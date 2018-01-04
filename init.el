@@ -33,7 +33,9 @@
 
 (setq custom-file (expand-file-name "custom.el" user-emacs-directory))
 
-(setq init-directory (expand-file-name "init" user-emacs-directory))
+(setq init-directory (expand-file-name "init" user-emacs-directory)
+      emacs-cache-directory (expand-file-name ".cache" user-emacs-directory)
+      )
 
 (defcustom init-file-blacklist '() "Init files to ignore."
   :group 'akirak :type '(repeat symbol))

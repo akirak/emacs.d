@@ -1,8 +1,8 @@
 (setq-default version-control t
               vc-follow-symlinks t
               vc-make-backup-files t
-              backup-directory-alist '("." "~/.emacs.d/backups")
-              auto-save-file-name-transforms '((".*" "~/.emacs.d/auto-save-list/" t))
+              backup-directory-alist `("." ,(concat emacs-cache-directory "/backup"))
+              auto-save-file-name-transforms `((".*" ,(concat emacs-cache-directory "/auto-save-list/") t))
               delete-old-versions -1
               coding-system-for-read 'utf-8
               coding-system-for-write 'utf-8
