@@ -12,13 +12,13 @@
 (use-package restart-emacs
   :straight t)
 
-(use-package emacs-pg
-  :straight (emacs-pg :type git :host github :repo "akirak/emacs-pg")
+(use-package play
+  :straight (play :type git :host github :repo "akirak/play.el")
   :defer t
-  :commands (emacs-pg-try
-             emacs-pg-add
-             emacs-pg-adopt
-             emacs-pg-dismiss
-             emacs-pg-update-symlinks))
+  :commands (play-checkout
+             play-start-last
+             play-adopt
+             play-dismiss
+             play-update-symlinks))
 
 (provide 'ak-base)
