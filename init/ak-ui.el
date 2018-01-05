@@ -10,3 +10,5 @@
   (add-to-list 'default-frame-alist `(title . ,relpath)))
 
 (use-package dracula-theme :straight t)
+
+(provide 'ak-ui)
