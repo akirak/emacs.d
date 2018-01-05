@@ -1,18 +1,11 @@
 (setq-default version-control t
               vc-follow-symlinks t
               vc-make-backup-files t
-              delete-old-versions -1
               coding-system-for-read 'utf-8
               coding-system-for-write 'utf-8
               sentence-end-double-space nil
               default-fill-column 80
-              initial-scratch-message ";;; Emacs Lisp scratch buffer\n"
-
-              backup-directory-alist
-              `("." ,(concat akirak/emacs-cache-directory "/backup"))
-              auto-save-file-name-transforms
-              `((".*" ,(concat akirak/emacs-cache-directory "/auto-save-list/") t))
-              )
+              initial-scratch-message ";;; Emacs Lisp scratch buffer\n")
 
 (use-package restart-emacs
   :straight t)
