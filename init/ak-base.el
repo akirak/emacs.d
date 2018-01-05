@@ -7,6 +7,8 @@
               default-fill-column 80
               initial-scratch-message ";;; Emacs Lisp scratch buffer\n")
 
+(setq recentf-save-file "~/.cache/emacs/recentf")
+
 (use-package restart-emacs
   :straight t)
 
