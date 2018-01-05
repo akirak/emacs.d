@@ -54,6 +54,8 @@
 ;; Load prerequisites inside this library
 (require 'cl)
 (require 'subr-x)
+(use-package dash :straight t)
+(use-package dash-functional :straight t)
 
 (defcustom akirak/init-directory (expand-file-name "init" user-emacs-directory)
   "Directory containing my initialization modules.
@@ -72,15 +74,31 @@ variable before the main library is loaded."
 the suffix \".el\". "
   :group 'akirak :type '(repeat symbol))
 
+(defcustom akirak/preloaded-init-files
+  '(ak-keys)
+  "List of modules that should be reloaded before other modules.
+
+The modules in this list are loaded by `akirak/load-init-files` in the order
+before the other modules. The items should be specified as symbols excluding
+\".el\" suffix. "
+  :group 'akirak :type '(repeat symbol))
+
 (defun akirak/load-init-files ()
   "Force reloading initialization files in akirak/init-directory.
 
 Files contained in akirak/init-file-blacklist are skipped during this loading
 process."
   (interactive)
-  (cl-loop for fname in (directory-files akirak/init-directory nil "\.el$")
-           unless (memq (intern (file-name-base fname)) akirak/init-file-blacklist)
-           do (load-file (expand-file-name fname akirak/init-directory))))
+  (->> (append
+        (->> akirak/preloaded-init-files
+             (-map 'symbol-name)
+             (--map (concat it ".el"))) ; convert symbols to file names ending with .el
+        (->> (directory-files akirak/init-directory nil "\.el$")
+             (--remove (memq (intern (file-name-base it)) ; convert to symbol to check membership
+                             (append akirak/preloaded-init-files
+                                     akirak/init-file-blacklist)))))
+       (--map (expand-file-name it akirak/init-directory)) ; convert to full path
+       (mapc 'load-file))) ; load them
 
 (defun akirak/startup ()
   "The normal startup initialization of my configuration."
