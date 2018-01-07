@@ -53,7 +53,6 @@
 
 ;; Load prerequisites inside this library
 (require 'cl)
-(require 'subr-x)
 (use-package dash :straight t)
 (use-package dash-functional :straight t)
 
