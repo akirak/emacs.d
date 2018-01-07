@@ -1,5 +1,7 @@
 # emacs.d
 
+[![Build Status](https://travis-ci.org/akirak/emacs.d.svg?branch=master)](https://travis-ci.org/akirak/emacs.d)
+
 This is an attempt to write an Emacs initialization file from scratch. I had been a long-time user of Vim, then switched to Spacemacs last year, and now I want to use Emacs without extra layers of Spacemacs. 
 
 This configuration is not "production-ready" for now. That is, I am not using it for any serious purpose. I am currently developing this configuration using Spacemacs and trying it on [play](https://github.com/akirak/play.el). 
