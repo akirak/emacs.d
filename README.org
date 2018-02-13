@@ -1,0 +1,20 @@
+#+title: emacs.d
+
+This Emacs configuration is currently under development.
+
+* Features
+- Based on a modern configuration framework ([[file:lisp/ak-config.el][ak-config.el]]):
+  - Use use-package + straight.el for package management
+  - Use general.el for keybinding configuration
+  - Display keybindings via which-key
+  - Keep ~/.emacs.d directory clean using no-littering 
+  - Reduce clutter in the modeline using diminish
+    
+* Installation
+FIXME
+
+* Usage
+See [[file:EmacsUsage.org][EmacsUsage.org]]
+
+* License
+GPL v3
