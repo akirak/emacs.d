@@ -1,3 +1,5 @@
 straight/
 elpa/
 .cache/
+# Ignore the private configuration
+private/
