@@ -15,7 +15,12 @@ This repository contains multiple branches with each having a different level of
   - Reduce clutter in the modeline using diminish
     
 * Installation
-FIXME
+You can use [[https://github.com/akirak/emacs-playground][playground]] to try out this configuration.
+
+To properly install this configuration properly, first back up your current configuration and then use Git: 
+#+BEGIN_SRC
+git clone https://github.com/akirak/emacs.d.git ~/.emacs.d 
+#+END_SRC
 
 * Usage
 See [[file:EmacsUsage.org][EmacsUsage.org]]
