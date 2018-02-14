@@ -13,6 +13,7 @@ This repository contains multiple branches with each having a different level of
   - Display keybindings via which-key
   - Keep ~/.emacs.d directory clean with help of no-littering 
   - Reduce clutter in the modeline using diminish
+- [[file:lisp/ak-visual-cues.el][Visual cues]] (highlight-indent-guides, rainbow-delimiters, and fill-column-indicator)
 
 * Prerequisites
 This configuration requires Emacs 25.1 or later. 
