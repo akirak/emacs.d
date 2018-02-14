@@ -50,7 +50,9 @@
         (expand-file-name ".cache" user-emacs-directory)))
 
 ;; Use diminish to reduce clutters from the modeline
-(use-package diminish)
+(use-package diminish
+  :config
+  (diminish 'auto-revert-mode))
 
 ;; Allow you to define keybindings more concisely
 (use-package general)
