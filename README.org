@@ -13,6 +13,9 @@ This repository contains multiple branches with each having a different level of
   - Display keybindings via which-key
   - Keep ~/.emacs.d directory clean with help of no-littering 
   - Reduce clutter in the modeline using diminish
+
+* Prerequisites
+This configuration requires Emacs 25.1 or later. 
     
 * Installation
 You can use [[https://github.com/akirak/emacs-playground][playground]] to try out this configuration.
