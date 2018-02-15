@@ -11,6 +11,8 @@
 
 ;;; Code:
 
+(require 'cl-lib)
+
 ;; Check the version of Emacs
 (when (version< emacs-version "25.1")
   (error "Use GNU Emacs version 25.1 or later"))
@@ -21,6 +23,9 @@
 
 ;; Add ~/.emacs.d/lisp to load-path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+
+;; Remove org-mode shipped with Emacs from load-path
+(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
 
 ;; Load packages
 (let ((gc-cons-threshold most-positive-fixnum))
