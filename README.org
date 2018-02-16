@@ -5,7 +5,7 @@ This Emacs configuration is currently under development.
 * Branches
 This repository contains multiple branches with each having a different level of customization:
 - [[https://travis-ci.org/akirak/emacs.d.svg?branch=core]] [[https://github.com/akirak/emacs.d/tree/core][core]], which only provides a framework for customization
-- [[https://travis-ci.org/akirak/emacs.d][{{https://travis-ci.org/akirak/emacs.d.svg?branch=base}}]] [[https://github.com/akirak/emacs.d/tree/base][base]] offering a set of less-opinionated features
+- [[https://travis-ci.org/akirak/emacs.d.svg?branch=base]] [[https://github.com/akirak/emacs.d/tree/base][base]] offering a set of less-opinionated features
 
 * Features
 - Based on a modern configuration framework ([[file:lisp/ak-config.el][ak-config.el]]):
