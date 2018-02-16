@@ -18,7 +18,7 @@ Visit [[https://travis-ci.org/akirak/emacs.d/branches][this link]] to check the 
 - [[file:lisp/ak-visual-cues.el][Visual cues]] (highlight-indent-guides, rainbow-delimiters, and fill-column-indicator)
 
 * Prerequisites
-This configuration requires Emacs 25.1 or later. 
+This configuration requires Emacs 25.2 or later. 
     
 * Installation
 You can use [[https://github.com/akirak/emacs-playground][playground]] to try out this configuration.
