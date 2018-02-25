@@ -9,13 +9,13 @@ This repository contains multiple branches with each having a different level of
 Visit [[https://travis-ci.org/akirak/emacs.d/branches][this link]] to check the Travis status. 
 
 * Features
-- Based on a modern configuration framework ([[file:lisp/ak-config.el][ak-config.el]]):
+- [[file:lisp/init-config.el][Based on a modern configuration framework]]:
   - Use use-package + straight.el for package management
   - Use general.el for keybinding configuration
   - Display keybindings via which-key
   - Keep ~/.emacs.d directory clean with help of no-littering 
   - Reduce clutter in the modeline using diminish
-- [[file:lisp/ak-visual-cues.el][Visual cues]] (highlight-indent-guides, rainbow-delimiters, and fill-column-indicator)
+- [[file:lisp/init-visual-cues.el][Visual cues]] (highlight-indent-guides, rainbow-delimiters, and fill-column-indicator)
 
 * Prerequisites
 This configuration requires Emacs 25.2 or later. 

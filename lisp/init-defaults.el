@@ -34,4 +34,4 @@
 (setq-default coding-system-for-read 'utf-8
               coding-system-for-write 'utf-8)
 
-(provide 'ak-defaults)
+(provide 'init-defaults)

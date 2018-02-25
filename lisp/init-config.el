@@ -71,4 +71,4 @@
                    (cons (car kb)
                          (string-remove-prefix "akirak/" (cdr kb)))))))
 
-(provide 'ak-config)
+(provide 'init-config)

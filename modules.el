@@ -1,5 +1,5 @@
 ;;; modules.el --- Load modules
-(require 'ak-defaults)
-(require 'ak-theme)
-(require 'ak-visual-cues)
-(require 'ak-keymaps)
+(require 'init-defaults)
+(require 'init-theme)
+(require 'init-visual-cues)
+(require 'init-keymaps)

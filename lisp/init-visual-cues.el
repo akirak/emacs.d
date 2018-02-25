@@ -10,4 +10,4 @@
   :init
   (add-hook 'prog-mode-hook 'fci-mode))
 
-(provide 'ak-visual-cues)
+(provide 'init-visual-cues)

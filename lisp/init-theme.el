@@ -8,4 +8,4 @@
   ;;  ...)
   )
 
-(provide 'ak-theme)
+(provide 'init-theme)
