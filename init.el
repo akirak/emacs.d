@@ -21,6 +21,17 @@
 (setq-default custom-file (expand-file-name "custom.el" user-emacs-directory))
 (when (file-exists-p custom-file) (load-file custom-file))
 
+(defcustom akirak/private-directory
+  (expand-file-name "private" user-emacs-directory)
+  "Directory containing private configuration files for Emacs."
+  :group 'akirak)
+
+;; Load a private custom file if it exists at ~/.emacs.d/private/custom.el
+(let ((private-custom-file (expand-file-name "custom.el"
+                                             akirak/private-directory)))
+  (when (file-exists-p private-custom-file)
+    (load-file private-custom-file)))
+
 ;; Add ~/.emacs.d/lisp to load-path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
