@@ -35,6 +35,14 @@
 ;; Add ~/.emacs.d/lisp to load-path
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 
+;; Add directories in ~/.emacs.d/site-lisp to load-path
+(let ((site-lisp-directory (expand-file-name "site-lisp"
+                                             user-emacs-directory)))
+  (when (file-directory-p site-lisp-directory)
+    (dolist (dir (directory-files site-lisp-directory t
+                                  'file-directory-p))
+      (add-to-list 'load-path dir))))
+
 ;; Remove org-mode shipped with Emacs from load-path
 (cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
 
