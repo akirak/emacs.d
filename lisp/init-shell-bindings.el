@@ -25,4 +25,4 @@
                     "C-w" 'backward-kill-word
                     "C-k" 'kill-line)
 
-(provide 'init-keymaps)
+(provide 'init-shell-bindings)

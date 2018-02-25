@@ -2,4 +2,4 @@
 (require 'init-defaults)
 (require 'init-theme)
 (require 'init-visual-cues)
-(require 'init-keymaps)
+(require 'init-shell-bindings)
