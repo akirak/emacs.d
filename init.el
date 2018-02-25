@@ -41,4 +41,4 @@
       (progn (add-to-list 'load-path private-directory)
              (load-file private-init-file))
     ;; Load the default layout otherwise
-    (require 'ak-default-layout)))
+    (require 'init-default-layout)))
