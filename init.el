@@ -30,7 +30,7 @@
 ;; Load packages
 (let ((gc-cons-threshold most-positive-fixnum))
   ;; Load the configuration framework before loading other packages
-  (require 'ak-config)
+  (require 'init-config)
   ;; Load other modules from ~/.emacs.d/modules.el
   (load-file (expand-file-name "modules.el" user-emacs-directory)))
 
