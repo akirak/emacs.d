@@ -53,11 +53,10 @@
   ;; Load other modules from ~/.emacs.d/modules.el
   (load-file (expand-file-name "modules.el" user-emacs-directory)))
 
-;; Load a personal layout from ~/.emacs.d/private/init.el if the file exists
-(let* ((private-directory (expand-file-name "private" user-emacs-directory))
-       (private-init-file (expand-file-name "init.el" private-directory)))
-  (if (file-exists-p private-init-file)
-      (progn (add-to-list 'load-path private-directory)
-             (load-file private-init-file))
-    ;; Load the default layout otherwise
-    (require 'init-default-layout)))
+;; Add ~/.emacs.d/private to load-path if it exists
+(let* ((private-directory (expand-file-name "private" user-emacs-directory)))
+  (when (file-directory-p private-directory)
+    (add-to-list 'load-path private-directory)))
+
+;; Load init-private library if it exists in any directory
+(require 'init-private nil t)
