@@ -1,5 +1,13 @@
 ;;; ak-config.el --- A configuration infrastructure for Emacs
 
+;;; Commentary:
+
+;; - Use use-package + straight.el for package management
+;; - Use general.el for keybinding configuration
+;; - Display keybindings via which-key
+;; - Keep ~/.emacs.d directory clean with help of no-littering 
+;; - Reduce clutter in the modeline using diminish
+
 ;;;; Custom variables and functions for configuration
 
 ;;;;; Personalisation
