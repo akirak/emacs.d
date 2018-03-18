@@ -1,3 +1,8 @@
+# Ignore packages installed by straight.el 
 straight/
+# Ignore packages installed in the standard way (possibly by mistake)
 elpa/
+# Ignore various local persistent files
 .cache/
+# Ignore the private configuration
+private/

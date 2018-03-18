@@ -26,6 +26,6 @@
     (with-eval-after-load 'org
       (push task-template org-capture-templates))))
 
-(provide 'ak-default-layout)
+(provide 'init-default-layout)
 
 ;;; ak-default-layout.el ends here
