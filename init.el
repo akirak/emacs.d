@@ -32,7 +32,7 @@
 (require 'init-startup)                 ; Optional
 (require 'init-shell-bindings)
 
-(require 'init-theme)
+(require 'init-dracula-theme)
 (require 'init-visual-cues)
 
 ;; Remove org-mode shipped with Emacs from load-path
