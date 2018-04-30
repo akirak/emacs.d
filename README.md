@@ -13,3 +13,8 @@ To properly install this configuration, first back up your current configuration
 
 ## License
 GPL v3
+
+## Resources
+
+- [Advanced Techniques for Reducing Emacs Startup Time](https://blog.d46.us/advanced-emacs-startup/)
+- [hlissner/doom-emacs](https://github.com/hlissner/doom-emacs)
