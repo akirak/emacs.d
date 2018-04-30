@@ -1,0 +1,2 @@
+* TODO Use rich-minority rather than diminish
+Use [[https://github.com/Malabarba/rich-minority][GitHub - Malabarba/rich-minority: Emacs package for hiding and/or highlighting the list of minor-modes in the mode-line.]]
