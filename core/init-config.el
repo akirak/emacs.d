@@ -1,29 +1,4 @@
-;;; ak-config.el --- A configuration infrastructure for Emacs
-
-;;; Commentary:
-
-;; - Use use-package + straight.el for package management
-;; - Use general.el for keybinding configuration
-;; - Display keybindings via which-key
-;; - Keep ~/.emacs.d directory clean with help of no-littering 
-;; - Reduce clutter in the modeline using diminish
-
-;;;; Custom variables and functions for configuration
-
-;;;;; Personalisation
-
-;; This configuration repository contains some parts that are applicable only to
-;; the author (Akira Komamura). This is done by checking the e-mail address
-;; in the Git config:
-
 (require 'subr-x)
-
-(defvar akirak/personalized
-  ;; Use the e-mail address to check the user
-  (string-equal (string-trim-right (shell-command-to-string
-                                    "git config --global user.email") )
-                "akira.komamura@gmail.com")
-  "Non-nil if the configuration should be personalized.")
 
 ;;;; Bootstrap straight.el package manager
 (unless (featurep 'straight)
@@ -59,8 +34,10 @@
 
 ;; Use diminish to reduce clutters from the modeline
 (use-package diminish
-  :config
-  (diminish 'auto-revert-mode))
+  :init
+  (diminish 'auto-revert-mode)
+  (diminish 'outline-minor-mode)
+  (diminish 'flyspell-mode))
 
 ;; Allow you to define keybindings more concisely
 (use-package general)

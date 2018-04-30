@@ -30,8 +30,39 @@
 ;; Enable winner-mode for undoing/redoing the window configuration
 (winner-mode 1)
 
-;; Set default coding
-(setq-default coding-system-for-read 'utf-8
-              coding-system-for-write 'utf-8)
+;; Default variables
+(setq-default version-control t
+              vc-follow-symlinks t
+              vc-make-backup-files t
+              coding-system-for-read 'utf-8
+              coding-system-for-write 'utf-8
+              sentence-end-double-space nil
+              default-fill-column 80
+              indent-tabs-mode nil
+              indicate-empty-lines t
+              truncate-lines t
+              backup-by-copying t
+              delete-by-moving-to-trash t
+              delete-old-versions t)
+
+(setq inhibit-startup-screen t
+      ring-bell-function 'ignore)
+
+;;;; Truncating lines and visual-lines-mode
+;; Call this function in each major modes
+(defun turn-on-visual-line-mode ()
+  (interactive)
+  (visual-line-mode 1))
+(add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
+
+;;;; Scrolling
+
+;; Scroll up/down by half screen
+(defun scroll-half-page-advice (&optional arg)
+  (or arg (/ (window-body-height) 2)))
+
+(when akirak/personalized
+  (general-advice-add '(scroll-up scroll-down)
+                      :filter-args #'scroll-half-page-advice))
 
 (provide 'init-defaults)
