@@ -61,8 +61,7 @@
 (defun scroll-half-page-advice (&optional arg)
   (or arg (/ (window-body-height) 2)))
 
-(when akirak/personalized
-  (general-advice-add '(scroll-up scroll-down)
-                      :filter-args #'scroll-half-page-advice))
+(general-advice-add '(scroll-up scroll-down)
+                     :filter-args #'scroll-half-page-advice)
 
 (provide 'init-defaults)
