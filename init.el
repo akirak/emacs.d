@@ -41,8 +41,8 @@
 (require 'init-config)
 
 (require 'init-defaults)
+(require 'init-keybindings)
 (require 'init-startup)                 ; Optional
-(require 'init-shell-bindings)
 
 (require 'init-dracula-theme)
 (require 'init-visual-cues)
