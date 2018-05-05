@@ -5,4 +5,7 @@
 (require 'init-org-download)
 (require 'init-org-web-tools)
 
+(with-eval-after-load 'org
+  (require 'akirak-org-refile-path))
+
 (provide 'init-org)
