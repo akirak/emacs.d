@@ -43,8 +43,7 @@
 (require 'init-defaults)
 (require 'init-keybindings)
 (require 'init-org)
+(require 'init-ui)
 (require 'init-startup)                 ; Optional
 
-(require 'init-dracula-theme)
-(require 'init-visual-cues)
 
