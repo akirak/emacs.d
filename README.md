@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/akirak/emacs.d.svg?branch=devel)](https://travis-ci.org/akirak/emacs.d)
+
 # emacs.d
 This Emacs configuration is currently under development.
 
