@@ -18,7 +18,16 @@
   :group 'akirak)
 
 ;; Add directories for init files
-(dolist (subdir '("core" "misc" "progmodes" "tools"))
+(dolist (subdir '("core"
+                  "keybindings"
+                  "progmodes"
+                  "tools"
+                  "misc"
+                  "org"
+                  "apps"
+                  "exwm"
+                  "ui"
+                  "international"))
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
 ;; Load custom settings
