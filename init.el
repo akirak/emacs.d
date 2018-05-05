@@ -21,7 +21,7 @@
 (dolist (subdir '("core"
                   "keybindings"
                   "progmodes"
-                  "tools"
+                  "coding"
                   "misc"
                   "org"
                   "apps"
@@ -44,6 +44,13 @@
 (require 'init-keybindings)
 (require 'init-org)
 (require 'init-ui)
+
+(require 'init-ivy)
 (require 'init-startup)                 ; Optional
 
+;; apps
 
+;; programming languages
+
+;; natural languages
+(require 'init-japanese)
