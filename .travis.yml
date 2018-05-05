@@ -20,7 +20,7 @@ before_install:
 install:
   - ln -s $PWD $HOME/.emacs.d
 script:
-  - emacs --batch -l init.el
+  - emacs -Q --batch -f batch-byte-compile init.el
 notifications:
   email:
     on_success: never
