@@ -10,6 +10,9 @@
 ;; (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold 800000)))
 
+;; Remove org-mode shipped with Emacs from load-path
+(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
+
 (defcustom akirak/dotemacs-directory user-emacs-directory
   "The directory where this directory exists."
   :group 'akirak)
@@ -35,5 +38,3 @@
 (require 'init-dracula-theme)
 (require 'init-visual-cues)
 
-;; Remove org-mode shipped with Emacs from load-path
-(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
