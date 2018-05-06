@@ -44,6 +44,7 @@
 (require 'init-keybindings)
 (require 'init-org)
 (require 'init-ui)
+(require 'init-helm)
 
 (require 'init-ivy)
 (require 'init-startup)                 ; Optional
