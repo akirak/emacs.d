@@ -6,6 +6,7 @@
 (when (version< emacs-version "25.1")
   (error "Use GNU Emacs version 25.1 or later"))
 
+;; TODO: Try this to accelerate the startup time
 ;; (setq gc-cons-threshold (* 50 1000 1000))
 ;; (setq gc-cons-threshold most-positive-fixnum)
 (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold 800000)))
@@ -31,6 +32,7 @@
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
 ;; Load custom settings
+;; TODO: Migrate the custom settings to use-package directives
 (let ((fpath (expand-file-name "~/ops/custom.el")))
   (setq-default custom-file (if (file-exists-p fpath)
                                 fpath
