@@ -5,10 +5,6 @@
 (use-package katawa-ivy
   :straight katawa
   :after katawa
-  :commands (katawa-ivy katawa-ivy-fix katawa-ivy-fix-at-point)
-  :init
-  (bind-keys :map text-mode-map
-             ("C-c j" . katawa-ivy)
-             ("C-c J" . katawa-ivy-fix)))
+  :commands (katawa-ivy katawa-ivy-fix katawa-ivy-fix-at-point))
 
 (provide 'init-katawa)

@@ -47,6 +47,7 @@
 (require 'init-helm)
 
 (require 'init-ivy)
+(require 'init-commands)
 (require 'init-startup)                 ; Optional
 (require 'init-desktop)
 

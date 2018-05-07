@@ -40,7 +40,7 @@
   (diminish 'flyspell-mode))
 
 ;; Allow you to define keybindings more concisely
-(use-package general)
+(require 'init-general)
 
 ;; Show keybindings
 (use-package which-key

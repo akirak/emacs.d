@@ -8,6 +8,7 @@
   ;; (helm-command-prefix-key "C-c h")
   (helm-autoresize-max-height 40)
   ;; (helm-split-window-in-side-p t)
-  )
+  :general
+  ([remap apropos-command] 'helm-apropos))
 
 (provide 'init-helm)
