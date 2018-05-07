@@ -48,6 +48,7 @@
 
 (require 'init-ivy)
 (require 'init-startup)                 ; Optional
+(require 'init-desktop)
 
 ;; apps
 (require 'init-multi-term)
