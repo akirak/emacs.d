@@ -60,6 +60,11 @@
 (require 'init-magit)
 
 ;; programming languages
+(require 'init-graphviz)
+(require 'init-nim)
+(require 'init-lispy)
+(require 'init-markdown)
+(require 'init-haskell)
 
 ;; natural languages
 (require 'init-japanese)
