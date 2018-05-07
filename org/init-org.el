@@ -6,6 +6,7 @@
 (require 'init-org-web-tools)
 (require 'init-org-offtime)
 (require 'init-org-super-agenda)
+(require 'init-helm-org-rifle)
 
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))
