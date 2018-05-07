@@ -40,18 +40,21 @@
 ;; This needs to be loaded first
 (require 'init-config)
 
+;;; Basic configuration
 (require 'init-defaults)
 (require 'init-keybindings)
 (require 'init-org)
 (require 'init-ui)
 (require 'init-helm)
-
 (require 'init-ivy)
+(require 'init-coding)
+
+;;; Enhancements (misc/)
 (require 'init-commands)
 (require 'init-startup)                 ; Optional
 (require 'init-desktop)
 
-;; apps
+;;; Apps (apps/)
 (require 'init-multi-term)
 (require 'init-prodigy)
 (require 'init-dired)
@@ -59,12 +62,12 @@
 (require 'init-linux-disk)
 (require 'init-magit)
 
-;; programming languages
+;;; Programming languages (progmodes/)
 (require 'init-graphviz)
 (require 'init-nim)
 (require 'init-lispy)
 (require 'init-markdown)
 (require 'init-haskell)
 
-;; natural languages
+;;; Natural languages (international/)
 (require 'init-japanese)
