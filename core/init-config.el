@@ -32,28 +32,11 @@
   (setq no-littering-var-directory
         (expand-file-name ".cache" user-emacs-directory)))
 
-;; Use diminish to reduce clutters from the modeline
-(use-package diminish
-  :init
-  (diminish 'auto-revert-mode)
-  (diminish 'outline-minor-mode)
-  (diminish 'flyspell-mode))
-
-;; Allow you to define keybindings more concisely
+;; Allow :diminish keyword in use-package directives
+(require 'init-diminish)
+;; Allow use of :general keyword in use-package directives
 (require 'init-general)
-
-;; Show keybindings
-(use-package which-key
-  :diminish which-key-mode
-  :init
-  (which-key-mode)
-  :config
-  (which-key-setup-side-window-bottom)  ; Display a popup window at bottom
-  ;; Remove 'akirak/' prefix from descriptions
-  (add-to-list 'which-key-replacement-alist
-               `((nil . "akirak/") .
-                 (lambda (kb)
-                   (cons (car kb)
-                         (string-remove-prefix "akirak/" (cdr kb)))))))
+;; Allow use of :wk keyword in general.el keybinding definitions
+(require 'init-which-key)
 
 (provide 'init-config)
