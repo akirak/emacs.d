@@ -50,6 +50,12 @@
 (require 'init-startup)                 ; Optional
 
 ;; apps
+(require 'init-multi-term)
+(require 'init-prodigy)
+(require 'init-dired)
+(require 'init-docker)
+(require 'init-linux-disk)
+(require 'init-magit)
 
 ;; programming languages
 
