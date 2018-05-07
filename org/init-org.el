@@ -5,6 +5,7 @@
 (require 'init-org-download)
 (require 'init-org-web-tools)
 (require 'init-org-offtime)
+(require 'init-org-super-agenda)
 
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))
