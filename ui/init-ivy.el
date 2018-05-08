@@ -1,5 +1,5 @@
 (require 'init-smex)          ; Install smex for sorting M-x candidates
-(require 'akirak/counsel-extras)
+(require 'akirak-counsel-extras)
 
 ;;;; Custom sorting functions
 
