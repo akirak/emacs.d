@@ -1,0 +1,3 @@
+[submodule "etc/yasnippet"]
+	path = etc/yasnippet
+	url = https://github.com/AndreaCrotti/yasnippet-snippets.git
