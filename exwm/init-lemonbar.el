@@ -8,7 +8,8 @@
                       "-p"
                       "-f" "Hack-9"))
   (lemonbar-output-template '(akirak/lemonbar-exwm-buffer-list
-                              ;; akirak/lemonbar-org-clock
+                              "| "
+                              lemonbar-org-clock-string
                               lemonbar-align-right
                               akirak/lemonbar-i3status)))
 
