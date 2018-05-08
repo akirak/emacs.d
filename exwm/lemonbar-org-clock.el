@@ -23,7 +23,9 @@
                                collect (cons category
                                              (org-minutes-to-clocksum-string total))))
                 (cons 'total
-                      (org-minutes-to-clocksum-string (apply '+ (mapcar 'cdr ents))))))))
+                      (org-minutes-to-clocksum-string
+                       (or (apply '+ (mapcar 'cdr ents))
+                           0)))))))
 
 (defun lemonbar-org-clock--current-clock ()
   "Summarize the clock information for when there is a running clock."
@@ -54,15 +56,16 @@
 
 (defun lemonbar-org-clock--last-clock ()
   "Update information on the last running clock."
-  (when-let ((marker (car org-clock-history)))
-    (with-current-buffer (marker-buffer marker)
-      (org-with-wide-buffer
-       (goto-char marker)
-       (setq lemonbar-org-clock-last-clock
+  (setq lemonbar-org-clock-last-clock
+        (when-let ((marker (car org-clock-history)))
+          (with-current-buffer (marker-buffer marker)
+            (org-with-wide-buffer
+             (goto-char marker)
              (list (cons 'title (nth 4 (org-heading-components)))
-                   (cons 'time (org-clock-get-last-clock-out-time))))))))
+                   (cons 'time (org-clock-get-last-clock-out-time))
+                   (cons 'category (org-get-category))))))))
 
-(defun lemonbar-org-clock-update (&optional event)
+(defun lemonbar-org-clock-update (&optional event trigger-update)
   "Update the string to describe the clock status."
   (when event
     (lemonbar-org-clock--statistics))
@@ -75,22 +78,18 @@
             (concat (format "Spent %s today" .total)
                     (when lemonbar-org-clock-last-clock
                       (let-alist lemonbar-org-clock-last-clock
-                        ;; time diff is omitted for now
-                        ;; (format ", clocked out at %s from \"%s\""
-                        ;;         (format-time-string "%R" .time)
-                        ;;         .title)
-                        ;; FIXME: display time diff correctly
-                        (format ", clocked out at %s (%s ago) from \"%s\""
-                                (format-time-string "%R" time)
+                        (format ", clocked out at %s (%s ago) from \"%s\" in %s"
+                                (format-time-string "%R" .time)
                                 (org-minutes-to-clocksum-string
-                                 (floor (- (float-time) (float-time time)) 60))
-                                title)
-                        )))))))
+                                 (floor (- (float-time) (float-time .time)) 60))
+                                .title
+                                .category)))))))
+  (when trigger-update (lemonbar-update)))
 
 (when (require 'org-clock nil t)
-  (add-hook 'org-clock-in-hook (lambda () (lemonbar-org-clock-update 'clock-in)))
-  (add-hook 'org-clock-out-hook (lambda () (lemonbar-org-clock-update 'clock-out)))
-  (add-hook 'lemonbar-start-hook (lambda () (lemonbar-org-clock-update 'start)))
+  (add-hook 'org-clock-in-hook (lambda () (lemonbar-org-clock-update 'clock-in t)))
+  (add-hook 'org-clock-out-hook (lambda () (lemonbar-org-clock-update 'clock-out t)))
+  (add-hook 'lemonbar-start-hook (lambda () (lemonbar-org-clock-update 'start t)))
   (add-hook 'lemonbar-before-update-hook 'lemonbar-org-clock-update))
 
 (provide 'lemonbar-org-clock)
