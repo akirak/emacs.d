@@ -1,4 +1,7 @@
 (require 'init-smex)          ; Install smex for sorting M-x candidates
+(require 'akirak/counsel-extras)
+
+;;;; Custom sorting functions
 
 ;; https://github.com/abo-abo/swiper/wiki/Sort-files-by-mtime#a-simple-version
 (defun eh-ivy-sort-file-by-mtime (x y)
@@ -14,6 +17,8 @@
           nil
         (time-less-p y-mtime x-mtime)))))
 
+;;;; Functions for the mini buffer
+
 (defun ivy-backward-kill-sentence ()
   (interactive)
   (if ivy--directory
@@ -22,6 +27,8 @@
     (if (bolp)
         (kill-region (point-min) (point))
       (backward-kill-sentence))))
+
+;;;; Loading packages
 
 (use-package counsel                 ; Configure all of ivy, swiper, and counsel
   :diminish (counsel-mode ivy-mode)
