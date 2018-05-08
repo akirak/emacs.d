@@ -44,7 +44,11 @@
            " "
            akirak/x-alternate-display
            "&\n"
-           "DISPLAY=" akirak/alternate-window-manager " " wm "\n"
+           "DISPLAY="
+           akirak/x-alternate-display
+           " "
+           akirak/alternate-window-manager
+           "\n"
            "kill %1")
    "*window-manager*"))
 
