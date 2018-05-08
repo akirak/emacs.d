@@ -37,6 +37,9 @@
 (add-hook 'buffer-list-update-hook #'akirak/lemonbar-update-exwm-buffer-list)
 (add-hook 'exwm-manage-finish-hook #'akirak/lemonbar-update-exwm-buffer-list)
 
+;;;; Integration with org-clock
+(require 'lemonbar-org-clock)
+
 ;;;; Feeding system information from i3status
 (defconst i3status-buffer "*i3status*")
 
