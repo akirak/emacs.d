@@ -11,6 +11,8 @@ env:
   - EVM_EMACS=emacs-25.1-travis
   - EVM_EMACS=emacs-25.2-travis
   - EVM_EMACS=emacs-25.3-travis
+  - EVM_EMACS=emacs-26-pretest-travis
+  - EVM_EMACS=emacs-git-snapshot-travis
 before_install:
   - (cd $HOME/.evm && git pull) || git clone https://github.com/rejeep/evm.git $HOME/.evm
   - export PATH=$HOME/.evm/bin:$PATH
@@ -20,7 +22,7 @@ before_install:
 install:
   - ln -s $PWD $HOME/.emacs.d
 script:
-  - emacs --batch -l init.el
+  - emacs -Q --batch -f batch-byte-compile init.el
 notifications:
   email:
     on_success: never
