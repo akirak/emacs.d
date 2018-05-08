@@ -32,11 +32,7 @@
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
 ;; Load custom settings
-;; TODO: Migrate the custom settings to use-package directives
-(let ((fpath (expand-file-name "~/ops/custom.el")))
-  (setq-default custom-file (if (file-exists-p fpath)
-                                fpath
-                              (expand-file-name "custom.el" user-emacs-directory))))
+(setq-default custom-file (expand-file-name "custom.el" akirak/dotemacs-directory))
 (when (file-exists-p custom-file) (load-file custom-file))
 
 ;; This needs to be loaded first
