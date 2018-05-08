@@ -13,7 +13,7 @@
   (company-quickhelp-mode 1))
 
 (use-package company-statistics
-  :disable t
+  :disabled t
   :after company
   :init
   (company-statistics-mode 1))

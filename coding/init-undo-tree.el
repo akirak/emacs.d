@@ -2,4 +2,4 @@
   :config
   (global-undo-tree-mode 1))
 
-(provide 'undo-tree)
+(provide 'init-undo-tree)

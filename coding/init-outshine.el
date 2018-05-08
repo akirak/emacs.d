@@ -12,4 +12,4 @@
 ;; Jumping based on outlines (better than imenu)
 (use-package helm-navi :after navi-mode)
 
-(provide 'init-outlines)
+(provide 'init-outshine)
