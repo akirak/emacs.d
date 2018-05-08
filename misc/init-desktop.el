@@ -15,4 +15,6 @@
 
 (add-hook 'after-init-hook #'akirak/startup-read-desktop)
 
+(setq-default desktop-restore-frames nil)
+
 (provide 'init-desktop)

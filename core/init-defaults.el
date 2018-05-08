@@ -62,6 +62,8 @@
   (or arg (/ (window-body-height) 2)))
 
 (general-advice-add '(scroll-up scroll-down)
-                     :filter-args #'scroll-half-page-advice)
+                    :filter-args #'scroll-half-page-advice)
+
+(setq-default scroll-preserve-screen-position 1)
 
 (provide 'init-defaults)

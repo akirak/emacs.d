@@ -7,6 +7,7 @@
   :custom
   ;; (helm-command-prefix-key "C-c h")
   (helm-autoresize-max-height 40)
+  (helm-display-function (quote pop-to-buffer))
   ;; (helm-split-window-in-side-p t)
   :general
   ([remap apropos-command] 'helm-apropos))

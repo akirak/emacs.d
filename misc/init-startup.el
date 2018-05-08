@@ -1,4 +1,6 @@
-(use-package uptimes)
+(use-package uptimes
+  :custom
+  (uptimes-database "~/.emacs.d/.cache/uptimes.el"))
 (use-package esup)
 
 (defcustom akirak/init-time-log-file nil

@@ -6,6 +6,10 @@
   :init
   (projectile-mode)
   :custom
+  (projectile-completion-system (quote ivy))
+  (projectile-create-missing-test-files t)
+  (projectile-enable-caching t)
+  (projectile-require-project-root nil)
   (projectile-keymap-prefix (kbd "C-x 9")))
 
 (use-package counsel-projectile

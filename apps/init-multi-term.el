@@ -1,3 +1,6 @@
-(use-package multi-term)
+(use-package multi-term
+  :custom
+  (multi-term-dedicated-select-after-open-p t)
+  (multi-term-dedicated-window-height 20))
 
 (provide 'init-multi-term)

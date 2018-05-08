@@ -55,6 +55,8 @@
 (require 'init-commands)
 (require 'init-startup)                 ; Optional
 (require 'init-desktop)
+(require 'init-midnight)
+(require 'init-playground)
 
 ;;; Apps (apps/)
 (require 'init-multi-term)

@@ -2,6 +2,7 @@
 (require 'init-visual-cues)
 (require 'init-shackle)
 (require 'init-font)
+(require 'init-olivetti)
 (require 'init-ace-window)
 (require 'init-treemacs)
 (require 'init-framemove)
