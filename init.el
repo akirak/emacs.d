@@ -63,6 +63,7 @@
 (require 'init-docker)
 (require 'init-linux-disk)
 (require 'init-magit)
+(require 'init-ibuffer)
 
 ;;; Programming languages (progmodes/)
 (require 'init-graphviz)

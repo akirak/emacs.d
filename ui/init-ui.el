@@ -3,6 +3,7 @@
 (require 'init-shackle)
 (require 'init-font)
 (require 'init-ace-window)
+(require 'init-treemacs)
 
 (require 'init-anzu)
 

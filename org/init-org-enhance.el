@@ -1,5 +1,11 @@
 ;;; init-org-enhance.el --- Enhancements to org mode -*- lexical-binding: t -*-
 
+;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
+(defun org-add-completion-at-point ()
+  (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point
+            nil t))
+(add-hook 'org-mode-hook #'org-add-completion-at-point)
+
 ;; Prettify headline bullets
 (use-package org-bullets
   :init
