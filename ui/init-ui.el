@@ -4,6 +4,7 @@
 (require 'init-font)
 (require 'init-ace-window)
 (require 'init-treemacs)
+(require 'init-framemove)
 
 (require 'init-anzu)
 
