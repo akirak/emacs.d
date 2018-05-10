@@ -58,7 +58,6 @@
 (require 'init-multi-term)
 (require 'init-prodigy)
 (require 'init-dired)
-(require 'init-docker)
 (require 'init-linux-disk)
 (require 'init-magit)
 (require 'init-ibuffer)
@@ -69,6 +68,7 @@
 (require 'init-lispy)
 (require 'init-markdown)
 (require 'init-haskell)
+(require 'init-dockerfile)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
