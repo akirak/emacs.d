@@ -37,6 +37,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-w" . akirak/exwm-goto-browser)
  ("s-x" . counsel-linux-app)
  ("s-y" . (lambda () (interactive) (window-go-split-sensibly '(16))))
+ ("s-z" . counsel-org-clock-context)
  ("s-^" . treemacs)
  ("s-6" . window-go-first-file-window)
  ("s-7" . windmove-left)

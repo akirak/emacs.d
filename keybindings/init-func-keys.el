@@ -25,7 +25,4 @@
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
 
-(general-def :keymaps 'akirak/app-map
-  "<f12>" 'counsel-org-clock-context)
-
 (provide 'init-func-keys)
