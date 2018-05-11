@@ -16,6 +16,8 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                              (quote ,cmd)))))
 
 (akirak/exwm-bind-keys
+ ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
+                                     (call-interactively 'counsel-ag))))
  ("s-H" . window-go-shrink)
  ("s-L" . window-go-grow)
  ("s-S" . exwm-workspace-move-window)
@@ -23,6 +25,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-b" . exwm-workspace-switch-to-buffer)
  ("s-c" . akirak/capture-map)
  ("s-d" . (lambda () (interactive) (org-clock-goto) (delete-other-windows)))
+ ("s-f" . counsel-locate)
  ("s-h" . window-go-shrink-horizontally)
  ("s-j" . other-window)
  ("s-k" . window-go-previous)
