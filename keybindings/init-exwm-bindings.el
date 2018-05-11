@@ -3,6 +3,8 @@
 
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
+(use-package exwm-window-go
+  :straight window-go)
 
 (defmacro akirak/exwm-bind-keys (&rest bindings)
   "Bind input keys in EXWM.
@@ -18,18 +20,18 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
 (akirak/exwm-bind-keys
  ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
                                      (call-interactively 'counsel-ag))))
- ("s-H" . window-go-shrink)
- ("s-L" . window-go-grow)
+ ("s-H" . exwm-window-go-shrink)
+ ("s-L" . exwm-window-go-grow)
  ("s-S" . exwm-workspace-move-window)
  ("s-Z" . counsel-org-offtime)
  ("s-b" . exwm-workspace-switch-to-buffer)
  ("s-c" . akirak/capture-map)
  ("s-d" . (lambda () (interactive) (org-clock-goto) (delete-other-windows)))
  ("s-f" . counsel-locate)
- ("s-h" . window-go-shrink-horizontally)
+ ("s-h" . exwm-window-go-shrink-horizontally)
  ("s-j" . other-window)
  ("s-k" . window-go-previous)
- ("s-l" . window-go-grow-horizontally)
+ ("s-l" . exwm-window-go-grow-horizontally)
  ("s-m" . window-go-master)
  ("s-n" . akirak/exwm-next-workspace)
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
