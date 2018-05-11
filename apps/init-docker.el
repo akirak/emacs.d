@@ -1,3 +1,3 @@
 (use-package docker)
 
-(require 'init-docker)
+(provide 'init-docker)
