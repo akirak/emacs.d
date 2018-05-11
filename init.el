@@ -53,6 +53,7 @@
 (require 'init-desktop)
 (require 'init-midnight)
 (require 'init-playground)
+(require 'init-locate)
 
 ;;; Apps (apps/)
 (require 'init-multi-term)
