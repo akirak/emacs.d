@@ -6,9 +6,8 @@
 (when (version< emacs-version "25.1")
   (error "Use GNU Emacs version 25.1 or later"))
 
-;; TODO: Try this to accelerate the startup time
-;; (setq gc-cons-threshold (* 50 1000 1000))
-;; (setq gc-cons-threshold most-positive-fixnum)
+;; Set gc-cons-threshold temporarily to accelerate startup time
+(setq gc-cons-threshold (* 50 1000 1000))
 (add-hook 'emacs-startup-hook (lambda () (setq gc-cons-threshold 800000)))
 
 ;; Remove org-mode shipped with Emacs from load-path
