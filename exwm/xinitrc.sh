@@ -45,6 +45,5 @@ export EDITOR="$VISUAL"
 setxkbmap -layout us -option ctrl:nocaps
 
 exec dbus-launch --exit-with-session emacs \
-     --debug-init \
      --eval "(require 'init-exwm-config)" \
      "$@"
