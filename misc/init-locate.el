@@ -5,7 +5,8 @@
 
 (defcustom akirak/locate-roots
   `(("~/.emacs.d" "emacs.db"
-     :prune-paths ("~/.emacs.d/.cache"))
+     :prune-paths ("~/.emacs.d/.cache"
+                   "~/.emacs.d/straight/build"))
     ("~/.config" "config.db"
      :prune-paths ("~/.config/chromium"))
     ,@(cl-loop for name in (directory-files "~" nil "^[^\.]")
