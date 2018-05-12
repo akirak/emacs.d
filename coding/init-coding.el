@@ -9,6 +9,7 @@
 (require 'init-yasnippet)
 (require 'init-yankpad)
 (require 'init-aggressive-indent)
+(require 'init-corral)
 (require 'init-prog-commands)
 
 (provide 'init-coding)
