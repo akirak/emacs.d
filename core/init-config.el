@@ -32,11 +32,18 @@
   (setq no-littering-var-directory
         (expand-file-name ".cache" user-emacs-directory)))
 
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :init
+  (exec-path-from-shell-initialize))
+
 ;; Allow :diminish keyword in use-package directives
 (require 'init-diminish)
 ;; Allow use of :general keyword in use-package directives
 (require 'init-general)
 ;; Allow use of :wk keyword in general.el keybinding definitions
 (require 'init-which-key)
+;; Allow installation of system packages via use-package
+(require 'init-system-packages)
 
 (provide 'init-config)
