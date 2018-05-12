@@ -3,6 +3,7 @@
   :diminish 'yas-minor-mode
   :config
   (yas-global-mode 1)
-  (add-to-list 'company-backends 'company-yasnippet t))
+  (with-eval-after-load 'company
+    (add-hook 'company-backends 'company-yasnippet t)))
 
 (provide 'init-yasnippet)
