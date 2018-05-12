@@ -70,6 +70,7 @@
 (require 'init-markdown)
 (require 'init-haskell)
 (require 'init-dockerfile)
+(require 'init-kotlin)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
