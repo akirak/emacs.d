@@ -1,10 +1,10 @@
-[![Build Status](https://travis-ci.org/akirak/emacs.d.svg?branch=devel)](https://travis-ci.org/akirak/emacs.d)
+[![Build Status](https://travis-ci.org/akirak/emacs.d.svg)](https://travis-ci.org/akirak/emacs.d)
 
 # emacs.d
-This Emacs configuration is currently under development.
+This is my working Emacs configuration.
 
 ## Prerequisites
-This configuration requires Emacs 25.2 or later.
+Emacs 25.2 or later
 
 ## Installation
 You can use [playground](https://github.com/akirak/emacs-playground) to try out this configuration.
@@ -15,8 +15,3 @@ To properly install this configuration, first back up your current configuration
 
 ## License
 GPL v3
-
-## Resources
-
-- [Advanced Techniques for Reducing Emacs Startup Time](https://blog.d46.us/advanced-emacs-startup/)
-- [hlissner/doom-emacs](https://github.com/hlissner/doom-emacs)
