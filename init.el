@@ -71,6 +71,7 @@
 (require 'init-haskell)
 (require 'init-dockerfile)
 (require 'init-kotlin)
+(require 'init-emacs-lisp)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
