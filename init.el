@@ -35,6 +35,7 @@
 (when (file-exists-p custom-file) (load-file custom-file))
 
 ;; This needs to be loaded first
+(require 'init-compat)
 (require 'init-config)
 
 ;;; Basic configuration
