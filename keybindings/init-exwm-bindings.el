@@ -51,6 +51,8 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-9" . window-go-bottom)
  ("s-," . winner-undo)
  ("s-." . winner-redo)
+ ("s-[" . fm-left-frame)
+ ("s-]" . fm-right-frame)
  ("s--" . delete-other-windows)
  ("s-S-SPC" . balance-windows)
  ("s-SPC" . akirak/exwm-window-command-map)
