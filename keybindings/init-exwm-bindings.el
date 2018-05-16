@@ -29,6 +29,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-b" . exwm-workspace-switch-to-buffer)
  ("s-c" . akirak/capture-map)
  ("s-d" . (lambda () (interactive) (org-clock-goto) (delete-other-windows)))
+ ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
  ("s-h" . exwm-window-go-shrink-horizontally)
  ("s-j" . other-window)
