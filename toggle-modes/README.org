@@ -1,0 +1,1 @@
+This is a hydra for toggling minor modes such as =flycheck-mode=, =flyspell-mode=, and so on.
