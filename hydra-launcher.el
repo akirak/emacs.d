@@ -1,4 +1,5 @@
-(autoload 'akirak/emacs-lisp-hydra "emacs-lisp-hydra")
+(autoload 'akirak/emacs-lisp-hydra "emacs-lisp-hydra"
+  "Hydra for Emacs Lisp." t)
 
 (defcustom akirak/hydra-launcher-major-mode-command-alist
   '((emacs-lisp-mode . akirak/emacs-lisp-hydra))
