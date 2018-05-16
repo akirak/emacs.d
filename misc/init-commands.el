@@ -5,4 +5,6 @@
 
 (use-package restart-emacs)
 
+(require 'init-helpful)
+
 (provide 'init-commands)
