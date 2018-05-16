@@ -3,10 +3,6 @@
 ;; Required by org-git-version and org-release
 (use-package git)
 
-(use-package org
-  :config
-  (require 'org-loaddefs))
-
 ;; Workarounds for org-mode installed by straight.el
 ;; See https://github.com/raxod502/radian/blob/master/radian-emacs/radian-org.el
 (defun org-git-version ()
@@ -36,5 +32,9 @@
                "HEAD")))))
 
 (provide 'org-version)
+
+(use-package org
+  :config
+  (require 'org-loaddefs))
 
 (provide 'init-org-base)
