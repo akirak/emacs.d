@@ -1,0 +1,5 @@
+#+title: Emacs Hydra Collection
+
+This is a collection of [[https://github.com/abo-abo/hydra][Hydra]] applications I implemented. They may not require dependencies that are not part of this repository. 
+* License
+GPL v3
