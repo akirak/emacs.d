@@ -1,5 +1,5 @@
 (defcustom akirak/hydra-launcher-major-mode-command-alist
-  '((emacs-lisp-mode . akirak/emacs-lisp-hydra/body))
+  '((emacs-lisp-mode . akirak/emacs-lisp-hydra))
   "Alist of major modes and commands for hydra-launcher.")
 
 (defun akirak/hydra-launcher-for-major-mode ()
