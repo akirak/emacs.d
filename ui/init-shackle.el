@@ -11,6 +11,9 @@
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
                    ("*compilation*" :other t)
+                   ;; org-capture to org-journal needs a big window
+                   ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
+                   ("^CAPTURE-\\(fix\\|search\\)" :regexp t :other t)
                    ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
