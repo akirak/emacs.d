@@ -1,5 +1,4 @@
 (require 'exwm-input)
-(require 'init-capture-map)
 
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
@@ -19,15 +18,16 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
 
 (akirak/exwm-bind-keys
  ("s-A" . akirak/org-optimistic-agenda)
+ ("s-C" . akirak/screenshot)
  ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
                                      (call-interactively 'counsel-ag))))
  ("s-H" . exwm-window-go-shrink)
  ("s-L" . exwm-window-go-grow)
  ("s-S" . exwm-workspace-move-window)
  ("s-Z" . counsel-org-offtime)
- ("s-a" . akirak/org-agenda-for-today)
+ ("s-a" . org-agenda)
  ("s-b" . exwm-workspace-switch-to-buffer)
- ("s-c" . akirak/capture-map)
+ ("s-c" . org-capture)
  ("s-d" . (lambda () (interactive) (org-clock-goto) (delete-other-windows)))
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)

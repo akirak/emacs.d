@@ -1,3 +1,5 @@
+;; I have stopped using this keymap as I bound this binding directory to
+;; org-capture.
 (define-prefix-command 'akirak/capture-map)
 
 (general-def akirak/capture-map
