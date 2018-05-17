@@ -1,11 +1,13 @@
 (require 'init-app-map)
 (require 'init-project-map)
+(require 'init-hydra)
 
 (general-def
   "<S-f1>" 'helm-apropos
   "<M-f1>" 'woman
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
+  "<f7>" 'akirak/hydra-launcher-for-major-mode
   "<f8>" 'projectile-test-command
   "<S-f8>" 'akirak/project-map
   "<f9>" 'recompile

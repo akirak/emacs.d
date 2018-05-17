@@ -1,11 +1,11 @@
 (require 'init-customize-map)
-(require 'init-toggle-map)
+(require 'init-hydra)
 
 (general-def
   "C-x c" #'akirak/customize-map
   "C-x g" #'magit
   "C-x p" #'counsel-projectile
-  "C-x t" #'akirak/toggle-map
+  "C-x t" #'akirak/toggle-modes-hydra/body
   "C-x u" #'undo-tree-visualize
   "C-x K" #'kill-this-buffer
   "C-x /" #'counsel-ag
