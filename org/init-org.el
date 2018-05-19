@@ -7,6 +7,7 @@
 (require 'init-org-super-agenda)
 (require 'init-helm-org-rifle)
 (require 'init-counsel-org-clock)
+(require 'init-org-bindings)
 
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))

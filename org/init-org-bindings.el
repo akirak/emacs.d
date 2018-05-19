@@ -6,4 +6,4 @@
   "M-L" 'org-shiftmetaright
   "C-c o l" '(org-web-tools-insert-link-for-url :wk "insert link for url"))
 
-(provide 'init-org-keys)
+(provide 'init-org-bindings)
