@@ -4,7 +4,9 @@
 (require 'init-font)
 (require 'init-olivetti)
 (require 'init-ace-window)
-(require 'init-treemacs)
+;; Deprecate treemacs in favor of sidebar
+;; (require 'init-treemacs)
+(require 'init-sidebar)
 (require 'init-framemove)
 
 (require 'init-anzu)
