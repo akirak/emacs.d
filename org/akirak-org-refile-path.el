@@ -2,6 +2,7 @@
 (require 'org)
 
 (defun akirak//org-propertize-path (segs)
+  "Build a propertized refile path from SEGS."
   (cl-loop for seg being the elements of segs using (index i)
            concat (concat
                    "/"
@@ -13,7 +14,11 @@
                      seg))))
 
 (defun akirak/ad-filter-org-refile-targets (targets)
+  "Modify TARGETS of `org-refile' for better presentation."
+  ;; Modify the targets if and only if you use full file paths.
   (if (eq org-refile-use-outline-path 'full-file-path)
+      ;; Modify the path (the first element) in each candidate.
+      ;; Its file name is used as a hint, and the rest are irrelevant.
       (cl-loop for (path filename . rest) in targets
                collect (cons (let* ((nondir (file-name-nondirectory filename))
                                     (pos (string-match (regexp-quote nondir) path))
