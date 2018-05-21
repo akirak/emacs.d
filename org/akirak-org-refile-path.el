@@ -36,13 +36,18 @@
 ;; a new node. Advise `completing-read' temporarily instead.
 ;; (advice-add #'org-refile-get-targets :filter-return #'akirak/ad-filter-org-refile-targets)
 
+(require 'dash)
+
 (defun akirak/ad-around-org-refile-completing-read (oldfun prompt candidates &rest r)
   "Advice function for `completing-read' for use inside `org-refile-get-location'."
   (if (eq org-refile-use-outline-path 'full-file-path)
-      (expand-file-name (substring-no-properties
-                         (apply oldfun prompt
-                                (akirak/ad-filter-org-refile-targets candidates)
-                                r)))
+      (let* ((modified-candidates (akirak/ad-filter-org-refile-targets candidates))
+             ;; Store the mapping to support symlinked targets
+             (alist (-zip (mapcar #'car modified-candidates)
+                          (mapcar #'car candidates)))
+             (raw (apply oldfun prompt modified-candidates r)))
+        (or (cdr (assoc raw alist))
+            (expand-file-name (substring-no-properties raw))))
     (apply oldfun prompt candidates r)))
 
 (defun akirak/ad-around-org-refile-get-location (oldfun &rest r)
