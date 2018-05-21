@@ -1,7 +1,7 @@
 (straight-override-recipe '(org-super-agenda
                             :host github
-                            :repo "alphapapa/org-super-agenda"
-                            :branch "reverse-auto-group-items"))
+                            :repo "akirak/org-super-agenda"
+                            :branch "reverse-auto-category-items"))
 
 (use-package org-super-agenda)
 
