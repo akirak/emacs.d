@@ -1,5 +1,8 @@
 (require 'exwm-input)
 
+(require 'init-framegroups)
+(require 'init-framegroup-map)
+
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
 (use-package exwm-window-go
@@ -31,6 +34,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-d" . (lambda () (interactive) (org-clock-goto) (delete-other-windows)))
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
+ ("s-g" . akirak/framegroup-map)
  ("s-h" . exwm-window-go-shrink-horizontally)
  ("s-j" . other-window)
  ("s-k" . window-go-previous)
@@ -62,8 +66,9 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("M-<f2>" . akirak/counsel-external-command)
  ("M-<f4>" . kill-this-buffer-and-its-window)
  ("<s-return>" . window-go-swap-master)
- ("<s-insert>" . exwm-workspace-add)
+ ("<s-insert>" . fg-create-frame)
  ("<s-delete>" . exwm-workspace-delete)
+ ("<s-tab>" . fg-switch-to-last-frame)
  ;; ("<print>" . akirak/screenshot)
  ("s-0" . delete-window)
  ("s-/" . counsel-wmctrl))

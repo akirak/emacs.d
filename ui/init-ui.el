@@ -8,6 +8,7 @@
 ;; (require 'init-treemacs)
 (require 'init-sidebar)
 (require 'init-framemove)
+(require 'init-frames)
 
 (require 'init-anzu)
 
