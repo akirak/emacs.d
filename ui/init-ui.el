@@ -9,6 +9,7 @@
 (require 'init-sidebar)
 (require 'init-framemove)
 (require 'init-frames)
+(require 'init-modeline)
 
 (require 'init-anzu)
 
