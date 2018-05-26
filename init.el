@@ -30,10 +30,6 @@
                   "international"))
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
-;; Load custom settings
-(setq-default custom-file (expand-file-name "custom.el" akirak/dotemacs-directory))
-(when (file-exists-p custom-file) (load-file custom-file))
-
 ;; This needs to be loaded first
 (require 'init-compat)
 (require 'init-config)
