@@ -72,3 +72,4 @@
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
+(require 'init-chinese)
