@@ -2,6 +2,22 @@
 
 (defvar lemonbar-org-clock-string nil)
 
+(defvar lemonbar-org-clock-color nil)
+
+(defconst lemonbar-org-clock-color-reset "{B-}{F-}")
+
+(defcustom lemonbar-org-clock-clock-out-color
+  "%{B\#3f51b5}%{F\#ffffff}"
+  "Color format string applied when there is no running clock.")
+
+(defcustom lemonbar-org-clock-default-clock-in-color
+  "%{B\#8bc34a}%{F\#000000}"
+  "Color format string applied when there is no running clock.")
+
+(defcustom lemonbar-org-clock-offtime-clock-in-color
+  "%{B\#e51c23}%{F\#ffffff}"
+  "Color format string applied when the current clock is in offtime category.")
+
 (defun lemonbar-org-clock--statistics (&optional start)
   "Get category statistics."
   (let* ((start (or start
@@ -39,6 +55,10 @@
                                     (float-time org-clock-start-time)) 60)))
            (total org-clock-total-time)
            (effort org-clock-effort))
+       (setq lemonbar-org-clock-color
+             (if (string-equal category "offtime")
+                 lemonbar-org-clock-offtime-clock-in-color
+               lemonbar-org-clock-default-clock-in-color))
        (let-alist lemonbar-org-clock-status
          (format "%s on \"%s\" (Today: %s on %s, total %s)"
                  (concat clocked-time
@@ -72,6 +92,7 @@
   (setq lemonbar-org-clock-string
         (if (org-clocking-p)
             (lemonbar-org-clock--current-clock)
+          (setq lemonbar-org-clock-color lemonbar-org-clock-clock-out-color)
           (when (memq event '(clock-out start))
             (lemonbar-org-clock--last-clock))
           (let-alist lemonbar-org-clock-status
