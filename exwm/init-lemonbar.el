@@ -8,10 +8,12 @@
                       "-p"
                       "-f" "Hack-9"))
   (lemonbar-output-template '(akirak/lemonbar-exwm-buffer-list
-                              "| "
+                              lemonbar-align-center
                               lemonbar-org-clock-string
                               lemonbar-align-right
-                              akirak/lemonbar-i3status)))
+                              ;; Somehow this doesn't work now
+                              ;; akirak/lemonbar-i3status
+                              (:eval (format-time-string "%F (%a) %R %Z")))))
 
 ;;;; Display statistics of X windows
 (defvar akirak/lemonbar-exwm-buffer-list nil)
