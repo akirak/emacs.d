@@ -2,6 +2,7 @@
   :straight (lemonbar :host github :repo "akirak/lemonbar.el")
   :config
   (lemonbar-set-output-template '(lemonbar-org-clock-color
+                                  "  "
                                   akirak/lemonbar-exwm-buffer-list
                                   lemonbar-align-center
                                   lemonbar-org-clock-string
@@ -9,20 +10,14 @@
                                   ;; Somehow this doesn't work now
                                   ;; akirak/lemonbar-i3status
                                   (:eval (format-time-string "%F (%a) %R %Z"))
+                                  "  "
                                   lemonbar-org-clock-reset-color))
   (lemonbar-start)
   :custom
-  (lemonbar-options `("-b"            ; Dock the bar at the bottom of the screen
-                      "-g" "1920x20+0+0"
+  (lemonbar-options '("-b"            ; Dock the bar at the bottom of the screen
+                      "-g" "1920x22+0+0"
                       "-p"
-                      "-f" "Hack-9"))
-  (lemonbar-output-template '(akirak/lemonbar-exwm-buffer-list
-                              lemonbar-align-center
-                              lemonbar-org-clock-string
-                              lemonbar-align-right
-                              ;; Somehow this doesn't work now
-                              ;; akirak/lemonbar-i3status
-                              (:eval (format-time-string "%F (%a) %R %Z")))))
+                      "-f" "Noto Sans-10.5:medium:italic")))
 
 ;;;; Display statistics of X windows
 (defvar akirak/lemonbar-exwm-buffer-list nil)
