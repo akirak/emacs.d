@@ -3,6 +3,8 @@
   :config
   (lemonbar-set-output-template '(lemonbar-org-clock-color
                                   "  "
+                                  akirak/lemonbar-exwm-workspace-list
+                                  "  "
                                   akirak/lemonbar-exwm-buffer-list
                                   lemonbar-align-center
                                   lemonbar-org-clock-string
@@ -18,6 +20,33 @@
                       "-g" "1920x22+0+0"
                       "-p"
                       "-f" "Noto Sans-10.5:medium:italic")))
+
+;;;; EXWM workspaces
+(defvar akirak/lemonbar-exwm-workspace-list nil)
+
+(defun akirak/lemonbar-update-exwm-workspace-list ()
+  (setq akirak/lemonbar-exwm-workspace-list
+        (mapconcat (lambda (i)
+                     (let* ((frm (exwm-workspace--workspace-from-frame-or-index i))
+                            (name (frame-parameter frm 'workflow-prototype)))
+                       (format
+                        (cond
+                         ((equal frm (selected-frame)) "[%s*]")
+                         ;; TODO: A better way to detect active workspaces
+                         ;; This does not always detect all active workspaces.
+                         ((exwm-workspace--active-p frm) "[%s]")
+                         (t "%s"))
+                        (concat (int-to-string i)
+                                (if name
+                                    (concat ":" (symbol-name name))
+                                  "")))))
+                   (number-sequence 0 (1- (exwm-workspace--count)))
+                   " "))
+  (lemonbar-update))
+
+(add-hook 'exwm-workspace-list-change-hook #'akirak/lemonbar-update-exwm-workspace-list)
+(add-hook 'exwm-workspace-switch-hook #'akirak/lemonbar-update-exwm-workspace-list)
+(add-hook 'frame-workflow-set-prototype-hook #'akirak/lemonbar-update-exwm-workspace-list)
 
 ;;;; Display statistics of X windows
 (defvar akirak/lemonbar-exwm-buffer-list nil)
