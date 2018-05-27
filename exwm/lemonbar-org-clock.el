@@ -48,9 +48,9 @@
                          (when effort
                            (concat "/" (prin1-to-string effort))))
                  title
-                 (cdr (assoc category .categories))
+                 (or (cdr (assoc category .categories)) "0")
                  category
-                 .total))))))
+                 (or .total "0")))))))
 
 (defvar lemonbar-org-clock-last-clock nil)
 
@@ -75,7 +75,7 @@
           (when (memq event '(clock-out start))
             (lemonbar-org-clock--last-clock))
           (let-alist lemonbar-org-clock-status
-            (concat (format "Spent %s today" .total)
+            (concat (format "Spent %s today" (or .total 0))
                     (when lemonbar-org-clock-last-clock
                       (let-alist lemonbar-org-clock-last-clock
                         (format ", clocked out at %s (%s ago) from \"%s\" in %s"
