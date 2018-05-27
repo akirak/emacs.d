@@ -7,4 +7,9 @@
   :after katawa
   :commands (katawa-ivy katawa-ivy-fix katawa-ivy-fix-at-point))
 
+(use-package katawa-ivy-exwm
+  :straight katawa
+  :after exwm
+  :commands (katawa-ivy-exwm))
+
 (provide 'init-katawa)
