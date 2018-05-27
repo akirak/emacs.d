@@ -7,11 +7,13 @@
   "<M-f1>" 'woman
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
+  "<S-f6>" 'multi-term-next
   "<f7>" 'akirak/hydra-launcher-for-major-mode
   "<f8>" 'projectile-test-command
   "<S-f8>" 'akirak/project-map
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
+  "<M-f10>" 'menu-bar-mode
   "<f12>" 'akirak/app-map
   "<S-f12>" 'helm-org-starter
   "<M-f12>" 'helm-org-rifle
@@ -19,9 +21,11 @@
 
 ;; Most of these commands are from crux and fwb-cmds.el
 (general-def :prefix "<f2>"
+  "c" #'magit-branch-and-checkout
   "D" #'crux-delete-file-and-buffer
   "F" #'switch-to-current-buffer-other-frame
   "k" #'kill-this-buffer-and-its-window
+  "m" (lambda () (interactive) (magit-checkout "master"))
   "o" #'crux-open-with
   "r" #'counsel-recentf
   "R" #'crux-rename-file-and-buffer
