@@ -1,7 +1,5 @@
 (require 'exwm-input)
 
-(require 'init-frame-map)
-
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
 (use-package exwm-window-go
@@ -18,6 +16,8 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                                (t key))
                                              (quote ,cmd)))))
 
+(define-prefix-command 'akirak/frame-map)
+
 (akirak/exwm-bind-keys
  ("s-A" . akirak/org-optimistic-agenda)
  ("s-C" . akirak/screenshot)
@@ -25,13 +25,14 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                      (call-interactively 'counsel-ag))))
  ("s-H" . exwm-window-go-shrink)
  ("s-L" . exwm-window-go-grow)
- ;; ("s-S" . exwm-workspace-move-window)
+ ("s-P" . exwm-window-go-next-hidden-workspace)
+ ("s-S" . exwm-workspace-move-window)
  ("s-X" . frame-workflow-select-action)
  ("s-Z" . counsel-org-offtime)
  ("s-a" . org-agenda)
  ("s-b" . exwm-workspace-switch-to-buffer)
  ("s-c" . org-capture)
- ("s-d" . (lambda () (interactive) (org-journal-new-entry t)))
+ ("s-d" . (lambda () (interactive) (org-journal-new-entry t) (org-show-entry)))
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
  ("s-g" . akirak/frame-map)
@@ -42,47 +43,54 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-m" . window-go-master)
  ("s-n" . akirak/exwm-next-workspace)
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
- ("s-p" . akirak/exwm-previous-workspace)
- ("s-s" . frame-workflow-switch-frame)
  ("s-u" . exwm-reset)
+ ("s-p" . exwm-window-go-previous-hidden-workspace)
+ ("s-s" . exwm-workspace-switch)
  ("s-v" . toggle-window-split)
  ("s-w" . akirak/exwm-goto-browser)
  ("s-x" . frame-workflow-action-map)
  ("s-y" . window-go-other-buffer-in-split-window)
  ("s-z" . counsel-org-clock-context)
- ("s-6" . window-go-first-file-window)
- ("s-7" . windmove-left)
- ("s-8" . windmove-right)
  ("s-9" . window-go-bottom)
  ("s-," . winner-undo)
  ("s-." . winner-redo)
- ("s-[" . fm-left-frame)
- ("s-]" . fm-right-frame)
+ ("s-[" . exwm-window-go-next-visible-workspace)
+ ("s-]" . exwm-window-go-previous-visible-workspace)
  ("s-\\" . katawa-ivy-exwm)
  ("s--" . delete-other-windows)
- ("s-S-SPC" . balance-windows)
- ("s-SPC" . akirak/exwm-window-command-map)
+ ("s-=" . balance-windows)
+ ("s-SPC" . switch-window)
+ ("s-S-SPC" . frame-workflow-exwm-swap-workspaces)
  ("M-<f2>" . akirak/counsel-external-command)
  ("M-S-<f2>" . counsel-linux-app)
  ("M-<f4>" . kill-this-buffer-and-its-window)
- ("<s-return>" . window-go-swap-master)
+ ("<s-return>" . switch-window-then-swap-buffer)
  ("<s-insert>" . frame-workflow-make-frame)
  ("<s-delete>" . exwm-workspace-delete)
  ;; ("<print>" . akirak/screenshot)
  ("s-0" . delete-window)
  ("s-/" . counsel-wmctrl))
 
-;;;; Keybindings in exwm-mode-map 
+;;;; Keybindings in exwm-mode-map
 (general-def exwm-mode-map
   "s-i" #'exwm-input-release-keyboard)
 
 ;;;; Keymap for commands on the current X window
-(define-prefix-command 'akirak/exwm-window-command-map)
+(general-def :keymaps 'switch-window-extra-map :package 'switch-window
+  "h" (lambda () (interactive) (exwm-floating-hide) (keyboard-quit))
+  "t" (lambda () (interactive) (exwm-floating-toggle-floating) (keyboard-quit))
+  "x" (lambda () (interactive) (exwm-layout-toggle-fullscreen) (keyboard-quit)))
 
-(general-def akirak/exwm-window-command-map
-  "f" #'exwm-layout-toggle-fullscreen
-  "t" #'exwm-floating-toggle-floating
-  "h" #'exwm-floating-hide)
+(with-eval-after-load 'switch-window
+  (dolist (i (number-sequence 0 9))
+    (define-key switch-window-extra-map (int-to-string i)
+      `(lambda () (interactive) (exwm-workspace-move-window ,i)))))
+
+(general-def :prefix-map 'akirak/frame-map :prefix "s-g"
+  "e" '((lambda () (interactive) (frame-workflow-switch-frame 'emacs-lisp))
+        :which-key "emacs-lisp")
+  "w" '((lambda () (interactive) (frame-workflow-switch-frame 'web))
+        :which-key "web"))
 
 ;;;; Simulation key
 

@@ -3,7 +3,8 @@
 (require 'init-shackle)
 (require 'init-font)
 (require 'init-olivetti)
-(require 'init-ace-window)
+(require 'init-switch-window)
+;; (require 'init-ace-window)
 ;; Deprecate treemacs in favor of sidebar
 ;; (require 'init-treemacs)
 (require 'init-sidebar)
