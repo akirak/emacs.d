@@ -16,6 +16,9 @@
 (add-to-list 'recentf-exclude
              (expand-file-name "~/\.emacs\.d/straight/build/.+-autoloads\.el"))
 
+(add-to-list 'recentf-exclude
+             (expand-file-name "~/\.emacs\.d/\.cache\/") t)
+
 ;; Highlight matching parentheses
 (show-paren-mode 1)
 
