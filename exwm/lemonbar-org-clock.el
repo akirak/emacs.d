@@ -77,13 +77,23 @@
 (defun lemonbar-org-clock--last-clock ()
   "Update information on the last running clock."
   (setq lemonbar-org-clock-last-clock
-        (when-let ((marker (car org-clock-history)))
-          (with-current-buffer (marker-buffer marker)
-            (org-with-wide-buffer
-             (goto-char marker)
-             (list (cons 'title (nth 4 (org-heading-components)))
-                   (cons 'time (org-clock-get-last-clock-out-time))
-                   (cons 'category (org-get-category))))))))
+        (let (found
+              (history (copy-list org-clock-history)))
+          ;; Repeat until a proper clock is found
+          (while (not found)
+            (when-let ((marker (pop history)))
+              (with-current-buffer (marker-buffer marker)
+                (org-with-wide-buffer
+                 (goto-char marker)
+                 ;; Check the daily total clock time on the subtree
+                 ;; as there are some cases where the clock finishes too quickly
+                 ;; e.g. some org-capture executions
+                 (when (> (org-clock-sum-current-item) 0)
+                   (setq found
+                         (list (cons 'title (nth 4 (org-heading-components)))
+                               (cons 'time (org-clock-get-last-clock-out-time))
+                               (cons 'category (org-get-category)))))))))
+          found)))
 
 (defun lemonbar-org-clock-update (&optional event trigger-update)
   "Update the string to describe the clock status."
