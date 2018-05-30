@@ -1,14 +1,4 @@
-(use-package hydra)
-
-(straight-use-package '(hydra-collection
-                        :host github :repo "akirak/hydra-collection"))
-
-(use-package hydra-launcher
-  :straight hydra-collection
-  :commands (akirak/hydra-launcher-for-major-mode))
-
-(use-package toggle-modes-hydra
-  :straight hydra-collection
-  :commands (akirak/toggle-modes-hydra/body))
+(autoload 'akirak/hydra-launcher-for-major-mode "hydra-launcher")
+(autoload 'akirak/toggle-modes-hydra/body "toggle-modes-hydra")
 
 (provide 'init-hydra)

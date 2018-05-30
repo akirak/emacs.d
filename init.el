@@ -22,6 +22,7 @@
                   "keybindings"
                   "progmodes"
                   "coding"
+                  "hydra"
                   "misc"
                   "org"
                   "apps"
