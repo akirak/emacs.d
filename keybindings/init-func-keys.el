@@ -16,10 +16,7 @@
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
   "<M-f10>" 'menu-bar-mode
-  "<f12>" 'akirak/app-map
-  "<S-f12>" 'helm-org-starter
-  "<M-f12>" 'helm-org-rifle
-  "<M-S-f12>" 'org-journal-search)
+  "<f12>" 'akirak/app-map)
 
 ;; Most of these commands are from crux and fwb-cmds.el
 (general-def :prefix "<f2>"
