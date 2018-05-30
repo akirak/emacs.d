@@ -40,6 +40,8 @@
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
+  (add-to-list 'swiper-font-lock-exclude 'emacs-lisp-mode)
+  (add-to-list 'swiper-font-lock-exclude 'org-mode)
   :general
   ("C-s" #'swiper
    "C-r" #'swiper)
