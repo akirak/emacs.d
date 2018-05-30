@@ -1,10 +1,12 @@
 (require 'init-app-map)
 (require 'init-project-map)
 (require 'init-hydra)
+(require 'init-global-org-map)
 
 (general-def
   "<S-f1>" 'helm-apropos
   "<M-f1>" 'woman
+  "<S-f2>" #'akirak/global-org-map
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
   "<S-f6>" 'multi-term-next
