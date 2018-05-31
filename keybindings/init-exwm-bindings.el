@@ -16,8 +16,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                                (t key))
                                              (quote ,cmd)))))
 
-(define-prefix-command 'akirak/frame-map)
-
 (akirak/exwm-bind-keys
  ("s-A" . akirak/org-optimistic-agenda)
  ("s-C" . akirak/screenshot)
@@ -73,13 +71,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
 ;;;; Keybindings in exwm-mode-map
 (general-def exwm-mode-map
   "s-i" #'exwm-input-release-keyboard)
-
-;;;; frame-workflow
-(general-def :prefix-map 'akirak/frame-map :prefix "s-g"
-  "e" '((lambda () (interactive) (frame-workflow-switch-frame 'emacs-lisp))
-        :which-key "emacs-lisp")
-  "w" '((lambda () (interactive) (frame-workflow-switch-frame 'web))
-        :which-key "web"))
 
 ;;;; Simulation key
 
