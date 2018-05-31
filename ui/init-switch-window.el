@@ -21,7 +21,6 @@ When a universal prefix is given, select a window to delete."
           'akirak/switch-window-frame-list-function))
   :general
   (:keymaps 'switch-window-extra-map
-            "=" #'balance-windows
             "q" #'keyboard-quit)
   :custom
   (switch-window-multiple-frames t)

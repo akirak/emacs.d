@@ -41,7 +41,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-k" . window-go-previous)
  ("s-l" . exwm-window-go-grow-horizontally)
  ("s-m" . window-go-master)
- ("s-n" . akirak/exwm-next-workspace)
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
  ("s-u" . exwm-reset)
  ("s-p" . exwm-window-go-previous-hidden-workspace)
@@ -75,17 +74,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
 (general-def exwm-mode-map
   "s-i" #'exwm-input-release-keyboard)
 
-;;;; Keymap for commands on the current X window
-(general-def :keymaps 'switch-window-extra-map :package 'switch-window
-  "h" (lambda () (interactive) (exwm-floating-hide) (keyboard-quit))
-  "t" (lambda () (interactive) (exwm-floating-toggle-floating) (keyboard-quit))
-  "x" (lambda () (interactive) (exwm-layout-toggle-fullscreen) (keyboard-quit)))
-
-(with-eval-after-load 'switch-window
-  (dolist (i (number-sequence 0 9))
-    (define-key switch-window-extra-map (int-to-string i)
-      `(lambda () (interactive) (exwm-workspace-move-window ,i)))))
-
+;;;; frame-workflow
 (general-def :prefix-map 'akirak/frame-map :prefix "s-g"
   "e" '((lambda () (interactive) (frame-workflow-switch-frame 'emacs-lisp))
         :which-key "emacs-lisp")
@@ -120,19 +109,5 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
 
 (with-eval-after-load 'exwm-input
   (exwm-input-set-simulation-keys jf/default-simulation-keys))
-
-(defun akirak/exwm-next-workspace (&optional inc)
-  (interactive)
-  (let* ((inc (or inc 1))
-         (index (+ exwm-workspace-current-index inc))
-         (len (length exwm-workspace--list)))
-    (exwm-workspace-switch (cond
-                            ((< index 0) (+ index len))
-                            ((< index len) index)
-                            (t (- index len))))))
-
-(defun akirak/exwm-previous-workspace (&optional inc)
-  (interactive)
-  (akirak/exwm-next-workspace (- (or inc 1))))
 
 (provide 'init-exwm-bindings)
