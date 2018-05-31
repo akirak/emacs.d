@@ -6,6 +6,7 @@
 
 (use-package helm-org-starter
   :straight org-starter
-  :commands (helm-org-starter))
+  :commands (helm-org-starter)
+  :defines (helm-org-starter-known-file-source))
 
 (provide 'init-org-starter)

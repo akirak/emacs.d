@@ -28,7 +28,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-X" . frame-workflow-select-action)
  ("s-Z" . counsel-org-offtime)
  ("s-a" . org-agenda)
- ("s-b" . exwm-workspace-switch-to-buffer)
+ ("s-b" . helm-mini)
  ("s-c" . org-capture)
  ("s-d" . (lambda () (interactive) (org-journal-new-entry t) (org-show-entry)))
  ("s-e" . ivy-bookmarked-directory)
@@ -66,7 +66,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("<s-delete>" . exwm-workspace-delete)
  ;; ("<print>" . akirak/screenshot)
  ("s-0" . delete-window)
- ("s-/" . counsel-wmctrl))
+ ("s-/" . helm-org-rifle-agenda-files-with-recent-headings))
 
 ;;;; Keybindings in exwm-mode-map
 (general-def exwm-mode-map

@@ -4,6 +4,7 @@
 (use-package helm
   :config
   (helm-autoresize-mode 1)
+  (require 'helm-mini-extra)
   :custom
   ;; (helm-command-prefix-key "C-c h")
   (helm-autoresize-max-height 40)
