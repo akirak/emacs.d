@@ -1,5 +1,17 @@
 (use-package switch-window
   :straight (switch-window :host github :repo "akirak/switch-window")
+  :init
+  ;; A wrapper function for `switch-window' command with prefix support
+  (defun akirak/switch-window (&optional arg)
+    "`switch-window' with an optional prefix argument.
+
+By default, this function behaves the same as `switch-window'.
+
+When a universal prefix is given, select a window to delete."
+    (interactive "P")
+    (pcase arg
+      ('(4) (switch-window-then-delete))
+      (_ (switch-window))))
   :config
   (defun akirak/switch-window-frame-list-function ()
     "Frame list function for `switch-window' on EXWM."

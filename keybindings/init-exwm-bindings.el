@@ -59,7 +59,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-\\" . katawa-ivy-exwm)
  ("s--" . delete-other-windows)
  ("s-=" . balance-windows)
- ("s-SPC" . switch-window)
+ ("s-SPC" . akirak/switch-window)
  ("s-S-SPC" . frame-workflow-exwm-swap-workspaces)
  ("M-<f2>" . akirak/counsel-external-command)
  ("M-S-<f2>" . counsel-linux-app)
