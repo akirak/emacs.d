@@ -51,6 +51,7 @@
 (require 'init-midnight)
 (require 'init-playground)
 (require 'init-locate)
+(require 'init-gpastel)
 
 ;;; Apps (apps/)
 (require 'init-multi-term)
