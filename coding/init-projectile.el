@@ -3,6 +3,15 @@
       (file-equal-p "~/annex/" root)
       (string-prefix-p "/usr/" root)))
 
+(advice-add #'projectile-keep-project-p :after-while
+            (lambda (project) (not (akirak/projectile-ignore-project-p project))))
+
+(defun akirak/projectile-delete-duplicate-known-projects ()
+  (cl-delete-duplicates projectile-known-projects :test #'file-equal-p))
+
+(advice-add 'projectile-cleanup-known-projects :after
+            #'akirak/projectile-delete-duplicate-known-projects)
+
 (use-package projectile
   :init
   (projectile-mode)
@@ -11,6 +20,7 @@
   (projectile-create-missing-test-files t)
   (projectile-enable-caching t)
   (projectile-require-project-root nil)
+  (projectile-ignored-project-function #'akirak/projectile-ignore-project-p)
   (projectile-keymap-prefix (kbd "C-x 9")))
 
 (use-package counsel-projectile
