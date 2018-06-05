@@ -1,7 +1,8 @@
 ;;;; M-g
 
-(general-def
-  "M-g f" 'akirak/link-hint-open-link)
+(general-def "M-g c" #'avy-goto-char-in-line)
+
+(general-def "M-g f" 'akirak/link-hint-open-link)
 
 (akirak/define-contextual-key "M-g u"
   ('outline-up-heading :package 'outline :keymaps 'outline-minor-mode-map)
@@ -13,17 +14,13 @@
   ('counsel-imenu)
   ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
 
-(general-def
-    "M-s o" 'counsel-outline)
+(akirak/define-contextual-key "M-s o"
+  ('counsel-outline)
+  ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
 
 ;;;; Other keybindings under meta key
-
 (general-def
-  ;; "M-o" '(nil :package lispy :keymaps lispy-mode-map)
   "M-r" 'ivy-resume
-  "M-R" 'helm-resume
-  "M-z" 'zop-to-char
-  ;; M-TAB is C-M-i
   "M-;" 'comment-dwim-2
   "M-/" 'hippie-expand)
 
@@ -34,9 +31,7 @@
   "M-RET" 'outshine-insert-heading)
 (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-RET")
 
-(general-def "M-o" 'ace-window)
-(general-unbind :package 'lispy :keymaps 'lispy-mode-map "M-o")
-
+;; M-TAB is C-M-i
 (general-def "M-TAB" 'complete-symbol)
 (general-unbind :keymaps 'outline-minior-mode-map :package 'outshine "M-TAB")
 (general-unbind :keymaps 'flyspell-mode-map :package 'flyspell "M-TAB")
