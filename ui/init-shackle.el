@@ -6,6 +6,7 @@
   (shackle-default-ratio 0.4)
   (shackle-default-alignment 'below)
   (shackle-rules '(
+                   ("\\*ivy-occur counsel-projectile " :regexp t :align left :ratio 0.15)
                    ;; Shackle rules for org-mode
                    ("*Org Select*" :ratio 0.25 :align below)
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
