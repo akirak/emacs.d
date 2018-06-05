@@ -44,7 +44,11 @@
   (add-to-list 'swiper-font-lock-exclude 'org-mode)
   :general
   ("C-s" #'swiper
-   "C-r" #'swiper)
+   "C-r" #'swiper
+   :keymaps 'ivy-occur-mode-map
+   "n" #'ivy-occur-next-line
+   "p" #'ivy-occur-previous-line
+   "SPC" #'ivy-occur-press)
   :custom
   (enable-recursive-minibuffers t)
   (ivy-height 20)
