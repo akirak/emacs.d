@@ -1,4 +1,6 @@
-(use-package avy)
+(use-package avy
+  :init
+  (require 'avy-extra-commands))
 
 (use-package iedit)
 

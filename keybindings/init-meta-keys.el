@@ -8,11 +8,25 @@
   ('outline-up-heading :package 'outline :keymaps 'outline-minor-mode-map)
   ('org-up-element :package 'org :keymaps 'org-mode-map))
 
+(general-def "M-g w" #'akirak/avy-goto-symbol-in-line)
+
+;;;;; A bunch of avy commands to a symbol in line
+
+(general-def :prefix "M-g"
+  "p" #'akirak/avy-goto-defun-above
+  "n" #'akirak/avy-goto-defun-below
+  "-" #'akirak/avy-goto-word-in-line
+  "'" #'akirak/avy-goto-quote-in-line
+  "\"" #'akirak/avy-goto-dquote-in-line
+  "[" #'akirak/avy-goto-open-bracket-above-in-defun
+  "]" #'akirak/avy-goto-open-bracket-below-in-defun)
+
 ;;;; M-s
 
 (akirak/define-contextual-key "M-s i"
   ('counsel-imenu)
   ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
+
 
 (akirak/define-contextual-key "M-s o"
   ('counsel-outline)
