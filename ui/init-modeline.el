@@ -1,3 +1,7 @@
+(use-package relative-buffers
+  :config
+  (global-relative-buffers-mode))
+
 ;; Display both line and column numbers in the modeline
 (setq column-number-mode 1
       line-number-mode 1)
