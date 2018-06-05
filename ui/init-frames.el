@@ -7,11 +7,10 @@
   (frame-purpose-mode 1))
 
 (use-package frame-workflow
-  :straight (frame-workflow :host github :repo "akirak/frame-workflow")
-  :config
-  (require 'frame-workflow-purpose)
-  (frame-workflow-purpose-setup)
-  (require 'frame-workflow-menu))
+  :straight (frame-workflow :host github
+                            :repo
+                            "akirak/frame-workflow"
+                            :branch "eieio"))
 
 ;;;; Keymap to switch to a frame
 
@@ -24,12 +23,12 @@
 
 (defun akirak/frame-workflow-bind ()
   (let ((prefixes (mapcar 'key-description (where-is-internal 'akirak/frame-map))))
-    (cl-loop for (key . symbol) in akirak/frame-workflow-bindings
+    (cl-loop for (key . name) in akirak/frame-workflow-bindings
              do (define-key akirak/frame-map (kbd key)
-                  `(lambda () (interactive) (frame-workflow-switch-frame (quote ,symbol))))
+                  `(lambda () (interactive) (frame-workflow-switch-frame ,name)))
              do (cl-loop for prefix in prefixes
                          do (which-key-add-key-based-replacements
-                              (concat prefix " " key) (concat "" (symbol-name symbol)))))))
+                              (concat prefix " " key) (concat "" name))))))
 
 ;; As the prefix map is not bound to any key and the prefix key is unknown at
 ;; the time of loading this file, add the which-key replacements after startup.
