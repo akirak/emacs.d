@@ -63,6 +63,7 @@
 (require 'init-docker)
 
 ;;; Programming languages (progmodes/)
+(require 'init-git-modes)
 (require 'init-graphviz)
 (require 'init-nim)
 (require 'init-lispy)
