@@ -10,6 +10,9 @@
 (require 'init-yankpad)
 (require 'init-aggressive-indent)
 (require 'init-corral)
+(require 'init-symbol-overlay)
+(require 'init-rainbow-mode)
+(require 'init-fix-word)
 (require 'init-prog-commands)
 
 (provide 'init-coding)
