@@ -7,7 +7,7 @@
   "C-x p" #'counsel-projectile
   "C-x t" #'akirak/toggle-modes-hydra/body
   "C-x u" #'undo-tree-visualize
-  "C-x K" #'kill-this-buffer
+  "C-x k" #'kill-this-buffer
   "C-x w" #'frame-workflow-map
   "C-x /" #'counsel-ag
   "C-x =" #'narrow-or-widen-dwim
