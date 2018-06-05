@@ -1,15 +1,3 @@
-(use-package highlight-indent-guides
-  :init
-  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
-
-(use-package rainbow-delimiters
-  :init
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode))
-
-(use-package fill-column-indicator
-  :init
-  (add-hook 'prog-mode-hook 'fci-mode))
-
 (require 'whitespace)
 (diminish 'whitespace-mode)
 (setq whitespace-display-mappings
@@ -22,15 +10,4 @@
 (setq whitespace-style '(face tabs trailing tab-mark))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 
-(use-package git-gutter
-  :diminish git-gutter-mode
-  :init
-  (global-git-gutter-mode))
-
-(use-package dimmer
-  :init
-  (dimmer-mode 1)
-  :custom
-  (dimmer-exclusion-regexp "\\(\\*Help\\*\\|\\*helm\\)"))
-
-(provide 'init-visual-cues)
+(provide 'init-whitespace)

@@ -1,22 +1,40 @@
+;;;; General appearance
+(require 'init-font)
+(require 'init-modeline)
+
+;;;;; Prefered themes
+(require 'init-dracula-theme)
+
+;;;; Visual cues
+
+;;;;; Focus
+;; Use hl-line-mode
 (add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
 (add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
 
-(require 'init-dracula-theme)
-(require 'init-visual-cues)
-(require 'init-shackle)
-(require 'init-font)
-(require 'init-olivetti)
-(require 'init-switch-window)
-;; (require 'init-ace-window)
-;; Deprecate treemacs in favor of sidebar
-;; (require 'init-treemacs)
-(require 'init-sidebar)
-(require 'init-framemove)
-(require 'init-frames)
-(require 'init-modeline)
 (require 'init-focus)
 (require 'init-beacon)
+(require 'init-dimmer)
 
-(require 'init-anzu)
+;;;;; Text
+(require 'init-rainbow-delimiters)
+
+;;;;; Columns and spaces
+(require 'init-fci)
+(require 'init-highlight-indent-guides)
+(require 'init-whitespace)
+
+;;;;; Fringe
+(require 'init-git-gutter)
+
+;;;; Window layout
+(require 'init-shackle)
+
+;;;; Switching windows/frames
+(require 'init-frames)
+(require 'init-switch-window)
+
+;;;; Distraction-free editing
+(require 'init-olivetti)
 
 (provide 'init-ui)
