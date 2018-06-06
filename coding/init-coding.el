@@ -15,5 +15,6 @@
 (require 'init-fix-word)
 (require 'init-prog-commands)
 (require 'init-anzu)
+(require 'init-dumb-jump)
 
 (provide 'init-coding)

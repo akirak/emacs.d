@@ -10,6 +10,13 @@
 
 (general-def "M-g w" #'akirak/avy-goto-symbol-in-line)
 
+(general-def :prefix "M-g"
+  "." #'dumb-jump-go
+  "o" #'dumb-jump-go-other-window
+  "i" #'dumb-jump-go-prompt
+  "x" #'dumb-jump-prefer-external
+  "z" #'dumb-jump-go-prefer-external-other-window)
+
 ;;;;; A bunch of avy commands to a symbol in line
 
 (general-def :prefix "M-g"
