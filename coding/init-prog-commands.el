@@ -1,7 +1,3 @@
-(use-package avy
-  :init
-  (require 'avy-extra-commands))
-
 (use-package iedit)
 
 (use-package comment-dwim-2)
