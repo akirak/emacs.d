@@ -14,7 +14,7 @@
   "." #'dumb-jump-go
   "o" #'dumb-jump-go-other-window
   "i" #'dumb-jump-go-prompt
-  "x" #'dumb-jump-prefer-external
+  "x" #'dumb-jump-go-prefer-external
   "z" #'dumb-jump-go-prefer-external-other-window)
 
 ;;;;; A bunch of avy commands to a symbol in line
