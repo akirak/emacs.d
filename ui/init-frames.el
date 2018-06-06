@@ -8,11 +8,15 @@
 
 (use-package frame-workflow
   :straight (frame-workflow :host github
-                            :repo
-                            "akirak/frame-workflow"
+                            :repo "akirak/frame-workflow"
                             :branch "eieio")
   :config
   (frame-workflow-mode 1))
+
+(use-package helm-frame-workflow
+  :after (frame-workflow helm)
+  :straight frame-workflow
+  :commands (helm-frame-workflow))
 
 ;;;; Keymap to switch to a frame
 
