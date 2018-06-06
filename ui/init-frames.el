@@ -10,25 +10,33 @@
   :straight (frame-workflow :host github
                             :repo
                             "akirak/frame-workflow"
-                            :branch "eieio"))
+                            :branch "eieio")
+  :config
+  (frame-workflow-mode 1))
 
 ;;;; Keymap to switch to a frame
 
 (define-prefix-command 'akirak/frame-map)
 
-;; Store keybindings in the custom file, as my workflow is defined in the file.
-(defcustom akirak/frame-workflow-bindings nil
-  "Alist of keybindings in `akirak/frame-map' to switch to a workspace."
-  :type '(alist :key-type string :value-type symbol))
-
-(defun akirak/frame-workflow-bind ()
+(defun akirak/frame-workflow-bind (&optional bindings)
   (let ((prefixes (mapcar 'key-description (where-is-internal 'akirak/frame-map))))
-    (cl-loop for (key . name) in akirak/frame-workflow-bindings
+    (cl-loop for (key . name) in (or bindings akirak/frame-workflow-bindings)
              do (define-key akirak/frame-map (kbd key)
                   `(lambda () (interactive) (frame-workflow-switch-frame ,name)))
              do (cl-loop for prefix in prefixes
                          do (which-key-add-key-based-replacements
                               (concat prefix " " key) (concat "" name))))))
+
+;; Store keybindings in the custom file, as my workflow is defined in the file.
+(defcustom akirak/frame-workflow-bindings nil
+  "Alist of keybindings in `akirak/frame-map' to switch to a workspace."
+  :group 'frame-workflow
+  :group 'akirak
+  :type '(repeat (cons (string :tag "Key")
+                       (string :tag "Subject")))
+  :set (lambda (symbol value)
+         (set-default symbol value)
+         (akirak/frame-workflow-bind value)))
 
 ;; As the prefix map is not bound to any key and the prefix key is unknown at
 ;; the time of loading this file, add the which-key replacements after startup.
