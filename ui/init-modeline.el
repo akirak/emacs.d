@@ -1,3 +1,5 @@
+;; This config file is deprecated. Use init-spaceline-ati.el
+
 (use-package relative-buffers
   :config
   (global-relative-buffers-mode))

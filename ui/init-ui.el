@@ -1,6 +1,6 @@
 ;;;; General appearance
 (require 'init-font)
-(require 'init-modeline)
+(require 'init-spaceline-ati)
 
 ;;;;; Prefered themes
 (require 'init-dracula-theme)
