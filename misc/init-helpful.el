@@ -10,10 +10,7 @@
                                          (counsel-M-x . helpful-command))
              do (ivy-add-actions command
                                  `(("f" ,(-compose action 'intern) "helpful")))))
-  ;; :general
-  ;; ([help ?f] 'helpful-function
-  ;;  [help ?v] 'helpful-variable
-  ;;  [help ?\.] 'helpful-at-point)
-  )
+  :general
+  ([help ?.] 'helpful-at-point))
 
 (provide 'init-helpful)
