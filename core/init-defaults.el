@@ -19,6 +19,8 @@
 (add-to-list 'recentf-exclude
              (expand-file-name "~/\.emacs\.d/\.cache\/") t)
 
+(setq recentf-max-saved-items 200)
+
 ;; Highlight matching parentheses
 (show-paren-mode 1)
 
