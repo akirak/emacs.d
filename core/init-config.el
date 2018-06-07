@@ -46,4 +46,9 @@
 ;; Allow installation of system packages via use-package
 (require 'init-system-packages)
 
+(defmacro akirak/define-frame-workflow (name &rest args)
+  (declare (indent 1))
+  `(with-eval-after-load 'frame-workflow
+     (frame-workflow-define-subject ,name ,@args)))
+
 (provide 'init-config)

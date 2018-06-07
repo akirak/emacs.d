@@ -15,4 +15,7 @@
   "l" 'package-lint-current-buffer
   "Cp" 'flycheck-package-setup)
 
+(akirak/define-frame-workflow "emacs-lisp"
+  :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
+
 (provide 'init-emacs-lisp)
