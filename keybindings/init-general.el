@@ -13,4 +13,7 @@
                           (append context
                                   (list key def))))))
 
+(general-create-definer akirak/bind-help-key
+  :prefix "<menu>")
+
 (provide 'init-general)

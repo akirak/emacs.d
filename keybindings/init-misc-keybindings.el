@@ -1,7 +1,4 @@
 (general-def
-  "<menu>" #'which-key-show-major-mode)
-
-(general-def
   "<M-prior>" #'git-gutter:previous-hunk
   "<M-next>" #'git-gutter:next-hunk
   "<M-insert>" #'git-gutter:stage-hunk

@@ -1,5 +1,15 @@
 #+title: Emacs
 * Overview of configuration
+** Menu key for help                            :help:keybinding:microhabit:
+Use ~<menu>~ key as a prefix for alternative help commands. Especially, the following kinds of commands should bound on this prefix:
+
+- Help/referencing commands specific to modes of the current buffer.
+- Dictionary commands (for natural languages).
+
+There is already ~<f1>~ (or ~C-h~ by default) for help commands, but these are about Emacs. If you want to get a context-specific help, try ~<menu>~.
+
+*** Tutorial hydra                       :microhabit:keybinding:help:hydra:
+By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
 * Usage tips
 * Deprecated
 * Footnotes
