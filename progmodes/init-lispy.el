@@ -1,6 +1,5 @@
 (straight-override-recipe '(lispy :host github
-                                  :repo "akirak/lispy" :branch "outline"
-                                  :files (:defaults "lispy-clojure.clj")
+                                  :repo "akirak/lispy" :branch "master"
                                   :upstream (:host github
                                                    :repo "abo-abo/lispy")))
 
