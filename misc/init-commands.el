@@ -11,13 +11,21 @@
   :commands (ivy-bookmarked-directory)
   :config
   (ivy-add-actions 'ivy-bookmarked-directory
-                   '(("m" (lambda (cand)
+                   '(("f" counsel-find-file
+                      "find-file")
+                     ("m" (lambda (cand)
                             (let ((default-directory cand))
                               (multi-term)))
                       "multi-term")
-                     ("f" (lambda (cand)
+                     ("F" (lambda (cand)
                             (frame-purpose-make-directory-frame cand))
                       "Make a frame with frame-purpose")
+                     ("p" (lambda (cand)
+                            (let ((default-directory cand)
+                                  (projectile-cached-buffer-file-name nil)
+                                  (projectile-cached-project-root nil))
+                              (projectile-find-file)))
+                      "projectile-find-file")
                      ("s" (lambda (cand)
                             (counsel-ag nil cand))
                       "Run ag")
