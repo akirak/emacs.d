@@ -7,6 +7,11 @@
 (require 'init-exwm-bindings)
 (require 'akirak-x-apps)
 
+(akirak/define-frame-workflow "web"
+  :layout '(progn
+             (start-process-shell-command "firefox" nil "firefox")
+             (delete-other-windows)))
+
 (server-start)
 
 ;; Load my personal configuration

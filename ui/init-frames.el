@@ -9,7 +9,7 @@
 (use-package frame-workflow
   :straight (frame-workflow :host github
                             :repo "akirak/frame-workflow"
-                            :branch "eieio")
+                            :branch "edge")
   :config
   (frame-workflow-mode 1))
 
@@ -17,6 +17,11 @@
   :after (frame-workflow helm)
   :straight frame-workflow
   :commands (helm-frame-workflow))
+
+;;;; Some workspaces
+(akirak/define-frame-workflow "emacs-config"
+  :layout '(find-file (expand-file-name "init.el" user-emacs-directory))
+  :make-frame '(frame-purpose-make-directory-frame user-emacs-directory))
 
 ;;;; Keymap to switch to a frame
 

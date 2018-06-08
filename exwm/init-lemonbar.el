@@ -28,7 +28,8 @@
   (setq akirak/lemonbar-exwm-workspace-list
         (mapconcat (lambda (i)
                      (let* ((frm (exwm-workspace--workspace-from-frame-or-index i))
-                            (name (frame-parameter frm 'workflow-prototype)))
+                            (name (when (fboundp 'frame-workflow--frame-subject-name)
+                                    (frame-workflow--frame-subject-name frm))))
                        (format
                         (cond
                          ((equal frm (selected-frame)) "[%s*]")
@@ -38,7 +39,7 @@
                          (t "%s"))
                         (concat (int-to-string i)
                                 (if name
-                                    (concat ":" (symbol-name name))
+                                    (concat ":" name)
                                   "")))))
                    (number-sequence 0 (1- (exwm-workspace--count)))
                    " "))
