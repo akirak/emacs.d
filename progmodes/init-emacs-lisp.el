@@ -8,12 +8,18 @@
 (use-package flycheck-package
   :commands (flycheck-package-setup))
 
+(use-package suggest
+  :commands (suggest))
+
 (define-prefix-command 'akirak/emacs-lisp-extra-map)
 
 (general-def akirak/emacs-lisp-extra-map
   "e" 'eval-buffer
   "l" 'package-lint-current-buffer
   "Cp" 'flycheck-package-setup)
+
+(akirak/bind-help-key :keymaps 'emacs-lisp-mode-map
+  "s" #'suggest)
 
 (akirak/define-frame-workflow "emacs-lisp"
   :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
