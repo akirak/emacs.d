@@ -1,3 +1,4 @@
+(require 'init-key-translation)
 (require 'init-general)
 (require 'init-shell-bindings)
 (require 'init-c-x)

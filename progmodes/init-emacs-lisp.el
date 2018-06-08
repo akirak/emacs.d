@@ -19,7 +19,8 @@
   "Cp" 'flycheck-package-setup)
 
 (akirak/bind-help-key :keymaps 'emacs-lisp-mode-map
-  "s" #'suggest)
+  "s" #'suggest
+  "." #'helpful-at-point)
 
 (akirak/define-frame-workflow "emacs-lisp"
   :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
