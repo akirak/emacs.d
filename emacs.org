@@ -11,5 +11,16 @@ There is already ~<f1>~ (or ~C-h~ by default) for help commands, but these are a
 *** Tutorial hydra                       :microhabit:keybinding:help:hydra:
 By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
 * Usage tips
+** Scratch buffers                                              :microhabit:
+Use scratch buffer extensively: [[file:coding/init-scratch.el]]
+** hl-todo
+[[https://github.com/tarsius/hl-todo][hl-todo]] package highlights todo keywords in buffers: [[file:coding/init-hl-todo.el::(use-package%20hl-todo][init-hl-todo.el]]
+*** TODO Navigate through a buffer by todo keywords            :keybinding:
+Bind keys to the following commands:
+
+- [ ] =hl-todo-next/previous= commands
+- [ ] =hl-todo-occur= command
+*** magit-todos
+[[file:apps/init-magit.el::(use-package%20magit-todos][magit-todos]] enhances =magit-status= to show todo items in files in the project.
 * Deprecated
 * Footnotes

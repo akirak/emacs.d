@@ -23,12 +23,17 @@
 (require 'init-aggressive-indent)
 (require 'init-corral)
 (require 'init-fix-word)
+(require 'init-expand-region)
 
 ;;;;; Visual
 (require 'init-undo-tree)
 (require 'init-anzu)
 (require 'init-symbol-overlay)
 (require 'init-rainbow-mode)
+(require 'init-hl-todo)
+
+;;;;; Misc
+(require 'init-scratch)
 
 ;;;; Org
 (require 'init-outshine)

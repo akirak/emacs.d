@@ -40,6 +40,11 @@
   ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
 
 ;;;; Other keybindings under meta key
+;; TODO: Bind a more complex key
+(general-def "M-m" 'er/expand-region)
+;; (general-def :keymaps 'emacs-lisp-mode-map "M-m" 'er/mark-symbol-with-prefix)
+;; (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-m")
+
 (general-def
   "M-r" 'ivy-resume
   "M-;" 'comment-dwim-2
