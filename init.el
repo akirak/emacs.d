@@ -35,6 +35,8 @@
 (require 'init-compat)
 (require 'init-config)
 
+(use-package hydra)
+
 ;;; Basic configuration
 (require 'init-defaults)
 (require 'init-keybindings)
