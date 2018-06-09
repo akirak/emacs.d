@@ -51,7 +51,7 @@
   "M-/" 'hippie-expand)
 
 (general-def :package 'company :keymaps 'company-mode-map
-  "C-M-/" '(company-complete-common))
+  "C-M-/" #'company-complete-common)
 
 (general-def :keymaps 'outline-minor-mode-map :package 'outshine
   "M-RET" 'outshine-insert-heading)

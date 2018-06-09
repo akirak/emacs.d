@@ -5,6 +5,7 @@
 (require 'init-dumb-jump)
 (require 'init-avy)
 (require 'init-link-hint)
+(require 'init-bm)
 
 ;;;; Expansion, completion, and templates
 (require 'init-company)
