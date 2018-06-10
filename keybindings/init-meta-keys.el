@@ -11,6 +11,7 @@
 (general-def "M-g w" #'akirak/avy-goto-symbol-in-line)
 
 (general-def :prefix "M-g"
+  "," #'dumb-jump-back
   "." #'dumb-jump-go
   "o" #'dumb-jump-go-other-window
   "i" #'dumb-jump-go-prompt
@@ -62,7 +63,6 @@
 
 ;; M-TAB is C-M-i
 (general-def "M-TAB" 'complete-symbol)
-(general-unbind :keymaps 'outline-minior-mode-map :package 'outshine "M-TAB")
 (general-unbind :keymaps 'flyspell-mode-map :package 'flyspell "M-TAB")
 
 (provide 'init-meta-keys)

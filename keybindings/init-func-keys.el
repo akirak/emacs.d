@@ -1,12 +1,10 @@
 (require 'init-app-map)
-(require 'init-hydra)
 
 (general-def
   "<M-f1>" 'woman
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
   "<S-f6>" 'multi-term-next
-  "<f7>" 'akirak/hydra-launcher-for-major-mode
   "<f8>" 'projectile-test-command
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
@@ -20,5 +18,11 @@
   "r" #'counsel-recentf
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
+
+(general-def :prefix "<f7>"
+  "A" #'magit-cherry-pick-popup
+  "b" #'magit-branch-popup
+  "m" #'magit-merge-popup
+  "w" #'magit-worktree-popup)
 
 (provide 'init-func-keys)

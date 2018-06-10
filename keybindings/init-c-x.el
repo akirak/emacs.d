@@ -1,5 +1,4 @@
 (require 'init-customize-map)
-(require 'init-hydra)
 
 (general-def
   "C-x c" #'akirak/customize-map

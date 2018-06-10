@@ -2,6 +2,9 @@
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 
 (use-package outshine
+  :general
+  (:keymaps 'outline-minor-mode-map
+            "C-M-i" nil)
   :hook
   (outline-minor-mode . outshine-hook-function)
   :custom

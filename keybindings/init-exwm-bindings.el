@@ -17,7 +17,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                              (quote ,cmd)))))
 
 (akirak/exwm-bind-keys
- ("s-A" . akirak/org-optimistic-agenda)
  ("s-B" . helm-frame-workflow)
  ("s-C" . akirak/screenshot)
  ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
@@ -31,7 +30,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-a" . org-agenda)
  ("s-b" . helm-mini)
  ("s-c" . org-capture)
- ("s-d" . (lambda () (interactive) (org-journal-new-entry t) (org-show-entry)))
+ ("s-d" . akirak/driver)
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
  ("s-g" . akirak/frame-map)
