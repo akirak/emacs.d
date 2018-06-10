@@ -6,7 +6,9 @@
   :commands (package-lint-current-buffer))
 
 (use-package flycheck-package
-  :commands (flycheck-package-setup))
+  :commands (flycheck-package-setup)
+  :hook
+  (emacs-lisp . flycheck-package-setup))
 
 (use-package suggest
   :commands (suggest))
