@@ -25,6 +25,7 @@
 (require 'init-corral)
 (require 'init-fix-word)
 (require 'init-expand-region)
+(require 'init-flycheck)
 
 ;;;;; Visual
 (require 'init-undo-tree)
