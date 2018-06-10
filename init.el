@@ -54,6 +54,7 @@
 (require 'init-playground)
 (require 'init-locate)
 (require 'init-gpastel)
+(require 'init-autosave)
 
 ;;; Apps (apps/)
 (require 'init-multi-term)
