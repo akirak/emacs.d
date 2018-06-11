@@ -8,6 +8,8 @@
 (require 'init-helm-org-rifle)
 (require 'init-counsel-org-clock)
 (require 'init-org-bindings)
+(require 'init-org-make-toc)
+(require 'init-org-edna)
 
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))
