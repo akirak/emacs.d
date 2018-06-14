@@ -80,3 +80,8 @@
 ;;; Natural languages (international/)
 (require 'init-japanese)
 (require 'init-chinese)
+
+;;; Personal configuration
+;; Load my personal configuration if an option is given
+(add-to-list 'command-switch-alist
+             '("--ops" . (lambda (_) (require 'init-ops))))

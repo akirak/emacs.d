@@ -44,6 +44,6 @@ export EDITOR="$VISUAL"
 # Set capslock as ctrl
 setxkbmap -layout us -option ctrl:nocaps
 
-exec dbus-launch --exit-with-session emacs \
+exec dbus-launch --exit-with-session emacs --ops \
      --eval "(require 'init-exwm-config)" \
      "$@"
