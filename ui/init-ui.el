@@ -5,6 +5,9 @@
 (require 'init-spaceline-ati)
 ;; (require 'init-doom-modeline)
 
+;; The header line
+(require 'init-header-line)
+
 ;;;;; Prefered themes
 (require 'init-dracula-theme)
 

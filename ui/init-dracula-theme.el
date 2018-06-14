@@ -6,6 +6,7 @@
   ;;  'dracula
   ;;  `(outshine-level-1 SPEC)
   ;;  ...)
+  ;; TODO: Add a custom face for the header line so that it looks distinct
   )
 
 ;; (with-eval-after-load 'whitespace

@@ -14,6 +14,7 @@
   (spaceline-all-the-icons-theme 'frame-workflow)
   (spaceline-all-the-icons--setup-anzu)
   (spaceline-all-the-icons--setup-git-ahead)
+  (spaceline-toggle-all-the-icons-which-function-off)
   :custom
   (spaceline-all-the-icons-hide-long-buffer-path t)
   (spaceline-all-the-icons-clock-always-visible nil))

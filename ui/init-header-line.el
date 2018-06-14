@@ -1,0 +1,52 @@
+(defun akirak/make-header-line-format (&rest body)
+  "Build a header line format with BODY indicating additional information."
+  `("  "
+    (:eval (or (and (featurep 'all-the-icons)
+                    (all-the-icons-icon-for-buffer))
+               mode-name))
+    " "
+    (buffer-file-name ((:eval (file-name-nondirectory buffer-file-name))
+                       ": ")
+                      (:eval (buffer-name)))
+    (:eval (when (buffer-narrowed-p) "<Nrr> "))
+    ,@body))
+
+;;;; Default header line with which-function
+
+;; The default header line format with which-function.
+(which-function-mode 1)
+
+(defun akirak/set-default-header-line ()
+  (setq header-line-format (akirak/make-header-line-format
+                            '(which-func-mode ("" which-func-format " ")))))
+
+;; As I don't know how to disable the header line in the which-key window
+;; (I tried `which-key-init-buffer-hook', but it didn't work),
+;; I turn on the default header line only in certain groups of buffers
+;; rather than setting it using `setq-default'.
+(add-hook 'prog-mode-hook #'akirak/set-default-header-line)
+(add-hook 'text-mode-hook #'akirak/set-default-header-line)
+(add-hook 'magit-mode-hook #'akirak/set-default-header-line)
+(add-hook 'help-mode-hook #'akirak/set-default-header-line)
+
+;;;; Header line formats for specific modes
+;;;;; org-mode
+;; Set the header line format for org-mode with the outline path.
+(setq-mode-local org-mode
+                 header-line-format
+                 (akirak/make-header-line-format
+                  '(:eval (org-format-outline-path
+                           (let* ((orig-rev (nreverse (org-get-outline-path t t)))
+                                  (seg-length (pcase (length orig-rev)
+                                                ((pred (< 4)) 8)
+                                                ((pred (< 2)) 12)
+                                                (_ 20))))
+                             (nreverse
+                              (cons (car orig-rev)
+                                    (mapcar (lambda (s)
+                                              (if (> (length s) seg-length)
+                                                  (substring s 0 seg-length)
+                                                s))
+                                            (cdr orig-rev)))))))))
+
+(provide 'init-header-line)

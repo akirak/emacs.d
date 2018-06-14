@@ -16,8 +16,7 @@
                                   lemonbar-org-clock-reset-color))
   (lemonbar-start)
   :custom
-  (lemonbar-options '("-b"            ; Dock the bar at the bottom of the screen
-                      "-g" "1920x22+0+0"
+  (lemonbar-options '("-g" "1920x22+0+0"
                       "-p"
                       "-f" "Noto Sans-10.5:medium:italic")))
 
