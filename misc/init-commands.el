@@ -36,4 +36,9 @@
 
 (require 'init-helpful)
 
+(use-package helm-tail
+  :after helm
+  :straight (helm-tail :host github :repo "akirak/helm-tail")
+  :commands (helm-tail))
+
 (provide 'init-commands)
