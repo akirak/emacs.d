@@ -75,6 +75,7 @@
 (require 'init-dockerfile)
 (require 'init-kotlin)
 (require 'init-emacs-lisp)
+(require 'init-shell-scripts)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
