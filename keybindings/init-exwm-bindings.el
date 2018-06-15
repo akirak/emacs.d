@@ -3,7 +3,9 @@
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
 (use-package exwm-window-go
-  :straight window-go)
+  :straight window-go
+  :custom
+  (exwm-window-go-cycle-visible-workspaces nil))
 
 (defmacro akirak/exwm-bind-keys (&rest bindings)
   "Bind input keys in EXWM.
@@ -51,8 +53,8 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-9" . window-go-bottom)
  ("s-," . winner-undo)
  ("s-." . winner-redo)
- ("s-[" . exwm-window-go-next-visible-workspace)
- ("s-]" . exwm-window-go-previous-visible-workspace)
+ ("s-[" . exwm-window-go-previous-visible-workspace)
+ ("s-]" . exwm-window-go-next-visible-workspace)
  ("s-\\" . katawa-ivy-exwm)
  ("s--" . delete-other-windows)
  ("s-=" . balance-windows)
