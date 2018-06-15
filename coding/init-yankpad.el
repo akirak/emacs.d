@@ -1,10 +1,7 @@
 (require 'init-yasnippet)
 
 (use-package yankpad
-  :after (org yasnippet)
-  :config
-  (with-eval-after-load 'company
-    (add-hook 'company-backends #'company-yankpad t)))
+  :after (org yasnippet))
 
 (defun yankpad-hydra--format-active-snippets ()
   (mapconcat (lambda (ent)

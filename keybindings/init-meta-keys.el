@@ -45,6 +45,9 @@
 ;; (general-def :keymaps 'emacs-lisp-mode-map "M-m" 'er/mark-symbol-with-prefix)
 ;; (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-m")
 
+(general-def "M-o" 'aya-open-line)
+(general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
+
 (general-def
   "M-r" 'ivy-resume
   "M-;" 'comment-dwim-2
