@@ -8,6 +8,7 @@
 
 ;; Prettify headline bullets
 (use-package org-bullets
+  :disabled t
   :after org
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))

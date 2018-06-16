@@ -2,7 +2,7 @@
 (require 'init-font)
 
 ;;;;; Modeline
-(require 'init-spaceline-ati)
+;; (require 'init-spaceline-ati)
 ;; (require 'init-doom-modeline)
 
 ;; The header line
