@@ -1,3 +1,5 @@
+(use-package all-the-icons)
+
 (defun akirak/make-header-line-format (&rest body)
   "Build a header line format with BODY indicating additional information."
   `("  "
