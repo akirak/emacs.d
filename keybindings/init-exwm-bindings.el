@@ -1,4 +1,5 @@
 (require 'exwm-input)
+(require 'init-search-map)
 
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
@@ -19,14 +20,13 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                              (quote ,cmd)))))
 
 (akirak/exwm-bind-keys
- ("s-B" . helm-frame-workflow)
  ("s-C" . akirak/screenshot)
  ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
                                      (call-interactively 'counsel-ag))))
  ("s-H" . exwm-window-go-shrink)
  ("s-L" . exwm-window-go-grow)
  ("s-P" . exwm-window-go-next-hidden-workspace)
- ("s-S" . exwm-workspace-move-window)
+ ("s-S" . frame-workflow-exwm-swap-workspaces)
  ;; ("s-X" . frame-workflow-select-action)
  ("s-Z" . counsel-org-offtime)
  ("s-a" . org-agenda)
@@ -44,7 +44,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
  ("s-u" . exwm-reset)
  ("s-p" . exwm-window-go-previous-hidden-workspace)
- ("s-s" . exwm-workspace-switch)
+ ("s-s" . helm-frame-workflow)
  ("s-v" . toggle-window-split)
  ("s-w" . akirak/exwm-goto-browser)
  ;; ("s-x" . frame-workflow-action-map)
@@ -59,7 +59,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s--" . delete-other-windows)
  ("s-=" . balance-windows)
  ("s-SPC" . akirak/switch-window)
- ("s-S-SPC" . frame-workflow-exwm-swap-workspaces)
  ("M-<f2>" . akirak/counsel-external-command)
  ("M-S-<f2>" . counsel-linux-app)
  ("M-<f4>" . kill-this-buffer-and-its-window)
@@ -68,7 +67,13 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("<s-delete>" . exwm-workspace-delete)
  ;; ("<print>" . akirak/screenshot)
  ("s-0" . delete-window)
- ("s-/" . helm-org-rifle-agenda-files-with-recent-headings))
+ ("s-/" . akirak/search-map))
+
+;; Bind s-g N to Nth EXWM workspace
+(require 'init-frames)
+(dolist (i (number-sequence 0 9))
+  (define-key akirak/frame-map (int-to-string i)
+    `(lambda () (interactive) (exwm-workspace-switch ,i))))
 
 ;;;; Keybindings in exwm-mode-map
 (general-def exwm-mode-map
