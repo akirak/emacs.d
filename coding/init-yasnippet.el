@@ -10,9 +10,7 @@
   :after (yasnippet-snippets)
   :diminish 'yas-minor-mode
   :config
-  (yas-global-mode 1)
-  (with-eval-after-load 'company
-    (add-hook 'company-backends 'company-yasnippet t)))
+  (yas-global-mode 1))
 
 (use-package auto-yasnippet
   :commands (aya-create aya-expand))

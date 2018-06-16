@@ -52,10 +52,11 @@
 (general-def
   "M-r" 'ivy-resume
   "M-;" 'comment-dwim-2
-  "M-/" 'hippie-expand)
+  ;; "M-/" 'hippie-expand
+  )
 
 (general-def :package 'company :keymaps 'company-mode-map
-  "C-M-/" #'company-complete-common)
+  "M-/" #'company-complete)
 
 (general-def :keymaps 'outline-minor-mode-map :package 'outshine
   "M-RET" 'outshine-insert-heading)

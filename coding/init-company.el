@@ -10,9 +10,9 @@
   :custom
   (company-dabbrev-other-buffers 'all "Search all buffers for company-dabbrev")
   (company-tooltip-align-annotations t)
-  (company-backends '(
-                      company-capf
+  (company-backends '(company-capf
                       company-keywords
+                      company-yasnippet
                       company-files
                       company-dabbrev)
                     "Remove some backends I am unlikely to use"))
