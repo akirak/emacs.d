@@ -19,7 +19,7 @@
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
                    ("*helm-descbinds*" :other t)
-                   ("\\*helm.+\\*" :regexp t :ratio 0.25 :align below)
+                   ("\\*helm.*\\*" :regexp t :ratio 0.25 :align below)
                    ("*Messages*" :align below :ratio 0.3 :noselect t)
                    ("*Warnings*" :align below :ratio 0.3 :noselect t)
                    ("*Backtrace*" :align below :ratio 0.4 :noselect t)
