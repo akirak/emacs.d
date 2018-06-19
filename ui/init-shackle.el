@@ -11,10 +11,11 @@
                    ("*Org Select*" :ratio 0.25 :align below)
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
+                   ("*Capture*" :ratio 0.4 :align below)
                    ("*compilation*" :ratio 0.25 :align below)
                    ;; org-capture to org-journal needs a big window
                    ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
-                   ("^CAPTURE-\\(fix\\|search\\)" :regexp t :other t)
+                   ("^CAPTURE-\\(snippets\\)" :regexp t :other t)
                    ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
@@ -36,6 +37,11 @@
 (with-eval-after-load 'org
   (advice-add 'org-switch-to-buffer-other-window
               :override 'switch-to-buffer-other-window))
+
+;;;; Window management rules that can't be configured by shackle
+;;;;; org-mode
+(setq-default org-agenda-window-setup 'other-window
+              org-src-window-setup 'split-window-below)
 
 ;;;; Delete compilation window
 
