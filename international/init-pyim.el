@@ -1,5 +1,6 @@
 ;; Mostly based on an example in https://github.com/tumashu/pyim/blob/master/README.md
 (use-package pyim
+  :diminish 'pyim-isearch-mode
   :config
   ;; 激活 basedict 拼音词库
   (use-package pyim-basedict
