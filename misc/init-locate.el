@@ -20,6 +20,11 @@
     )
   "List of update configurations.")
 
+(defcustom akirak/locate-global-prune-names
+  '("elpa" ".cask")
+  "Additional prune names (\"-n\") passed to updatedb."
+  :type '(repeat string))
+
 (defun akirak/locate-database-file (filename)
   "Get the path to FILENAME in the database directory."
   (expand-file-name filename akirak/locate-database-directory))
@@ -50,11 +55,14 @@
                      "-l" "0"
                      "-o" (akirak/locate-database-file dbname)
                      "-U" (expand-file-name root)
-                     (append (cl-loop for path in (plist-get plist :prune-paths)
-                                      append (list "-e" (expand-file-name path)))
-                             (cl-loop for dir in (append projectile-globally-ignored-directories
-                                                         projectile-globally-ignored-files)
-                                      append (list "-n" dir))))))
+                     (append
+                      (when-let ((prune-paths (plist-get plist :prune-paths)))
+                        `("-e" ,(mapconcat #'expand-file-name prune-paths " ")))
+                      (when-let ((prune-names
+                                  (append projectile-globally-ignored-directories
+                                          projectile-globally-ignored-files
+                                          akirak/locate-global-prune-names)))
+                        `("-n" ,(string-join prune-names " ")))))))
 
 (defun akirak/locate-rebuild-database ()
   "Delete the current database files and rebuild the databases from scratch."
