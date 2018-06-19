@@ -1,5 +1,5 @@
 #+title: Emacs
-* Overview of configuration
+* Overview of the configuration
 ** Menu key for help                            :help:keybinding:microhabit:
 Use ~<menu>~ key as a prefix for alternative help commands. Especially, the following kinds of commands should bound on this prefix:
 
@@ -22,5 +22,6 @@ Bind keys to the following commands:
 - [ ] =hl-todo-occur= command
 *** magit-todos
 [[file:apps/init-magit.el::(use-package%20magit-todos][magit-todos]] enhances =magit-status= to show todo items in files in the project.
+* Issues
 * Deprecated
 * Footnotes
