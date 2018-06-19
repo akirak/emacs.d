@@ -1,3 +1,5 @@
+;; TODO: Use a single database file
+
 ;;;; Database configuration
 
 (defcustom akirak/locate-database-directory "~/.cache/my-locate"
