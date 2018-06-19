@@ -2,6 +2,9 @@
 
 (use-package helm-org-rifle
   :after (helm org)
+  :general
+  (:keymaps 'org-mode-map
+            "M-s r" #'helm-org-rifle-current-buffer)
   :custom
   (helm-org-rifle-show-path t))
 
