@@ -44,25 +44,32 @@
 
 ;;;; updatedb
 
+(defconst akirak/updatedb-log-buffer "*updatedb*")
+
+(defun akirak/updatedb-log (&rest strings)
+  (with-current-buffer (get-buffer-create akirak/updatedb-log-buffer)
+    (mapc #'insert strings) (insert "\n")))
+
 (defun akirak/locate-updatedb ()
   "Update locate databases."
   (require 'projectile)
   (make-directory akirak/locate-database-directory 'parents)
+  (akirak/updatedb-log (format "[%s] Running updatedb" (format-time-string "%F %R")))
   (cl-loop for (root dbname . plist) in akirak/locate-roots
            when (file-directory-p root)
-           do (apply 'start-file-process (concat "updatedb-" dbname)
-                     nil "updatedb"
-                     "-l" "0"
-                     "-o" (akirak/locate-database-file dbname)
-                     "-U" (expand-file-name root)
-                     (append
-                      (when-let ((prune-paths (plist-get plist :prune-paths)))
-                        `("-e" ,(mapconcat #'expand-file-name prune-paths " ")))
-                      (when-let ((prune-names
-                                  (append projectile-globally-ignored-directories
-                                          projectile-globally-ignored-files
-                                          akirak/locate-global-prune-names)))
-                        `("-n" ,(string-join prune-names " ")))))))
+           do (let ((args `("-l" "0"
+                            "-o" ,(akirak/locate-database-file dbname)
+                            "-U" ,(expand-file-name root)
+                            ,@(when-let ((prune-paths (plist-get plist :prune-paths)))
+                                `("-e" ,(mapconcat #'expand-file-name prune-paths " ")))
+                            ,@(when-let ((prune-names
+                                          (append projectile-globally-ignored-directories
+                                                  projectile-globally-ignored-files
+                                                  akirak/locate-global-prune-names)))
+                                `("-n" ,(string-join prune-names " "))))))
+                (akirak/updatedb-log (mapconcat #'shell-quote-argument args " "))
+                (apply 'start-file-process (concat "updatedb-" dbname) nil
+                       "updatedb" args))))
 
 (defun akirak/locate-rebuild-database ()
   "Delete the current database files and rebuild the databases from scratch."
