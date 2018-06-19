@@ -12,6 +12,7 @@
 (require 'init-hippie-expand)
 (require 'init-yasnippet)
 (require 'init-yankpad)
+(require 'init-autoinsert)
 
 ;;;; Compilation
 (require 'init-helm-make)
