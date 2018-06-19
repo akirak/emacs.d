@@ -9,4 +9,8 @@
   :commands (helm-org-starter)
   :defines (helm-org-starter-known-file-source))
 
+(use-package counsel-org-starter
+  :straight org-starter
+  :commands (counsel-org-starter counsel-org-starter-known-file))
+
 (provide 'init-org-starter)
