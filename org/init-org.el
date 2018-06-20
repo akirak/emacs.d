@@ -10,6 +10,7 @@
 (require 'init-org-bindings)
 (require 'init-org-make-toc)
 (require 'init-org-edna)
+(require 'org-refile-hydra)
 
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))

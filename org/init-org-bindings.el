@@ -12,6 +12,7 @@
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft
   "M-L" 'org-shiftmetaright
-  "C-c o l" '(org-web-tools-insert-link-for-url :wk "insert link for url"))
+  "C-c o l" '(org-web-tools-insert-link-for-url :wk "insert link for url")
+  "C-4" 'org-refile-hydra)
 
 (provide 'init-org-bindings)
