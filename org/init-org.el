@@ -21,6 +21,7 @@
 
 ;;;; Keybindings
 (require 'init-org-bindings)
+(require 'init-org-agenda-bindings)
 (require 'org-refile-hydra)
 
 (provide 'init-org)
