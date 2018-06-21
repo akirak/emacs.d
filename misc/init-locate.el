@@ -23,7 +23,7 @@
   "List of update configurations.")
 
 (defcustom akirak/locate-global-prune-names
-  '("elpa" ".cask")
+  '("elpa" ".cask" ".elpa" ".elpa.test")
   "Additional prune names (\"-n\") passed to updatedb."
   :type '(repeat string))
 
