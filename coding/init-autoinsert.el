@@ -5,7 +5,10 @@
                            . akirak/yas-auto-insert)))
 
 (defun akirak/yas-auto-insert ()
-  (when-let ((snippet (yas-lookup-snippet "auto-insert")))
+  ;; Expand a snippet named \"auto-insert\" if and only if it exists
+  (when-let ((snippet (condition-case nil
+                          (yas-lookup-snippet "auto-insert")
+                        (error nil))))
     (yas-expand-snippet snippet)))
 
 (provide 'init-autoinsert)
