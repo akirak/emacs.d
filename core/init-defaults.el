@@ -62,6 +62,8 @@
   (visual-line-mode 1))
 (add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
 
+(add-hook 'text-mode-hook (lambda () (setq-local truncate-lines nil)))
+
 ;;;; Scrolling
 
 ;; Scroll up/down by half screen
