@@ -51,4 +51,20 @@
                                                 s))
                                             (cdr orig-rev)))))))))
 
+;;;;; org-agenda-mode
+(defun akirak/set-org-agenda-header-line ()
+  (setq header-line-format
+        '((:eval (and (featurep 'all-the-icons)
+                      (all-the-icons-icon-for-buffer)))
+          " "
+          (:eval (pcase org-agenda-redo-command
+                   (`(org-agenda-run-series ,desc . ,_)
+                    (when-let ((key (caar (cl-remove-if-not
+                                           (lambda (list) (equal (nth 1 list) desc))
+                                           org-agenda-custom-commands))))
+                      (format "[%s]%s" key (car (split-string desc ":")))))
+                   (x (prin1-to-string x)))))))
+
+(add-hook 'org-agenda-mode-hook #'akirak/set-org-agenda-header-line)
+
 (provide 'init-header-line)
