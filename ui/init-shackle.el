@@ -12,7 +12,7 @@
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
                    ("*Capture*" :ratio 0.4 :align below)
-                   ("*compilation*" :ratio 0.25 :align below)
+                   ("*compilation*" :align below :ratio 0.4)
                    ;; org-capture to org-journal needs a big window
                    ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
                    ("^CAPTURE-\\(snippets\\)" :regexp t :other t)
