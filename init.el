@@ -65,6 +65,7 @@
 (require 'init-magit)
 (require 'init-ibuffer)
 (require 'init-docker)
+(require 'init-web-search)
 
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
