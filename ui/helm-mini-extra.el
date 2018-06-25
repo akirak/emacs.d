@@ -21,20 +21,8 @@
 (advice-add 'helm-buffer-list :filter-return 'akirak/ad-return-helm-buffer-list)
 
 (require 'helm-bookmark)
-(require 'init-org-recent-headings)
 (setq helm-mini-default-sources `(helm-source-buffers-list
                                   helm-source-exwm-buffer-list
-                                  ,@(remq 'helm-source-bookmark-set
-                                          helm-bookmark-default-filtered-sources)
-                                  helm-source-recentf
-                                  helm-org-starter-known-file-source
-                                  helm-source-org-recent-headings
                                   helm-source-buffer-not-found))
-
-(defun akirak/ad-before-helm-mini ()
-  (unless (boundp 'helm-org-starter-known-file-source)
-    (require 'helm-org-starter)))
-
-(advice-add 'helm-mini :before 'akirak/ad-before-helm-mini)
 
 (provide 'helm-mini-extra)
