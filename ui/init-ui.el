@@ -43,4 +43,7 @@
 ;;;; Distraction-free editing
 (require 'init-olivetti)
 
+;;;; Other extra packages
+(require 'init-corefighter)
+
 (provide 'init-ui)
