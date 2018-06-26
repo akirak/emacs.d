@@ -51,7 +51,6 @@
 (require 'init-startup)                 ; Optional
 (require 'init-desktop)
 (require 'init-midnight)
-(require 'init-playground)
 (require 'init-locate)
 (require 'init-gpastel)
 (require 'init-autosave)
