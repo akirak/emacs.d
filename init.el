@@ -77,6 +77,7 @@
 (require 'init-kotlin)
 (require 'init-emacs-lisp)
 (require 'init-shell-scripts)
+(require 'init-yaml)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
