@@ -15,28 +15,7 @@
   :commands (suggest))
 
 ;;;; Testing
-(defun akirak/setup-emake ()
-  (interactive)
-  (let ((project-root (projectile-project-root))
-        (package-basename (read-from-minibuffer "Package basename: "
-                                                (when (eq major-mode 'emacs-lisp-mode)
-                                                  (file-name-base (buffer-file-name)))))
-        (filenames '("Makefile" ".travis.yml" ".gitignore")))
-    (dolist (filename filenames)
-      (unless (or (not (file-exists-p (expand-file-name filename project-root)))
-                  (yes-or-no-p (format "%s already exists. Overwrite it?" filename)))
-        (user-error "Aborted")))
-    (dolist (filename filenames)
-      (let ((fpath (expand-file-name filename project-root))
-            (url (concat "https://raw.githubusercontent.com/vermiculus/emake.el-example/master/" filename)))
-        (url-copy-file url fpath 'overwrite)))
-    (find-file (expand-file-name "Makefile" project-root))
-    (goto-char (point-min))
-    (re-search-forward (rx bol "PACKAGE_BASENAME" (1+ space)
-                           ":=" (1+ space) (group (1+ wordchar)) eol))
-    (replace-match package-basename nil nil nil 1)
-    (re-search-forward (rx "wget"))
-    (replace-match "curl -O")))
+(require 'init-emake)
 
 ;;;; Help
 (akirak/bind-help-key :keymaps 'emacs-lisp-mode-map
