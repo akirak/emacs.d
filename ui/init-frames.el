@@ -7,9 +7,7 @@
   (frame-purpose-mode 1))
 
 (use-package frame-workflow
-  :straight (frame-workflow :host github
-                            :repo "akirak/frame-workflow"
-                            :branch "edge")
+  :straight (frame-workflow :host github :repo "akirak/frame-workflow")
   :config
   (frame-workflow-mode 1))
 

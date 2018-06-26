@@ -45,6 +45,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
  ("s-u" . exwm-reset)
  ("s-p" . exwm-window-go-previous-hidden-workspace)
+ ("s-r" . frame-workflow-reload-layout)
  ("s-s" . helm-frame-workflow)
  ("s-v" . toggle-window-split)
  ("s-w" . akirak/exwm-goto-browser)
