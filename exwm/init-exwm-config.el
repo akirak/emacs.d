@@ -7,10 +7,7 @@
 (require 'init-exwm-bindings)
 (require 'akirak-x-apps)
 
-(akirak/define-frame-workflow "web"
-  :layout '(progn
-             (start-process-shell-command "firefox" nil "firefox")
-             (delete-other-windows)))
+(require 'init-web-browser)
 
 (server-start)
 

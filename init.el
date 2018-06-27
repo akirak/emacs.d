@@ -28,7 +28,8 @@
                   "apps"
                   "exwm"
                   "ui"
-                  "international"))
+                  "international"
+                  "x"))
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
 ;; This needs to be loaded first
@@ -56,7 +57,7 @@
 (require 'init-autosave)
 (require 'init-browse-url)
 
-;;; Apps (apps/)
+;;; Apps (apps/, x/)
 (require 'init-multi-term)
 (require 'init-prodigy)
 (require 'init-dired)
@@ -65,6 +66,7 @@
 (require 'init-ibuffer)
 (require 'init-docker)
 (require 'init-web-search)
+(require 'init-web-browser)
 
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
