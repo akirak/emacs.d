@@ -66,6 +66,7 @@
 (general-def "M-TAB" 'complete-symbol)
 (general-unbind :keymaps 'flyspell-mode-map :package 'flyspell "M-TAB")
 
-(general-def "M-SPC" '(:prefix-command akirak/fix-map :which-key "prefix"))
+(general-def :keymaps '(prog-mode-map text-mode-map)
+  "M-SPC" '(:prefix-command akirak/fix-map :which-key "prefix"))
 
 (provide 'init-meta-keys)
