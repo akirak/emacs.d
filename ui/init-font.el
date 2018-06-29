@@ -101,9 +101,11 @@ Example:
 
 ;;;;; Symbols
 (defcustom akirak/symbol-fonts
-  '("EmojiOne Color"
-    "EmojiOne"
-    "Noto Color Emoji")
+  '(
+    ;; "EmojiOne Color"
+    ;; "EmojiOne"
+    ;; "Noto Color Emoji"
+    )
   "List of preferred fonts for cjk-misc."
   :set (lambda (_symbol value)
          (akirak/set-available-font-for-charset 'symbol value)))
