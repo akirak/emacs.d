@@ -12,6 +12,7 @@
 (require 'init-org-download)
 (require 'init-org-web-tools)
 (require 'init-org-make-toc)
+(require 'init-counsel-org-capture-string)
 
 ;;;; Search and navigation
 (require 'init-helm-org-rifle)

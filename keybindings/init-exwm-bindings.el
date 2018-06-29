@@ -41,6 +41,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-k" . window-go-previous)
  ("s-l" . exwm-window-go-grow-horizontally)
  ("s-m" . window-go-master)
+ ("s-n" . counsel-org-capture-string)
  ("s-o" . (lambda () (interactive) (switch-to-buffer (other-buffer))))
  ("s-u" . exwm-reset)
  ("s-p" . exwm-window-go-previous-hidden-workspace)
