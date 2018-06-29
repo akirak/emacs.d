@@ -10,6 +10,23 @@ There is already ~<f1>~ (or ~C-h~ by default) for help commands, but these are a
 
 *** Tutorial hydra                       :microhabit:keybinding:help:hydra:
 By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
+** Projectile and remote repositories
+:PROPERTIES:
+:ID:       96328360-8a53-47d6-afbb-d7b90aaea751
+:END:
+*** Use =helm-repom= to open a repository
+I used =counsel-projectile-switch-project= for opening a local repository, but now that I have =repom=, I will use =helm-repom= to open a repository. If a repository is not available locally, then I can clone it from a remote server quickly.
+
+- [[file:misc/init-repom.el]]
+*** TODO Cleaning up the list
+I have to maintain =projectile-known-projects= regularly:
+
+- [X] Delete duplicates
+- [X] Delete projects that no longer exists
+- [ ] For repositories in some locations (e.g. straight packages), they should be deleted from the list unless they are in a dirty state
+
+These tasks are completed by =projectile-cleanup-known-projects=. I have to run it regularly.
+
 * Usage tips
 ** Scratch buffers                                              :microhabit:
 Use scratch buffer extensively: [[file:coding/init-scratch.el]]

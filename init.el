@@ -56,6 +56,7 @@
 (require 'init-gpastel)
 (require 'init-autosave)
 (require 'init-browse-url)
+(require 'init-repom)
 
 ;;; Apps (apps/, x/)
 (require 'init-multi-term)
