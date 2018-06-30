@@ -3,6 +3,11 @@
              helpful-variable
              helpful-at-point
              helpful-command)
+  :init
+  ;; Configuration for using helpful with counsel.
+  ;; From https://www.reddit.com/r/emacs/comments/8t3imt/helpful_one_year_on/e1eoy6v/
+  (setq counsel-describe-variable-function 'helpful-variable
+        counsel-describe-function-function 'helpful-callable)
   :config
   (with-eval-after-load 'counsel
     (cl-loop for (command . action) in '((counsel-describe-function . helpful-function)
