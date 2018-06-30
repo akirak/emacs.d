@@ -20,7 +20,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
                                              (quote ,cmd)))))
 
 (akirak/exwm-bind-keys
- ("s-C" . akirak/screenshot)
+ ("s-C" . counsel-org-capture)
  ("s-F" . (lambda () (interactive) (let ((current-prefix-arg 4))
                                      (call-interactively 'counsel-ag))))
  ("s-H" . exwm-window-go-shrink)

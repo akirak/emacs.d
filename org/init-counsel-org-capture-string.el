@@ -8,7 +8,15 @@
   (ivy-add-actions
    'counsel-org-capture-string
    '(("sd" akirak/web-search-firefox "Default search with Firefox")
-     ("sg" akirak/surfraw/google "Google"))))
+     ("sg" akirak/surfraw/google "Google")))
+  (defun akirak/counsel-org-capture ()
+    (require 'org-capture)
+    (require 'counsel-org-capture-string)
+    (ivy-read "Capture template: "
+              #'counsel-org-capture-string--template-list
+              :action (lambda (x)
+                        (org-capture nil (car (split-string x))))))
+  (advice-add #'counsel-org-capture :override #'akirak/counsel-org-capture))
 
 (provide 'init-counsel-org-capture-string)
 ;;; init-counsel-org-capture-string.el ends here
