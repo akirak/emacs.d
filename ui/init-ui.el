@@ -43,7 +43,8 @@
 ;;;; Distraction-free editing
 (require 'init-olivetti)
 
-;;;; Other extra packages
+;;;; Extra information displays
+(require 'init-imenu-list)
 (require 'init-corefighter)
 
 (provide 'init-ui)
