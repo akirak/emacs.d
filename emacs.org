@@ -1,5 +1,25 @@
 #+title: Emacs
-* Overview of the configuration
+* Contents                                                         :noexport:
+:PROPERTIES:
+:TOC:      this
+:END:
+  -  [[#overall-policies][Overall policies]]
+    -  [[#menu-key-for-help][Menu key for help]]
+      -  [[#tutorial-hydra][Tutorial hydra]]
+    -  [[#projectile-and-remote-repositories][Projectile and remote repositories]]
+      -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
+      -  [[#cleaning-up-the-list][Cleaning up the list]]
+  -  [[#usage-tips][Usage tips]]
+    -  [[#scratch-buffers][Scratch buffers]]
+    -  [[#hl-todo][hl-todo]]
+      -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
+      -  [[#magit-todos][magit-todos]]
+  -  [[#issues][Issues]]
+
+* Overall policies
+:PROPERTIES:
+:TOC:      2
+:END:
 ** Menu key for help                            :help:keybinding:microhabit:
 Use ~<menu>~ key as a prefix for alternative help commands. Especially, the following kinds of commands should bound on this prefix:
 
@@ -26,13 +46,20 @@ I have to maintain =projectile-known-projects= regularly:
 - [ ] For repositories in some locations (e.g. straight packages), they should be deleted from the list unless they are in a dirty state
 
 These tasks are completed by =projectile-cleanup-known-projects=. I have to run it regularly.
-
 * Usage tips
+:PROPERTIES:
+:TOC:      2
+:END:
 ** Scratch buffers                                              :microhabit:
 Use scratch buffer extensively: [[file:coding/init-scratch.el]]
 ** hl-todo
 [[https://github.com/tarsius/hl-todo][hl-todo]] package highlights todo keywords in buffers: [[file:coding/init-hl-todo.el::(use-package%20hl-todo][init-hl-todo.el]]
-*** TODO Navigate through a buffer by todo keywords            :keybinding:
+*** ARCHIVED Navigate through a buffer by todo keywords        :keybinding:
+CLOSED: [2018-07-04 Wed 01:49]
+:LOGBOOK:
+- State "ARCHIVED"   from "TODO"       [2018-07-04 Wed 01:49] \\
+  I probably don't need this feature, as magit-todos provides a todo list.
+:END:
 Bind keys to the following commands:
 
 - [ ] =hl-todo-next/previous= commands
@@ -40,5 +67,18 @@ Bind keys to the following commands:
 *** magit-todos
 [[file:apps/init-magit.el::(use-package%20magit-todos][magit-todos]] enhances =magit-status= to show todo items in files in the project.
 * Issues
+:PROPERTIES:
+:TOC:      1
+:END:
 * Deprecated
+:PROPERTIES:
+:TOC:      ignore
+:END:
 * Footnotes
+:PROPERTIES:
+:TOC:      ignore
+:END:
+
+# Local Variables:
+# before-save-hook: org-make-toc
+# End:
