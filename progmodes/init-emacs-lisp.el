@@ -19,6 +19,7 @@
 
 ;;;; Help
 (akirak/bind-help-key :keymaps 'emacs-lisp-mode-map
+  "i" #'counsel-info-lookup-symbol
   "s" #'suggest
   "." #'helpful-at-point)
 
