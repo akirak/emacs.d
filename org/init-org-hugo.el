@@ -101,7 +101,7 @@ in this case."
   (mapconcat (lambda (tag)
                (if (string-match "[[:space:]]" tag)
                    (concat "\""
-                           (replace-regexp-in-string "\"" "\\\"")
+                           (replace-regexp-in-string "\"" "\\\"" tag)
                            "\"")
                  tag))
              tags " "))
