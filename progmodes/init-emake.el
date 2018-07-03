@@ -19,7 +19,7 @@ BRANCH is a revision of the files to retrieve."
         (user-error "Aborted")))
     (dolist (filename filenames)
       (let ((fpath (expand-file-name filename project-root))
-            (url (akirak/emake-example-file-url filename "master")))
+            (url (akirak/emake-example-file-url filename (or branch "master"))))
         (url-copy-file url fpath 'overwrite)))))
 
 ;;;; Generate an emake configuration for a simple project
