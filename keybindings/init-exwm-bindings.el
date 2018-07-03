@@ -29,7 +29,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-S" . frame-workflow-exwm-swap-workspaces)
  ;; ("s-X" . frame-workflow-select-action)
  ("s-Z" . counsel-org-offtime)
- ("s-a" . org-agenda)
  ("s-b" . helm-mini)
  ("s-c" . org-capture)
  ("s-d" . akirak/driver)
@@ -65,9 +64,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("M-S-<f2>" . counsel-linux-app)
  ("M-<f4>" . kill-this-buffer-and-its-window)
  ("<s-return>" . switch-window-then-swap-buffer)
- ("<s-insert>" . frame-workflow-make-frame)
- ("<s-delete>" . exwm-workspace-delete)
- ;; ("<print>" . akirak/screenshot)
+ ("<s-backspace>" . keyboard-quit)
  ("s-0" . delete-window)
  ("s-/" . akirak/search-map))
 

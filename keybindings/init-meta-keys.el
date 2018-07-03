@@ -49,8 +49,17 @@
 (general-def "M-o" 'aya-open-line)
 (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 
+;; Use M-r as a prefix for register and repeat commands
 (general-def
-  "M-r" 'ivy-resume
+  "M-r" (general-simulate-key "C-x r")
+  ;; M-r h
+  "C-x r h" #'helm-resume
+  ;; M-r ;
+  "C-x r ;" #'repeat-complex-command
+  ;; M-r M-r
+  "C-x r M-r" #'ivy-resume)
+
+(general-def
   "M-;" 'comment-dwim-2
   ;; "M-/" 'hippie-expand
   )
@@ -66,7 +75,10 @@
 (general-def "M-TAB" 'complete-symbol)
 (general-unbind :keymaps 'flyspell-mode-map :package 'flyspell "M-TAB")
 
-(general-def :keymaps '(prog-mode-map text-mode-map)
-  "M-SPC" '(:prefix-command akirak/fix-map :which-key "prefix"))
+(general-create-definer akirak/bind-fix-map
+  :prefix-map 'akirak/fix-map
+  :prefix "M-SPC")
+
+(require 'init-fix-map)
 
 (provide 'init-meta-keys)

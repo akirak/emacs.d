@@ -1,11 +1,13 @@
 (require 'init-app-map)
+(require 'init-ui-map)
 
 (general-def
   "<M-f1>" 'woman
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
   "<S-f6>" 'multi-term-next
-  "<f8>" 'projectile-test-command
+  "<f7>" 'magit
+  "<f8>" 'akirak/ui-map
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
   "<M-f10>" 'menu-bar-mode
@@ -18,11 +20,5 @@
   "r" #'counsel-recentf
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
-
-(general-def :prefix "<f7>"
-  "A" #'magit-cherry-pick-popup
-  "b" #'magit-branch-popup
-  "m" #'magit-merge-popup
-  "w" #'magit-worktree-popup)
 
 (provide 'init-func-keys)
