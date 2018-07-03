@@ -56,6 +56,27 @@ which entry should never be published, so a general done state is not suitable
 in this case."
   (not (equal "DONE" (substring-no-properties (org-get-todo-state)))))
 
+(defun akirak/org-hugo-find-root ()
+  "Move to an ancestor or self where EXPORT_FILE_NAME property is set.
+
+If found, return the point. Otherwise, this function returns nil."
+  (let ((start (point))
+        level)
+    (while (and (setq level (org-current-level))
+                (> level 1)
+                (not (org-entry-get nil "EXPORT_FILE_NAME")))
+      (org-up-heading-all 1))
+    (if (org-entry-get nil "EXPORT_FILE_NAME")
+        (point)
+      (goto-char start)
+      nil)))
+
+(defvar akirak/org-hugo-original-position nil)
+
+(defun akirak/org-hugo-find-root-save ()
+  (setq akirak/org-hugo-original-position (point))
+  (akirak/org-hugo-find-root))
+
 (defun akirak/org-export-subtree-to-hugo ()
   "Export the current subtree using ox-hugo with workarounds."
   (interactive)
@@ -63,34 +84,36 @@ in this case."
     (user-error "Not in org-mode"))
   (when (org-before-first-heading-p)
     (user-error "Before the first heading. Not exporting the subtree"))
-  (let* ((site (akirak/org-hugo-setup-buffer))
-         ;; Set EXPORT_FILE_NAME property on the subtree
-         (filename (or (org-entry-get nil "EXPORT_FILE_NAME")
-                       (let ((filename (read-string
-                                        (format "Set the export file name for the subtree \"%s\": "
-                                                (nth 4 (org-heading-components))))))
-                         (org-entry-put nil "EXPORT_FILE_NAME" filename)
-                         filename)))
-         (outfile (f-join (plist-get site :base-dir)
-                          "content"
-                          (plist-get site :section)
-                          filename))
-         (already-open (find-buffer-visiting outfile)))
-    ;; Set the draft status as well as a timestamp based on the todo state.
-    (let ((is-draft (akirak/ox-hugo-draft-p)))
-      (org-entry-put nil "HUGO_DRAFT" (if is-draft "true" "false"))
-      ;; Set the export date if it is Hugo
-      (if is-draft
-          ;; Date and time in the format supported by Hugo
-          (org-entry-put nil "EXPORT_DATE" (format-time-string "%FT%R%:z"))
-        (org-entry-delete nil "EXPORT_DATE")))
-    (call-interactively 'org-hugo-export-wim-to-md)
-    (if already-open
-        (with-current-buffer already-open
-          (revert-buffer t t)
-          (pop-to-buffer (current-buffer)))
-      (find-file-other-window outfile)
-      (goto-char (point-min)))))
+  (save-excursion
+    (akirak/org-hugo-find-root)
+    (let* ((site (akirak/org-hugo-setup-buffer))
+           ;; Set EXPORT_FILE_NAME property on the subtree
+           (filename (or (org-entry-get nil "EXPORT_FILE_NAME")
+                         (let ((filename (read-string
+                                          (format "Set the export file name for the subtree \"%s\": "
+                                                  (nth 4 (org-heading-components))))))
+                           (org-entry-put nil "EXPORT_FILE_NAME" filename)
+                           filename)))
+           (outfile (f-join (plist-get site :base-dir)
+                            "content"
+                            (plist-get site :section)
+                            filename))
+           (already-open (find-buffer-visiting outfile)))
+      ;; Set the draft status as well as a timestamp based on the todo state.
+      (let ((is-draft (akirak/ox-hugo-draft-p)))
+        (org-entry-put nil "HUGO_DRAFT" (if is-draft "true" "false"))
+        ;; Set the export date if it is Hugo
+        (if is-draft
+            ;; Date and time in the format supported by Hugo
+            (org-entry-put nil "EXPORT_DATE" (format-time-string "%FT%R%:z"))
+          (org-entry-delete nil "EXPORT_DATE")))
+      (call-interactively 'org-hugo-export-wim-to-md)
+      (if already-open
+          (with-current-buffer already-open
+            (revert-buffer t t)
+            (pop-to-buffer (current-buffer)))
+        (find-file-other-window outfile)
+        (goto-char (point-min))))))
 
 (defun akirak/org-hugo-process-tags (tags)
   "Maybe replace underscores in TAGS."
@@ -133,7 +156,9 @@ in this case."
                                        :pre (progn
                                               (unless (derived-mode-p 'org-mode)
                                                 (user-error "Not in org-mode"))
-                                              (require 'ox-hugo)))
+                                              (require 'ox-hugo))
+                                       :post
+                                       (goto-char akirak/org-hugo-original-position))
   "
 Export to Hugo
 
@@ -163,6 +188,15 @@ _t_ Tags: %s(akirak/org-hugo-tags)
   ("C" (customize-variable-other-window 'akirak/hugo-categories)
    "Configure categories")
   ("e" akirak/org-export-subtree-to-hugo "dispatch" :exit t))
+
+(advice-add #'akirak/org-hugo-hydra/body :before #'akirak/org-hugo-find-root-save)
+
+(defun akirak/org-export-subtree-to-hugo-dwim (arg)
+  (interactive (list current-prefix-arg))
+  (if (and (save-excursion (akirak/org-hugo-find-root))
+           (not arg))
+      (akirak/org-export-subtree-to-hugo)
+    (akirak/org-hugo-hydra/body)))
 
 (provide 'init-org-hugo)
 ;;; init-org-hugo.el ends here

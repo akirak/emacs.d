@@ -9,9 +9,7 @@
   ;; "C-2" 'org-time-hydra
   ;; "C-3" 'org-edna-hydra
   "C-4" 'org-refile-hydra
-  "C-6" (general-predicate-dispatch 'akirak/org-hugo-hydra/body
-          (org-entry-get nil "EXPORT_FILE_NAME") 'akirak/org-export-subtree-to-hugo)
-  "C-^" '(akirak/org-hugo-hydra/body :wk "hugo hydra")
+  "C-6" 'akirak/org-export-subtree-to-hugo-dwim
   ;; "C-8" 'org-insert-hydra
   )
 
