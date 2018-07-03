@@ -24,7 +24,7 @@
   (require 'org-element)
   (unless (derived-mode-p 'org-mode)
     (error "Not in org-mode"))
-  (let* ((buffer-ast (org-element-parse-buffer))
+  (let* ((buffer-ast (org-with-wide-buffer (org-element-parse-buffer)))
          (keywords (org-element-map buffer-ast 'keyword
                      (lambda (keyword)
                        (cons (org-element-property :key keyword)
