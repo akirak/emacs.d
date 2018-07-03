@@ -180,7 +180,10 @@ _t_ Tags: %s(akirak/org-hugo-tags)
                                                          #'string<)))
                         cat)))
   ("T" (when-let ((tag (completing-read "Tag to exclude: "
-                                        (split-string (or (akirak/org-hugo-tags) ""))
+                                        (seq-difference (let ((org-use-tag-inheritance t))
+                                                          (mapcar #'substring-no-properties
+                                                                  (org-hugo--get-tags)))
+                                                        org-export-exclude-tags)
                                         nil t)))
          (customize-save-variable 'org-export-exclude-tags
                                   (cons tag org-export-exclude-tags)))
