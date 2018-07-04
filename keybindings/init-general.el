@@ -16,4 +16,9 @@
 (general-create-definer akirak/bind-help-key
   :prefix "<menu>")
 
+(global-unset-key (kbd "<menu>"))
+
+(akirak/bind-help-key
+  "?" #'akirak/helm-search)
+
 (provide 'init-general)

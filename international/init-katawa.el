@@ -5,7 +5,10 @@
 (use-package katawa-ivy
   :straight katawa
   :after katawa
-  :commands (katawa-ivy katawa-ivy-fix katawa-ivy-fix-at-point))
+  :commands (katawa-ivy katawa-ivy-fix katawa-ivy-fix-at-point)
+  :config
+  (ivy-add-actions 'katawa-ivy
+                   '(("ss" akirak/helm-search "Choose a search engine"))))
 
 (use-package katawa-ivy-exwm
   :straight katawa

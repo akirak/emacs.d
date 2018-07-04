@@ -14,6 +14,7 @@
     -  [[#hl-todo][hl-todo]]
       -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
       -  [[#magit-todos][magit-todos]]
+    -  [[#search][Search]]
   -  [[#issues][Issues]]
 
 * Overall policies
@@ -66,6 +67,19 @@ Bind keys to the following commands:
 - [ ] =hl-todo-occur= command
 *** magit-todos
 [[file:apps/init-magit.el::(use-package%20magit-todos][magit-todos]] enhances =magit-status= to show todo items in files in the project.
+** REVIEW Search
+:PROPERTIES:
+:ID:       9d45eb85-dc93-425c-9564-c4e4b0e0a489
+:END:
+:LOGBOOK:
+- State "REVIEW"     from              [2018-07-04 Wed 15:27]
+:END:
+- [[file:misc/init-web-search.el::(defun%20akirak/helm-search%20(query)][akirak/helm-search]] command lets you choose a search engine for a given query.
+  - This command is bound at ~<menu> ?~ key.
+  - This command is also available as an alternative action in =counsel-org-capture-string=.
+- [[file:misc/init-web-search.el::(defun%20akirak/helm-search-symbol-at-point%20()][akirak/helm-search-symbol-at-point]] command lets you choose a search engine for a symbol under the cursor.
+  - I am not sure if this command is useful though.
+
 * Issues
 :PROPERTIES:
 :TOC:      1

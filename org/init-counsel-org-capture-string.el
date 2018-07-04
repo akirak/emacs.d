@@ -8,7 +8,8 @@
   (ivy-add-actions
    'counsel-org-capture-string
    '(("sd" akirak/web-search-firefox "Default search with Firefox")
-     ("sg" akirak/surfraw/google "Google")))
+     ("sg" akirak/surfraw/google "Google")
+     ("ss" akirak/helm-search "Choose a search engine")))
   (defun akirak/counsel-org-capture ()
     (require 'org-capture)
     (require 'counsel-org-capture-string)
