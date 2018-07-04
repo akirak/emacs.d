@@ -9,6 +9,7 @@
     -  [[#projectile-and-remote-repositories][Projectile and remote repositories]]
       -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
       -  [[#cleaning-up-the-list][Cleaning up the list]]
+    -  [[#japanese-support-through-katawa][Japanese support through Katawa]]
   -  [[#usage-tips][Usage tips]]
     -  [[#scratch-buffers][Scratch buffers]]
     -  [[#hl-todo][hl-todo]]
@@ -47,6 +48,14 @@ I have to maintain =projectile-known-projects= regularly:
 - [ ] For repositories in some locations (e.g. straight packages), they should be deleted from the list unless they are in a dirty state
 
 These tasks are completed by =projectile-cleanup-known-projects=. I have to run it regularly.
+** REVIEW Japanese support through Katawa
+:LOGBOOK:
+- State "REVIEW"     from "NEXT"       [2018-07-08 Sun 19:44]
+CLOCK: [2018-07-08 Sun 18:55]--[2018-07-08 Sun 19:14] =>  0:19
+:END:
+Because Japanese is my native language, I still have to rely on it for extensive vocabulary. [[file:international/init-katawa.el][katawa.el]] provides limited support for Japanese in a platform-independent manner.
+
+Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather than being a real input method, it can insert a small portion of Japanese text into the buffer without dependencies. Additional actions are configured in [[file:international/init-katawa.el::(ivy-add-actions%20'katawa-ivy][init-katawa.el]].
 * Usage tips
 :PROPERTIES:
 :TOC:      2

@@ -22,7 +22,35 @@
 (akirak/define-surfraw-command "google")
 (akirak/define-surfraw-command "duckduckgo")
 
-;;;; Extensive search engines
+;;;; Custom search engines
+
+(defun akirak/escape-url-query (query)
+  "Escape QUERY into a hex string."
+  (string-join (mapcar #'url-hexify-string
+                       (-flatten (mapcar #'split-string query)))
+               "+"))
+
+;;;;; Life in Japan
+
+(defun akirak/weblio-japanese-chinese-dictionary (query)
+  (interactive "MJapanese/Chinese: ")
+  (browse-url (format "https://cjjc.weblio.jp/content/%s" query)))
+
+(defun akirak/wikipedia-japanese (query)
+  (interactive "MWikipedia (ja): ")
+  (eww (format "https://ja.wikipedia.org/wiki/%s" query)))
+
+(defun akirak/search-twitter-accounts (query)
+  (browse-url (format "https://twitter.com/search?f=users&vertical=default&q=%s"
+                      query)))
+
+(defun akirak/google-maps-search (query)
+  (browse-url (format "http://www.google.com/maps/search/%s" query)))
+
+(defun akirak/baidu-baike-search (query)
+  (browse-url (format "https://baike.baidu.com/search/word?word=%s" query)))
+
+;;;; search engines
 
 (defun akirak/helm-search (query)
   "Choose a search engine for QUERY."
