@@ -11,8 +11,7 @@
 
 (use-package ox-hugo :after ox
   :custom
-  (org-hugo-front-matter-format 'yaml)
-  (org-hugo-export-with-toc 2))
+  (org-hugo-front-matter-format 'yaml))
 
 ;; Provides akirak/org-insert-buffer-header function
 (require 'akirak-org-commands)
