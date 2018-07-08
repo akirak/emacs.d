@@ -6,9 +6,12 @@
 
 (defun akirak/yas-auto-insert ()
   ;; Expand a snippet named \"auto-insert\" if and only if it exists
-  (when-let ((snippet (condition-case nil
-                          (yas-lookup-snippet "auto-insert")
-                        (error nil))))
-    (yas-expand-snippet snippet)))
+  (unless (and (eq major-mode 'emacs-lisp-mode)
+               (equal ".dir-locals.el"
+                      (file-name-base (buffer-file-name))))
+    (when-let ((snippet (condition-case nil
+                            (yas-lookup-snippet "auto-insert")
+                          (error nil))))
+      (yas-expand-snippet snippet))))
 
 (provide 'init-autoinsert)
