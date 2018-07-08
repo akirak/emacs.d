@@ -99,13 +99,9 @@ If found, return the point. Otherwise, this function returns nil."
                             filename))
            (already-open (find-buffer-visiting outfile)))
       ;; Set the draft status as well as a timestamp based on the todo state.
+      ;; TODO: Remove this when the custom draft status is implemented in ox-hugo
       (let ((is-draft (akirak/ox-hugo-draft-p)))
-        (org-entry-put nil "HUGO_DRAFT" (if is-draft "true" "false"))
-        ;; Set the export date if it is Hugo
-        (if is-draft
-            ;; Date and time in the format supported by Hugo
-            (org-entry-put nil "EXPORT_DATE" (format-time-string "%FT%R%:z"))
-          (org-entry-delete nil "EXPORT_DATE")))
+        (org-entry-put nil "HUGO_DRAFT" (if is-draft "true" "false")))
       (call-interactively 'org-hugo-export-wim-to-md)
       (if already-open
           (with-current-buffer already-open
