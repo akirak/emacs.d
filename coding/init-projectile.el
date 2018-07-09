@@ -32,9 +32,6 @@
   (with-eval-after-load 'ivy-rich
     (ivy-set-display-transformer
      'counsel-projectile-switch-to-buffer
-     'ivy-rich-switch-buffer-transformer))
-  :init
-  ;; Open a file or switch to a buffer in the project after projectile-switch-project
-  (setq projectile-switch-project-action 'counsel-projectile-find-file))
+     'ivy-rich-switch-buffer-transformer)))
 
 (provide 'init-projectile)
