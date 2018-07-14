@@ -15,6 +15,7 @@
 (use-package projectile
   :init
   (projectile-mode)
+  (add-to-list 'projectile-globally-ignored-directories ".cask")
   :custom
   (projectile-completion-system (quote ivy))
   (projectile-create-missing-test-files t)
