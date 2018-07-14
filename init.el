@@ -48,6 +48,7 @@
 (require 'init-coding)
 
 ;;; Enhancements (misc/)
+(require 'init-savehist)
 (require 'init-commands)
 (require 'init-startup)                 ; Optional
 (require 'init-desktop)
