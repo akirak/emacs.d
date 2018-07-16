@@ -13,5 +13,7 @@ To properly install this configuration, first back up your current configuration
 
     git clone https://github.com/akirak/emacs.d.git ~/.emacs.d 
 
+After starting Emacs with the configuration, you have to run `all-the-icons-install-fonts`.
+
 ## License
 GPL v3
