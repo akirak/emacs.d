@@ -6,5 +6,16 @@
   :straight (repom :host github :repo "akirak/repom.el")
   :commands (helm-repom))
 
+(defun akirak/repom-async-get-lists ()
+  (when (version< "26" emacs-version)
+    (make-thread
+     (lambda ()
+       (message "Retrieving lists of GitHub repositories...")
+       (require 'repom-github)
+       (repom-github-fetch-repo-lists)
+       (message "Finished retrieving repository lists.")))))
+
+(add-hook 'emacs-startup-hook #'akirak/repom-async-get-lists)
+
 (provide 'init-repom)
 ;;; init-repom.el ends here
