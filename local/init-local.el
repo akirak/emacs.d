@@ -27,7 +27,7 @@ ORG-FILES."
   (let ((local-init-file (expand-file-name "init.el" dir)))
     `(when (file-directory-p ,dir)
        ,(when symbol
-          `(setq symbol ,dir))
+          `(setq ,symbol ,dir))
        ;; This should be run before load-file, as the local-init-file
        ;; can contain org-starter-define-file statements that depends
        ;; on the directory configuration, e.g. load-path.
