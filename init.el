@@ -91,4 +91,8 @@
 ;;; Personal configuration
 ;; Load my personal configuration if an option is given
 (add-to-list 'command-switch-alist
-             '("--ops" . (lambda (_) (require 'init-ops))))
+             '("--ops" . (lambda (_)
+                           (add-to-list 'load-path
+                                        (expand-file-name "local"
+                                                          user-emacs-directory))
+                           (require 'init-local))))
