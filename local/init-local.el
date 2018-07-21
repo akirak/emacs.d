@@ -1,6 +1,10 @@
 ;;; init-local.el --- Root of my personal configuration -*- lexical-binding: t -*-
 
 (require 'init-org-starter)
+(require 'init-org-capture)
+(require 'init-org-agenda)
+
+;;;; Optional repositories
 
 (cl-defmacro akirak/load-config-from-directory (dir
                                                 &key
@@ -33,11 +37,36 @@ ORG-FILES."
        (when (file-exists-p ,local-init-file)
          (load-file ,local-init-file)))))
 
+;; These Git repositories are deployed by Ansible
+
 (akirak/load-config-from-directory "~/ops"
   :org-dir-options (:agenda t))
 
+;; Deprecated
+(akirak/load-config-from-directory "~/org"
+  :org-dir-options (:add-to-path t)
+  :symbol org-directory)
+
 (akirak/load-config-from-directory "~/learning"
   :org-dir-options (:add-to-path t))
+
+(akirak/load-config-from-directory "~/hugo"
+  :symbol hugo-project-directory)
+
+(akirak/load-config-from-directory "~/private"
+  :org-dir-options (:add-to-path t))
+
+(akirak/load-config-from-directory "~/personal/ledger"
+  :org-dir-options (:add-to-path t))
+
+(akirak/load-config-from-directory "~/personal/org-journal"
+  :symbol org-journal-dir)
+
+(akirak/load-config-from-directory "~/personal/language-learning"
+  :org-dir-options (:id 'language-learning
+                        :add-to-path t
+                        :agenda nil
+                        :refile '(:maxlevel . 1)))
 
 (provide 'init-local)
 ;;; init-local.el ends here
