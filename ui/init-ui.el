@@ -7,6 +7,7 @@
 
 ;; The header line
 (require 'init-header-line)
+(require 'init-frame-title)
 
 ;;;;; Prefered themes
 (require 'init-dracula-theme)
