@@ -31,7 +31,7 @@
 (require 'org-refile-hydra)
 (require 'org-insert-hydra)
 
-;;;; Exporting
-(require 'init-org-hugo)
+;;;; Specific files
+(require 'init-emacs-org)
 
 (provide 'init-org)

@@ -24,6 +24,9 @@
   :layout '(find-file (expand-file-name "init.el" user-emacs-directory))
   :make-frame '(frame-purpose-make-directory-frame user-emacs-directory))
 
+(akirak/define-frame-workflow "home"
+  :layout '(corefighter-sidebar))
+
 ;;;; Keymap to switch to a frame
 
 (define-prefix-command 'akirak/frame-map)

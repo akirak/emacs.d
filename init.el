@@ -32,6 +32,9 @@
                   "x"))
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
+(when (member "--ops" command-line-args)
+  (add-to-list 'load-path (expand-file-name "local" user-emacs-directory)))
+
 ;; This needs to be loaded first
 (require 'init-compat)
 (require 'init-config)
@@ -90,11 +93,5 @@
 (require 'init-chinese)
 (require 'init-google-translate)
 
-;;; Personal configuration
-;; Load my personal configuration if an option is given
-(add-to-list 'command-switch-alist
-             '("--ops" . (lambda (_)
-                           (add-to-list 'load-path
-                                        (expand-file-name "local"
-                                                          user-emacs-directory))
-                           (require 'init-local))))
+;;; Personal configuration (local/)
+(add-to-list 'command-switch-alist '("--ops" . (lambda (_) (require 'init-local))))
