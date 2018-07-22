@@ -82,6 +82,7 @@
             "p" 'dired-hacks-previous-file))
 
 (use-package joseph-single-dired
+  :disabled t
   :after dired)
 
 (use-package ivy-dired-history
