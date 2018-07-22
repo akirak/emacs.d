@@ -49,7 +49,7 @@
   (let ((org-refile-targets `((nil . ,(cl-typecase arg
                                         (number `(:level . ,arg))
                                         (t '(:maxlevel . 9)))))))
-    (org-refile)))
+    (call-interactively #'org-refile)))
 
 (defun org-refile-targets-other-window-files ()
   "org-refile to a buffer in a window in the same frame."
@@ -79,15 +79,18 @@
     (org-agenda-refile)))
 
 (defun org-journal-refile-location (time)
+  "Get a refile location in org-journal at/on TIME."
   (save-window-excursion
     (org-with-wide-buffer
      (org-journal-new-entry t time)
      (goto-char (point-min))
      (unless (string-match "^\*" (thing-at-point 'line t))
        (re-search-forward "^\* "))
-     (list nil (buffer-file-name) nil (point)))))
+     (let ((filename (buffer-file-name)))
+       (message "Refiling to %s" filename)
+       (list nil filename nil (point))))))
 
-(defun org-journal-entry-time (time)
+(defun org-journal-entry-time (arg)
   (unless (derived-mode-p 'org-mode)
     (user-error "Not in org-mode"))
   (if arg
@@ -111,7 +114,7 @@
     (user-error "Before first heading"))
   (when (region-active-p)
     (user-error "Cannot be run on a region"))
-  (org-refile nil nil (org-journal-refile-location (org-journal-entry-time))))
+  (org-refile nil nil (org-journal-refile-location (org-journal-entry-time arg))))
 
 (defun org-agenda-refile-to-journal (arg)
   "Refile the current entry to org-journal."
@@ -123,7 +126,7 @@
                      (org-agenda-error)))
          (rfloc (with-current-buffer (marker-buffer marker)
                   (goto-char (marker-position marker))
-                  (org-journal-refile-location (org-journal-entry-time)))))
+                  (org-journal-refile-location (org-journal-entry-time arg)))))
     (org-agenda-refile nil rfloc)))
 
 (defhydra org-refile-hydra
