@@ -7,7 +7,7 @@
   ;; TODO: Create hydra commands
   ;; "C-2" 'org-time-hydra
   ;; "C-3" 'org-edna-hydra
-  "C-4" 'org-refile-hydra
+  "C-4" 'org-starter-refile-by-key
   "C-6" 'akirak/org-export-subtree-to-hugo-dwim
   "C-8" 'org-insert-hydra/body)
 
