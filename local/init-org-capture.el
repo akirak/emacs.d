@@ -44,6 +44,7 @@
                                                          &key (todo nil)
                                                          (tags nil)
                                                          (extra-props nil))
+  (declare (indent 1))
   (concat "* " (if todo (concat todo " ") "") (or heading "%?")
           (when tags
             (format " :%s:" (string-join tag ":")))
