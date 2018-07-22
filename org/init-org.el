@@ -19,6 +19,10 @@
 (require 'init-helm-org-rifle)
 (require 'init-org-offtime)
 (require 'init-counsel-org-clock)
+
+;;;; Utilities for customization
+(require 'init-org-capture)
+(require 'init-org-agenda)
 (require 'init-org-super-agenda)
 
 ;;;; Keybindings
