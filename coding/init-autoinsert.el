@@ -1,14 +1,19 @@
 (auto-insert-mode 1)
 (setq auto-insert 'other
       auto-insert-query nil
-      auto-insert-alist `((("\\.[[:alpha:]]+\\'" . "yasnippet")
+      auto-insert-alist '((("/\\(init\\|my\\)-.+\\.el\\'" . "Emacs init")
+                           . (> _ "\n\n"
+                                "(provide '"
+                                (file-name-base (buffer-file-name))
+                                ")"))
+                          (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
 
 (defun akirak/yas-auto-insert ()
   ;; Expand a snippet named \"auto-insert\" if and only if it exists
   (unless (and (eq major-mode 'emacs-lisp-mode)
-               (equal ".dir-locals.el"
-                      (file-name-base (buffer-file-name))))
+               (member (file-name-base (buffer-file-name))
+                       '(".dir-locals.el" "init.el")))
     (when-let ((snippet (condition-case nil
                             (yas-lookup-snippet "auto-insert")
                           (error nil))))
