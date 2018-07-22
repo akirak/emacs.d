@@ -35,7 +35,10 @@ ORG-FILES."
          ,@org-dir-options
          :files (quote ,org-files))
        (when (file-exists-p ,local-init-file)
-         (load-file ,local-init-file)))))
+         (condition-case err
+             (load-file ,local-init-file)
+           (error (message "Error while loading %s: %s"
+                           ,local-init-file err)))))))
 
 ;; These Git repositories are deployed by Ansible
 
