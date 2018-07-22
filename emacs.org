@@ -3,22 +3,22 @@
 :PROPERTIES:
 :TOC:      this
 :END:
-  -  [[#overall-policies][Overall policies]]
+  -  [[#policies][Policies]]
     -  [[#menu-key-for-help][Menu key for help]]
       -  [[#tutorial-hydra][Tutorial hydra]]
     -  [[#projectile-and-remote-repositories][Projectile and remote repositories]]
       -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
       -  [[#cleaning-up-the-list][Cleaning up the list]]
-    -  [[#japanese-support-through-katawa][Japanese support through Katawa]]
+    -  [[#review-japanese-support-through-katawa][REVIEW Japanese support through Katawa]]
   -  [[#usage-tips][Usage tips]]
     -  [[#scratch-buffers][Scratch buffers]]
     -  [[#hl-todo][hl-todo]]
-      -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
+      -  [[#archived-navigate-through-a-buffer-by-todo-keywords][ARCHIVED Navigate through a buffer by todo keywords]]
       -  [[#magit-todos][magit-todos]]
-    -  [[#search][Search]]
+    -  [[#review-search][REVIEW Search]]
   -  [[#issues][Issues]]
 
-* Overall policies
+* Policies
 :PROPERTIES:
 :TOC:      2
 :END:
