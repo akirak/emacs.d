@@ -25,6 +25,7 @@
 (require 'init-org-bindings)
 (require 'init-org-agenda-bindings)
 (require 'org-refile-hydra)
+(require 'org-insert-hydra)
 
 ;;;; Exporting
 (require 'init-org-hugo)
