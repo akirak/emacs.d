@@ -1,5 +1,13 @@
 ;;; init-web-browser.el --- Integration with an external web browser -*- lexical-binding: t -*-
 
+(defun akirak/display-url-for-referencing (url)
+  (interactive "sUrl: ")
+  (let ((orig-win (selected-window)))
+    (split-window-sensibly)
+    (other-window 1)
+    (eww url)
+    (select-window orig-win)))
+
 (defun akirak/browser-windows ()
   "Return a list of web browser windows in the frame."
   (cl-remove-if-not (lambda (window)

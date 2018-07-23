@@ -40,6 +40,9 @@
 (require 'init-rainbow-mode)
 (require 'init-hl-todo)
 
+;;;;; Referencing
+(require 'init-dash)
+
 ;;;;; Misc
 (require 'init-scratch)
 
