@@ -73,6 +73,7 @@
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
 (require 'init-graphviz)
+(require 'init-python)
 (require 'init-nim)
 (require 'init-lispy)
 (require 'init-markdown)

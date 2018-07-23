@@ -1,5 +1,7 @@
 ;;; init-emacs-lisp.el --- Configuration for emacs-lisp-mode  -*- lexical-binding: t; -*-
 
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
 ;;;; Packages
 (setq-default flycheck-emacs-lisp-load-path (quote inherit))
 
