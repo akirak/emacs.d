@@ -131,8 +131,12 @@
                            "dockerfile" "mk")))
            ("Programs"
             (extension "exe" "run" "deb"))
+           ("Objects and binary files"
+            (extension "o" "elc"))
            ("Meta data"
-            (extension "torrent" "acsm")))))
+            (extension "torrent" "acsm"))
+           ("Emacs Lisp"
+            (extension "el")))))
   :hook
   (dired-mode . dired-filter-mode)
   (dired-mode . dired-filter-group-mode))
