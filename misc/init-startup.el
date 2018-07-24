@@ -26,4 +26,9 @@
   (interactive)
   (find-file-read-only akirak/init-time-log-file))
 
+;;;; Startup window
+;; Switch to *Messages* at startup
+(add-hook 'emacs-startup-hook
+          (lambda () (switch-to-buffer "*Messages*")))
+
 (provide 'init-startup)
