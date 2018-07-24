@@ -13,4 +13,10 @@
   :general
   ([remap apropos-command] 'helm-apropos))
 
+(use-package helm-system-packages
+  :commands (helm-system-packages))
+
+(use-package helm-systemd
+  :commands (helm-systemd))
+
 (provide 'init-helm)

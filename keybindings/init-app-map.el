@@ -1,12 +1,16 @@
 (define-prefix-command 'akirak/app-map)
 
 (general-def akirak/app-map
-  ;; "a" '((lambda () (interactive) (org-agenda nil "a")) :which-key "agenda")
+  "a" 'org-agenda
   "c" 'calendar
   "d" 'helm-linux-disks
   "i" 'docker-images
+  "j" 'org-journal
   "k" 'docker-containers
   "p" 'prodigy
-  "t" 'helm-top)
+  "P" 'helm-system-packages
+  "S" 'helm-systemd
+  "t" 'helm-top
+  "u" 'uptimes)
 
 (provide 'init-app-map)

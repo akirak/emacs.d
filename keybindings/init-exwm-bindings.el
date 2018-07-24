@@ -31,7 +31,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-Z" . counsel-org-offtime)
  ("s-b" . helm-mini)
  ("s-c" . org-capture)
- ("s-d" . akirak/driver)
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
  ("s-g" . akirak/frame-map)
@@ -48,10 +47,8 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-s" . helm-frame-workflow)
  ("s-v" . toggle-window-split)
  ("s-w" . akirak/exwm-goto-browser)
- ;; ("s-x" . frame-workflow-action-map)
  ("s-y" . window-go-other-buffer-in-split-window)
  ("s-z" . counsel-org-clock-context)
- ("s-9" . window-go-bottom)
  ("s-," . winner-undo)
  ("s-." . winner-redo)
  ("s-[" . exwm-window-go-previous-visible-workspace)
@@ -65,8 +62,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("M-<f4>" . kill-this-buffer-and-its-window)
  ("<s-return>" . switch-window-then-swap-buffer)
  ("<s-backspace>" . keyboard-quit)
- ("s-0" . delete-window)
- ("s-/" . akirak/search-map))
+ ("s-0" . delete-window))
 
 ;; Bind s-g N to Nth EXWM workspace
 (require 'init-frames)
