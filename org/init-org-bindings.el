@@ -11,4 +11,10 @@
   "C-6" 'akirak/org-export-subtree-to-hugo-dwim
   "C-8" 'org-insert-hydra/body)
 
+(defun akirak/pop-up-org-clocking-task ()
+  (interactive)
+  (split-window-below)
+  (other-window 1)
+  (org-clock-goto))
+
 (provide 'init-org-bindings)
