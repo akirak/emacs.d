@@ -69,6 +69,7 @@
 (require 'init-docker)
 (require 'init-web-search)
 (require 'init-web-browser)
+(require 'init-pocket-reader)
 
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
