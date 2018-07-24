@@ -73,6 +73,7 @@
 (require 'init-web-search)
 (require 'init-web-browser)
 (require 'init-pocket-reader)
+(require 'init-eaf)
 
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
