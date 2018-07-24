@@ -1,5 +1,6 @@
 (use-package magit
   :custom
+  ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
 ;;;; Extra sections in =magit-status=

@@ -1,3 +1,6 @@
+;; Both ibuffer-projectile and ibuffer-vc are similar packages,
+;; but I prefer ibuffer-projectile for now.
+
 (use-package ibuffer-projectile
   :init
   (add-hook 'ibuffer-hook
