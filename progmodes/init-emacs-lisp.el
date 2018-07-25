@@ -27,7 +27,11 @@
                                                     user-emacs-directory)))
                           nil t
                           (projectile-project-name))))
-  (straight-pull-package (intern name)))
+  (straight-pull-package (intern name))
+  (when (yes-or-no-p "Rebuild the package? ")
+    (straight-rebuild-package name))
+  (when (yes-or-no-p "Reload it? ")
+    (load-library name)))
 
 (defun akirak/eval-buffer-or-load-file ()
   (interactive)
