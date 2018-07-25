@@ -11,6 +11,7 @@
     :set-default 'yankpad-file
     :refile '(:level . 1))
   (akirak/define-frame-workflow "ops"
+    :key "o"
     :layout '(find-file "~/ops/README.org")
-    :make-frame '(frame-purpose-make-directory-frame akirak/ops-directory))
+    :make-frame '(frame-purpose-make-directory-frame "~/ops/"))
   (provide 'my-ops))

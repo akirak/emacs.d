@@ -33,7 +33,7 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("s-c" . org-capture)
  ("s-e" . ivy-bookmarked-directory)
  ("s-f" . counsel-locate)
- ("s-g" . akirak/frame-map)
+ ("s-g" . frame-workflow-prefix-map)
  ("s-h" . exwm-window-go-shrink-horizontally)
  ("s-j" . other-window)
  ("s-k" . window-go-previous)
@@ -63,12 +63,6 @@ BINDINGS is a list of cons cells containing a key (string) and a command."
  ("<s-return>" . switch-window-then-swap-buffer)
  ("<s-backspace>" . keyboard-quit)
  ("s-0" . delete-window))
-
-;; Bind s-g N to Nth EXWM workspace
-(require 'init-frames)
-(dolist (i (number-sequence 0 9))
-  (define-key akirak/frame-map (int-to-string i)
-    `(lambda () (interactive) (exwm-workspace-switch ,i))))
 
 ;;;; Keybindings in exwm-mode-map
 (general-def exwm-mode-map

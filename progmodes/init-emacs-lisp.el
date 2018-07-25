@@ -59,6 +59,7 @@
 
 ;;;; frame-workflow
 (akirak/define-frame-workflow "emacs-lisp"
+  :key "e"
   :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
 
 (provide 'init-emacs-lisp)

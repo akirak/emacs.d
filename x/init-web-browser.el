@@ -22,6 +22,7 @@
   (start-process-shell-command "firefox" nil "firefox"))
 
 (akirak/define-frame-workflow "web"
+  :key "w"
   :layout
   '(progn
      (akirak/start-browser)

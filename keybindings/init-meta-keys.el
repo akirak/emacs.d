@@ -81,4 +81,6 @@
 
 (require 'init-fix-map)
 
+(general-def "C-M-g" #'frame-workflow-prefix-map)
+
 (provide 'init-meta-keys)
