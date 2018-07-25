@@ -1,5 +1,5 @@
 #+title: Emacs
-* Contents                                                         :noexport:
+* Contents :noexport:
 :PROPERTIES:
 :TOC:      this
 :END:
@@ -9,13 +9,13 @@
     -  [[#projectile-and-remote-repositories][Projectile and remote repositories]]
       -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
       -  [[#cleaning-up-the-list][Cleaning up the list]]
-    -  [[#review-japanese-support-through-katawa][REVIEW Japanese support through Katawa]]
+    -  [[#japanese-support-through-katawa][Japanese support through Katawa]]
   -  [[#usage-tips][Usage tips]]
     -  [[#scratch-buffers][Scratch buffers]]
     -  [[#hl-todo][hl-todo]]
-      -  [[#archived-navigate-through-a-buffer-by-todo-keywords][ARCHIVED Navigate through a buffer by todo keywords]]
+      -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
       -  [[#magit-todos][magit-todos]]
-    -  [[#review-search][REVIEW Search]]
+    -  [[#search][Search]]
   -  [[#issues][Issues]]
 
 * Policies
