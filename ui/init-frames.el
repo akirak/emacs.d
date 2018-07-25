@@ -22,8 +22,16 @@
 ;;;; Some workspaces
 (akirak/define-frame-workflow "emacs-config"
   :key "C"
-  :layout '(find-file (expand-file-name "init.el" user-emacs-directory))
-  :make-frame '(frame-purpose-make-directory-frame user-emacs-directory))
+  :layout
+  '(progn
+     (delete-other-windows)
+     (frame-workflow-magit-same-window)
+     (split-window-right)
+     (find-file (expand-file-name "emacs.org" user-emacs-directory))
+     (when (fboundp 'ibuffer-sidebar-show-sidebar)
+       (ibuffer-sidebar-show-sidebar)))
+  :make-frame
+  '(frame-purpose-make-directory-frame user-emacs-directory))
 
 (akirak/define-frame-workflow "home"
   :key "h"
