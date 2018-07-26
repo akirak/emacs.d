@@ -27,4 +27,9 @@
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
 
+(smartrep-define-key
+    global-map "<f8>"
+  '(("=" . text-scale-increase)
+    ("-" . text-scale-decrease)))
+
 (provide 'init-func-keys)
