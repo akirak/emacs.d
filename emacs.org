@@ -15,6 +15,9 @@
     -  [[#hl-todo][hl-todo]]
       -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
       -  [[#magit-todos][magit-todos]]
+    -  [[#ibuffer-sidebar-and-dired-sidebar][ibuffer-sidebar and dired-sidebar]]
+      -  [[#dired-sidebar][dired-sidebar]]
+      -  [[#ibuffer-sidebar][ibuffer-sidebar]]
     -  [[#search][Search]]
   -  [[#issues][Issues]]
 
@@ -76,6 +79,17 @@ Bind keys to the following commands:
 - [ ] =hl-todo-occur= command
 *** magit-todos
 [[file:apps/init-magit.el::(use-package%20magit-todos][magit-todos]] enhances =magit-status= to show todo items in files in the project.
+** ibuffer-sidebar and dired-sidebar
+There are several sidebar packages for Emacs. I once used treemacs, which was well-developed, but I don't always need a sidebar, and I don't want to learn new keybindings for less frequently applications. dired-sidebar and ibuffer-sidebar are based on dired and ibuffer respectively, so I will try to use it.
+
+Configuration: [[file:ui/init-sidebar.el]]
+*** dired-sidebar
+**** TODO Tweak the keybindings in dired-sidebar buffer
+- [ ] ~RET~ to open the file in a non-sidebar window
+- [ ] ~SPC~ to open the file in a non-sidebar window but keep focus in the sidebar
+*** ibuffer-sidebar
+**** Add support for frame-purpose.el to ibuffer-sidebar
+I've added an experimental support for frame-purpose. This can replace the built-in sidebar of frame-purpose.
 ** REVIEW Search
 :PROPERTIES:
 :ID:       9d45eb85-dc93-425c-9564-c4e4b0e0a489
