@@ -4,8 +4,9 @@
   :after (helm projectile))
 
 (use-package repom
-  :straight (repom :host github :repo "akirak/repom.el")
-  :commands (helm-repom))
+  :straight (repom :host github :repo "akirak/repom.el"
+                   :files (:defaults
+                           (:exclude "helm-repom.el"))))
 
 (when (version< "26" emacs-version)
   (defun akirak/repom-async-get-lists ()
@@ -19,6 +20,13 @@
   (add-hook 'emacs-startup-hook
             (lambda ()
               (run-with-timer 2 nil #'akirak/repom-async-get-lists))))
+
+(use-package ghub)
+
+(use-package helm-repom
+  :straight (helm-repom :host github :repo "akirak/repom.el"
+                        :files ("helm-repom.el"))
+  :commands (helm-repom))
 
 (provide 'init-repom)
 ;;; init-repom.el ends here
