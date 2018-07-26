@@ -164,10 +164,14 @@
 
 ;;;;;; Colorizing
 
+;; Use diredful to detect malformed file names
 (use-package diredful
   :after dired
   :config
-  (diredful-mode 1))
+  (diredful-mode 1)
+  :custom
+  ;; Make diredful machine-specific
+  (diredful-init-file (expand-file-name "~/.diredful")))
 
 (use-package diredfl
   :disabled t
