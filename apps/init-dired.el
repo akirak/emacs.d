@@ -224,4 +224,14 @@
 
 (define-key dired-mode-map (kbd "/") dired-filter-map)
 
+;;;; frame-workflow
+
+(akirak/define-frame-workflow "dired"
+  :key "d"
+  :make-frame
+  '(frame-purpose-make-mode-frame 'dired-mode)
+  :layout
+  '(when (fboundp 'ibuffer-sidebar-show-sidebar)
+     (ibuffer-sidebar-show-sidebar)))
+
 (provide 'init-dired)

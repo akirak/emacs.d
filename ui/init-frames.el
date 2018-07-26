@@ -41,8 +41,4 @@
   :make-frame
   '(frame-purpose-make-directory-frame user-emacs-directory))
 
-(akirak/define-frame-workflow "home"
-  :key "h"
-  :layout '(corefighter-sidebar))
-
 (provide 'init-frames)
