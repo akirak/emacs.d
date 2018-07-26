@@ -1,4 +1,7 @@
 #+title: Emacs
+
+See also [[file:README.org]]
+
 * Contents :noexport:
 :PROPERTIES:
 :TOC:      this
@@ -43,7 +46,7 @@ By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
 I used =counsel-projectile-switch-project= for opening a local repository, but now that I have =repom=, I will use =helm-repom= to open a repository. If a repository is not available locally, then I can clone it from a remote server quickly.
 
 - [[file:misc/init-repom.el]]
-*** TODO Cleaning up the list
+*** Cleaning up the list
 I have to maintain =projectile-known-projects= regularly:
 
 - [X] Delete duplicates
