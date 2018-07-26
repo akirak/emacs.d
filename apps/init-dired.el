@@ -106,8 +106,7 @@
             (directory . t))
            ("Dotfiles"
             (name . "^\\."))
-           ("Books and papers"
-            (extension "pdf" "mobi" "epub" "azw"))
+           ;; Text files
            ("Text"
             (or (name . "README")
                 (name . "TODO")
@@ -115,27 +114,33 @@
                 (extension "txt" "md" "mkd" "markdown" "rst")))
            ("Org"
             (extension "org" "bib"))
-           ("Archives"
-            (extension "zip" "rar" "gz" "bz2" "tar"))
-           ("Images and graphics"
-            (extension "jpg" "jpeg" "png" "gif" "svg"))
-           ("Disk images"
-            (extension "iso" "ova"))
            ("Data files"
             (extension "csv" "json" "sql"))
+           ;; Binary files
+           ("Books and papers"
+            (extension "pdf" "mobi" "epub" "azw"))
+           ("Archives"
+            (extension "zip" "rar" "gz" "bz2" "tar"))
+           ("Disk images"
+            (extension "iso" "ova"))
            ("Office docs"
             (extension "xlsx" "xls" "docx" "doc"))
-           ("Config"
-            (or (name . "Makefile")
-                (name . "Dockerfile")
-                (extension "yml" "yaml" "cabal"
-                           "dockerfile" "mk")))
            ("Programs"
             (extension "exe" "run" "deb"))
            ("Objects and binary files"
             (extension "o" "elc"))
            ("Meta data"
             (extension "torrent" "acsm"))
+           ;; Images are often thumbnails, so they should come
+           ;; after other binary files
+           ("Images and graphics"
+            (extension "jpg" "jpeg" "png" "gif" "svg"))
+           ;; Source code
+           ("Config"
+            (or (name . "Makefile")
+                (name . "Dockerfile")
+                (extension "yml" "yaml" "cabal"
+                           "dockerfile" "mk")))
            ("Emacs Lisp"
             (extension "el")))))
   :hook
