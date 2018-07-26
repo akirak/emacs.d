@@ -62,7 +62,8 @@
 ;;;; Packages for enhancing dired
 (use-package dired-x
   :straight nil
-  :after dired
+  ;; If you need dired-k, you may need to load dired-x after dired-k
+  :after (dired dired-k)
   :config
   (setq-default dired-omit-files-p t))
 
@@ -180,10 +181,20 @@
   (diredfl-global-mode 1))
 
 (use-package dired-k
-  :disabled t
   :after dired
-  :hook
-  (dired-mode . dired-k))
+  :functions (dired-k)
+  :init
+  (add-hook 'dired-after-readin-hook #'dired-k-no-revert t)
+  :config
+  ;; Prevent from highlighting by file attributes.
+  ;; Just add git status
+  (defun akirak/ad-override-dired-k--highlight-by-file-attribyte ()
+    nil)
+  (advice-add #'dired-k--highlight-by-file-attribyte
+              :override
+              #'akirak/ad-override-dired-k--highlight-by-file-attribyte)
+  :custom
+  (dired-k-style 'git))
 
 (use-package dired-rainbow
   :disabled t
