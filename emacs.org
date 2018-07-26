@@ -53,8 +53,8 @@ I have to maintain =projectile-known-projects= regularly:
 - [X] Delete projects that no longer exists
 - [ ] For repositories in some locations (e.g. straight packages), they should be deleted from the list unless they are in a dirty state
 
-These tasks are completed by =projectile-cleanup-known-projects=. I have to run it regularly.
-** REVIEW Japanese support through Katawa
+These tasks are completed by =projectile-cleanup-known-projects=. This is triggered by midnight-mode: [[file:misc/init-midnight.el]].
+** Japanese support through Katawa
 :LOGBOOK:
 - State "REVIEW"     from "NEXT"       [2018-07-08 Sun 19:44]
 CLOCK: [2018-07-08 Sun 18:55]--[2018-07-08 Sun 19:14] =>  0:19

@@ -6,5 +6,6 @@
   (add-to-list 'clean-buffer-list-kill-regexps "\\*magit"))
 
 (add-hook 'midnight-hook 'org-store-agenda-views)
+(add-hook 'midnight-hook #'projectile-cleanup-known-projects)
 
 (provide 'init-midnight)
