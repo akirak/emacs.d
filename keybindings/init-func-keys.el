@@ -7,7 +7,7 @@
   "<f5>" 'revert-buffer
   "<f6>" 'multi-term
   "<S-f6>" 'multi-term-next
-  "<f7>" 'magit
+  "<f7>" #'akirak/magit-status-prefer-existing
   "<f8>" 'akirak/ui-map
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
