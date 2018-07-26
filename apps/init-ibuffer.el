@@ -2,12 +2,14 @@
 ;; but I prefer ibuffer-projectile for now.
 
 (use-package ibuffer-projectile
-  :init
-  (add-hook 'ibuffer-hook
-            (lambda ()
-              (ibuffer-projectile-set-filter-groups)
-              (unless (eq ibuffer-sorting-mode 'alphabetic)
-                (ibuffer-do-sort-by-alphabetic)))))
+  :after projectile
+  :config
+  (defun ibuffer-projectile-run ()
+    (ibuffer-projectile-set-filter-groups)
+    (unless (eq ibuffer-sorting-mode 'alphabetic)
+      (ibuffer-do-sort-by-alphabetic)))
+  :hook
+  (ibuffer . ibuffer-projectile-run))
 
 (use-package ibuffer-vc
   :disabled t
