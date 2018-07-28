@@ -5,7 +5,10 @@
 
 (use-package corefighter
   :straight (corefighter :host github
-                         :repo "akirak/corefighter.el")
+                         :repo "akirak/corefighter.el"
+                         :files
+                         (:defaults
+                          (:exclude "helm-corefighter.el")))
   :commands (corefighter-sidebar)
   :config
   (require 'corefighter-repom)
@@ -13,6 +16,11 @@
         '((corefighter-repom-dirty)
           (corefighter-org-agenda)))
   (corefighter-load-modules))
+
+(use-package helm-corefighter
+  :straight (helm-corefighter :host github :repo "akirak/corefighter.el"
+                              :files ("helm-corefighter.el"))
+  :commands (helm-corefighter))
 
 (require 'init-repom)
 
