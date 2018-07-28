@@ -120,5 +120,5 @@ I've added an experimental support for frame-purpose. This can replace the built
 :END:
 
 # Local Variables:
-# before-save-hook: org-make-toc
+# org-make-toc: t
 # End:
