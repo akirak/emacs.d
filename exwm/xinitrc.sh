@@ -31,6 +31,13 @@ else
     if which ${auth_agent}; then
         ${auth_agent} &
     fi
+
+    if which fcitx >/dev/null; then
+        fcitx -d -s5
+        export GTK_IM_MODULE=fcitx
+        export QT_IM_MODULE=fcitx
+        export XMODIFIERS=@im=fcitx
+    fi
 fi
 
 # If Emacs is started in server mode, `emacsclient` is a convenient way to edit
