@@ -5,7 +5,7 @@
   "c" 'calendar
   "d" 'helm-linux-disks
   "i" 'docker-images
-  "j" 'org-journal
+  "j" 'org-journal-new-entry
   "k" 'docker-containers
   "p" 'prodigy
   "P" 'helm-system-packages
