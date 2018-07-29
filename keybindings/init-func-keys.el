@@ -32,4 +32,13 @@
   '(("=" . text-scale-increase)
     ("-" . text-scale-decrease)))
 
+(with-eval-after-load 'origami
+  (smartrep-define-key
+      origami-mode-map "<f8>"
+    '(("o" . origami-show-only-node)
+      ("," . origami-undo)
+      ("." . origami-redo)
+      ("TAB" . origami-recursively-toggle-node)
+      ("<backtab>" . origami-close-all-nodes))))
+
 (provide 'init-func-keys)

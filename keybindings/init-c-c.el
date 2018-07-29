@@ -13,4 +13,8 @@
   "C-c s" 'symbol-overlay-put
   "C-c y" 'ivy-yasnippet)
 
+(general-def origami-mode-map
+  ;; "C-c o" #'origami-recursively-toggle-node
+  "C-c o" #'origami-show-node)
+
 (provide 'init-c-c)

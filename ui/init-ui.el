@@ -22,6 +22,7 @@
 (require 'init-focus)
 (require 'init-beacon)
 (require 'init-dimmer)
+(require 'init-origami)
 
 ;;;;; Text
 (require 'init-rainbow-delimiters)
