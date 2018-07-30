@@ -56,10 +56,19 @@
   (projectile-completion-system 'ivy)
   (ivy-ignore-buffers (quote ("\\` " "\\\\*lemonbar\\\\*" "\\\\*i3status\\\\*"))))
 
+;; Deprecated. Use ivy-filthy-rich instead
 (use-package ivy-rich
   :after ivy
+  :disabled t
   :config
   (ivy-set-display-transformer 'ivy-switch-buffer
                                'ivy-rich-switch-buffer-transformer))
+
+(use-package ivy-filthy-rich
+  :straight (ivy-filthy-rich :host github :repo "casouri/ivy-filthy-rich")
+  :diminish 'ivy-filthy-rich-mode
+  :after ivy
+  :config
+  (ivy-filthy-rich-mode t))
 
 (provide 'init-ivy)
