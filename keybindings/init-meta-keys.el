@@ -4,7 +4,7 @@
 
 (general-def "M-g f" 'akirak/link-hint-open-link)
 
-(akirak/define-contextual-key "M-g u"
+(akirak/define-contextual-key "M-g h"
   ('outline-up-heading :package 'outline :keymaps 'outline-minor-mode-map)
   ('org-up-element :package 'org :keymaps 'org-mode-map))
 
@@ -13,13 +13,15 @@
 (general-def :prefix "M-g"
   "," #'dumb-jump-back
   "." #'dumb-jump-go
-  "o" #'dumb-jump-go-other-window
-  "i" #'dumb-jump-go-prompt
-  "x" #'dumb-jump-go-prefer-external
-  "z" #'dumb-jump-go-prefer-external-other-window)
+  "j" #'dumb-jump-go-other-window
+  ;; "i" #'dumb-jump-go-prompt
+  ;; "x" #'dumb-jump-go-prefer-external
+  ;; "z" #'dumb-jump-go-prefer-external-other-window
+  )
 
 ;;;;; A bunch of avy commands to a symbol in line
 
+;; This is questionable.
 (general-def :prefix "M-g"
   "p" #'akirak/avy-goto-defun-above
   "n" #'akirak/avy-goto-defun-below

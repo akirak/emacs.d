@@ -12,7 +12,8 @@
   "<f9>" 'recompile
   "<S-f9>" 'helm-make
   "<M-f10>" 'menu-bar-mode
-  "<f12>" 'akirak/app-map)
+  "<f12>" 'akirak/app-map
+  "<S-f12>" #'corefighter-next-item)
 
 ;; Most of these commands are from crux and fwb-cmds.el
 (general-def :prefix "<f2>"
