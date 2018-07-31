@@ -4,6 +4,8 @@
                                            :repo "akirak/corefighter-extras"))
 
 (use-package corefighter
+  :after (repom)
+  :defer 5
   :straight (corefighter :host github
                          :repo "akirak/corefighter.el"
                          :files
