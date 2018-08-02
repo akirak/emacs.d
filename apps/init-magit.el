@@ -38,9 +38,9 @@
   (magit-todos-mode 1))
 
 ;;;;; magithub
-(use-package magithub
-  :after magit
-  :config
-  (magithub-feature-autoinject 'status-checks-header))
+;; As magithub slows down magit-status, it sometimes causes problems,
+;; and I don't always need its features, I will disable it by default.
+;; I will load "init-magithub" library if I need it.
+;; (require 'init-magithub)
 
 (provide 'init-magit)
