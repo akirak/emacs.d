@@ -149,6 +149,13 @@
 
 (use-package dired-collapse
   :after dired
+  ;; TODO: Suppress dired-collapse-mode in dired-sidebar-mode
+  ;; This displays two icons in every line. What's wrong?
+  ;; :init
+  ;; (add-hook 'dired-mode-hook
+  ;;           (lambda ()
+  ;;             (unless (eq major-mode 'dired-sidebar-mode)
+  ;;               (dired-collapse-mode 1))))
   :hook
   (dired-mode . dired-collapse-mode))
 
