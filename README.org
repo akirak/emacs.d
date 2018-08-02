@@ -3,7 +3,7 @@
   :CUSTOM_ID: emacs.d
   :END:
 
-[[https://travis-ci.org/akirak/emacs.d][[[https://travis-ci.org/akirak/emacs.d.svg]]]]
+[[https://travis-ci.org/akirak/emacs.d][https://travis-ci.org/akirak/emacs.d.svg]]
 
 This is my working Emacs configuration.
 
