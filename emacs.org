@@ -28,6 +28,16 @@ See also [[file:README.org]]
 :PROPERTIES:
 :TOC:      2
 :END:
+** Keybindings for browsing                                     :keybinding:
+Some Emacs applications display a list of items and let you browse them. These applications innclude dired, magit, and "sidebar" applications. You might sometimes prefer switching focus to a browsed item, but otherwise you might prefer keeping focus. You need separate bindings for opening an item. I basically prefer the following bindings for this kind of commands:
+
+- ~RET~ to open an item and switch focus
+- ~SPC~ to open an item in another window but keep focus in the original window
+
+These bindings are applicable to the following major modes in my configuration:
+
+- magit-status (including magit-todos)
+- dired-sidebar
 ** Menu key for help                            :help:keybinding:microhabit:
 Use ~<menu>~ key as a prefix for alternative help commands. Especially, the following kinds of commands should bound on this prefix:
 
@@ -87,9 +97,10 @@ There are several sidebar packages for Emacs. I once used treemacs, which was we
 
 Configuration: [[file:ui/init-sidebar.el]]
 *** dired-sidebar
-**** TODO Tweak the keybindings in dired-sidebar buffer
-- [ ] ~RET~ to open the file in a non-sidebar window
-- [ ] ~SPC~ to open the file in a non-sidebar window but keep focus in the sidebar
+**** DONE Tweak the keybindings in dired-sidebar buffer
+CLOSED: [2018-08-12 Sun 05:46]
+- [X] ~RET~ to open the file in a non-sidebar window
+- [X] ~SPC~ to open the file in a non-sidebar window but keep focus in the sidebar
 *** ibuffer-sidebar
 **** Add support for frame-purpose.el to ibuffer-sidebar
 I've added an experimental support for frame-purpose. This can replace the built-in sidebar of frame-purpose.

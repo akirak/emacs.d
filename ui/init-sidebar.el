@@ -17,6 +17,24 @@
                      eshell))
     (add-to-list 'ibuffer-sidebar-special-refresh-commands command)))
 
-(use-package dired-sidebar)
+(use-package dired-sidebar
+  :config
+  (defun akirak/dired-sidebar-find-file ()
+    (interactive)
+    (let ((file (dired-get-file-for-visit))
+          (window (selected-window)))
+      ;; This may not be enough
+      (setq window (window-in-direction 'right window))
+      (select-window window)
+      (find-file file)))
+  (defun akirak/dired-sidebar-preview-file ()
+    (interactive)
+    (let ((orig-window (selected-window)))
+      (akirak/dired-sidebar-find-file)
+      (select-window orig-window)))
+  :general
+  (:keymaps 'dired-sidebar-mode-map :package 'dired-sidebar
+            "SPC" #'akirak/dired-sidebar-preview-file
+            "RET" #'akirak/dired-sidebar-find-file))
 
 (provide 'init-sidebar)
