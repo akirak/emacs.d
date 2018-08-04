@@ -8,7 +8,7 @@
   ;; "C-2" 'org-time-hydra
   ;; "C-3" 'org-edna-hydra
   "C-4" 'org-starter-refile-by-key
-  "C-6" 'akirak/org-export-subtree-to-hugo-dwim
+  "C-6" 'akirak/org-export-hydra/body
   "C-8" 'org-insert-hydra/body
   "C-9" #'org-tree-to-indirect-buffer)
 
@@ -17,5 +17,16 @@
   (split-window-below)
   (other-window 1)
   (org-clock-goto))
+
+(defhydra akirak/org-export-hydra (:exit t :hint nil)
+  "
+^^Documents  ^^Graph
+^^---------  ^^-------------------
+_h_ hugo     _gb_ mindmap (buffer)
+^^           _gt_ mindmap (tree)
+"
+  ("h" akirak/org-export-subtree-to-hugo-dwim)
+  ("gb" org-mind-map-write)
+  ("gt" org-mind-map-write-current-tree))
 
 (provide 'init-org-bindings)

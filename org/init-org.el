@@ -20,6 +20,9 @@
 (require 'init-org-offtime)
 (require 'init-counsel-org-clock)
 
+;;;; Additional exporters
+(require 'init-org-mind-map)
+
 ;;;; Utilities for customization
 (require 'init-org-capture)
 (require 'init-org-agenda)
