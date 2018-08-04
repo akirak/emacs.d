@@ -1,6 +1,10 @@
 (use-package org-starter
   :straight (org-starter :host github :repo "akirak/org-starter")
   :functions (org-starter-define-directory org-starter-define-file)
+  :config
+  (defun helm-org-rifle-known-files ()
+    (interactive)
+    (helm-org-rifle-files org-starter-known-files))
   :custom
   (org-starter-exclude-from-recentf '(known-files path))
   (org-starter-alternative-find-function #'helm-org-rifle-files)
@@ -11,7 +15,9 @@
      ("'" avy-org-refile-as-child "avy")
      ("?" org-refile-same-buffer "in-buffer")
      ("o" org-refile-other-window-files "other window buffers")
-     ("@" (lambda () (interactive) (org-refile 2)) "clock"))))
+     ("@" (lambda () (interactive) (org-refile 2)) "clock")))
+  (org-starter-extra-alternative-find-file-map
+   '(("SPC" helm-org-rifle-known-files "all"))))
 
 (use-package helm-org-starter
   :straight org-starter
