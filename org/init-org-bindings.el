@@ -9,7 +9,8 @@
   ;; "C-3" 'org-edna-hydra
   "C-4" 'org-starter-refile-by-key
   "C-6" 'akirak/org-export-subtree-to-hugo-dwim
-  "C-8" 'org-insert-hydra/body)
+  "C-8" 'org-insert-hydra/body
+  "C-9" #'org-tree-to-indirect-buffer)
 
 (defun akirak/pop-up-org-clocking-task ()
   (interactive)
