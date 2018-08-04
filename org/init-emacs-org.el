@@ -3,12 +3,10 @@
   :key "e"
   :agenda t
   :refile '(:maxlevel . 3)
-  :capture '(("e" "Emacs (emacs.org)")
-             ("ei" "Emacs issue" entry (file+olp "Issues")
-              "* TODO %?\n\n")
-             ("et" "Emacs tip" entry (file+olp "Usage tips")
-              "* %?\n\n")
-             ("ep" "Emacs policy/overview" entry (file+olp "Policies")
-              "* %?\n\n")))
+  :capture `(("e" "Emacs" entry (file+function
+                                 (lambda ()
+                                   (goto-char (org-find-property "CUSTOM_ID" "issues"))))
+              ,(akirak/org-capture-entry-template-1 "%i%?" ""
+                                                    :todo "TODO"))))
 
 (provide 'init-emacs-org)

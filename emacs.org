@@ -120,6 +120,7 @@ I've added an experimental support for frame-purpose. This can replace the built
 * Issues
 :PROPERTIES:
 :TOC:      1
+:CUSTOM_ID: issues
 :END:
 * Deprecated
 :PROPERTIES:
