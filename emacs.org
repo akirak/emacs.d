@@ -8,25 +8,27 @@ See also [[file:README.org]]
 :END:
   -  [[#policies][Policies]]
     -  [[#menu-key-for-help][Menu key for help]]
-      -  [[#tutorial-hydra][Tutorial hydra]]
-    -  [[#projectile-and-remote-repositories][Projectile and remote repositories]]
+  -  [[#tips][Tips]]
+    -  [[#manage-local-and-remote-repositories][Manage local and remote repositories]]
       -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
       -  [[#cleaning-up-the-list][Cleaning up the list]]
-    -  [[#japanese-support-through-katawa][Japanese support through Katawa]]
-  -  [[#usage-tips][Usage tips]]
     -  [[#scratch-buffers][Scratch buffers]]
-    -  [[#hl-todo][hl-todo]]
+    -  [[#check-todos][Check todos]]
       -  [[#navigate-through-a-buffer-by-todo-keywords][Navigate through a buffer by todo keywords]]
       -  [[#magit-todos][magit-todos]]
     -  [[#ibuffer-sidebar-and-dired-sidebar][ibuffer-sidebar and dired-sidebar]]
       -  [[#dired-sidebar][dired-sidebar]]
       -  [[#ibuffer-sidebar][ibuffer-sidebar]]
     -  [[#search][Search]]
+    -  [[#editing-org-mode][Editing org-mode]]
+      -  [[#graphics-and-images-in-org-mode][Graphics and images in Org Mode]]
+    -  [[#using-pandoc-for-document-conversion][Using pandoc for document conversion]]
+    -  [[#japanese-support-through-katawa][Japanese support through Katawa]]
   -  [[#issues][Issues]]
 
-* Policies
+* Policies                                                           :policy:
 :PROPERTIES:
-:TOC:      2
+:TOC:      1
 :END:
 ** Keybindings for browsing                                     :keybinding:
 Some Emacs applications display a list of items and let you browse them. These applications innclude dired, magit, and "sidebar" applications. You might sometimes prefer switching focus to a browsed item, but otherwise you might prefer keeping focus. You need separate bindings for opening an item. I basically prefer the following bindings for this kind of commands:
@@ -48,10 +50,15 @@ There is already ~<f1>~ (or ~C-h~ by default) for help commands, but these are a
 
 *** Tutorial hydra                       :microhabit:keybinding:help:hydra:
 By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
-** Projectile and remote repositories
+* Tips
+:PROPERTIES:
+:TOC:      2
+:END:
+** Manage local and remote repositories
 :PROPERTIES:
 :ID:       96328360-8a53-47d6-afbb-d7b90aaea751
 :END:
+Use repom package to manage local and remote repositories: [[file:misc/init-repom.el]]
 *** Use =helm-repom= to open a repository
 I used =counsel-projectile-switch-project= for opening a local repository, but now that I have =repom=, I will use =helm-repom= to open a repository. If a repository is not available locally, then I can clone it from a remote server quickly.
 
@@ -64,21 +71,9 @@ I have to maintain =projectile-known-projects= regularly:
 - [ ] For repositories in some locations (e.g. straight packages), they should be deleted from the list unless they are in a dirty state
 
 These tasks are completed by =projectile-cleanup-known-projects=. This is triggered by midnight-mode: [[file:misc/init-midnight.el]].
-** Japanese support through Katawa
-:LOGBOOK:
-- State "REVIEW"     from "NEXT"       [2018-07-08 Sun 19:44]
-CLOCK: [2018-07-08 Sun 18:55]--[2018-07-08 Sun 19:14] =>  0:19
-:END:
-Because Japanese is my native language, I still have to rely on it for extensive vocabulary. [[file:international/init-katawa.el][katawa.el]] provides limited support for Japanese in a platform-independent manner.
-
-Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather than being a real input method, it can insert a small portion of Japanese text into the buffer without dependencies. Additional actions are configured in [[file:international/init-katawa.el::(ivy-add-actions%20'katawa-ivy][init-katawa.el]].
-* Usage tips
-:PROPERTIES:
-:TOC:      2
-:END:
 ** Scratch buffers                                              :microhabit:
 Use scratch buffer extensively: [[file:coding/init-scratch.el]]
-** hl-todo
+** Check todos
 [[https://github.com/tarsius/hl-todo][hl-todo]] package highlights todo keywords in buffers: [[file:coding/init-hl-todo.el::(use-package%20hl-todo][init-hl-todo.el]]
 *** ARCHIVED Navigate through a buffer by todo keywords        :keybinding:
 CLOSED: [2018-07-04 Wed 01:49]
@@ -116,7 +111,33 @@ I've added an experimental support for frame-purpose. This can replace the built
   - This command is also available as an alternative action in =counsel-org-capture-string=.
 - [[file:misc/init-web-search.el::(defun%20akirak/helm-search-symbol-at-point%20()][akirak/helm-search-symbol-at-point]] command lets you choose a search engine for a symbol under the cursor.
   - I am not sure if this command is useful though.
+** Editing org-mode
+*** Graphics and images in Org Mode
+:PROPERTIES:
+:ID:       d5035d86-4f0f-4e3d-907f-234c117b0061
+:END:
+**** TODO org-download
+**** Generate diagrams using org-babel
+- GraphViz
+- Ditaa
+- PlantUML
 
+** Using pandoc for document conversion
+:PROPERTIES:
+:ID:       a9cdcd00-68a0-4320-9236-c959a8370ed2
+:END:
+[[http://pandoc.org/][Pandoc]] is a document converter that supports a wide range of markup formats. As Org is one of its supported exporting formats, you can use pandoc to import documents from several documents to org.
+** Japanese support through Katawa
+:PROPERTIES:
+:ID:       5e04241c-6428-4dbc-8983-6691e02a9104
+:END:
+:LOGBOOK:
+- State "REVIEW"     from "NEXT"       [2018-07-08 Sun 19:44]
+CLOCK: [2018-07-08 Sun 18:55]--[2018-07-08 Sun 19:14] =>  0:19
+:END:
+Because Japanese is my native language, I still have to rely on it for extensive vocabulary. [[file:international/init-katawa.el][katawa.el]] provides limited support for Japanese in a platform-independent manner.
+
+Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather than being a real input method, it can insert a small portion of Japanese text into the buffer without dependencies. Additional actions are configured in [[file:international/init-katawa.el::(ivy-add-actions%20'katawa-ivy][init-katawa.el]].
 * Issues
 :PROPERTIES:
 :TOC:      1
