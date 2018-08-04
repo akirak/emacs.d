@@ -7,7 +7,8 @@
             "M-s r" #'helm-org-rifle-current-buffer)
   :custom
   (helm-org-rifle-directories-recursive nil)
-  (helm-org-rifle-show-path t))
+  (helm-org-rifle-show-path t)
+  (helm-org-rifle-test-against-path t))
 
 ;;;; helm-org-rifle + org-recent-headings
 
