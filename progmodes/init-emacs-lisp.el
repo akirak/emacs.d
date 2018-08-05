@@ -55,7 +55,7 @@
 (general-def :keymaps 'emacs-lisp-mode-map :prefix "C-z"
   "e" #'akirak/eval-buffer-or-load-file
   "l" #'package-lint-current-buffer
-  "m" #'emacs-lisp-macroexpand)
+  "m" #'pp-macroexpand-last-sexp)
 
 ;;;; frame-workflow
 (akirak/define-frame-workflow "emacs-lisp"
