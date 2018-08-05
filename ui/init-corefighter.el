@@ -3,6 +3,9 @@
 (straight-use-package '(corefighter-extras :host github
                                            :repo "akirak/corefighter-extras"))
 
+(require 'init-repom)
+(require 'init-org-ql)
+
 (use-package corefighter
   :after (repom)
   :defer 5
@@ -13,9 +16,23 @@
                           (:exclude "helm-corefighter.el")))
   :commands (corefighter-sidebar)
   :config
-  (require 'corefighter-repom)
+  (use-package corefighter-git-statuses
+    :straight corefighter-extras)
+  (use-package corefighter-org-ql
+    :straight corefighter-extras)
   (setq corefighter-modules
-        '((corefighter-repom-dirty)
+        '((corefighter-git-statuses :title "Dirty Git repositories")
+          (corefighter-git-statuses :title "Git repositories with stashes"
+                                    :fields (stash))
+          (corefighter-git-statuses :title "Repositories with unmerged branches"
+                                    :fields (unmerged))
+          (corefighter-org-ql :title "Org scheduled"
+                              :due earlier
+                              :sort (scheduled)
+                              :q (and (or (scheduled <= today)
+                                          (deadline <= today))
+                                      (not (todo "DONE" "ARCHIVED"))
+                                      (not (tags "ARCHIVE"))))
           (corefighter-org-agenda)))
   (corefighter-load-modules))
 
@@ -23,11 +40,6 @@
   :straight (helm-corefighter :host github :repo "akirak/corefighter.el"
                               :files ("helm-corefighter.el"))
   :commands (helm-corefighter))
-
-(require 'init-repom)
-
-(use-package corefighter-repom
-  :straight corefighter-extras)
 
 (akirak/define-frame-workflow "inbox"
   :key "i"
