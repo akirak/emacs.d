@@ -9,6 +9,7 @@
    'counsel-org-capture-string
    '(("sd" akirak/web-search-firefox "Default search with Firefox")
      ("sg" akirak/surfraw/google "Google")
+     ("sl" akiraksearch/lucky "I'm Feeling Lucky")
      ("ss" akirak/helm-search "Choose a search engine")))
   (defun akirak/counsel-org-capture ()
     (require 'org-capture)

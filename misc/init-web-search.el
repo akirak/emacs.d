@@ -1,5 +1,17 @@
 ;;; init-web-search.el --- Search tools -*- lexical-binding: t -*-
 
+;; TODO: Define search engines through a custom variable
+
+;; This does not look like a good solution.
+;; Maybe I'll write a package for configuring search engines.
+(defmacro akirak/define-search-engine (id name url)
+  (declare (indent 1))
+  (let ((func-name (intern (concat "akirak/search/" (symbol-name id)))))
+    `(defun ,func-name (query)
+       ,(format "Search QUERY using %s." name)
+       (interactive ,(format "M%s: " name))
+       (browse-url (format ,url query)))))
+
 (defun akirak/web-search-firefox (term)
   (interactive (list (read-from-minibuffer "Search term: ")))
   (start-process "firefox-search" nil "firefox" "--search" term ))
@@ -49,6 +61,10 @@
 
 (defun akirak/baidu-baike-search (query)
   (browse-url (format "https://baike.baidu.com/search/word?word=%s" query)))
+
+(akirak/define-search-engine lucky
+  "Google (I'm Feeling Lucky)"
+  "http://www.google.com/webhp?#q=%s&btnI=I")
 
 ;;;; search engines
 
