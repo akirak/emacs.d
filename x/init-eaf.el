@@ -1,4 +1,5 @@
 (use-package eaf
+  :when (eq system-type 'gnu/linux)
   :straight (eaf :host github
                  :repo "manateelazycat/emacs-application-framework")
   :config
