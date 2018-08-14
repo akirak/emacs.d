@@ -5,11 +5,9 @@
   (org-starter-define-file "scratch.org"
     :key "i"
     :required nil
+    :custom-vars 'org-default-notes-file
     :agenda t
-    :refile '(:maxlevel . 2)
-    :capture `(("tt" "Generic task in the inbox" entry file
-                ,(akirak/org-capture-entry-template-1 "%i"
-                   "%?" :todo "TODO"))))
+    :refile '(:maxlevel . 2))
   (org-starter-define-file "tasks.org"
     :required nil
     :agenda t

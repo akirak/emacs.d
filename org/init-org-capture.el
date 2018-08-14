@@ -1,24 +1,3 @@
-;;;; Template groups
-
-(let ((non-file-templates `(("t" "Task")
-                            ("r" "Reference, reply, comment, etc.")
-                            ("i" "Idea")
-                            ("s" "Search")
-                            ("g" "Goodies")
-                            ("o" "Workflow")
-                            ("w" "Writing")
-                            ("." "Contextual"))))
-  (if (null org-capture-templates)
-      (setq org-capture-templates non-file-templates)
-    ;; Remove duplicates
-    (cl-delete-duplicates org-capture-templates :test #'equal :key #'car)
-    ;; Insert the template groups
-    (dolist (entry non-file-templates)
-      (if-let ((existing (assoc (car entry) org-capture-templates)))
-          (setcdr existing (cdr entry))
-        (push entry org-capture-templates))))
-  (cl-sort org-capture-templates #'string< :key #'car))
-
 ;;;; Meta-templates: Templating functions for templates
 
 (defun akirak/babel-capture-template (language &optional
