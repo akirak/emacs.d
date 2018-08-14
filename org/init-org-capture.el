@@ -11,8 +11,6 @@
 :CAPTURE_CLOCKING: %K
 :END:
 
-# Add a description
-
 #+begin_src " language "\n"
 (or initial-before "") "%?" (or initial-after "") "
 #+end_src
