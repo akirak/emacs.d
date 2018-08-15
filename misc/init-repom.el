@@ -6,7 +6,14 @@
 (use-package repom
   :straight (repom :host github :repo "akirak/repom.el"
                    :files (:defaults
-                           (:exclude "helm-repom.el"))))
+                           (:exclude "helm-repom.el")))
+  :custom
+  (repom-local-discovery-locations
+   '(("~/github/" 1 :name "github")
+     ("~/docs/" 1 :name "docs")
+     ("~/.emacs.d/straight/repos/" 1 :name "straight")
+     ("~/personal/" 1 :name "personal")
+     ("~/" 1 :pattern "^[^\.]"))))
 
 (when (version< "26" emacs-version)
   (defun akirak/repom-async-get-lists ()
