@@ -50,6 +50,28 @@ There is already ~<f1>~ (or ~C-h~ by default) for help commands, but these are a
 
 *** Tutorial hydra                       :microhabit:keybinding:help:hydra:
 By convention, ~<menu> h~ should be bound to a Hydra command for the major mode.
+** org-capture templates                     :Org_Mode:note_taking:org__protocol:
+*** org-default-notes vs. the clock target
+My =org-capture-templates= variable is configured to allow quickly capturing certain kinds of information to some location. Some location means the clocked task when there is a running clock and otherwise =org-default-notes-file=. This was inspired from [[http://www.howardism.org/Technical/Emacs/capturing-content.html][Capturing Content for Emacs]]:
+
+| Type              | Clock | Default |
+|-------------------+-------+---------|
+| Task (entry)      | ~t~   | ~dt~    |
+| Plain             | ~a~   | N/A     |
+| List item         | ~i~   | N/A     |
+| org-protocol link | ~L~   | ~dL~    |
+| org-protocol note | ~p~   | ~dp~    |
+
+A few notes:
+
+- When no running clock is running, templates with the default target (beginning with ~d~) are "lifted" to keys without the prefix. You can use ~t~ to create a task, ~L~ to create a protocol, etc.
+- When no clock is running, the protocol link template creates an entry in the default file. When a clock is running, the protocol link template creates an item under the clocked task.
+
+These templates are configured through =org-starter-initial-capture-templates= variable in my =org-starter= package ([[file:org/init-org-starter.el]]), because I also configure some other templates elsewhere using =org-starter=. Also note that this variable is set using =general-setq=.
+**** TODO org-protocol
+Configure org-protocol properly. The current templates may not work.
+*** Templates to specific files
+Templates that capture into specific files can be configured within =org-starter-define-file=. Use =:capture= option.
 * Tips
 :PROPERTIES:
 :TOC:      2

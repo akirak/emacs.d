@@ -11,30 +11,41 @@
   ;; Based on http://www.howardism.org/Technical/Emacs/capturing-content.html
   (general-setq
    org-starter-initial-capture-templates
-   `(("i" "Add an item to the clocked task" item
+   `(("a" "Append plain text to the clocked task" plain
+      (clock)
+      "%i"
+      :empty-lines 1 :immediate-finish t)
+     ("i" "Add an item to the clocked task" item
       (clock)
       "%i%?" :empty-lines 1)
-     ("@" "To the clocked task")
-     ("@t" "Sub-task of the clocked task" entry
+     ("t" "Sub-task of the clocked task" entry
       (clock)
       ,(akirak/org-capture-entry-template-1 "%i%?" ""
                                             :todo "TODO")
       :clock-in t :clock-resume t)
+     ("p" "Protocol quote" entry (clock)
+      ,akirak/org-protocol-note-template)
+     ("L" "Protocol link (as item)" item (clock)
+      "[[%:link][%:description]] %?")
      ("d" "To the default notes file")
      ("dt" "Task in the default notes file" entry
-      (file nil)
+      (file "")
       ,(akirak/org-capture-entry-template-1 "%i%?" ""
                                             :todo "TODO"))
-     ;; ("K" "Memorize the kill-ring content (to the clock)" plain
-     ;;  (clock)
-     ;;  "%c" :immediate-finish t :empty-lines 1)
-     ;; ("A" "Append text to the clocked task" plain
-     ;;  (clock)
-     ;;  "%i" :immediate-finish t :empty-lines 1)
-     ))
+     ("dp" "Protocol quote" entry (file "") ,akirak/org-protocol-note-template
+      :clock-in t)
+     ("dL" "Protocol link (as entry)" entry (file "") ,akirak/org-protocol-link-template
+      :clock-in t)
+     ("u" "Urgent task" entry
+      (file "")
+      "* NEXT %?\nDEADLINE: %t\n%i"
+      :clock-in t :clock-resume t)))
   (setq org-capture-templates-contexts
-        `(("t" "@t" (org-clocking-p))
-          ("t" "dt" ((lambda () (not (org-clocking-p)))))
+        `(
+          ;; Capture into org-default-notes-file when not clocking in
+          ,@(cl-loop for key in '("t" "p" "L")
+                     collect `(,key ,(concat "d" key)
+                                    ((lambda () (not (org-clocking-p))))))
           ;; Disable templates with the clock target when not clocking in
           ("@" (org-clocking-p))
           ,@(cl-loop for (key _ _ target) in org-starter-initial-capture-templates

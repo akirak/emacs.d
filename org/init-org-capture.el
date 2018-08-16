@@ -1,3 +1,6 @@
+;; This file does not contain an actual configuration of
+;; `org-capture-templates'. See init-org-starter.el instead.
+
 ;;;; Meta-templates: Templating functions for templates
 
 (defun akirak/babel-capture-template (language &optional
@@ -38,6 +41,30 @@
           ":END:\n"
           (if body (concat body "\n") "")
           "\n\n"))
+
+(defconst akirak/org-protocol-note-template
+  "* %?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+#+BEGIN_QUOTE
+%i
+#+END_QUOTE
+
+[[%:link][%:description]]
+
+")
+
+(defconst akirak/org-protocol-link-template
+  "* [[%:link][%:description]]
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+%?
+
+")
 
 ;;;; Jump to a heading
 
