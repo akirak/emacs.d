@@ -61,6 +61,7 @@
 (require 'init-autosave)
 (require 'init-browse-url)
 (require 'init-repom)
+(require 'init-chrome)
 
 ;;; Apps (apps/, x/)
 (require 'init-multi-term)
@@ -74,6 +75,7 @@
 (require 'init-web-browser)
 (require 'init-pocket-reader)
 (require 'init-eaf)
+(require 'init-matrix)
 
 ;;; Programming languages (progmodes/)
 (require 'init-git-modes)
