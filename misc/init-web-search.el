@@ -1,9 +1,5 @@
 ;;; init-web-search.el --- Search tools -*- lexical-binding: t -*-
 
-;; TODO: Define search engines through a custom variable
-
-;; This does not look like a good solution.
-;; Maybe I'll write a package for configuring search engines.
 (defmacro akirak/define-search-engine (id name url)
   (declare (indent 1))
   (let ((func-name (intern (concat "akirak/search/" (symbol-name id)))))
@@ -11,6 +7,45 @@
        ,(format "Search QUERY using %s." name)
        (interactive ,(format "M%s: " name))
        (browse-url (format ,url query)))))
+
+(defcustom akirak/search-engine-alist
+  '((lucky
+     "Google (I'm Feeling Lucky)"
+     "http://www.google.com/webhp?#q=%s&btnI=I"))
+  "Alist of search engines."
+  :type
+  '(repeat (list (symbol :tag "Identifier")
+                 (string :tag "Caption")
+                 (string :tag "URL with a placeholder")))
+  :set (lambda (symbol value)
+         (set-default symbol value)
+         (cl-loop for (id name url . _) in value
+                  do (let ((func-name (intern (concat "akirak/search/"
+                                                      (symbol-name id)))))
+                       `(defun ,func-name (query)
+                          ,(format "Search QUERY using %s." name)
+                          (interactive ,(format "M%s: " name))
+                          (browse-url (format ,url query)))))))
+
+(defun akirak/search-engine (id query)
+  (interactive
+   (let* ((default (if (use-region-p)
+                       (buffer-substring-no-properties
+                        (region-beginning) (region-end))
+                     (thing-at-point 'symbol)))
+          (query (read-string (if default
+                                  (format "Search (default %s): " default)
+                                "Search: ")
+                              nil 'helm-surfraw-input-history default))
+          (id (helm :prompt (format "Search engine for \"%s\":" query)
+                    :sources
+                    (list (helm-build-sync-source "My search engines"
+                            :candidates
+                            (cl-loop for (id name . _) in akirak/search-engine-alist
+                                     collect (cons name id)))))))
+     (list id query)))
+  (browse-url (format (nth 1 (alist-get id akirak/search-engine-alist))
+                      query)))
 
 (defun akirak/web-search-firefox (term)
   (interactive (list (read-from-minibuffer "Search term: ")))
@@ -61,10 +96,6 @@
 
 (defun akirak/baidu-baike-search (query)
   (browse-url (format "https://baike.baidu.com/search/word?word=%s" query)))
-
-(akirak/define-search-engine lucky
-  "Google (I'm Feeling Lucky)"
-  "http://www.google.com/webhp?#q=%s&btnI=I")
 
 ;;;; search engines
 

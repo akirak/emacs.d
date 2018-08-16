@@ -167,6 +167,15 @@ Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather 
 :TOC:      1
 :CUSTOM_ID: issues
 :END:
+** TODO Web search
+:PROPERTIES:
+:CREATED_TIME: [2018-08-17 Fri 08:46]
+:ID:       81c5b1b2-f848-4a41-be21-4dba968484a7
+:END:
+[[file:misc/init-web-search.el][file:~/.emacs.d/misc/init-web-search.el]]
+
+- [ ] Redefine search engine commands in terms of the new search engine scheme in =akirak/define-search-engine=
+
 * Deprecated
 :PROPERTIES:
 :TOC:      ignore
