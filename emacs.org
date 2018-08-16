@@ -138,11 +138,13 @@ I've added an experimental support for frame-purpose. This can replace the built
 :PROPERTIES:
 :ID:       d5035d86-4f0f-4e3d-907f-234c117b0061
 :END:
-**** TODO org-download
-**** Generate diagrams using org-babel
+**** TODO Adding screenshots
+Maybe I will use org-download or some other solution.
+**** TODO Generate diagrams using org-babel
 - GraphViz
 - Ditaa
 - PlantUML
+- etc.
 
 ** Using pandoc for document conversion
 :PROPERTIES:
