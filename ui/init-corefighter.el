@@ -32,8 +32,7 @@
                               :q (and (or (scheduled <= today)
                                           (deadline <= today))
                                       (not (todo "DONE" "ARCHIVED"))
-                                      (not (tags "ARCHIVE"))))
-          (corefighter-org-agenda)))
+                                      (not (tags "ARCHIVE"))))))
   (corefighter-load-modules))
 
 (use-package helm-corefighter
