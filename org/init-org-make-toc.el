@@ -6,7 +6,7 @@
   (make-variable-buffer-local 'org-make-toc)
   (defun maybe-turn-on-org-make-toc-mode ()
     (when org-make-toc
-      (org-make-toc-mode t)))
+      (org-make-toc-mode 1)))
   :hook
   (org-mode . maybe-turn-on-org-make-toc-mode))
 

@@ -78,7 +78,7 @@
           (prompt (if default
                       (format "SearchFor (default %s): " default)
                     "SearchFor: ")))
-     (read-string prompt nil 'helm-surfraw-input-history default)))
+     (list (read-string prompt nil 'helm-surfraw-input-history default))))
   (require 'helm-net)
   (helm :prompt (format "Search engine for \"%s\": " query)
         :sources

@@ -37,19 +37,20 @@
 (setq-mode-local org-mode
                  header-line-format
                  (akirak/make-header-line-format
-                  '(:eval (org-format-outline-path
-                           (let* ((orig-rev (nreverse (org-get-outline-path t t)))
-                                  (seg-length (pcase (length orig-rev)
-                                                ((pred (< 4)) 8)
-                                                ((pred (< 2)) 12)
-                                                (_ 20))))
-                             (nreverse
-                              (cons (car orig-rev)
-                                    (mapcar (lambda (s)
-                                              (if (> (length s) seg-length)
-                                                  (substring s 0 seg-length)
-                                                s))
-                                            (cdr orig-rev)))))))))
+                  '(:eval (unless (org-before-first-heading-p)
+                            (org-format-outline-path
+                             (let* ((orig-rev (nreverse (org-get-outline-path t t)))
+                                    (seg-length (pcase (length orig-rev)
+                                                  ((pred (< 4)) 8)
+                                                  ((pred (< 2)) 12)
+                                                  (_ 20))))
+                               (nreverse
+                                (cons (car orig-rev)
+                                      (mapcar (lambda (s)
+                                                (if (> (length s) seg-length)
+                                                    (substring s 0 seg-length)
+                                                  s))
+                                              (cdr orig-rev))))))))))
 
 ;;;;; org-agenda-mode
 (defun akirak/set-org-agenda-header-line ()
