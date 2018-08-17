@@ -98,10 +98,6 @@ If found, return the point. Otherwise, this function returns nil."
                             (plist-get site :section)
                             filename))
            (already-open (find-buffer-visiting outfile)))
-      ;; Set the draft status as well as a timestamp based on the todo state.
-      ;; TODO: Remove this when the custom draft status is implemented in ox-hugo
-      (let ((is-draft (akirak/ox-hugo-draft-p)))
-        (org-entry-put nil "HUGO_DRAFT" (if is-draft "true" "false")))
       (call-interactively 'org-hugo-export-wim-to-md)
       (if already-open
           (with-current-buffer already-open
@@ -130,10 +126,9 @@ If found, return the point. Otherwise, this function returns nil."
       (akirak/org-hugo-process-tags
        (cl-remove-if
         (lambda (s) (string-prefix-p "@" s))
-        (seq-difference (let ((org-use-tag-inheritance t))
-                          (mapcar #'substring-no-properties
-                                  (org-hugo--get-tags)))
-                        org-export-exclude-tags)))))
+        (let ((org-use-tag-inheritance t))
+          (mapcar #'substring-no-properties
+                  (org-hugo--get-tags)))))))
 
 (defun akirak/org-hugo-categories ()
   "Get a list of Hugo categories for the current subtree."
