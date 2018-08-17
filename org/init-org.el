@@ -37,4 +37,9 @@
 ;;;; Specific files
 (require 'init-emacs-org)
 
+;;;; frame-workflow
+(akirak/define-frame-workflow "org"
+  :key "o"
+  :make-frame '(frame-purpose-make-mode-frame 'org-mode))
+
 (provide 'init-org)
