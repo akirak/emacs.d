@@ -24,14 +24,21 @@
 (akirak/define-frame-workflow "web"
   :key "w"
   :layout
+  ;; Start a browser and delete the other windows
   '(progn
      (akirak/start-browser)
      (delete-other-windows))
   :refocus
+  ;; If there is no browser window in the frame, open a new
+  ;; browser instance.
   '(unless (akirak/browser-windows)
      (akirak/start-browser))
   :after-kill-buffer
-  '(unless (akirak/browser-windows)
+  ;; Delete the frame.
+  ;; If there is a browser window in the frame, don't delete the frame.
+  ;; If the frame is the only frame, don't delete the frame.
+  '(unless (or (akirak/browser-windows)
+               (= 1 (length (frame-list))))
      (delete-frame)))
 
 (provide 'init-web-browser)
