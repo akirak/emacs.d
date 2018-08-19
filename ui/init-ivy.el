@@ -56,6 +56,22 @@
   (projectile-completion-system 'ivy)
   (ivy-ignore-buffers (quote ("\\` " "\\\\*lemonbar\\\\*" "\\\\*i3status\\\\*"))))
 
+;; ivy-switch-buffer with frame-purpose support
+;; https://github.com/alphapapa/frame-purpose.el/issues/13
+(defun ivy-switch-buffer-2 ()
+  "Switch to another buffer."
+  (interactive)
+  (let ((this-command 'ivy-switch-buffer))
+    (ivy-read "Switch to buffer: " (lambda (&rest args)
+                                     (mapcar #'buffer-name (buffer-list)))
+              :matcher #'ivy--switch-buffer-matcher
+              :preselect (buffer-name (other-buffer (current-buffer)))
+              :action #'ivy--switch-buffer-action
+              :keymap ivy-switch-buffer-map
+              :caller 'ivy-switch-buffer)))
+
+(general-def "C-x b" #'ivy-switch-buffer-2)
+
 ;; Deprecated. Use ivy-filthy-rich instead
 (use-package ivy-rich
   :after ivy
