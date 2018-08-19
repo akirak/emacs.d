@@ -21,18 +21,19 @@
   (use-package corefighter-org-ql
     :straight corefighter-extras)
   (setq corefighter-modules
-        '((corefighter-git-statuses :title "Dirty Git repositories")
-          (corefighter-git-statuses :title "Git repositories with stashes"
-                                    :fields (stash))
-          (corefighter-git-statuses :title "Repositories with unmerged branches"
-                                    :fields (unmerged))
+        '((corefighter-git-statuses)
+          (corefighter-git-statuses :fields (stash))
+          ;; (corefighter-git-statuses :fields (unmerged))
           (corefighter-org-ql :title "Org scheduled"
                               :due earlier
                               :sort (scheduled)
                               :q (and (or (scheduled <= today)
                                           (deadline <= today))
                                       (not (todo "DONE" "ARCHIVED"))
-                                      (not (tags "ARCHIVE"))))))
+                                      (not (tags "ARCHIVE"))))
+          (corefighter-org-ql :title "Org next"
+                              :q (and (todo "NEXT")
+                                      (not (scheduled))))))
   (corefighter-load-modules))
 
 (use-package helm-corefighter
