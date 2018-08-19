@@ -3,6 +3,6 @@
                               :repo "akirak/helm-linux-disks")
   :commands (helm-linux-disks)
   :custom
-  (linux-disk-terminal-type (quote multi-term)))
+  (linux-disk-terminal-type 'aweshell-new))
 
 (provide 'init-linux-disk)

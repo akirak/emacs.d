@@ -64,7 +64,8 @@
 (require 'init-chrome)
 
 ;;; Apps (apps/, x/)
-(require 'init-multi-term)
+;; (require 'init-multi-term)
+(require 'init-aweshell)
 (require 'init-prodigy)
 (require 'init-dired)
 (require 'init-linux-disk)

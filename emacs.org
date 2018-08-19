@@ -30,6 +30,39 @@ See also [[file:README.org]]
 :PROPERTIES:
 :TOC:      1
 :END:
+** Shells and terminals
+:PROPERTIES:
+:CREATED_TIME: [2018-08-19 Sun 18:07]
+:ID:       a880c587-5b67-4510-96a8-0839e6d32961
+:END:
+*** Prefer eshell
+:PROPERTIES:
+:ID:       a2c30e8c-6aca-4cf1-a9df-4fdd674d07c0
+:END:
+I haven't used eshell frequently since I have started using Emacs, but I will give it a try. The primary reason for this is that it works the same in all operating systems, including Windows. I have been using Linux as my primary desktop operating system for several years, but I am going to use Windows at work, so I will try eshell.
+
+The default configuration of eshell is not very sophisticated compared to fish or well-configured zsh. You can tweak eshell in Emacs Lisp, but there is a package named [[https://github.com/manateelazycat/aweshell][aweshell]], which makes eshell like fish. I will use it: [[file:apps/init-aweshell.el][init-aweshell.el]]
+
+Advantages of using eshell:
+
+- Cross-platform: Eshell can be used as an alternative UNIX-like shell for non-UNIX platforms, e.g. Windows.
+- Integration with TRAMP.
+- You can operate on Emacs Lisp lists easily in shells.
+- A good emulation of bash (compared to fish).
+- Extensible in Emacs Lisp.
+
+Limitations of eshell (with aweshell):
+
+- With the default configuration, aweshell starts slower than fish.
+- Not fully compliant with bash. For example, =!!= is supported in esehell, but =!$= is not supported.
+- Eshell is not a terminal emulator, so terminal applications like =htop= will not run on it.
+
+References:
+
+- [[https://masteringemacs.org/article/complete-guide-mastering-eshell][Mastering Eshell - Mastering Emacs]]
+- [[http://ergoemacs.org/emacs/eshell.html][Emacs: eshell - Ergomacs]]
+- [[http://ergoemacs.org/emacs/emacs_shell_vs_term_vs_ansi-term_vs_eshell.html][Emacs: Difference between shell, term, eshell]]
+
 ** Keybindings for browsing                                     :keybinding:
 Some Emacs applications display a list of items and let you browse them. These applications innclude dired, magit, and "sidebar" applications. You might sometimes prefer switching focus to a browsed item, but otherwise you might prefer keeping focus. You need separate bindings for opening an item. I basically prefer the following bindings for this kind of commands:
 
