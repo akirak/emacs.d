@@ -25,7 +25,10 @@ This can be used for an org-capture template to create an entry in the journal."
     (org-journal-new-entry t time)
     (buffer-file-name)))
 
-(with-eval-after-load 'org
-  (add-to-list 'org-refile-targets '(org-journal-new-entry-file . (:level . 1))))
+;; Add the current file of org-journal to org-refile-targets.
+;; Currently disabled.
+;; (with-eval-after-load 'org
+;;   (add-to-list 'org-refile-targets
+;;                '(org-journal-new-entry-file . (:level . 1))))
 
 (provide 'init-org-journal)
