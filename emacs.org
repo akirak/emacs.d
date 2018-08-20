@@ -7,7 +7,10 @@ See also [[file:README.org]]
 :TOC:      this
 :END:
   -  [[#policies][Policies]]
-    -  [[#menu-key-for-help][Menu key for help]]
+    -  [[#shells-and-terminals][Shells and terminals]]
+    -  [[#common-keybindings-for-navigation-in-a-list][Common keybindings for navigation in a list]]
+    -  [[#using-menu-key-for-help][Using menu key for help]]
+    -  [[#org-capture-templates][org-capture templates]]
   -  [[#tips][Tips]]
     -  [[#manage-local-and-remote-repositories][Manage local and remote repositories]]
       -  [[#use-helm-repom-to-open-a-repository][Use =helm-repom= to open a repository]]
@@ -20,6 +23,8 @@ See also [[file:README.org]]
       -  [[#dired-sidebar][dired-sidebar]]
       -  [[#ibuffer-sidebar][ibuffer-sidebar]]
     -  [[#search][Search]]
+      -  [[#find-documentation][Find documentation]]
+      -  [[#web-search][Web search]]
     -  [[#editing-org-mode][Editing org-mode]]
       -  [[#graphics-and-images-in-org-mode][Graphics and images in Org Mode]]
     -  [[#using-pandoc-for-document-conversion][Using pandoc for document conversion]]
@@ -63,7 +68,7 @@ References:
 - [[http://ergoemacs.org/emacs/eshell.html][Emacs: eshell - Ergomacs]]
 - [[http://ergoemacs.org/emacs/emacs_shell_vs_term_vs_ansi-term_vs_eshell.html][Emacs: Difference between shell, term, eshell]]
 
-** Keybindings for browsing                                     :keybinding:
+** Common keybindings for navigation in a list                  :keybinding:
 Some Emacs applications display a list of items and let you browse them. These applications innclude dired, magit, and "sidebar" applications. You might sometimes prefer switching focus to a browsed item, but otherwise you might prefer keeping focus. You need separate bindings for opening an item. I basically prefer the following bindings for this kind of commands:
 
 - ~RET~ to open an item and switch focus
@@ -73,7 +78,7 @@ These bindings are applicable to the following major modes in my configuration:
 
 - magit-status (including magit-todos)
 - dired-sidebar
-** Menu key for help                            :help:keybinding:microhabit:
+** Using menu key for help                      :help:keybinding:microhabit:
 Use ~<menu>~ key as a prefix for alternative help commands. Especially, the following kinds of commands should bound on this prefix:
 
 - Help/referencing commands specific to modes of the current buffer.
@@ -164,8 +169,18 @@ I've added an experimental support for frame-purpose. This can replace the built
 - [[file:misc/init-web-search.el::(defun%20akirak/helm-search%20(query)][akirak/helm-search]] command lets you choose a search engine for a given query.
   - This command is bound at ~<menu> ?~ key.
   - This command is also available as an alternative action in =counsel-org-capture-string=.
+*** Find documentation
 - [[file:misc/init-web-search.el::(defun%20akirak/helm-search-symbol-at-point%20()][akirak/helm-search-symbol-at-point]] command lets you choose a search engine for a symbol under the cursor.
   - I am not sure if this command is useful though.
+*** TODO Web search
+:PROPERTIES:
+:CREATED_TIME: [2018-08-17 Fri 08:46]
+:ID:       81c5b1b2-f848-4a41-be21-4dba968484a7
+:END:
+[[file:misc/init-web-search.el][file:~/.emacs.d/misc/init-web-search.el]]
+
+- [ ] Redefine search engine commands in terms of the new search engine scheme in =akirak/define-search-engine=
+
 ** Editing org-mode
 *** Graphics and images in Org Mode
 :PROPERTIES:
@@ -200,15 +215,6 @@ Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather 
 :TOC:      1
 :CUSTOM_ID: issues
 :END:
-** TODO Web search
-:PROPERTIES:
-:CREATED_TIME: [2018-08-17 Fri 08:46]
-:ID:       81c5b1b2-f848-4a41-be21-4dba968484a7
-:END:
-[[file:misc/init-web-search.el][file:~/.emacs.d/misc/init-web-search.el]]
-
-- [ ] Redefine search engine commands in terms of the new search engine scheme in =akirak/define-search-engine=
-
 * Deprecated
 :PROPERTIES:
 :TOC:      ignore
