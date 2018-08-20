@@ -40,6 +40,8 @@
 ;;;; frame-workflow
 (akirak/define-frame-workflow "org"
   :key "o"
+  :layout '(when (fboundp #'ibuffer-sidebar-show-sidebar)
+             (ibuffer-sidebar-show-sidebar))
   :make-frame '(frame-purpose-make-mode-frame 'org-mode))
 
 (provide 'init-org)
