@@ -12,7 +12,6 @@
    '(("~/github/" 1 :name "github")
      ("~/docs/" 1 :name "docs")
      ("~/.emacs.d/straight/repos/" 1 :name "straight")
-     ("~/personal/" 1 :name "personal")
      ("~/" 1 :pattern "^[^\.]")))
   (repom-clone-destination-for-viewing "~/Downloads/")
   (repom-clone-destination-for-editing "~/github/"))

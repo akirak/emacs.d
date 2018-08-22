@@ -215,6 +215,16 @@ Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather 
 :TOC:      1
 :CUSTOM_ID: issues
 :END:
+** MAYBE Strip dependency on Dropbox                                 :MAYBE:
+:PROPERTIES:
+:CREATED_TIME: [2018-08-22 Wed 14:13]
+:ID:       d2584edc-286d-4b2e-a374-22818f957c94
+:END:
+:LOGBOOK:
+- State "MAYBE"      from "TODO"       [2018-08-22 Wed 14:14] \\
+  I am not sure if this idea is good. It might be a good idea to keep a copy of those files in the cloud.
+:END:
+Maybe get rid of [[file:local/my-dropbox.el]]
 * Deprecated
 :PROPERTIES:
 :TOC:      ignore
