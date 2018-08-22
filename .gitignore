@@ -7,3 +7,4 @@ elpa/
 .cache/
 # Ignore files created by emacs-application-framework
 eaf/
+mastodon.plstore
