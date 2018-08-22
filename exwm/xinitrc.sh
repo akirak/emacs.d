@@ -38,6 +38,10 @@ else
         export QT_IM_MODULE=fcitx
         export XMODIFIERS=@im=fcitx
     fi
+
+    if which syncthing >/dev/null; then
+        sleep 2 && syncthing -no-browser &
+    fi
 fi
 
 # If Emacs is started in server mode, `emacsclient` is a convenient way to edit
