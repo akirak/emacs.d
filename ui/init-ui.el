@@ -22,7 +22,7 @@
 (require 'init-focus)
 (require 'init-beacon)
 (require 'init-dimmer)
-(require 'init-origami)
+;; (require 'init-origami)
 
 ;;;;; Text
 (require 'init-rainbow-delimiters)
@@ -40,7 +40,7 @@
 
 ;;;; Switching windows/frames
 (require 'init-frames)
-(require 'init-switch-window)
+;; (require 'init-switch-window)
 
 ;;;; Distraction-free editing
 (require 'init-olivetti)
