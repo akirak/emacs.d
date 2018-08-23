@@ -140,6 +140,11 @@
 ;;   nil
 ;;   (list (akirak/org-agenda-view-file "reading.html")))
 
+;;;; Other org options
+
+(with-eval-after-load 'org-clock
+  (org-clock-persistence-insinuate))
+
 ;;;; frame-workflow
 
 (akirak/define-frame-workflow "org"

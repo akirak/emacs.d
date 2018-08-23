@@ -28,6 +28,9 @@
 (require 'init-org-agenda)
 (require 'init-org-super-agenda)
 
+;;;; Set options
+(require 'init-org-options)
+
 ;;;; Keybindings
 (require 'init-org-bindings)
 (require 'init-org-agenda-bindings)
