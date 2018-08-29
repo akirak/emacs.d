@@ -29,6 +29,27 @@ configuration and then use Git to clone the repository:
     git clone https://github.com/akirak/emacs.d.git ~/.emacs.d 
 #+END_EXAMPLE
 
+This repository ships with an Ansible playbook for extra configuration tasks. It can be triggered by =Makefile= in the repository.
+
+To install dependencies,
+
+#+BEGIN_SRC shell
+make deps
+#+END_SRC
+
+
+To activate my personal configuration,
+
+#+BEGIN_SRC shell
+make normal
+#+END_SRC
+
+To install =~/.xinitrc= for EXWM as well as the personal configuration,
+
+#+BEGIN_SRC shell
+make exwm
+#+END_SRC
+
 After starting Emacs with the configuration, you have to run
 =all-the-icons-install-fonts=.
 

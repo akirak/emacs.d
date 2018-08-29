@@ -1,0 +1,44 @@
+---
+- hosts: all
+  tasks:
+    - name: install ~/.emacs
+      block:
+        - name: Use etc/loader.el as ~/.emacs
+          file:
+            src: "{{ '~/.emacs.d/etc/loader.el' | expanduser }}"
+            path: "{{ '~/.emacs' | expanduser }}"
+            state: link
+        - name: Create an empty custom file
+          copy:
+            dest: "{{ '~/.custom.el' | expanduser }}"
+            force: no
+            content: ""
+    # Use this if you prefer chemacs
+    # - name: install chemacs
+    #   tags: chemacs
+    #   block:
+    #     - name: Clone the chemacs repository
+    #       git:
+    #         dest: "{{ '~/.emacs.d/.cache/chemacs' | expanduser }}"
+    #         repo: https://github.com/plexus/chemacs.git
+    #     - name: Install chemacs
+    #       file:
+    #         path: "{{ '~/.emacs' | expanduser }}"
+    #         state: link
+    #         src: "{{ '~/.emacs.d/.cache/chemacs/.emacs' | expanduser }}"
+    #     - name: Install the default chemacs configuration
+    #       copy:
+    #         dest: "{{ '~/.emacs-profiles.el' | expanduser }}"
+    #         # Don't overwrite an existing configuration file if any
+    #         force: no
+    #         src: "etc/chemacs/default.el"
+    #     - name: Create an empty custom file
+    #       copy:
+    #         dest: "{{ '~/.custom.el' | expanduser }}"
+    #         force: no
+    #         content: ""
+    - name: install dependencies
+      tags: deps
+      package:
+        name: ripgrep
+      become: yes

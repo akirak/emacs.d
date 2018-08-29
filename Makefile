@@ -1,6 +1,13 @@
 xinitrc := $(shell readlink -f exwm/xinitrc.sh)
+ANSIBLE := ansible-playbook -c local -i localhost, playbook.yml
 
-.PRUNE: install-exwm
+.PRUNE: normal deps exwm
 
-install-exwm:
+normal:
+	$(ANSIBLE)
+
+deps:
+	$(ANSIBLE) -t deps
+
+exwm: no-exwm
 	ln -svf $(xinitrc) $(HOME)/.xinitrc

@@ -8,3 +8,5 @@ elpa/
 # Ignore files created by emacs-application-framework
 eaf/
 mastodon.plstore
+# Ansible
+*.retry
