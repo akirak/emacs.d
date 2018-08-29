@@ -3,6 +3,8 @@
 
 (dolist (file (directory-files (expand-file-name "local" user-emacs-directory)
                                t "^my-.+\\.el"))
-  (require (intern (file-name-base file)) file t))
+  (condition-case err
+      (require (intern (file-name-base file)) file)
+    (error (message "%s was not loaded properly: %s" file err))))
 
 (provide 'init-local)
