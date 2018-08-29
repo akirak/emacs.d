@@ -1,6 +1,8 @@
 (unless (require 'dash-functional nil t)
   (use-package dash-functional))
 
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
 (use-package frame-purpose
   :straight (frame-purpose :host github :repo "alphapapa/frame-purpose.el")
   :config
