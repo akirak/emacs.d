@@ -32,9 +32,6 @@
                   "x"))
   (add-to-list 'load-path (expand-file-name subdir akirak/dotemacs-directory)))
 
-(when (member "--ops" command-line-args)
-  (add-to-list 'load-path (expand-file-name "local" user-emacs-directory)))
-
 ;; This needs to be loaded first
 (require 'init-compat)
 (require 'init-config)
@@ -100,4 +97,15 @@
 (require 'init-google-translate)
 
 ;;; Personal configuration (local/)
-(add-to-list 'command-switch-alist '("--ops" . (lambda (_) (require 'init-local))))
+(defcustom akirak/use-personal-configuration nil
+  "When non-nil, load the personal configuration.
+
+The personal configuration resides in \"local\" directory of this
+repository.  Files prefixed with \"local-\" are automatically loaded."
+  :type 'boolean
+  :group 'akirak
+  :set (lambda (symbol value)
+         (set symbol value)
+         (when value
+           (add-to-list 'load-path (expand-file-name "local" user-emacs-directory))
+           (require 'init-local))))
