@@ -40,6 +40,8 @@
 (require 'init-config)
 
 (use-package hydra)
+(use-package ov
+  :straight (ov :host github :repo "ShingoFukuyama/ov.el"))
 
 ;;; Basic configuration
 (require 'init-defaults)
