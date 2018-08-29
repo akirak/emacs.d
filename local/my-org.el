@@ -123,15 +123,12 @@
 
 ;;;; org-agenda custom commands (currently unused)
 
-;; (akirak/org-add-agenda-custom-command "r" "Reading"
-;;   '((tags "CATEGORY=\"readings\""
-;;           ((org-agenda-prefix-format "  ")
-;;            (org-tags-match-list-sublevels nil)
-;;            (org-agenda-sorting-strategy '(deadline-down priority-up))
-;;            (org-super-agenda-groups
-;;             '((:todo "REVIEW"))))))
-;;   nil
-;;   (list (akirak/org-agenda-view-file "reading.html")))
+(akirak/org-add-agenda-custom-command "b" "Main block agenda"
+  '((agenda ""
+            ((org-agenda-span 1)))
+    (tags "CATEGORY=\"scratch\""
+          ((org-agenda-overriding-header "Top-level headings in scratch")
+           (org-tags-match-list-sublevels nil)))))
 
 ;;;; Custom rifle commands
 
