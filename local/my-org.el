@@ -1,3 +1,5 @@
+(setq org-starter-require-file-by-default nil)
+
 ;;;; Org directories
 
 (org-starter-def "~/org/"
