@@ -133,6 +133,25 @@
 ;;   nil
 ;;   (list (akirak/org-agenda-view-file "reading.html")))
 
+;;;; Custom rifle commands
+
+(defun akirak/helm-org-rifle-knowledge-base ()
+  (interactive)
+  (helm-org-rifle-files (delq nil
+                              (mapcar (lambda (fname)
+                                        (org-starter-locate-file fname nil t))
+                                      '("scratch.org"
+                                        "workflow.org"
+                                        "emacs.org"
+                                        "code.org"
+                                        "posts.org"
+                                        "brainstorming.org"
+                                        "subjects.org"
+                                        "planner.org")))))
+
+(general-def :prefix "<menu>"
+  "<menu>" #'akirak/helm-org-rifle-knowledge-base)
+
 ;;;; Other org options
 
 (with-eval-after-load 'org-clock
