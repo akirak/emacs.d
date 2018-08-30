@@ -27,7 +27,7 @@
   (declare (indent 1))
   (concat "* " (if todo (concat todo " ") "") (or heading "%?")
           (when tags
-            (format " :%s:" (string-join tag ":")))
+            (format " :%s:" (string-join tags ":")))
           "\n:PROPERTIES:\n:CREATED_TIME: %U\n"
           (cl-etypecase extra-props
             (null "")
