@@ -7,6 +7,7 @@
   :straight (repom :host github :repo "akirak/repom.el"
                    :files (:defaults
                            (:exclude "helm-repom.el")))
+  :after projectile
   :custom
   (repom-local-discovery-locations
    '(("~/github/" 1 :name "github")
