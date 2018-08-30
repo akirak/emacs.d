@@ -85,7 +85,7 @@
   :refile '(:maxlevel . 9))
 
 (defun akirak/buffer-mode-name (filename)
-  (with-current-buffer filename
+  (with-current-buffer (find-buffer-visiting filename)
     (string-remove-suffix "-mode" (symbol-name major-mode))))
 
 (org-starter-define-file "code.org"
