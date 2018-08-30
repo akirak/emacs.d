@@ -31,7 +31,8 @@
      ("dt" "Task in the default notes file" entry
       (file "")
       ,(akirak/org-capture-entry-template-1 "%i%?" ""
-                                            :todo "TODO"))
+                                            :todo "TODO")
+      :clock-in t)
      ("dp" "Protocol quote" entry (file "") ,akirak/org-protocol-note-template
       :clock-in t)
      ("dL" "Protocol link (as entry)" entry (file "") ,akirak/org-protocol-link-template
