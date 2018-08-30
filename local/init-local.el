@@ -7,8 +7,10 @@
   :init
   (akirak/define-frame-workflow "org"
     :key "o"
-    :layout '(when (fboundp #'ibuffer-sidebar-show-sidebar)
-               (ibuffer-sidebar-show-sidebar))
+    :layout '(progn
+               (org-starter-load-all-known-files)
+               (when (fboundp #'ibuffer-sidebar-show-sidebar)
+                 (ibuffer-sidebar-show-sidebar)))
     :make-frame '(frame-purpose-make-mode-frame 'org-mode))
   :general
   ("<menu> <menu>" #'akirak/helm-org-rifle-knowledge-base))
