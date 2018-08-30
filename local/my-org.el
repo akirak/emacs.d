@@ -104,7 +104,12 @@
              ("ce" "Babel code, Emacs Lisp" entry
               (file+function akirak/org-reverse-date-tree)
               ,(akirak/babel-capture-template "emacs-lisp")
-              :clock-in t :clock-resume t)))
+              :clock-in t :clock-resume t)
+             ("ct" "Topic in code.org" entry
+              (file+function akirak/org-reverse-date-tree)
+              ,(akirak/org-capture-entry-template-1 "%?" "%K"
+                                                    :todo "TOPIC"
+                                                    :tags '("topic")))))
 
 (org-starter-define-file "posts.org"
   :key "P"
