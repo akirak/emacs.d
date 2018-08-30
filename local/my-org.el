@@ -126,6 +126,14 @@
   :set-default 'yankpad-file
   :refile '(:level . 1))
 
+;; Set org-default-notes-file
+(unless (bound-and-true-p org-default-notes-file)
+  (setq org-default-notes-file "~/notes.org")
+  (message "Set org-default-notes-file to %s" org-default-notes-file)
+  (unless (file-exists-p org-default-notes-file)
+    (with-temp-buffer
+      (write-file org-default-notes-file))))
+
 ;;;; org-agenda custom commands (currently unused)
 
 (akirak/org-add-agenda-custom-command "b" "Main block agenda"
