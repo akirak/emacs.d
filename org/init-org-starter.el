@@ -53,6 +53,7 @@
                      when (equal target '(clock))
                      collect `(,key (org-clocking-p)))))
   :custom
+  (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
   (org-starter-alternative-find-function #'helm-org-rifle-files)
   (org-starter-extra-find-file-map
