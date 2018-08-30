@@ -93,7 +93,7 @@
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
-(require 'init-chinese)
+;; (require 'init-chinese)
 (require 'init-google-translate)
 
 ;;; Personal configuration (local/)
