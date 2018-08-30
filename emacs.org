@@ -166,17 +166,30 @@ I've added an experimental support for frame-purpose. This can replace the built
 :LOGBOOK:
 - State "REVIEW"     from              [2018-07-04 Wed 15:27]
 :END:
-- [[file:misc/init-web-search.el::(defun%20akirak/helm-search%20(query)][akirak/helm-search]] command lets you choose a search engine for a given query.
-  - This command is bound at ~<menu> ?~ key.
-  - This command is also available as an alternative action in =counsel-org-capture-string=.
 *** Find documentation
 - [[file:misc/init-web-search.el::(defun%20akirak/helm-search-symbol-at-point%20()][akirak/helm-search-symbol-at-point]] command lets you choose a search engine for a symbol under the cursor.
   - I am not sure if this command is useful though.
+*** TODO Full-text search
+:PROPERTIES:
+:CREATED_TIME: [2018-08-24 Fri 15:26]
+:ID:       2667c671-0e0b-405e-9924-7a9c9f6811d5
+:END:
+**** Deadgrep
+In mastodon, Kaushal Modi mentioned deadgrep, which is a ripgrep frontend for Emacs. 
+
+Deadgrep also provides a comparison between [[https://github.com/Wilfred/deadgrep/blob/master/docs/ALTERNATIVES.md][alternatives]] to the tool itself. 
+**** Prefer rg over ag
+I have used =counsel-ag=, but I will switch to =counsel-rg=. 
+
 *** TODO Web search
 :PROPERTIES:
 :CREATED_TIME: [2018-08-17 Fri 08:46]
 :ID:       81c5b1b2-f848-4a41-be21-4dba968484a7
 :END:
+- [[file:misc/init-web-search.el::(defun%20akirak/helm-search%20(query)][akirak/helm-search]] command lets you choose a search engine for a given query.
+  - This command is bound at ~<menu> ?~ key.
+  - This command is also available as an alternative action in =counsel-org-capture-string=.
+
 [[file:misc/init-web-search.el][file:~/.emacs.d/misc/init-web-search.el]]
 
 - [ ] Redefine search engine commands in terms of the new search engine scheme in =akirak/define-search-engine=
