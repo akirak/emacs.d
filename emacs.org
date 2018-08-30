@@ -237,7 +237,7 @@ Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather 
 - State "MAYBE"      from "TODO"       [2018-08-22 Wed 14:14] \\
   I am not sure if this idea is good. It might be a good idea to keep a copy of those files in the cloud.
 :END:
-Maybe get rid of [[file:local/my-dropbox.el]]
+My configuration currently [[file:local/my-dropbox.el][depends on Dropbox]], which is bad as I am using syncthing as well to synchronise files between computers. 
 * Deprecated
 :PROPERTIES:
 :TOC:      ignore
