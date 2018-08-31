@@ -7,6 +7,7 @@
   "i" 'docker-images
   "j" 'org-journal-new-entry
   "k" 'docker-containers
+  "l" 'hledger-capture
   "p" 'prodigy
   "P" 'helm-system-packages
   "S" 'helm-systemd

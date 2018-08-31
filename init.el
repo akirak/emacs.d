@@ -90,6 +90,7 @@
 (require 'init-emacs-lisp)
 (require 'init-shell-scripts)
 (require 'init-yaml)
+(require 'init-hledger)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
