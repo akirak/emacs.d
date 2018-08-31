@@ -41,4 +41,12 @@
 ;;;; Specific files
 (require 'init-emacs-org)
 
+(akirak/define-frame-workflow "org"
+  :key "o"
+  :layout '(progn
+             (org-starter-load-all-known-files)
+             (when (fboundp #'ibuffer-sidebar-show-sidebar)
+               (ibuffer-sidebar-show-sidebar)))
+  :make-frame '(frame-purpose-make-mode-frame 'org-mode))
+
 (provide 'init-org)
