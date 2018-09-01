@@ -55,6 +55,8 @@
 
 (setq ediff-window-setup-function #'ediff-setup-windows-plain)
 
+(setq bookmark-default-file "~/.emacs-bookmarks")
+
 ;;;; Truncating lines and visual-lines-mode
 ;; Call this function in each major modes
 (defun turn-on-visual-line-mode ()
