@@ -3,6 +3,8 @@
 
 (use-package my-org
   :straight (my-org :host github :repo "akirak/my-org")
+  :init
+  (require 'my-org)
   :general
   ("<menu> <menu>" #'akirak/helm-org-rifle-knowledge-base))
 
