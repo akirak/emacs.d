@@ -238,6 +238,15 @@ Especially, =katawa-ivy= command is a convenient interface for Japanese. Rather 
   I am not sure if this idea is good. It might be a good idea to keep a copy of those files in the cloud.
 :END:
 My configuration currently [[file:local/my-dropbox.el][depends on Dropbox]], which is bad as I am using syncthing as well to synchronise files between computers. 
+** Bookmarks
+:PROPERTIES:
+:CREATED_TIME: [2018-09-01 Sat 09:07]
+:ID:       67a6ed2d-b8fc-4958-b186-20369ab5dc00
+:END:
+- By default, the default bookmark file is ~/.emacs-bookmarks: [[file:core/init-defaults.el::(setq%20bookmark-default-file%20"~/.emacs-bookmarks")][init-defaults.el]].
+  - It does not reside in ~/.emacs.d/.cache, because the directory can be purged for clearing local data, e.g. packages.
+- When init-local.el (my personal configuration) is loaded and ~/learning/ exists, it is ~/learning/emacs-bookmarks. This is configured in my-org repository.
+  - ~/learning is a Git repository, so the file is under version control. Adding a bookmark can be considered as part of a learning process, so every addition to a bookmark should be cared by the user.
 * Deprecated
 :PROPERTIES:
 :TOC:      ignore
