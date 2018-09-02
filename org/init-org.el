@@ -46,7 +46,10 @@
   :layout '(progn
              (org-starter-load-all-known-files)
              (when (fboundp #'ibuffer-sidebar-show-sidebar)
-               (ibuffer-sidebar-show-sidebar)))
+               (ibuffer-sidebar-show-sidebar)
+               (with-current-buffer (ibuffer-sidebar-buffer (selected-frame))
+                 (ibuffer-projectile-set-filter-groups)
+                 (ibuffer-update nil))))
   :make-frame '(frame-purpose-make-mode-frame 'org-mode))
 
 (provide 'init-org)
