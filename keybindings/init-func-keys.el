@@ -28,11 +28,6 @@
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
 
-(smartrep-define-key
-    global-map "<f8>"
-  '(("=" . text-scale-increase)
-    ("-" . text-scale-decrease)))
-
 ;; (with-eval-after-load 'origami
 ;;   (smartrep-define-key
 ;;       origami-mode-map "<f8>"

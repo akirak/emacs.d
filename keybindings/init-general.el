@@ -3,7 +3,17 @@
 ;;
 ;; Use `general-def' to define keybindings.
 
-(use-package general)
+;; Hopefully, defrepeater is soon going to be integrated with general
+(use-package defrepeater)
+
+(use-package general
+  :config
+  (general-define-key
+   [remap other-window] (defrepeater #'other-window)
+   [remap winner-undo] (defrepeater #'winner-undo)
+   [remap winner-redo] (defrepeater #'winner-redo)
+   [remap text-scale-increase] (defrepeater #'text-scale-increase)
+   [remap text-scale-decrease] (defrepeater #'text-scale-decrease)))
 
 (defmacro akirak/define-contextual-key (key &rest general-defs)
   (declare (indent 1))

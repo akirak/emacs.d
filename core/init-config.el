@@ -45,7 +45,6 @@
 (require 'init-which-key)
 ;; Allow installation of system packages via use-package
 (require 'init-system-packages)
-(require 'init-smartrep)
 
 (defmacro akirak/define-frame-workflow (name &rest args)
   (declare (indent 1))
