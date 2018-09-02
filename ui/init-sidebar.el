@@ -15,7 +15,9 @@
   (dolist (command '(kill-this-buffer
                      multi-term
                      eshell))
-    (add-to-list 'ibuffer-sidebar-special-refresh-commands command)))
+    (add-to-list 'ibuffer-sidebar-special-refresh-commands command))
+  :custom
+  (ibuffer-sidebar-width 20))
 
 (use-package dired-sidebar
   :config
