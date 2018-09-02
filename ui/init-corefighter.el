@@ -41,12 +41,5 @@
                               :files ("helm-corefighter.el"))
   :commands (helm-corefighter))
 
-(akirak/define-frame-workflow "inbox"
-  :key "i"
-  :layout '(progn
-             (org-agenda nil "a")
-             (delete-other-windows)
-             (corefighter-sidebar)))
-
 (provide 'init-corefighter)
 ;;; init-corefighter.el ends here
