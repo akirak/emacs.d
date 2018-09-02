@@ -1,14 +1,21 @@
 (use-package ace-window
   :custom
-  (aw-keys '(?a ?s ?d ?f ?g ?h ?j))
+  (aw-keys '(?a ?s ?d ?f ?g))
   (aw-background nil)
   (aw-dispatch-alist
-   '((?k aw-delete-window "Delete Window")
-     (?m aw-swap-window "Swap Windows")
-     (?o delete-other-windows "Delete Other Windows")
+   '((?m aw-swap-window "Swap Windows")
+     (?x aw-delete-window "Delete Window")
+     (?c aw-split-window-horz "Split horizontally")
+     (?v aw-split-window-vert "Split vertically")
+     (?b balance-windows)
+     (?o delete-other-windows)
+     (?F make-frame)
+     (?D delete-frame)
+     (?z iconify-frame)
      (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm" minibuffer-mode))
-  (aw-ignore-on t)
-  (ace-window-display-mode nil))
+  (aw-dispatch-always t)
+  (aw-scope 'frame)
+  (aw-ignore-on t))
 
 (provide 'init-ace-window)

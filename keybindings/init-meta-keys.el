@@ -81,6 +81,8 @@
   :prefix-map 'akirak/fix-map
   :prefix "M-SPC")
 
+(akirak/bind-fix-map "M-SPC" #'ace-window)
+
 (require 'init-fix-map)
 
 (general-def "C-M-g" #'frame-workflow-prefix-map)
