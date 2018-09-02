@@ -9,7 +9,10 @@
     (unless (eq ibuffer-sorting-mode 'alphabetic)
       (ibuffer-do-sort-by-alphabetic)))
   :hook
-  (ibuffer . ibuffer-projectile-run))
+  (ibuffer . ibuffer-projectile-run)
+  :custom
+  (ibuffer-projectile-group-name-function
+   (lambda (_name root) (abbreviate-file-name root))))
 
 (use-package ibuffer-vc
   :disabled t
