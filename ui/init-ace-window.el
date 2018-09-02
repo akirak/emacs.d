@@ -8,6 +8,7 @@
      (?c aw-split-window-horz "Split horizontally")
      (?v aw-split-window-vert "Split vertically")
      (?b balance-windows)
+     (?r toggle-window-split)
      (?o delete-other-windows)
      (?F make-frame)
      (?D delete-frame)
