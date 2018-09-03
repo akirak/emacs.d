@@ -8,6 +8,7 @@
   "j" 'org-journal-new-entry
   "k" 'docker-containers
   "l" 'hledger-capture
+  "o" 'helm-org-rifle-agenda-files
   "p" 'prodigy
   "P" 'helm-system-packages
   "S" 'helm-systemd
