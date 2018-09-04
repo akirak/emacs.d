@@ -41,6 +41,7 @@
 ;;;; Switching windows/frames
 (require 'init-frames)
 ;; (require 'init-switch-window)
+(require 'init-ace-window)
 
 ;;;; Distraction-free editing
 (require 'init-olivetti)
