@@ -23,6 +23,10 @@
       ,(akirak/org-capture-entry-template-1 "%i%?" ""
                                             :todo "TODO")
       :clock-in t :clock-resume t)
+     ("n" "Note under the clocked task" entry
+      (clock)
+      ,(akirak/org-capture-entry-template-1 "%i%?" "")
+      :clock-in t :clock-resume t)
      ("p" "Protocol quote" entry (clock)
       ,akirak/org-protocol-note-template)
      ("L" "Protocol link (as item)" item (clock)
@@ -32,6 +36,10 @@
       (file "")
       ,(akirak/org-capture-entry-template-1 "%i%?" ""
                                             :todo "TODO")
+      :clock-in t)
+     ("dn" "Note in the default notes file" entry
+      (file "")
+      ,(akirak/org-capture-entry-template-1 "%i%?" "")
       :clock-in t)
      ("dp" "Protocol quote" entry (file "") ,akirak/org-protocol-note-template
       :clock-in t)
@@ -44,7 +52,7 @@
   (setq org-capture-templates-contexts
         `(
           ;; Capture into org-default-notes-file when not clocking in
-          ,@(cl-loop for key in '("t" "p" "L")
+          ,@(cl-loop for key in '("t" "n" "p" "L")
                      collect `(,key ,(concat "d" key)
                                     ((lambda () (not (org-clocking-p))))))
           ;; Disable templates with the clock target when not clocking in
