@@ -10,7 +10,7 @@
   "C-c l" 'org-store-link
   "C-c m" 'bm-toggle
   "C-c n" #'counsel-org-capture-string
-  "C-c p" 'yankpad-hydra/body
+  "C-c p" 'yankpad-insert
   "C-c r" #'rename-buffer
   "C-c s" 'symbol-overlay-put
   "C-c y" 'ivy-yasnippet)
