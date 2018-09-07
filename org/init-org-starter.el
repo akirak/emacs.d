@@ -2,7 +2,6 @@
 (require 'init-org-capture)
 
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter")
   :functions (org-starter-define-directory org-starter-define-file)
   :config
   (defun helm-org-rifle-known-files ()
