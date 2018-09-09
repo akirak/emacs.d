@@ -8,6 +8,9 @@
 (require 'init-org-edna)
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))
+(use-package org-reverse-datetree
+  :straight (org-reverse-datetree :host github
+                                  :repo "akirak/org-reverse-datetree"))
 
 ;;;; Convenient tools for editing org files
 (require 'init-org-download)
