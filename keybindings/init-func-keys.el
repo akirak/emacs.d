@@ -25,6 +25,7 @@
   "l" #'counsel-locate
   "r" #'counsel-recentf
   "t" #'aweshell-dedicated-open
+  "O" #'org-clock-out
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
 
