@@ -16,6 +16,13 @@
 (use-package suggest
   :commands (suggest))
 
+;; Generate README from Emacs Lisp.
+(use-package ox-gfm
+  :after ox)
+
+(use-package el2org
+  :commands (el2org-generate-readme))
+
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
   "Pull the package recipe for the current projectile project."
