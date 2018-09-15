@@ -23,6 +23,9 @@
                           (append context
                                   (list key def))))))
 
+;;;; Help keys
+
+;; Define a prefix for help commands.
 (general-create-definer akirak/bind-help-key
   :prefix "<menu>")
 
@@ -30,5 +33,13 @@
 
 (akirak/bind-help-key
   "?" #'akirak/helm-search)
+
+;;;; Mode-specific keys
+
+;; Define a prefix for commands specific to a major mode.
+;; For now, it is the same as that of help commands.
+;; To prevent conflicts, use upper-case tail keys for these commands.
+(general-create-definer akirak/bind-mode-key
+  :prefix "<menu>")
 
 (provide 'init-general)

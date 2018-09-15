@@ -59,10 +59,10 @@
   "." #'helpful-at-point)
 
 ;;;;; Extra commands
-(general-def :keymaps 'emacs-lisp-mode-map :prefix "C-z"
-  "e" #'akirak/eval-buffer-or-load-file
-  "l" #'package-lint-current-buffer
-  "m" #'pp-macroexpand-last-sexp)
+(akirak/bind-mode-key :keymaps 'emacs-lisp-mode-map
+  "E" #'akirak/eval-buffer-or-load-file
+  "L" #'package-lint-current-buffer
+  "M" #'pp-macroexpand-last-sexp)
 
 ;;;; frame-workflow
 (akirak/define-frame-workflow "emacs-lisp"
