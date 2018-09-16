@@ -11,6 +11,14 @@
   :custom
   (beancount-mode-map-prefix (kbd "<menu>"))
   (beancount-use-ido nil)
+  :init
+  (defun akirak/remove-id-from-beancount-capture ()
+    (with-current-buffer (marker-buffer org-capture-last-stored-marker)
+      (when (bound-and-true-p beancount-mode)
+        (when (org-entry-delete org-capture-last-stored-marker "ID")
+          (save-buffer)))))
+  (add-hook 'org-capture-after-finalize-hook
+            #'akirak/remove-id-from-beancount-capture)
   :config
   (add-hook 'company-backends 'company-ledger-backend))
 
