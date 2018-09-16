@@ -1,4 +1,7 @@
 (general-def :keymaps 'org-mode-map :package 'org
+  ;; I don't use any of these bindings and want to use them for other purposes
+  "C-c [" nil
+  "C-c ]" nil
   "M-n" 'org-metadown
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft

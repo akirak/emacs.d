@@ -41,4 +41,8 @@
   :straight (helm-tail :host github :repo "akirak/helm-tail")
   :commands (helm-tail))
 
+(defun akirak/previous-frame ()
+  (interactive)
+  (other-frame -1))
+
 (provide 'init-commands)

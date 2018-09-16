@@ -14,7 +14,9 @@
   "C-c p" 'yankpad-insert
   "C-c r" #'rename-buffer
   "C-c s" 'symbol-overlay-put
-  "C-c y" 'ivy-yasnippet)
+  "C-c y" 'ivy-yasnippet
+  "C-c [" (defrepeater #'akirak/previous-frame)
+  "C-c ]" (defrepeater #'other-frame))
 
 (general-def :keymaps 'org-mode-map :package 'org
   "C-c o" #'outorg-copy-edits-and-exit)
