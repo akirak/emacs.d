@@ -3,7 +3,6 @@
   "C-c b" 'helm-bm
   "C-c c" #'org-capture
   "C-c e" 'aya-expand
-  "C-c f" #'org-starter-alternative-find-file-by-key
   "C-c h" #'helm-corefighter
   "C-c i" 'scratch
   "C-c k" 'kill-compilation
