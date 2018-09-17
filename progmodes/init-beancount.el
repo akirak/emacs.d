@@ -1,5 +1,3 @@
-(require 'init-company)
-
 (defcustom akirak/ledger-primary-currency "JPY"
   "The currency primarily used in the country I am living in.")
 
@@ -18,8 +16,6 @@
         (when (org-entry-delete org-capture-last-stored-marker "ID")
           (save-buffer)))))
   (add-hook 'org-capture-after-finalize-hook
-            #'akirak/remove-id-from-beancount-capture)
-  :config
-  (add-hook 'company-backends 'company-ledger-backend))
+            #'akirak/remove-id-from-beancount-capture))
 
 (provide 'init-beancount)
