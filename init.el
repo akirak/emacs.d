@@ -89,7 +89,6 @@
 (require 'init-emacs-lisp)
 (require 'init-shell-scripts)
 (require 'init-yaml)
-(require 'init-hledger)
 (require 'init-beancount)
 
 ;;; Natural languages (international/)
