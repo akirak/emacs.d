@@ -4,6 +4,7 @@
 ;;;;; Modeline
 ;; (require 'init-spaceline-ati)
 ;; (require 'init-doom-modeline)
+(require 'init-feebleline)
 
 ;; The header line
 (require 'init-header-line)
