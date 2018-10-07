@@ -33,6 +33,7 @@
 (require 'init-whitespace)
 
 ;;;;; Fringe
+(require 'init-line-numbers)
 (require 'init-git-gutter)
 
 ;;;; Window layout
