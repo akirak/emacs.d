@@ -62,6 +62,7 @@
 (require 'init-browse-url)
 (require 'init-repom)
 (require 'init-chrome)
+(require 'init-git-auto-commit)
 
 ;;; Apps (apps/, x/)
 ;; (require 'init-multi-term)
