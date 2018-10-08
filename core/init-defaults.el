@@ -39,8 +39,7 @@
 (setq-default version-control t
               vc-follow-symlinks t
               vc-make-backup-files t
-              coding-system-for-read 'utf-8
-              coding-system-for-write 'utf-8
+              buffer-file-coding-system 'utf-8
               sentence-end-double-space nil
               default-fill-column 80
               indent-tabs-mode nil
