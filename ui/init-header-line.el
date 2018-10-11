@@ -26,8 +26,7 @@
 ;; (I tried `which-key-init-buffer-hook', but it didn't work),
 ;; I turn on the default header line only in certain groups of buffers
 ;; rather than setting it using `setq-default'.
-(add-hook 'prog-mode-hook #'akirak/set-default-header-line)
-(add-hook 'text-mode-hook #'akirak/set-default-header-line)
+(add-hook 'find-file-hook #'akirak/set-default-header-line)
 (add-hook 'magit-mode-hook #'akirak/set-default-header-line)
 (add-hook 'help-mode-hook #'akirak/set-default-header-line)
 
