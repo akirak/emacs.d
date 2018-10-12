@@ -27,10 +27,7 @@
                    ("\\*Agenda Commands\\*" :regexp t :align below :ratio 0.4)
                    ("*Calendar*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
-                   ;; FIXME: Somehow this doesn't work. Maybe not using display-buffer?
-                   ("*undo tree*" :size 0.2 :align right)
-                   ;; TODO: Perhaps windows for these buffers should be handled by purpose-mode
-                   ("*scratch*" :align below :ratio 0.4 :select t)
+                   ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
                    ("\\*Org Agenda" :regexp t :other t))))
 

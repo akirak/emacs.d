@@ -34,7 +34,7 @@
 (require 'init-flycheck)
 
 ;;;;; Visual
-(require 'init-undo-tree)
+;; (require 'init-undo-tree)
 (require 'init-anzu)
 (require 'init-symbol-overlay)
 (require 'init-rainbow-mode)
