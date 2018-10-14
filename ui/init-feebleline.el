@@ -1,7 +1,9 @@
+(require 'init-magit)
+
 (use-package feebleline
-  :after magit
   :straight (feebleline :host github :repo "akirak/feebleline")
   :init
+  (require 'magit nil t)
   (feebleline-mode 1)
   :custom
   (feebleline-show-git-branch t)
