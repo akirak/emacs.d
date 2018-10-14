@@ -1,4 +1,5 @@
 (use-package feebleline
+  :after magit
   :straight (feebleline :host github :repo "akirak/feebleline")
   :init
   (feebleline-mode 1)
