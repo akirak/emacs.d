@@ -22,6 +22,7 @@
               org-use-speed-commands t
               org-habit-graph-column 1
               org-habit-preceding-days 21
-              org-habit-following-days 7)
+              org-habit-following-days 7
+              org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
 (provide 'init-org-options)
