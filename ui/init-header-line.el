@@ -1,16 +1,38 @@
 (use-package all-the-icons)
 
+(defface akirak/header-line-outline
+  '((default :inherit font-lock-function-name-face :height 1.3))
+  "Face for the function name or header in the header line.")
+
 (defun akirak/make-header-line-format (&rest body)
-  "Build a header line format with BODY indicating additional information."
+  "Build a header line format with the standard set of segments."
   `("  "
+    ;; Display an icon for the mode if any
     (:eval (or (and (featurep 'all-the-icons)
                     (all-the-icons-icon-for-buffer))
                mode-name))
     " "
-    (buffer-file-name ((:eval (file-name-nondirectory buffer-file-name))
-                       ": ")
-                      (:eval (buffer-name)))
-    (:eval (when (buffer-narrowed-p) "<Nrr> "))
+    ;; If it is a file-visiting buffer, show the file name.
+    ;; Otherwise, show the buffer name.
+    (buffer-file-name (:eval
+                       ;; If the file is inside a project, show the
+                       ;; relative file path from the root.
+                       (concat (if-let ((root (projectile-project-root)))
+                                   (file-relative-name buffer-file-name root)
+                                 (file-name-nondirectory buffer-file-name))
+                               (when (buffer-modified-p) "*")
+                               ": "))
+                      (:eval (propertize
+                              (buffer-name)
+                              'face 'italic)))
+    ;; Display the statuses of the buffer
+    (:eval (when (buffer-narrowed-p) "<N>"))
+    (read-only-mode "<RO>")
+    ;; Display the column number if the buffer is in prog-mode
+    ,(if (derived-mode-p 'prog-mode)
+         "%3c "
+       " ")
+    ;; Append any segments
     ,@body))
 
 ;;;; Default header line with which-function
@@ -19,16 +41,39 @@
 (which-function-mode 1)
 
 (defun akirak/set-default-header-line ()
-  (setq header-line-format (akirak/make-header-line-format
-                            '(which-func-mode ("" which-func-format " ")))))
+  "Set the default header line with which-function."
+  (unless header-line-format
+    (setq header-line-format (akirak/make-header-line-format
+                              `(which-func-mode
+                                (:eval
+                                 (propertize ,(cadr which-func-current)
+                                             'face 'akirak/header-line-outline)))))))
+
+;;;;; Setting the default header line
 
 ;; As I don't know how to disable the header line in the which-key window
 ;; (I tried `which-key-init-buffer-hook', but it didn't work),
 ;; I turn on the default header line only in certain groups of buffers
 ;; rather than setting it using `setq-default'.
+
+;; Display a header line whenever you visit a file
 (add-hook 'find-file-hook #'akirak/set-default-header-line)
+
+;; Display a header line in prog-mode even if you are not visiting
+;; a file, e.g. in a scratch buffer
+(add-hook 'prog-mode-hook #'akirak/set-default-header-line)
+
+;; Magit buffers should display their names
 (add-hook 'magit-mode-hook #'akirak/set-default-header-line)
+
+;; Help buffers should display their names
 (add-hook 'help-mode-hook #'akirak/set-default-header-line)
+(add-hook 'helpful-mode-hook #'akirak/set-default-header-line)
+
+;; Interactive shells
+(add-hook 'eshell-mode-hook #'akirak/set-default-header-line)
+(add-hook 'term-mode-hook #'akirak/set-default-header-line)
+(add-hook 'comint-mode-hook #'akirak/set-default-header-line)
 
 ;;;; Header line formats for specific modes
 ;;;;; org-mode
@@ -66,5 +111,16 @@
                    (x (prin1-to-string x)))))))
 
 (add-hook 'org-agenda-mode-hook #'akirak/set-org-agenda-header-line)
+
+;;;;; dired with dired-filter
+(setq dired-filter-header-line-format
+      `("  "
+        (:eval (or (and (featurep 'all-the-icons)
+                        (all-the-icons-icon-for-buffer))
+                   mode-name))
+        " "
+        dired-directory
+        " "
+        (:eval (dired-filter--describe-filters))))
 
 (provide 'init-header-line)
