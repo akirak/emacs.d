@@ -1,12 +1,21 @@
 (use-package dracula-theme
   ;; TODO: Extend the theme to support outshine headings
   ;; See https://github.com/dracula/emacs/blob/master/dracula-theme.el
-  ;; :config
-  ;; (custom-theme-set-faces
-  ;;  'dracula
-  ;;  `(outshine-level-1 SPEC)
-  ;;  ...)
-  ;; TODO: Add a custom face for the header line so that it looks distinct
+  :config
+  (let ((key2 "#0189cc")
+        (bg1 "#282a36")
+        (bg4 "#565761")
+        (type  "#bd93f9"))
+    (custom-theme-set-faces
+     'dracula
+     `(header-line ((default
+                      :background ,bg1
+                      :foreground ,type
+                      :box t)))
+     ;; `(outshine-level-1 SPEC
+     ;;                    )
+     ))
+  ;; Add a custom face for the header line so that it looks distinct
   )
 
 ;; (with-eval-after-load 'whitespace
