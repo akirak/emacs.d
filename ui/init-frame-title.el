@@ -29,9 +29,9 @@
   (cond
    ((and (bound-and-true-p frame-workflow-mode)
          (frame-parameter nil 'workflow))
-    (format "*%s* " (frame-workflow--frame-subject-name)))
+    (format "#%s# " (frame-workflow--frame-subject-name)))
    ((frame-parameter nil 'buffer-predicate)
-    (format "[%s] " (frame-parameter nil 'purpose-name)))
+    (format ":%s: " (frame-parameter nil 'purpose-name)))
    (t (format "%s: " (projectile-project-name)))))
 
 (defun akirak/frame-title-body ()
