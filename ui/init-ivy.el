@@ -89,4 +89,6 @@
   :custom
   (ivy-filthy-rich-max-length 120))
 
+(require 'init-ivy-posframe)
+
 (provide 'init-ivy)
