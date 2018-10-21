@@ -65,8 +65,7 @@
 (require 'init-git-auto-commit)
 
 ;;; Apps (apps/, x/)
-;; (require 'init-multi-term)
-(require 'init-aweshell)
+(require 'init-terminal)
 (require 'init-prodigy)
 (require 'init-dired)
 (require 'init-linux-disk)

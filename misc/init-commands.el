@@ -15,7 +15,7 @@
                       "find-file")
                      ("m" (lambda (cand)
                             (let ((default-directory cand))
-                              (aweshell-new)))
+                              (akirak/shell-new)))
                       "term")
                      ("F" (lambda (cand)
                             (frame-purpose-make-directory-frame cand))

@@ -5,8 +5,8 @@
   "<M-f1>" 'woman
   "<S-f2>" 'org-starter-find-file-by-key
   "<f5>" 'revert-buffer
-  "<f6>" 'aweshell-new
-  "<S-f6>" 'aweshell-next
+  "<f6>" 'akirak/shell-new
+  "<S-f6>" 'akirak/shell-next
   "<f7>" #'akirak/magit-status-prefer-existing
   "<f8>" 'akirak/ui-map
   "<f9>" 'recompile
@@ -24,7 +24,7 @@
   "g" #'helm-repom
   "l" #'counsel-locate
   "r" #'counsel-recentf
-  "t" #'aweshell-dedicated-open
+  "t" #'akirak/shell-open-dedicated
   "O" #'org-clock-out
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
