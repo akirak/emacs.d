@@ -85,6 +85,8 @@
   :diminish 'ivy-filthy-rich-mode
   :after ivy
   :config
-  (ivy-filthy-rich-mode t))
+  (ivy-filthy-rich-mode t)
+  :custom
+  (ivy-filthy-rich-max-length 120))
 
 (provide 'init-ivy)
