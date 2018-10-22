@@ -16,12 +16,14 @@
 (setq-default org-todo-keywords
               '((sequence
                  "TODO(t)"
-                 "NEXT(n!/)"
+                 "NEXT(n!)"
+                 "STARTED(s!)"
                  "REVIEW(r!)" ; I probably need to review my task after working on it
                  "|"
                  "DONE(d)")
                 (sequence
                  "MAYBE(m@)"
+                 ;; Probably deprecated soon
                  "BLOCKED(b@/!)"
                  "WAITING(w@/!)" ; Waiting for a particular starting time.
                  "URGENT(u!/)"
@@ -30,6 +32,7 @@
                 (type
                  "TO_BLOG(l)"
                  "HABIT(h)"
+                 ;; Define these tags precisely
                  "TOPIC(o)"
                  "FIX(f)"
                  "IDEA(i)")))
@@ -44,6 +47,7 @@
 (setq org-todo-keyword-faces
       `(("TODO" . (:foreground "SpringGreen2" :weight bold))
         ("NEXT" . (:foreground "yellow2" :weight bold))
+        ("STARTED" . (:foreground "DarkOrange" :weight bold))
         ;; Warning
         ("URGENT" . (:foreground "red"))
         ("TOPIC" . (:foreground "LightSeaGreen" :weight bold))
@@ -72,8 +76,8 @@ Skips capture tasks, projects, and subprojects."
   (when (and (not (and (boundp 'org-capture-mode) org-capture-mode))
              (not (equal (org-entry-get nil "STYLE") "habit")))
     (cond
-     ((member (org-get-todo-state) (list "TODO" "WAITING"))
-      "NEXT"))))
+     ((member (org-get-todo-state) (list "TODO" "NEXT" "WAITING"))
+      "STARTED"))))
 (setq-default org-clock-in-switch-to-state #'akirak/clock-in-to-next)
 
 (provide 'init-org-todo)
