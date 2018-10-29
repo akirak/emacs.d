@@ -12,7 +12,6 @@
      (shell . t)
      (python . t)
      (sqlite . t)
-     (hledger . t)
      (dot . t)))
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
 
