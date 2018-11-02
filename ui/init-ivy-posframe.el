@@ -7,7 +7,7 @@
   :config
   ;; Custom "poshandler" functions
   ;; Set a fixed height for the child frames
-  (defcustom akirak/ivy-posframe-frame-height 10
+  (defcustom akirak/ivy-posframe-frame-height 15
     "Fixed height of ivy-posframe frames.")
 
   (defun akirak/posframe-poshandler-frame-center-1 (info)
