@@ -13,6 +13,7 @@
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
                    ("*Capture*" :ratio 0.4 :align below)
                    ("*compilation*" :align below :ratio 0.4)
+                   ("*lispy-message*" :align below :ratio 0.4)
                    ;; org-capture to org-journal needs a big window
                    ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
                    ("^CAPTURE-\\(code\\)" :regexp t :other t)
