@@ -30,7 +30,7 @@
 (require 'init-org-capture)
 (require 'init-org-agenda)
 (require 'init-org-super-agenda)
-(require 'init-org-timeline)
+;; (require 'init-org-timeline)
 
 ;;;; Set options
 (require 'init-org-options)
