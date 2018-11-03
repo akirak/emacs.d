@@ -7,6 +7,7 @@
   "s" #'akirak/kill-sentence
   "w" #'akirak/kill-word
   "f" #'akirak/kill-defun
+  "o" #'split-line     ; Originally C-M-o
   ;; M-SPC was originally bound to just-one-space
   "SPC" 'just-one-space)
 

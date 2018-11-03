@@ -87,4 +87,10 @@
 
 (general-def "C-M-g" #'frame-workflow-prefix-map)
 
+(global-unset-key (kbd "C-M-o"))
+(general-create-definer akirak/bind-global-org-map
+  :prefix "C-M-o")
+
+(require 'init-global-org-map)
+
 (provide 'init-meta-keys)

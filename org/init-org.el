@@ -6,6 +6,7 @@
 ;;;; Enhancements to org-mode
 (require 'init-org-enhance)
 (require 'init-org-edna)
+(require 'init-org-recent-headings)
 (with-eval-after-load 'org
   (require 'akirak-org-refile-path))
 (use-package org-reverse-datetree
@@ -22,6 +23,7 @@
 (require 'init-helm-org-rifle)
 (require 'init-org-offtime)
 (require 'init-counsel-org-clock)
+(require 'init-counsel-org-bookmark)
 
 ;;;; Additional exporters
 (require 'init-org-mind-map)

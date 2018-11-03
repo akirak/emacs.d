@@ -19,13 +19,10 @@
 (general-def :prefix "<f2>"
   "D" #'crux-delete-file-and-buffer
   "o" #'crux-open-with
-  "a" #'helm-org-rifle-agenda-files
-  "c" #'akirak/pop-up-org-clocking-task
   "g" #'helm-repom
   "l" #'counsel-locate
   "r" #'counsel-recentf
   "t" #'akirak/shell-open-dedicated
-  "O" #'org-clock-out
   "R" #'crux-rename-file-and-buffer
   "S" #'sudo-find-file)
 
