@@ -26,7 +26,8 @@
                (with-current-buffer (get-buffer bufname)
                  (derived-mode-p 'org-mode)))
              (internal-complete-buffer "" nil t))
-            :caller #'ivy-switch-buffer))
+            :caller #'ivy-switch-buffer
+            :action #'switch-to-buffer))
 
 (defvar org-select-window-last-window nil)
 
