@@ -32,7 +32,8 @@
                    ("*Org Links*" :ratio 0.1 :align below)
                    ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
-                   ("\\*Org Agenda" :regexp t :other t))))
+                   ("\\*Org Agenda" :regexp t :other t)))
+  )
 
 (with-eval-after-load 'org
   (advice-add 'org-switch-to-buffer-other-window
@@ -41,7 +42,8 @@
 ;;;; Window management rules that can't be configured by shackle
 ;;;;; org-mode
 (setq-default org-agenda-window-setup 'other-window
-              org-src-window-setup 'split-window-below)
+              org-src-window-setup 'split-window-below
+              org-indirect-buffer-display 'current-window)
 
 ;;;; Delete compilation window
 
