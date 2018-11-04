@@ -22,9 +22,11 @@
                                  (file-name-nondirectory buffer-file-name))
                                (when (buffer-modified-p) "*")
                                ": "))
-                      (:eval (propertize
-                              (buffer-name)
-                              'face 'italic)))
+                      (:eval (propertize (buffer-name)
+                                         'face
+                                         (if (buffer-base-buffer)
+                                             'bolditalic
+                                           'italic))))
     ;; Display the statuses of the buffer
     (:eval (when (buffer-narrowed-p) "<N>"))
     (read-only-mode "<RO>")
@@ -44,10 +46,13 @@
   "Set the default header line with which-function."
   (unless header-line-format
     (setq header-line-format (akirak/make-header-line-format
-                              `(which-func-mode
-                                (:eval
-                                 (propertize ,(cadr which-func-current)
-                                             'face 'akirak/header-line-outline)))))))
+                              ;; Omit which-func if the buffer is indirect
+                              (unless (buffer-base-buffer)
+                                `(which-func-mode
+                                  (:eval
+
+                                   (propertize ,(cadr which-func-current)
+                                               'face 'akirak/header-line-outline))))))))
 
 ;;;;; Setting the default header line
 
@@ -81,20 +86,22 @@
 (setq-mode-local org-mode
                  header-line-format
                  (akirak/make-header-line-format
-                  '(:eval (unless (org-before-first-heading-p)
-                            (org-format-outline-path
-                             (let* ((orig-rev (nreverse (org-get-outline-path t t)))
-                                    (seg-length (pcase (length orig-rev)
-                                                  ((pred (< 4)) 8)
-                                                  ((pred (< 2)) 12)
-                                                  (_ 20))))
-                               (nreverse
-                                (cons (car orig-rev)
-                                      (mapcar (lambda (s)
-                                                (if (> (length s) seg-length)
-                                                    (substring s 0 seg-length)
-                                                  s))
-                                              (cdr orig-rev))))))))))
+                  '(:eval
+                    (unless (or (buffer-base-buffer)
+                                (org-before-first-heading-p))
+                      (org-format-outline-path
+                       (let* ((orig-rev (nreverse (org-get-outline-path t t)))
+                              (seg-length (pcase (length orig-rev)
+                                            ((pred (< 4)) 8)
+                                            ((pred (< 2)) 12)
+                                            (_ 20))))
+                         (nreverse
+                          (cons (car orig-rev)
+                                (mapcar (lambda (s)
+                                          (if (> (length s) seg-length)
+                                              (substring s 0 seg-length)
+                                            s))
+                                        (cdr orig-rev))))))))))
 
 ;;;;; org-agenda-mode
 (defun akirak/set-org-agenda-header-line ()
