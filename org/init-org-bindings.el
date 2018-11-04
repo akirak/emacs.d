@@ -13,7 +13,11 @@
   "C-4" 'org-starter-refile-by-key
   "C-6" 'akirak/org-export-hydra/body
   "C-8" 'org-insert-hydra/body
-  "C-9" #'org-tree-to-indirect-buffer)
+  "C-9" #'org-tree-to-indirect-buffer
+  [remap org-schedule] #'akirak/org-schedule)
+
+(general-def :keymaps 'org-agenda-mode-map :package 'org-agenda
+  [remap org-agenda-schedule] #'akirak/org-agenda-schedule)
 
 (defconst akirak/org-clock-buffer-name "*org clocking*"
   "Name for the indirect buffer for the clocking task.")
