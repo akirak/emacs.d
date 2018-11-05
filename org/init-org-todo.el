@@ -32,13 +32,15 @@
                 (type
                  "TO_BLOG(l)"
                  "HABIT(h)"
+                 "EXPLORE(x)"
                  ;; Define these tags precisely
                  "TOPIC(o)"
                  "FIX(f)"
                  "IDEA(i)")))
 
 (setq-default org-todo-state-tags-triggers
-              (append '(("ARCHIVED" ("ARCHIVE" . t)))
+              (append '(("ARCHIVED" ("ARCHIVE" . t))
+                        ("EXPLORE" ("@explore" . t)))
                       (mapcar (lambda (kw)
                                 `(,kw (,(concat "@" (downcase kw)) . t)))
                               '("FIX" "TOPIC"))))
