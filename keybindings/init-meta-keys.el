@@ -93,4 +93,8 @@
 
 (require 'init-global-org-map)
 
+(general-def
+  "C-M-=" #'text-scale-increase
+  "C-M--" #'text-scale-decrease)
+
 (provide 'init-meta-keys)
