@@ -27,6 +27,7 @@
 
 ;;;;; Text
 (require 'init-rainbow-delimiters)
+(require 'init-fontify-face)
 
 ;;;;; Columns and spaces
 (require 'init-fci)
