@@ -1,5 +1,5 @@
 ;;;; General appearance
-(require 'init-font)
+(require 'init-typeface)
 
 ;;;;; Modeline
 ;; (require 'init-spaceline-ati)
