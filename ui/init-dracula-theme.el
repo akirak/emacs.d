@@ -3,6 +3,7 @@
   ;; See https://github.com/dracula/emacs/blob/master/dracula-theme.el
   :config
   (let ((key2 "#0189cc")
+        (bg0 "#000000")
         (bg1 "#282a36")
         (bg2 "#373844")
         (bg4 "#565761")
@@ -24,6 +25,8 @@
                                    :inherit 'line-number
                                    :bold t
                                    :foreground ,fg2)))
+     `(hl-line
+       ((default :background ,bg0)))
      `(dired-filter-group-header
        ((default :foreground ,keyword))))))
 
