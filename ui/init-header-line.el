@@ -1,8 +1,37 @@
 (use-package all-the-icons)
 
+(defface akirak/header-line-buffer-name
+  '()
+  "Face for the buffer name segment in a header line.")
+
+(defface akirak/header-line-non-file-buffer-name
+  '((default :inherit 'italic))
+  "Face for non-file buffer names.")
+
+(defface akirak/header-line-indirect-buffer-name
+  '((default :inherit 'bolditalic))
+  "Face for the buffer names of indirect buffers.")
+
 (defface akirak/header-line-outline
-  '((default :inherit font-lock-function-name-face :height 1.3))
+  '((default :inherit font-lock-function-name-face))
   "Face for the function name or header in the header line.")
+
+(defun akirak/header-line-buffer-segment ()
+  "Generate the buffer segment in the header line."
+  (propertize
+   (if buffer-file-name
+       ;; If the file is inside a project, show the
+       ;; relative file path from the root.
+       (concat (if-let ((root (projectile-project-root)))
+                   (file-relative-name buffer-file-name root)
+                 (file-name-nondirectory buffer-file-name))
+               (when (buffer-modified-p) "*"))
+     (propertize (buffer-name)
+                 'face
+                 (if (buffer-base-buffer)
+                     'akirak/header-line-indirect-buffer-name
+                   'akirak/header-line-non-file-buffer-name)))
+   'face 'akirak/header-line-buffer-name))
 
 (defun akirak/make-header-line-format (&rest body)
   "Build a header line format with the standard set of segments."
@@ -14,19 +43,8 @@
     " "
     ;; If it is a file-visiting buffer, show the file name.
     ;; Otherwise, show the buffer name.
-    (buffer-file-name (:eval
-                       ;; If the file is inside a project, show the
-                       ;; relative file path from the root.
-                       (concat (if-let ((root (projectile-project-root)))
-                                   (file-relative-name buffer-file-name root)
-                                 (file-name-nondirectory buffer-file-name))
-                               (when (buffer-modified-p) "*")
-                               ": "))
-                      (:eval (propertize (buffer-name)
-                                         'face
-                                         (if (buffer-base-buffer)
-                                             'bolditalic
-                                           'italic))))
+    (:eval (akirak/header-line-buffer-segment))
+    ": "
     ;; Display the statuses of the buffer
     (:eval (when (buffer-narrowed-p) "<N>"))
     (read-only-mode "<RO>")
@@ -50,7 +68,6 @@
                               (unless (buffer-base-buffer)
                                 `(which-func-mode
                                   (:eval
-
                                    (propertize ,(cadr which-func-current)
                                                'face 'akirak/header-line-outline))))))))
 

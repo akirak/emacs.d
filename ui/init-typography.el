@@ -1,5 +1,9 @@
 ;;; init-typography.el --- Typography configuration
 
+
+
+;;;; Options
+
 (setq-default org-fontify-quote-and-verse-blocks t)
 
 ;;;; Setting the typeface for writing
@@ -79,12 +83,15 @@
   (set-face-attribute 'variable-pitch nil
                       :family proportional)
 
-  ;; TODO: Choose a better font
+  ;; Header lines
   ;; Titillium may be a sensible choice
   (set-face-attribute 'header-line nil
                       :family writing-italic
-                      :height 1.3
                       :inherit 'italic)
+  (set-face-attribute 'akirak/header-line-buffer-name nil
+                      :height 1.3)
+  (set-face-attribute 'akirak/header-line-outline nil
+                      :height 1.3)
 
   ;; Headings
   ;; This face is inherited by all the other info title faces
