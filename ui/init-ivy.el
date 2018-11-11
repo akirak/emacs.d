@@ -90,5 +90,6 @@
   (ivy-filthy-rich-max-length 120))
 
 (require 'init-ivy-posframe)
+(require 'init-ivy-frame-actions)
 
 (provide 'init-ivy)
