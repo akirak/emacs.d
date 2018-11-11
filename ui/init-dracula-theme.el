@@ -9,7 +9,8 @@
         (fg2 "#e2e2dc")
         (fg4 "#b6b6b2")
         (const "#8be9fd")
-        (type "#bd93f9"))
+        (type "#bd93f9")
+        (keyword "#ff79c6"))
     (custom-theme-set-faces
      'dracula
      `(header-line ((default
@@ -22,6 +23,8 @@
      `(line-number-current-line ((default
                                    :inherit 'line-number
                                    :bold t
-                                   :foreground ,fg2))))))
+                                   :foreground ,fg2)))
+     `(dired-filter-group-header
+       ((default :foreground ,keyword))))))
 
 (provide 'init-dracula-theme)

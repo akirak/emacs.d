@@ -107,6 +107,8 @@
     ;; This face is inherited by all the other info title faces
     (set-face-attribute 'info-title-4 nil :family .heading :slant 'italic)
     (set-face-attribute 'helpful-heading nil :family .heading :height 1.2)
+    (set-face-attribute 'dired-filter-group-header nil
+                        :family .heading :height 1.2 :inherit 'default)
 
     ;; Org headings
     (dolist (level (number-sequence 1 8))
