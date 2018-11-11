@@ -16,7 +16,7 @@
 
 ;;;; Visual cues
 
-;;;;; Focus
+;;;;; Highlighting focus
 ;; Use hl-line-mode
 (add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
 (add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
