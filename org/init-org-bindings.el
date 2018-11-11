@@ -1,4 +1,6 @@
 (general-def :keymaps 'org-mode-map :package 'org
+  "C-a" #'move-beginning-of-line
+  "C-e" #'move-end-of-line
   ;; I don't use any of these bindings and want to use them for other purposes
   "C-c [" nil
   "C-c ]" nil
