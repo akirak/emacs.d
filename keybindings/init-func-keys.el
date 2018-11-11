@@ -35,4 +35,8 @@
 ;;       ("TAB" . origami-recursively-toggle-node)
 ;;       ("<backtab>" . origami-close-all-nodes))))
 
+(general-def :prefix "<f1>"
+  "x c" #'describe-char
+  "x f" #'counsel-describe-face)
+
 (provide 'init-func-keys)
