@@ -58,12 +58,6 @@
 (setq bookmark-default-file "~/.emacs-bookmarks")
 
 ;;;; Truncating lines and visual-lines-mode
-;; Call this function in each major modes
-(defun turn-on-visual-line-mode ()
-  (interactive)
-  (visual-line-mode 1))
-(add-hook 'markdown-mode-hook #'turn-on-visual-line-mode)
-
 (add-hook 'text-mode-hook (lambda () (setq-local truncate-lines nil)))
 
 ;;;; Scrolling
