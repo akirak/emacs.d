@@ -99,7 +99,8 @@
                         :family .writing-italic
                         :inherit 'italic)
     (set-face-attribute 'akirak/header-line-buffer-name nil
-                        :height 1.3)
+                        :height 1.3
+                        :slant 'italic)
     (set-face-attribute 'akirak/header-line-outline nil
                         :height 1.3)
 
