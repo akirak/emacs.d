@@ -26,7 +26,7 @@
 (require 'init-dimmer)
 ;; (require 'init-origami)
 
-;;;;; Text
+;;;;; Text decoration
 (require 'init-rainbow-delimiters)
 (require 'init-fontify-face)
 
