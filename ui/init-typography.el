@@ -1,7 +1,5 @@
 ;;; init-typography.el --- Typography configuration
 
-
-
 ;;;; Options
 
 (setq-default org-fontify-quote-and-verse-blocks t)
