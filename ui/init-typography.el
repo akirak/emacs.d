@@ -117,11 +117,12 @@
   ;; (set-face-attribute 'org-verbatim nil :family default)
   (set-face-attribute 'org-quote nil :family writing-italic :inherit 'italic)
   (set-face-attribute 'org-tag nil
-                      :family default
-                      ;; :foreground nil
-                      ;; :background nil
-                      :height 0.8
-                      :inherit 'highlight)
+                      :family writing-italic
+                      :foreground "grey"
+                      :background nil
+                      :underline t
+                      :height (floor (* 10 default-font-size 1.1))
+                      :inherit 'italic)
   ;; (set-face-attribute 'org-priority nil :family "ETBookOT" :slant 'normal)
   ;; (set-face-attribute 'org-checkbox-statistics-todo nil :family "ETBookOT" :slant 'italic :height 1.3)
   ;; (set-face-attribute 'org-todo nil :family "Overpass")
