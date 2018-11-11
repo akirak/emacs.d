@@ -28,7 +28,9 @@
 
 ;;;; Startup window
 ;; Switch to *Messages* at startup
-(add-hook 'emacs-startup-hook
-          (lambda () (switch-to-buffer "*Messages*")))
+(defun akirak/setup-startup-windows ()
+  (switch-to-buffer "*Messages*"))
+
+(add-hook 'emacs-startup-hook 'akirak/setup-startup-windows)
 
 (provide 'init-startup)
