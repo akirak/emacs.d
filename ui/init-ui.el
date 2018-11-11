@@ -1,7 +1,5 @@
 ;;;; General appearance
-(require 'init-typography)
-
-;;;;; Modeline
+;;;;; Frame elements
 ;; (require 'init-spaceline-ati)
 ;; (require 'init-doom-modeline)
 (require 'init-feebleline)
@@ -10,8 +8,11 @@
 (require 'init-header-line)
 (require 'init-frame-title)
 
-;;;;; Prefered themes
+;;;;; Prefered theme
 (require 'init-dracula-theme)
+
+;;;;; Typography
+(require 'init-typography)
 
 ;;;; Visual cues
 
