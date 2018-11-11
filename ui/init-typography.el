@@ -6,6 +6,10 @@
 
 (setq-default org-fontify-quote-and-verse-blocks t)
 
+;;;; Variables
+
+(defvar akirak/heading-font)
+
 ;;;; Setting the typeface for writing
 
 (defvar akirak/writing-font)
@@ -107,11 +111,15 @@
     ;; Headings
     ;; This face is inherited by all the other info title faces
     (set-face-attribute 'info-title-4 nil :family .heading :slant 'italic)
+    (setq akirak/heading-font .heading)
     (with-eval-after-load 'helpful
-      (set-face-attribute 'helpful-heading nil :family .heading :height 1.2))
+      (set-face-attribute 'helpful-heading nil :family akirak/heading-font :height 1.2))
     (with-eval-after-load 'dired-filter
       (set-face-attribute 'dired-filter-group-header nil
-                          :family .heading :height 1.2 :inherit 'default))
+                          :family akirak/heading-font :height 1.2 :inherit 'default))
+    (with-eval-after-load 'info
+      (set-face-attribute 'info-menu-header nil
+                          :family akirak/heading-font :height 1.2 :inherit 'default))
 
     ;; Org headings
     (dolist (level (number-sequence 1 8))
