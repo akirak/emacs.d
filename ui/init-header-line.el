@@ -100,25 +100,44 @@
 ;;;; Header line formats for specific modes
 ;;;;; org-mode
 ;; Set the header line format for org-mode with the outline path.
+(defvar akirak/header-line-org-outline-path-root-level nil)
+(make-variable-buffer-local 'akirak/header-line-org-outline-path-root-level)
+
+(defun akirak/header-line-org-outline-path ()
+  (let ((indirect-p (buffer-base-buffer))
+        (indirect-level akirak/header-line-org-outline-path-root-level)
+        (path (unless (org-before-first-heading-p)
+                (org-get-outline-path t t))))
+    ;; If the buffer is an indirect buffer, store the level of the root
+    (when (and indirect-p (not indirect-level))
+      (setq indirect-level (save-excursion
+                             (goto-char (point-min))
+                             (length path))
+            akirak/header-line-org-outline-path-root-level indirect-level))
+    ;; If the buffer is an indirect buffer, trim the root path
+    (when indirect-p
+      (setq path (seq-drop path indirect-level)))
+    ;; Continue if and only if the path is not null
+    (when path
+      (org-format-outline-path
+       (let* ((orig-rev (nreverse path))
+              (seg-length (pcase (length orig-rev)
+                            ((pred (< 4)) 8)
+                            ((pred (< 2)) 12)
+                            (_ 20))))
+         (nreverse
+          (cons (car orig-rev)
+                (mapcar (lambda (s)
+                          (if (> (length s) seg-length)
+                              (substring s 0 seg-length)
+                            s))
+                        (cdr orig-rev)))))))))
+
 (setq-mode-local org-mode
                  header-line-format
                  (akirak/make-header-line-format
                   '(:eval
-                    (unless (or (buffer-base-buffer)
-                                (org-before-first-heading-p))
-                      (org-format-outline-path
-                       (let* ((orig-rev (nreverse (org-get-outline-path t t)))
-                              (seg-length (pcase (length orig-rev)
-                                            ((pred (< 4)) 8)
-                                            ((pred (< 2)) 12)
-                                            (_ 20))))
-                         (nreverse
-                          (cons (car orig-rev)
-                                (mapcar (lambda (s)
-                                          (if (> (length s) seg-length)
-                                              (substring s 0 seg-length)
-                                            s))
-                                        (cdr orig-rev))))))))))
+                    (akirak/header-line-org-outline-path))))
 
 ;;;;; org-agenda-mode
 (defun akirak/set-org-agenda-header-line ()
