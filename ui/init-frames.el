@@ -27,11 +27,8 @@
   :layout
   '(progn
      (delete-other-windows)
-     (find-file (expand-file-name "emacs.org" user-emacs-directory))
-     (when (fboundp 'ibuffer-sidebar-show-sidebar)
-       (ibuffer-sidebar-show-sidebar))
-     (split-window-sensibly)
-     (frame-workflow-magit-same-window))
+     (let ((default-directory user-emacs-directory))
+       (frame-workflow-magit-same-window)))
   :make-frame
   '(frame-purpose-make-directory-frame user-emacs-directory))
 
