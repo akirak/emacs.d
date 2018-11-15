@@ -40,6 +40,6 @@
 ;; For now, it is the same as that of help commands.
 ;; To prevent conflicts, use upper-case tail keys for these commands.
 (general-create-definer akirak/bind-mode-key
-  :prefix "<menu>")
+  :prefix "C-c d")
 
 (provide 'init-general)

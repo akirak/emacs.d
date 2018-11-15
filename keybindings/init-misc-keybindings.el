@@ -9,4 +9,6 @@
                 (shell-command "setxkbmap -option ctrl:nocaps"))
               :wk "setxkbmap"))
 
+(general-def "C-z" #'purgatory)
+
 (provide 'init-misc-keybindings)

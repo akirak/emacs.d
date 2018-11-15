@@ -230,8 +230,7 @@
   "z h" #'dired-hide-dotfiles-mode
   "<S-return>" #'dired-open-xdg)
 
-(general-def :keymaps 'dired-mode-map
-  :prefix "C-z"
+(akirak/bind-mode-key dired-mode-map
   "r" #'dired-rsync)
 
 (define-key dired-mode-map (kbd "/") dired-filter-map)

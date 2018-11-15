@@ -2,6 +2,7 @@
   "C-c a" 'aya-create
   "C-c b" 'helm-bm
   "C-c c" #'org-capture
+  ;; For C-c d, see akirak/bind-mode-key
   "C-c e" 'aya-expand
   "C-c h" #'helm-corefighter
   "C-c i" 'scratch
@@ -13,6 +14,8 @@
   "C-c p" 'yankpad-insert
   "C-c r" #'rename-buffer
   "C-c s" 'symbol-overlay-put
+  "C-c u" #'winner-undo-repeat
+  "C-c U" #'winner-redo-repeat
   "C-c y" 'ivy-yasnippet
   "C-c [" (defrepeater #'akirak/previous-frame)
   "C-c ]" (defrepeater #'other-frame))
