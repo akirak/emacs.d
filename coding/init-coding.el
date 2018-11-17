@@ -30,6 +30,7 @@
 (require 'init-aggressive-indent)
 (require 'init-corral)
 (require 'init-fix-word)
+(require 'init-easy-kill)
 (require 'init-expand-region)
 (require 'init-flycheck)
 
