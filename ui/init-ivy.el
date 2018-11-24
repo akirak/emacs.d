@@ -81,7 +81,8 @@
                                'ivy-rich-switch-buffer-transformer))
 
 (use-package ivy-filthy-rich
-  :straight (ivy-filthy-rich :host github :repo "casouri/ivy-filthy-rich")
+  :straight (ivy-filthy-rich :host github :repo "akirak/ivy-filthy-rich"
+                             :branch fix-max-length)
   :diminish 'ivy-filthy-rich-mode
   :after ivy
   :config
