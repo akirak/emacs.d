@@ -53,6 +53,6 @@
 ;;;; Extra information displays
 (require 'init-imenu-list)
 (require 'init-sidebar)
-(require 'init-corefighter)
+;; (require 'init-corefighter)
 
 (provide 'init-ui)
