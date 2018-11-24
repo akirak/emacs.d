@@ -92,6 +92,7 @@
 (require 'init-shell-scripts)
 (require 'init-yaml)
 (require 'init-beancount)
+(require 'init-nix)
 
 ;;; Natural languages (international/)
 (require 'init-japanese)
