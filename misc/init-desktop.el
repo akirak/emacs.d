@@ -1,3 +1,5 @@
+;; This module is deprecated. Use purgatory (init-purgatory.el).
+
 (defun akirak/maybe-save-desktop-and-kill-emacs (arg)
   "Kill the desktop.
 

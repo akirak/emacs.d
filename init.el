@@ -53,7 +53,7 @@
 (require 'init-savehist)
 (require 'init-commands)
 (require 'init-startup)                 ; Optional
-(require 'init-desktop)
+;; (require 'init-desktop)
 (require 'init-midnight)
 (require 'init-locate)
 (require 'init-gpastel)
