@@ -6,6 +6,7 @@
                                 "(provide '"
                                 (file-name-base (buffer-file-name))
                                 ")"))
+                          (("/\\.dir-locals\\.el\\'" . "directory local variables") . nil)
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
 
