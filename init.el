@@ -60,7 +60,7 @@
 ;; (require 'init-autosave)
 (require 'init-super-save)
 (require 'init-browse-url)
-(require 'init-repom)
+;; (require 'init-repom)
 (require 'init-chrome)
 (require 'init-git-auto-commit)
 (require 'init-purgatory)
