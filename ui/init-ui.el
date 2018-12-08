@@ -12,7 +12,10 @@
 (require 'init-dracula-theme)
 
 ;;;;; Typography
-(require 'init-typography)
+;; Activate the primary typography if and only if a window system is
+;; available
+(when (window-system)
+  (require 'init-typography))
 
 ;;;; Visual cues
 
