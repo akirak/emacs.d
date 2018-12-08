@@ -2,8 +2,8 @@
   "The currency primarily used in the country I am living in.")
 
 (use-package beancount
-  :straight (beancount :host github
-                       :repo "beancount/beancount"
+  :straight (beancount :host bitbucket
+                       :repo "blais/beancount"
                        :files ("editors/emacs/*.el"))
   :mode ("\\.bean\\'" . beancount-mode)
   :custom
