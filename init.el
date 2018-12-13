@@ -83,6 +83,7 @@
 (require 'init-graphviz)
 (require 'init-python)
 (require 'init-nim)
+(require 'init-elixir)
 (require 'init-lispy)
 (require 'init-markdown)
 (require 'init-haskell)
