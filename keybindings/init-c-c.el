@@ -14,6 +14,7 @@
   "C-c p" 'yankpad-insert
   "C-c r" #'rename-buffer
   "C-c s" 'symbol-overlay-put
+  "C-c t" #'akirak/shell-toggle-dedicated
   "C-c u" #'winner-undo-repeat
   "C-c U" #'winner-redo-repeat
   "C-c y" 'ivy-yasnippet

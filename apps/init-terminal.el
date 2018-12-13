@@ -8,6 +8,7 @@
                   :next aweshell-next
                   :prev aweshell-prev)
         (multi-term :open-dedicated multi-term-dedicated-open
+                    :toggle-dedicated multi-term-dedicated-toggle
                     :new multi-term
                     :next multi-term-next
                     :prev multi-term-prev)))
