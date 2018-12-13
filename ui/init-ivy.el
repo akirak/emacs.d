@@ -51,7 +51,7 @@
             "SPC" #'ivy-occur-press)
   :custom
   (enable-recursive-minibuffers t)
-  (ivy-height 20)
+  (ivy-height 10)
   (ivy-initial-inputs-alist nil "Don't prepend `^' to any of the ivy prompts")
   (projectile-completion-system 'ivy)
   (ivy-ignore-buffers (quote ("\\` " "\\\\*lemonbar\\\\*" "\\\\*i3status\\\\*"))))
@@ -90,7 +90,7 @@
   :custom
   (ivy-filthy-rich-max-length 120))
 
-(require 'init-ivy-posframe)
+;; (require 'init-ivy-posframe)
 (require 'init-ivy-frame-actions)
 
 (provide 'init-ivy)
