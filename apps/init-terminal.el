@@ -12,7 +12,7 @@
                     :next multi-term-next
                     :prev multi-term-prev)))
 
-(defcustom akirak/default-shell 'aweshell
+(defcustom akirak/default-shell 'multi-term
   "The defaut shell for use."
   :set
   (lambda (key value)
@@ -24,8 +24,7 @@
                                               (string-remove-prefix ":" (symbol-name key))))))
                     (fset name value))))))
 
-;; Use aweshell as the default terminal
-(require 'init-aweshell)
+(require 'init-multi-term)
 
 ;; Map commands
 
