@@ -39,7 +39,7 @@
                                             (string key))
                                           value))))
           ":END:\n"
-          (if body (concat body "\n") "")
+          body
           "\n\n"))
 
 (defconst akirak/org-protocol-note-template
