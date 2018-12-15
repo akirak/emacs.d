@@ -1,6 +1,5 @@
 (use-package clipmon
   :hook
-  (after-init . clipmon-mode-start)
-  (after-init . clipmon-persist))
+  (after-init . clipmon-mode-start))
 
 (provide 'init-clipmon)
