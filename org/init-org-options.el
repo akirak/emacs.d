@@ -1,9 +1,6 @@
 (require 'org-habit)
 (add-hook 'org-modules 'org-protocol)
 
-(require 'init-org-tags)
-(require 'init-org-todo)
-
 (setq-default org-clock-history-length 20
               org-clock-mode-line-total (quote today)
               org-clock-out-remove-zero-time-clocks t
