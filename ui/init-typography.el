@@ -55,7 +55,7 @@
   (let ((all-fonts (font-family-list)))
     (cl-loop for (key family) in list
              do (unless (member family all-fonts)
-                  (message "Preferred font '%s' for %s is unavailable"
+                  (message "The preferred font '%s' for %s is unavailable"
                            family (symbol-name key)))
              collect (cons key family))))
 
