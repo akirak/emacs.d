@@ -16,9 +16,11 @@
   :custom
   (outshine-use-speed-commands t))
 
-(use-package navi-mode)
+(use-package navi-mode
+  :disabled t)
 
 ;; Jumping based on outlines (better than imenu)
-(use-package helm-navi :after navi-mode)
+(use-package helm-navi :after navi-mode
+  :disabled t)
 
 (provide 'init-outshine)
