@@ -4,4 +4,10 @@
 ;; on non-EXWM buffers.
 (define-key key-translation-map (kbd "<C-tab>") (kbd "<menu>"))
 
+;; Chromebook don't have physical function keys. They substitute
+;; Search + num for function keys, but Search + 1 is hard to press,
+;; especially when Search and Ctrl are swapped.
+;; This is quite annoying, so I will use M-` as <f1>.
+(define-key key-translation-map (kbd "M-`") (kbd "<f1>"))
+
 (provide 'init-key-translation)
