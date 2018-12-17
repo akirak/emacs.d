@@ -4,9 +4,7 @@
 (use-package my-org
   :straight (my-org :host github :repo "akirak/my-org")
   :init
-  (require 'my-org)
-  :general
-  ("<menu> <menu>" #'akirak/helm-org-rifle-knowledge-base))
+  (require 'my-org))
 
 (dolist (file (directory-files (expand-file-name "local" user-emacs-directory)
                                t "^my-.+\\.el"))
