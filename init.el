@@ -64,6 +64,7 @@
 ;; (require 'init-repom)
 (require 'init-chrome)
 (require 'init-git-auto-commit)
+(require 'init-forge)
 (require 'init-purgatory)
 
 ;;; Apps (apps/, x/)
