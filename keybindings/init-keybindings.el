@@ -1,5 +1,5 @@
-(require 'init-key-translation)
 (require 'init-general)
+(require 'init-key-translation)
 (require 'init-shell-bindings)
 (require 'init-c-x)
 (require 'init-c-c)
