@@ -24,6 +24,7 @@
 (require 'init-org-offtime)
 (require 'init-counsel-org-clock)
 (require 'init-counsel-org-bookmark)
+(require 'init-calfw-org)
 
 ;;;; Additional exporters
 (require 'init-org-mind-map)
