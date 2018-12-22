@@ -1,4 +1,5 @@
 (use-package org-recent-headings
+  :disabled t
   :config
   (org-recent-headings-mode 1)
   :custom
