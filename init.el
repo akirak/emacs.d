@@ -40,6 +40,11 @@
 (use-package ov
   :straight (ov :host github :repo "ShingoFukuyama/ov.el"))
 
+;;; New configuration
+;; Upgrade org-mode to the Git version first
+(require 'init-org-base)
+(org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
+
 ;;; Basic configuration
 (require 'init-defaults)
 (require 'init-keybindings)
