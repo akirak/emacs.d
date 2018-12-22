@@ -3,7 +3,7 @@
 (use-package bm
   :commands (bm-toggle bm-next bm-previous))
 
-(use-package helm-bm
+(use-package helm-bm :after helm
   :commands (helm-bm))
 
 ;; Not using for now

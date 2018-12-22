@@ -20,7 +20,7 @@
   :disabled t)
 
 ;; Jumping based on outlines (better than imenu)
-(use-package helm-navi :after navi-mode
+(use-package helm-navi :after (helm navi-mode)
   :disabled t)
 
 (provide 'init-outshine)

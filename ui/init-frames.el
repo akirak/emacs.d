@@ -16,8 +16,7 @@
   :config
   (frame-workflow-mode 1))
 
-(use-package helm-frame-workflow
-  :after (frame-workflow helm)
+(use-package helm-frame-workflow :after (frame-workflow helm)
   :straight frame-workflow
   :commands (helm-frame-workflow))
 

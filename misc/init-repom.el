@@ -32,7 +32,7 @@
 
 (use-package ghub)
 
-(use-package helm-repom
+(use-package helm-repom :after helm
   :straight (helm-repom :host github :repo "akirak/repom.el"
                         :files ("helm-repom.el"))
   :commands (helm-repom))

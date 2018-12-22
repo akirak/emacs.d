@@ -1,7 +1,6 @@
 (require 'init-helm)
 
-(use-package helm-descbinds
-  :after helm
+(use-package helm-descbinds :after helm
   :commands (helm-descbinds)
   :bind
   ([remap describe-bindings] . helm-descbinds)
