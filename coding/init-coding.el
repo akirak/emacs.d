@@ -33,6 +33,7 @@
 (require 'init-easy-kill)
 (require 'init-expand-region)
 (require 'init-flycheck)
+(require 'init-embrace)
 
 ;;;;; Visual
 ;; (require 'init-undo-tree)

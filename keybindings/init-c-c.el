@@ -1,3 +1,8 @@
+(general-def :prefix "C-."
+  "a" #'embrace-add
+  "c" #'embrace-change
+  "d" #'embrace-delete)
+
 (general-def
   "C-c a" 'aya-create
   "C-c b" 'helm-bm
