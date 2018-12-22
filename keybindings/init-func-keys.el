@@ -2,29 +2,12 @@
 (require 'init-ui-map)
 
 (general-def
-  "<M-f1>" 'woman
-  "<S-f2>" 'org-starter-find-file-by-key
   "<f5>" 'revert-buffer
   "<f6>" 'akirak/shell-new
-  "<S-f6>" 'akirak/shell-next
   "<f7>" #'akirak/magit-status-prefer-existing
   "<f8>" 'akirak/ui-map
   "<f9>" 'recompile
-  "<S-f9>" 'helm-make
-  "<M-f10>" 'menu-bar-mode
-  "<f12>" 'akirak/app-map
-  "<S-f12>" #'corefighter-next-item)
-
-;; Most of these commands are from crux and fwb-cmds.el
-(general-def :prefix "<f2>"
-  "D" #'crux-delete-file-and-buffer
-  "o" #'crux-open-with
-  "g" #'helm-repom
-  "l" #'counsel-locate
-  "r" #'counsel-recentf
-  "t" #'akirak/shell-open-dedicated
-  "R" #'crux-rename-file-and-buffer
-  "S" #'sudo-find-file)
+  "<f12>" 'akirak/app-map)
 
 ;; (with-eval-after-load 'origami
 ;;   (smartrep-define-key
