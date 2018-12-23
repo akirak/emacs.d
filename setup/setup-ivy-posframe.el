@@ -58,4 +58,4 @@
   ;; Ensure hiding the posframe frame when existing ivy
   (add-hook 'minibuffer-exit-hook #'ivy-posframe-cleanup))
 
-(provide 'init-ivy-posframe)
+(provide 'setup-ivy-posframe)

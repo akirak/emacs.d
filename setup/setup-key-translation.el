@@ -11,4 +11,4 @@
   ;; This is quite annoying, so I will use M-` as <f1>.
   "M-`" (kbd "<f1>"))
 
-(provide 'init-key-translation)
+(provide 'setup-key-translation)

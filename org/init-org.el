@@ -1,5 +1,4 @@
 ;;;; Basic configuration
-(require 'init-org-base)
 (require 'init-org-babel)
 (require 'init-org-starter)
 

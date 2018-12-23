@@ -1,5 +1,3 @@
-;;; init-ivy-frame-actions.el --- Ivy actions creating a new frame
-
 ;;;; Action functions
 
 ;; TODO: Integrate these functions with frame-workflow
@@ -34,4 +32,4 @@
                    '(("f" akirak/find-file-some-frame "frame")
                      ("F" akirak/find-file-some-frame "frame"))))
 
-(provide 'init-ivy-frame-actions)
+(provide 'setup-ivy-frame-actions)

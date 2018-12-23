@@ -11,4 +11,4 @@
                    (cons (car kb)
                          (string-remove-prefix "akirak/" (cdr kb)))))))
 
-(provide 'init-which-key)
+(provide 'setup-which-key)

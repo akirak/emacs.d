@@ -1,1 +1,172 @@
-#+title: My Emacs Configuration
+* My Emacs Configuration
+** Support older versions of Emacs
+=when-let= and =if-let= are available in Emacs 25.1, but they have been renamed to =when-let*= and =if-let*= in 26.1, which are correct names to describe their behaviours.
+
+#+begin_src emacs-lisp
+  (eval-and-compile
+    (when (version< emacs-version "26")
+      (with-no-warnings
+        (defalias 'when-let* #'when-let)
+        (function-put #'when-let* 'lisp-indent-function 1)
+        (defalias 'if-let* #'if-let)
+        (function-put #'if-let* 'lisp-indent-function 2))))
+#+end_src
+
+** Before using =use-package=
+These packages are required in other use-package directives declared in this
+configuration.
+
+Save efforts to configure individual variable files using no-littering
+
+#+begin_src emacs-lisp
+(use-package no-littering
+  :init
+  (setq no-littering-var-directory
+        (expand-file-name ".cache" user-emacs-directory)))
+#+end_src
+
+Use the executable path from the shell
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :if (memq window-system '(mac ns x))
+  :init
+  (exec-path-from-shell-initialize))
+#+end_src
+
+Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
+
+#+begin_src emacs-lisp
+  (use-package diminish
+    :init
+    (diminish 'auto-revert-mode)
+    (diminish 'outline-minor-mode)
+    (diminish 'flyspell-mode))
+#+end_src
+
+Deprecated: Allow installation of system packages via use-package
+
+#+begin_src emacs-lisp
+  (use-package system-packages)
+
+  (use-package use-package-ensure-system-package)
+#+end_src
+
+Define a custom function for defining frame subjects.
+
+#+begin_src emacs-lisp
+  (defmacro akirak/define-frame-workflow (name &rest args)
+    (declare (indent 1))
+    `(with-eval-after-load 'frame-workflow
+       (frame-workflow-define-subject ,name ,@args)))
+#+end_src
+** Overriding defaults
+These settings don't depend on external dependencies, so they should be applied earlier.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-defaults t)
+#+end_src
+
+** Keybindings infrastructure
+
+Use general.el to define keybindings. It has made several improvements over
+bind-key, including a built-in support for which-key.
+
+#+begin_src emacs-lisp
+  (use-package general)
+#+end_src
+
+This also adds support for =:general= keyword in use-package directives
+
+Allow use of =:wk= keyword in general.el keybinding definitions
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-which-key t)
+#+end_src
+
+*** Repeatable keys
+
+Hopefully, defrepeater is soon going to be integrated with general
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-defrepeater t)
+#+end_src
+
+*** Custom definers
+**** Definer for mode-specific help commands
+Define a prefix for help commands.
+#+begin_src emacs-lisp
+(general-create-definer akirak/bind-help-key
+  :prefix "<menu>")
+
+(global-unset-key (kbd "<menu>"))
+
+(akirak/bind-help-key
+  "?" #'akirak/helm-search)
+#+end_src
+***** TODO Use ~M-s~
+**** TODO Mode-specific dispatch map
+Define a prefix for commands specific to a major mode.
+For now, it is the same as that of help commands.
+To prevent conflicts, use upper-case tail keys for these commands.
+
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-mode-key
+    :prefix "C-c d")
+#+end_src
+
+**** TODO Contextual keys
+#+begin_src emacs-lisp
+  (defmacro akirak/define-contextual-key (key &rest general-defs)
+    (declare (indent 1))
+    (macroexp-progn
+     (cl-loop for (def . context) in general-defs
+              collect (cons 'general-define-key
+                            (append context
+                                    (list key def))))))
+#+end_src
+
+** Dependencies for other packages
+These packages may be required by other packages loaded later on.
+*** Ivy
+#+begin_src emacs-lisp
+  (akirak/require 'setup-ivy t)
+#+end_src
+*** TODO Helm
+*** Hydra
+#+begin_src emacs-lisp
+(use-package hydra)
+#+end_src
+*** ov (overlays)
+#+begin_src emacs-lisp
+(use-package ov
+  :straight (ov :host github :repo "ShingoFukuyama/ov.el"))
+#+end_src
+** A bunch of useful features
+#+begin_src emacs-lisp
+  (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
+                     setup-key-translation ; Translate certain key combinations for ergonomics
+                     setup-counsel         ; Basic Counsel commands
+                     setup-swiper          ; Incremental search through the buffer using Ivy
+                     setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
+                     setup-ivy-frame-actions ; Add frame-creation actions to Ivy
+                     ))
+    (akirak/require feature))
+#+end_src
+
+The following packages are enhancements to Emacs that don't require much configuration:
+
+#+begin_src emacs-lisp
+  (use-package smex) ; Install smex for sorting M-x candidates
+#+end_src
+** Programming languages and applications
+** Meta
+*** TODO Import from the previous configuration
+#+begin_src emacs-lisp
+  (let ((old-init-file (expand-file-name "old-init.el" user-emacs-directory)))
+    (load-file old-init-file)
+    (run-with-timer 3 nil
+                    `(lambda ()
+                       (message "The previous configuration files (%s) still exist. I have to migrate them soon."
+                                (abbreviate-file-name ,old-init-file)))))
+#+end_src
