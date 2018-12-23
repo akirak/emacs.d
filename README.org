@@ -1,12 +1,4 @@
 * emacs.d
-  :PROPERTIES:
-  :CUSTOM_ID: emacs.d
-  :END:
-
-[[https://travis-ci.org/akirak/emacs.d][https://travis-ci.org/akirak/emacs.d.svg]]
-
-This is my working Emacs configuration.
-
 ** Prerequisites
    :PROPERTIES:
    :CUSTOM_ID: prerequisites
@@ -34,6 +26,10 @@ Dependencies and extra configuration files, which are configured in my [[https:/
 After starting Emacs with the configuration, you have to run
 =all-the-icons-install-fonts=.
 
+** Credit
+This configuration is inspired by the following configuration repositories:
+
+- [[https://github.com/kaushalmodi/.emacs.d][.emacs.d by Kaushal Modi]]
 ** License
    :PROPERTIES:
    :CUSTOM_ID: license
