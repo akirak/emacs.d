@@ -1,15 +1,13 @@
-# Deprecated: Use Nix and home-manager instead. See README for details
+.PHONY: update emacsql-sqlite
 
-xinitrc := $(shell readlink -f exwm/xinitrc.sh)
-ANSIBLE := ansible-playbook -c local -i localhost, playbook.yml
+update:
+	git pull
+	git submodule update --init --recursive
+	emacs -Q --batch --load init.el
 
-.PRUNE: normal deps exwm
+emacsql-sqlite: straight/repos/emacsql/emacsql-sqlite.elc
 
-normal:
-	$(ANSIBLE)
-
-deps:
-	$(ANSIBLE) -t deps
-
-exwm: no-exwm
-	ln -svf $(xinitrc) $(HOME)/.xinitrc
+straight/repos/emacsql/emacsql-sqlite.elc:
+	cd .emacs.d/straight/repos/emacsql
+	make sqlite/emacsql-sqlite
+	make emacsql-sqlite.elc

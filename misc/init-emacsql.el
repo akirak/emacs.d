@@ -1,4 +1,5 @@
 (use-package emacsql-sqlite
+  :disabled t
   :init
   (let ((default-directory "~/.emacs.d/straight/repos/emacsql"))
     (if (file-exists-p "emacsql-sqlite.elc")
