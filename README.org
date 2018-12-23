@@ -38,5 +38,5 @@ After starting Emacs with the configuration, you have to run
    :PROPERTIES:
    :CUSTOM_ID: license
    :END:
+MIT License
 
-GPL v3
