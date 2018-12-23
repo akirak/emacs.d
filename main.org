@@ -1,4 +1,6 @@
 * My Emacs Configuration
+This is not a true literate configuration. Packages that demand complex configuration are configured in separate files. I am rewriting this configuration 
+for a better understanding of my previous work and organizing it in a more sensible way.
 ** Support older versions of Emacs
 =when-let= and =if-let= are available in Emacs 25.1, but they have been renamed to =when-let*= and =if-let*= in 26.1, which are correct names to describe their behaviours.
 
