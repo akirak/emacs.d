@@ -1,15 +1,15 @@
-(defun akirak/kill-region-or-backward-kill-word ()
+(defun akirak/kill-region-or-backward-kill-word (&optional arg)
   "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
-  (lambda (&optional arg) (interactive "p")
-    (if (region-active-p)
-        (kill-region (region-beginning) (region-end))
-      (backward-kill-word arg))))
+  (interactive "p")
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end))
+    (backward-kill-word arg)))
 
-(defun akirak/back-to-indentation-or-beginning-of-line ()
-  (lambda (&optional arg) (interactive "P")
-    (if (or arg (bolp))
-        (back-to-indentation)
-      (beginning-of-line))))
+(defun akirak/back-to-indentation-or-beginning-of-line (&optional arg)
+  (interactive "P")
+  (if (or arg (bolp))
+      (back-to-indentation)
+    (beginning-of-line)))
 
 (general-def
   "C-h" 'backward-delete-char
