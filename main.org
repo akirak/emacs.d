@@ -152,6 +152,8 @@ These packages may be required by other packages loaded later on.
                      setup-swiper          ; Incremental search through the buffer using Ivy
                      setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
+                     setup-aweshell          ; Enhance eshell
+                     setup-dired             ; File browser
                      ))
     (akirak/require feature))
 #+end_src
@@ -161,6 +163,14 @@ The following packages are enhancements to Emacs that don't require much configu
 #+begin_src emacs-lisp
   (use-package smex) ; Install smex for sorting M-x candidates
 #+end_src
+*** Forge
+#+begin_src emacs-lisp
+  (use-package forge
+    ;; Depends on emacsql-sqlite
+    :disabled t
+    :straight (forge :host github :repo "magit/forge"))
+#+end_src
+
 ** Programming languages and applications
 ** Meta
 *** TODO Import from the previous configuration

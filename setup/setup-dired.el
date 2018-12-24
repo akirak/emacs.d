@@ -245,4 +245,4 @@
   '(when (fboundp 'ibuffer-sidebar-show-sidebar)
      (ibuffer-sidebar-show-sidebar)))
 
-(provide 'init-dired)
+(provide 'setup-dired)

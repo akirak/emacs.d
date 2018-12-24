@@ -9,4 +9,4 @@
     (aweshell-new)
     (set-window-dedicated-p nil t)))
 
-(provide 'init-aweshell)
+(provide 'setup-aweshell)

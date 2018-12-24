@@ -23,4 +23,4 @@
               (unless (eq ibuffer-sorting-mode 'alphabetic)
                 (ibuffer-do-sort-by-alphabetic)))))
 
-(provide 'init-ibuffer)
+(provide 'setup-ibuffer)
