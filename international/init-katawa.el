@@ -2,8 +2,6 @@
   :straight (katawa :host github :repo "akirak/katawa.el")
   :functions (katawa-get-some-candidates katawa-google--request))
 
-(require 'init-web-search)
-
 (use-package katawa-ivy
   :straight katawa
   :after katawa
