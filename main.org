@@ -154,6 +154,8 @@ These packages may be required by other packages loaded later on.
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
                      setup-aweshell          ; Enhance eshell
                      setup-dired             ; File browser
+                     setup-rename            ; Utilities for rename operations
+                     setup-crux              ; Collection of utilities with modifications
                      ))
     (akirak/require feature))
 #+end_src
