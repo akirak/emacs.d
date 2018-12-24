@@ -1,58 +1,3 @@
-(akirak/bind-global-org-map
-  "a" #'org-agenda
-  "b" #'ivy-switch-to-org-buffer
-  "c" #'counsel-org-clock-context
-  "f" #'helm-org-clock-follow-link
-  "h" #'counsel-org-clock-history
-  "j" #'akirak/pop-up-org-clocking-task
-  "m" #'counsel-org-bookmark
-  "n" #'org-clock-in-next-sibling
-  "o" #'org-clock-out
-  "q" #'org-clock-cancel
-  "r" #'org-recent-headings
-  "s" #'helm-org-rifle-agenda-files
-  "t" #'yankpad-edit
-  "u" #'org-clock-in-parent
-  "v" #'org-web-tools-read-url-as-org
-  "w" #'org-select-window
-  "y" #'helm-org-clock-yank
-  "L" #'org-starter-load-all-known-files)
-
-(defun ivy-switch-to-org-buffer ()
-  (interactive)
-  (ivy-read "Org buffer: "
-            (cl-remove-if-not
-             (lambda (bufname)
-               (with-current-buffer (get-buffer bufname)
-                 (derived-mode-p 'org-mode)))
-             (internal-complete-buffer "" nil t))
-            :caller #'ivy-switch-buffer
-            :action #'switch-to-buffer))
-
-(defvar org-select-window-last-window nil)
-
-(defun org-select-window (arg)
-  (interactive "P")
-  (if arg
-      (progn
-        (when org-select-window-last-window
-          (select-window org-select-window-last-window)
-          (setq org-select-window-last-window nil)))
-    (let* ((wlist (window-list))
-           (i0 (-elem-index (selected-window) wlist))
-           (queue (append (-slice wlist (1+ i0))
-                          (-take i0 wlist)))
-           (w (-find (lambda (w)
-                       (with-current-buffer (window-buffer w)
-                         (derived-mode-p 'org-mode)))
-                     queue)))
-      (if w
-          (progn
-            (unless (derived-mode-p 'org-mode)
-              (setq org-select-window-last-window (selected-window)))
-            (select-window w))
-        (message "No other org window in this frame")))))
-
 (defun helm-org-clock-yank ()
   (interactive)
   (unless (org-clocking-p)
@@ -68,12 +13,12 @@
                       (setq start (point))
                       (split-string (buffer-substring start end) "\n"))))))
     (helm :sources (helm-build-sync-source
-                       (format "Content inside %s" org-clock-current-task)
-                     :candidates
-                     (--map-indexed
-                      (cons (format "%d: %s" it-index it)
-                            (cons it-index it))
-                      content)))))
+                    (format "Content inside %s" org-clock-current-task)
+                    :candidates
+                    (--map-indexed
+                     (cons (format "%d: %s" it-index it)
+                           (cons it-index it))
+                     content)))))
 
 (defun helm-org-clock-follow-link ()
   (interactive)

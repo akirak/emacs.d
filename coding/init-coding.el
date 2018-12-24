@@ -13,7 +13,6 @@
 
 ;;;; Expansion, completion, and templates
 (require 'init-lsp)
-(require 'init-company)
 (require 'init-hippie-expand)
 (require 'init-yasnippet)
 (require 'init-yankpad)

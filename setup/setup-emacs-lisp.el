@@ -47,26 +47,4 @@
         (load-file buffer-file-name)
       (eval-buffer))))
 
-;;;; Testing
-(require 'init-emake)
-
-;;;; Keybindings
-
-;;;;; Help
-(akirak/bind-help-key :keymaps 'emacs-lisp-mode-map
-  "i" #'counsel-info-lookup-symbol
-  "s" #'suggest
-  "." #'helpful-at-point)
-
-;;;;; Extra commands
-(akirak/bind-mode-key :keymaps 'emacs-lisp-mode-map
-  "E" #'akirak/eval-buffer-or-load-file
-  "L" #'package-lint-current-buffer
-  "M" #'pp-macroexpand-last-sexp)
-
-;;;; frame-workflow
-(akirak/define-frame-workflow "emacs-lisp"
-  :key "e"
-  :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
-
-(provide 'init-emacs-lisp)
+(provide 'setup-emacs-lisp)

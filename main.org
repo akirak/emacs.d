@@ -95,28 +95,40 @@ Hopefully, defrepeater is soon going to be integrated with general
 #+end_src
 
 *** Custom definers
+**** Per-mode hydra
+As it is hard to remember workflow for every programming language, I've decided to set up a hydra for each programming language I use. Frequently-used commands specific to a major mode should be added to the hydra for its language. All mode hydras should share the same keybinding, which is currently ~C-d~.
+
+I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on the key. It takes the name of the major mode and binds the key to =akirak/MODE-hydra/body=. This is not a precisely keybinding definer but plays a somewhat similar role.
+
+#+begin_src emacs-lisp
+  (defcustom akirak/mode-hydra-key (kbd "C-c d")
+    "Key sequence to access the hydra for the current mode.")
+
+  (defun akirak/bind-mode-hydra (mode &optional hydra-function)
+    (let ((map (intern (concat (symbol-name mode) "-map"))))
+      (define-key (symbol-value map) akirak/mode-hydra-key
+        (or hydra-function
+            (intern (format "akirak/%s-hydra/body" mode))))))
+#+end_src
+
+**** Search commands
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-search-map :prefix "M-s")
+#+end_src
+
 **** Definer for mode-specific help commands
 Define a prefix for help commands.
-#+begin_src emacs-lisp
-(general-create-definer akirak/bind-help-key
-  :prefix "<menu>")
-
-(global-unset-key (kbd "<menu>"))
-
-(akirak/bind-help-key
-  "?" #'akirak/helm-search)
-#+end_src
-***** TODO Use ~M-s~
-**** TODO Mode-specific dispatch map
-Define a prefix for commands specific to a major mode.
-For now, it is the same as that of help commands.
-To prevent conflicts, use upper-case tail keys for these commands.
 
 #+begin_src emacs-lisp
-  (general-create-definer akirak/bind-mode-key
-    :prefix "C-c d")
+  (general-create-definer akirak/bind-fix-map
+    :prefix-map 'akirak/fix-map
+    :prefix "M-SPC")
 #+end_src
-
+**** Global org map
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-global-org-map
+    :prefix "C-M-o")
+#+end_src
 **** TODO Contextual keys
 #+begin_src emacs-lisp
   (defmacro akirak/define-contextual-key (key &rest general-defs)
@@ -146,14 +158,16 @@ These packages may be required by other packages loaded later on.
 #+end_src
 ** A bunch of useful features
 #+begin_src emacs-lisp
-  (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
-                     setup-key-translation ; Translate certain key combinations for ergonomics
-                     setup-counsel         ; Basic Counsel commands
-                     setup-swiper          ; Incremental search through the buffer using Ivy
-                     setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
+  (dolist (feature '(setup-shell-bindings    ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
+                     setup-key-translation   ; Translate certain key combinations for ergonomics
+                     setup-keybindings       ; My global keybindings
+                     setup-counsel           ; Basic Counsel commands
+                     setup-swiper            ; Incremental search through the buffer using Ivy
+                     setup-ivy-filthy-rich   ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
-                     setup-aweshell          ; Enhance eshell
+                     setup-company           ; Auto completion
                      setup-dired             ; File browser
+                     setup-aweshell          ; Enhance eshell
                      setup-rename            ; Utilities for rename operations
                      setup-crux              ; Collection of utilities with modifications
                      ))
@@ -164,6 +178,26 @@ The following packages are enhancements to Emacs that don't require much configu
 
 #+begin_src emacs-lisp
   (use-package smex) ; Install smex for sorting M-x candidates
+  (use-package savehist)                  ; Save minibuffer history
+#+end_src
+*** Dired
+**** Hydra
+#+begin_src emacs-lisp
+  (defhydra akirak/dired-mode-hydra ()
+    ""
+    ("r" dired-rsync))
+
+  (akirak/bind-mode-hydra 'dired-mode)
+#+end_src
+**** Frame
+#+begin_src emacs-lisp
+  (akirak/define-frame-workflow "dired"
+    :key "d"
+    :make-frame
+    '(frame-purpose-make-mode-frame 'dired-mode)
+    :layout
+    '(when (fboundp 'ibuffer-sidebar-show-sidebar)
+       (ibuffer-sidebar-show-sidebar)))
 #+end_src
 *** Forge
 #+begin_src emacs-lisp
@@ -172,8 +206,79 @@ The following packages are enhancements to Emacs that don't require much configu
     :disabled t
     :straight (forge :host github :repo "magit/forge"))
 #+end_src
+*** Chrome
+#+begin_src emacs-lisp
+(use-package atomic-chrome
+  :disabled t
+  :init
+  (atomic-chrome-start-server))
+#+end_src
+*** Switching windows
+**** Switching to an Org window
+#+begin_src emacs-lisp
+  (defvar org-select-window-last-window nil)
 
-** Programming languages and applications
+  (defun org-select-window (arg)
+    (interactive "P")
+    (if arg
+        (progn
+          (when org-select-window-last-window
+            (select-window org-select-window-last-window)
+            (setq org-select-window-last-window nil)))
+      (let* ((wlist (window-list))
+             (i0 (-elem-index (selected-window) wlist))
+             (queue (append (-slice wlist (1+ i0))
+                            (-take i0 wlist)))
+             (w (-find (lambda (w)
+                         (with-current-buffer (window-buffer w)
+                           (derived-mode-p 'org-mode)))
+                       queue)))
+        (if w
+            (progn
+              (unless (derived-mode-p 'org-mode)
+                (setq org-select-window-last-window (selected-window)))
+              (select-window w))
+          (message "No other org window in this frame")))))
+#+end_src
+
+** Programming languages
+Ideally, this section should be a portfolio of my skills.
+*** Emacs Lisp
+#+begin_src emacs-lisp
+(akirak/require 'setup-emacs-lisp)
+#+end_src
+**** Hydra
+#+begin_src emacs-lisp
+  (defhydra akirak/emacs-lisp-mode-hydra (:exit t :hint nil)
+    "
+  emacs-lisp
+
+  ^^Point/last sexp  ^^Buffer          ^^Help/doc
+  ^^---------------  ^^--------------  ----------
+  _._ helpful        _e_ eval          _i_ info symbol
+  _m_ macroexp       _l_ package-lint  _s_ suggest
+
+  "
+    ("i" counsel-info-lookup-symbol)
+    ("s" suggest)
+    ("." helpful-at-point)
+    ("e" akirak/eval-buffer-or-load-file)
+    ("l" package-lint-current-buffer)
+    ("m" pp-macroexpand-last-sexp)
+    ("q" nil "quit"))
+
+  (akirak/bind-mode-hydra 'emacs-lisp-mode)
+#+end_src
+**** Frame
+#+begin_src emacs-lisp
+  (akirak/define-frame-workflow "emacs-lisp"
+    :key "e"
+    :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
+#+end_src
+**** EMake
+#+begin_src emacs-lisp
+  (akirak/require 'setup-emake)
+#+end_src
 ** Meta
 *** TODO Import from the previous configuration
 #+begin_src emacs-lisp
@@ -202,4 +307,6 @@ Review config in the following directories:
 
 The following modules require further review:
 
-- [ ] dired
+- [ ] [[file:setup/setup-dired.el]]
+- [ ] [[file:setup/setup-keybindings.el]]
+

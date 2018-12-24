@@ -86,8 +86,7 @@
   :disabled t
   :after dired)
 
-(use-package ivy-dired-history
-  :after dired
+(use-package ivy-dired-history :after (dired savehist)
   :init
   (add-to-list 'savehist-additional-variables 'ivy-dired-history-variable))
 
@@ -230,19 +229,6 @@
   "z h" #'dired-hide-dotfiles-mode
   "<S-return>" #'dired-open-xdg)
 
-(akirak/bind-mode-key dired-mode-map
-  "r" #'dired-rsync)
-
 (define-key dired-mode-map (kbd "/") dired-filter-map)
-
-;;;; frame-workflow
-
-(akirak/define-frame-workflow "dired"
-  :key "d"
-  :make-frame
-  '(frame-purpose-make-mode-frame 'dired-mode)
-  :layout
-  '(when (fboundp 'ibuffer-sidebar-show-sidebar)
-     (ibuffer-sidebar-show-sidebar)))
 
 (provide 'setup-dired)

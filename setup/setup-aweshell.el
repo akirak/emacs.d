@@ -1,4 +1,4 @@
-(use-package aweshell
+(use-package aweshell :after company
   :straight (aweshell :host github :repo "manateelazycat/aweshell")
   :init
   (defcustom aweshell-dedicated-height 20

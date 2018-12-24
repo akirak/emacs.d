@@ -1,13 +1,11 @@
 ;; -*- no-byte-compile: t -*-
 
-(dolist (subdir '("keybindings"
-                  "progmodes"
+(dolist (subdir '("progmodes"
                   "coding"
                   "hydra"
                   "misc"
                   "org"
                   "apps"
-                  "exwm"
                   "ui"
                   "international"
                   "x"))
@@ -15,14 +13,12 @@
 
 ;;; Basic configuration
 
-(require 'init-keybindings)
 (require 'init-org)
 (require 'init-ui)
 (require 'init-helm)
 (require 'init-coding)
 
 ;;; Enhancements (misc/)
-(require 'init-savehist)
 (require 'init-commands)
 (require 'init-startup)                 ; Optional
 ;; (require 'init-desktop)
@@ -30,24 +26,18 @@
 (require 'init-locate)
 ;; (require 'init-gpastel)
 (require 'init-clipmon)
-;; (require 'init-autosave)
 (require 'init-super-save)
 (require 'init-browse-url)
 ;; (require 'init-repom)
-(require 'init-chrome)
 (require 'init-git-auto-commit)
-(require 'init-forge)
 (require 'init-purgatory)
 
 ;;; Apps (apps/, x/)
 (require 'init-terminal)
 (require 'init-prodigy)
-(require 'init-dired)
 (require 'init-linux-disk)
 (require 'init-magit)
-(require 'init-ibuffer)
 (require 'init-docker)
-(require 'init-web-search)
 (require 'init-web-browser)
 (require 'init-pocket-reader)
 ;; (require 'init-eaf)
@@ -63,7 +53,6 @@
 (require 'init-haskell)
 (require 'init-dockerfile)
 (require 'init-kotlin)
-(require 'init-emacs-lisp)
 (require 'init-shell-scripts)
 (require 'init-yaml)
 (require 'init-beancount)

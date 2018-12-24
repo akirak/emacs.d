@@ -8,4 +8,4 @@
   :custom
   (real-auto-save-interval 30))
 
-(provide 'init-autosave)
+(provide 'setup-real-autosave)

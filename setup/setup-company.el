@@ -28,4 +28,4 @@
   :init
   (company-statistics-mode 1))
 
-(provide 'init-company)
+(provide 'setup-company)

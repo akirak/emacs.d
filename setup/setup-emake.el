@@ -1,5 +1,3 @@
-;;; init-emake.el --- Run emake -*- lexical-binding: t -*-
-
 ;;;; Assets from the example repository
 
 (defun akirak/emake-example-file-url (filename &optional branch)
@@ -122,5 +120,4 @@ compile: install
 	rm -f $(PACKAGE_LISP:.el=.elc)
 	$(EMAKE) compile ~error-on-warn"))
 
-(provide 'init-emake)
-;;; init-emake.el ends here
+(provide 'setup-emake)

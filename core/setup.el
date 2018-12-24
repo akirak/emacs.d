@@ -16,8 +16,9 @@
 (defun akirak/setup-find-failed-module ()
   "Open a module which has been failed to load."
   (interactive)
-  (if-let* ((feature (or akirak/setup-module-worked-on
-                         (setq akirak/setup-module-worked-on (pop akirak/setup-failed-modules))))
+  (if-let* ((feature (setq akirak/setup-module-worked-on
+                           (or akirak/setup-module-worked-on
+                               (pop akirak/setup-failed-modules))))
             (filename (expand-file-name (concat "setup/" (symbol-name feature) ".el")
                                         user-emacs-directory)))
       (when (file-exists-p filename)
@@ -33,10 +34,9 @@ FEATURE should be a module in ~/.emacs.d/setup.
 If SEVERITY is non-nil, abort the initialization process."
   (unless (require feature nil t)
     (add-to-list akirak/setup-failed-modules feature t)
-    (if severity
-        (progn
-          (akirak/setup-find-failed-module)
-          (error "Failed to load %s" feature))
-      (message "Failed to load %s" feature))))
+    (message "Failed to load %s" feature)
+    (when severity
+      (akirak/setup-find-failed-module)
+      (error "Aborted due to a failed module."))))
 
 (defalias 'akirak/require 'akirak/setup-load)

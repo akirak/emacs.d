@@ -47,4 +47,16 @@
 
 (general-def "C-x b" #'ivy-switch-buffer-2)
 
+(defun ivy-switch-to-org-buffer ()
+  "Switch to an open Org buffer."
+  (interactive)
+  (ivy-read "Org buffer: "
+            (cl-remove-if-not
+             (lambda (bufname)
+               (with-current-buffer (get-buffer bufname)
+                 (derived-mode-p 'org-mode)))
+             (internal-complete-buffer "" nil t))
+            :caller #'ivy-switch-buffer
+            :action #'switch-to-buffer))
+
 (provide 'setup-ivy)
