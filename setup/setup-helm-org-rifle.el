@@ -1,5 +1,3 @@
-(require 'init-helm)
-
 (use-package helm-org-rifle
   :after (helm org)
   :config
@@ -64,4 +62,4 @@
 ;;  :sources (cons helm-source-org-recent-headings
 ;;                 (mapcar 'helm-org-rifle-get-source-for-file (org-agenda-files))))
 
-(provide 'init-helm-org-rifle)
+(provide 'setup-helm-org-rifle)

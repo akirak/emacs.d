@@ -34,13 +34,41 @@
 (require 'init-fontify-face)
 
 ;;;;; Columns and spaces
-(require 'init-fci)
-(require 'init-highlight-indent-guides)
-(require 'init-whitespace)
 
-;;;;; Fringe
-(require 'init-line-numbers)
-(require 'init-git-gutter)
+(use-package highlight-indent-guides
+  :init
+  (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+
+(use-package fill-column-indicator
+  :init
+  (add-hook 'prog-mode-hook 'fci-mode))
+
+(use-package whitespace
+  :straight nil
+  :diminish whitespace-mode
+  :hook
+  (prog-mode-hook . whitespace-mode)
+  :custom
+  (whitespace-display-mappings
+   ;; all numbers are Unicode codepoint in decimal. try (insert-char 182 ) to see it
+   '(
+     (space-mark 32 [183] [46]) ; 32 SPACE, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+     (newline-mark 10 [182 10]) ; 10 LINE FEED
+     (tab-mark 9 [187 9] [9655 9] [92 9]) ; 9 TAB, 9655 WHITE RIGHT-POINTING TRIANGLE 「▷」
+     ))
+  (whitespace-style '(face tabs trailing tab-mark)))
+
+(when (version<= "26.1" emacs-version)
+  (defun turn-on-display-line-numbers-mode ()
+    (interactive)
+    (display-line-numbers-mode 1))
+  (add-hook 'prog-mode-hook #'turn-on-display-line-numbers-mode)
+  (add-hook 'text-mode-hook #'turn-on-display-line-numbers-mode))
+
+(use-package git-gutter
+  :diminish git-gutter-mode
+  :init
+  (global-git-gutter-mode))
 
 ;;;; Window layout
 (require 'init-shackle)

@@ -10,4 +10,4 @@
   :hook
   (org-mode . maybe-turn-on-org-make-toc-mode))
 
-(provide 'init-org-make-toc)
+(provide 'setup-org-make-toc)

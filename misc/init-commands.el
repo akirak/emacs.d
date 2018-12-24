@@ -1,8 +1,6 @@
 (use-package fwb-cmds
   :straight (fwb-cmds :host github :repo "tarsius/fwb-cmds"))
 
-(use-package restart-emacs)
-
 (use-package ivy-bookmarked-directory
   :straight (ivy-bookmarked-directory :host github
                                       :repo "akirak/ivy-bookmarked-directory")

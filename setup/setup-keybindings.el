@@ -1,12 +1,10 @@
 ;; TODO: Add a global minor mode for these keybindings like [[https://github.com/kaushalmodi/.emacs.d][Kaushal Modi]] does?
-(general-def :prefix "<f1>"
+(akirak/bind-key :prefix "<f1>"
   "M" #'woman)
 
-(general-def :prefix "<f1> x"
+(akirak/bind-key :prefix "<f1> x"
   "c" #'describe-char
   "f" #'counsel-describe-face)
-
-(define-prefix-command 'akirak/customize-map)
 
 ;; (general-def
 ;;   "<M-prior>" #'git-gutter:previous-hunk
@@ -14,8 +12,6 @@
 ;;   "<M-insert>" #'git-gutter:stage-hunk)
 
 (general-def "C-z" #'purgatory)
-
-;;;; M-g
 
 (general-def "M-g c" #'avy-goto-char-in-line)
 
@@ -94,8 +90,6 @@
 (general-def "M-TAB" 'complete-symbol)
 (general-unbind :keymaps 'flyspell-mode-map :package 'flyspell "M-TAB")
 
-(akirak/bind-fix-map "M-SPC" #'ace-window)
-
 (general-def "C-M-g" #'frame-workflow-prefix-map)
 
 (global-unset-key (kbd "C-M-o"))
@@ -109,20 +103,6 @@
                 (interactive)
                 (shell-command "setxkbmap -option ctrl:nocaps"))
               :wk "setxkbmap"))
-
-(general-def :keymaps 'akirak/customize-map
-  "" '(nil :wk "customize")
-  "f" #'customize-face-other-window
-  "g" #'customize-group-other-window
-  "l" #'load-library
-  "p" '((lambda () (interactive)
-          (if (featurep 'straight)
-              (call-interactively 'straight-use-package)
-            (package-list-packages)))
-        :wk "packages")
-  "s" #'customize-set-value
-  "v" #'customize-variable-other-window
-  "R" #'restart-emacs)
 
 (general-def
   "C-c a" 'aya-create
@@ -212,18 +192,19 @@
 
 ;;;; Misc
 
-(akirak/bind-fix-map
-  :keymaps '(prog-mode-map text-mode-map)
-  "e" 'akirak/hydra-flycheck
-  "u" 'fix-word-upcase
-  "l" 'fix-word-downcase
-  "c" 'fix-word-capitalize
-  "s" #'akirak/kill-sentence
-  "w" #'akirak/kill-word
-  "f" #'akirak/kill-defun
-  "o" #'split-line     ; Originally C-M-o
-  ;; M-SPC was originally bound to just-one-space
-  "SPC" 'just-one-space)
+;; TODO: C-.
+;; (akirak/bind-fix-map
+;;   :keymaps '(prog-mode-map text-mode-map)
+;;   "e" 'akirak/hydra-flycheck
+;;   "u" 'fix-word-upcase
+;;   "l" 'fix-word-downcase
+;;   "c" 'fix-word-capitalize
+;;   "s" #'akirak/kill-sentence
+;;   "w" #'akirak/kill-word
+;;   "f" #'akirak/kill-defun
+;;   "o" #'split-line     ; Originally C-M-o
+;;   ;; M-SPC was originally bound to just-one-space
+;;   "SPC" 'just-one-space)
 
 (general-def :prefix "M-s"
   "d" #'helm-dash)

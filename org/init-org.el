@@ -15,11 +15,9 @@
 ;;;; Convenient tools for editing org files
 (require 'init-org-download)
 (require 'init-org-web-tools)
-(require 'init-org-make-toc)
 (require 'init-counsel-org-capture-string)
 
 ;;;; Search and navigation
-(require 'init-helm-org-rifle)
 (require 'init-org-offtime)
 (require 'init-counsel-org-clock)
 (require 'init-counsel-org-bookmark)

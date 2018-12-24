@@ -1,5 +1,3 @@
-(require 'init-helm)
-
 (use-package helm-descbinds :after helm
   :commands (helm-descbinds)
   :bind
@@ -7,4 +5,4 @@
   :custom
   (helm-descbinds-window-style 'split "Use pop-up style window for descbinds"))
 
-(provide 'init-helm-descbinds)
+(provide 'setup-helm-descbinds)

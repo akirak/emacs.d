@@ -3,4 +3,4 @@
   (multi-term-dedicated-select-after-open-p t)
   (multi-term-dedicated-window-height 20))
 
-(provide 'init-multi-term)
+(provide 'setup-multi-term)

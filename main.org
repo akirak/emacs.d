@@ -128,26 +128,44 @@ I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on 
         (or hydra-function
             (intern (format "akirak/%s-hydra/body" mode))))))
 #+end_src
+**** Generic definer
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-key)
+#+end_src
+**** Prefix for customizing Emacs
+I often need to tweak Emacs while I am using it.
 
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-customize-map :prefix "C-x c")
+#+end_src
+
+There are not so many commands that need to be add to the map:
+
+#+begin_src emacs-lisp
+  (akirak/bind-customize-map
+    "" '(nil :wk "customize")
+    "f" #'customize-face-other-window
+    "g" #'customize-group-other-window
+    "l" #'load-library
+    "p" '((lambda () (interactive)
+            (if (featurep 'straight)
+                (call-interactively 'straight-use-package)
+              (package-list-packages)))
+          :wk "packages")
+    "s" #'customize-set-value
+    "v" #'customize-variable-other-window)
+#+end_src
 **** Search commands
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-search-map :prefix "M-s")
 #+end_src
 
-**** Definer for mode-specific help commands
-Define a prefix for help commands.
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-fix-map
-    :prefix-map 'akirak/fix-map
-    :prefix "M-SPC")
-#+end_src
 **** Global org map
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-global-org-map
     :prefix "C-M-o")
 #+end_src
-**** TODO Contextual keys
+**** Contextual keys
 #+begin_src emacs-lisp
   (defmacro akirak/define-contextual-key (key &rest general-defs)
     (declare (indent 1))
@@ -164,7 +182,10 @@ These packages may be required by other packages loaded later on.
 #+begin_src emacs-lisp
   (akirak/require 'setup-ivy t)
 #+end_src
-*** TODO Helm
+*** Helm
+#+begin_src emacs-lisp
+  (akirak/require 'setup-helm t)
+#+end_src
 *** Hydra
 #+begin_src emacs-lisp
 (use-package hydra)
@@ -176,18 +197,25 @@ These packages may be required by other packages loaded later on.
 #+end_src
 ** A bunch of useful features
 #+begin_src emacs-lisp
-  (dolist (feature '(setup-shell-bindings    ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
-                     setup-key-translation   ; Translate certain key combinations for ergonomics
-                     setup-keybindings       ; My global keybindings
-                     setup-counsel           ; Basic Counsel commands
-                     setup-swiper            ; Incremental search through the buffer using Ivy
-                     setup-ivy-filthy-rich   ; Provide more information via Ivy/Counsel commands
+  (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
+                     setup-key-translation ; Translate certain key combinations for ergonomics
+                     setup-keybindings     ; My global keybindings
+                     setup-counsel         ; Basic Counsel commands
+                     setup-swiper ; Incremental search through the buffer using Ivy
+                     setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
-                     setup-company           ; Auto completion
-                     setup-dired             ; File browser
-                     setup-aweshell          ; Enhance eshell
-                     setup-rename            ; Utilities for rename operations
-                     setup-crux              ; Collection of utilities with modifications
+                     setup-magit       ; The Git porcelain for Emacs
+                     setup-company     ; Auto completion
+                     setup-dired       ; File browser
+                     setup-aweshell    ; Enhance eshell
+                     setup-rename      ; Utilities for rename operations
+                     setup-crux ; Collection of utilities with modifications
+                     setup-google-translate ; Translate a word in a buffer
+                     ;; setup-japanese
+                     setup-helm-descbinds
+                     setup-helm-make
+                     setup-anzu
+                     setup-org-make-toc
                      ))
     (akirak/require feature))
 #+end_src
@@ -197,6 +225,12 @@ The following packages are enhancements to Emacs that don't require much configu
 #+begin_src emacs-lisp
   (use-package smex) ; Install smex for sorting M-x candidates
   (use-package savehist)                  ; Save minibuffer history
+  (use-package helm-system-packages :after helm ; Install system packages
+    :commands (helm-system-packages))
+  (use-package helm-systemd :after helm   ; Run (root) systemd operations
+    :commands (helm-systemd))
+  (use-package hl-todo
+    :hook (prog-mode . hl-todo-mode))
 #+end_src
 *** Dired
 **** Hydra
@@ -217,6 +251,22 @@ The following packages are enhancements to Emacs that don't require much configu
     '(when (fboundp 'ibuffer-sidebar-show-sidebar)
        (ibuffer-sidebar-show-sidebar)))
 #+end_src
+*** Magit
+The following packages extend the display of =magit-status=:
+
+- magit-todos
+- magithub
+**** magit-todos
+#+begin_src emacs-lisp
+  (use-package magit-todos :after (magit hl-todo)
+    :straight (magit-todos :host github :repo "alphapapa/magit-todos")
+    :config
+    (magit-todos-mode 1))
+#+end_src
+**** magithub
+As magithub slows down magit-status, it sometimes causes problems,
+and I don't always need its features, I will disable it by default.
+I will load =setup-magithub= library if I need it.
 *** Forge
 #+begin_src emacs-lisp
   (use-package forge
@@ -310,7 +360,7 @@ Ideally, this section should be a portfolio of my skills.
 
 Review config in the following directories:
 
-- [ ] keybindings
+- [X] keybindings
 - [ ] progmodes
 - [ ] org
 - [ ] ui
@@ -318,7 +368,7 @@ Review config in the following directories:
 - [ ] coding
 - [ ] etc
 - [ ] exwm
-- [ ] international
+- [X] international
 - [ ] local
 - [ ] misc
 - [ ] x

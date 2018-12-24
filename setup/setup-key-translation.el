@@ -1,4 +1,4 @@
-(general-def key-translation-map
+(akirak/bind-key key-translation-map
   ;; As <menu> (application on Windows keyboards) is hard to reach on some
   ;; keyboards, I will use <C-tab> instead. This key combination is occupied on
   ;; web browsers but vacant on most Emacs major modes, so it is safe to use it

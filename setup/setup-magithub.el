@@ -10,4 +10,4 @@
   :config
   (magithub-feature-autoinject 'status-checks-header))
 
-(provide 'init-magithub)
+(provide 'setup-magithub)

@@ -18,9 +18,6 @@
 (require 'init-yankpad)
 (require 'init-autoinsert)
 
-;;;; Compilation
-(require 'init-helm-make)
-
 ;;;; Other packages for quality of life
 ;; Small commands
 (require 'init-prog-commands)
@@ -35,11 +32,8 @@
 (require 'init-embrace)
 
 ;;;;; Visual
-;; (require 'init-undo-tree)
-(require 'init-anzu)
 (require 'init-symbol-overlay)
 (require 'init-rainbow-mode)
-(require 'init-hl-todo)
 
 ;;;;; Referencing
 (require 'init-dash)
@@ -49,6 +43,6 @@
 
 ;;;; Org
 (require 'init-outshine)
-(require 'init-outorg)
+(require 'setup-outorg)
 
 (provide 'init-coding)

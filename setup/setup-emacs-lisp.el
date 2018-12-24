@@ -47,4 +47,8 @@
         (load-file buffer-file-name)
       (eval-buffer))))
 
+(defun akirak/debug-emacs-startup ()
+  (interactive)
+  (async-start-process "emacs-debug" "emacs" nil "--debug-init"))
+
 (provide 'setup-emacs-lisp)

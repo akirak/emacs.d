@@ -35,4 +35,4 @@
   ;; Share the action list with katawa-ivy
   (katawa-ivy-exwm-as-katawa-ivy t))
 
-(provide 'init-katawa)
+(provide 'setup-katawa)

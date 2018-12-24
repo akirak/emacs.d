@@ -4,8 +4,6 @@
   :hook
   (exwm-init-hook . gpastel-start-listening))
 
-(require 'init-helm)
-
 (defun helm-exwm-show-kill-ring ()
   "A variant of `helm-show-kill-ring' that supports pasting to a EXWM buffer."
   (interactive)
@@ -24,4 +22,4 @@
 ;; TODO: Check if this unbinding really works
 (general-unbind :keymaps 'counsel-mode-map :package 'counsel [remap yank-pop])
 
-(provide 'init-gpastel)
+(provide 'setup-gpastel)

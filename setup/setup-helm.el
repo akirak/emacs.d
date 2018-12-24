@@ -25,19 +25,8 @@
   ;; (require 'helm-source)
   :config
   (helm-autoresize-mode 1)
-  (require 'helm-mini-extra)
   :custom
-  ;; (helm-command-prefix-key "C-c h")
   (helm-autoresize-max-height 40)
-  (helm-display-function (quote pop-to-buffer))
-  ;; (helm-split-window-in-side-p t)
-  :general
-  ([remap apropos-command] 'helm-apropos))
+  (helm-display-function (quote pop-to-buffer)))
 
-(use-package helm-system-packages
-  :commands (helm-system-packages))
-
-(use-package helm-systemd
-  :commands (helm-systemd))
-
-(provide 'init-helm)
+(provide 'setup-helm)

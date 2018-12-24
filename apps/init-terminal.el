@@ -25,7 +25,7 @@
                                               (string-remove-prefix ":" (symbol-name key))))))
                     (fset name value))))))
 
-(require 'init-multi-term)
+(require 'setup-multi-term)
 
 ;; Map commands
 

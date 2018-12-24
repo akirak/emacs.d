@@ -51,4 +51,4 @@
   ;;  ("C-;" . pyim-delete-word-from-personal-buffer))
   )
 
-(provide 'init-pyim)
+(provide 'setup-pyim)

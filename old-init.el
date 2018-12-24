@@ -15,7 +15,6 @@
 
 (require 'init-org)
 (require 'init-ui)
-(require 'init-helm)
 (require 'init-coding)
 
 ;;; Enhancements (misc/)
@@ -36,7 +35,6 @@
 (require 'init-terminal)
 (require 'init-prodigy)
 (require 'init-linux-disk)
-(require 'init-magit)
 (require 'init-docker)
 (require 'init-web-browser)
 (require 'init-pocket-reader)
@@ -57,11 +55,6 @@
 (require 'init-yaml)
 (require 'init-beancount)
 (require 'init-nix)
-
-;;; Natural languages (international/)
-(require 'init-japanese)
-;; (require 'init-chinese)
-(require 'init-google-translate)
 
 ;;; Personal configuration (local/)
 (defcustom akirak/use-personal-configuration nil

@@ -21,26 +21,8 @@
           (with-current-buffer buf
             (magit-refresh)))
       (magit-status directory cache)))
-  :general
-  ([remap magit-status] #'akirak/magit-status-prefer-existing)
   :custom
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
-;;;; Extra sections in =magit-status=
-;;;;; magit-todos
-;; magit-todos requires hl-todo
-(require 'init-hl-todo)
-(use-package magit-todos
-  :after magit
-  :straight (magit-todos :host github :repo "alphapapa/magit-todos")
-  :config
-  (magit-todos-mode 1))
-
-;;;;; magithub
-;; As magithub slows down magit-status, it sometimes causes problems,
-;; and I don't always need its features, I will disable it by default.
-;; I will load "init-magithub" library if I need it.
-;; (require 'init-magithub)
-
-(provide 'init-magit)
+(provide 'setup-magit)

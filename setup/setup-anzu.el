@@ -5,4 +5,4 @@
   ([remap query-replace] . anzu-query-replace)
   ([remap query-replace-regexp] . anzu-query-replace-regexp))
 
-(provide 'init-anzu)
+(provide 'setup-anzu)
