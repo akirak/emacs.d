@@ -182,3 +182,22 @@ The following packages are enhancements to Emacs that don't require much configu
                        (message "The previous configuration files (%s) still exist. I have to migrate them soon."
                                 (abbreviate-file-name ,old-init-file)))))
 #+end_src
+
+Review config in the following directories:
+
+- [ ] keybindings
+- [ ] progmodes
+- [ ] org
+- [ ] ui
+- [ ] apps
+- [ ] coding
+- [ ] etc
+- [ ] exwm
+- [ ] international
+- [ ] local
+- [ ] misc
+- [ ] x
+
+The following modules require further review:
+
+- [ ] dired
