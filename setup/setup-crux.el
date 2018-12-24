@@ -21,10 +21,10 @@
            ((vc-backend filename) (vc-rename-file filename new-name))
            (t
             (rename-file filename new-name t)
-            (set-visited-file-name new-name t t)
-            ;; See setup-rename.el
-            (when (fboundp 'akirak/update-buffer-after-renaming)
-              (akirak/update-buffer-after-renaming filename)))))))))
+            (set-visited-file-name new-name t t)))
+          ;; See setup-rename.el
+          (when (fboundp 'akirak/update-buffer-after-renaming)
+            (akirak/update-buffer-after-renaming filename)))))))
 
 (provide 'setup-crux)
 ;;; setup-crux.el ends here
