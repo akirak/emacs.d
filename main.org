@@ -1,6 +1,24 @@
 * My Emacs Configuration
 This is not a true literate configuration. Packages that demand complex configuration are configured in separate files. I am rewriting this configuration 
 for a better understanding of my previous work and organizing it in a more sensible way.
+** Why?
+*** Literate configuration in Org mode
+Quite a few people maintain their Emacs configuration in a single literate Org file. I didn't like the idea, but I have to admit that it offers several benefits.
+**** Pros
+- You can quickly add a piece of configuration by refiling a subtree to the file from another location, e.g. your inbox Org file.
+- You'll be exposed to a constant pressure to maintain a consistent structure, so the configuration will be more consistent.
+- Each piece of configuration gets an explicit context.
+**** Cons
+- It is slightly more tedious to edit the literate config in Org mode. Rather than edit a file directly, you have to pop up an edit buffer for each piece of configuration you want to change.
+- Revision history is lost when entries are reordered. This can be prevented by automatically sorting all headings before saving.
+*** Organizational policies
+I will combine both a literate configuration file and separate configuration files:
+
+- The main configuration file is a single Org file containing babel source blocks. Simple package configurations can be put directly in the file.
+- Complex package configurations are put in separate files, because they are likely to entail bugfixes and updates.
+- However, certain kinds of configuration code to integrate those packages can be put in the Org configuration file. Keybindings and frame (frame-workflow) configurations are examples of such ones. They are inherently personal and often interrelated, so it doesn't make sense to treat them as independent ideas.
+
+In principle, the main configuration file should be a thin layer of the Emacs configuration, even though they can contain some complex pieces.
 ** Support older versions of Emacs
 =when-let= and =if-let= are available in Emacs 25.1, but they have been renamed to =when-let*= and =if-let*= in 26.1, which are correct names to describe their behaviours.
 
