@@ -1,0 +1,3 @@
+[submodule "extras/unpackaged"]
+	path = extras/unpackaged
+	url = https://github.com/alphapapa/unpackaged.el.git
