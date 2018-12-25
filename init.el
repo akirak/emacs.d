@@ -29,6 +29,10 @@
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
+;; Load my personal config
+(let ((file "~/learning/toolbox.org"))
+  (when (file-exists-p file)
+    (org-babel-load-file file t)))
 
 ;;;; Finalization
 ;; https://github.com/kaushalmodi/.emacs.d/blob/master/init.el
