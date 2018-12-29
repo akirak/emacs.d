@@ -131,7 +131,6 @@
   "C-x R" #'crux-rename-file-and-buffer
   "C-x S" #'sudo-find-file
   "C-x T" #'akirak/shell-toggle-dedicated
-  "C-x c" #'akirak/customize-map
   "C-x k" #'kill-this-buffer
   "C-x p" #'counsel-projectile
   "C-x t" #'helm-tail
