@@ -10,6 +10,8 @@
   :type '(repeat string))
 
 (use-package ox-hugo :after ox
+  :init
+  (require 'ox-org)
   :custom
   (org-hugo-front-matter-format 'yaml))
 
