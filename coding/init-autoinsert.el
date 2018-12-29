@@ -1,7 +1,7 @@
 (auto-insert-mode 1)
 (setq auto-insert 'other
       auto-insert-query nil
-      auto-insert-alist '((("/\\(init\\|my\\)-.+\\.el\\'" . "Emacs init")
+      auto-insert-alist '((("/\\(init\\|my\\|setup\\)-.+\\.el\\'" . "Emacs init")
                            . (> _ "\n\n"
                                 "(provide '"
                                 (file-name-base (buffer-file-name))
