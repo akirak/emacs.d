@@ -36,5 +36,3 @@
 (use-package org
   :config
   (require 'org-loaddefs))
-
-(provide 'init-org-base)
