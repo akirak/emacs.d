@@ -392,6 +392,25 @@ I will load =setup-magithub= library if I need it.
   (akirak/bind-key :package 'org :keymaps 'org-mode-map
     [remap org-meta-return] 'modi/org-meta-return)
 #+end_src
+*** Poporg
+:PROPERTIES:
+:CREATED_TIME: [2018-12-29 Sat 19:51]
+:ID:       e76069bd-d9b2-488a-a5c8-9f2410240396
+:END:
+
+Use poporg rather than outorg.
+
+- [X] Add poporg package
+- [X] Remap keys
+
+#+begin_src emacs-lisp
+  (use-package poporg)
+  (akirak/bind-key "C-c '" 'poporg-dwim)
+  ;; The default keybindings in poporg-mode-map are not intuitive to me,
+  (akirak/bind-key :keymaps 'poporg-mode-map
+    "C-c C-c" 'poporg-edit-exit
+    "C-x C-s" 'poporg-update-and-save)
+#+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1
