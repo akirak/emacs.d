@@ -1,6 +1,42 @@
+# -*- mode: org; mode: org-make-toc; org-id-link-to-org-use-id: nil
+
 * My Emacs Configuration
 This is not a true literate configuration. Packages that demand complex configuration are configured in separate files. I am rewriting this configuration 
 for a better understanding of my previous work and organizing it in a more sensible way.
+** Table of contents                                              :noexport:
+:PROPERTIES:
+:TOC:      siblings
+:END:
+    -  [[#why][Why?]]
+      -  [[#literate-configuration-in-org-mode][Literate configuration in Org mode]]
+        -  [[#pros][Pros]]
+        -  [[#cons][Cons]]
+      -  [[#organizational-policies][Organizational policies]]
+    -  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
+    -  [[#before-using-use-package][Before using use-package]]
+    -  [[#overriding-defaults][Overriding defaults]]
+    -  [[#keybindings-infrastructure][Keybindings infrastructure]]
+    -  [[#dependencies-for-other-packages][Dependencies for other packages]]
+      -  [[#ivy][Ivy]]
+      -  [[#helm][Helm]]
+      -  [[#org][Org]]
+      -  [[#hydra][Hydra]]
+      -  [[#ov-overlays][ov (overlays)]]
+      -  [[#ts-date-time-library-by-alphapapa][ts (date-time library by alphapapa)]]
+    -  [[#a-bunch-of-useful-features][A bunch of useful features]]
+      -  [[#dired][Dired]]
+      -  [[#magit][Magit]]
+      -  [[#forge][Forge]]
+      -  [[#chrome][Chrome]]
+      -  [[#switching-windows][Switching windows]]
+    -  [[#writing][Writing]]
+      -  [[#graphviz][GraphViz]]
+      -  [[#ditaa][Ditaa]]
+    -  [[#programming-languages][Programming languages]]
+      -  [[#emacs-lisp][Emacs Lisp]]
+    -  [[#meta][Meta]]
+      -  [[#import-from-the-previous-configuration][Import from the previous configuration]]
+
 ** Why?
 *** Literate configuration in Org mode
 Quite a few people maintain their Emacs configuration in a single literate Org file. I didn't like the idea, but I have to admit that it offers several benefits.
@@ -88,6 +124,9 @@ These settings don't depend on external dependencies, so they should be applied 
 #+end_src
 
 ** Keybindings infrastructure
+:PROPERTIES:
+:TOC:      0
+:END:
 
 Use general.el to define keybindings. It has made several improvements over
 bind-key, including a built-in support for which-key.
@@ -177,6 +216,9 @@ There are not so many commands that need to be add to the map:
 #+end_src
 
 ** Dependencies for other packages
+:PROPERTIES:
+:TOC:      1
+:END:
 These packages may be required by other packages loaded later on.
 *** Ivy
 #+begin_src emacs-lisp
@@ -222,6 +264,9 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
     :straight (ts :host github :repo "alphapapa/ts.el"))
 #+end_src
 ** A bunch of useful features
+:PROPERTIES:
+:TOC:      1
+:END:
 #+begin_src emacs-lisp
   (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
                      setup-key-translation ; Translate certain key combinations for ergonomics
@@ -338,6 +383,9 @@ I will load =setup-magithub= library if I need it.
 #+end_src
 
 ** Writing
+:PROPERTIES:
+:TOC:      1
+:END:
 
 *** GraphViz
 #+begin_src emacs-lisp
@@ -359,6 +407,9 @@ I will load =setup-magithub= library if I need it.
 #+end_src
 
 ** Programming languages
+:PROPERTIES:
+:TOC:      1
+:END:
 Ideally, this section should be a portfolio of my skills.
 *** Emacs Lisp
 #+begin_src emacs-lisp
