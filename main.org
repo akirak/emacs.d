@@ -186,6 +186,27 @@ These packages may be required by other packages loaded later on.
 #+begin_src emacs-lisp
   (akirak/require 'setup-helm t)
 #+end_src
+*** Org
+**** Org-babel
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-babel t)
+#+end_src
+To add support for a language in org-babel, add the following configuration:
+
+- Add =(LANG . t)= to =org-babel-load-languages= in =:init= section of a =use-package= directive.
+- If necessary, add a custom mapping to =org-src-lang-modes=.
+****  Org-export
+Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(require 'ox-org)= to all of their configurations, so I will load it immediately after =ox= is loaded.
+
+#+begin_src emacs-lisp
+  (use-package ox
+    :after org
+    :straight nil
+    :config
+    ;; Workaround for preventing a loading error in some exporter packages
+    (require 'ox-org))
+#+end_src
+
 *** Hydra
 #+begin_src emacs-lisp
 (use-package hydra)
@@ -314,6 +335,27 @@ I will load =setup-magithub= library if I need it.
                 (setq org-select-window-last-window (selected-window)))
               (select-window w))
           (message "No other org window in this frame")))))
+#+end_src
+
+** Writing
+
+*** GraphViz
+#+begin_src emacs-lisp
+  (use-package ob-dot
+    :after ob
+    :straight nil
+    :init
+    (require 'ox-org)
+    (add-to-list 'org-babel-load-languages '(dot . t))
+    (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
+#+end_src
+*** Ditaa
+#+begin_src emacs-lisp
+  (use-package ob-ditaa
+    :after ob
+    :straight nil
+    :init
+    (add-to-list 'org-babel-load-languages '(ditaa . t)))
 #+end_src
 
 ** Programming languages
