@@ -381,7 +381,11 @@ I will load =setup-magithub= library if I need it.
               (select-window w))
           (message "No other org window in this frame")))))
 #+end_src
-
+**** unpackaged/org-return-dwim
+#+begin_src emacs-lisp
+  (akirak/bind-key :package 'org :keymaps 'org-mode-map
+    [remap org-return] 'unpackaged/org-return-dwim)
+#+end_src
 **** modi/org-split-block
 #+begin_src emacs-lisp
   (akirak/require 'modi-org-split-block)
