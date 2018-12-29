@@ -416,6 +416,26 @@ Use poporg rather than outorg.
 :TOC:      1
 :END:
 
+*** Hydra for Org-mode
+#+begin_src emacs-lisp
+  (defhydra akirak/org-mode-hydra (:exit t :hint nil)
+    "
+  Org
+
+  ^^Export
+  ^^--------------
+  _h_ hugo subtree
+
+  _mb_ mindmap buffer
+  _mt_ mindmap subtree
+  "
+
+    ("h" akirak/org-hugo-export-subtree)
+    ("mb" org-mind-map-write)
+    ("mt" org-mind-map-write-current-tree))
+
+  (akirak/bind-mode-hydra 'org-mode)
+#+end_src
 *** GraphViz
 #+begin_src emacs-lisp
   (use-package ob-dot
@@ -434,7 +454,11 @@ Use poporg rather than outorg.
     :init
     (add-to-list 'org-babel-load-languages '(ditaa . t)))
 #+end_src
-
+*** Exporting
+**** ox-hugo
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-hugo)
+#+end_src
 ** Programming languages
 :PROPERTIES:
 :TOC:      1

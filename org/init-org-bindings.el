@@ -63,15 +63,4 @@ select it."
           (display-buffer buf)
         (pop-to-buffer buf)))))
 
-(defhydra akirak/org-export-hydra (:exit t :hint nil)
-  "
-^^Documents  ^^Graph
-^^---------  ^^-------------------
-_h_ hugo     _gb_ mindmap (buffer)
-^^           _gt_ mindmap (tree)
-"
-  ("h" akirak/org-export-subtree-to-hugo-dwim)
-  ("gb" org-mind-map-write)
-  ("gt" org-mind-map-write-current-tree))
-
 (provide 'init-org-bindings)
