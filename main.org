@@ -221,6 +221,7 @@ These packages may be required by other packages loaded later on.
                      setup-helm-make
                      setup-anzu
                      setup-org-make-toc
+                     setup-unpackaged
                      ))
     (akirak/require feature))
 #+end_src
@@ -238,20 +239,6 @@ The following packages are enhancements to Emacs that don't require much configu
     :hook (prog-mode . hl-todo-mode))
 #+end_src
 
-Load unpackaged stuffs:
-
-#+begin_src emacs-lisp
-  (cl-loop for (src . outfile) in `((,(expand-file-name "extras/unpackaged/README.org"
-                                                        user-emacs-directory)
-                                     . "unpackaged.el"))
-           do (if (file-exists-p src)
-                  (let ((enable-local-variables nil)
-                        (outpath (f-join user-emacs-directory ".cache" outfile)))
-                    (org-babel-tangle-file src outpath)
-                    (load-file outpath))
-                (message "%s does not exist. Maybe you haven't checked out submodules"
-                         config)))
-#+end_src
 *** Dired
 **** Hydra
 #+begin_src emacs-lisp

@@ -40,3 +40,17 @@ If SEVERITY is non-nil, abort the initialization process."
       (error "Aborted due to a failed module."))))
 
 (defalias 'akirak/require 'akirak/setup-load)
+
+(defun akirak/load-babel-config-file (srcfile outfile)
+  "Load an Org literate config file.
+
+SRCFILE is the source Org file, and OUTFILE is the file name of an
+output file without the directory."
+  (require 'ob-tangle)
+  (if (file-exists-p srcfile)
+      (let ((enable-local-variables nil)
+            (outpath (f-join user-emacs-directory ".cache" outfile)))
+        (org-babel-tangle-file srcfile outpath)
+        (load-file outpath))
+    (message "%s does not exist. Maybe you haven't checked out submodules"
+             config)))
