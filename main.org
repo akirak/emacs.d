@@ -354,7 +354,7 @@ I will load =setup-magithub= library if I need it.
   :init
   (atomic-chrome-start-server))
 #+end_src
-*** Switching windows
+*** Miscellaneous commands
 **** Switching to an Org window
 #+begin_src emacs-lisp
   (defvar org-select-window-last-window nil)
@@ -382,6 +382,12 @@ I will load =setup-magithub= library if I need it.
           (message "No other org window in this frame")))))
 #+end_src
 
+**** modi/org-split-block
+#+begin_src emacs-lisp
+  (akirak/require 'modi-org-split-block)
+  (akirak/bind-key :package 'org :keymaps 'org-mode-map
+    [remap org-meta-return] 'modi/org-meta-return)
+#+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1

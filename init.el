@@ -28,6 +28,7 @@
 
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
+(add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 ;; Load my personal config
 (let ((file "~/learning/toolbox.org"))
