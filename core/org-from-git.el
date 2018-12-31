@@ -36,3 +36,22 @@
 (use-package org
   :config
   (require 'org-loaddefs))
+
+;; Workaround for a weird behaviour in `org-src-switch-to-buffer'
+;; when `org-src-window-setup' is set to `split-window-below'.
+;; It splits the window even when exiting the source buffer,
+;; which is not what I expect.
+
+(defun akirak/ad-around-org-src-switch-to-buffer (orig buffer context)
+  (if (and (eq org-src-window-setup 'split-window-below)
+           (memq context '(exit save)))
+      (progn
+        (delete-window)
+        (if-let ((w (get-buffer-window buffer)))
+            (select-window w)
+          (select-window (split-window-sensibly))
+          (switch-to-buffer buffer)))
+    (funcall orig buffer context)))
+
+(advice-add 'org-src-switch-to-buffer :around
+            'akirak/ad-around-org-src-switch-to-buffer)
