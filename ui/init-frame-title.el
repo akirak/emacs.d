@@ -48,7 +48,7 @@
 
 (setq frame-title-format
       '((:eval (akirak/frame-title-subject))
-        (:eval (akirak/frame-title-body))
+        ;; (:eval (akirak/frame-title-body))
         (:eval (akirak/frame-title-task))))
 
 (provide 'init-frame-title)
