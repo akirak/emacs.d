@@ -13,10 +13,8 @@
   ;; "C-2" 'org-time-hydra
   ;; "C-3" 'org-edna-hydra
   "C-4" 'org-starter-refile-by-key
-  "C-6" 'akirak/org-export-hydra/body
   "C-8" 'org-insert-hydra/body
-  "C-9" #'org-tree-to-indirect-buffer
-  [remap org-schedule] #'akirak/org-schedule)
+  "C-9" #'org-tree-to-indirect-buffer)
 
 (general-def :keymaps 'org-agenda-mode-map :package 'org-agenda
   [remap org-agenda-schedule] #'akirak/org-agenda-schedule)

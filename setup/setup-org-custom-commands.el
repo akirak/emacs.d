@@ -1,17 +1,8 @@
-(defun akirak/org-insert-buffer-header (key value)
-  (interactive
-   (list (read-string "Key: ")
-         (read-string "Value: ")))
-  (org-with-wide-buffer
-   (goto-char (point-min))
-   ;; If the first line is part of a header, go to the next line, as the line
-   ;; is likely to be a title and it is important in deft-mode.
-   (when (string-match "^#\\+" (thing-at-point 'line))
-     (forward-line))
-   (insert "#+" key ": " value "\n")
-   ;; Return the value
-   value))
-
+;; This library provides the following commands:
+;;
+;; - A variant of =org-schedule= and =org-agenda-schedule= which accept a numeric prefix N and schedule the entry in N days.
+;;
+;; Corresponding keybindings are remapped to the commands.
 (defun akirak/org-schedule (arg)
   "`org-schedule' which allows specifying a relative date as a numeric prefix."
   (interactive "P")
@@ -29,4 +20,9 @@
 (defun akirak/org-relative-date-string (n)
   (format-time-string "%F" (+ (float-time) (* n 86400))))
 
-(provide 'akirak-org-commands)
+(general-def :keymaps 'org-mode-map :package 'org
+  [remap org-schedule] #'akirak/org-schedule)
+(general-def :keymaps 'org-agenda-mode-map :package 'org
+  [remap org-agenda-schedule] #'akirak/org-agenda-schedule)
+
+(provide 'setup-org-custom-commands)
