@@ -1,11 +1,11 @@
 (defhydra akirak/window-hydra (:hint nil)
   "
-^^Window ^^^^         Layout^^^^       Toggle^^       Frame^^      ^^
-^^-------^^^^-------  ^^^^-----------  ^^-----------  ^^-----------^^------  
- _k_  ^^ _d_: delete  _s_/_v_: split   _o_: olivetti  _R_: rename  _F_: new
-_h_ _l_  _O_: other   _SPC_: layout^^  _zb_: ibuffer  _D_: delete
- _j_  ^^ _x_: kill b  _=_: balance^^   _zs_: symbols  _/_: select
-_a_ce ^^ _m_: cl msgs _r_: to reg^^    _zd_: debug-on-error (%s(if debug-on-error \"on\" \"off\"))
+^^Window ^^^^         Layout^^^^       Toggle^^       Frame^^      ^^             Org clock^^
+^^-------^^^^-------  ^^^^-----------  ^^-----------  ^^-----------^^-----------  ^^----------------------------
+ _k_  ^^ _d_: delete  _s_/_v_: split   _o_: olivetti  _R_: rename  _F_: new       _cj_: goto       _cc_: context
+_h_ _l_  _O_: other   _SPC_: layout^^  _zb_: ibuffer  _D_: delete  ^^             _co_: clock out  _ch_: history
+ _j_  ^^ _x_: kill b  _=_: balance^^   _zt_: dired    _/_: select  _C-r_: reload  _cq_: cancel     ^^
+_a_ce ^^ _m_: cl msgs _r_: to reg^^    _zs_: symbols  _zd_: [%s(if debug-on-error \"X\" \" \")] debug-on-error _C-v_: [%s(if view-mode \"X\" \" \")] view
 
 "
   ("'" avy-goto-char-timer "avy" :exit t)
@@ -17,6 +17,11 @@ _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zd_: debug-on-error (%s(if debug-on-erro
   ("R" set-frame-name)
   ("a" ace-window :exit t)
   ("b" ivy-switch-buffer "switch buf")
+  ("cc" counsel-org-clock-context)
+  ("ch" counsel-org-clock-history)
+  ("cj" org-clock-goto)
+  ("co" org-clock-out)
+  ("cq" org-clock-cancel)
   ("d" delete-window)
   ("g" (select-window (frame-first-window)))
   ("h" windmove-left)
@@ -39,6 +44,12 @@ _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zd_: debug-on-error (%s(if debug-on-erro
   ("zb" ibuffer-sidebar-toggle-sidebar)
   ("zd" toggle-debug-on-error :exit t)
   ("zs" symbol-overlay-remove-all)
+  ("zt" dired-sidebar-toggle-sidebar)
+  ("{" shrink-window-horizontally)
+  ("}" enlarge-window-horizontally)
+  
+  ("C-r" frame-workflow-reload-layout)
+  ("C-v" view-mode)
 
   ("RET" nil)
   ("SPC" toggle-window-split))
@@ -48,7 +59,7 @@ _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zd_: debug-on-error (%s(if debug-on-erro
   (mapc (lambda (name)
           (when-let ((w (get-buffer-window name)))
             (delete-window w)))
-        '("*Messages*" "*Warnings*")))
+        '("*Messages*" "*Warnings*" "*Backtrace*")))
 
 (defun akirak/toggle-terminal-like ()
   "Toggle a terminal window or something like it."

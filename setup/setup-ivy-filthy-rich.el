@@ -13,7 +13,9 @@
   :after ivy
   :disabled t
   :config
-  (ivy-set-display-transformer 'ivy-switch-buffer
-                               'ivy-rich-switch-buffer-transformer))
+  (dolist (func '(ivy-switch-buffer
+                  counsel-projectile-switch-to-buffer))
+    (ivy-set-display-transformer func
+                                 'ivy-rich-switch-buffer-transformer)))
 
 (provide 'setup-ivy-filthy-rich)

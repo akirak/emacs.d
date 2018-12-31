@@ -4,4 +4,4 @@
   :custom
   (dimmer-exclusion-regexp "\\(\\*Help\\*\\|\\*helm\\)"))
 
-(provide 'init-dimmer)
+(provide 'setup-dimmer)

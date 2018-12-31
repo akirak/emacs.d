@@ -15,6 +15,7 @@
 (tooltip-mode -1)
 (menu-bar-mode -1)
 (winner-mode 1)                         ; Enable winner-mode for undoing/redoing the window configuration
+(blink-cursor-mode 0)
 
 ;; Default variables
 (setq-default version-control t
@@ -35,6 +36,9 @@
       ediff-window-setup-function #'ediff-setup-windows-plain)
 
 (setq bookmark-default-file "~/.emacs-bookmarks")
+
+(add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
+(add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
 
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here

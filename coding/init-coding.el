@@ -2,9 +2,6 @@
 ;; e.g. lsp-mode, depending on the language.
 (global-eldoc-mode -1)
 
-;;;; Project management
-(require 'init-projectile)
-
 ;;;; Jump and navigation
 (require 'init-dumb-jump)
 (require 'init-avy)
@@ -33,16 +30,11 @@
 
 ;;;;; Visual
 (require 'init-symbol-overlay)
-(require 'init-rainbow-mode)
 
 ;;;;; Referencing
 (require 'init-dash)
 
 ;;;;; Misc
 (require 'init-scratch)
-
-;;;; Org
-(require 'init-outshine)
-(require 'setup-outorg)
 
 (provide 'init-coding)

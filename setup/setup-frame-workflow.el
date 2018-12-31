@@ -1,6 +1,3 @@
-(unless (require 'dash-functional nil t)
-  (use-package dash-functional))
-
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 (use-package frame-purpose
@@ -20,15 +17,4 @@
   :straight frame-workflow
   :commands (helm-frame-workflow))
 
-;;;; Some workspaces
-(akirak/define-frame-workflow "emacs-config"
-  :key "C"
-  :layout
-  '(progn
-     (delete-other-windows)
-     (let ((default-directory user-emacs-directory))
-       (frame-workflow-magit-same-window)))
-  :make-frame
-  '(frame-purpose-make-directory-frame user-emacs-directory))
-
-(provide 'init-frames)
+(provide 'setup-frame-workflow)

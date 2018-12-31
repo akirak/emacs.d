@@ -14,7 +14,6 @@
 ;;; Basic configuration
 
 (require 'init-org)
-(require 'init-ui)
 (require 'init-coding)
 
 ;;; Enhancements (misc/)
@@ -45,7 +44,6 @@
 (require 'init-python)
 (require 'init-nim)
 (require 'init-elixir)
-(require 'init-lispy)
 (require 'init-markdown)
 (require 'init-haskell)
 (require 'init-dockerfile)

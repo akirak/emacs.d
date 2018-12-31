@@ -59,4 +59,4 @@
 
 (setq-default compilation-finish-functions #'akirak/close-compilation-on-finish)
 
-(provide 'init-shackle)
+(provide 'setup-window-management)

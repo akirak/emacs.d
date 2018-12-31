@@ -11,14 +11,9 @@
   :general
   (:keymaps 'outline-minor-mode-map
             "C-M-i" nil)
+  :hook
+  (outline-minor . outshine-mode)
   :custom
   (outshine-use-speed-commands t))
 
-(use-package navi-mode
-  :disabled t)
-
-;; Jumping based on outlines (better than imenu)
-(use-package helm-navi :after (helm navi-mode)
-  :disabled t)
-
-(provide 'init-outshine)
+(provide 'setup-outshine)

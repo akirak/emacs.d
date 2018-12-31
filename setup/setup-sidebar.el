@@ -37,6 +37,8 @@
   :general
   (:keymaps 'dired-sidebar-mode-map :package 'dired-sidebar
             "SPC" #'akirak/dired-sidebar-preview-file
-            "RET" #'akirak/dired-sidebar-find-file))
+            "RET" #'akirak/dired-sidebar-find-file)
+  :custom
+  (dired-sidebar-width 29))
 
-(provide 'init-sidebar)
+(provide 'setup-sidebar)

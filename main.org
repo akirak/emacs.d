@@ -108,14 +108,6 @@ Deprecated: Allow installation of system packages via use-package
   (use-package use-package-ensure-system-package)
 #+end_src
 
-Define a custom function for defining frame subjects.
-
-#+begin_src emacs-lisp
-  (defmacro akirak/define-frame-workflow (name &rest args)
-    (declare (indent 1))
-    `(with-eval-after-load 'frame-workflow
-       (frame-workflow-define-subject ,name ,@args)))
-#+end_src
 ** Overriding defaults
 These settings don't depend on external dependencies, so they should be applied earlier.
 
@@ -218,8 +210,17 @@ There are not so many commands that need to be add to the map:
 ** Dependencies for other packages
 :PROPERTIES:
 :TOC:      1
+:CUSTOM_ID: dependencies
+:ID:       ee01d40d-51af-4598-825e-dc79e4e0c394
 :END:
 These packages may be required by other packages loaded later on.
+*** dash.el
+Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they should be loaded in the very beginning of package declarations.
+
+#+begin_src emacs-lisp
+  (use-package dash)
+  (use-package dash-functional)
+#+end_src
 *** Ivy
 #+begin_src emacs-lisp
   (akirak/require 'setup-ivy t)
@@ -297,13 +298,17 @@ The typography module depends on several fonts from many packages. I have to doc
 ** A bunch of useful features
 :PROPERTIES:
 :TOC:      1
+:ID:       7042f1a9-0cd3-4769-acda-a98d200f569b
+:CUSTOM_ID: enhancements
 :END:
 #+begin_src emacs-lisp
   (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
                      setup-key-translation ; Translate certain key combinations for ergonomics
                      setup-keybindings     ; My global keybindings
                      setup-counsel         ; Basic Counsel commands
+                     setup-projectile      ; Manage projects
                      setup-swiper ; Incremental search through the buffer using Ivy
+                     setup-lispy  ; Efficient lispy editing
                      setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
                      setup-magit       ; The Git porcelain for Emacs
@@ -322,6 +327,9 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-unpackaged     ; A bunch of useful commands
                      setup-locate        ; Configure locate and updatedb
                      setup-org-custom-commands
+                     setup-ace-window     ; An alternative way for window manipulation
+                     setup-sidebar        ; ibuffer and dired sidebars
+                     setup-outshine       ; Extra support for outline editing
                      ))
     (akirak/require feature))
 #+end_src
@@ -342,8 +350,38 @@ The following packages are enhancements to Emacs that don't require much configu
   (use-package helm-tail :after helm
     :straight (helm-tail :host github :repo "akirak/helm-tail")
     :commands (helm-tail))
+  (use-package counsel-projectile
+    :after (projectile counsel)
+    :init
+    (counsel-projectile-mode 1))
+  (use-package olivetti                   ; Distraction-free editing
+    :commands (turn-on-olivetti-mode)
+    :custom (olivetti-body-width 92))
+  (use-package fontify-face
+    :hook
+    (emacs-lisp . (lambda () (fontify-face-mode 1))))
+  (use-package rainbow-mode
+    :diminish 'rainbow-mode
+    :commands (rainbow-mode)
+    :hook
+    (prog-mode . (lambda () (rainbow-mode 1))))
 #+end_src
 
+*** frame-workflow
+[[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-frame-workflow t) ; Ensure loading frame-workflow
+#+end_src
+
+Define a custom function for defining frame subjects.
+
+#+begin_src emacs-lisp
+  (defmacro akirak/define-frame-workflow (name &rest args)
+    (declare (indent 1))
+    `(with-eval-after-load 'frame-workflow
+       (frame-workflow-define-subject ,name ,@args)))
+#+end_src
 *** Dired
 **** Hydra
 #+begin_src emacs-lisp
@@ -466,6 +504,93 @@ I created a hydra for managing frames and windows.
   (akirak/require 'setup-window-hydra)
   (akirak/bind-key "M-o" #'akirak/window-hydra/body)
 #+end_src
+*** Visual cues and extra information display
+
+Additional visual cues can increase productivity, but they can be noisy at the same time. Therefore I need to justify each package added to my config.
+
+**** Beacon
+I often lose sight of the cursor when I switch to another window, so this is necessary.
+#+begin_src emacs-lisp
+  (use-package beacon                     ; Highlight the cursor on certain events
+    :config
+    (beacon-mode 1))
+#+end_src
+**** Rainbow-delimiters
+This is especially useful in editing Lisp code.
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters         ; Colourize parentheses in source code
+  :hook
+  (prog-mode-hook . rainbow-delimiters-mode))
+#+end_src
+**** Dimmer
+This package makes the focused window stands out by dimming the other windows. However, the dimness should be kept small to make referenced text readable.
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dimmer)
+#+end_src
+**** Git-gutter
+This lets you know which parts of the buffers are modified since the last commit.
+#+begin_src emacs-lisp
+  (use-package git-gutter
+    :diminish git-gutter-mode
+    :init
+    (global-git-gutter-mode))
+#+end_src
+**** Highlight-indent-guides
+This is helpful in programming languages that depend on indentation levels.
+#+begin_src emacs-lisp
+  (use-package highlight-indent-guides
+    :init
+    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+#+end_src
+**** Fill-column-indicator
+Visualise (usually) 80 columns.
+#+begin_src emacs-lisp
+  (use-package fill-column-indicator
+    :init
+    (add-hook 'prog-mode-hook 'fci-mode))
+#+end_src
+**** Whitespace
+Visualise unnecessary, extra whitespace characters in source code.
+#+begin_src emacs-lisp
+  (use-package whitespace
+    :straight nil
+    :diminish whitespace-mode
+    :hook
+    (prog-mode-hook . whitespace-mode)
+    :custom
+    (whitespace-display-mappings
+     ;; all numbers are Unicode codepoint in decimal. try (insert-char 182 ) to see it
+     '(
+       (space-mark 32 [183] [46]) ; 32 SPACE, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
+       (newline-mark 10 [182 10]) ; 10 LINE FEED
+       (tab-mark 9 [187 9] [9655 9] [92 9]) ; 9 TAB, 9655 WHITE RIGHT-POINTING TRIANGLE 「▷」
+       ))
+    (whitespace-style '(face tabs trailing tab-mark)))
+#+end_src
+
+*** LaCarte
+:PROPERTIES:
+:CREATED_TIME: [2019-01-01 Tue 12:16]
+:ID:       9f69a1f2-bc17-4dd1-b98e-51a398b0cb6e
+:END:
+:LOGBOOK:
+CLOCK: [2019-01-01 Tue 12:16]--[2019-01-01 Tue 12:18] =>  0:02
+:END:
+
+Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangerous key by default, so I will remap the key to lacarte instead:
+
+#+begin_src emacs-lisp
+  (use-package lacarte
+    :commands (lacarte-execute-menu-command))
+  (akirak/bind-key [remap menu-bar-open] #'lacarte-execute-menu-command)
+#+end_src
+*** DSLs
+**** Meson                                                 :build__system:
+
+#+begin_src emacs-lisp
+  (use-package meson-mode)
+#+end_src
+
 ** Writing
 :PROPERTIES:
 :TOC:      1
@@ -551,9 +676,32 @@ Ideally, this section should be a portfolio of my skills.
     :key "e"
     :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
 #+end_src
+**** Frame for the Emacs config
+#+begin_src emacs-lisp
+  (akirak/define-frame-workflow "emacs-config"
+    :key "C"
+    :layout
+    '(progn
+       (delete-other-windows)
+       (let ((default-directory user-emacs-directory))
+         (frame-workflow-magit-same-window)))
+    :make-frame
+    '(frame-purpose-make-directory-frame user-emacs-directory))
+#+end_src
 **** EMake
 #+begin_src emacs-lisp
   (akirak/require 'setup-emake)
+#+end_src
+*** Rust
+:PROPERTIES:
+:CREATED_TIME: [2019-01-01 Tue 15:54]
+:ID:       e15d3e74-9760-4e6f-ba18-9cb337758247
+:END:
+:LOGBOOK:
+CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
+:END:
+#+begin_src emacs-lisp
+  (use-package rust-mode)
 #+end_src
 ** Meta
 *** TODO Import from the previous configuration
