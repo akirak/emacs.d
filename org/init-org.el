@@ -27,7 +27,6 @@
 
 ;;;; Utilities for customization
 (require 'init-org-capture)
-(require 'init-org-agenda)
 (require 'init-org-super-agenda)
 ;; (require 'init-org-timeline)
 
@@ -35,8 +34,6 @@
 (require 'init-org-options)
 
 ;;;; Keybindings
-(require 'init-org-bindings)
-(require 'init-org-agenda-bindings)
 (require 'org-refile-hydra)
 (require 'org-insert-hydra)
 

@@ -1,24 +1,3 @@
-(general-def :keymaps 'org-mode-map :package 'org
-  "C-a" #'move-beginning-of-line
-  "C-e" #'move-end-of-line
-  ;; I don't use any of these bindings and want to use them for other purposes
-  "C-c [" nil
-  "C-c ]" nil
-  "M-n" 'org-metadown
-  "M-p" 'org-metaup
-  "M-H" 'org-shiftmetaleft
-  "M-L" 'org-shiftmetaright
-  "C-1" 'counsel-org-tag
-  ;; TODO: Create hydra commands
-  ;; "C-2" 'org-time-hydra
-  ;; "C-3" 'org-edna-hydra
-  "C-4" 'org-starter-refile-by-key
-  "C-8" 'org-insert-hydra/body
-  "C-9" #'org-tree-to-indirect-buffer)
-
-(general-def :keymaps 'org-agenda-mode-map :package 'org-agenda
-  [remap org-agenda-schedule] #'akirak/org-agenda-schedule)
-
 (defconst akirak/org-clock-buffer-name "*org clocking*"
   "Name for the indirect buffer for the clocking task.")
 
@@ -61,4 +40,4 @@ select it."
           (display-buffer buf)
         (pop-to-buffer buf)))))
 
-(provide 'init-org-bindings)
+(provide 'unused-org-commands)
