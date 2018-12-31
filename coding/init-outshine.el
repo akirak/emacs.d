@@ -11,8 +11,6 @@
   :general
   (:keymaps 'outline-minor-mode-map
             "C-M-i" nil)
-  :hook
-  (outline-minor-mode . outshine-hook-function)
   :custom
   (outshine-use-speed-commands t))
 
