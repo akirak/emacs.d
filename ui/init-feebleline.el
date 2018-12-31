@@ -12,7 +12,9 @@
                         (magit-get-current-branch))) :face font-lock-string-face :post " ")
           ((lambda () mode-name) :post " " :face font-lock-comment-face)
           ((lambda () (format-mode-line "%I")) :post " " :face font-lock-comment-face)
-          (akirak/org-clock-summary :face font-lock-builtin-face :pre " :: "))))
+          (akirak/org-clock-summary :face font-lock-builtin-face :pre " :: ")
+          ((lambda () (frame-parameter nil 'name))
+           :align right :face font-lock-function-name-face))))
 
 (defun akirak/org-clock-summary ()
   (when (org-clocking-p)
