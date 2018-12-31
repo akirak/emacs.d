@@ -23,16 +23,16 @@
                    (seconds (float-time duration)))
               (cond
                ((< seconds 3600) (format-time-string "%-M:%S" duration))
-               ((< seconds 86400) (format-time-string "%-Hh %-Mm" duration))
+               ((< seconds 86400) (format-time-string "%-Hh%-Mm" duration))
                (t (org-minutes-to-clocksum-string
                    (floor seconds 60)))))
             " on "
-            (or org-clock-current-task
+            (if (string-empty-p org-clock-current-task)
                 (with-current-buffer (marker-buffer org-clock-marker)
                   (org-with-wide-buffer
                    (goto-char org-clock-marker)
                    (nth 4 (org-heading-components))))
-                "-")
+              org-clock-current-task)
             " (in "
             (buffer-name (marker-buffer org-clock-marker))
             ")")))
