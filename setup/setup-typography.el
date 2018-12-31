@@ -1,7 +1,4 @@
-;;; init-typography.el --- Typography configuration
-
-(require 'init-header-line)
-
+;;; setup-typography.el --- Typography configuration
 ;;;; Options
 
 (setq-default org-fontify-quote-and-verse-blocks t)
@@ -193,4 +190,4 @@
   (set-fontset-font "fontset-default" 'han .simplified-chinese-font)
   (set-fontset-font "fontset-default" 'bopomofo .traditional-chinese-font))
 
-(provide 'init-typography)
+(provide 'setup-typography)

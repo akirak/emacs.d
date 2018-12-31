@@ -1,5 +1,3 @@
-(use-package all-the-icons)
-
 (defface akirak/header-line-buffer-name
   '()
   "Face for the buffer name segment in a header line.")
@@ -63,13 +61,14 @@
 (defun akirak/set-default-header-line ()
   "Set the default header line with which-function."
   (unless header-line-format
-    (setq header-line-format (akirak/make-header-line-format
-                              ;; Omit which-func if the buffer is indirect
-                              (unless (buffer-base-buffer)
-                                `(which-func-mode
-                                  (:eval
-                                   (propertize ,(cadr which-func-current)
-                                               'face 'akirak/header-line-outline))))))))
+    ;; (setq header-line-format (akirak/make-header-line-format
+    ;;                           ;; Omit which-func if the buffer is indirect
+    ;;                           (unless (buffer-base-buffer)
+    ;;                             `(which-func-mode
+    ;;                               (:eval
+    ;;                                (propertize ,(cadr which-func-current)
+    ;;                                            'face 'akirak/header-line-outline))))))
+    (setq header-line-format (akirak/make-header-line-format))))
 
 ;;;;; Setting the default header line
 
@@ -133,6 +132,7 @@
                             s))
                         (cdr orig-rev)))))))))
 
+(require 'mode-local)
 (setq-mode-local org-mode
                  header-line-format
                  (akirak/make-header-line-format
@@ -166,4 +166,4 @@
         " "
         (:eval (dired-filter--describe-filters))))
 
-(provide 'init-header-line)
+(provide 'setup-header-line)

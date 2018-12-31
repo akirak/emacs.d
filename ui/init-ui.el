@@ -1,22 +1,3 @@
-;;;; General appearance
-;;;;; Frame elements
-;; (require 'init-spaceline-ati)
-;; (require 'init-doom-modeline)
-(require 'init-feebleline)
-
-;; The header line
-(require 'init-header-line)
-(require 'init-frame-title)
-
-;;;;; Prefered theme
-(require 'init-dracula-theme)
-
-;;;;; Typography
-;; Activate the primary typography if and only if a window system is
-;; available
-(when (window-system)
-  (require 'init-typography))
-
 ;;;; Visual cues
 
 ;;;;; Highlighting focus

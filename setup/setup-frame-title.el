@@ -1,5 +1,3 @@
-;;; init-frame-title.el --- Set the frame title format -*- lexical-binding: t -*-
-
 ;;;; Advices
 
 ;;;;; Unset a frame title set by frame-purpose
@@ -47,9 +45,6 @@
 ;;;; The frame title format
 
 (setq frame-title-format
-      '((:eval (akirak/frame-title-subject))
-        ;; (:eval (akirak/frame-title-body))
-        (:eval (akirak/frame-title-task))))
+      '((:eval (akirak/frame-title-subject))))
 
-(provide 'init-frame-title)
-;;; init-frame-title.el ends here
+(provide 'setup-frame-title)

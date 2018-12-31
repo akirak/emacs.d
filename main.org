@@ -263,6 +263,37 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
   (use-package ts
     :straight (ts :host github :repo "alphapapa/ts.el"))
 #+end_src
+*** all-the-icons
+#+begin_src emacs-lisp
+(use-package all-the-icons)
+#+end_src
+** Appearances
+*** Theme
+I have been using dracula, but I may switch to another theme with light background.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dracula-theme t)
+#+end_src
+
+*** Frame elements
+Due to consistency with other applications on computer, my eyes tend to stay in the upper area of a window. I prefer relying on the header line extensively rather than the modeline.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-header-line t) ; Hide the mode line and use the header line
+  (akirak/require 'setup-feebleline t)  ; Display extra information in the echo area
+  (akirak/require 'setup-frame-title t) ; Configure a custom frame title format
+#+end_src
+*** Typography
+This modules configures extra face attributes for typography. 
+This feature is enabled if and only if a window system is
+available.
+
+#+begin_src emacs-lisp
+  (when (window-system)
+    (akirak/require 'setup-typography))
+#+end_src
+**** TODO How to install fonts
+The typography module depends on several fonts from many packages. I have to document how to install them.
 ** A bunch of useful features
 :PROPERTIES:
 :TOC:      1

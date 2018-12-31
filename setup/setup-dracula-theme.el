@@ -30,4 +30,4 @@
      `(dired-filter-group-header
        ((default :foreground ,keyword))))))
 
-(provide 'init-dracula-theme)
+(provide 'setup-dracula-theme)
