@@ -165,18 +165,7 @@
   "<f5>" 'revert-buffer
   "<f6>" 'akirak/shell-new
   "<f7>" #'akirak/magit-status-prefer-existing
-  "<f8>" #'akirak/window-hydra/body
   "<f9>" 'recompile)
-
-;; TODO: Use hydra
-(defhydra akirak/window-hydra ()
-  ""
-  ("d" toggle-debug-on-error "Debug on error")
-  ("l" imenu-list "imenu-list")
-  ("s" symbol-overlay-remove-all "symbol-overlay")
-  ("z" olivetti-mode "olivetti")
-  ("b" ibuffer-sidebar-toggle-sidebar :exit t)
-  ("q" nil))
 
 (general-def :prefix "<f12>"
   "c" 'calendar
