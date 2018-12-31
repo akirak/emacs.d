@@ -1,6 +1,3 @@
-(use-package fwb-cmds
-  :straight (fwb-cmds :host github :repo "tarsius/fwb-cmds"))
-
 (use-package ivy-bookmarked-directory
   :straight (ivy-bookmarked-directory :host github
                                       :repo "akirak/ivy-bookmarked-directory")
@@ -29,15 +26,5 @@
                             (let ((default-directory cand))
                               (call-interactively 'shell-command)))
                       "Run shell command"))))
-
-(require 'init-helpful)
-
-(use-package helm-tail :after helm
-  :straight (helm-tail :host github :repo "akirak/helm-tail")
-  :commands (helm-tail))
-
-(defun akirak/previous-frame ()
-  (interactive)
-  (other-frame -1))
 
 (provide 'init-commands)

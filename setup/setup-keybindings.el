@@ -61,7 +61,7 @@
 ;; (general-def :keymaps 'emacs-lisp-mode-map "M-m" 'er/mark-symbol-with-prefix)
 ;; (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-m")
 
-(general-def "M-o" 'aya-open-line)
+
 (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 
 ;; Use M-r as a prefix for register and repeat commands

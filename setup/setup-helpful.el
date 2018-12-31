@@ -18,4 +18,4 @@
   :general
   ([help ?.] 'helpful-at-point))
 
-(provide 'init-helpful)
+(provide 'setup-helpful)

@@ -110,4 +110,4 @@
                               " %s --regex %s")))
     (helm-locate arg)))
 
-(provide 'init-locate)
+(provide 'setup-locate)
