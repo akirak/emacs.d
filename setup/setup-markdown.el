@@ -5,4 +5,4 @@
   :custom
   (markdown-command "pandoc -f gfm -t html"))
 
-(provide 'init-markdown)
+(provide 'setup-markdown)

@@ -43,4 +43,4 @@ variable.")
       (akirak/ansible-playbook-file-p)
       (akirak/ansible-has-playbook-p)))
 
-(provide 'init-ansible)
+(provide 'setup-ansible)

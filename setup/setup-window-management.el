@@ -59,4 +59,25 @@
 
 (setq-default compilation-finish-functions #'akirak/close-compilation-on-finish)
 
+;; Workaround for a weird behaviour in `org-src-switch-to-buffer'
+;; when `org-src-window-setup' is set to `split-window-below'.
+;; It splits the window even when exiting the source buffer,
+;; which is not what I expect.
+
+(defvar-local akirak/org-src-last-wconf nil)
+
+(defun akirak/ad-around-org-src-switch-to-buffer (orig buffer context)
+  (if (eq org-src-window-setup 'split-window-below)
+      (if (memq context '(exit save))
+          (progn
+            (delete-window)
+            (set-window-configuration akirak/org-src-last-wconf))
+        (let ((wconf (current-window-configuration)))
+          (funcall orig buffer context)
+          (setq akirak/org-src-last-wconf wconf)))
+    (funcall orig buffer context)))
+
+(advice-add 'org-src-switch-to-buffer :around
+            'akirak/ad-around-org-src-switch-to-buffer)
+
 (provide 'setup-window-management)

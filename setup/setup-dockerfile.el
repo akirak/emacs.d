@@ -10,4 +10,4 @@
   :ensure-system-package
   (docker-langserver . "sudo npm i -g dockerfile-language-server-nodejs"))
 
-(provide 'init-dockerfile)
+(provide 'setup-dockerfile)

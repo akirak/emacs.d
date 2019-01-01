@@ -268,6 +268,17 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 #+begin_src emacs-lisp
 (use-package all-the-icons)
 #+end_src
+*** emacsql-sqlite
+#+begin_src emacs-lisp
+  (use-package emacsql-sqlite
+    :disabled t
+    :init
+    (let ((default-directory "~/.emacs.d/straight/repos/emacsql"))
+      (if (file-exists-p "emacsql-sqlite.elc")
+          (message "emacsql-sqlite has been already built")
+        (compile "make sqlite/emacsql-sqlite")
+        (compile "make emacsql-sqlite.elc"))))
+#+end_src
 ** Appearances
 *** Theme
 I have been using dracula, but I may switch to another theme with light background.
@@ -308,13 +319,14 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-counsel         ; Basic Counsel commands
                      setup-projectile      ; Manage projects
                      setup-swiper ; Incremental search through the buffer using Ivy
-                     setup-lispy  ; Efficient lispy editing
+                     setup-lispy  ; Efficient lisp editing
                      setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
                      setup-magit       ; The Git porcelain for Emacs
                      setup-helpful     ; Extended helpful commands
                      setup-company     ; Auto completion
                      setup-dired       ; File browser
+                     setup-multi-term  ; Terminal emulator
                      setup-aweshell    ; Enhance eshell
                      setup-rename      ; Utilities for rename operations
                      setup-crux ; Collection of utilities with modifications
@@ -330,6 +342,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-ace-window     ; An alternative way for window manipulation
                      setup-sidebar        ; ibuffer and dired sidebars
                      setup-outshine       ; Extra support for outline editing
+                     setup-init-time-log  ; Log init time
                      ))
     (akirak/require feature))
 #+end_src
@@ -365,6 +378,17 @@ The following packages are enhancements to Emacs that don't require much configu
     :commands (rainbow-mode)
     :hook
     (prog-mode . (lambda () (rainbow-mode 1))))
+  (use-package docker)                    ; Manage docker services
+  (use-package prodigy)                   ; Manage daemons
+  (use-package helm-linux-disks
+    :straight (helm-linux-disks :host github
+                                :repo "akirak/helm-linux-disks")
+    :commands (helm-linux-disks)
+    :custom
+    (linux-disk-terminal-type 'akirak/shell-new))
+  (use-package esup                       ; Profile the startup process
+    :commands (esup))
+  (use-package git-modes)
 #+end_src
 
 *** frame-workflow
@@ -374,14 +398,23 @@ The following packages are enhancements to Emacs that don't require much configu
   (akirak/require 'setup-frame-workflow t) ; Ensure loading frame-workflow
 #+end_src
 
-Define a custom function for defining frame subjects.
+*** Terminal
+#+begin_src emacs-lisp
+  (akirak/require 'setup-terminal t)
+#+end_src
+**** Frame
 
 #+begin_src emacs-lisp
-  (defmacro akirak/define-frame-workflow (name &rest args)
-    (declare (indent 1))
-    `(with-eval-after-load 'frame-workflow
-       (frame-workflow-define-subject ,name ,@args)))
+  (akirak/define-frame-workflow "terminal"
+    :key "t"
+    :make-frame
+    '(frame-purpose-make-frame :modes '(term-mode
+                                        eshell-mode
+                                        shell-mode))
+    :layout
+    '(ibuffer-sidebar-show-sidebar))
 #+end_src
+
 *** Dired
 **** Hydra
 #+begin_src emacs-lisp
@@ -590,6 +623,49 @@ Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangero
 #+begin_src emacs-lisp
   (use-package meson-mode)
 #+end_src
+**** YAML                                        :configuration__language:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-yaml)
+#+end_src
+***** Ansible
+Ansible is based on YAML.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-ansible)
+#+end_src
+**** Dockerfile                                  :configuration__language:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dockerfile)
+#+end_src
+**** Nix                                         :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-nix)
+#+end_src
+*** Startup window(s)
+By default, =*Messages*= buffer is shown at startup. This behaviour can be altered by overriding =akirak/setup-startup-windows= function.
+#+begin_src emacs-lisp
+  ;;;; Startup window
+  ;; Switch to *Messages* at startup
+  (defun akirak/setup-startup-windows ()
+    (switch-to-buffer "*Messages*"))
+
+  (add-hook 'emacs-startup-hook 'akirak/setup-startup-windows)
+#+end_src
+*** Auto saving and auto git-commit
+
+Files are automatically saved on certain events by =super-save-mode=:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-super-save)
+#+end_src
+
+You can also configure automatic git-commit using =git-auto-commit-mode=, but this is not enabled by default:
+
+#+begin_src emacs-lisp
+  (use-package git-auto-commit-mode)
+#+end_src
 
 ** Writing
 :PROPERTIES:
@@ -618,6 +694,8 @@ Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangero
 #+end_src
 *** GraphViz
 #+begin_src emacs-lisp
+  (use-package graphviz-dot-mode)
+
   (use-package ob-dot
     :after ob
     :straight nil
@@ -639,6 +717,13 @@ Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangero
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-hugo)
 #+end_src
+*** Markdown
+Markdown is supported as well:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-markdown)
+#+end_src
+
 ** Programming languages
 :PROPERTIES:
 :TOC:      1
@@ -692,6 +777,50 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/require 'setup-emake)
 #+end_src
+*** Elixir
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-elixir)
+#+end_src
+
+*** Haskell
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-haskell)
+#+end_src
+
+*** Shell scripts (bash)
+
+#+begin_src emacs-lisp
+  (use-package company-shell
+    :init
+    (add-to-list 'company-backends 'company-shell))
+#+end_src
+
+*** Elm
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-elm)
+#+end_src
+
+*** Kotlin
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-kotlin)
+#+end_src
+
+*** Nim
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-nim)
+#+end_src
+
+*** Python
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-python)
+#+end_src
+
 *** Rust
 :PROPERTIES:
 :CREATED_TIME: [2019-01-01 Tue 15:54]
@@ -702,6 +831,11 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 :END:
 #+begin_src emacs-lisp
   (use-package rust-mode)
+#+end_src
+** Emacs applications
+*** Beancount
+#+begin_src emacs-lisp
+  (akirak/require 'setup-beancount)
 #+end_src
 ** Meta
 *** TODO Import from the previous configuration
@@ -717,20 +851,22 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 Review config in the following directories:
 
 - [X] keybindings
-- [ ] progmodes
+- [X] progmodes
 - [ ] org
-- [ ] ui
-- [ ] apps
+- [X] ui
+- [X] apps
 - [ ] coding
 - [ ] etc
-- [ ] exwm
+- [X] exwm
 - [X] international
-- [ ] local
-- [ ] misc
-- [ ] x
+- [X] local
+- [X] misc
+- [X] x
 
 The following modules require further review:
 
 - [ ] [[file:setup/setup-dired.el]]
 - [ ] [[file:setup/setup-keybindings.el]]
-
+- [ ] [[file:setup/setup-web-browser.el]]
+- [ ] [[file:setup/setup-corefighter.el]]
+- [ ] [[file:setup/setup-repom.el]]

@@ -1,4 +1,4 @@
-;;; init-corefighter.el --- corefighter -*- lexical-binding: t -*-
+;;; setup-corefighter.el --- corefighter -*- lexical-binding: t -*-
 
 (straight-use-package '(corefighter-extras :host github
                                            :repo "akirak/corefighter-extras"))
@@ -41,5 +41,5 @@
                               :files ("helm-corefighter.el"))
   :commands (helm-corefighter))
 
-(provide 'init-corefighter)
-;;; init-corefighter.el ends here
+(provide 'setup-corefighter)
+;;; setup-corefighter.el ends here

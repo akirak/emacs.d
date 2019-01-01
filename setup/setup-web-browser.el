@@ -1,4 +1,4 @@
-;;; init-web-browser.el --- Integration with an external web browser -*- lexical-binding: t -*-
+;;; setup-web-browser.el --- Integration with an external web browser -*- lexical-binding: t -*-
 
 (defun akirak/display-url-for-referencing (url)
   (interactive "sUrl: ")
@@ -41,5 +41,5 @@
                (= 1 (length (frame-list))))
      (delete-frame)))
 
-(provide 'init-web-browser)
-;;; init-web-browser.el ends here
+(provide 'setup-web-browser)
+;;; setup-web-browser.el ends here

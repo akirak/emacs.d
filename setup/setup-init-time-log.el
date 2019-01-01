@@ -1,8 +1,3 @@
-(use-package uptimes
-  :custom
-  (uptimes-database "~/.emacs.d/.cache/uptimes.el"))
-(use-package esup)
-
 (defcustom akirak/init-time-log-file nil
   "Log file to record a history of `emacs-init-time'.")
 
@@ -20,17 +15,11 @@
         (append-to-file nil nil log-file)))
     (message "Emacs ready in %s with %d garbage collections."
              init-time gcs-done)))
+
 (add-hook 'emacs-startup-hook 'akirak/log-init-time)
 
 (defun akirak/view-init-log ()
   (interactive)
   (find-file-read-only akirak/init-time-log-file))
 
-;;;; Startup window
-;; Switch to *Messages* at startup
-(defun akirak/setup-startup-windows ()
-  (switch-to-buffer "*Messages*"))
-
-(add-hook 'emacs-startup-hook 'akirak/setup-startup-windows)
-
-(provide 'init-startup)
+(provide 'setup-init-time-log)

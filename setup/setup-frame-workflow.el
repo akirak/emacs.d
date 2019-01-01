@@ -13,6 +13,10 @@
   :config
   (frame-workflow-mode 1))
 
+(defalias 'akirak/define-frame-workflow 'frame-workflow-define-subject)
+(make-obsolete 'akirak/define-frame-workflow
+               'frame-workflow-define-subject "2019.1.1")
+
 (use-package helm-frame-workflow :after (frame-workflow helm)
   :straight frame-workflow
   :commands (helm-frame-workflow))

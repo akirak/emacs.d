@@ -19,4 +19,4 @@
   :hook
   (haskell-mode . lsp-haskell-enable))
 
-(provide 'init-haskell)
+(provide 'setup-haskell)

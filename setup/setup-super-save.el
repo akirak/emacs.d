@@ -4,4 +4,4 @@
   :custom
   (super-save-auto-save-when-idle t))
 
-(provide 'init-super-save)
+(provide 'setup-super-save)

@@ -25,21 +25,4 @@
                                               (string-remove-prefix ":" (symbol-name key))))))
                     (fset name value))))))
 
-(require 'setup-multi-term)
-
-;; Map commands
-
-;; (require 'init-multi-term)
-
-;;;; frame-workflow
-
-(akirak/define-frame-workflow "terminal"
-  :key "t"
-  :make-frame
-  '(frame-purpose-make-frame :modes '(term-mode
-                                      eshell-mode
-                                      shell-mode))
-  :layout
-  '(ibuffer-sidebar-show-sidebar))
-
-(provide 'init-terminal)
+(provide 'setup-terminal)

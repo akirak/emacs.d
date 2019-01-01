@@ -18,4 +18,4 @@
   (add-hook 'org-capture-after-finalize-hook
             #'akirak/remove-id-from-beancount-capture))
 
-(provide 'init-beancount)
+(provide 'setup-beancount)

@@ -17,4 +17,4 @@
   :if (bound-and-true-p akirak/nixos-options-available)
   :straight nix-emacs)
 
-(provide 'init-nix)
+(provide 'setup-nix)

@@ -7,4 +7,4 @@
   :custom
   (alchemist-key-command-prefix "C-c ,"))
 
-(provide 'init-elixir)
+(provide 'setup-elixir)

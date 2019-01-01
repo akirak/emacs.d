@@ -1,4 +1,4 @@
-;;; init-repom.el --- Configuration for the repository manager -*- lexical-binding: t -*-
+;;; setup-repom.el --- Configuration for the repository manager -*- lexical-binding: t -*-
 
 (use-package helm-projectile
   :after (helm projectile))
@@ -37,5 +37,5 @@
                         :files ("helm-repom.el"))
   :commands (helm-repom))
 
-(provide 'init-repom)
-;;; init-repom.el ends here
+(provide 'setup-repom)
+;;; setup-repom.el ends here
