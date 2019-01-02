@@ -17,4 +17,4 @@ _p_ previous / _n_ next
   ("p" bm-previous)
   ("q" nil "quit"))
 
-(provide 'init-bm)
+(provide 'setup-bm)

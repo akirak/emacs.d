@@ -6,4 +6,4 @@
   :hook
   ((emacs-lisp-mode) . aggressive-indent-mode-on))
 
-(provide 'init-aggressive-indent)
+(provide 'setup-aggressive-indent)

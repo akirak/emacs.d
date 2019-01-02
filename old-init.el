@@ -18,4 +18,3 @@
 
 ;;; Enhancements (misc/)
 ;; (require 'init-repom)
-(require 'init-purgatory)

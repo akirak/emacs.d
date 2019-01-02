@@ -1,5 +1,3 @@
-(require 'init-yasnippet)
-
 (use-package yankpad
   :after (org yasnippet))
 
@@ -29,4 +27,4 @@ _m_   map      _<backtab>_ append   _R_ reload"
   ("R" yankpad-reload)
   ("C" yankpad-capture-snippet :exit t))
 
-(provide 'init-yankpad)
+(provide 'setup-yankpad)

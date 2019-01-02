@@ -1,3 +1,5 @@
+(use-package avy)
+
 ;;;; Inline jump
 (defun akirak/avy-goto-in-line (regexp)
   (let (beg end)
@@ -60,4 +62,4 @@
   (akirak/avy-goto-defun (1+ (point)) (window-end))
   (back-to-indentation))
 
-(provide 'avy-extra-commands)
+(provide 'setup-avy)

@@ -350,7 +350,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-counsel         ; Basic Counsel commands
                      setup-projectile      ; Manage projects
                      setup-swiper ; Incremental search through the buffer using Ivy
-                     setup-lispy  ; Efficient lisp editing
+                     setup-aggressive-indent
+                     setup-lispy          ; Efficient lisp editing
                      setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
                      setup-ivy-frame-actions ; Add frame-creation actions to Ivy
                      setup-magit       ; The Git porcelain for Emacs
@@ -366,14 +367,17 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-helm-descbinds ; Better keybinding search
                      setup-helm-make  ; Choose a make command via Helm
                      setup-anzu       ; Provide info in search & replace
-                     setup-org-make-toc   ; Generating TOCs
-                     setup-unpackaged     ; A bunch of useful commands
+                     setup-org-make-toc  ; Generating TOCs
+                     setup-unpackaged    ; A bunch of useful commands
                      setup-locate        ; Configure locate and updatedb
                      setup-org-custom-commands
-                     setup-ace-window     ; An alternative way for window manipulation
-                     setup-sidebar        ; ibuffer and dired sidebars
-                     setup-outshine       ; Extra support for outline editing
+                     setup-ace-window ; An alternative way for window manipulation
+                     setup-yasnippet
+                     setup-yankpad
+                     setup-sidebar   ; ibuffer and dired sidebars
+                     setup-outshine  ; Extra support for outline editing
                      setup-init-time-log  ; Log init time
+                     setup-autoinsert
                      ))
     (akirak/require feature))
 #+end_src
@@ -420,6 +424,15 @@ The following packages are enhancements to Emacs that don't require much configu
   (use-package esup                       ; Profile the startup process
     :commands (esup))
   (use-package git-modes)
+  (use-package fix-word
+    :commands (fix-word-upcase fix-word-downcase fix-word-capitalize))
+  (use-package scratch
+    :commands (scratch))
+  (use-package embrace)
+  (use-package dumb-jump
+    ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
+    :custom
+    (dumb-jump-selector 'ivy))
 #+end_src
 
 *** frame-workflow
@@ -663,7 +676,7 @@ Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangero
 Ansible is based on YAML.
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-ansible)
+  ;; (akirak/require 'setup-ansible)
 #+end_src
 **** Dockerfile                                  :configuration__language:
 

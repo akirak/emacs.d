@@ -76,7 +76,6 @@
 
 (general-def
   "M-;" 'comment-dwim-2
-  ;; "M-/" 'hippie-expand
   )
 
 (general-def :package 'company :keymaps 'company-mode-map

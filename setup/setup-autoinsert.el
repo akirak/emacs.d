@@ -20,4 +20,4 @@
                           (error nil))))
       (yas-expand-snippet snippet))))
 
-(provide 'init-autoinsert)
+(provide 'setup-autoinsert)

@@ -14,4 +14,4 @@ If no prefix is given, this function opens a link (`link-hint-open-link').
       (link-hint-open-multiple-links)
     (link-hint-open-link)))
 
-(provide 'init-link-hint)
+(provide 'setup-link-hint)

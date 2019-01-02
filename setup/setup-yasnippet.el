@@ -18,4 +18,4 @@
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
 
-(provide 'init-yasnippet)
+(provide 'setup-yasnippet)
