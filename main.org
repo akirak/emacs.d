@@ -378,6 +378,14 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-outshine  ; Extra support for outline editing
                      setup-init-time-log  ; Log init time
                      setup-autoinsert
+                     setup-org-capture    ; Org-capture templates
+                     setup-org-starter    ; Org starter
+                     setup-counsel-org-capture-string
+                     setup-org-refile
+                     setup-org-download
+                     setup-org-mind-map
+                     setup-link-hint
+                     setup-helm-org-rifle
                      ))
     (akirak/require feature))
 #+end_src
@@ -433,6 +441,29 @@ The following packages are enhancements to Emacs that don't require much configu
     ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
     :custom
     (dumb-jump-selector 'ivy))
+  (use-package iedit)
+  (use-package comment-dwim-2)
+  (autoload 'narrow-or-widen-dwim "narrow-or-widen.el")
+  (use-package counsel-org-clock)
+  (use-package org-reverse-datetree
+    :straight (org-reverse-datetree :host github
+                                    :repo "akirak/org-reverse-datetree"))
+  (use-package org-autolist ; Edit Org-Mode lists like in word processors
+    :after org
+    :diminish 'org-autolist-mode
+    :init
+    (add-hook 'org-mode-hook #'org-autolist-mode))
+  (use-package org-bookmark-heading ; Allow you to bookmark headings in Org-Mode
+    :after org)
+  (use-package org-web-tools
+    ;; TODO: Revert this spec to master of alphapapa after merging
+    :straight (org-web-tools :host github :repo "akirak/org-web-tools"
+                             :branch "empty-title"))
+  (use-package org-bullets :after org
+    :init
+    (add-hook 'org-mode-hook 'org-bullets-mode))
+  (use-package org-mind-map               ; Exporting mind maps
+    :after (org ox))
 #+end_src
 
 *** frame-workflow
@@ -540,11 +571,6 @@ I will load =setup-magithub= library if I need it.
                 (setq org-select-window-last-window (selected-window)))
               (select-window w))
           (message "No other org window in this frame")))))
-#+end_src
-**** unpackaged/org-return-dwim
-#+begin_src emacs-lisp
-  (akirak/bind-key :package 'org :keymaps 'org-mode-map
-    [remap org-return] 'unpackaged/org-return-dwim)
 #+end_src
 **** modi/org-split-block
 #+begin_src emacs-lisp
@@ -715,7 +741,11 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 :PROPERTIES:
 :TOC:      1
 :END:
+Set the basic options for org-mode:
 
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org t)
+#+end_src
 *** Hydra for Org-mode
 #+begin_src emacs-lisp
   (defhydra akirak/org-mode-hydra (:exit t :hint nil)
@@ -736,6 +766,7 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 
   (akirak/bind-mode-hydra 'org-mode)
 #+end_src
+
 *** GraphViz
 #+begin_src emacs-lisp
   (use-package graphviz-dot-mode)
@@ -877,6 +908,44 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
   (use-package rust-mode)
 #+end_src
 ** Emacs applications
+*** Getting organised
+**** Jump to the current context
+Use =my-goto= function locate the current context.
+
+ #+begin_src emacs-lisp
+   (defcustom my-goto-default-function nil
+     "Function called by `my-goto' when there is no clocking task."
+     :type 'function
+     :group 'akirak)
+
+   (defun my-goto (&optional arg)
+     (interactive "P")
+     (cond
+      (arg (counsel-org-clock-history))
+      ((org-clocking-p) (org-clock-goto))
+      ((functionp my-goto-default-function) (funcall my-goto-default-function))
+      (t (message "I have no idea what to do or where to go."))))
+
+   (akirak/bind-key "M-g M-j" #'my-goto)
+ #+end_src
+**** Frame
+:PROPERTIES:
+:ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
+:END:
+
+#+begin_src emacs-lisp
+  (akirak/define-frame-workflow "org"
+    :key "o"
+    :layout '(progn
+               (org-starter-load-all-known-files)
+               (when (fboundp #'ibuffer-sidebar-show-sidebar)
+                 (ibuffer-sidebar-show-sidebar)
+                 (with-current-buffer (ibuffer-sidebar-buffer (selected-frame))
+                   (ibuffer-projectile-set-filter-groups)
+                   (ibuffer-update nil))))
+    :make-frame '(frame-purpose-make-mode-frame 'org-mode))
+#+end_src
+
 *** Beancount
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)

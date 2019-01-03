@@ -79,7 +79,7 @@
 
 (defvar ivy-switch-to-org-buffer-map
   (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
-    (define-key map (kbd "C-c C-l") 'ivy-switch-to-org-buffer--load)
+    (define-key map (kbd "C-l") 'ivy-switch-to-org-buffer--load)
     map))
 
 (defun ivy-switch-to-org-buffer--load ()

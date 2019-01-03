@@ -5,10 +5,6 @@
 ;;;; Expansion, completion, and templates
 (require 'init-lsp)
 
-;;;; Other packages for quality of life
-;; Small commands
-(require 'init-prog-commands)
-
 ;;;;; Editing
 (require 'init-corral)
 (require 'init-easy-kill)

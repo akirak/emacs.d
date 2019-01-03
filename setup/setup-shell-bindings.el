@@ -18,6 +18,10 @@
 (general-def prog-mode-map
   "C-a" 'akirak/back-to-indentation-or-beginning-of-line)
 
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-a" #'move-beginning-of-line
+  "C-e" #'move-end-of-line)
+
 (general-def minibuffer-local-map
   "C-u" 'backward-kill-sentence)
 

@@ -1,4 +1,4 @@
-;;; init-counsel-org-capture-string.el --- Configuration for counsel-org-capture-string -*- lexical-binding: t -*-
+;;; setup-counsel-org-capture-string.el --- Configuration for counsel-org-capture-string -*- lexical-binding: t -*-
 
 (use-package counsel-org-capture-string
   :straight (counsel-org-capture-string :host github
@@ -20,5 +20,5 @@
                         (org-capture nil (car (split-string x))))))
   (advice-add #'counsel-org-capture :override #'akirak/counsel-org-capture))
 
-(provide 'init-counsel-org-capture-string)
-;;; init-counsel-org-capture-string.el ends here
+(provide 'setup-counsel-org-capture-string)
+;;; setup-counsel-org-capture-string.el ends here

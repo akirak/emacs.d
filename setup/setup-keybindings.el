@@ -11,10 +11,6 @@
 ;;   "<M-next>" #'git-gutter:next-hunk
 ;;   "<M-insert>" #'git-gutter:stage-hunk)
 
-(general-def "C-z" #'purgatory)
-
-(general-def "M-g c" #'avy-goto-char-in-line)
-
 (general-def "M-g f" 'akirak/link-hint-open-link)
 
 (akirak/define-contextual-key "M-g h"
@@ -25,35 +21,19 @@
 
 (general-def :prefix "M-g"
   "," #'dumb-jump-back
-  "." #'dumb-jump-go
-  "j" #'dumb-jump-go-other-window
-  ;; "i" #'dumb-jump-go-prompt
-  ;; "x" #'dumb-jump-go-prefer-external
-  ;; "z" #'dumb-jump-go-prefer-external-other-window
-  )
+  "." #'dumb-jump-go)
 
 ;;;;; A bunch of avy commands to a symbol in line
-
-;; This is questionable.
-(general-def :prefix "M-g"
-  "p" #'akirak/avy-goto-defun-above
-  "n" #'akirak/avy-goto-defun-below
-  "-" #'akirak/avy-goto-word-in-line
-  "'" #'akirak/avy-goto-quote-in-line
-  "\"" #'akirak/avy-goto-dquote-in-line
-  "[" #'akirak/avy-goto-open-bracket-above-in-defun
-  "]" #'akirak/avy-goto-open-bracket-below-in-defun)
-
-;;;; M-s
 
 (akirak/define-contextual-key "M-s i"
   ('counsel-imenu)
   ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
 
-
 (akirak/define-contextual-key "M-s o"
   ('counsel-outline)
   ('counsel-org-goto :package 'org :keymaps 'org-mode-map))
+
+(akirak/bind-key "M-s M-o" #'helm-org-rifle-known-files)
 
 ;;;; Other keybindings under meta key
 ;; TODO: Bind a more complex key
@@ -94,10 +74,6 @@
 (global-unset-key (kbd "C-M-o"))
 
 (general-def
-  "C-M-=" #'text-scale-increase
-  "C-M--" #'text-scale-decrease)
-
-(general-def
   "<M-f12>" '((lambda ()
                 (interactive)
                 (shell-command "setxkbmap -option ctrl:nocaps"))
@@ -108,7 +84,6 @@
   "C-c b" 'helm-bm
   "C-c c" #'org-capture
   "C-c e" 'aya-expand
-  "C-c h" #'helm-corefighter
   "C-c i" 'scratch
   "C-c k" 'kill-compilation
   "C-c l" 'org-store-link
@@ -117,7 +92,6 @@
   "C-c p" 'yankpad-insert
   "C-c s" 'symbol-overlay-put
   "C-c u" #'winner-undo-repeat
-  "C-c U" #'winner-redo-repeat
   "C-c y" 'ivy-yasnippet
   "C-c '" #'outorg-edit-as-org
 
@@ -138,8 +112,7 @@
   "C-x C-b" #'ibuffer
   "C-x C-j" #'dired-jump
 
-  "C-;" 'iedit-mode
-  )
+  "C-;" 'iedit-mode)
 
 (general-def :keymaps 'org-mode-map :package 'org
   "C-c o" nil)
@@ -203,25 +176,11 @@
 (akirak/bind-global-org-map
   "a" #'org-agenda
   "b" #'ivy-switch-to-org-buffer
-  "c" #'counsel-org-clock-context
-  "f" #'helm-org-clock-follow-link
-  "h" #'counsel-org-clock-history
-  "m" #'counsel-org-bookmark
-  "n" #'org-clock-in-next-sibling
-  "o" #'org-clock-out
-  "q" #'org-clock-cancel
-  "r" #'org-recent-headings
-  "s" #'helm-org-rifle-agenda-files
-  "t" #'yankpad-edit
-  "u" #'org-clock-in-parent
-  "v" #'org-web-tools-read-url-as-org
-  "w" #'org-select-window
-  "y" #'helm-org-clock-yank
-  "L" #'org-starter-load-all-known-files)
+  ;; Maybe
+  ;; "v" #'org-web-tools-read-url-as-org
+  )
 
 (general-def :keymaps 'org-mode-map :package 'org
-  "C-a" #'move-beginning-of-line
-  "C-e" #'move-end-of-line
   ;; I don't use any of these bindings and want to use them for other purposes
   "C-c [" nil
   "C-c ]" nil
@@ -236,5 +195,14 @@
   "C-4" 'org-starter-refile-by-key
   "C-8" 'org-insert-hydra/body
   "C-9" #'org-tree-to-indirect-buffer)
+
+;; Somehow Emacs seems to receive an infinite sequence of right keys
+;; after receiving focus on Chrome OS, even without my config.
+;; Is this a bug with Emacs or a hardware problem?
+;; This workaround seems to prevent the issue. I don't use arrow keys
+;; to move the cursor, so this is not a serious problem.
+;; I've gained peace of mind by disabling one of the arrow keys
+;; for cursor motion.
+(general-unbind "<right>")
 
 (provide 'setup-keybindings)

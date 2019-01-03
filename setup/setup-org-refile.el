@@ -1,5 +1,6 @@
-(require 'cl-lib)
-(require 'org)
+;; (require 'cl-lib)
+;; (require 'org)
+(require 'dash)
 
 (defun akirak//org-propertize-path (segs)
   "Build a propertized refile path from SEGS."
@@ -36,8 +37,6 @@
 ;; a new node. Advise `completing-read' temporarily instead.
 ;; (advice-add #'org-refile-get-targets :filter-return #'akirak/ad-filter-org-refile-targets)
 
-(require 'dash)
-
 (defun akirak/ad-around-org-refile-completing-read (oldfun prompt candidates &rest r)
   "Advice function for `completing-read' for use inside `org-refile-get-location'."
   (if (eq org-refile-use-outline-path 'full-file-path)
@@ -59,4 +58,4 @@
 
 (advice-add #'org-refile-get-location :around #'akirak/ad-around-org-refile-get-location)
 
-(provide 'akirak-org-refile-path)
+(provide 'setup-org-refile)

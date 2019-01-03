@@ -22,4 +22,13 @@
               org-habit-following-days 7
               org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
 
-(provide 'init-org-options)
+;; Prevent from saving org-refile and org-capture locations to bookmarks
+(setq org-bookmark-names-plist nil)
+
+;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
+(defun org-add-completion-at-point ()
+  (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point
+            nil t))
+(add-hook 'org-mode-hook #'org-add-completion-at-point)
+
+(provide 'setup-org)
