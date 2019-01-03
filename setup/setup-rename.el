@@ -6,20 +6,13 @@ Each item is a pair of a symbol to a major mode and a function.
 The function takes the following arguments:
 ")
 
-(defvar akirak/rename-file-hook nil
-  "Hook run after the current buffer file is renamed.")
-
 (defun akirak/update-buffer-after-renaming (old-file-name)
-  (unless (bound-and-true-p projectile-mode)
-    (user-error "projectile-mode is not enabled."))
-  (when-let* ((func (alist-get major-mode akirak/post-file-rename-functions))
-              (new-file-name (buffer-file-name))
-              (root (projectile-project-root))
-              (relative (and root (file-relative-name new-file-name root))))
-    (run-hooks 'akirak/rename-file-hook)
-    (when (projectile-file-cached-p old-file-name root)
-      (projectile-purge-file-from-cache old-file-name))
-    (funcall func old-file-name new-file-name root relative)))
+  (when-let ((func (alist-get major-mode akirak/post-file-rename-functions)))
+    (let* ((root (and (bound-and-true-p projectile-mode)
+                      (projectile-project-root)))
+           (new-file-name (buffer-file-name))
+           (relative (and root (file-relative-name new-file-name root))))
+      (funcall func old-file-name new-file-name root relative))))
 
 (cl-defun akirak/post-rename-function/emacs-lisp (oldname newname root relative)
   (let ((old-file-name-nondirectory (file-name-nondirectory oldname))
@@ -36,6 +29,16 @@ The function takes the following arguments:
     ;; TODO: Rename other files inside the project
     ))
 
-(add-hook 'akirak/rename-file-hook #'projectile-cache-current-file)
+(advice-add 'set-visited-file-name :after
+            (lambda (&rest _args) (projectile-cache-current-file)))
+
+(defun akirak/after-remove-file-function (file)
+  (when (bound-and-true-p projectile-mode)
+    (when-let* ((root (projectile-project-root)))
+      (when (projectile-file-cached-p file root)
+        (message "Removing %s" file)
+        (projectile-purge-file-from-cache file)))))
+
+(advice-add 'dired-remove-file :after #'akirak/after-remove-file-function)
 
 (provide 'setup-rename)
