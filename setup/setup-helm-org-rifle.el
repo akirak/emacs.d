@@ -12,6 +12,14 @@
                '("Insert link with custom ID"
                  . helm-org-rifle--insert-link-with-custom-id)
                t)
+  (add-to-list 'helm-org-rifle-actions
+               '("Store link"
+                 . helm-org-rifle--store-link)
+               t)
+  (add-to-list 'helm-org-rifle-actions
+               '("Store link with custom ID"
+                 . helm-org-rifle--store-link-with-custom-id)
+               t)
   (defun helm-org-rifle--store-link (candidate &optional use-custom-id)
     "Store a link to CANDIDATE."
     (-let (((buffer . pos) candidate))
@@ -27,6 +35,9 @@
                                          (helm-org-rifle--make-default-custom-id
                                           (nth 4 (org-heading-components))))))
         (call-interactively 'org-store-link))))
+  (defun helm-org-rifle--store-link-with-custom-id (candidate)
+    "Store a link to CANDIDATE with a custom ID.."
+    (helm-org-rifle--store-link candidate 'use-custom-id))
   (defun helm-org-rifle--insert-link (candidate &optional use-custom-id)
     "Insert a link to CANDIDATE."
     (unless (derived-mode-p 'org-mode)
