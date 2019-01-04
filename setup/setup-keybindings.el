@@ -123,8 +123,18 @@
 
 (general-def :prefix "C-."
   "a" #'embrace-add
-  "c" #'embrace-change
-  "d" #'embrace-delete)
+  "c" 'fix-word-capitalize
+  "d" #'embrace-delete
+  "l" 'fix-word-downcase
+  "o" #'split-line                      ; Originally C-M-o
+  "p" #'embrace-change
+  "u" 'fix-word-upcase
+  ;; TODO: Maybe activate these keybindings
+  ;; "s" #'akirak/kill-sentence
+  ;; "w" #'akirak/kill-word
+  ;; "f" #'akirak/kill-defun
+
+  "SPC" 'just-one-space)
 
 (akirak/define-contextual-key "C-'"
   ('avy-goto-char-timer)
@@ -151,20 +161,6 @@
   "u" 'uptimes)
 
 ;;;; Misc
-
-;; TODO: C-.
-;; (akirak/bind-fix-map
-;;   :keymaps '(prog-mode-map text-mode-map)
-;;   "e" 'akirak/hydra-flycheck
-;;   "u" 'fix-word-upcase
-;;   "l" 'fix-word-downcase
-;;   "c" 'fix-word-capitalize
-;;   "s" #'akirak/kill-sentence
-;;   "w" #'akirak/kill-word
-;;   "f" #'akirak/kill-defun
-;;   "o" #'split-line     ; Originally C-M-o
-;;   ;; M-SPC was originally bound to just-one-space
-;;   "SPC" 'just-one-space)
 
 (general-def :prefix "M-s"
   "d" #'helm-dash)
