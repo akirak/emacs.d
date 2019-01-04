@@ -24,17 +24,18 @@
     "Store a link to CANDIDATE."
     (-let (((buffer . pos) candidate))
       (with-current-buffer buffer
-        (goto-char pos)
-        (when (and use-custom-id
-                   (not (org-entry-get nil "CUSTOM_ID")))
-          (org-set-property "CUSTOM_ID"
-                            (read-string (format "Set CUSTOM_ID for %s: "
-                                                 (substring-no-properties
-                                                  (org-format-outline-path
-                                                   (org-get-outline-path t nil))))
-                                         (helm-org-rifle--make-default-custom-id
-                                          (nth 4 (org-heading-components))))))
-        (call-interactively 'org-store-link))))
+        (org-with-wide-buffer
+         (goto-char pos)
+         (when (and use-custom-id
+                    (not (org-entry-get nil "CUSTOM_ID")))
+           (org-set-property "CUSTOM_ID"
+                             (read-string (format "Set CUSTOM_ID for %s: "
+                                                  (substring-no-properties
+                                                   (org-format-outline-path
+                                                    (org-get-outline-path t nil))))
+                                          (helm-org-rifle--make-default-custom-id
+                                           (nth 4 (org-heading-components))))))
+         (call-interactively 'org-store-link)))))
   (defun helm-org-rifle--store-link-with-custom-id (candidate)
     "Store a link to CANDIDATE with a custom ID.."
     (helm-org-rifle--store-link candidate 'use-custom-id))
