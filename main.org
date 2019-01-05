@@ -357,6 +357,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-magit       ; The Git porcelain for Emacs
                      setup-helpful     ; Extended helpful commands
                      setup-company     ; Auto completion
+                     setup-eldoc       ; Display short help while coding
                      setup-dired       ; File browser
                      setup-multi-term  ; Terminal emulator
                      setup-aweshell    ; Enhance eshell
