@@ -64,16 +64,27 @@
 ;; It splits the window even when exiting the source buffer,
 ;; which is not what I expect.
 
+(setq-default org-src-window-setup 'split-window-below)
+
 (defvar-local akirak/org-src-last-wconf nil)
 
 (defun akirak/ad-around-org-src-switch-to-buffer (orig buffer context)
   (if (eq org-src-window-setup 'split-window-below)
       (if (memq context '(exit save))
-          (progn
-            (delete-window)
-            (set-window-configuration akirak/org-src-last-wconf))
+          (let ((wconf (with-current-buffer buffer
+                         akirak/org-src-last-wconf)))
+            (set-window-configuration wconf)
+            (if-let* ((w (get-buffer-window buffer)))
+                (select-window w)
+              (switch-to-buffer buffer)))
         (let ((wconf (current-window-configuration)))
-          (funcall orig buffer context)
+          (cond
+           ((> (window-total-width) 160)
+            (split-window-right))
+           ((> (window-total-height 30))
+            (split-window-below)))
+          (other-window 1)
+          (switch-to-buffer buffer)
           (setq akirak/org-src-last-wconf wconf)))
     (funcall orig buffer context)))
 
