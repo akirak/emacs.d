@@ -33,7 +33,7 @@ FEATURE should be a module in ~/.emacs.d/setup.
 
 If SEVERITY is non-nil, abort the initialization process."
   (unless (require feature nil t)
-    (add-to-list akirak/setup-failed-modules feature t)
+    (add-to-list 'akirak/setup-failed-modules feature t)
     (message "Failed to load %s" feature)
     (when severity
       (akirak/setup-find-failed-module)
