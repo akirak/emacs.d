@@ -127,6 +127,7 @@
           (goto-char (cdr (assoc choice cands)))
           (when-let ((filename (read-string "Set a file name of the post: "
                                             (concat (or (org-entry-get nil "EXPORT_HUGO_SLUG")
+                                                        (org-entry-get nil "CUSTOM_ID")
                                                         (akirak/org-hugo-make-slug))
                                                     ".md"))))
             (org-set-property "EXPORT_FILE_NAME" filename))
@@ -137,8 +138,9 @@
   (interactive "P")
   (unless (org-entry-get nil "EXPORT_HUGO_SLUG")
     (let ((slug (read-string "Set a slug for the post: "
-                             (akirak/org-hugo-make-slug
-                              (nth 4 (org-heading-components))))))
+                             (or (org-entry-get nil "CUSTOM_ID")
+                                 (akirak/org-hugo-make-slug
+                                  (nth 4 (org-heading-components)))))))
       (org-set-property "EXPORT_HUGO_SLUG" slug)))
   (when (or (not (org-entry-get-with-inheritance "EXPORT_HUGO_CATEGORIES"))
             force)
