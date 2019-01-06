@@ -91,4 +91,18 @@
 (advice-add 'org-src-switch-to-buffer :around
             'akirak/ad-around-org-src-switch-to-buffer)
 
+;; Ignore some windows
+(defcustom akirak/skipped-window-buffers
+  '(" *LV*")
+  "List of buffer names whose windows should never be selected.")
+
+(defun akirak/ad-around-next-window--for-ignore-window (orig &rest args)
+  (let ((window (apply orig args)))
+    (if (member (buffer-name (window-buffer window)) akirak/skipped-window-buffers)
+        (apply orig window (cdr args))
+      window)))
+
+(advice-add 'next-window
+            :around #'akirak/ad-around-next-window--for-ignore-window)
+
 (provide 'setup-window-management)

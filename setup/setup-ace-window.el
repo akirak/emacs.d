@@ -15,6 +15,7 @@
   ;;    (?? aw-show-dispatch-help)))
   (aw-make-frame-char ?F)
   (aw-ignored-buffers '("\\*helm"
+                        " *LV*"
                         minibuffer-mode
                         ibuffer-sidebar-mode))
   (aw-dispatch-always t)
