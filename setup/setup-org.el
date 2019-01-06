@@ -20,15 +20,25 @@
               org-habit-graph-column 1
               org-habit-preceding-days 21
               org-habit-following-days 7
-              org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id)
+              org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
+              org-group-tags t
+              ;; org-use-fast-tag-selection t
+              ;; org-fast-tag-selection-single-key nil
+              org-agenda-use-tag-inheritance t
+              org-tags-exclude-from-inheritance '())
 
 ;; Prevent from saving org-refile and org-capture locations to bookmarks
 (setq org-bookmark-names-plist nil)
+
+(setq org-clock-goto-may-find-recent-task nil)
 
 ;; https://emacs.stackexchange.com/questions/21171/company-mode-completion-for-org-keywords
 (defun org-add-completion-at-point ()
   (add-hook 'completion-at-point-functions 'pcomplete-completions-at-point
             nil t))
 (add-hook 'org-mode-hook #'org-add-completion-at-point)
+
+(with-eval-after-load 'org-clock
+  (org-clock-persistence-insinuate))
 
 (provide 'setup-org)
