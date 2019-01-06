@@ -12,6 +12,7 @@
   :custom
   ;; `org-starter-initial-capture-templates` is defined in setup-org-capture.el
   (org-starter-require-file-by-default nil)
-  (org-starter-exclude-from-recentf '(known-files path)))
+  (org-starter-exclude-from-recentf '(known-files path))
+  (org-starter-enable-local-variables :all))
 
 (provide 'setup-org-starter)
