@@ -387,6 +387,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-org-mind-map
                      setup-link-hint
                      setup-helm-org-rifle
+                     setup-lsp
                      ))
     (akirak/require feature))
 #+end_src

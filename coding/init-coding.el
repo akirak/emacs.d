@@ -1,6 +1,3 @@
-;;;; Expansion, completion, and templates
-(require 'init-lsp)
-
 ;;;;; Editing
 (require 'init-corral)
 (require 'init-easy-kill)
