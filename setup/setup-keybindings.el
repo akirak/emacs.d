@@ -125,6 +125,7 @@
   "a" #'embrace-add
   "c" 'fix-word-capitalize
   "d" #'embrace-delete
+  "j" #'katawa-ivy-fix-at-point
   "l" 'fix-word-downcase
   "o" #'split-line                      ; Originally C-M-o
   "p" #'embrace-change
