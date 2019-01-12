@@ -9,7 +9,8 @@
 ;; eldoc messages.
 (setq eldoc-message-function (cl-function
                               (lambda (format &rest args)
-                                (if format
+                                (if (and format
+                                         (not (string-empty-p format)))
                                     (apply #'lv-message format args)
                                   (lv-delete-window)))))
 
