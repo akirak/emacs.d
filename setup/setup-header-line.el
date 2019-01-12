@@ -42,14 +42,16 @@
     ;; If it is a file-visiting buffer, show the file name.
     ;; Otherwise, show the buffer name.
     (:eval (akirak/header-line-buffer-segment))
-    ": "
+    " "
     ;; Display the statuses of the buffer
     (:eval (when (buffer-narrowed-p) "<N>"))
     (read-only-mode "<RO>")
     ;; Display the column number if the buffer is in prog-mode
     ,(if (derived-mode-p 'prog-mode)
-         "%3c "
+         "(%l,%3c) "
        " ")
+    minor-mode-alist
+    " "
     ;; Append any segments
     ,@body))
 
