@@ -391,6 +391,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-lsp
                      setup-japanese
                      setup-rich-minority
+                     setup-clipboard      ; Clipboard integration
                      ))
     (akirak/require feature))
 #+end_src
