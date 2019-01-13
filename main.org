@@ -460,10 +460,6 @@ The following packages are enhancements to Emacs that don't require much configu
     (add-hook 'org-mode-hook #'org-autolist-mode))
   (use-package org-bookmark-heading ; Allow you to bookmark headings in Org-Mode
     :after org)
-  (use-package org-web-tools
-    ;; TODO: Revert this spec to master of alphapapa after merging
-    :straight (org-web-tools :host github :repo "akirak/org-web-tools"
-                             :branch "empty-title"))
   (use-package org-bullets :after org
     :init
     (add-hook 'org-mode-hook 'org-bullets-mode))
@@ -740,6 +736,24 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 
 #+begin_src emacs-lisp
   (use-package git-auto-commit-mode)
+#+end_src
+*** org-web-tools and clipurl
+[[https://github.com/alphapapa/org-web-tools][org-web-tools]] is handy, but commands in the package often fail to retrieve a proper URL I want to operate on. Therefore I created =clipurl= package to pick a URL from the kill ring.
+
+#+begin_src emacs-lisp
+  (use-package org-web-tools)
+
+  (use-package clipurl
+    :straight (clipurl :host github :repo "akirak/clipurl.el"))
+
+  (use-package ivy-clipurl
+    :straight clipurl
+    :commands (ivy-clipurl)
+    :config
+    (ivy-add-actions 'ivy-clipurl
+                     '(("r" org-web-tools-read-url-as-org "Read as Org")))
+    :general
+    ("C-c w" 'ivy-clipurl))
 #+end_src
 
 ** Writing
