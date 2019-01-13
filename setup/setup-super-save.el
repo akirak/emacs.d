@@ -1,4 +1,5 @@
 (use-package super-save
+  ;; :diminish 'super-save-mode
   :config
   (super-save-mode 1)
   :custom

@@ -1,5 +1,5 @@
 (use-package counsel
-  :diminish counsel-mode
+  ;; :diminish counsel-mode
   :init
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   :config

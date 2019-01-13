@@ -170,7 +170,7 @@
 
 (use-package all-the-icons-dired
   :after dired
-  :diminish 'all-the-icons-dired-mode
+  ;; :diminish 'all-the-icons-dired-mode
   :hook
   (dired-mode . all-the-icons-dired-mode))
 

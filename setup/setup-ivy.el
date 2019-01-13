@@ -1,5 +1,5 @@
 (use-package ivy
-  :diminish (ivy-mode)
+  ;; :diminish (ivy-mode)
   :init
   (ivy-mode 1)               ; Use ivy as completing-read-function
   :config

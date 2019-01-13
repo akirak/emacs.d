@@ -7,6 +7,7 @@
 
 (use-package frame-workflow
   :straight (frame-workflow :host github :repo "akirak/frame-workflow")
+  ;; :diminish 'frame-workflow-mode
   :init
   (setq projectile-switch-project-action
         #'frame-workflow-switch-directory-frame)

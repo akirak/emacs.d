@@ -1,5 +1,5 @@
 (use-package company
-  :diminish company-mode
+  ;; :diminish company-mode
   :init
   (add-hook 'after-init-hook 'global-company-mode)
   :general

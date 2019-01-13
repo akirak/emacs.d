@@ -1,4 +1,4 @@
-(diminish 'outline-minor-mode)
+;; (diminish 'outline-minor-mode)
 (add-hook 'prog-mode-hook 'outline-minor-mode)
 
 (use-package outshine

@@ -125,6 +125,7 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 
 #+begin_src emacs-lisp
   (use-package diminish
+    :disabled t
     :init
     (diminish 'auto-revert-mode)
     (diminish 'outline-minor-mode)
@@ -420,7 +421,7 @@ The following packages are enhancements to Emacs that don't require much configu
     :hook
     (emacs-lisp . (lambda () (fontify-face-mode 1))))
   (use-package rainbow-mode
-    :diminish 'rainbow-mode
+    ;; :diminish 'rainbow-mode
     :commands (rainbow-mode)
     :hook
     (prog-mode . (lambda () (rainbow-mode 1))))
@@ -453,7 +454,7 @@ The following packages are enhancements to Emacs that don't require much configu
                                     :repo "akirak/org-reverse-datetree"))
   (use-package org-autolist ; Edit Org-Mode lists like in word processors
     :after org
-    :diminish 'org-autolist-mode
+    ;; :diminish 'org-autolist-mode
     :init
     (add-hook 'org-mode-hook #'org-autolist-mode))
   (use-package org-bookmark-heading ; Allow you to bookmark headings in Org-Mode

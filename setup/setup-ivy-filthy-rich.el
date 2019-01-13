@@ -1,7 +1,7 @@
 (use-package ivy-filthy-rich
   :straight (ivy-filthy-rich :host github :repo "akirak/ivy-filthy-rich"
                              :branch "fix-max-length")
-  :diminish 'ivy-filthy-rich-mode
+  ;; :diminish 'ivy-filthy-rich-mode
   :after ivy
   :config
   (ivy-filthy-rich-mode t)

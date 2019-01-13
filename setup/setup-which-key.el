@@ -1,5 +1,5 @@
 (use-package which-key
-  :diminish which-key-mode
+  ;; :diminish which-key-mode
   :init
   (which-key-mode)
   :config
