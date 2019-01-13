@@ -390,6 +390,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-helm-org-rifle
                      setup-lsp
                      setup-japanese
+                     setup-rich-minority
                      ))
     (akirak/require feature))
 #+end_src

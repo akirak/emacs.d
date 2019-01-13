@@ -50,7 +50,10 @@
     ,(if (derived-mode-p 'prog-mode)
          "(%l,%3c) "
        " ")
-    minor-mode-alist
+    (:eval (if rich-minority-mode
+               (rm--mode-list-as-string-list)
+             ;; I am not sure if this works
+             (format-mode-line 'minor-mode-list)))
     " "
     ;; Append any segments
     ,@body))
