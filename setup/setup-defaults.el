@@ -33,8 +33,7 @@
 
 (setq inhibit-startup-screen t
       ring-bell-function 'ignore
-      ediff-window-setup-function #'ediff-setup-windows-plain
-      save-interprogram-paste-before-kill t)
+      ediff-window-setup-function #'ediff-setup-windows-plain)
 
 (setq bookmark-default-file "~/.emacs-bookmarks")
 

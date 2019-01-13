@@ -17,4 +17,9 @@
     (unless (string-empty-p s)
       (string-trim-right s))))
 
+(use-package clipsave
+  :straight (clipurl :host github :repo "akirak/clipurl.el")
+  :init
+  (clipsave-mode 1))
+
 (provide 'setup-clipboard)
