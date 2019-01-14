@@ -374,23 +374,23 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-locate        ; Configure locate and updatedb
                      setup-org-custom-commands
                      setup-ace-window ; An alternative way for window manipulation
-                     setup-yasnippet
+                     setup-yasnippet  ; Snippets for programming
                      setup-yankpad
                      setup-sidebar   ; ibuffer and dired sidebars
                      setup-outshine  ; Extra support for outline editing
                      setup-init-time-log  ; Log init time
-                     setup-autoinsert
+                     setup-autoinsert     ; File templates
                      setup-org-capture    ; Org-capture templates
                      setup-org-starter    ; Org starter
                      setup-counsel-org-capture-string
-                     setup-org-refile
-                     setup-org-download
+                     setup-org-refile     ; Enhance org-refile
+                     setup-org-download   ; Screenshots
                      setup-org-mind-map
-                     setup-link-hint
+                     setup-link-hint      ; Jumping to a URL
                      setup-helm-org-rifle
-                     setup-lsp
+                     setup-lsp            ; Language-agnostic IDE toolkit
                      setup-japanese
-                     setup-rich-minority
+                     setup-rich-minority  ; Whitelist minor modes
                      setup-clipboard      ; Clipboard integration
                      ))
     (akirak/require feature))
