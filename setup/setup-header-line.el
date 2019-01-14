@@ -44,8 +44,8 @@
     (:eval (akirak/header-line-buffer-segment))
     " "
     ;; Display the statuses of the buffer
-    (:eval (when (buffer-narrowed-p) "<N>"))
-    (read-only-mode "<RO>")
+    (:eval (when (buffer-narrowed-p) "<N> "))
+    (read-only-mode "<RO> ")
     ;; Display the column number if the buffer is in prog-mode
     ,(if (derived-mode-p 'prog-mode)
          "(%l,%3c) "
@@ -66,14 +66,12 @@
 (defun akirak/set-default-header-line ()
   "Set the default header line with which-function."
   (unless header-line-format
-    ;; (setq header-line-format (akirak/make-header-line-format
-    ;;                           ;; Omit which-func if the buffer is indirect
-    ;;                           (unless (buffer-base-buffer)
-    ;;                             `(which-func-mode
-    ;;                               (:eval
-    ;;                                (propertize ,(cadr which-func-current)
-    ;;                                            'face 'akirak/header-line-outline))))))
-    (setq header-line-format (akirak/make-header-line-format))))
+    (setq header-line-format (akirak/make-header-line-format
+                              ;; Omit which-func if the buffer is indirect
+                              (unless (buffer-base-buffer)
+                                `(which-function-mode
+                                  (:eval
+                                   ,(cadr which-func-current))))))))
 
 ;;;;; Setting the default header line
 
