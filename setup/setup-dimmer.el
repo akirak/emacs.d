@@ -2,6 +2,6 @@
   :init
   (dimmer-mode 1)
   :custom
-  (dimmer-exclusion-regexp "\\(\\*Help\\*\\|\\*helm\\)"))
+  (dimmer-exclusion-regexp "\\(\\*Help\\*\\|\\*helm\\|\\*LV\\*\\)"))
 
 (provide 'setup-dimmer)
