@@ -3,12 +3,17 @@
   :init
   (which-key-mode)
   :config
-  (which-key-setup-side-window-bottom)  ; Display a popup window at bottom
-  ;; Remove 'akirak/' prefix from descriptions
-  (add-to-list 'which-key-replacement-alist
-               `((nil . "akirak/") .
-                 (lambda (kb)
-                   (cons (car kb)
-                         (string-remove-prefix "akirak/" (cdr kb)))))))
+  (which-key-setup-side-window-bottom) ; Display a popup window at bottom
+  )
+
+(defmacro akirak/which-key-add-stripped-prefix (prefix)
+  "Add PREFIX as a stripped prefix to `which-key-replacement-alist'."
+  `(add-to-list 'which-key-replacement-alist
+                (quote ((nil . ,prefix) .
+                        (lambda (kb)
+                          (cons (car kb)
+                                (string-remove-prefix ,prefix (cdr kb))))))))
+
+(akirak/which-key-add-stripped-prefix "akirak/")
 
 (provide 'setup-which-key)
