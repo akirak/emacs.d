@@ -409,6 +409,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-japanese
                      setup-rich-minority  ; Whitelist minor modes
                      setup-clipboard      ; Clipboard integration
+                     setup-ivy-omni-org
                      ))
     (akirak/require feature))
 #+end_src
