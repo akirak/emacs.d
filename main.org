@@ -176,6 +176,9 @@ Hopefully, defrepeater is soon going to be integrated with general
 #+end_src
 
 *** Custom definers
+:PROPERTIES:
+:ID:       e9451901-1b7f-43fc-ae51-bca550900161
+:END:
 **** Per-mode hydra
 As it is hard to remember workflow for every programming language, I've decided to set up a hydra for each programming language I use. Frequently-used commands specific to a major mode should be added to the hydra for its language. All mode hydras should share the same keybinding, which is currently ~C-d~.
 
@@ -227,6 +230,20 @@ There are not so many commands that need to be add to the map:
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-global-org-map
     :prefix "C-M-o")
+#+end_src
+
+**** Register map
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-register-map
+    :prefix "C-x r")
+#+end_src
+
+**** Eval command
+Add a prefix for keybindings to eval commands
+
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-eval-map
+    :prefix "C-c e")
 #+end_src
 **** Contextual keys
 #+begin_src emacs-lisp
@@ -542,6 +559,12 @@ I will load =setup-magithub= library if I need it.
   (atomic-chrome-start-server))
 #+end_src
 *** Yasnippet and auto-yasnippet
+
+#+begin_src emacs-lisp
+  (akirak/bind-register-map
+    "a" 'aya-create
+    "e" 'aya-expand)
+#+end_src
 
 #+begin_src emacs-lisp
   (general-def "C-o" 'aya-open-line)
