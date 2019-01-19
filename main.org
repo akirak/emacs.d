@@ -989,6 +989,19 @@ Use =my-goto= function locate the current context.
     :make-frame '(frame-purpose-make-mode-frame 'org-mode))
 #+end_src
 
+**** Org-agenda keybindings                              :Emacs:Org__Mode:
+:PROPERTIES:
+:CREATED_TIME: [2019-01-19 Sat 12:22]
+:END:
+:LOGBOOK:
+CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
+:END:
+
+#+begin_src emacs-lisp
+  (general-def org-agenda-mode-map :package 'org-agenda
+    "M-n" #'org-agenda-drag-line-forward
+    "M-p" #'org-agenda-drag-line-backward)
+#+end_src
 *** Beancount
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)
