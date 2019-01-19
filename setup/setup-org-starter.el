@@ -2,6 +2,8 @@
 
 (use-package org-starter
   :functions (org-starter-define-directory org-starter-define-file)
+  :init
+  (org-starter-mode 1)
   :config
   ;; Prevent an error that can be caused when a custom agenda command
   ;; is defined by org-starter
