@@ -961,13 +961,22 @@ Use =my-goto= function locate the current context.
      :type 'function
      :group 'akirak)
 
+   (defcustom my-goto-number-function nil
+     "Function called by `my-goto' when a numeric prefix is given to it."
+     :type 'function
+     :group 'akirak)
+
    (defun my-goto (&optional arg)
      (interactive "P")
-     (cond
-      (arg (counsel-org-clock-history))
-      ((org-clocking-p) (org-clock-goto))
-      ((functionp my-goto-default-function) (funcall my-goto-default-function))
-      (t (message "I have no idea what to do or where to go."))))
+     (pcase arg
+       ('nil (cond
+              ((org-clocking-p) (org-clock-goto))
+              ((functionp my-goto-default-function) (funcall my-goto-default-function))
+              (t (message "I have no idea what to do or where to go."))))
+       ('(4) (counsel-org-clock-history))
+       ((pred numberp)
+        (funcall my-goto-number-function arg))
+       (_ (user-error "Invalid arg: %s" arg))))
 
    (akirak/bind-key "M-g M-j" #'my-goto)
  #+end_src
