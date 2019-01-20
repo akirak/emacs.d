@@ -380,6 +380,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-helm-descbinds ; Better keybinding search
                      setup-helm-make  ; Choose a make command via Helm
                      setup-anzu       ; Provide info in search & replace
+                     setup-smartparens   ; Parenthesis editing
                      setup-org-make-toc  ; Generating TOCs
                      setup-unpackaged    ; A bunch of useful commands
                      setup-locate        ; Configure locate and updatedb
