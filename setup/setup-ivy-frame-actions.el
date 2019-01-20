@@ -29,7 +29,8 @@
                    '(("j" counsel-find-library-other-window "definition in other window")
                      ("F" akirak/find-library-some-frame "definition in frame")))
   (ivy-add-actions 'counsel-recentf
-                   '(("f" akirak/find-file-some-frame "frame")
+                   '(("j" find-file-other-window "other window")
+                     ("f" akirak/find-file-some-frame "frame")
                      ("F" akirak/find-file-some-frame "frame"))))
 
 (provide 'setup-ivy-frame-actions)
