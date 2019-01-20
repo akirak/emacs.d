@@ -1,30 +1,23 @@
 (use-package yankpad
   :after (org yasnippet))
 
-(defun yankpad-hydra--format-active-snippets ()
-  (mapconcat (lambda (ent)
-               (concat (car ent) (if-let ((key (nth 1 ent)))
-                                     (format " %s" key)
-                                   "")))
-             (yankpad-active-snippets)
-             "\n"))
-
 (defhydra yankpad-hydra (:hint nil)
   "
-Category: %s`yankpad-category
+Category: %s`yankpad-category (_C_: Set, _A_: Append)
+"
+  ("C" yankpad-set-category)
+  ("A" yankpad-append-category)
+  ("SPC" yankpad-insert "Insert" :exit t)
+  ("r" yankpad-repeat "Repeat" :exit t)
+  ("a" yankpad-aya-persist "Aya-persist")
+  ("c" yankpad-capture-snippet "Capture" :exit t)
+  ("E" yankpad-edit "Edit" :exit t)
+  ("R" yankpad-reload "Reload" :exit t))
 
-%s(yankpad-hydra--format-active-snippets)
-
-^Expand^       ^Category^           ^Snippets^
-^^----------   ^^----------------   ^^-------------------
-_SPC_ insert   _<tab>_     set      _e_ edit    _C_ capture
-_m_   map      _<backtab>_ append   _R_ reload"
-  ("SPC" yankpad-insert :exit t)
-  ("m" yankpad-map :exit t)
-  ("<tab>" yankpad-set-category)
-  ("<backtab>" yankpad-append-category)
-  ("e" yankpad-edit :exit t)
-  ("R" yankpad-reload)
-  ("C" yankpad-capture-snippet :exit t))
+(defun akirak/yankpad-insert (&optional arg)
+  (interactive "P")
+  (if arg
+      (yankpad-hydra/body)
+    (yankpad-insert)))
 
 (provide 'setup-yankpad)

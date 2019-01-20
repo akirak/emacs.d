@@ -555,14 +555,30 @@ I will load =setup-magithub= library if I need it.
 #+end_src
 *** Yasnippet and auto-yasnippet
 
+I prefer using =ivy-yasnippet= for choosing a snippet:
+
+#+begin_src emacs-lisp
+  (akirak/bind-key "C-c y" 'ivy-yasnippet)
+#+end_src
+
+=auto-yasnippet= is convenient for temporary snippets:
+
 #+begin_src emacs-lisp
   (akirak/bind-register-map
     "a" 'aya-create
     "e" 'aya-expand)
 #+end_src
 
+=aya-open-line= is the fastest way to expand a snippet if you know its name. It behaves like =open-line= if the word before the point is not registered as a snippet:
+
 #+begin_src emacs-lisp
   (general-def "C-o" 'aya-open-line)
+#+end_src
+
+Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
+
+#+begin_src emacs-lisp
+  (akirak/bind-key "C-c p" 'akirak/yankpad-insert)
 #+end_src
 
 *** Miscellaneous commands

@@ -87,10 +87,8 @@
   "C-c l" 'org-store-link
   "C-c m" 'bm-toggle
   "C-c n" #'counsel-org-capture-string
-  "C-c p" 'yankpad-insert
   "C-c s" 'symbol-overlay-put
   "C-c u" #'winner-undo-repeat
-  "C-c y" 'ivy-yasnippet
   "C-c '" #'outorg-edit-as-org
 
   "C-x /" #'counsel-rg
