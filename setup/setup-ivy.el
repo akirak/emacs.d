@@ -76,6 +76,8 @@
 (general-def "C-x b" #'ivy-switch-buffer-2)
 
 ;;;; ivy-switch-to-org-buffer
+;; Deprecated. I will use ivy-omni-org instead:
+;; https://github.com/akirak/ivy-omni-org
 
 (defvar ivy-switch-to-org-buffer-map
   (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))

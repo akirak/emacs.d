@@ -226,12 +226,6 @@ There are not so many commands that need to be add to the map:
   (general-create-definer akirak/bind-search-map :prefix "M-s")
 #+end_src
 
-**** Global org map
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-global-org-map
-    :prefix "C-M-o")
-#+end_src
-
 **** Register map
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-register-map

@@ -168,13 +168,6 @@
 ;; "d" #'helm-dash-at-point
 ;; "+" #'helm-dash-install-docset
 
-(akirak/bind-global-org-map
-  "a" #'org-agenda
-  "b" #'ivy-switch-to-org-buffer
-  ;; Maybe
-  ;; "v" #'org-web-tools-read-url-as-org
-  )
-
 (general-def :keymaps 'org-mode-map :package 'org
   ;; I don't use any of these bindings and want to use them for other purposes
   "C-c [" nil
