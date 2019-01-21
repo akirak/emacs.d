@@ -16,6 +16,11 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#before-using-use-package][Before using use-package]]
     -  [[#overriding-defaults][Overriding defaults]]
     -  [[#keybindings-infrastructure][Keybindings infrastructure]]
+      -  [[#repeatable-keys][Repeatable keys]]
+      -  [[#per-mode-hydra][Per-mode hydra]]
+      -  [[#generic-definer][Generic definer]]
+      -  [[#definers-for-emacs-standard-prefix-keys][Definers for Emacs standard prefix keys]]
+      -  [[#definers-for-non-standard-prefix-keys][Definers for non-standard prefix keys]]
     -  [[#dependencies-for-other-packages][Dependencies for other packages]]
       -  [[#dashel][dash.el]]
       -  [[#ivy][Ivy]]
@@ -39,6 +44,11 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#forge][Forge]]
       -  [[#chrome][Chrome]]
       -  [[#yasnippet-and-auto-yasnippet][Yasnippet and auto-yasnippet]]
+      -  [[#avy][Avy]]
+      -  [[#source-code-navigation][Source code navigation]]
+      -  [[#outline-navigation][Outline navigation]]
+      -  [[#outline-editing][Outline editing]]
+      -  [[#referencing][Referencing]]
       -  [[#miscellaneous-commands][Miscellaneous commands]]
       -  [[#poporg][Poporg]]
       -  [[#hydra-for-windows][Hydra for windows]]
@@ -47,6 +57,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#dsls][DSLs]]
       -  [[#startup-windows][Startup window(s)]]
       -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
+      -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
     -  [[#writing][Writing]]
       -  [[#hydra-for-org-mode][Hydra for Org-mode]]
       -  [[#graphviz][GraphViz]]
@@ -64,6 +75,10 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#python][Python]]
       -  [[#rust][Rust]]
     -  [[#emacs-applications][Emacs applications]]
+      -  [[#getting-organised][Getting organised]]
+        -  [[#jump-to-the-current-context][Jump to the current context]]
+        -  [[#frame][Frame]]
+        -  [[#org-agenda-keybindings][Org-agenda keybindings]]
       -  [[#beancount][Beancount]]
     -  [[#meta][Meta]]
       -  [[#import-from-the-previous-configuration][Import from the previous configuration]]
@@ -148,10 +163,6 @@ These settings don't depend on external dependencies, so they should be applied 
 #+end_src
 
 ** Keybindings infrastructure
-:PROPERTIES:
-:TOC:      0
-:END:
-
 Use general.el to define keybindings. It has made several improvements over
 bind-key, including a built-in support for which-key.
 
@@ -175,11 +186,7 @@ Hopefully, defrepeater is soon going to be integrated with general
   (akirak/require 'setup-defrepeater t)
 #+end_src
 
-*** Custom definers
-:PROPERTIES:
-:ID:       e9451901-1b7f-43fc-ae51-bca550900161
-:END:
-**** Per-mode hydra
+*** Per-mode hydra
 As it is hard to remember workflow for every programming language, I've decided to set up a hydra for each programming language I use. Frequently-used commands specific to a major mode should be added to the hydra for its language. All mode hydras should share the same keybinding, which is currently ~C-d~.
 
 I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on the key. It takes the name of the major mode and binds the key to =akirak/MODE-hydra/body=. This is not a precisely keybinding definer but plays a somewhat similar role.
@@ -194,21 +201,54 @@ I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on 
         (or hydra-function
             (intern (format "akirak/%s-hydra/body" mode))))))
 #+end_src
-**** Generic definer
+*** Generic definer
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-key)
 #+end_src
-**** Prefix for customizing Emacs
+*** Definers for Emacs standard prefix keys
+**** M-s: Search
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-search :prefix "M-s")
+  (define-obsolete-function-alias 'akirak/bind-search-map
+    'akirak/bind-search)
+#+end_src
+**** M-g: Jump
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-jump :prefix "M-g")
+#+end_src
+**** M-r: Registers
+#+begin_src emacs-lisp
+  (general-def
+    "M-r" (general-simulate-key "C-x r"))
+#+end_src
+
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-register :prefix "C-x r")
+  (define-obsolete-function-alias 'akirak/bind-register-map
+    'akirak/bind-register)
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/bind-register "M-r" #'ivy-resume)
+#+end_src
+**** F1: Help
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-help :prefix "<f1>")
+#+end_src
+*** Definers for non-standard prefix keys
 I often need to tweak Emacs while I am using it.
 
 #+begin_src emacs-lisp
-  (general-create-definer akirak/bind-customize-map :prefix "C-x c")
+  (general-create-definer akirak/bind-customization :prefix "C-x c")
+
+  (define-obsolete-function-alias 'akirak/bind-customize-map
+    'akirak/bind-customization)
 #+end_src
 
 There are not so many commands that need to be add to the map:
 
 #+begin_src emacs-lisp
-  (akirak/bind-customize-map
+  (akirak/bind-customization
     "" '(nil :wk "customize")
     "f" #'customize-face-other-window
     "g" #'customize-group-other-window
@@ -221,33 +261,48 @@ There are not so many commands that need to be add to the map:
     "s" #'customize-set-value
     "v" #'customize-variable-other-window)
 #+end_src
-**** Search commands
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-search-map :prefix "M-s")
-#+end_src
 
-**** Register map
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-register-map
-    :prefix "C-x r")
-#+end_src
-
-**** Eval command
-Add a prefix for keybindings to eval commands
+~C-c~ is reserved for the user:
 
 #+begin_src emacs-lisp
-  (general-create-definer akirak/bind-eval-map
-    :prefix "C-c e")
+  (general-create-definer akirak/bind-user :prefix "C-c")
 #+end_src
-**** Contextual keys
+
+Add a prefix for keybindings to eval commands:
+
 #+begin_src emacs-lisp
-  (defmacro akirak/define-contextual-key (key &rest general-defs)
-    (declare (indent 1))
-    (macroexp-progn
-     (cl-loop for (def . context) in general-defs
-              collect (cons 'general-define-key
-                            (append context
-                                    (list key def))))))
+  (general-create-definer akirak/bind-eval :prefix "C-c e")
+  (define-obsolete-function-alias 'akirak/bind-eval-map 'akirak/bind-eval)
+#+end_src
+
+Generic prefix key for editing commands:
+
+#+begin_src emacs-lisp
+(general-create-definer akirak/bind-generic :prefix "C-.")
+#+end_src
+
+#+begin_src emacs-lisp
+(akirak/bind-generic
+  "j" #'katawa-ivy-fix-at-point
+  "o" #'split-line ; Originally C-M-o
+  "SPC" 'just-one-space)
+#+end_src
+
+Prefix for mode-specific keys:
+
+#+begin_src emacs-lisp
+(defconst akirak/mode-prefix-key "C-,")
+(general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
+#+end_src
+
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-extra-help :prefix "<f1>x")
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/bind-extra-help
+    "c" #'describe-char
+    "f" #'counsel-describe-face)
 #+end_src
 
 ** Dependencies for other packages
@@ -405,6 +460,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-rich-minority  ; Whitelist minor modes
                      setup-clipboard      ; Clipboard integration
                      setup-ivy-omni-org
+                     setup-bm
                      ))
     (akirak/require feature))
 #+end_src
@@ -452,16 +508,27 @@ The following packages are enhancements to Emacs that don't require much configu
     :commands (esup))
   (use-package git-modes)
   (use-package fix-word
-    :commands (fix-word-upcase fix-word-downcase fix-word-capitalize))
+    :commands (fix-word-upcase fix-word-downcase fix-word-capitalize)
+    :general
+    ([remap upcase-word] 'fix-word-upcase
+     [remap downcase-word] 'fix-word-downcase
+     [remap capitalize-word] 'fix-word-capitalize))
   (use-package scratch
     :commands (scratch))
-  (use-package embrace)
+  (use-package embrace
+    ;; I probably don't need this package. Use sp-{rewrap,unwrap}-sexp
+    ;; instead
+    :disabled t)
   (use-package dumb-jump
     ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
     :custom
     (dumb-jump-selector 'ivy))
-  (use-package iedit)
-  (use-package comment-dwim-2)
+  (use-package iedit
+    :general
+    ("C-;" 'iedit-mode))
+  (use-package comment-dwim-2
+    :general
+    ("M-;" 'comment-dwim-2))
   (autoload 'narrow-or-widen-dwim "narrow-or-widen.el")
   (use-package counsel-org-clock)
   (use-package org-reverse-datetree
@@ -486,6 +553,8 @@ The following packages are enhancements to Emacs that don't require much configu
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-frame-workflow t) ; Ensure loading frame-workflow
+
+  (general-def "C-M-g" #'frame-workflow-prefix-map)
 #+end_src
 
 *** Terminal
@@ -506,6 +575,9 @@ The following packages are enhancements to Emacs that don't require much configu
 #+end_src
 
 *** Dired
+#+begin_src emacs-lisp
+  (general-def "C-x C-j" #'dired-jump)
+#+end_src
 **** Hydra
 #+begin_src emacs-lisp
   (defhydra akirak/dired-mode-hydra ()
@@ -524,6 +596,15 @@ The following packages are enhancements to Emacs that don't require much configu
     '(when (fboundp 'ibuffer-sidebar-show-sidebar)
        (ibuffer-sidebar-show-sidebar)))
 #+end_src
+
+*** Crux and file operations
+#+begin_src emacs-lisp
+  (general-def
+    "C-x D" #'crux-delete-file-and-buffer
+    "C-x R" #'crux-rename-file-and-buffer
+    "C-x S" #'sudo-find-file
+    "C-x x" #'crux-open-with)
+#+end_src
 *** Magit
 The following packages extend the display of =magit-status=:
 
@@ -540,7 +621,7 @@ The following packages extend the display of =magit-status=:
 As magithub slows down magit-status, it sometimes causes problems,
 and I don't always need its features, I will disable it by default.
 I will load =setup-magithub= library if I need it.
-*** Forge
+**** Forge
 #+begin_src emacs-lisp
   (use-package forge
     ;; Depends on emacsql-sqlite
@@ -554,12 +635,17 @@ I will load =setup-magithub= library if I need it.
   :init
   (atomic-chrome-start-server))
 #+end_src
+*** Company completion
+#+begin_src emacs-lisp
+(general-def :package 'company :keymaps 'company-mode-map
+  "M-/" #'company-complete)
+#+end_src
 *** Yasnippet and auto-yasnippet
 
 I prefer using =ivy-yasnippet= for choosing a snippet:
 
 #+begin_src emacs-lisp
-  (akirak/bind-key "C-c y" 'ivy-yasnippet)
+  (akirak/bind-user "y" 'ivy-yasnippet)
 #+end_src
 
 =auto-yasnippet= is convenient for temporary snippets:
@@ -579,9 +665,77 @@ I prefer using =ivy-yasnippet= for choosing a snippet:
 Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
 
 #+begin_src emacs-lisp
-  (akirak/bind-key "C-c p" 'akirak/yankpad-insert)
+  (akirak/bind-user "p" 'akirak/yankpad-insert)
+#+end_src
+*** Frequent counsel commands                                  :navigation:
+#+begin_src emacs-lisp
+  (general-def
+    "C-x p" #'counsel-projectile
+    "C-x /" #'counsel-rg
+    "C-x F" #'counsel-recentf
+    "C-x L" #'counsel-locate)
+#+end_src
+*** Avy                                                        :navigation:
+#+begin_src emacs-lisp
+  (akirak/bind-key "C-'" 'avy-goto-char-timer)
+
+  (general-unbind "C-'" :keymaps 'org-mode-map :package 'org)
 #+end_src
 
+=link-hint= is not part of =avy= package, but it is covenient for following a link:
+
+#+begin_src emacs-lisp
+  (akirak/bind-jump "f" 'akirak/link-hint-open-link)
+#+end_src
+*** Source code navigation                                     :navigation:
+
+#+begin_src emacs-lisp
+  (akirak/bind-jump
+    "." #'dumb-jump-go
+    "," #'dumb-jump-back)
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/bind-search "i" 'counsel-imenu)
+
+  (akirak/bind-search :package 'org :keymaps 'org-mode-map
+    "i" 'counsel-org-goto)
+#+end_src
+
+*** Outline navigation                                         :navigation:
+#+begin_src emacs-lisp
+  (akirak/bind-jump :package 'outline :keymaps 'outline-minor-mode-map
+    "h" 'outline-up-heading)
+
+  (akirak/bind-jump  :package 'org :keymaps 'org-mode-map
+    "h" 'org-up-element)
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/bind-search "o" 'counsel-outline)
+  (akirak/bind-search :package 'org :keymaps 'org-mode-map
+    "o" 'counsel-org-goto)
+#+end_src
+
+*** Outline editing                                              :outlines:
+#+begin_src emacs-lisp
+  (general-def :keymaps 'outline-minor-mode-map :package 'outshine
+    "M-RET" 'outshine-insert-heading)
+  (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-RET")
+#+end_src
+*** Referencing                                               :referencing:
+#+begin_src emacs-lisp
+  (akirak/bind-search
+    "d" #'helm-dash)
+
+  ;; "a" #'helm-dash-activate-docset
+  ;; "d" #'helm-dash-at-point
+  ;; "+" #'helm-dash-install-docset
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/bind-help "M" #'woman)
+#+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
 #+begin_src emacs-lisp
@@ -628,7 +782,7 @@ Use poporg rather than outorg.
 
 #+begin_src emacs-lisp
   (use-package poporg)
-  (akirak/bind-key "C-c '" 'poporg-dwim)
+  (akirak/bind-user "'" 'poporg-dwim)
   ;; The default keybindings in poporg-mode-map are not intuitive to me,
   (akirak/bind-key :keymaps 'poporg-mode-map
     "C-c C-c" 'poporg-edit-exit
@@ -643,6 +797,7 @@ I created a hydra for managing frames and windows.
 #+begin_src emacs-lisp
   (akirak/require 'setup-window-hydra)
   (akirak/bind-key "M-o" #'akirak/window-hydra/body)
+  (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 #+end_src
 *** Visual cues and extra information display
 
@@ -787,11 +942,25 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
     :commands (ivy-clipurl)
     :config
     (ivy-add-actions 'ivy-clipurl
-                     '(("r" org-web-tools-read-url-as-org "Read as Org")))
-    :general
-    ("C-c w" 'ivy-clipurl))
+                     '(("r" org-web-tools-read-url-as-org "Read as Org"))))
+
+  (akirak/bind-user "w" 'ivy-clipurl)
 #+end_src
 
+*** Highlighting part(s) of source code
+:PROPERTIES:
+:CREATED_TIME: [2019-01-25 Fri 22:47]
+:END:
+
+- bm (visual bookmarks)
+- symbol-overlay
+
+#+begin_src emacs-lisp
+(akirak/bind-user
+  "b" 'helm-bm
+  "m" 'bm-toggle
+  "s" 'symbol-overlay-put)
+#+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1
@@ -1020,6 +1189,14 @@ Use =my-goto= function to locate the current context.
 
    (akirak/bind-key "M-g M-j" #'my-goto)
  #+end_src
+**** Org anywhere
+#+begin_src emacs-lisp
+  (akirak/bind-search "M-o" #'helm-org-rifle-known-files)
+  (akirak/bind-user
+    "c" #'org-capture
+    "l" 'org-store-link
+    "n" #'counsel-org-capture-string)
+#+end_src
 **** Frame
 :PROPERTIES:
 :ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
