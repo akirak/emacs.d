@@ -81,7 +81,7 @@
           (cond
            ((> (window-total-width) 160)
             (split-window-right))
-           ((> (window-total-height 30))
+           ((> (window-total-height) 30)
             (split-window-below)))
           (other-window 1)
           (switch-to-buffer buffer)

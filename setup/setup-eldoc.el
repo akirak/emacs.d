@@ -8,8 +8,11 @@
 (defvar akirak/eldoc-lv-window nil)
 
 (defun akirak/eldoc-message (message &rest args)
-  (apply #'lv-message format args)
-  (setq akirak/eldoc-lv-window t))
+  (let ((window (setq akirak/eldoc-lv-window (lv-window)))
+        (buffer (get-buffer " *LV*")))
+    (unless (eql buffer (get-buffer-window buffer))
+      (set-window-buffer window buffer))
+    (apply #'lv-message format args)))
 
 (defun akirak/eldoc-delete-window (&rest _args)
   (when akirak/eldoc-lv-window

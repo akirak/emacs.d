@@ -461,6 +461,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-clipboard      ; Clipboard integration
                      setup-ivy-omni-org
                      setup-bm
+                     setup-window-management
                      ))
     (akirak/require feature))
 #+end_src
