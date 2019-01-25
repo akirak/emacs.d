@@ -13,7 +13,6 @@
 
 ;;; Basic configuration
 
-(require 'init-org)
 (require 'init-coding)
 
 ;;; Enhancements (misc/)

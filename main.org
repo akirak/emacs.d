@@ -305,6 +305,10 @@ Prefix for mode-specific keys:
     "f" #'counsel-describe-face)
 #+end_src
 
+#+begin_src emacs-lisp
+(general-create-definer akirak/bind-system :prefix "<f12>")
+#+end_src
+
 ** Dependencies for other packages
 :PROPERTIES:
 :TOC:      1
@@ -418,7 +422,6 @@ The typography module depends on several fonts from many packages. I have to doc
 #+begin_src emacs-lisp
   (dolist (feature '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
                      setup-key-translation ; Translate certain key combinations for ergonomics
-                     setup-keybindings     ; My global keybindings
                      setup-counsel         ; Basic Counsel commands
                      setup-projectile      ; Manage projects
                      setup-swiper ; Incremental search through the buffer using Ivy
@@ -467,6 +470,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-ivy-omni-org
                      setup-bm
                      setup-window-management
+                     setup-system-tools
+                     setup-chromeos       ; Workarounds for Chrome OS
                      ))
     (akirak/require feature))
 #+end_src
@@ -563,9 +568,15 @@ The following packages are enhancements to Emacs that don't require much configu
   (general-def "C-M-g" #'frame-workflow-prefix-map)
 #+end_src
 
-*** Terminal
+*** Terminal and shells
 #+begin_src emacs-lisp
   (akirak/require 'setup-terminal t)
+#+end_src
+
+#+begin_src emacs-lisp
+  (general-def
+    "<f6>" 'akirak/shell-new
+    "C-x T" #'akirak/shell-toggle-dedicated)
 #+end_src
 **** Frame
 
@@ -611,11 +622,24 @@ The following packages are enhancements to Emacs that don't require much configu
     "C-x S" #'sudo-find-file
     "C-x x" #'crux-open-with)
 #+end_src
+
+*** Buffer management
+#+begin_src emacs-lisp
+  ;; buffer management
+  (general-def
+    "<f5>" 'revert-buffer
+    "C-x k" #'kill-this-buffer  
+    "C-x C-b" #'ibuffer)
+#+end_src
 *** Magit
 The following packages extend the display of =magit-status=:
 
 - magit-todos
 - magithub
+
+#+begin_src emacs-lisp
+  (general-def "<f7>" #'akirak/magit-status-prefer-existing)
+#+end_src
 **** magit-todos
 #+begin_src emacs-lisp
   (use-package magit-todos :after (magit hl-todo)
@@ -652,6 +676,7 @@ I prefer using =ivy-yasnippet= for choosing a snippet:
 
 #+begin_src emacs-lisp
   (akirak/bind-user "y" 'ivy-yasnippet)
+  (akirak/bind-register "M-n" 'yas-new-snippet)
 #+end_src
 
 =auto-yasnippet= is convenient for temporary snippets:
@@ -794,10 +819,15 @@ Use poporg rather than outorg.
     "C-c C-c" 'poporg-edit-exit
     "C-x C-s" 'poporg-update-and-save)
 #+end_src
-*** Hydra for windows
+*** Window management
 :PROPERTIES:
 :CREATED_TIME: [2018-12-31 Mon 05:04]
 :END:
+#+begin_src emacs-lisp
+(akirak/bind-user
+  "u" #'winner-undo-repeat)
+#+end_src
+
 I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
@@ -953,7 +983,7 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
   (akirak/bind-user "w" 'ivy-clipurl)
 #+end_src
 
-*** Highlighting part(s) of source code
+*** Highlighting part(s) of source code and focusing
 :PROPERTIES:
 :CREATED_TIME: [2019-01-25 Fri 22:47]
 :END:
@@ -966,6 +996,35 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
   "b" 'helm-bm
   "m" 'bm-toggle
   "s" 'symbol-overlay-put)
+#+end_src
+
+#+begin_src emacs-lisp
+(general-def
+  "C-x =" #'narrow-or-widen-dwim)
+#+end_src
+*** Editing source code                                       :programming:
+:PROPERTIES:
+:CREATED_TIME: [2019-01-25 Fri 22:50]
+:END:
+
+#+begin_src emacs-lisp
+  (akirak/bind-generic :keymaps 'smartparens-mode-map
+    "r" 'sp-rewrap-sexp
+    "u" 'sp-unwrap-sexp)
+#+end_src
+*** Development workflow
+#+begin_src emacs-lisp
+  (general-def
+    "<f9>" 'recompile)
+
+  (general-def
+    "C-x t" #'helm-tail)
+#+end_src
+*** Scratch buffers
+#+begin_src emacs-lisp
+;; Development
+(akirak/bind-user
+  "i" 'scratch)
 #+end_src
 ** Writing
 :PROPERTIES:

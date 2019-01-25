@@ -1,6 +1,10 @@
 (require 'org-habit)
 (add-hook 'org-modules 'org-protocol)
 
+(when (bound-and-true-p akirak/mode-prefix-key)
+  (general-translate-key nil 'org-mode-map
+    :package 'org akirak/mode-prefix-key "C-c C-x"))
+
 (setq-default org-clock-history-length 20
               org-clock-mode-line-total (quote today)
               org-clock-out-remove-zero-time-clocks t
@@ -45,12 +49,42 @@
   ;; I don't use any of these bindings and want to use them for other purposes
   "C-c [" nil
   "C-c ]" nil
+  ;; M-up/down/left/right is unavailable on Chromebooks, so I need
+  ;; alternative bindings for commands bound on those keys.
   "M-n" 'org-metadown
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft
   "M-L" 'org-shiftmetaright
-  "C-1" 'counsel-org-tag
-  "C-8" 'org-insert-hydra/body
-  "C-9" #'org-tree-to-indirect-buffer)
+  "C-1" 'counsel-org-tag)
+
+(akirak/bind-mode :keymaps 'org-mode-map :package 'org
+  "t" 'akirak/org-table-create-or-edit)
+
+(defun akirak/org-table-create-or-edit ()
+  (interactive)
+  (if (org-at-table-p)
+      (akirak/org-table-hydra/body)
+    (org-table-create)))
+
+(defhydra akirak/org-table-hydra (:hint nil)
+  "
+Org Table
+
+        ^^Insert  ^^Delete
+Row     _ir_      _dr_
+Column  _ic_      _dc_
+
+Edit: _e_
+Navigation: _n_ _p_ _f_ _b_
+"
+  ("dc" org-table-delete-column)
+  ("dr" org-table-kill-row)
+  ("ic" org-table-insert-column)
+  ("ir" org-table-insert-row)
+  ("e" org-edit-special)
+  ("f" org-table-next-field)
+  ("b" org-table-previous-field)
+  ("n" org-table-next-row)
+  ("p" previous-line))
 
 (provide 'setup-org)
