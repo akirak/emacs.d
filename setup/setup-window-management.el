@@ -66,26 +66,24 @@
 
 (setq-default org-src-window-setup 'split-window-below)
 
-(defvar-local akirak/org-src-last-wconf nil)
+(defvar-local akirak/org-src-split-window nil)
 
 (defun akirak/ad-around-org-src-switch-to-buffer (orig buffer context)
   (if (eq org-src-window-setup 'split-window-below)
       (if (memq context '(exit save))
-          (let ((wconf (with-current-buffer buffer
-                         akirak/org-src-last-wconf)))
-            (set-window-configuration wconf)
-            (if-let* ((w (get-buffer-window buffer)))
-                (select-window w)
+          (progn
+            (ignore-errors (delete-window))
+            (if-let ((window (get-buffer-window buffer)))
+                (select-window window)
               (switch-to-buffer buffer)))
-        (let ((wconf (current-window-configuration)))
-          (cond
-           ((> (window-total-width) 160)
-            (split-window-right))
-           ((> (window-total-height) 30)
-            (split-window-below)))
-          (other-window 1)
-          (switch-to-buffer buffer)
-          (setq akirak/org-src-last-wconf wconf)))
+        (cond
+         ((> (window-total-width) 160)
+          (split-window-right))
+         (t
+          (split-window-below)))
+        (other-window 1)
+        (switch-to-buffer buffer)
+        (set-window-dedicated-p (selected-window) t))
     (funcall orig buffer context)))
 
 (advice-add 'org-src-switch-to-buffer :around
