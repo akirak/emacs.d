@@ -362,6 +362,11 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
   (use-package ts
     :straight (ts :host github :repo "alphapapa/ts.el"))
 #+end_src
+*** org-ql
+#+begin_src emacs-lisp
+  (use-package org-ql
+    :straight (org-ql :host github :repo "alphapapa/org-ql"))
+#+end_src
 *** all-the-icons
 #+begin_src emacs-lisp
 (use-package all-the-icons)
