@@ -1,15 +1,27 @@
-;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
-(defun narrow-or-widen-dwim (p)
+;; Based on http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+;;;###autoload
+(defun akirak/narrow-or-widen-dwim (arg)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
 Dwim means: region, org-src-block, org-subtree, or
 defun, whichever applies first. Narrowing to
 org-src-block actually calls `org-edit-src-code'.
 
-With prefix P, don't widen, just narrow even if buffer
-is already narrowed."
+When a universal prefix argument is given, create an indirect buffer
+to the corresponding area instead of narrowing to it. If the current buffer
+is an indirect buffer, this command doesn't do anything."
   (interactive "P")
   (declare (interactive-only))
-  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+  (cond ((and arg (buffer-base-buffer)) nil)
+        ((and arg (region-active-p))
+         ;; TODO: Create an indirect buffer for the current region
+         )
+        ((and arg (derived-mode-p 'org-mode))
+         (org-tree-to-indirect-buffer))
+        (arg
+         ;; TODO: Create an indirect buffer for the current defun
+         (clone-indirect-buffer )
+         )
+        ((buffer-narrowed-p) (widen))
         ((region-active-p)
          (narrow-to-region (region-beginning)
                            (region-end)))

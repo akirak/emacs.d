@@ -540,7 +540,8 @@ The following packages are enhancements to Emacs that don't require much configu
   (use-package comment-dwim-2
     :general
     ("M-;" 'comment-dwim-2))
-  (autoload 'narrow-or-widen-dwim "narrow-or-widen.el")
+  (use-package narrow-or-widen
+    :straight nil)
   (use-package counsel-org-clock)
   (use-package org-reverse-datetree
     :straight (org-reverse-datetree :host github
@@ -999,8 +1000,8 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 #+end_src
 
 #+begin_src emacs-lisp
-(general-def
-  "C-x =" #'narrow-or-widen-dwim)
+  (general-def
+    "C-x n" #'akirak/narrow-or-widen-dwim)
 #+end_src
 *** Editing source code                                       :programming:
 :PROPERTIES:
