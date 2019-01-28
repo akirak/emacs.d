@@ -29,7 +29,8 @@
               ;; org-use-fast-tag-selection t
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
-              org-tags-exclude-from-inheritance '())
+              org-tags-exclude-from-inheritance '()
+              org-special-ctrl-a/e t)
 
 ;; Prevent from saving org-refile and org-capture locations to bookmarks
 (setq org-bookmark-names-plist nil)
@@ -86,5 +87,19 @@ Navigation: _n_ _p_ _f_ _b_
   ("b" org-table-previous-field)
   ("n" org-table-next-row)
   ("p" previous-line))
+
+(defun akirak/ad-around-org-beginning-of-line (orig n)
+  (cond
+   ((org-at-property-p)
+    (if (bolp)
+        (when-let* ((line (thing-at-point 'line))
+                    (match (string-match org-property-re line)))
+          (beginning-of-line 1)
+          (right-char (string-match (regexp-quote (match-string 3 line))
+                                    line)))
+      (beginning-of-line n)))
+   (t (funcall orig n))))
+(advice-add 'org-beginning-of-line :around
+            'akirak/ad-around-org-beginning-of-line)
 
 (provide 'setup-org)

@@ -19,8 +19,8 @@
   "C-a" 'akirak/back-to-indentation-or-beginning-of-line)
 
 (general-def :keymaps 'org-mode-map :package 'org
-  "C-a" #'move-beginning-of-line
-  "C-e" #'move-end-of-line)
+  "C-a" #'org-beginning-of-line
+  "C-e" #'org-end-of-line)
 
 (general-def minibuffer-local-map
   "C-u" 'backward-kill-sentence)

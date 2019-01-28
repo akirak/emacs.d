@@ -473,8 +473,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-system-tools
                      setup-chromeos       ; Workarounds for Chrome OS
                      setup-flycheck
-                     setup-spell
-                     ))
+                     setup-navigation-bindings
+                     setup-spell))
     (akirak/require feature))
 #+end_src
 
