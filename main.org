@@ -1173,6 +1173,18 @@ Ideally, this section should be a portfolio of my skills.
     (add-to-list 'company-backends 'company-shell))
 #+end_src
 
+*** TODO Vue
+:PROPERTIES:
+:CUSTOM_ID: vue
+:END:
+- [ ] Better solution for editing HTML files (maybe =web-mode=?)
+- [ ] Configure [[file:setup/setup-navigation-bindings.el]] for HTML,  as smartparens seems to be a bad idea
+- [ ] Configure imenu entries
+- [ ] Maybe install =emmet-mode=
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-vue)
+#+end_src
 *** Elm
 
 #+begin_src emacs-lisp

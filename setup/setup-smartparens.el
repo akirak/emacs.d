@@ -6,6 +6,6 @@
   (:keymaps 'smartparens-mode-map
             [remap down-list] #'sp-down-sexp)
   :hook
-  (prog-mode . turn-on-smartparens-strict-mode))
+  ((prog-mode sgml-mode) . turn-on-smartparens-strict-mode))
 
 (provide 'setup-smartparens)

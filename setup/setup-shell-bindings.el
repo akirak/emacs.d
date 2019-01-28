@@ -5,7 +5,7 @@
   "C-h" 'backward-delete-char
   "C-w" 'akirak/kill-region-or-backward-kill-word)
 
-(general-def prog-mode-map
+(general-def :keymaps '(prog-mode-map sgml-mode-map)
   "C-a" 'akirak/back-to-indentation-or-beginning-of-line)
 
 (general-def :keymaps 'org-mode-map :package 'org
