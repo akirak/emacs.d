@@ -1,9 +1,6 @@
 (use-package akirak/edit
   :straight nil)
 
-(use-package akirak/org-edit
-  :straight nil)
-
 (general-def
   "C-h" 'backward-delete-char
   "C-w" 'akirak/kill-region-or-backward-kill-word)
