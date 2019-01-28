@@ -33,6 +33,7 @@
 
 (setq inhibit-startup-screen t
       ring-bell-function 'ignore
+      x-gtk-use-system-tooltips nil
       ediff-window-setup-function #'ediff-setup-windows-plain)
 
 (setq bookmark-default-file "~/.emacs-bookmarks")
