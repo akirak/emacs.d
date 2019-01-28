@@ -472,6 +472,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-window-management
                      setup-system-tools
                      setup-chromeos       ; Workarounds for Chrome OS
+                     setup-flycheck
+                     setup-spell
                      ))
     (akirak/require feature))
 #+end_src
@@ -558,6 +560,15 @@ The following packages are enhancements to Emacs that don't require much configu
     (add-hook 'org-mode-hook 'org-bullets-mode))
   (use-package org-mind-map               ; Exporting mind maps
     :after (org ox))
+  (use-package easy-kill
+    :general
+    ([remap kill-ring-save] #'easy-kill
+     "M-m" #'easy-mark))
+  (use-package symbol-overlay
+    :commands (symbol-overlay-put symbol-overlay-mode))
+  (use-package helm-dash :after helm
+    :custom
+    (helm-dash-browser-func #'akirak/display-url-for-referencing))
 #+end_src
 
 *** frame-workflow

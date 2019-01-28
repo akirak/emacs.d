@@ -20,4 +20,4 @@ Errors (flycheck): %s`flycheck-checker
   (flycheck-mode 1)
   (hydra-flycheck/body))
 
-(provide 'init-flycheck)
+(provide 'setup-flycheck)
