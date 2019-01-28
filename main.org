@@ -1311,34 +1311,10 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 #+end_src
 ** Meta
 *** TODO Import from the previous configuration
-#+begin_src emacs-lisp
-  (let ((old-init-file (expand-file-name "old-init.el" user-emacs-directory)))
-    (load-file old-init-file)
-    (run-with-timer 3 nil
-                    `(lambda ()
-                       (message "The previous configuration files (%s) still exist. I have to migrate them soon."
-                                (abbreviate-file-name ,old-init-file)))))
-#+end_src
-
-Review config in the following directories:
-
-- [X] keybindings
-- [X] progmodes
-- [ ] org
-- [X] ui
-- [X] apps
-- [ ] coding
-- [ ] etc
-- [X] exwm
-- [X] international
-- [X] local
-- [X] misc
-- [X] x
-
 The following modules require further review:
 
 - [ ] [[file:setup/setup-dired.el]]
-- [ ] [[file:setup/setup-keybindings.el]]
+- [X] [[file:setup/setup-keybindings.el]]
 - [ ] [[file:setup/setup-web-browser.el]]
 - [ ] [[file:setup/setup-corefighter.el]]
 - [ ] [[file:setup/setup-repom.el]]
