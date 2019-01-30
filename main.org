@@ -1165,6 +1165,10 @@ Ideally, this section should be a portfolio of my skills.
   (akirak/require 'setup-haskell)
 #+end_src
 
+*** Web-mode
+#+begin_src emacs-lisp
+  (akirak/require 'setup-web-mode)
+#+end_src
 *** Shell scripts (bash)
 
 #+begin_src emacs-lisp
