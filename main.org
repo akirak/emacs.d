@@ -475,7 +475,9 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-chromeos       ; Workarounds for Chrome OS
                      setup-flycheck
                      setup-navigation-bindings
-                     setup-spell))
+                     setup-spell
+                     setup-git-clone
+                     setup-clipurl))
     (akirak/require feature))
 #+end_src
 
@@ -669,6 +671,8 @@ I will load =setup-magithub= library if I need it.
     :disabled t
     :straight (forge :host github :repo "magit/forge"))
 #+end_src
+**** Cloning Git repositories
+[[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
 *** Chrome
 #+begin_src emacs-lisp
 (use-package atomic-chrome
@@ -980,16 +984,6 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 
 #+begin_src emacs-lisp
   (use-package org-web-tools)
-
-  (use-package clipurl
-    :straight (clipurl :host github :repo "akirak/clipurl.el"))
-
-  (use-package ivy-clipurl
-    :straight clipurl
-    :commands (ivy-clipurl)
-    :config
-    (ivy-add-actions 'ivy-clipurl
-                     '(("r" org-web-tools-read-url-as-org "Read as Org"))))
 
   (akirak/bind-user "w" 'ivy-clipurl)
 #+end_src
