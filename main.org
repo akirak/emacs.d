@@ -1249,6 +1249,11 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (use-package rust-mode)
 #+end_src
+
+*** Java
+#+begin_src emacs-lisp
+  (akirak/require 'setup-java)
+#+end_src
 ** Emacs applications
 *** Getting organised
 **** Jump to the current context
