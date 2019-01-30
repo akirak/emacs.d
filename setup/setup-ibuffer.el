@@ -15,7 +15,6 @@
    (lambda (_name root) (abbreviate-file-name root))))
 
 (use-package ibuffer-vc
-  :disabled t
   :init
   (add-hook 'ibuffer-hook
             (lambda ()
