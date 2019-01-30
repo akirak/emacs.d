@@ -537,9 +537,7 @@ The following packages are enhancements to Emacs that don't require much configu
     ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
     :custom
     (dumb-jump-selector 'ivy))
-  (use-package iedit
-    :general
-    ("C-;" 'iedit-mode))
+  (use-package iedit)
   (use-package comment-dwim-2
     :general
     ("M-;" 'comment-dwim-2))
@@ -1038,6 +1036,34 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
 ;; Development
 (akirak/bind-user
   "i" 'scratch)
+#+end_src
+*** Spell checking and iedit                               :editor:writing:
+#+begin_src emacs-lisp
+  (general-def "C-;" 'akirak/iedit-or-flyspell)
+
+  (defun akirak/iedit-or-flyspell ()
+    "With a prefix argument, run iedit in the function. Otherwise, run iedit or flyspell.
+
+  With a prefix argument, call `unpackaged/iedit-scoped'.
+  Otherwise, call `unpackaged/iedit-or-flyspell'."
+    (interactive)
+    (if current-prefix-arg
+        (unpackaged/iedit-scoped)
+      (unpackaged/iedit-or-flyspell)))
+
+  (defhydra akirak/flyspell-hydra ()
+    "flyspell"
+    ("n" flyspell-goto-next-error)
+    ("c" flyspell-correct-word))
+
+  (defun akirak/turn-on-flyspell-mode-in-text-mode ()
+    (when (derived-mode-p 'text-mode)
+      (flyspell-mode-on)))
+
+  (advice-add 'akirak/flyspell-hydra/body
+              :before 'akirak/turn-on-flyspell-mode-in-text-mode)
+
+  (akirak/bind-generic "f" 'akirak/flyspell-hydra/body)
 #+end_src
 ** Writing
 :PROPERTIES:
