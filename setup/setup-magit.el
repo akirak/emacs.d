@@ -1,10 +1,9 @@
 (use-package magit
   :config
   (defun akirak/kill-existing-magit-status-buffer ()
-    (let* ((directory (or directory
-                          (if (bound-and-true-p projectile-mode)
-                              (projectile-project-root)
-                            default-directory)))
+    (let* ((directory (if (bound-and-true-p projectile-mode)
+                          (projectile-project-root)
+                        default-directory))
            (buffer (car (member-if (lambda (buf)
                                      (string-equal directory
                                                    (with-current-buffer buf
