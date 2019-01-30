@@ -1,4 +1,8 @@
 ;;; setup-typography.el --- Typography configuration
+;;
+;; Note: =unpackaged/font-compare= will be convenient for picking a
+;; font for a specific type of text.
+;;
 ;;;; Options
 
 (setq-default org-fontify-quote-and-verse-blocks t)
