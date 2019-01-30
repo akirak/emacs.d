@@ -26,15 +26,16 @@ Dependencies and extra configuration files, which are configured in my [[https:/
 After starting Emacs with the configuration, you have to run
 =all-the-icons-install-fonts=.
 
-** Overview of the initialization process
-1. Emacs loads [[file:init.el][init.el]].
-   1. [[file:main.org][main.org]], the rewritten version of my configuration, is loaded.
-   2. [[file:old-init.el][old-init.el]] loads my previous configuration which have not been migrating yet.
+** Overview
+Emacs loads [[file:init.el][~/.emacs.d/init.el]], which in turn loads [[file:main.org][main.org]].
 
-** Credit
-This configuration is inspired by the following configuration repositories:
+** See also
+There are great Emacs configuration repositories on GitHub. The following repositories are my favorites:
 
+- [[https://github.com/purcell/emacs.d][emacs.d by Steve Purcell]]
 - [[https://github.com/kaushalmodi/.emacs.d][.emacs.d by Kaushal Modi]]
+
+[[https://github.com/alphapapa][Alphapapa (Adam Porter)]] is one of the most active Emacs package developers in the world, and I rely on quite a few packages and ideas by him. I definitely recommend that you take a look at his stuffs if you want to make the most of Emacs.
 ** License
    :PROPERTIES:
    :CUSTOM_ID: license
