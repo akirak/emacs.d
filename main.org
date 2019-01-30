@@ -1,4 +1,5 @@
 # -*- mode: org; mode: org-make-toc; org-id-link-to-org-use-id: nil
+#+category: emacs
 
 * My Emacs Configuration
 This is not a true literate configuration. Packages that demand complex configuration are configured in separate files. I am rewriting this configuration 
