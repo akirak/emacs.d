@@ -1,5 +1,19 @@
 (use-package magit
   :config
+  (defun akirak/kill-existing-magit-status-buffer ()
+    (let* ((directory (or directory
+                          (if (bound-and-true-p projectile-mode)
+                              (projectile-project-root)
+                            default-directory)))
+           (buffer (car (member-if (lambda (buf)
+                                     (string-equal directory
+                                                   (with-current-buffer buf
+                                                     default-directory)))
+                                   (mapcar #'get-buffer
+                                           (internal-complete-buffer "magit: " nil t))))))
+      (when buffer
+        (kill-buffer buffer))))
+  (advice-add 'magit-status :before 'akirak/kill-existing-magit-status-buffer)
   (defun akirak/find-magit-status-buffer (&optional directory)
     (let ((directory (or directory
                          (if (bound-and-true-p projectile-mode)

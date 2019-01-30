@@ -649,7 +649,7 @@ The following packages extend the display of =magit-status=:
 - magithub
 
 #+begin_src emacs-lisp
-  (general-def "<f7>" #'akirak/magit-status-prefer-existing)
+  (general-def "<f7>" #'unpackaged/magit-status)
 #+end_src
 **** magit-todos
 #+begin_src emacs-lisp
