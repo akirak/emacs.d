@@ -91,7 +91,7 @@
   (counsel-require-program "locate")
   (format "locate -i -d '%s' --regex '%s'"
           (akirak/locate-database-arg)
-          (counsel-unquote-regex-parens
+          (counsel--elisp-to-pcre
            (ivy--regex input))))
 
 (setq counsel-locate-cmd 'akirak/counsel-locate-command)
