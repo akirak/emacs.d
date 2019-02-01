@@ -23,4 +23,35 @@
 
 (akirak/which-key-add-stripped-prefix "alchemist-")
 
+(add-to-list 'counsel-outline-settings
+             `(elixir-mode
+               :outline-regexp
+               ,(rx (seq (* space)
+                         (group (or (sequence "def" (* (not space)))
+                                    (sequence "@" (* (not space)))
+                                    "alias"
+                                    "import"
+                                    "require"
+                                    "use"
+                                    "test"
+                                    "doctest"
+                                    "setup_all"))
+                         (+ space)
+                         (group (*? any))
+                         (or ", do:" " do" eol)))
+               :outline-level
+               (lambda ()
+                 (pcase (match-string 1)
+                   ("defmodule" 1)
+                   (_ 2)))
+               :outline-title
+               (lambda ()
+                 (let ((s1 (match-string 1))
+                       (s2 (match-string 2)))
+                   (pcase s1
+                     ((pred (string-prefix-p "@")) s1)
+                     ("defstruct" s1)
+                     ((pred (string-prefix-p "def")) s2)
+                     (_ (concat s1 " " s2)))))))
+
 (provide 'setup-elixir)
