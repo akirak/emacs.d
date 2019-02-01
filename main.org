@@ -481,6 +481,7 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-link-hint      ; Jumping to a URL
                      setup-helm-org-rifle
                      setup-ibuffer
+                     setup-smart-jump    ; Jump to a definition / reference
                      setup-lsp            ; Language-agnostic IDE toolkit
                      setup-japanese
                      setup-rich-minority  ; Whitelist minor modes
@@ -752,10 +753,15 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
 #+end_src
 *** Source code navigation                                     :navigation:
 
+I used =dumb-jump=, but now I will try =smart-jump= instead.
+
+The following keybindings have been replaced with smart-jump correspondents:
+
 #+begin_src emacs-lisp
-  (akirak/bind-jump
-    "." #'dumb-jump-go
-    "," #'dumb-jump-back)
+  ;; Use smart-jump instead.
+  ;; (akirak/bind-jump
+  ;;   "." #'dumb-jump-go
+  ;;   "," #'dumb-jump-back)
 #+end_src
 
 #+begin_src emacs-lisp

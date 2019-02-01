@@ -103,4 +103,22 @@
 (advice-add 'next-window
             :around #'akirak/ad-around-next-window--for-ignore-window)
 
+;; By default, smart-jump always displays the destination buffer in
+;; another window in emacs-lisp-mode, which I really don't like.
+;;
+;; This function advice is a workaround to alter the buffer switching
+;; function used by `find-function'.
+(defun akirak/ad-around-find-function-do-it (orig symbol type switch-fn)
+  (funcall orig symbol type 'akirak/switch-buffer-maybe-same-window))
+
+(advice-add 'find-function-do-it
+            :around 'akirak/ad-around-find-function-do-it)
+
+(defun akirak/switch-buffer-maybe-same-window (buffer &rest args)
+  "Display BUFFER in the same window if the buffer refers to the same file."
+  (if (file-equal-p (buffer-file-name (current-buffer))
+                    (buffer-file-name buffer))
+      (apply 'pop-to-buffer-same-window buffer args)
+    (apply 'pop-to-buffer buffer args)))
+
 (provide 'setup-window-management)
