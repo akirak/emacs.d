@@ -7,6 +7,7 @@
   :config
   (ivy-add-actions 'ivy-clipurl
                    '(("c" akirak/git-clone "git clone")
-                     ("r" org-web-tools-read-url-as-org "Read as Org"))))
+                     ("r" org-web-tools-read-url-as-org "Read as Org")
+                     ("u" akirak/straight-use-package-git-url "use-package"))))
 
 (provide 'setup-clipurl)
