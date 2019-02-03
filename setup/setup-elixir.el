@@ -5,6 +5,11 @@
 (use-package alchemist
   :after elixir-mode
   :general
+  ;; alchemist-mode-keymap is defined as a prefix command, so this
+  ;; works without setting `alchemist-key-command-prefix'.
+  (:keymaps 'alchemist-mode-map
+            akirak/alchemist-key-command-prefix #'alchemist-mode-keymap)
+  ;; Somehow this doesn't seem to work.
   (:keymaps 'alchemist-mode-map
             :prefix akirak/alchemist-key-command-prefix
             "c" '(:ignore t :wk "compile")
