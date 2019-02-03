@@ -102,4 +102,14 @@ Navigation: _n_ _p_ _f_ _b_
 (advice-add 'org-beginning-of-line :around
             'akirak/ad-around-org-beginning-of-line)
 
+(general-def :keymaps 'org-read-date-minibuffer-local-map
+  "C-p" (lambda () (interactive)
+          (org-eval-in-calendar '(calendar-forward-week -1)))
+  "C-n" (lambda () (interactive)
+          (org-eval-in-calendar '(calendar-forward-week 1)))
+  "<tab>" (lambda () (interactive)
+            (org-eval-in-calendar '(calendar-forward-day 1)))
+  "<S-iso-lefttab>" (lambda () (interactive)
+                      (org-eval-in-calendar '(calendar-forward-day -1))))
+
 (provide 'setup-org)
