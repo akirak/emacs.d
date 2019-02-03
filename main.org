@@ -587,6 +587,14 @@ The following packages are enhancements to Emacs that don't require much configu
   (use-package helm-dash :after helm
     :custom
     (helm-dash-browser-func #'akirak/display-url-for-referencing))
+  (use-package plumber
+    :straight (plumber :host github :repo "akirak/plumber.el")
+    :config
+    (require 'plumber-config)
+    (plumber-global-mode 1)
+    :custom
+    (plumber-avy-word-style 'pre)
+    (plumber-enable-keybindings t))
 #+end_src
 
 *** Chrome OS support
