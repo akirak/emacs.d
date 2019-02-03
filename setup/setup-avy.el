@@ -1,4 +1,9 @@
-(use-package avy)
+(use-package avy
+  :custom
+  (avy-style 'at)
+  (avy-styles-alist '((ivy-avy . pre)
+                      (avy-goto-char-timer . at)))
+  (avy-keys (string-to-list "asdfghjkl")))
 
 ;;;; Inline jump
 (defun akirak/avy-goto-in-line (regexp)
