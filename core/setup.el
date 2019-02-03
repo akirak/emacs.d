@@ -26,13 +26,14 @@
         (display-buffer "*Backtrace*"))
     (message "No broken module left")))
 
-(defun akirak/setup-load (feature &optional severity)
+(cl-defun akirak/setup-load (feature &optional severity
+                                     &key (when t))
   "Load a configuration module.
 
 FEATURE should be a module in ~/.emacs.d/setup.
 
 If SEVERITY is non-nil, abort the initialization process."
-  (unless (require feature nil t)
+  (when (and when (not (require feature nil t)))
     (add-to-list 'akirak/setup-failed-modules feature t)
     (message "Failed to load %s" feature)
     (when severity
