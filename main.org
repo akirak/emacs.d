@@ -490,7 +490,6 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-bm
                      setup-window-management
                      setup-system-tools
-                     setup-chromeos       ; Workarounds for Chrome OS
                      setup-flycheck
                      setup-navigation-bindings
                      setup-spell
@@ -590,6 +589,11 @@ The following packages are enhancements to Emacs that don't require much configu
     (helm-dash-browser-func #'akirak/display-url-for-referencing))
 #+end_src
 
+*** Chrome OS support
+I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it runs on Chrome OS:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-chromeos t :when (akirak/running-on-crostini-p))
+#+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
 

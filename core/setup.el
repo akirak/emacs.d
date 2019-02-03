@@ -55,3 +55,7 @@ output file without the directory."
         (load-file outpath))
     (message "%s does not exist. Maybe you haven't checked out submodules"
              config)))
+
+(defun akirak/running-on-crostini-p ()
+  "Return non-nil if Emacs is running on Crostini of Chrome OS."
+  (stringp (getenv-internal "SOMMELIER_VERSION")))

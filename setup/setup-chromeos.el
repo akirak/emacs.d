@@ -1,3 +1,6 @@
+(unless (akirak/running-on-crostini-p)
+  (user-error "Not running on Chrome OS / Crostini"))
+
 ;; Somehow Emacs seems to receive an infinite sequence of right keys
 ;; after receiving focus on Chrome OS, even without my config.
 ;; Is this a bug with Emacs or a hardware problem?
