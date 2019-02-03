@@ -12,7 +12,7 @@
   (:keymaps 'outline-minor-mode-map
             "C-M-i" nil)
   :hook
-  (outline-minor . outshine-mode)
+  (outline-minor-mode . outshine-mode)
   :custom
   (outshine-use-speed-commands t))
 
