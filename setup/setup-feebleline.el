@@ -5,8 +5,9 @@
   (feebleline-mode 1)
   :config
   (setq feebleline-msg-functions
-        '(((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
-          ((lambda () (format-time-string "%b %d %a %H:%M")) :post " " :face font-lock-comment-face)
+        '(
+          ;; ((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
+          ((lambda () (format-time-string "%b %d %a W%U %H:%M")) :post " " :face font-lock-comment-face)
           (feebleline-file-directory :face feebleline-dir-face :post "")
           (feebleline-file-or-buffer-name :face font-lock-keyword-face :post "")
           ((lambda () (format-mode-line '((vc-mode vc-mode)))) :face font-lock-string-face)
