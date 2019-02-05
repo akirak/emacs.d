@@ -494,7 +494,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-navigation-bindings
                      setup-spell
                      setup-git-clone
-                     setup-clipurl))
+                     setup-clipurl
+                     setup-idle))
     (akirak/require feature))
 #+end_src
 

@@ -3,9 +3,26 @@
   (error "Use GNU Emacs version 25.1 or later"))
 
 ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
+;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
 ;; https://github.com/kaushalmodi/.emacs.d/blob/master/init.el
-(defvar modi/gc-cons-threshold--orig gc-cons-threshold)
-(setq gc-cons-threshold (* 100 1024 1024)) ;100 MB before garbage collection
+(defconst modi/gc-cons-threshold--orig gc-cons-threshold)
+
+(defsubst akirak/expand-gc-threshold ()
+  (setq gc-cons-threshold (* 100 1024 1024)))
+
+(defsubst akirak/restore-original-gc-threshold ()
+  ;; I am not sure if garbage collection should be run on minibuffer
+  ;; exit events. If I remove this line, I will change the
+  ;; `after-init-hook' to include garbage collection.
+  (garbage-collect)
+  (setq gc-cons-threshold modi/gc-cons-threshold--orig))
+
+;; GC hack for startup
+(akirak/expand-gc-threshold)
+
+;; GC hack for minibuffers
+(add-hook 'minibuffer-setup-hook #'akirak/expand-gc-threshold)
+(add-hook 'minibuffer-exit-hook #'akirak/restore-original-gc-threshold)
 
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
@@ -35,7 +52,4 @@
   (when (file-exists-p file)
     (org-babel-load-file file t)))
 
-;;;; Finalization
-;; https://github.com/kaushalmodi/.emacs.d/blob/master/init.el
-(when modi/gc-cons-threshold--orig
-  (run-with-idle-timer 5 nil (lambda () (setq gc-cons-threshold modi/gc-cons-threshold--orig))))
+(run-with-idle-timer 3 nil #'akirak/restore-original-gc-threshold)
