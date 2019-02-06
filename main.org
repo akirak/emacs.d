@@ -295,14 +295,16 @@ Add a prefix for keybindings to eval commands:
 Generic prefix key for editing commands:
 
 #+begin_src emacs-lisp
-(general-create-definer akirak/bind-generic :prefix "C-.")
+  (general-create-definer akirak/bind-generic :prefix "C-.")
+  (general-create-definer akirak/bind-mark :prefix "C-. m")
 #+end_src
 
 #+begin_src emacs-lisp
-(akirak/bind-generic
-  "j" #'katawa-ivy-fix-at-point
-  "o" #'split-line ; Originally C-M-o
-  "SPC" 'just-one-space)
+  (akirak/bind-generic
+    "j" #'katawa-ivy-fix-at-point
+    "m" '(nil :wk "mark")
+    "o" #'split-line                      ; Originally C-M-o
+    "SPC" 'just-one-space)
 #+end_src
 
 Prefix for mode-specific keys:
@@ -495,7 +497,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-spell
                      setup-git-clone
                      setup-clipurl
-                     setup-idle))
+                     setup-idle
+                     setup-multiple-cursors))
     (akirak/require feature))
 #+end_src
 
@@ -1068,6 +1071,8 @@ You can also configure automatic git-commit using =git-auto-commit-mode=, but th
   "i" 'scratch)
 #+end_src
 *** Spell checking and iedit                               :editor:writing:
+Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-cursors]]. You can first select all the occurrences of a symbol using multiple-cursors and then edit them using iedit.
+
 #+begin_src emacs-lisp
   (general-def "C-;" 'akirak/iedit-or-flyspell)
 
