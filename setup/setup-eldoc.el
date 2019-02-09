@@ -23,10 +23,13 @@
 ;; eldoc messages.
 (setq eldoc-message-function (cl-function
                               (lambda (format &rest args)
-                                (if (and format
-                                         (not (string-empty-p format)))
-                                    (apply #'akirak/eldoc-message format args)
-                                  (akirak/eldoc-delete-window)))))
+                                (let ((initial-window (selected-window)))
+                                  (unwind-protect
+                                      (if (and format
+                                               (not (string-empty-p format)))
+                                          (apply #'akirak/eldoc-message format args)
+                                        (akirak/eldoc-delete-window))
+                                    (select-window initial-window))))))
 
 (advice-add #'display-buffer :before #'akirak/eldoc-delete-window)
 
