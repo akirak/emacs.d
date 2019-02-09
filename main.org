@@ -546,6 +546,8 @@ The following packages are enhancements to Emacs that don't require much configu
   (use-package git-modes)
   (use-package fix-word
     :commands (fix-word-upcase fix-word-downcase fix-word-capitalize)
+    :hook
+    (prog-mode . (lambda () (setq fix-word-thing 'symbol)))
     :general
     ([remap upcase-word] 'fix-word-upcase
      [remap downcase-word] 'fix-word-downcase
