@@ -18,7 +18,7 @@
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
 
 (defun akirak/org-clock-summary-for-feebleline ()
-  (when (org-clocking-p)
+  (when (and (featurep 'org-clock) (org-clocking-p))
     (concat (let* ((duration (time-subtract (current-time)
                                             org-clock-start-time))
                    (seconds (float-time duration)))
