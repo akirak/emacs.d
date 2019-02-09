@@ -102,13 +102,38 @@ Navigation: _n_ _p_ _f_ _b_
 (advice-add 'org-beginning-of-line :around
             'akirak/ad-around-org-beginning-of-line)
 
+(defmacro akirak/org-define-set-property-command (property)
+  (let ((command (intern (format "akirak/org-set-%s-property"
+                                 (downcase (s-replace "_" "-" property))))))
+    `(defun ,command ()
+       ,(format "Set %s property of the subtree." property)
+       (interactive)
+       (cl-case current-prefix-arg
+         ('(4) (princ (org-entry-get nil ,property t)))
+         (otherwise (org-set-property ,property nil))))))
+
+(add-to-list 'which-key-replacement-alist
+             '(("C-," . "akirak/org-set-") .
+               (lambda (kb)
+                 (if (string-match (rx bol "akirak/org-set-"
+                                       (group (+ any))
+                                       "-property" eol)
+                                   (cdr kb))
+                     (cons (car kb) (match-string 1 (cdr kb)))
+                   kb))))
+
+(akirak/org-define-set-property-command "CUSTOM_ID")
+
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "h" '(nil :wk "heading")
   "he" '(org-edit-headline :wk "edit")
   "hs" '(org-insert-subheading :wk "ins subheading")
   "hS" '(org-insert-todo-subheading :wk "ins todo subheading")
   "hr" '(org-insert-heading-respect-content :wk "ins respect")
-  "hR" '(org-insert-todo-heading-respect-content :wk "ins todo respect"))
+  "hR" '(org-insert-todo-heading-respect-content :wk "ins todo respect")
+  "M-p" '(nil :wk "common props")
+  "M-p c" 'akirak/org-set-custom-id-property
+  "M-p i" 'org-id-get-create)
 
 (general-def :keymaps 'org-read-date-minibuffer-local-map
   "C-p" (lambda () (interactive)
