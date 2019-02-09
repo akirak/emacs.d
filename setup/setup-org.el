@@ -102,6 +102,14 @@ Navigation: _n_ _p_ _f_ _b_
 (advice-add 'org-beginning-of-line :around
             'akirak/ad-around-org-beginning-of-line)
 
+(akirak/bind-mode :keymaps 'org-mode-map :package 'org
+  "h" '(nil :wk "heading")
+  "he" '(org-edit-headline :wk "edit")
+  "hs" '(org-insert-subheading :wk "ins subheading")
+  "hS" '(org-insert-todo-subheading :wk "ins todo subheading")
+  "hr" '(org-insert-heading-respect-content :wk "ins respect")
+  "hR" '(org-insert-todo-heading-respect-content :wk "ins todo respect"))
+
 (general-def :keymaps 'org-read-date-minibuffer-local-map
   "C-p" (lambda () (interactive)
           (org-eval-in-calendar '(calendar-forward-week -1)))
