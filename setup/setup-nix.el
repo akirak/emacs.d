@@ -7,11 +7,10 @@
         (and (bound-and-true-p nixos-options-json-file)
              (file-exists-p nixos-options-json-file))))
 
-(use-package company-nixos-options :after (company nixos-options)
+(use-package company-nixos-options
   :if (bound-and-true-p akirak/nixos-options-available)
   :straight (nix-emacs :host github :repo "travisbhartwell/nix-emacs")
-  :init
-  (add-to-list 'company-backends 'company-nixos-options t))
+  :company (nix-mode . company-nixos-options))
 
 (use-package helm-nixos-options :after (helm nixos-options)
   :if (bound-and-true-p akirak/nixos-options-available)

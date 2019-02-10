@@ -172,6 +172,11 @@ Deprecated: Allow installation of system packages via use-package
   (use-package use-package-ensure-system-package)
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package use-package-company
+    :straight (use-package-company :host github :repo "Foltik/use-package-company"))
+#+end_src
+
 ** Overriding defaults
 These settings don't depend on external dependencies, so they should be applied earlier.
 
