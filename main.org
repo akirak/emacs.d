@@ -256,7 +256,7 @@ I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on 
 I often need to tweak Emacs while I am using it.
 
 #+begin_src emacs-lisp
-  (general-create-definer akirak/bind-customization :prefix "C-x c")
+  (general-create-definer akirak/bind-customization :prefix "C-x ESC")
 
   (define-obsolete-function-alias 'akirak/bind-customize-map
     'akirak/bind-customization)
@@ -269,7 +269,7 @@ There are not so many commands that need to be add to the map:
     "" '(nil :wk "customize")
     "f" #'customize-face-other-window
     "g" #'customize-group-other-window
-    "l" #'load-library
+    "l" #'counsel-find-library
     "p" '((lambda () (interactive)
             (if (featurep 'straight)
                 (call-interactively 'straight-use-package)

@@ -1,8 +1,9 @@
 (use-package counsel
   ;; :diminish counsel-mode
-  :init
-  (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   :config
+  (counsel-mode 1) ; Remap built-in functions with counsel equivalents
+  (ivy-add-actions #'counsel-find-library
+                   '(("l" load-library "load")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char))
 
