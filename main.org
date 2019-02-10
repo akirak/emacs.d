@@ -503,7 +503,8 @@ The typography module depends on several fonts from many packages. I have to doc
                      setup-git-clone
                      setup-clipurl
                      setup-idle
-                     setup-multiple-cursors))
+                     setup-multiple-cursors
+                     setup-hyperspace))
     (akirak/require feature))
 #+end_src
 
