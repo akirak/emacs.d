@@ -14,6 +14,7 @@
 
 (defun akirak/projectile-ignore-project-p (root)
   (or (file-equal-p "~/" root)
+      (file-equal-p "~/org/" root)
       (file-equal-p "~/annex/" root)
       (string-prefix-p "/usr/" root)))
 
