@@ -1,5 +1,7 @@
 (use-package unpackaged
-  :straight (unpackaged :host github :repo "alphapapa/unpackaged.el"))
+  :straight (unpackaged :host github :repo "alphapapa/unpackaged.el")
+  :config
+  (unpackaged/magit-log-date-headers-mode 1))
 
 (defun akirak/ad-before-org-return (&optional _indent)
   ;; Empty row: end the table.
