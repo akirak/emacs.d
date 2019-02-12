@@ -58,4 +58,10 @@
 
 (advice-add #'org-refile-get-location :around #'akirak/ad-around-org-refile-get-location)
 
+(defun akirak/org-refile-target-verify-function ()
+  (not (or (org-entry-is-done-p)
+           (string-equal (org-get-todo-state) "COMMENT"))))
+
+(setq-default org-refile-target-verify-function #'akirak/org-refile-target-verify-function)
+
 (provide 'setup-org-refile)
