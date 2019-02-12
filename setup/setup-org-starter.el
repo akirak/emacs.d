@@ -11,6 +11,8 @@
   (defun helm-org-rifle-known-files ()
     (interactive)
     (helm-org-rifle-files org-starter-known-files))
+  (akirak/bind-mode :keymaps 'org-mode-map :package 'org
+    "r" #'org-starter-refile-by-key)
   :custom
   ;; `org-starter-initial-capture-templates` is defined in setup-org-capture.el
   (org-starter-require-file-by-default nil)
