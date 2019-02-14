@@ -24,7 +24,9 @@
                    (seconds (float-time duration)))
               (cond
                ((< seconds 3600) (format-time-string "%-M:%S" duration))
-               ((< seconds 86400) (format-time-string "%-Hh%-Mm" duration))
+               ((< seconds 86400) (format "%dh %dm"
+                                          (/ seconds 3600)
+                                          (mod (/ seconds 60) 60)))
                (t (org-minutes-to-clocksum-string
                    (floor seconds 60)))))
             " on "
