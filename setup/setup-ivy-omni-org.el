@@ -1,7 +1,12 @@
 (use-package ivy-omni-org
   :straight (ivy-omni-org :host github :repo "akirak/ivy-omni-org")
   :custom
-  (ivy-omni-org-file-sources '(org-starter-known-files)))
+  (ivy-omni-org-file-sources '(org-starter-known-files
+                               akirak/conflict-org-files)))
+
+(defun akirak/conflict-org-files ()
+  "List of Syncthing conflict files in `org-directory'.g"
+  (directory-files org-directory t "\\.sync-conflict-[-[:digit:]]+\\.org\\'"))
 
 (advice-add 'ivy-omni-org-default-buffer-transformer
             :around
