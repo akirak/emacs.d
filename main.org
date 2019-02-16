@@ -548,8 +548,6 @@ I will load =setup-magithub= library if I need it.
 **** Forge
 #+begin_src emacs-lisp
   (use-package forge
-    ;; Depends on emacsql-sqlite
-    :disabled t
     :straight (forge :host github :repo "magit/forge"))
 #+end_src
 **** Cloning Git repositories
