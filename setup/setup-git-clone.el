@@ -9,24 +9,51 @@
           akirak/github-repo-path-pattern
           "\\)\\(\.git\\)?/?$"))
 
-(defcustom akirak/default-git-clone-directory "~/tmp"
-  "Directory to which Git repositories are cloned.")
+(defcustom akirak/git-clone-default-directory "~/tmp"
+  "Default directory in which Git repositories are created.")
+
+(defcustom akirak/git-clone-user-directory "~/github"
+  "Default directory in which your own Git repositories are created.")
+
+(defcustom akirak/github-login "akirak"
+  "The user name on GitHub.")
+
+(defun akirak/git-clone-github-repo (path)
+  (interactive (list (read-string "GitHub repo: ")))
+  (-let (((user repo) (s-split-up-to "/" path 1)))
+    (cond
+     ((string-equal user akirak/github-login)
+      (akirak/git-clone-internal (concat "git@github.com:" path ".git")
+                                 (expand-file-name repo
+                                                   akirak/git-clone-user-directory)))
+     (t
+      (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo)))))
+
+(defun akirak/git-clone-some-repo (url name)
+  (let ((parent (completing-read
+                 "Parent directory: "
+                 (list akirak/git-clone-default-directory
+                       akirak/git-clone-user-directory))))
+    (akirak/git-clone-internal url (expand-file-name name parent))))
 
 (defun akirak/git-clone (url)
   (interactive (list (read-string "Repository URL: ")))
-  (-when-let ((url . name)
-              (or (when (string-match akirak/github-https-url-regexp url)
-                    (let ((path (match-string 1 url)))
-                      (cons (format "https://github.com/%s.git" path)
-                            (file-name-nondirectory path))))
-                  (when (string-match (concat "^" akirak/github-repo-path-pattern "$") url)
-                    (let ((path (match-string 1 url)))
-                      (cons (format "https://github.com/%s.git" path)
-                            (file-name-nondirectory path))))
-                  (when (string-match (rx "/" (group (1+ (any "-" alnum))) ".git" bol) url)
-                    (cons url (match-string 1 url)))
-                  (user-error "Doesn't seem to be a Git repository URL: %s" url)))
-    (akirak//git-clone-default-directory url name)))
+  (cond
+   ((string-match akirak/github-https-url-regexp url)
+    (akirak/git-clone-github-repo (match-string 1 url)))
+   ((string-match (concat "^" akirak/github-repo-path-pattern "$") url)
+    (akirak/git-clone-github-repo (match-string 1 url)))
+   ((string-match (rx "/" (group (1+ (any "-" alnum))) ".git" bol) url)
+    (akirak/git-clone-some-repo url (match-string 1 url)))))
+
+(defun akirak/git-clone-internal (url local-path)
+  "Call `magit-clone' on URL if LOCAL-PATH does not exist or otherwise open it."
+  (if (file-exists-p local-path)
+      (let ((default-directory local-path))
+        (message "%s already exists" local-path)
+        (funcall projectile-switch-project-action))
+    (message "Cloning %s to %s..." url local-path)
+    (magit-clone url local-path)))
 
 (defun akirak//git-clone-default-directory (url name)
   (let ((local-repo-path (expand-file-name name akirak/default-git-clone-directory)))
