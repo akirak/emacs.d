@@ -57,7 +57,10 @@
    [remap downcase-word] 'fix-word-downcase
    [remap capitalize-word] 'fix-word-capitalize))
 (use-package scratch
-  :commands (scratch))
+  :commands (scratch)
+  :config
+  (add-to-list 'scratch-mode-alist '(helpful-mode . emacs-lisp-mode))
+  (add-to-list 'scratch-mode-alist '(help-mode . emacs-lisp-mode)))
 (use-package embrace
   ;; I probably don't need this package. Use sp-{rewrap,unwrap}-sexp
   ;; instead
