@@ -7,6 +7,14 @@
                                 (file-name-base (buffer-file-name))
                                 ")"))
                           (("/\\.dir-locals\\.el\\'" . "directory local variables") . nil)
+                          (("melpa/recipes/.+\\'" . "Melpa recipe")
+                           . (> "("
+                                (file-name-nondirectory (buffer-file-name))
+                                " :fetcher github :repo \""
+                                akirak/github-login
+                                "/"
+                                _
+                                "\")"))
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
 
