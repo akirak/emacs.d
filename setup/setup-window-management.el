@@ -17,11 +17,12 @@
                    ("*compilation*" :align below :ratio 0.4)
                    ("*lispy-message*" :align below :ratio 0.4)
                    ;; org-capture to org-journal needs a big window
-                   ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
-                   ("^CAPTURE-\\(code\\)" :regexp t :other t)
-                   ("^CAPTURE-\\(journal\\)" :regexp t :other t)
-                   ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
-                   ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
+                   ;; ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
+                   ;; ("^CAPTURE-\\(code\\)" :regexp t :other t)
+                   ;; ("^CAPTURE-\\(journal\\)" :regexp t :other t)
+                   ;; ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
+                   ;; ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
+                   ("^CAPTURE-" :regexp t :other t)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
                    ("*helm-descbinds*" :other t)
