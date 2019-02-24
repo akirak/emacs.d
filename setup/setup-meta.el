@@ -34,7 +34,6 @@
     setup-outshine                 ; Extra support for outline editing
     setup-init-time-log            ; Log init time
     setup-autoinsert               ; File templates
-    setup-org-starter              ; Org starter
     setup-counsel-org-capture-string
     setup-org-refile                    ; Enhance org-refile
     setup-org-download                  ; Screenshots

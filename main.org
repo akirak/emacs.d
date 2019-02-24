@@ -953,6 +953,9 @@ Set the basic options for org-mode:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-org t)
+
+  ;; org-starter should be loaded after org is loaded
+  (akirak/require 'setup-org-starter)
 #+end_src
 *** Hydra for Org-mode
 #+begin_src emacs-lisp
