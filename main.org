@@ -1130,57 +1130,7 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 Use =my-goto= function to locate the current context.
 
  #+begin_src emacs-lisp
-   (defcustom my-goto-default-function nil
-     "Function called by `my-goto' when there is no clocking task."
-     :type 'function
-     :group 'my-goto)
-
-   (defcustom my-goto-number-function nil
-     "Function called by `my-goto' when a numeric prefix is given to it."
-     :type 'function
-     :group 'my-goto)
-
-   (defcustom my-goto-two-C-u-action 'my-goto-show-current-agenda-buffer
-     "Function called when `my-goto' is run with two universal prefixes."
-     :type 'function
-     :group 'my-goto)
-
-   (defcustom my-goto-default-agenda-command 'org-agenda
-     "Default agenda command."
-     :type 'function
-     :group 'my-goto)
-
-   (defun my-goto (&optional arg)
-     (interactive "P")
-     (pcase arg
-       ('nil (cond
-              ((org-clocking-p) (org-clock-goto))
-              ((functionp my-goto-default-function) (funcall my-goto-default-function))
-              (t (message "I have no idea what to do or where to go."))))
-       ('(4) (counsel-org-clock-history))
-       ('(16) (funcall my-goto-two-C-u-action))
-       ((pred numberp)
-        (funcall my-goto-number-function arg))
-       (_ (user-error "Invalid arg: %s" arg))))
-
-   (defun my-goto-show-current-agenda-buffer ()
-     "Show an existing agenda buffer if any.
-
-   Otherwise, `my-goto-default-agenda-command' is run."
-     (let ((buf (or (get-buffer "*Org Agenda*")
-                    (internal-complete-buffer "*Org Agenda" nil nil))))
-       (cl-etypecase buf
-         (null (progn
-                 (message "No org-agenda buffer is found. Start a new one")
-                 (funcall my-goto-default-agenda-command)))
-         (buffer (progn
-                   (message "Open an existing agenda buffer")
-                   (switch-to-buffer-other-window buf)))
-         (listp (progn
-                  (message "Opening an agenda buffer: %s" buf)
-                  (switch-to-buffer-other-window (car buf)))))))
-
-   (akirak/bind-key "M-g M-j" #'my-goto)
+   (akirak/bind-key "M-g M-j" #'counsel-org-clock-goto)
  #+end_src
 **** Org anywhere
 #+begin_src emacs-lisp
