@@ -119,7 +119,8 @@ DEADLINE: %T SCHEDULED: %T
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
-"
+
+%(unless (string-empty-p \"%i\") \"%i\n\n\")%?"
   :clock-in t :clock-resume t :empty-lines 1)
 
 ;;;; Resources
