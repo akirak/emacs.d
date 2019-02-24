@@ -12,6 +12,7 @@
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
                    ("*org clocking*" :other t)
+                   ("*Org Note*" :align below :ratio 0.3)
                    ("*Capture*" :ratio 0.4 :align below)
                    ("*compilation*" :align below :ratio 0.4)
                    ("*lispy-message*" :align below :ratio 0.4)
