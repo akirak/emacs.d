@@ -61,10 +61,6 @@
   :config
   (add-to-list 'scratch-mode-alist '(helpful-mode . emacs-lisp-mode))
   (add-to-list 'scratch-mode-alist '(help-mode . emacs-lisp-mode)))
-(use-package embrace
-  ;; I probably don't need this package. Use sp-{rewrap,unwrap}-sexp
-  ;; instead
-  :disabled t)
 (use-package dumb-jump
   ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
   :custom
@@ -79,9 +75,6 @@
   :custom
   (counsel-org-clock-goto-fallback-function 'org-agenda)
   (counsel-org-clock-default-action 'clock-in))
-(use-package org-reverse-datetree
-  :straight (org-reverse-datetree :host github
-                                  :repo "akirak/org-reverse-datetree"))
 ;; Edit Org-Mode lists like in word processors
 (use-package org-autolist 
   :after org
