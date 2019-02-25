@@ -75,7 +75,9 @@
   ("M-;" 'comment-dwim-2))
 (use-package narrow-or-widen
   :straight nil)
-(use-package counsel-org-clock)
+(use-package counsel-org-clock
+  :custom
+  (counsel-org-clock-default-action 'clock-in))
 (use-package org-reverse-datetree
   :straight (org-reverse-datetree :host github
                                   :repo "akirak/org-reverse-datetree"))

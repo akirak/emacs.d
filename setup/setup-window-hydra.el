@@ -1,10 +1,10 @@
 (defhydra akirak/window-hydra (:hint nil)
   "
-^^Window ^^^^         Layout^^^^       Toggle^^       Frame^^      ^^             Org clock^^
-^^-------^^^^-------  ^^^^-----------  ^^-----------  ^^-----------^^-----------  ^^----------------------------
- _k_  ^^ _d_: delete  _s_/_v_: split   _o_: olivetti  _R_: rename  _F_: new       _cj_: goto       _cc_: context
-_h_ _l_  _O_: other   _SPC_: layout^^  _zb_: ibuffer  _D_: delete  ^^             _co_: clock out  _ch_: history
- _j_  ^^ _x_: kill b  _=_: balance^^   _zt_: dired    _/_: select  _C-r_: reload  _cq_: cancel     ^^
+^^Window ^^^^         Layout^^^^       Toggle^^       Frame^^      ^^            
+^^-------^^^^-------  ^^^^-----------  ^^-----------  ^^-----------^^-----------
+ _k_  ^^ _d_: delete  _s_/_v_: split   _o_: olivetti  _R_: rename  _F_: new     
+_h_ _l_  _O_: other   _SPC_: layout^^  _zb_: ibuffer  _D_: delete  ^^           
+ _j_  ^^ _x_: kill b  _=_: balance^^   _zt_: dired    _/_: select  _C-r_: reload
 _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zs_: symbols  _zd_: [%s(if debug-on-error \"X\" \" \")] debug-on-error _C-v_: [%s(if view-mode \"X\" \" \")] view
 
 "
@@ -17,11 +17,6 @@ _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zs_: symbols  _zd_: [%s(if debug-on-erro
   ("R" set-frame-name)
   ("a" ace-window :exit t)
   ("b" ivy-switch-buffer "switch buf")
-  ("cc" counsel-org-clock-context)
-  ("ch" counsel-org-clock-history)
-  ("cj" org-clock-goto)
-  ("co" org-clock-out)
-  ("cq" org-clock-cancel)
   ("d" delete-window)
   ("g" (select-window (frame-first-window)))
   ("h" windmove-left)
