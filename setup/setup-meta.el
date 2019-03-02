@@ -57,7 +57,8 @@
     setup-clipurl
     setup-idle
     setup-multiple-cursors
-    setup-hyperspace))
+    setup-hyperspace
+    setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)
 

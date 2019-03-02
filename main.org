@@ -858,11 +858,9 @@ Files are automatically saved on certain events by =super-save-mode=:
   (akirak/require 'setup-super-save)
 #+end_src
 
-You can also configure automatic git-commit using =git-auto-commit-mode=, but this is not enabled by default:
+Some files are automatically committed to their contained repositories.
 
-#+begin_src emacs-lisp
-  (use-package git-auto-commit-mode)
-#+end_src
+[[file:setup/setup-git-auto-commit.el]]
 *** org-web-tools and clipurl
 [[https://github.com/alphapapa/org-web-tools][org-web-tools]] is handy, but commands in the package often fail to retrieve a proper URL I want to operate on. Therefore I created =clipurl= package to pick a URL from the kill ring.
 
