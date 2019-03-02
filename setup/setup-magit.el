@@ -36,6 +36,9 @@
       (magit-status directory cache)))
   (when (fboundp 'unpackaged/magit-log-date-headers-mode)
     (unpackaged/magit-log-date-headers-mode 1))
+  :general
+  ("C-x v w" #'magit-worktree
+   "C-x M-w" #'magit-worktree-status)
   :custom
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
