@@ -31,6 +31,14 @@
               delete-by-moving-to-trash t
               delete-old-versions t)
 
+(defun akirak/turn-on-indent-tabs-mode ()
+  (interactive)
+  (setq indent-tabs-mode 1))
+
+(dolist (mode-hook '(makefile-mode-hook
+                     org-mode-hook))
+  (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode))
+
 (setq inhibit-startup-screen t
       ring-bell-function 'ignore
       x-gtk-use-system-tooltips nil
