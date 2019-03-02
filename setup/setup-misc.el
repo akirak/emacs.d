@@ -107,5 +107,10 @@
   :custom
   (plumber-avy-word-style 'pre)
   (plumber-enable-keybindings t))
+(use-package undo-propose
+  :config
+  (undo-propose-mode)
+  :general
+  ("C-x u" 'undo-propose))
 
 (provide 'setup-misc)
