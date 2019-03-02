@@ -10,11 +10,8 @@
         counsel-describe-function-function 'helpful-callable)
   :config
   (with-eval-after-load 'counsel
-    (cl-loop for (command . action) in '((counsel-describe-function . helpful-function)
-                                         (counsel-describe-variable . helpful-variable)
-                                         (counsel-M-x . helpful-command))
-             do (ivy-add-actions command
-                                 `(("f" ,(-compose action 'intern) "helpful")))))
+    (ivy-add-actions 'counsel-M-x
+                     `(("h" ,(-compose 'helpful-command 'intern) "helpful"))))
   :general
   ([help ?.] 'helpful-at-point))
 
