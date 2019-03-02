@@ -3,7 +3,6 @@
 (use-package org-starter
   :config
   (org-starter-mode 1)
-  (function-put #'org-starter-def-capture 'lisp-indent-function 2)
   (unless (bound-and-true-p org-starter-path)
     (general-setq org-starter-path '("~/org/")))
   :custom
