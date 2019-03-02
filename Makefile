@@ -1,15 +1,23 @@
-.PHONY: update emacsql-sqlite
+USER_EMACS_DIR = $(shell pwd)
+export NIX_PATH = $(HOME)/.nix-defexpr/channels
+export HOME_MANAGER_CONFIG= $(USER_EMACS_DIR)/nix/home.nix
 
-update:
-	git pull
+build: tangle update-submodules
+	home-manager switch
+
+update-submodules:
 	git submodule update --init --recursive
-	emacs -Q --batch --load init.el
 
-# FIXME
-emacsql-sqlite: straight/repos/emacsql/emacsql-sqlite.elc
+tangle:
+	nix-shell '<nixpkgs>' -p emacs --run \
+	'emacs --batch -l ob-tangle -eval "(org-babel-tangle-file \"README.org\")"'
 
-# FIXME
-straight/repos/emacsql/emacsql-sqlite.elc:
-	cd .emacs.d/straight/repos/emacsql
-	make sqlite/emacsql-sqlite
-	make emacsql-sqlite.elc
+init: update-submodules
+	nix-channel --update
+	nix-shell '<home-manager>' -A install
+	$(MAKE) build
+
+clear:
+	rm -rf straight/repos straight/build .cache
+
+.PHONY:	build update-submodules tangle init clear

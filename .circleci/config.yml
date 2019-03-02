@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    environment:
+      IMAGE_NAME: akirak/emacs.d
+      TERM: dumb
+    docker:
+      - image: akirak/nixmacs-bootstrap
+    working_directory:
+      ~/.emacs.d
+    steps:
+      - checkout
+      - run: make init
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - master
+                - maint
+                - nixify
