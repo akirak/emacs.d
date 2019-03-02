@@ -24,6 +24,7 @@
   (counsel-projectile-mode 1))
 ;; Distraction-free editing
 (use-package olivetti
+  :disabled t
   :commands (turn-on-olivetti-mode)
   :custom (olivetti-body-width 92))
 (use-package fontify-face
@@ -111,5 +112,11 @@
   (undo-propose-mode)
   :general
   ("C-x u" 'undo-propose))
+(use-package perfect-margin
+  :straight (perfect-margin :host github :repo "mpwang/perfect-margin")
+  :config
+  (perfect-margin-mode 1)
+  :custom
+  (perfect-margin-visible-width 92))
 
 (provide 'setup-misc)
