@@ -119,5 +119,7 @@
   (perfect-margin-mode 1)
   :custom
   (perfect-margin-visible-width 92))
+(use-package akirak/org-refile
+  :straight nil)
 
 (provide 'setup-misc)
