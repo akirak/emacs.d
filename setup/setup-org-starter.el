@@ -51,6 +51,9 @@
 Used in source blocks."
   (with-current-buffer (find-buffer-visiting filename)
     (string-remove-suffix "-mode" (symbol-name major-mode))))
+;;;; Refiling
+(add-to-list 'org-starter-extra-refile-map
+             '("?" akirak/org-refile-same-buffer "same buffer") t)
 
 ;;;; Workflow
 
