@@ -1,5 +1,4 @@
 (use-package ivy-omni-org
-  :straight (ivy-omni-org :host github :repo "akirak/ivy-omni-org")
   :custom
   (ivy-omni-org-file-sources '(org-starter-known-files
                                akirak/conflict-org-files)))
