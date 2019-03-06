@@ -6,7 +6,9 @@
 
 (defun akirak/conflict-org-files ()
   "List of Syncthing conflict files in `org-directory'.g"
-  (directory-files org-directory t "\\.sync-conflict-[-[:digit:]]+\\.org\\'"))
+  (when (and (bound-and-true-p org-directory)
+             (file-directory-p org-directory))
+    (directory-files org-directory t "\\.sync-conflict-[-[:digit:]]+\\.org\\'")))
 
 (advice-add 'ivy-omni-org-default-buffer-transformer
             :around
