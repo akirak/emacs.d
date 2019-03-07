@@ -1,11 +1,14 @@
 (autoload 'helm-org-rifle-files "helm-org-rifle")
 
 (use-package org-starter
+  :straight (org-starter :host github :repo "akirak/org-starter"
+                         :branch "config-files")
   :config
   (org-starter-mode 1)
   (unless (bound-and-true-p org-starter-path)
     (general-setq org-starter-path '("~/org/")))
   :custom
+  (org-starter-load-config-files t)
   ;; `org-starter-initial-capture-templates` is defined in setup-org-capture.el
   (org-starter-initial-capture-templates
    '(("a" "Append to the current clock")
