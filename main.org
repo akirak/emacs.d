@@ -412,10 +412,24 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 #+end_src
 ** Appearances
 *** Theme
-I have been using dracula, but I may switch to another theme with light background.
-
 #+begin_src emacs-lisp
-  (akirak/require 'setup-dracula-theme t)
+  (defcustom akirak/default-theme-module 'setup-dracula-theme
+    "Symbol of a module to load the default theme.")
+
+  (defun akirak/set-theme-from-command-line (_arg)
+    (if-let ((theme-name (pop command-line-args-left)))
+	(or (akirak/require (intern (concat "setup-" theme-name "-theme")))
+	    (progn
+	      (message "%s failed to load. Fallback to the default theme.")
+	      (akirak/require akirak/default-theme-module)))
+      (error "--theme must be followed by a theme name")))
+
+  (add-to-list 'command-switch-alist
+	       '("--theme" . akirak/set-theme-from-command-line))
+
+  ;; If the option is not given, load the default theme.
+  (unless (member "--theme" (cdr command-line-args))
+    (akirak/require akirak/default-theme-module))
 #+end_src
 
 *** Frame elements
