@@ -120,5 +120,9 @@
   (perfect-margin-visible-width 92))
 (use-package akirak/org-refile
   :straight nil)
+(use-package goto-line-preview
+  :commands (goto-line-preview)
+  :general
+  ([remap goto-line] 'goto-line-preview))
 
 (provide 'setup-misc)
