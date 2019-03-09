@@ -121,5 +121,9 @@
   (perfect-margin-visible-width 92))
 (use-package akirak/org-refile
   :straight nil)
+(use-package default-text-scale
+  :commands (default-text-scale-increase default-text-scale-decrease)
+  :custom
+  (default-text-scale-amount 3))
 
 (provide 'setup-misc)
