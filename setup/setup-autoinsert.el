@@ -1,12 +1,22 @@
 (auto-insert-mode 1)
 (setq auto-insert 'other
       auto-insert-query nil
-      auto-insert-alist '((("/\\(init\\|my\\|setup\\)-.+\\.el\\'" . "Emacs init")
+      auto-insert-alist `(((,(rx "/.emacs.d/extras/" (+ anything) ".el" eos)
+                            . "Extra elisp file")
+                           . (> _ "\n\n"
+                                "(provide '"
+                                (file-relative-name
+                                 (file-name-sans-extension
+                                  (expand-file-name (buffer-file-name)))
+                                 (expand-file-name "extras" user-emacs-directory))
+                                ")"))
+                          (("/\\(init\\|my\\|setup\\)-.+\\.el\\'"
+                            . "Emacs init")
                            . (> _ "\n\n"
                                 "(provide '"
                                 (file-name-base (buffer-file-name))
                                 ")"))
-                          (("/\\.dir-locals\\.el\\'" . "directory local variables") . nil)
+                          ((,(rx "/." (+ (not (any "/"))) ".el" eos) . "Configuration files") . nil)
                           (("melpa/recipes/.+\\'" . "Melpa recipe")
                            . (> "("
                                 (file-name-nondirectory (buffer-file-name))
