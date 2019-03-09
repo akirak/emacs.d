@@ -204,28 +204,6 @@ DEADLINE: %^{Deadline}T SCHEDULED: %t
   :clock-in t :clock-resume t :empty-lines 1)
 
 ;;;;; Misc
-;;;;;; journal.org
-(org-starter-def-capture "j" "journal.org: New entry (with %i as body)"
-  entry (file+function "journal.org" org-reverse-datetree-goto-read-date-in-file)
-  "* %^{Title}
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-
-%(unless (string-empty-p \"%i\") \"%i\n\n\")%?"
-  :clock-in t :clock-resume t :empty-lines 1)
-
-(akirak/def-org-reverse-datetree-refile "journal.org"
-  :key "j"
-  :ask-always t :prefer '("SCHEDULED" "CLOSED" "CREATED_TIME" "CREATED_AT"))
-
-(defun akirak/org-schedule-journal-entry (date)
-  (interactive (list (org-read-date nil nil nil "Scheduled date: ")))
-  (unless (derived-mode-p 'org-mode)
-    (user-error "Not in org-mode"))
-  (org-schedule nil date)
-  (org-reverse-datetree-refile-to-file
-   (org-starter-locate-file "journal.org" nil t) date))
 
 ;;;;;; code.org
 (org-starter-def-capture "co" "code.org: Stub entry (with %i as body)"
