@@ -7,6 +7,26 @@
 
 (setq-default org-fontify-quote-and-verse-blocks t)
 
+(defcustom akirak/default-font "Overpass Mono"
+  "Default monospace font."
+  :group 'akirak
+  :type 'string)
+
+(defcustom akirak/japanese-font "HarenosoraMincho"
+  "Default font for Japanese."
+  :group 'akirak
+  :type 'string)
+
+(defcustom akirak/simplified-chinese-font "AR PL UKai CN"
+  "Default font for simplified Chinese."
+  :group 'akirak
+  :type 'string)
+
+(defcustom akirak/traditional-chinese-font "AR PL UKai TW"
+  "Default font for traditional Chinese."
+  :group 'akirak
+  :type 'string)
+
 ;;;; Variables
 
 (defvar akirak/heading-font)
@@ -78,9 +98,9 @@
 (let ((default-font-size 10.5))
   (let-alist
       (akirak/check-fonts
-       '(;; Default monospace font.
+       `(;; Default monospace font.
          ;; Alternatives: Hack, Noto Sans Mono, Monofur, Meslo LG S, mononoki
-         (default "Overpass Mono")
+         (default ,akirak/default-font)
          ;; Font for body text when writing documents
          ;; Alternatives: Fantasque Sans Mono, Iosevka, MMCedar
          (writing "Monaco")
@@ -171,10 +191,10 @@
 
 (let-alist
     (akirak/check-fonts
-     '(
+     `(
        ;; Japanese font
        ;; Alternatives: Source Han Sans JP, Noto Sans Mono CJK JP, Ume Gothic C4
-       (japanese-font "HarenosoraMincho")
+       (japanese-font ,akirak/japanese-font)
        ;; Example:
        ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは
        ;; 10日以内に消費者庁に報告しなければなりません。消費者庁は、当該事故情報を迅速に
@@ -185,7 +205,7 @@
 
        ;; Simplified Chinese font
        ;; Alternatives: Adobe Heiti Std R, Noto Sans Mono CJK SC, WenQuanYi Micro Hei Mono
-       (simplified-chinese-font "AR PL UKai CN")
+       (simplified-chinese-font ,akirak/simplified-chinese-font)
        ;; Example:
        ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，
        ;; 发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
@@ -193,7 +213,7 @@
 
        ;; Traditional Chinese font
        ;; Alternatives: Source Han Sans TW, Noto Sans Mono CJK TC
-       (traditional-chinese-font "AR PL UKai TW")
+       (traditional-chinese-font ,akirak/traditional-chinese-font)
        ;; Example:
        ;; 藝人吳建豪與新加坡百億千金石貞善(Arissa)2013年結婚，兩人屢屢傳出婚變消息，
        ;; 婚後也鮮少公開露面，夫妻兩甚至還一度在IG上公開互嗆，讓外界一頭霧水，先前再被爆出，
