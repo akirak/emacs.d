@@ -1,5 +1,8 @@
 #+category: config
 * emacs.d
+| Branch | CI                                                               |
+|--------+------------------------------------------------------------------|
+| [[https://github.com/akirak/emacs.d/tree/nixify][nixify]] | [[https://circleci.com/gh/akirak/emacs.d/tree/nixify][https://circleci.com/gh/akirak/emacs.d/tree/nixify.svg?style=svg]] |
 ** Table of contents
 :PROPERTIES:
 :CREATED_AT: [2019-03-03 Sun 16:41]
