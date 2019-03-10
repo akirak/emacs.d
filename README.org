@@ -13,8 +13,6 @@
     -  [[#overview][Overview]]
     -  [[#see-also][See also]]
     -  [[#license][License]]
-    -  [[#meta][Meta]]
-      -  [[#file-local-variables][File-local variables]]
 
 ** Prerequisites
    :PROPERTIES:
@@ -51,15 +49,6 @@ There are great Emacs configuration repositories on GitHub. The following reposi
 :CUSTOM_ID: license
 :END:
 GPL v3 for the most part.
-** Meta
-:PROPERTIES:
-:CREATED_AT: [2019-03-02 Sat 23:54]
-:END:
-
-*** File-local variables
-:PROPERTIES:
-:CREATED_AT: [2019-03-03 Sun 16:44]
-:END:
 # Local Variables:
 # before-save-hook: org-make-toc
 # org-id-link-to-org-use-id: nil
