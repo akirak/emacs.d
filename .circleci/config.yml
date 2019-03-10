@@ -10,6 +10,7 @@ jobs:
       ~/.emacs.d
     steps:
       - checkout
+      - run: git submodule update --init --recursive
       - run: make init
       - run: make test
 workflows:
