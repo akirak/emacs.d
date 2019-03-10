@@ -20,4 +20,8 @@ init: update-submodules
 clear:
 	rm -rf straight/repos straight/build .cache
 
-.PHONY:	build update-submodules tangle init clear
+test:
+	$(MAKE) -f test.mk all
+	$(MAKE) -C nix -f test/test.mk all
+
+.PHONY:	build update-submodules tangle init clear test

@@ -11,6 +11,7 @@ jobs:
     steps:
       - checkout
       - run: make init
+      - run: make test
 workflows:
   version: 2
   build:
