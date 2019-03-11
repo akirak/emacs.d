@@ -58,4 +58,10 @@ do
   fi
 done
 
+git diff --exit-code --name-status HEAD
+if [ $? -gt 0 ]; then
+    echo "Pre-push tests are prevented if the working tree is dirty" >&2
+    exit 1
+fi
+
 sh test-docker.sh
