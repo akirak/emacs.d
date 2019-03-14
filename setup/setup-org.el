@@ -145,4 +145,18 @@ Navigation: _n_ _p_ _f_ _b_
   "<S-iso-lefttab>" (lambda () (interactive)
                       (org-eval-in-calendar '(calendar-forward-day -1))))
 
+(defun akirak/org-set-created-timestamp (&rest args)
+  "Add a creation timestamp to the current Org entry.
+
+If the current command is run with a prefix argument, prevent
+from running."
+  (unless current-prefix-arg
+    (org-set-property "CREATED_TIME"
+                      (org-timestamp-format
+                       (org-timestamp-from-time (current-time) t t)
+                       (org-time-stamp-format t t)))))
+
+(advice-add #'org-insert-heading
+            :after #'akirak/org-set-created-timestamp)
+
 (provide 'setup-org)
