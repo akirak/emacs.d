@@ -77,6 +77,7 @@
   :straight nil)
 (use-package counsel-org-clock
   :custom
+  (counsel-org-clock-goto-fallback-function 'org-agenda)
   (counsel-org-clock-default-action 'clock-in))
 (use-package org-reverse-datetree
   :straight (org-reverse-datetree :host github
