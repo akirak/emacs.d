@@ -1,7 +1,12 @@
 (auto-insert-mode 1)
 (setq auto-insert 'other
       auto-insert-query nil
-      auto-insert-alist `(((,(rx "/.emacs.d/extras/" (+ anything) ".el" eos)
+      auto-insert-alist `((
+                           ;; ~/.emacs.d/extras/**/*.el
+                           ;; Add
+                           ;; (provide 'DIRECTORY/BASENAME)
+                           ;; e.g. (provide 'akirak/org-refile)
+                           (,(rx "/.emacs.d/extras/" (+ anything) ".el" eos)
                             . "Extra elisp file")
                            . (> _ "\n\n"
                                 "(provide '"
@@ -10,13 +15,20 @@
                                   (expand-file-name (buffer-file-name)))
                                  (expand-file-name "extras" user-emacs-directory))
                                 ")"))
+                          ;; setup-*.el
+                          ;; Add
+                          ;; (provide 'BASENAME)
                           (("/\\(init\\|my\\|setup\\)-.+\\.el\\'"
                             . "Emacs init")
                            . (> _ "\n\n"
                                 "(provide '"
                                 (file-name-base (buffer-file-name))
                                 ")"))
+                          ;; Elisp dotfiles (.*.el)
+                          ;; Noop
                           ((,(rx "/." (+ (not (any "/"))) ".el" eos) . "Configuration files") . nil)
+                          ;; Melpa recipes
+                          ;; Insert a minimal recipe definition
                           (("melpa/recipes/.+\\'" . "Melpa recipe")
                            . (> "("
                                 (file-name-nondirectory (buffer-file-name))
@@ -25,6 +37,7 @@
                                 "/"
                                 _
                                 "\")"))
+                          ;; Fallback to "auto-insert" yasnippet template
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
 
