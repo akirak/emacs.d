@@ -2,6 +2,8 @@
 * emacs.d
 | Branch | CI                                                               |
 |--------+------------------------------------------------------------------|
+| [[https://github.com/akirak/emacs.d/][master]] | [[https://circleci.com/gh/akirak/emacs.d/tree/master][https://circleci.com/gh/akirak/emacs.d/tree/master.svg?style=svg]] |
+| [[https://github.com/akirak/emacs.d/tree/maint][maint]]  | [[https://circleci.com/gh/akirak/emacs.d/tree/maint][https://circleci.com/gh/akirak/emacs.d/tree/maint.svg?style=svg]]  |
 | [[https://github.com/akirak/emacs.d/tree/nixify][nixify]] | [[https://circleci.com/gh/akirak/emacs.d/tree/nixify][https://circleci.com/gh/akirak/emacs.d/tree/nixify.svg?style=svg]] |
 ** Table of contents
 :PROPERTIES:
@@ -48,9 +50,10 @@ There are great Emacs configuration repositories on GitHub. The following reposi
 :PROPERTIES:
 :CUSTOM_ID: license
 :END:
-GPL v3
+GPL v3.
 
-Files in =contrib= directory were originally written by others, so they are not GPL-licensed.
+Emacs Lisp libraries in =contrib= directory were originally written by other people, and they may not be licensed under GPL.
+
 # Local Variables:
 # before-save-hook: org-make-toc
 # org-id-link-to-org-use-id: nil
