@@ -1,44 +1,55 @@
+#+category: config
 * emacs.d
+| Branch | CI                                                               |
+|--------+------------------------------------------------------------------|
+| [[https://github.com/akirak/emacs.d/tree/nixify][nixify]] | [[https://circleci.com/gh/akirak/emacs.d/tree/nixify][https://circleci.com/gh/akirak/emacs.d/tree/nixify.svg?style=svg]] |
+** Table of contents
+:PROPERTIES:
+:CREATED_AT: [2019-03-03 Sun 16:41]
+:TOC:      siblings
+:END:
+    -  [[#prerequisites][Prerequisites]]
+    -  [[#installation][Installation]]
+    -  [[#overview][Overview]]
+    -  [[#see-also][See also]]
+    -  [[#license][License]]
+
 ** Prerequisites
    :PROPERTIES:
    :CUSTOM_ID: prerequisites
    :END:
 
 - Emacs 26.1
-- Extra executables such as ripgrep might be needed for some functionalities in this configuration to work
-
+- Nix package manager for installing dependencies
 ** Installation
-   :PROPERTIES:
-   :CUSTOM_ID: installation
-   :END:
-
-You can use [[https://github.com/akirak/emacs-playground][playground]] to try out this configuration.
-
-To properly install this configuration, first back up your current
-configuration and then use Git to clone the repository:
-
-#+BEGIN_EXAMPLE
-    git clone https://github.com/akirak/emacs.d.git ~/.emacs.d 
-#+END_EXAMPLE
-
-Dependencies and extra configuration files, which are configured in my [[https://github.com/akirak/nixos-config][nixos-config]] repository, can be installed using Nix package manager and [[https://github.com/rycee/home-manager][home-manager]].
-
-After starting Emacs with the configuration, you have to run
-=all-the-icons-install-fonts=.
-
+:PROPERTIES:
+:CUSTOM_ID: installation
+:END:
+#+begin_src sh
+  curl https://raw.githubusercontent.com/akirak/nixmacs-bootstrap/master/bootstrap.sh
+       | sh
+  cd ~/.emacs.d
+  git fetch BRANCH
+  git checkout BRANCH
+  make init
+#+end_src
 ** Overview
 Emacs loads [[file:init.el][~/.emacs.d/init.el]], which in turn loads [[file:main.org][main.org]].
 
 ** See also
 There are great Emacs configuration repositories on GitHub. The following repositories are my favorites:
 
+- [[https://matthewbauer.us/bauer/][Emacs + Nix IDE by Matthew Bauer]]
 - [[https://github.com/purcell/emacs.d][emacs.d by Steve Purcell]]
 - [[https://github.com/kaushalmodi/.emacs.d][.emacs.d by Kaushal Modi]]
 
 [[https://github.com/alphapapa][Alphapapa (Adam Porter)]] is one of the most active Emacs package developers in the world, and I rely on quite a few packages and ideas by him. I definitely recommend that you take a look at his stuffs if you want to make the most of Emacs.
 ** License
-   :PROPERTIES:
-   :CUSTOM_ID: license
-   :END:
-MIT License
-
+:PROPERTIES:
+:CUSTOM_ID: license
+:END:
+GPL v3 for the most part.
+# Local Variables:
+# before-save-hook: org-make-toc
+# org-id-link-to-org-use-id: nil
+# End:
