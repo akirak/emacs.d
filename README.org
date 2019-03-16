@@ -2,6 +2,8 @@
 * emacs.d
 | Branch | CI                                                               |
 |--------+------------------------------------------------------------------|
+| [[https://github.com/akirak/emacs.d/][master]] | [[https://circleci.com/gh/akirak/emacs.d/tree/master][https://circleci.com/gh/akirak/emacs.d/tree/master.svg?style=svg]] |
+| [[https://github.com/akirak/emacs.d/tree/maint][maint]]  | [[https://circleci.com/gh/akirak/emacs.d/tree/maint][https://circleci.com/gh/akirak/emacs.d/tree/maint.svg?style=svg]]  |
 | [[https://github.com/akirak/emacs.d/tree/nixify][nixify]] | [[https://circleci.com/gh/akirak/emacs.d/tree/nixify][https://circleci.com/gh/akirak/emacs.d/tree/nixify.svg?style=svg]] |
 ** Table of contents
 :PROPERTIES:
