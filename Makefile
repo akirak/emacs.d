@@ -19,7 +19,7 @@ init: update-submodules install-hooks
 
 install-hooks:
 	if [ -d .git ]; then \
-		cp -fv -t .git/hooks meta/git-hooks/pre-push; \
+		nix-shell '<nixpkgs>' -p bash --run 'bash meta/install-hooks.bash'; \
 	fi
 
 windows-deps:
