@@ -32,6 +32,8 @@
   (unless (bound-and-true-p org-starter-path)
     (general-setq org-starter-path '("~/org/")))
   (require 'akirak/org-todo)
+  (org-starter-def "~/.emacs.d/main.org"
+    :refile (:maxlevel . 5))
   (require 'akirak/org-cpb)
   (require 'akirak/org-clock-capture)
   (require 'akirak/org-task-capture)
