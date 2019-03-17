@@ -126,5 +126,6 @@
   :commands (default-text-scale-increase default-text-scale-decrease)
   :custom
   (default-text-scale-amount 3))
+(use-package focus)
 
 (provide 'setup-misc)

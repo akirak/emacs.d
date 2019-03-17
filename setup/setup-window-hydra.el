@@ -41,6 +41,7 @@ _a_ce ^^ _m_: cl msgs _r_: to reg^^    _zs_: symbols  _zd_: [%s(if debug-on-erro
   ("y" ivy-pop-view "pop view" :exit t)
   ("zb" ibuffer-sidebar-toggle-sidebar)
   ("zd" toggle-debug-on-error :exit t)
+  ("zf" focus-mode :exit t)
   ("zs" symbol-overlay-remove-all)
   ("zt" dired-sidebar-toggle-sidebar)
   ("{" shrink-window-horizontally)
