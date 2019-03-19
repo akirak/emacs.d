@@ -1190,12 +1190,3 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)
 #+end_src
-** Meta
-*** TODO Import from the previous configuration
-The following modules require further review:
-
-- [ ] [[file:setup/setup-dired.el]]
-- [X] [[file:setup/setup-keybindings.el]]
-- [ ] [[file:setup/setup-web-browser.el]]
-- [ ] [[file:setup/setup-corefighter.el]]
-- [ ] [[file:setup/setup-repom.el]]
