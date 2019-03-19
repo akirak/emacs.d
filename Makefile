@@ -18,9 +18,7 @@ init: update-submodules install-hooks
 	$(MAKE) build
 
 install-hooks:
-	if [ -d .git ]; then \
-		nix-shell '<nixpkgs>' -p bash --run 'bash meta/install-hooks.bash'; \
-	fi
+	install -v -m 755 -t .git/hooks meta/git-hooks/*
 
 clear:
 	rm -rf straight/repos straight/build .cache
