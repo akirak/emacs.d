@@ -18,9 +18,7 @@ init: update-submodules install-hooks
 	$(MAKE) build
 
 install-hooks:
-	if [ -d .git ]; then \
-		nix-shell '<nixpkgs>' -p bash --run 'bash meta/install-hooks.bash'; \
-	fi
+	if [ -d .git ]; then git config --add core.hooksPath .githooks; fi
 
 windows-deps:
 	choco install --yes mingw

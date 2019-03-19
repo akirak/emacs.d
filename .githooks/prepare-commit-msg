@@ -28,7 +28,7 @@ for s in $(git --no-pager diff --name-status "$COMMIT"); do
                 sed -i "1iAdd ${FILENAME}" "$1"
                 ;;
         esac
-    elif [[ "$s" =~ meta/ ]]; then
+    elif [[ "$s" =~ meta/ ]] || [[ "$s" =~ .githooks/ ]]; then
         sed -i "1iMeta: " "$1"
     elif [[ "$s" =~ README ]]; then
         sed -i "1iDoc: " "$1"
