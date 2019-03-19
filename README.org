@@ -50,7 +50,9 @@ There are great Emacs configuration repositories on GitHub. The following reposi
 :PROPERTIES:
 :CUSTOM_ID: license
 :END:
-GPL v3 for the most part.
+GPL v3
+
+Files in =contrib= directory were originally written by others, so they are not GPL-licensed.
 # Local Variables:
 # before-save-hook: org-make-toc
 # org-id-link-to-org-use-id: nil

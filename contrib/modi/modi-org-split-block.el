@@ -3,6 +3,7 @@
 ;; Based on https://github.com/kaushalmodi/.emacs.d/blob/master/setup-files/setup-org.el
 ;; Described in https://scripter.co/splitting-an-org-block-into-two/
 
+;;;###autoload
 (defun modi/org-in-any-block-p ()
   "Return non-nil if the point is in any Org block.
 
@@ -36,6 +37,7 @@ This function is heavily adapted from `org-between-regexps-p'."
              ;; Return value.
              (cons beg end))))))
 
+;;;###autoload
 (defun modi/org-split-block ()
   "Sensibly split the current Org block at point.
 
@@ -96,7 +98,7 @@ This function is heavily adapted from `org-between-regexps-p'."
             (beginning-of-line (if at-bol -1 0)))))
     (message "Point is not in an Org block")))
 
-
+;;;###autoload
 (defun modi/org-meta-return (&optional arg)
   "Insert a new heading or wrap a region in a table.
 Calls `org-insert-heading', `org-insert-item',

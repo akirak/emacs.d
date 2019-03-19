@@ -71,7 +71,8 @@
   :general
   ("M-;" 'comment-dwim-2))
 (use-package narrow-or-widen
-  :straight nil)
+  :straight nil
+  :load-path "contrib/misc")
 (use-package counsel-org-clock
   :custom
   (counsel-org-clock-goto-fallback-function 'org-agenda)

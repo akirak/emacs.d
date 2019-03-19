@@ -709,7 +709,9 @@ The following keybindings have been replaced with smart-jump correspondents:
 #+end_src
 **** modi/org-split-block
 #+begin_src emacs-lisp
-  (akirak/require 'modi-org-split-block)
+  (use-package modi-org-split-block
+    :straight nil
+    :load-path "contrib/modi")
   (akirak/bind-key :package 'org :keymaps 'org-mode-map
     [remap org-meta-return] 'modi/org-meta-return)
 #+end_src
