@@ -1,5 +1,7 @@
 #!/bin/sh
 
+git submodule update --init --recursive
+
 # Based on https://gist.github.com/Quintok/815396509ff79d886656b2855e1a8a46
 
 # A pre-push hook based on the git template. This will verify that no WIP or
@@ -64,4 +66,8 @@ if [ $? -gt 0 ]; then
     exit 1
 fi
 
-sh test-docker.sh
+if [ $(git symbolic-ref --short HEAD) = master ]; then
+    sh test-docker.sh
+else
+    make test
+fi
