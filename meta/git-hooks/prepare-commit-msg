@@ -1,36 +1,36 @@
 #!/bin/bash
 
-if [ -z "$3" ]; then
-    # Skip if a string like 'squash!' is included in the original message
-    if grep --quiet -P "^\\w+!" "$1"; then
-        exit 0
-    fi
-    COMMIT=$(git symbolic-ref HEAD)
-    # Generate a commit message from the diff of the commit
-    IFS=\n
-    for s in $(git --no-pager diff --name-status "$COMMIT"); do
-        if [[ "$s" =~ setup-(.*)\.el ]]; then
-            FILENAME=${BASH_REMATCH[1]}
-            # Prevent from inserting a message if the file is setup-misc.el
-            if [[ ${FILENAME} = misc ]]; then
-                continue
-            fi
-            # Insert a line into the message depending on the status of the file
-            STATUS=${s:0:1}
-            case ${STATUS} in
-                M)
-                    sed -i "1i[${FILENAME}] " "$1"
-                    ;;
-                A)
-                    sed -i "1iAdd ${FILENAME}" "$1"
-                    ;;
-            esac
-        elif [[ "$s" =~ meta/ ]]; then
-            sed -i "1iMeta: " "$1"
-        elif [[ "$s" =~ README ]]; then
-            sed -i "1iDoc: " "$1"
-        fi
-    done
-else
+if [ -n "$2" ]; then
+    exit
+fi
+
+# Skip if a string like 'squash!' is included in the original message
+if grep --quiet -P "^\\w+!" "$1"; then
     exit 0
 fi
+COMMIT=$(git symbolic-ref HEAD)
+# Generate a commit message from the diff of the commit
+IFS=\n
+for s in $(git --no-pager diff --name-status "$COMMIT"); do
+    if [[ "$s" =~ setup-(.*)\.el ]]; then
+        FILENAME=${BASH_REMATCH[1]}
+        # Prevent from inserting a message if the file is setup-misc.el
+        if [[ ${FILENAME} = misc ]]; then
+            continue
+        fi
+        # Insert a line into the message depending on the status of the file
+        STATUS=${s:0:1}
+        case ${STATUS} in
+            M)
+                sed -i "1i[${FILENAME}] " "$1"
+                ;;
+            A)
+                sed -i "1iAdd ${FILENAME}" "$1"
+                ;;
+        esac
+    elif [[ "$s" =~ meta/ ]]; then
+        sed -i "1iMeta: " "$1"
+    elif [[ "$s" =~ README ]]; then
+        sed -i "1iDoc: " "$1"
+    fi
+done
