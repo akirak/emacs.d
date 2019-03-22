@@ -43,7 +43,7 @@
     setup-ibuffer
     setup-smart-jump                ; Jump to a definition / reference
     setup-lsp                       ; Language-agnostic IDE toolkit
-    setup-japanese
+    setup-japanese-mozc
     setup-rich-minority                 ; Whitelist minor modes
     setup-clipboard                     ; Clipboard integration
     setup-ivy-omni-org

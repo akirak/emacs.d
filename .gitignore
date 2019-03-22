@@ -14,3 +14,5 @@ mastodon.plstore
 main.el
 # Git work trees for development
 /worktrees/
+# Compiled elisp files
+*.elc

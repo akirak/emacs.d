@@ -306,7 +306,7 @@ Generic prefix key for editing commands:
 
 #+begin_src emacs-lisp
   (akirak/bind-generic
-    "j" #'katawa-ivy-fix-at-point
+    "j" #'mozc-temp-convert-dwim
     "m" '(nil :wk "mark")
     "o" #'split-line                      ; Originally C-M-o
     "SPC" 'just-one-space)

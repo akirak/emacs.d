@@ -1,3 +1,5 @@
+;; Deprecated. Use setup-japanese-mozc
+
 (use-package katawa
   :straight (katawa :host github :repo "akirak/katawa.el")
   :functions (katawa-get-some-candidates katawa-google--request))
