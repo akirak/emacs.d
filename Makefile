@@ -18,7 +18,7 @@ init: update-submodules install-hooks
 	$(MAKE) build
 
 install-hooks:
-	install -v -m 755 -t .git/hooks meta/git-hooks/*
+	if [ -d .git ]; then git config --add core.hooksPath .githooks; fi
 
 clear:
 	rm -rf straight/repos straight/build .cache
