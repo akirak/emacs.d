@@ -993,6 +993,35 @@ Set the basic options for org-mode:
   ;; org-starter should be loaded after org is loaded
   (akirak/require 'setup-org-starter)
 #+end_src
+*** Multi-lingual support
+:PROPERTIES:
+:CREATED_TIME: [2019-03-23 Sat 16:36]
+:END:
+
+A modules for supporting a natural language should follow the naming convention of =setup-LANGUAGE-SYSTEM=. For example, =setup-chinese-pyim= is a Chinese support through =pyim.el=.
+
+You can customize a list of modules for supported languages through the following variable. This setting can be done per machine, so different machines can support different languages:
+
+#+begin_src emacs-lisp
+  (defcustom akirak/enabled-language-supports
+    nil
+    "List of enabled modules for supporting natural languages other than English.
+
+  These modules are loaded at startup.
+
+  I also suggest you set `default-input-method' to your preferred
+  input method in the environment."
+    :group 'akirak
+    :type '(set (const :tag "Japanese/日本語 (mozc)" setup-japanese-mozc)
+		(const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim))
+    :set (lambda (sym value)
+	   (set sym value)
+	   (dolist (module value)
+	     (akirak/require module))))
+#+end_src
+
+I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
+
 *** Hydra for Org-mode
 #+begin_src emacs-lisp
   (defhydra akirak/org-mode-hydra (:exit t :hint nil)
