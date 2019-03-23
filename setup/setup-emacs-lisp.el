@@ -39,6 +39,7 @@
   :after ox)
 
 (use-package el2org
+  :disabled t
   :commands (el2org-generate-readme))
 
 ;;;; Commands
