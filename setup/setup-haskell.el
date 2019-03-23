@@ -4,9 +4,11 @@
   (add-hook 'haskell-mode-hook 'intero-mode))
 
 (use-package haskell-mode
+  :disabled t
   :mode ("\\.hs\\'" . haskell-mode))
 
 (use-package dante
+  :disabled t
   :commands (dante-mode)
   :init
   (add-hook 'haskell-mode-hook 'dante-mode))
