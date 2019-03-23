@@ -21,6 +21,7 @@ install-hooks:
 	if [ -d .git ]; then git config --add core.hooksPath .githooks; fi
 
 windows-deps:
+	choco install --yes mingw
 	which rg || choco install --yes ripgrep
 	which pandoc || choco install --yes pandoc
 
