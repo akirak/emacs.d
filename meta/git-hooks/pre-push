@@ -66,4 +66,8 @@ if [ $? -gt 0 ]; then
     exit 1
 fi
 
-make test
+if [ $(git symbolic-ref --short HEAD) = master ]; then
+    sh test-docker.sh
+else
+    make test
+fi
