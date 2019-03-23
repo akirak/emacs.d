@@ -406,17 +406,21 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
     (let ((default-directory "~/.emacs.d/straight/repos/emacsql"))
       (if (file-exists-p "emacsql-sqlite.elc")
 	  (message "emacsql-sqlite has been already built")
-	(let ((tmp-directory (temporary-file-directory)))
+	(let* ((tmp-directory (temporary-file-directory))
+	       (c99-executable (expand-file-name "c99" tmp-directory)))
 	  (unwind-protect
 	      (progn
-		(with-temp-buffer
-		  (insert "#!/bin/sh\nexec gcc -std=c99 \"$@\"")
-		  (write-file (expand-file-name "c99" tmp-directory))
-		  (executable-chmod))
-		(setenv "PATH" (concat tmp-directory
-				       ":"
-				       (getenv "PATH"))
+		(unless (executable-find "c99")
+		  (with-temp-buffer
+		    (insert "#!" shell-file-name
+			    "\nexec gcc -std=c99 \\"$@\\"")
+		    (write-file c99-executable)
+		    (message "Created executable %s" c99-executable)
+		    (executable-chmod)))
+		(setenv "PATH" (concat tmp-directory ":" (getenv "PATH"))
 			(progn
+			  (message "Running commands with PATH=%s"
+				   (getenv "PATH"))
 			  (compile "make sqlite/emacsql-sqlite")
 			  (compile "make emacsql-sqlite.elc"))))
 	    (delete-directory tmp-directory 'recursive))))))
