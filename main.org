@@ -402,13 +402,24 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 *** emacsql-sqlite
 #+begin_src emacs-lisp
   (use-package emacsql-sqlite
-    :disabled t
     :init
     (let ((default-directory "~/.emacs.d/straight/repos/emacsql"))
       (if (file-exists-p "emacsql-sqlite.elc")
-          (message "emacsql-sqlite has been already built")
-        (compile "make sqlite/emacsql-sqlite")
-        (compile "make emacsql-sqlite.elc"))))
+	  (message "emacsql-sqlite has been already built")
+	(let ((tmp-directory (temporary-file-directory)))
+	  (unwind-protect
+	      (progn
+		(with-temp-buffer
+		  (insert "#!/bin/sh\nexec gcc -std=c99 \"$@\"")
+		  (write-file (expand-file-name "c99" tmp-directory))
+		  (executable-chmod))
+		(setenv "PATH" (concat tmp-directory
+				       ":"
+				       (getenv "PATH"))
+			(progn
+			  (compile "make sqlite/emacsql-sqlite")
+			  (compile "make emacsql-sqlite.elc"))))
+	    (delete-directory tmp-directory 'recursive))))))
 #+end_src
 ** Appearances
 *** Theme
