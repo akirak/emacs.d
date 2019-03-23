@@ -50,5 +50,9 @@
 (add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
 (add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
 
+(cond
+ ((eq system-type 'windows-nt)
+  (setq shell-file-name (executable-find "bash"))))
+
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here
