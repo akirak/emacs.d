@@ -20,6 +20,10 @@ init: update-submodules install-hooks
 install-hooks:
 	if [ -d .git ]; then git config --add core.hooksPath .githooks; fi
 
+windows-deps:
+	which rg || choco install --yes ripgrep
+	which pandoc || choco install --yes pandoc
+
 clear:
 	rm -rf straight/repos straight/build .cache
 
@@ -27,4 +31,4 @@ test:
 	$(MAKE) -f test.mk all
 	$(MAKE) -C nix -f test/test.mk all
 
-.PHONY:	build update-submodules tangle init clear test install-hooks
+.PHONY:	build update-submodules tangle init clear test install-hooks windows-deps
