@@ -2,6 +2,7 @@
   "The currency primarily used in the country I am living in.")
 
 (use-package beancount
+  :disabled t
   :straight (beancount :host bitbucket
                        :repo "blais/beancount"
                        :files ("editors/emacs/*.el"))
