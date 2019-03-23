@@ -13,7 +13,6 @@
   ;;    (?D delete-frame)
   ;;    (?z iconify-frame)
   ;;    (?? aw-show-dispatch-help)))
-  (aw-make-frame-char ?F)
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
                         minibuffer-mode
