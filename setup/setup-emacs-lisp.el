@@ -42,6 +42,11 @@
   :disabled t
   :commands (el2org-generate-readme))
 
+(use-package eros
+  :config
+  ;; TODO: Add an advice for lispy-eval
+  (eros-mode 1))
+
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
   "Pull the package recipe for the current projectile project."
