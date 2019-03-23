@@ -23,6 +23,7 @@ install-hooks:
 	fi
 
 windows-deps:
+	choco install --yes mingw
 	which rg || choco install --yes ripgrep
 	which pandoc || choco install --yes pandoc
 
