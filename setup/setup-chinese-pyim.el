@@ -51,4 +51,4 @@
   ;;  ("C-;" . pyim-delete-word-from-personal-buffer))
   )
 
-(provide 'setup-pyim)
+(provide 'setup-chinese-pyim)
