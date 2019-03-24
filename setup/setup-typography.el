@@ -1,94 +1,21 @@
-;;; setup-typography.el --- Typography configuration
+;;; setup-typography.el --- Typography configuration -*- lexical-binding: t -*-
 ;;
 ;; Note: =unpackaged/font-compare= will be convenient for picking a
 ;; font for a specific type of text.
-;;
-;;;; Options
 
-(setq-default org-fontify-quote-and-verse-blocks t)
+;;;; Line spacing
+;; Writing
+(setq-mode-local org-mode line-spacing 0.3)
+(setq-mode-local markdown-mode line-spacing 0.3)
 
-(defcustom akirak/default-font
-  (cond
-   ((eq system-type 'windows-nt) "Consolas")
-   (t "Overpass Mono"))
-  "Default monospace font."
-  :group 'akirak
-  :type 'string)
+;; Reading
+(setq-mode-local Info-mode line-spacing 0.5)
 
-(defcustom akirak/japanese-font "HarenosoraMincho"
-  "Default font for Japanese."
-  :group 'akirak
-  :type 'string)
+;; Browser
+;; This does not seem to effect
+;; (setq-mode-local eww-mode line-spacing 0.3)
 
-(defcustom akirak/simplified-chinese-font "AR PL UKai CN"
-  "Default font for simplified Chinese."
-  :group 'akirak
-  :type 'string)
-
-(defcustom akirak/traditional-chinese-font "AR PL UKai TW"
-  "Default font for traditional Chinese."
-  :group 'akirak
-  :type 'string)
-
-;;;; Variables
-
-(defvar akirak/heading-font)
-
-;;;; Setting the typeface for writing
-
-(defvar akirak/writing-font)
-(defvar akirak/writing-italic-font nil)
-
-(defun akirak/set-typeface-for-writing ()
-  "Configure the typography of the current buffer for writing."
-  (setq line-spacing 0.3)
-  (toggle-word-wrap 1)
-  (visual-line-mode 1)
-  (face-remap-add-relative 'default
-                           `(:family ,akirak/writing-font))
-  (when akirak/writing-italic-font
-    (face-remap-add-relative 'italic
-                             `(:family ,akirak/writing-italic-font))))
-
-;; Use the writing typography in these modes
-(add-hook 'org-mode-hook 'akirak/set-typeface-for-writing)
-(add-hook 'markdown-mode-hook 'akirak/set-typeface-for-writing)
-
-;; Suppress a message by `toggle-word-wrap' unless the function is
-;; called interactively. The message is annoying as the option is set
-;; on Org files by default.
-(defun akirak/ad-around-toggle-word-wrap (orig &optional arg)
-  (unwind-protect
-      (progn
-        (unless (called-interactively-p)
-          (advice-add 'message :override #'akirak/ignore-toggle-word-wrap-message))
-        (funcall orig arg))
-    (advice-remove 'message #'akirak/ignore-toggle-word-wrap-message)))
-(advice-add #'toggle-word-wrap :around #'akirak/ad-around-toggle-word-wrap)
-
-(defun akirak/ignore-toggle-word-wrap-message (&rest args)
-  (apply 'ignore args))
-
-;;;; Setting the typeface for reading
-
-(defvar akirak/reading-font)
-
-(defun akirak/set-typeface-for-reading ()
-  (setq line-spacing 0.5)
-  (face-remap-add-relative 'default
-                           `(:family ,akirak/reading-font)))
-
-(add-hook 'Info-mode-hook 'akirak/set-typeface-for-reading)
-
-(defun akirak/set-typeface-for-browser ()
-  (setq line-spacing 0.3)
-  (face-remap-add-relative 'default
-                           `(:height 1.3)))
-
-(add-hook 'eww-mode-hook 'akirak/set-typeface-for-browser)
-
-;;;; Configuring fonts
-
+;;;; Utilities for fonts
 (defun akirak/check-fonts (list)
   "Check availablity of fonts in LIST and transform it into an alist."
   (let ((all-fonts (font-family-list)))
@@ -98,138 +25,188 @@
                            family (symbol-name key)))
              collect (cons key family))))
 
-(let ((default-font-size 10.5))
-  (let-alist
-      (akirak/check-fonts
-       `(;; Default monospace font.
-         ;; Alternatives: Hack, Noto Sans Mono, Monofur, Meslo LG S, mononoki
-         (default ,akirak/default-font)
-         ;; Font for body text when writing documents
-         ;; Alternatives: Fantasque Sans Mono, Iosevka, MMCedar
-         (writing "Monaco")
-         ;; Font specific for italic
-         (writing-italic "Fantasque Sans Mono")
-         ;; Font for heading (primarily in org-mode)
-         (heading "Futura LT")
-         ;; Monospace font for tables.
-         ;; (table "Overpass Mono")
-         ;; Font for reading.
-         ;; Alternatives: Fira Code, Droid Sans, Merriweather, Gotham.
-         (reading "Droid Sans Mono")
+;;;; Faces
 
-         ;; Proportional font. Used mostly for browser (e.g. eww).
-         ;; Alternatives: Droid Sans, Overpass
-         (proportional "Overpass")))
-    ;; Set default fonts
-    (set-default-font (format "%s-%.1f" .default default-font-size))
-    ;; Set text body font to Duospace if any
-    (setq akirak/writing-font .writing)
-    (setq akirak/writing-italic-font .writing-italic)
-    (setq akirak/reading-font .reading)
+;; Enable faces for contents inside blocks
+(setq-default org-fontify-quote-and-verse-blocks t)
 
-    ;; Standard faces with local family
-    (set-face-attribute 'fixed-pitch nil :family .default)
-    (set-face-attribute 'fixed-pitch-serif nil
-                        ;; Change the color for info-mode
-                        :foreground "gold"
-                        :family .default :inherit 'default)
-    (set-face-attribute 'variable-pitch nil
-                        :family .proportional)
+(cl-defun akirak/use-face-fonts (&key default
+                                      variable-pitch
+                                      writing
+                                      writing-italic
+                                      heading
+                                      reading)
+  (unless default
+    (user-error "Default font is nil"))
 
-    ;; Header lines
-    ;; Titillium may be a sensible choice
-    (set-face-attribute 'header-line nil
-                        :family .writing-italic
-                        :inherit 'italic)
-    (set-face-attribute 'akirak/header-line-buffer-name nil
-                        :height 1.3
-                        :slant 'italic)
-    (set-face-attribute 'akirak/header-line-outline nil
-                        :height 1.3)
+  ;; Default fonts
+  (set-face-attribute 'default nil :height 105 :family default)
+  (set-face-attribute 'fixed-pitch-serif nil
+                      ;; Change the color for info-mode
+                      :foreground "gold"
+                      :family default
+                      :inherit 'default)
+  (set-face-attribute 'org-code nil :family default)
+  (set-face-attribute 'org-block nil :family default)
 
-    ;; Headings
-    ;; This face is inherited by all the other info title faces
-    (set-face-attribute 'info-title-4 nil :family .heading :slant 'italic)
-    (setq akirak/heading-font .heading)
-    (with-eval-after-load 'helpful
-      (set-face-attribute 'helpful-heading nil :family akirak/heading-font :height 1.2))
-    (with-eval-after-load 'dired-filter
-      (set-face-attribute 'dired-filter-group-header nil
-                          :family akirak/heading-font :height 1.2 :inherit 'default))
-    (with-eval-after-load 'info
-      (set-face-attribute 'info-menu-header nil
-                          :family akirak/heading-font :height 1.2 :inherit 'default))
+  ;; Variable pitch
+  (when variable-pitch
+    (set-face-attribute 'variable-pitch nil :family variable-pitch))
 
-    ;; Org headings
-    (dolist (level (number-sequence 1 8))
-      (set-face-attribute (intern (format "org-level-%d" level))
-                          nil :family .heading :inherit 'italic))
-    ;; Configure other face attributes for headings
-    (set-face-attribute 'org-level-1 nil :height 1.75)
-    (set-face-attribute 'org-level-2 nil :height 1.6)
-    (set-face-attribute 'org-level-3 nil :height 1.5)
-    (set-face-attribute 'org-level-4 nil :height 1.35)
-    (set-face-attribute 'org-level-5 nil :height 1.25)
-    (set-face-attribute 'org-level-6 nil :height 1.2)
-    (set-face-attribute 'org-level-7 nil :height 1.15)
-    (set-face-attribute 'org-level-8 nil :height 1.1)
+  ;; Header line
+  (set-face-attribute 'header-line nil
+                      :family (or heading default)
+                      :inherit 'italic)
+  (set-face-attribute 'akirak/header-line-buffer-name nil
+                      :family (or heading default)
+                      :height 1.3
+                      :slant 'italic)
+  (set-face-attribute 'akirak/header-line-outline nil
+                      :family (or heading default)
+                      :height 1.3)
+  (set-face-attribute 'info-title-4 nil :slant 'italic
+                      :family (or heading default))
 
-    (set-face-attribute 'org-code nil :family .default)
-    (set-face-attribute 'org-block nil :family .default)
-    ;; (set-face-attribute 'org-verbatim nil :family default)
-    (set-face-attribute 'org-quote nil :family .writing-italic :inherit 'italic)
-    (set-face-attribute 'org-tag nil
-                        :family .writing-italic
-                        :foreground "grey"
-                        :background nil
-                        :underline t
-                        :height (floor (* 10 default-font-size 1.1))
-                        :inherit 'italic)
-    ;; (set-face-attribute 'org-priority nil :family "ETBookOT" :slant 'normal)
-    ;; (set-face-attribute 'org-checkbox-statistics-todo nil :family "ETBookOT" :slant 'italic :height 1.3)
-    ;; (set-face-attribute 'org-todo nil :family "Overpass")
-    ))
+  ;; Org headings
+  (set-face-attribute 'org-level-1 nil :height 1.75 :inherit 'italic)
+  (set-face-attribute 'org-level-2 nil :height 1.6 :inherit 'italic)
+  (set-face-attribute 'org-level-3 nil :height 1.5 :inherit 'italic)
+  (set-face-attribute 'org-level-4 nil :height 1.35 :inherit 'italic)
+  (set-face-attribute 'org-level-5 nil :height 1.25 :inherit 'italic)
+  (set-face-attribute 'org-level-6 nil :height 1.2 :inherit 'italic)
+  (set-face-attribute 'org-level-7 nil :height 1.15 :inherit 'italic)
+  (set-face-attribute 'org-level-8 nil :height 1.1 :inherit 'italic)
+  (dolist (level (number-sequence 1 8))
+    (set-face-attribute (intern (format "org-level-%d" level)) nil
+                        :family (or heading default)))
 
-;;;; Configure fonts for specific natural languages
+  ;; Other headings (for reading)
+  (with-eval-after-load 'helpful
+    (set-face-attribute 'helpful-heading nil :height 1.2
+                        :family (or heading reading default)))
+  (with-eval-after-load 'dired-filter
+    (set-face-attribute 'dired-filter-group-header nil :height 1.2 :inherit 'default
+                        :family (or heading default)))
+  (with-eval-after-load 'info
+    (set-face-attribute 'info-menu-header nil :height 1.2 :inherit 'default
+                        :family (or heading reading default)))
 
-(let-alist
-    (akirak/check-fonts
-     `(
-       ;; Japanese font
-       ;; Alternatives: Source Han Sans JP, Noto Sans Mono CJK JP, Ume Gothic C4
-       (japanese-font ,akirak/japanese-font)
-       ;; Example:
-       ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは
-       ;; 10日以内に消費者庁に報告しなければなりません。消費者庁は、当該事故情報を迅速に
-       ;; 公表するなどの措置を行います。
+  ;; Other Org faces
+  (set-face-attribute 'org-quote nil :inherit 'italic
+                      :family (or writing-italic default))
+  (set-face-attribute 'org-tag nil
+                      :foreground "grey"
+                      :background nil
+                      :underline t
+                      :height 115
+                      :family (or writing-italic default)
+                      :inherit 'italic))
 
-       ;; Font that supports both simplified and traditional Chinese
-       ;; (unified-chinese-font "cwTeX Q Fangsong")
+(defun akirak/set-local-text-fonts ()
+  (when (derived-mode-p 'text-mode)
+    (cond
+     ((derived-mode-p 'Info-mode 'eww-mode)
+      (when-let ((reading (plist-get akirak/face-fonts :reading)))
+        (face-remap-add-relative 'default `(:family ,reading))))
+     ;; TODO: Set :height
+     ;; (face-remap-add-relative 'default
+     ;;                          `(:height 1.3))
+     ((derived-mode-p 'org-mode 'markdown-mode)
+      (when-let ((writing (plist-get akirak/face-fonts :writing)))
+        (face-remap-add-relative 'default `(:family ,writing)))
+      (when-let ((writing-italic (plist-get akirak/face-fonts :writing-italic)))
+        (face-remap-add-relative 'italic `(:family ,writing-italic)))))))
 
-       ;; Simplified Chinese font
-       ;; Alternatives: Adobe Heiti Std R, Noto Sans Mono CJK SC, WenQuanYi Micro Hei Mono
-       (simplified-chinese-font ,akirak/simplified-chinese-font)
-       ;; Example:
-       ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，
-       ;; 发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
-       ;; Cite: http://www.ting-yi-ting.com/entry/2018/05/09/213152
+(add-hook 'change-major-mode-hook 'akirak/set-local-text-fonts)
 
-       ;; Traditional Chinese font
-       ;; Alternatives: Source Han Sans TW, Noto Sans Mono CJK TC
-       (traditional-chinese-font ,akirak/traditional-chinese-font)
-       ;; Example:
-       ;; 藝人吳建豪與新加坡百億千金石貞善(Arissa)2013年結婚，兩人屢屢傳出婚變消息，
-       ;; 婚後也鮮少公開露面，夫妻兩甚至還一度在IG上公開互嗆，讓外界一頭霧水，先前再被爆出，
-       ;; 吳建豪早就主動和老婆提出離婚要求，但石貞善不願放手；據悉，一名自稱兩人密友爆料，
-       ;; 表示男方已連寄2封離婚協書，女方雖然試圖挽回，不過最終仍決心離婚。
+(defcustom akirak/face-fonts
+  (let ((family-list (font-family-list))
+        (the-list (list :default '("Overpass Mono"
+                                   "Hack"
+                                   "Noto Sans Mono"
+                                   "Monofur"
+                                   "Meslo LG S"
+                                   "mononoki"
+                                   ;; Fallback for Windows
+                                   "Consolas")
+                        :writing '("Monaco"
+                                   "Fantasque Sans Mono"
+                                   "Iosevka"
+                                   "MMCedar")
+                        :writing-italic '("Fantasque Sans Mono")
+                        ;; Font for heading (primarily in org-mode)
+                        :heading '("Futura LT"
+                                   "Overpass")
+                        ;; Monospace font for tables.
+                        ;; (table "Overpass Mono")
+                        :reading '("Droid Sans Mono"
+                                   "Fira Code"
+                                   "Droid Sans"
+                                   "Merriweather"
+                                   "Gotham")
+                        :variable-pitch '("Overpass"
+                                          "Droid Sans"))))
+    (cl-loop for (key families) on the-list by #'cddr
+             append (list key (--find (member it family-list) families))))
+  "Plist of fonts to use in Emacs."
+  :group 'akirak
+  :set (lambda (symbol value)
+         (let* ((family-list (font-family-list))
+                (value (cl-loop for (key family . _) on value by 'cddr with new-value
+                                do (cond
+                                    ((member family family-list)
+                                     (setq new-value `(,key ,family ,@new-value)))
+                                    (family
+                                     (message "Font family \"%s\" is unavailable" family))
+                                    (t
+                                     (message "Font family for %s is not set" key)))
+                                finally return new-value)))
+           ;; (cl-loop for )
+           (set symbol value)
+           (apply 'akirak/use-face-fonts value)
+           (dolist (buf (buffer-list))
+             (with-current-buffer buf
+               (akirak/set-local-text-fonts))))))
 
-       ;; CJK-misc font
-       ;; Alternatives: WenQuanYi Micro Hei Mono
-       ;; (cjk-misc-font )
-       ))
-  (set-fontset-font "fontset-default" 'kana .japanese-font)
-  ;; TODO: Define fallback for Japanese kanjis that are unavailble in Chinese fonts
-  (set-fontset-font "fontset-default" 'han .simplified-chinese-font)
-  (set-fontset-font "fontset-default" 'bopomofo .traditional-chinese-font))
+;;;; Fonts for specific fontsets
+
+;; TODO: Define fallback for Japanese kanjis that are unavailble in Chinese fonts
+(defcustom akirak/fontset-fonts
+  `(
+    ;; Alternatives
+    ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは10日以内に消費者庁に報告しなければなりません。
+    (kana . "HarenosoraMincho")
+    ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
+    (han . "AR PL UKai CN")
+    ;; 藝人吳建豪與新加坡百億千金石貞善(Arissa)2013年結婚，兩人屢屢傳出婚變消息，
+    (bopomofo . "AR PL UKai TW")
+    ;; NOTE: "cwTeX Q Fangsong" supports both simplified and traditional Chinese
+    )
+  "Fonts for specific fontsets."
+  :group 'akirak
+  :set (lambda (symbol value)
+         (set symbol value)
+         (cl-loop for (fontset . family) in value
+                  do (set-fontset-font "fontset-default" fontset family)))
+  :type '(alist :key-type (symbol :tag "Fontset")
+                :value-type (string :tag "Family")
+                :options
+                (((const :tag "Japanese Kana" kana)
+                  (choice (const "Harenosoramincho")
+                          (const "Source Han Sans JP")
+                          (const "Noto Sans Mono CJK JP")
+                          (const "Ume Gothic C4")
+                          (string :tag "Other family")))
+                 ((const :tag "Simplified Chinese" han)
+                  (choice (const "AR PL UKai CN")
+                          (const "Adobe Heiti Std R")
+                          (const "Noto Sans Mono CJK SC")
+                          (const "WenQuanYi Micro Hei Mono")
+                          (string :tag "Other family")))
+                 ((const :tag "Traditional Chinese" bopomofo)
+                  (choice (const "AR PL UKai TW")
+                          (const "Source Han Sans TW")
+                          (const "Noto Sans Mono CJK TC")
+                          (string :tag "Other family"))))))
 
 (provide 'setup-typography)

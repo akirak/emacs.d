@@ -1,6 +1,7 @@
 (defvar akirak/feature-list
   '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
     setup-key-translation ; Translate certain key combinations for ergonomics
+    setup-wrap
     setup-counsel         ; Basic Counsel commands
     setup-projectile      ; Manage projects
     setup-swiper     ; Incremental search through the buffer using Ivy
