@@ -127,5 +127,8 @@
   :custom
   (default-text-scale-amount 3))
 (use-package focus)
+(use-package beginend
+  :config
+  (beginend-global-mode 1))
 
 (provide 'setup-misc)
