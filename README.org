@@ -12,6 +12,8 @@
 :END:
     -  [[#prerequisites][Prerequisites]]
     -  [[#installation][Installation]]
+      -  [[#generic-linux][Generic Linux]]
+      -  [[#windows-without-wsl][Windows (without WSL)]]
     -  [[#overview][Overview]]
     -  [[#see-also][See also]]
     -  [[#license][License]]
@@ -27,14 +29,31 @@
 :PROPERTIES:
 :CUSTOM_ID: installation
 :END:
+*** Generic Linux
+The following snippet uses [[https://github.com/akirak/nixmacs-bootstrap][an external script]] to install [[https://nixos.org/nix/][Nix]] and [[https://github.com/rycee/home-manager][home-manager]] and creates a Git repository in =~/.emacs.d=.
+=BRANCH= should be either =master= or =maint=:
+
 #+begin_src sh
   curl https://raw.githubusercontent.com/akirak/nixmacs-bootstrap/master/bootstrap.sh
        | sh
   cd ~/.emacs.d
-  git fetch BRANCH
+  git fetch origin BRANCH
   git checkout BRANCH
   make init
 #+end_src
+
+Inside an Emacs session, run =all-the-icons-install-fonts= command to install icon fonts.
+*** Windows (without WSL)
+:PROPERTIES:
+:CREATED_TIME: [2019-03-25 Mon 03:09]
+:END:
+First install [[https://chocolatey.org][Chocolatey]] and then run the following command in a bash session:
+
+#+begin_src sh
+curl https://raw.githubusercontent.com/akirak/nixmacs-bootstrap/master/bootstrap-mingw.sh | sh
+#+end_src
+
+Inside an Emacs session, run =all-the-icons-install-fonts= command. It asks for a directory for saving font files. Enter a user directory for temporarily storing font files, and then copy the downloaded font files to =C:\Windows\Fonts= manually.
 ** Overview
 Emacs loads [[file:init.el][~/.emacs.d/init.el]], which in turn loads [[file:main.org][main.org]].
 
