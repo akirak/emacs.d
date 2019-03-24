@@ -8,16 +8,18 @@
         (when (file-equal-p directory (buffer-local-value 'default-directory buffer))
           (kill-buffer buffer)))))
   (defun akirak/find-magit-status-buffer (&optional directory)
-    (let ((directory (or directory
-                         (if (bound-and-true-p projectile-mode)
-                             (projectile-project-root)
-                           default-directory))))
-      (car (member-if (lambda (buf)
-                        (string-equal directory
-                                      (with-current-buffer buf
-                                        default-directory)))
-                      (mapcar #'get-buffer
-                              (internal-complete-buffer "magit: " nil t))))))
+    (let* ((directory (or directory
+                          (if (bound-and-true-p projectile-mode)
+                              (projectile-project-root)
+                            default-directory)))
+           (bufs (internal-complete-buffer
+                  "magit: "
+                  (lambda (cand)
+                    (file-equal-p directory
+                                  (buffer-local-value 'default-directory
+                                                      (cdr cand))))
+                  t)))
+      (cadr bufs)))
   ;; Based on `unpackaged/magit-status'.
   (defun akirak/magit-status-prefer-existing (directory cache)
     "Enhanced version of `unpackaged/magit-status'.
