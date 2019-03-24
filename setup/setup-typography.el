@@ -7,7 +7,10 @@
 
 (setq-default org-fontify-quote-and-verse-blocks t)
 
-(defcustom akirak/default-font "Overpass Mono"
+(defcustom akirak/default-font
+  (cond
+   ((eq system-type 'windows-nt) "Consolas")
+   (t "Overpass Mono"))
   "Default monospace font."
   :group 'akirak
   :type 'string)

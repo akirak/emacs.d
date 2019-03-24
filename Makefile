@@ -22,6 +22,11 @@ install-hooks:
 		cp -fv -t .git/hooks meta/git-hooks/pre-push; \
 	fi
 
+windows-deps:
+	choco install --yes mingw
+	which rg || choco install --yes ripgrep
+	which pandoc || choco install --yes pandoc
+
 clear:
 	rm -rf straight/repos straight/build .cache
 
@@ -29,4 +34,4 @@ test:
 	$(MAKE) -f test.mk all
 	$(MAKE) -C nix -f test/test.mk all
 
-.PHONY:	build update-submodules tangle init clear test install-hooks
+.PHONY:	build update-submodules tangle init clear test install-hooks windows-deps
