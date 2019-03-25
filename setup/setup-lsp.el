@@ -2,19 +2,20 @@
   :commands lsp)
 
 (use-package company-lsp
-  :after (lsp-mode company)
   :commands company-lsp
-  :init
-  (add-hook 'company-backends 'company-lsp))
+  :hook
+  (company-backends . company-lsp))
 
-(use-package lsp-ui :after lsp
+(use-package lsp-ui
   :commands lsp-ui-mode
-  :config
-  (add-hook 'lsp-ui-doc-mode-hook
-            (lambda () (when lsp-ui-doc-mode (eldoc-mode -1))))
-  (add-hook 'lsp-ui-mode-hook 'lsp-ui-doc-enable)
   :hook
   (lsp-mode . lsp-ui-mode))
+
+(use-package dap-mode
+  :after lsp-mode
+  :config
+  (dap-mode 1)
+  (dap-ui-mode 1))
 
 ;; https://github.com/abo-abo/hydra/wiki/lsp-mode
 (defhydra hydra-lsp (:exit t :hint nil)

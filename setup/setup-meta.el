@@ -58,6 +58,7 @@
     setup-idle
     setup-multiple-cursors
     setup-hyperspace
+    setup-treemacs
     setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)
