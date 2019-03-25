@@ -52,7 +52,7 @@ do
 
     # Check for autosquash commits
     commit=`git rev-list -n 1 --grep '^\(fixup\|squash\)!' "$range"`
-    if [ -n "$commit" ]
+    if [ "$remote" != maint -a -n "$commit" ]
     then
       echo "\nPush rejected: autosquash commit detected\n"
       exit 1
