@@ -71,8 +71,14 @@
         (load-file buffer-file-name)
       (eval-buffer))))
 
-(defun akirak/debug-emacs-startup ()
+(defun akirak/run-emacs-with-debug-init ()
+  "Run Emacs with \"--debug-init\" option."
   (interactive)
-  (async-start-process "emacs-debug" "emacs" nil "--debug-init"))
+  (if current-prefix-arg
+      (async-shell-command
+       (read-string "Command line: "
+                    (format "%s --debug-init "
+                            (shell-quote-argument (car command-line-args)))))
+    (async-start-process "emacs-debug" "emacs" nil "--debug-init")))
 
 (provide 'setup-emacs-lisp)
