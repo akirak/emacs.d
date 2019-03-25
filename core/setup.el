@@ -59,3 +59,13 @@ output file without the directory."
 (defun akirak/running-on-crostini-p ()
   "Return non-nil if Emacs is running on Crostini of Chrome OS."
   (stringp (getenv-internal "SOMMELIER_VERSION")))
+
+(defun akirak/os-like-debian-p ()
+  (when (file-exists-p "/etc/os-release")
+    (with-temp-buffer
+      (insert-file-contents "/etc/os-release")
+      (goto-char (point-min))
+      (or (re-search-forward (rx bol "ID=" (?  "\"") "debian" (?  "\"") eol)
+                             nil t)
+          (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
+                             nil t)))))

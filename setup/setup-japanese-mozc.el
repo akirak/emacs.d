@@ -2,15 +2,6 @@
 ;; If you are using Debian or its variant, it is available as
 ;; emacs-mozc-bin package. I may add it to nixpkgs in the future.
 
-(defun akirak/os-like-debian-p ()
-  (with-temp-buffer
-    (insert-file-contents "/etc/os-release")
-    (goto-char (point-min))
-    (or (re-search-forward (rx bol "ID=" (?  "\"") "debian" (?  "\"") eol)
-                           nil t)
-        (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
-                           nil t))))
-
 ;; mozc-mode lets you write Japanese
 (use-package mozc
   :straight nil
