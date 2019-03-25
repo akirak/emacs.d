@@ -473,8 +473,8 @@ available.
   (when (window-system)
     (akirak/require 'setup-typography))
 #+end_src
-**** TODO How to install fonts
-The typography module depends on several fonts from many packages. I have to document how to install them.
+
+If your operating system supports Docker, you can use [[https://github.com/akirak/fonts-container][fonts-container]] to install fonts used in the module.
 ** A bunch of useful features
 :PROPERTIES:
 :TOC:      1
