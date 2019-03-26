@@ -23,4 +23,4 @@
   :straight lsp-java
   :after treemacs)
 
-(provide 'setup-java)
+(provide 'setup-java-lsp)
