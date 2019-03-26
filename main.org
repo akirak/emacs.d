@@ -1192,7 +1192,13 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 
 *** Java
 #+begin_src emacs-lisp
-  (akirak/require 'setup-java)
+  (defcustom akirak/java-support-module 'setup-java-lsp
+    "Module for supporting Java."
+    :type '(choice (const setup-java-lsp)
+                   (const setup-java-meghanada)))
+
+  (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
+
 #+end_src
 ** Emacs applications
 *** Getting organised
