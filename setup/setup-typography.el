@@ -121,31 +121,36 @@
 
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
-        (the-list (list :default '("Overpass Mono"
-                                   "Hack"
-                                   "Noto Sans Mono"
-                                   "Monofur"
-                                   "Meslo LG S"
-                                   "mononoki"
-                                   ;; Fallback for Windows
-                                   "Consolas")
-                        :writing '("Monaco"
-                                   "Fantasque Sans Mono"
-                                   "Iosevka"
-                                   "MMCedar")
-                        :writing-italic '("Fantasque Sans Mono")
-                        ;; Font for heading (primarily in org-mode)
-                        :heading '("Futura LT"
-                                   "Overpass")
-                        ;; Monospace font for tables.
-                        ;; (table "Overpass Mono")
-                        :reading '("Droid Sans Mono"
-                                   "Fira Code"
-                                   "Droid Sans"
-                                   "Merriweather"
-                                   "Gotham")
-                        :variable-pitch '("Overpass"
-                                          "Droid Sans"))))
+        (the-list (cond
+                   ((or (eq system-type 'windows-nt)
+                        (executable-find "wsl.exe"))
+                    (list :default '("consolas"
+                                     "Hack")
+                          :heading '("Calibri")
+                          :variable-pitch '("Calibri")))
+                   (t (list :default '("Overpass Mono"
+                                       "Hack"
+                                       "Noto Sans Mono"
+                                       "Monofur"
+                                       "Meslo LG S"
+                                       "mononoki")
+                            :writing '("Monaco"
+                                       "Fantasque Sans Mono"
+                                       "Iosevka"
+                                       "MMCedar")
+                            :writing-italic '("Fantasque Sans Mono")
+                            ;; Font for heading (primarily in org-mode)
+                            :heading '("Futura LT"
+                                       "Overpass")
+                            ;; Monospace font for tables.
+                            ;; (table "Overpass Mono")
+                            :reading '("Droid Sans Mono"
+                                       "Fira Code"
+                                       "Droid Sans"
+                                       "Merriweather"
+                                       "Gotham")
+                            :variable-pitch '("Overpass"
+                                              "Droid Sans"))))))
     (cl-loop for (key families) on the-list by #'cddr
              append (list key (--find (member it family-list) families))))
   "Plist of fonts to use in Emacs."
