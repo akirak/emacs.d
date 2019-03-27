@@ -177,16 +177,27 @@
 
 ;; TODO: Define fallback for Japanese kanjis that are unavailble in Chinese fonts
 (defcustom akirak/fontset-fonts
-  `(
-    ;; Alternatives
-    ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは10日以内に消費者庁に報告しなければなりません。
-    (kana . "HarenosoraMincho")
-    ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
-    (han . "AR PL UKai CN")
-    ;; 藝人吳建豪與新加坡百億千金石貞善(Arissa)2013年結婚，兩人屢屢傳出婚變消息，
-    (bopomofo . "AR PL UKai TW")
-    ;; NOTE: "cwTeX Q Fangsong" supports both simplified and traditional Chinese
-    )
+  (let ((family-list (font-family-list))
+        (the-alist (quote (
+                           ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは10日以内に消費者庁に報告しなければなりません。
+                           (kana . ("Harenosoramincho"
+                                    "Source Han Sans JP"
+                                    "Noto Sans Mono CJK JP"
+                                    "Ume Gothic C4"))
+                           ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
+                           (han . ("AR PL UKai CN"
+                                   "Adobe Heiti Std R"
+                                   "Noto Sans Mono CJK SC"
+                                   "WenQuanYi Micro Hei Mono"))
+                           ;; 藝人吳建豪與新加坡百億千金石貞善(Arissa)2013年結婚，兩人屢屢傳出婚變消息，
+                           (bopomofo . ("AR PL UKai TW"
+                                        "Source Han Sans TW"
+                                        "Noto Sans Mono CJK TC"))
+                           ;; NOTE: "cwTeX Q Fangsong" supports both simplified and traditional Chinese
+                           ))))
+    (cl-loop for (key . families) in the-alist
+             collect (cons key (--find (member it family-list) families))))
+
   "Fonts for specific fontsets."
   :group 'akirak
   :set (lambda (symbol value)
@@ -197,21 +208,10 @@
                 :value-type (string :tag "Family")
                 :options
                 (((const :tag "Japanese Kana" kana)
-                  (choice (const "Harenosoramincho")
-                          (const "Source Han Sans JP")
-                          (const "Noto Sans Mono CJK JP")
-                          (const "Ume Gothic C4")
-                          (string :tag "Other family")))
+                  string)
                  ((const :tag "Simplified Chinese" han)
-                  (choice (const "AR PL UKai CN")
-                          (const "Adobe Heiti Std R")
-                          (const "Noto Sans Mono CJK SC")
-                          (const "WenQuanYi Micro Hei Mono")
-                          (string :tag "Other family")))
+                  string)
                  ((const :tag "Traditional Chinese" bopomofo)
-                  (choice (const "AR PL UKai TW")
-                          (const "Source Han Sans TW")
-                          (const "Noto Sans Mono CJK TC")
-                          (string :tag "Other family"))))))
+                  string))))
 
 (provide 'setup-typography)
