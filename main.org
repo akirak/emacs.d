@@ -464,14 +464,14 @@ Due to consistency with other applications on computer, my eyes tend to stay in 
   (akirak/require 'setup-feebleline t)  ; Display extra information in the echo area
   (akirak/require 'setup-frame-title t) ; Configure a custom frame title format
 #+end_src
-*** Typography
+*** Typeface
 This modules configures extra face attributes for typography. 
 This feature is enabled if and only if a window system is
 available.
 
 #+begin_src emacs-lisp
   (when (window-system)
-    (akirak/require 'setup-typography))
+    (akirak/require 'setup-typeface))
 #+end_src
 
 If your operating system supports Docker, you can use [[https://github.com/akirak/fonts-container][fonts-container]] to install fonts used in the module.
