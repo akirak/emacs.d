@@ -13,7 +13,7 @@
                     :next multi-term-next
                     :prev multi-term-prev)))
 
-(defcustom akirak/default-shell 'multi-term
+(defcustom akirak/default-shell 'aweshell
   "The defaut shell for use."
   :set
   (lambda (key value)
