@@ -375,10 +375,23 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
     ;; Workaround for preventing a loading error in some exporter packages
     (require 'ox-org))
 #+end_src
-
+*** posframe
+:PROPERTIES:
+:CREATED_TIME: [2019-03-31 Sun 01:55]
+:END:
+#+begin_src emacs-lisp
+  (use-package posframe)
+#+end_src
 *** Hydra
 #+begin_src emacs-lisp
 (use-package hydra)
+#+end_src
+
+#+begin_src emacs-lisp
+  (use-package hydra-posframe
+    :straight (hydra-posframe :host github :repo "Ladicle/hydra-posframe")
+    :hook
+    (after-init . hydra-posframe-enable))
 #+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
