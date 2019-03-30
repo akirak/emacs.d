@@ -73,10 +73,6 @@
 (use-package narrow-or-widen
   :straight nil
   :load-path "contrib/misc")
-(use-package counsel-org-clock
-  :custom
-  (counsel-org-clock-goto-fallback-function 'org-agenda)
-  (counsel-org-clock-default-action 'clock-in))
 ;; Edit Org-Mode lists like in word processors
 (use-package org-autolist 
   :after org

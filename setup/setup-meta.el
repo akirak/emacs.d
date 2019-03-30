@@ -38,6 +38,7 @@
     setup-counsel-org-capture-string
     setup-org-refile                    ; Enhance org-refile
     setup-org-download                  ; Screenshots
+    setup-counsel-org-clock
     setup-org-mind-map
     setup-link-hint                     ; Jumping to a URL
     setup-helm-org-rifle
