@@ -905,9 +905,20 @@ Some files are automatically committed to their contained repositories.
 [[https://github.com/alphapapa/org-web-tools][org-web-tools]] is handy, but commands in the package often fail to retrieve a proper URL I want to operate on. Therefore I created =clipurl= package to pick a URL from the kill ring.
 
 #+begin_src emacs-lisp
-  (use-package org-web-tools)
+  (akirak/require 'setup-org-web-tools)
 
-  (akirak/bind-user "w" 'ivy-clipurl)
+  (defun akirak/insert-previous-url-link ()
+    (interactive)
+    (if current-prefix-arg
+	(call-interactively 'ivy-clipurl)
+      ;; Use ivy-clipurl in place of org-web-tools-insert-link.
+      (let ((ivy-clipurl-default-action 'clipurl-insert-url-dwim)
+	    (ivy-clipurl-prompt "Choose a URL to insert: "))
+	(call-interactively 'ivy-clipurl))
+      ;; (call-interactively 'org-web-tools-insert-link-for-url)
+      ))
+
+  (akirak/bind-user "w" 'akirak/insert-previous-url-link)
 #+end_src
 
 *** Highlighting part(s) of source code and focusing
