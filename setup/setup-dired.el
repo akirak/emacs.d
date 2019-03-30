@@ -169,6 +169,7 @@
 ;;;;; Appearances of directory entries
 
 (use-package all-the-icons-dired
+  :disabled t
   :after dired
   ;; :diminish 'all-the-icons-dired-mode
   :hook
