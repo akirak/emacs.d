@@ -65,9 +65,9 @@ command was called, go to its unstaged changes section."
     (unpackaged/magit-log-date-headers-mode 1))
   :general
   ("C-x v w" #'magit-worktree
-   "C-x M-w" #'magit-worktree-status
-   [remap magit-status] #'akirak/magit-status-prefer-existing)
+   "C-x M-w" #'magit-worktree-status)
   :custom
+  (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
