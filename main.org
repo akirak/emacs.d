@@ -770,8 +770,7 @@ Use poporg rather than outorg.
 I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-window-hydra)
-  (akirak/bind-key "M-o" #'akirak/window-hydra/body)
+  (akirak/bind-key "M-o" #'ace-window)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 #+end_src
 *** Visual cues and extra information display
