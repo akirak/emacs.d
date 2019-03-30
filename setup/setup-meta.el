@@ -60,6 +60,7 @@
     setup-multiple-cursors
     setup-hyperspace
     setup-treemacs
+    setup-perfect-margin
     setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)

@@ -110,12 +110,6 @@
   (undo-propose-mode)
   :general
   ("C-x u" 'undo-propose))
-(use-package perfect-margin
-  :straight (perfect-margin :host github :repo "mpwang/perfect-margin")
-  :config
-  (perfect-margin-mode 1)
-  :custom
-  (perfect-margin-visible-width 92))
 (use-package akirak/org-refile
   :straight nil)
 (use-package default-text-scale
