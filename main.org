@@ -614,8 +614,8 @@ I will load =setup-magithub= library if I need it.
 #+end_src
 *** Company completion
 #+begin_src emacs-lisp
-(general-def :package 'company :keymaps 'company-mode-map
-  "M-/" #'company-complete)
+  (general-def :package 'company :keymaps 'company-mode-map
+    "C-M-/" #'company-complete-common-or-cycle)
 #+end_src
 *** Yasnippet and auto-yasnippet
 
