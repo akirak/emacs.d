@@ -1,4 +1,4 @@
-;;; setup-typography.el --- Typography configuration -*- lexical-binding: t -*-
+;;; setup-typeface.el --- Typography configuration -*- lexical-binding: t -*-
 ;;
 ;; Note: =unpackaged/font-compare= will be convenient for picking a
 ;; font for a specific type of text.
@@ -214,4 +214,4 @@
                  ((const :tag "Traditional Chinese" bopomofo)
                   string))))
 
-(provide 'setup-typography)
+(provide 'setup-typeface)
