@@ -54,5 +54,7 @@
  ((eq system-type 'windows-nt)
   (setq shell-file-name (executable-find "bash"))))
 
+(add-hook 'java-mode 'subword-mode)
+
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here
