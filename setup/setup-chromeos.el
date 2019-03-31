@@ -1,6 +1,7 @@
 (unless (akirak/running-on-crostini-p)
   (user-error "Not running on Chrome OS / Crostini"))
 
+;; NOTE: This bug seems to have been fixed.
 ;; Somehow Emacs seems to receive an infinite sequence of right keys
 ;; after receiving focus on Chrome OS, even without my config.
 ;; Is this a bug with Emacs or a hardware problem?
@@ -8,7 +9,7 @@
 ;; to move the cursor, so this is not a serious problem.
 ;; I've gained peace of mind by disabling one of the arrow keys
 ;; for cursor motion.
-(general-unbind "<right>")
+;; (general-unbind "<right>")
 
 ;; It seems that the pop-up menus hang up Chrome OS when Emacs is run
 ;; on Crostini. I don't know why, but it is safer to entirely disable
