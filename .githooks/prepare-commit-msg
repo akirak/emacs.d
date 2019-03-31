@@ -10,22 +10,22 @@ if grep --quiet -P "^\\w+!" "$1"; then
 fi
 COMMIT=$(git symbolic-ref HEAD)
 # Generate a commit message from the diff of the commit
-IFS=\n
-for s in $(git --no-pager diff --name-status "$COMMIT"); do
-    if [[ "$s" =~ setup-(.*)\.el ]]; then
+IFS="\n"
+for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
+    if [[ "$s" =~ setup-([^.]+) ]]; then
         FILENAME=${BASH_REMATCH[1]}
         # Prevent from inserting a message if the file is setup-misc.el
-        if [[ ${FILENAME} = misc ]]; then
+        if [[ ${FILENAME} =~ '^(meta|misc)$' ]]; then
             continue
         fi
         # Insert a line into the message depending on the status of the file
         STATUS=${s:0:1}
         case ${STATUS} in
             M)
-                sed -i "1i[${FILENAME}] " "$1"
+                sed -i "1i[${FILENAME}] \n" "$1"
                 ;;
             A)
-                sed -i "1iAdd ${FILENAME}" "$1"
+                sed -i "1iAdd ${FILENAME}\n" "$1"
                 ;;
         esac
     elif [[ "$s" =~ meta/ ]] || [[ "$s" =~ .githooks/ ]]; then
