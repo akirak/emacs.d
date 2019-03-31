@@ -5,7 +5,12 @@
 
 (use-package haskell-mode
   :disabled t
-  :mode ("\\.hs\\'" . haskell-mode))
+  :mode ("\\.hs\\'" . haskell-mode)
+  :config
+  (when (executable-find "nix-env")
+    (setq haskell-process-wrapper-function
+          (lambda (args)
+            (apply 'nix-shell-command (nix-current-sandbox) args)))))
 
 (use-package dante
   :disabled t
