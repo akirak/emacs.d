@@ -16,3 +16,6 @@ main.el
 /worktrees/
 # Compiled elisp files
 *.elc
+# Created by desktop.el
+.emacs.desktop
+.emacs.desktop.lock
