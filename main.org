@@ -1173,6 +1173,10 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-mode)
 #+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-restclient)
+#+end_src
 *** Shell scripts (bash)
 
 #+begin_src emacs-lisp
