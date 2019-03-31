@@ -11,6 +11,7 @@
     setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
     setup-magit                    ; The Git porcelain for Emacs
     setup-helpful                  ; Extended helpful commands
+    setup-ffap
     setup-company                  ; Auto completion
     setup-eldoc                    ; Display short help while coding
     setup-dired                    ; File browser
