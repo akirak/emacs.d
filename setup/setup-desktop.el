@@ -62,6 +62,7 @@ _w_: Another dir  _L_: Change dir   _F_: Clear
 (defun akirak/desktop-commmand ()
   (interactive)
   (unless (bound-and-true-p desktop-dirname)
+    (require 'desktop)
     (call-interactively desktop-change-dir))
   (akirak/desktop-hydra/body))
 
