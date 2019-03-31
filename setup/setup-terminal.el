@@ -7,13 +7,18 @@
                   :new aweshell-new
                   :next aweshell-next
                   :prev aweshell-prev)
+        (eshell :open-dedicated akirak/eshell-dedicated
+                :new eshell
+                ;; :next aweshell-next
+                ;; :prev aweshell-prev
+                )
         (multi-term :open-dedicated multi-term-dedicated-open
                     :toggle-dedicated multi-term-dedicated-toggle
                     :new multi-term
                     :next multi-term-next
                     :prev multi-term-prev)))
 
-(defcustom akirak/default-shell 'aweshell
+(defcustom akirak/default-shell 'eshell
   "The defaut shell for use."
   :set
   (lambda (key value)

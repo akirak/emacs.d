@@ -15,7 +15,8 @@
     setup-eldoc                    ; Display short help while coding
     setup-dired                    ; File browser
     setup-multi-term               ; Terminal emulator
-    setup-aweshell                 ; Enhance eshell
+    setup-eshell
+    ;; setup-aweshell                 ; Enhance eshell
     setup-rename                   ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
     setup-google-translate          ; Translate a word in a buffer
