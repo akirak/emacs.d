@@ -1,7 +1,7 @@
 ;;; Word wrap and visual-line-mode
 (general-add-hook '(org-mode-hook
                     markdown-mode-hook)
-                  '(toggle-word-wrap
+                  '((lambda () (toggle-word-wrap 1))
                     (lambda () (visual-line-mode 1))))
 
 ;; Suppress a message by `toggle-word-wrap' unless the function is
