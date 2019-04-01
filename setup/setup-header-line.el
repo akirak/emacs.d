@@ -70,8 +70,7 @@
                               ;; Omit which-func if the buffer is indirect
                               (unless (buffer-base-buffer)
                                 `(which-function-mode
-                                  (:eval
-                                   ,(cadr which-func-current))))))))
+                                  ,which-func-current))))))
 
 ;;;;; Setting the default header line
 
