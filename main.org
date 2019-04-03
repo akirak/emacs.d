@@ -1169,6 +1169,13 @@ Ideally, this section should be a portfolio of my skills.
   (akirak/require 'setup-haskell)
 #+end_src
 
+*** Vue
+:PROPERTIES:
+:CREATED_TIME: [2019-04-03 Wed 22:45]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-vue)
+#+end_src
 *** Web-mode
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-mode)

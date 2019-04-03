@@ -1,4 +1,3 @@
-(use-package web-mode
-  :mode "\\.vue\\'")
+(use-package web-mode)
 
 (provide 'setup-web-mode)
