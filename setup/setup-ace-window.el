@@ -25,7 +25,8 @@
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
                         minibuffer-mode
-                        ibuffer-sidebar-mode))
+                        ibuffer-sidebar-mode
+                        "*Calc Trail*"))
   (aw-dispatch-always t)
   (aw-scope 'frame)
   (aw-ignore-on t))
