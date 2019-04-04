@@ -2,6 +2,8 @@
   :custom
   (aw-keys (string-to-list "qwertyui"))
   (aw-background nil)
+  ;; Prevent an error from aw-set-make-frame-char
+  (aw-make-frame-char nil)
   ;; Ergonomic bindings
   (aw-dispatch-alist
    '((?o aw-swap-window "Swap Windows")
