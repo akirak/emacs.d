@@ -31,6 +31,13 @@
 
 ;;;; Prepend exec-path
 
+;; Example usage:
+;;
+;; Create .dir-locals.el with the following content:
+;;
+;; ((nil . ((projectile-project-compilation-cmd . "npm run serve")
+;;          (projectile-exec-path . ("node_modules/.bin")))))
+
 (defvar projectile-exec-path nil)
 (make-variable-buffer-local 'projectile-exec-path)
 
