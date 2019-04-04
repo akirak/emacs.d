@@ -29,4 +29,23 @@
 (advice-add 'projectile-cleanup-known-projects :after
             #'akirak/projectile-delete-duplicate-known-projects)
 
+;;;; Prepend exec-path
+
+(defvar projectile-exec-path nil)
+(make-variable-buffer-local 'projectile-exec-path)
+
+(defun projectile-with-exec-path (orig &rest args)
+  "Run ORIG function with ARGS with  `exec-path' modified."
+  (if projectile-exec-path
+      (let ((root (projectile-project-root))
+            (tmp-exec-path (copy-list exec-path)))
+        (dolist (relpath projectile-exec-path)
+          (cl-adjoin (expand-file-name relpath root) tmp-exec-path
+                     :test #'file-equal-p))
+        (let ((exec-path tmp-exec-path))
+          (apply orig args)))
+    (apply orig args)))
+
+(advice-add 'projectile--run-project-cmd :around #'projectile-with-exec-path)
+
 (provide 'setup-projectile)
