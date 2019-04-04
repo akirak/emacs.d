@@ -2,6 +2,8 @@
   :custom
   (aw-keys (string-to-list "qwertyui"))
   (aw-background nil)
+  ;; Prevent an error from aw-set-make-frame-char
+  (aw-make-frame-char nil)
   ;; Ergonomic bindings
   (aw-dispatch-alist
    '((?o aw-swap-window "Swap Windows")
@@ -23,7 +25,8 @@
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
                         minibuffer-mode
-                        ibuffer-sidebar-mode))
+                        ibuffer-sidebar-mode
+                        "*Calc Trail*"))
   (aw-dispatch-always t)
   (aw-scope 'frame)
   (aw-ignore-on t))
