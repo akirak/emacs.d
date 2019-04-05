@@ -4,6 +4,10 @@ export HOME_MANAGER_CONFIG= $(USER_EMACS_DIR)/nix/home.nix
 
 build: tangle update-submodules
 	home-manager switch
+	$(MAKE) emacsql-sqlite
+
+emacsql-sqlite: update-submodules
+	PATH="$(PWD)/extras/bin:$(PATH)" $(MAKE) -C contrib/emacsql sqlite/emacsql-sqlite emacsql-sqlite.elc
 
 update-submodules:
 	if [ -d .git ]; then git submodule update --init --recursive; fi
@@ -32,4 +36,4 @@ test:
 	$(MAKE) -f test.mk all
 	$(MAKE) -C nix -f test/test.mk all
 
-.PHONY:	build update-submodules tangle init clear test install-hooks windows-deps
+.PHONY:	build update-submodules tangle init clear test install-hooks windows-deps emacsql-sqlite
