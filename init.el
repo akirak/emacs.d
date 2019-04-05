@@ -37,11 +37,10 @@
 (require 'cl-lib)
 (require 'subr-x)
 
-;; Remove org-mode shipped with Emacs from load-path
-(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
+(straight-use-package 'org-plus-contrib)
 
-;; Install org-mode from the Git repository
-(load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
+(use-package org
+  :straight org-plus-contrib)
 
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
