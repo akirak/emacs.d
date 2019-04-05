@@ -2,10 +2,17 @@
 ;; If you are using Debian or its variant, it is available as
 ;; emacs-mozc-bin package. I may add it to nixpkgs in the future.
 
+(add-to-list 'load-path (expand-file-name "contrib/mozc"
+                                          user-emacs-directory))
+
+(straight-use-package '(mozc :type built-in))
+
+;; Lock the version as mozc.el is local
+(straight-use-package '(mozc-popup :host github :repo "d5884/mozc-popup"
+                                   :branch "f0684b875a7427ec08f8df13939a486e5d5cf420"))
+
 ;; mozc-mode lets you write Japanese
 (use-package mozc
-  :straight nil
-  :load-path "contrib/mozc"
   ;; If you want to disable this package, set :disabled to t.
   :if (or (executable-find "mozc_emacs_helper")
           (cond
