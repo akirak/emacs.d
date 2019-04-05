@@ -1,4 +1,4 @@
-# -*- mode: org; mode: org-make-toc; org-id-link-to-org-use-id: nil
+# -*- mode: org; org-id-link-to-org-use-id: nil
 #+category: emacs
 
 * My Emacs Configuration
@@ -14,7 +14,7 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#cons][Cons]]
       -  [[#organizational-policies][Organizational policies]]
     -  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
-    -  [[#before-using-use-package][Before using use-package]]
+    -  [[#before-using-use-package][Before using =use-package=]]
     -  [[#overriding-defaults][Overriding defaults]]
     -  [[#keybindings-infrastructure][Keybindings infrastructure]]
       -  [[#repeatable-keys][Repeatable keys]]
@@ -31,6 +31,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#ivy][Ivy]]
       -  [[#helm][Helm]]
       -  [[#org][Org]]
+      -  [[#posframe][posframe]]
       -  [[#hydra][Hydra]]
       -  [[#ov-overlays][ov (overlays)]]
       -  [[#ts-date-time-library-by-alphapapa][ts (date-time library by alphapapa)]]
@@ -40,9 +41,9 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#appearances][Appearances]]
       -  [[#theme][Theme]]
       -  [[#frame-elements][Frame elements]]
-      -  [[#typography][Typography]]
-        -  [[#how-to-install-fonts][How to install fonts]]
+      -  [[#typeface][Typeface]]
     -  [[#a-bunch-of-useful-features][A bunch of useful features]]
+      -  [[#chrome-os-support][Chrome OS support]]
       -  [[#frame-workflow][frame-workflow]]
       -  [[#terminal-and-shells][Terminal and shells]]
       -  [[#dired][Dired]]
@@ -73,6 +74,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#scratch-buffers][Scratch buffers]]
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
     -  [[#writing][Writing]]
+      -  [[#multi-lingual-support][Multi-lingual support]]
       -  [[#hydra-for-org-mode][Hydra for Org-mode]]
       -  [[#graphviz][GraphViz]]
       -  [[#ditaa][Ditaa]]
@@ -82,6 +84,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#emacs-lisp][Emacs Lisp]]
       -  [[#elixir][Elixir]]
       -  [[#haskell][Haskell]]
+      -  [[#vue][Vue]]
       -  [[#web-mode][Web-mode]]
       -  [[#shell-scripts-bash][Shell scripts (bash)]]
       -  [[#elm][Elm]]
@@ -97,8 +100,6 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#frame][Frame]]
         -  [[#org-agenda-keybindings][Org-agenda keybindings]]
       -  [[#beancount][Beancount]]
-    -  [[#meta][Meta]]
-      -  [[#import-from-the-previous-configuration][Import from the previous configuration]]
 
 ** Why?
 *** Literate configuration in Org mode
