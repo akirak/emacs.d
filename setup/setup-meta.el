@@ -7,6 +7,7 @@
     setup-swiper     ; Incremental search through the buffer using Ivy
     setup-aggressive-indent
     setup-lispy        ; Efficient lisp editing
+    setup-git-identity
     setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
     setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
     setup-magit                    ; The Git porcelain for Emacs
