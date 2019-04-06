@@ -330,6 +330,12 @@ Prefix for mode-specific keys:
     "f" #'counsel-describe-face)
 #+end_src
 
+Also create a prefix for specific help commands, e.g. =info= and =man=:
+
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-specific-help :prefix "<f1> ESC")
+#+end_src
+
 #+begin_src emacs-lisp
 (general-create-definer akirak/bind-system :prefix "<f12>")
 #+end_src
@@ -711,7 +717,7 @@ The following keybindings have been replaced with smart-jump correspondents:
 #+end_src
 *** Referencing                                               :referencing:
 #+begin_src emacs-lisp
-  (akirak/bind-search
+  (akirak/bind-specific-help
     "d" #'helm-dash)
 
   ;; "a" #'helm-dash-activate-docset
@@ -720,7 +726,9 @@ The following keybindings have been replaced with smart-jump correspondents:
 #+end_src
 
 #+begin_src emacs-lisp
-  (akirak/bind-help "M" #'woman)
+  (akirak/bind-specific-help
+    "i" #'helm-info
+    "m" #'woman)
 #+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
