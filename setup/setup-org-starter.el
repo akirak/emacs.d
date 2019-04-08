@@ -52,6 +52,7 @@
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
+  (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
 ;;;; Extra keybindings
