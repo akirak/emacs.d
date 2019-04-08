@@ -1142,10 +1142,9 @@ Ideally, this section should be a portfolio of my skills.
     :make-frame
     '(frame-purpose-make-directory-frame user-emacs-directory))
 #+end_src
-**** EMake
-#+begin_src emacs-lisp
-  (akirak/require 'setup-emake)
-#+end_src
+**** Makel
+I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
+
 *** Elixir
 
 #+begin_src emacs-lisp
