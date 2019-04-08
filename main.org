@@ -1234,6 +1234,7 @@ Use =my-goto= function to locate the current context.
 **** Org anywhere
 #+begin_src emacs-lisp
   (akirak/bind-search "M-o" #'helm-org-rifle-known-files)
+  (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
   (akirak/bind-user
     "c" #'org-capture
     "l" 'org-store-link

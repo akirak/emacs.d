@@ -33,6 +33,7 @@
     (general-setq org-starter-path '("~/org/")))
   (require 'akirak/org-todo)
   (org-starter-def "~/.emacs.d/main.org"
+    :key "m"
     :refile (:maxlevel . 5))
   (require 'akirak/org-cpb)
   (require 'akirak/org-clock-capture)
