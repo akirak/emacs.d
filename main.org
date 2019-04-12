@@ -586,8 +586,10 @@ As magithub slows down magit-status, it sometimes causes problems,
 and I don't always need its features, I will disable it by default.
 I will load =setup-magithub= library if I need it.
 **** Forge
+For now, I will disable forge, since straight.el doesn't seem to install the package properly (possibly related [[https://github.com/raxod502/straight.el/issues/336][#336]]). 
 #+begin_src emacs-lisp
   (use-package forge
+    :disabled t
     :straight (forge :host github :repo "magit/forge"))
 #+end_src
 **** Cloning Git repositories
