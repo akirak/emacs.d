@@ -1,6 +1,4 @@
-# -*- mode: org; org-id-link-to-org-use-id: nil
 #+category: emacs
-
 * My Emacs Configuration
 This is not a true literate configuration. Packages that demand complex configuration are configured in separate files. I am rewriting this configuration 
 for a better understanding of my previous work and organizing it in a more sensible way.
@@ -14,7 +12,7 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#cons][Cons]]
       -  [[#organizational-policies][Organizational policies]]
     -  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
-    -  [[#before-using-use-package][Before using =use-package=]]
+    -  [[#before-using-use-package][Before using use-package]]
     -  [[#overriding-defaults][Overriding defaults]]
     -  [[#keybindings-infrastructure][Keybindings infrastructure]]
       -  [[#repeatable-keys][Repeatable keys]]
@@ -26,6 +24,14 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#m-r-registers][M-r: Registers]]
         -  [[#f1-help][F1: Help]]
       -  [[#definers-for-non-standard-prefix-keys][Definers for non-standard prefix keys]]
+        -  [[#bind-customization-c-x-esc-for-customization][bind-customization (C-x ESC) for customization]]
+        -  [[#bind-user-c-c-for-miscellaneous-commands][bind-user (C-c) for miscellaneous commands]]
+          -  [[#eval][eval]]
+        -  [[#bind-generic-c--for-editing][bind-generic (C-.) for editing]]
+        -  [[#bind-mode-c--for-major-mode-specific-commands][bind-mode (C-,) for major-mode-specific commands]]
+        -  [[#bind-extra-help-f1-x-for-extra-help-commands][bind-extra-help (<f1> x) for extra help commands]]
+        -  [[#bind-specific-help-f1-esc-for-specific-help-commands][bind-specific-help (<f1> ESC) for specific help commands]]
+        -  [[#bind-system-f12-for-system-commands][bind-system (<f12>) for system commands]]
     -  [[#dependencies-for-other-packages][Dependencies for other packages]]
       -  [[#dashel][dash.el]]
       -  [[#ivy][Ivy]]
@@ -69,7 +75,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
       -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
       -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
-      -  [[#editing-source-code][Editing source code]]
       -  [[#development-workflow][Development workflow]]
       -  [[#scratch-buffers][Scratch buffers]]
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
@@ -84,6 +89,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#emacs-lisp][Emacs Lisp]]
       -  [[#elixir][Elixir]]
       -  [[#haskell][Haskell]]
+      -  [[#javascript][JavaScript]]
       -  [[#vue][Vue]]
       -  [[#web-mode][Web-mode]]
       -  [[#shell-scripts-bash][Shell scripts (bash)]]
@@ -1345,3 +1351,11 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)
 #+end_src
+** Meta
+:PROPERTIES:
+:TOC:      ignore
+:END:
+# Local Variables:
+# before-save-hook: org-make-toc
+# org-id-link-to-org-use-id: nil
+# End:
