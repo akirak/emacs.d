@@ -69,7 +69,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#poporg][Poporg]]
       -  [[#window-management][Window management]]
       -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
-      -  [[#lacarte][LaCarte]]
       -  [[#dsls][DSLs]]
       -  [[#startup-windows][Startup window(s)]]
       -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
@@ -80,7 +79,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
     -  [[#writing][Writing]]
       -  [[#multi-lingual-support][Multi-lingual support]]
-      -  [[#hydra-for-org-mode][Hydra for Org-mode]]
       -  [[#graphviz][GraphViz]]
       -  [[#ditaa][Ditaa]]
       -  [[#exporting][Exporting]]
@@ -913,22 +911,6 @@ Visualise unnecessary, extra whitespace characters in source code.
     (whitespace-style '(face tabs trailing tab-mark)))
 #+end_src
 
-*** LaCarte
-:PROPERTIES:
-:CREATED_TIME: [2019-01-01 Tue 12:16]
-:ID:       9f69a1f2-bc17-4dd1-b98e-51a398b0cb6e
-:END:
-:LOGBOOK:
-CLOCK: [2019-01-01 Tue 12:16]--[2019-01-01 Tue 12:18] =>  0:02
-:END:
-
-Emacs seems to have a problem with popups on Chrome OS. Now ~<f10>~ is a dangerous key by default, so I will remap the key to lacarte instead:
-
-#+begin_src emacs-lisp
-  (use-package lacarte
-    :commands (lacarte-execute-menu-command))
-  (akirak/bind-key [remap menu-bar-open] #'lacarte-execute-menu-command)
-#+end_src
 *** DSLs
 **** Meson                                                 :build__system:
 
@@ -1106,27 +1088,6 @@ You can customize a list of modules for supported languages through the followin
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
-
-*** Hydra for Org-mode
-#+begin_src emacs-lisp
-  (defhydra akirak/org-mode-hydra (:exit t :hint nil)
-    "
-  Org
-
-  ^^Export
-  ^^--------------
-  _h_ hugo subtree
-
-  _mb_ mindmap buffer
-  _mt_ mindmap subtree
-  "
-
-    ("h" akirak/org-hugo-export-subtree)
-    ("mb" org-mind-map-write)
-    ("mt" org-mind-map-write-current-tree))
-
-  (akirak/bind-mode-hydra 'org-mode)
-#+end_src
 
 *** GraphViz
 #+begin_src emacs-lisp
