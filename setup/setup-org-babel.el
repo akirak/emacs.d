@@ -15,6 +15,9 @@
         '((emacs-lisp . t)
           (shell . t)
           (python . t)
-          (sqlite . t))))
+          (sqlite . t)
+          (restclient . t))))
+
+(use-package ob-restclient)
 
 (provide 'setup-org-babel)
