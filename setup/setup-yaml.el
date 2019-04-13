@@ -7,9 +7,7 @@
          ("Procfile\\'" . yaml-mode))
   :general
   (:keymaps 'yaml-mode-map
-            "C-m" 'newline-and-indent)
-  :hook
-  (yaml-mode . (lambda () (flycheck-mode 1))))
+            "C-m" 'newline-and-indent))
 
 (provide 'setup-yaml)
 ;;; setup-yaml.el ends here
