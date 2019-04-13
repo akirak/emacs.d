@@ -30,7 +30,8 @@
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
               org-tags-exclude-from-inheritance '()
-              org-special-ctrl-a/e t)
+              org-special-ctrl-a/e t
+              org-M-RET-may-split-line nil)
 
 ;; Prevent from saving org-refile and org-capture locations to bookmarks
 (setq org-bookmark-names-plist nil)
