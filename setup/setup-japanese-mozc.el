@@ -31,6 +31,9 @@
   (setq mozc-candidate-style 'popup))
 
 (use-package mozc-temp
-  :commands (mozc-temp-convert mozc-temp-convert-dwim))
+  :commands (mozc-temp-convert mozc-temp-convert-dwim)
+  :general
+  (:keymaps 'akirak/insert-prefix-map
+            "j" #'mozc-temp-convert-dwim))
 
 (provide 'setup-japanese-mozc)

@@ -19,7 +19,11 @@
                                      #'find-file-other-frame)
                       "other frame")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
-  (global-set-key [remap insert-char] 'counsel-unicode-char))
+  (global-set-key [remap insert-char] 'counsel-unicode-char)
+  :custom
+  ;; Let counsel-find-file-at-point choose the file under cursor
+  ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
+  (counsel-find-file-at-point t))
 
 (defun akirak/ad-after-counsel-org-goto-action (_x)
   (org-show-entry))

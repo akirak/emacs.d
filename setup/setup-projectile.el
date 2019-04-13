@@ -2,6 +2,11 @@
   :init
   (projectile-mode)
   (add-to-list 'projectile-globally-ignored-directories ".cask")
+  :config
+  (akirak/bind-jump :keymaps 'projectile-mode-map
+    ;; Find the file under the cursor
+    ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du0ymqx/
+    "M-f" 'projectile-find-file-dwim)
   :custom
   (projectile-completion-system (quote ivy))
   (projectile-create-missing-test-files t)

@@ -2,11 +2,11 @@
   '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
     setup-key-translation ; Translate certain key combinations for ergonomics
     setup-wrap
-    setup-counsel         ; Basic Counsel commands
-    setup-projectile      ; Manage projects
+    setup-counsel    ; Basic Counsel commands
+    setup-projectile ; Manage projects
     setup-swiper     ; Incremental search through the buffer using Ivy
     setup-aggressive-indent
-    setup-lispy        ; Efficient lisp editing
+    setup-lispy                         ; Efficient lisp editing
     setup-git-identity
     setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
     setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
@@ -29,6 +29,7 @@
     setup-unpackaged                ; A bunch of useful commands
     setup-locate                    ; Configure locate and updatedb
     setup-org-custom-commands
+    setup-minor-mode-hydra
     setup-ace-window      ; An alternative way for window manipulation
     setup-yasnippet       ; Snippets for programming
     setup-yankpad
@@ -46,8 +47,8 @@
     setup-ibuffer
     setup-smart-jump                ; Jump to a definition / reference
     setup-lsp                       ; Language-agnostic IDE toolkit
-    setup-rich-minority                 ; Whitelist minor modes
-    setup-clipboard                     ; Clipboard integration
+    setup-rich-minority             ; Whitelist minor modes
+    setup-clipboard                 ; Clipboard integration
     setup-ivy-omni-org
     setup-bm
     setup-window-management

@@ -9,10 +9,9 @@
 (use-package akirak/avy-extra
   :straight nil
   :load-path "extras"
-  :init
-  (akirak/bind-generic
-    "is" #'akirak/insert-symbol)
   :general
+  (:keymaps 'akirak/insert-prefix-map
+            "s" #'akirak/insert-symbol)
   (:prefix "M-g"
            "d" #'akirak/avy-goto-defun
            "s" #'akirak/avy-goto-symbol-in-window

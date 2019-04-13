@@ -120,5 +120,96 @@
 (use-package beginend
   :config
   (beginend-global-mode 1))
+(use-package executable
+  :straight nil
+  :hook
+  (after-save . executable-make-buffer-file-executable-if-script-p))
+(use-package buffer-move
+  :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
+(use-package browse-at-remote
+  :commands (browse-at-remote))
+(use-package git-attr-linguist
+  :straight git-attr
+  :commands (git-attr-linguist)
+  :hook (find-file . git-attr-linguist))
+(use-package page-break-lines
+  :hook ((doc-mode
+          emacs-lisp-mode
+          compilation-mode
+          outline-mode
+          prog-mode
+          haskell-mode
+          help-mode
+          magit-mode) . page-break-lines-mode))
+(defun akirak/shrink-whitespace ()
+  (interactive)
+  (cond
+   ((and (integerp current-prefix-arg)
+         (>= current-prefix-arg 0))
+    (if (looking-at (rx (* space) eol))
+        (progn
+          (end-of-line)
+          (insert (make-string (max 0 (- current-prefix-arg
+                                         (car (posn-col-row (posn-at-point)))))
+                               32)))
+      (delete-horizontal-space)
+      (insert (make-string current-prefix-arg 32))))
+   ((and (not current-prefix-arg)
+         (looking-at (rx (* space) eol)))
+    (delete-horizontal-space))                
+   (t (call-interactively 'cycle-spacing))))
+(general-def [remap delete-horizontal-space] 'akirak/shrink-whitespace)
+(use-package string-inflection
+  :general
+  (:keymaps 'akirak/generic-prefix-map
+            "." (defrepeater 'string-inflection-cycle)
+            "c" #'akirak/string-inflection-hydra/body)
+  :config
+  (akirak/bind-generic :keymaps 'java-mode-map
+    "." (defrepeater 'string-inflection-java-style-cycle))
+  (akirak/bind-generic :keymaps 'python-mode-map
+    "." (defrepeater 'string-inflection-python-style-cycle))
+  (defhydra akirak/string-inflection-hydra (:hint nil)
+    "
+string inflection
+[_C_] CamelCase        [_-_] lisp-case
+[_c_] lowerCamelcase   [_\__] under_score
+[_u_] UPCASE           [_=_] Capital_Underscore
+"
+    ("_" string-inflection-underscore)
+    ("C" string-inflection-camelcase)
+    ("c" string-inflection-lower-camelcase)
+    ("-" string-inflection-lisp)
+    ("=" string-inflection-capital-underscore)
+    ("u" string-inflection-upcase)
+    ("SPC" string-inflection-all-cycle "all cycle")
+    ("q" nil "quit" :exit t)))
+(use-package comment-tags
+  :config
+  (akirak/bind-generic :keymaps 'comment-tags-mode-map
+    "'" (defrepeater 'comment-tags-next-tag))
+  :hook (prog-mode . comment-tags-mode)
+  :custom
+  (comment-tags-case-sensitive t)
+  (comment-tags-comment-start-only t))
+(use-package deadgrep
+  :commands deadgrep
+  :general
+  ("C-x ?" 'deadgrep))
+(use-package counsel-tramp
+  :commands (counsel-tramp))
+(use-package counsel-world-clock)
+(use-package align
+  :general
+  (:keymaps 'akirak/align-prefix-map
+            "a" 'align))
+(use-package ansi-color
+  :ensure nil
+  :hook (compilation-filter . colorize-compilation-buffer)
+  :preface
+  (autoload 'ansi-color-apply-on-region "ansi-color")
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max)))))
 
 (provide 'setup-misc)

@@ -21,6 +21,10 @@
      (?j windmove-down)
      (?k windmove-up)
      (?l windmove-right)
+     (?H buf-move-left)
+     (?J buf-move-down)
+     (?K buf-move-up)
+     (?L buf-move-right)
      (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
@@ -30,16 +34,5 @@
   (aw-dispatch-always t)
   (aw-scope 'frame)
   (aw-ignore-on t))
-
-(defhydra akirak/minor-mode-hydra (:hint nil)
-  "
-_d_ debug-on-error [%s(if debug-on-error \"on\" \"off\")]
-_f_ focus-mode [%s(if focus-mode \"on\" \"off\")]
-_v_ view-mode [%s(if view-mode \"on\" \"off\")]
-"
-  ("d" toggle-debug-on-error)
-  ("f" focus-mode)
-  ("v" view-mode)
-  ("q" nil "quit" :exit t))
 
 (provide 'setup-ace-window)
