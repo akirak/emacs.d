@@ -108,9 +108,6 @@
      ((derived-mode-p 'Info-mode 'eww-mode)
       (when-let ((reading (plist-get akirak/face-fonts :reading)))
         (face-remap-add-relative 'default `(:family ,reading))))
-     ;; TODO: Set :height
-     ;; (face-remap-add-relative 'default
-     ;;                          `(:height 1.3))
      ((derived-mode-p 'org-mode 'markdown-mode)
       (when-let ((writing (plist-get akirak/face-fonts :writing)))
         (face-remap-add-relative 'default `(:family ,writing)))
