@@ -4,9 +4,11 @@ export HOME_MANAGER_CONFIG= $(USER_EMACS_DIR)/nix/home.nix
 
 build: tangle update-submodules
 	home-manager switch
-	$(MAKE) emacsql-sqlite
+	$(MAKE) emacsql-sqlite || echo "emacs-sqlite failed to build."
 
 emacsql-sqlite: update-submodules
+	which gcc || nix-env -i gcc
+	which as || nix-env -i binutils
 	PATH="$(PWD)/extras/bin:$(PATH)" $(MAKE) -C contrib/emacsql sqlite/emacsql-sqlite emacsql-sqlite.elc
 
 update-submodules:
