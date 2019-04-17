@@ -1084,7 +1084,10 @@ You can customize a list of modules for supported languages through the followin
     :set (lambda (sym value)
 	   (set sym value)
 	   (dolist (module value)
-	     (akirak/require module))))
+	     (akirak/require module))
+	   (when (= 1 (length value))
+	     (setq default-input-method
+		   (string-remove-prefix "setup-" (symbol-name (car value)))))))
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
