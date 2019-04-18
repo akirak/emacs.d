@@ -39,6 +39,10 @@
                     (all-the-icons-icon-for-buffer))
                mode-name))
     " "
+    (:eval (when buffer-file-name
+             (let ((project (projectile-project-name)))
+               (when project (format "[%s] " project)))))
+    " "
     ;; If it is a file-visiting buffer, show the file name.
     ;; Otherwise, show the buffer name.
     (:eval (akirak/header-line-buffer-segment))
