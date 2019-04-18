@@ -452,14 +452,9 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 #+end_src
 *** Hydra
 #+begin_src emacs-lisp
-(use-package hydra)
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package hydra-posframe
-    :straight (hydra-posframe :host github :repo "Ladicle/hydra-posframe")
-    :hook
-    (after-init . hydra-posframe-enable))
+  (use-package hydra
+    :custom
+    (hydra-hint-display-type 'posframe))
 #+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
