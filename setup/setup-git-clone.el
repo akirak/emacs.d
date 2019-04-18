@@ -30,10 +30,7 @@
       (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo)))))
 
 (defun akirak/git-clone-some-repo (url name)
-  (let ((parent (completing-read
-                 "Parent directory: "
-                 (list akirak/git-clone-default-directory
-                       akirak/git-clone-user-directory))))
+  (let ((parent (read-directory-name "Parent directory: " "~/")))
     (akirak/git-clone-internal url (expand-file-name name parent))))
 
 (defun akirak/git-clone (url)
