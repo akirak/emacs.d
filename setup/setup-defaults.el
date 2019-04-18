@@ -35,8 +35,7 @@
   (interactive)
   (setq indent-tabs-mode 1))
 
-(dolist (mode-hook '(makefile-mode-hook
-                     org-mode-hook))
+(dolist (mode-hook '(makefile-mode-hook))
   (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode))
 
 (setq inhibit-startup-screen t
