@@ -6,6 +6,10 @@ build: tangle update-submodules
 	home-manager switch
 	$(MAKE) emacsql-sqlite || echo "emacs-sqlite failed to build."
 
+# TODO: Use nix to build the executable
+#
+# On WSL, proper versions of crtl.o and crti.o are missing, so
+# emacsql-sqlite fails to build.
 emacsql-sqlite: update-submodules
 	which gcc || nix-env -i gcc
 	which as || nix-env -i binutils
