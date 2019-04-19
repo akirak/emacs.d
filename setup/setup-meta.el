@@ -64,6 +64,8 @@
     setup-treemacs
     setup-perfect-margin
     setup-screencast
+    setup-string-inflection
+    setup-whitespace
     setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)

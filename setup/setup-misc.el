@@ -141,49 +141,6 @@
           haskell-mode
           help-mode
           magit-mode) . page-break-lines-mode))
-(defun akirak/shrink-whitespace ()
-  (interactive)
-  (cond
-   ((and (integerp current-prefix-arg)
-         (>= current-prefix-arg 0))
-    (if (looking-at (rx (* space) eol))
-        (progn
-          (end-of-line)
-          (insert (make-string (max 0 (- current-prefix-arg
-                                         (car (posn-col-row (posn-at-point)))))
-                               32)))
-      (delete-horizontal-space)
-      (insert (make-string current-prefix-arg 32))))
-   ((and (not current-prefix-arg)
-         (looking-at (rx (* space) eol)))
-    (delete-horizontal-space))                
-   (t (call-interactively 'cycle-spacing))))
-(general-def [remap delete-horizontal-space] 'akirak/shrink-whitespace)
-(use-package string-inflection
-  :general
-  (:keymaps 'akirak/generic-prefix-map
-            "." (defrepeater 'string-inflection-cycle)
-            "c" #'akirak/string-inflection-hydra/body)
-  :config
-  (akirak/bind-generic :keymaps 'java-mode-map
-    "." (defrepeater 'string-inflection-java-style-cycle))
-  (akirak/bind-generic :keymaps 'python-mode-map
-    "." (defrepeater 'string-inflection-python-style-cycle))
-  (defhydra akirak/string-inflection-hydra (:hint nil)
-    "
-string inflection
-[_C_] CamelCase        [_-_] lisp-case
-[_c_] lowerCamelcase   [_\__] under_score
-[_u_] UPCASE           [_=_] Capital_Underscore
-"
-    ("_" string-inflection-underscore)
-    ("C" string-inflection-camelcase)
-    ("c" string-inflection-lower-camelcase)
-    ("-" string-inflection-lisp)
-    ("=" string-inflection-capital-underscore)
-    ("u" string-inflection-upcase)
-    ("SPC" string-inflection-all-cycle "all cycle")
-    ("q" nil "quit" :exit t)))
 (use-package comment-tags
   :config
   (akirak/bind-generic :keymaps 'comment-tags-mode-map
@@ -196,9 +153,6 @@ string inflection
   :commands deadgrep
   :general
   ("C-x ?" 'deadgrep))
-(use-package counsel-tramp
-  :commands (counsel-tramp))
-(use-package counsel-world-clock)
 (use-package align
   :general
   (:keymaps 'akirak/align-prefix-map

@@ -47,4 +47,9 @@
         (swiper--cleanup)
         (swiper--add-overlays (ivy--regex ivy-text))))))
 
+(use-package counsel-tramp
+  :commands (counsel-tramp))
+
+(use-package counsel-world-clock)
+
 (provide 'setup-counsel)
