@@ -3,7 +3,9 @@
   :config
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   (ivy-add-actions #'counsel-find-library
-                   '(("l" load-library "load")))
+                   '(("l" load-library "load")
+                     ("g" akirak/magit-status-of-library "git repo")
+                     ("d" akirak/dired-of-library "dired")))
   (cl-loop for (command find-other-window)
            in '((counsel-describe-function find-function-other-window)
                 (counsel-describe-variable find-variable-other-window)
@@ -46,6 +48,22 @@
       (unless (eq ivy-exit 'done)
         (swiper--cleanup)
         (swiper--add-overlays (ivy--regex ivy-text))))))
+
+(defun akirak/magit-status-of-library (x)
+  (if-let ((path (find-library-name x))
+           (repo (locate-dominating-file (file-truename path) ".git")))
+      (magit-status repo)
+    (user-error "Cannot find library or its directory %s" x)))
+
+(defun akirak/dired-of-library (x)
+  (if-let ((path (find-library-name x))
+           (truename (file-truename path)))
+      (dired-jump nil (cond
+                       ((equal truename path) path)
+                       ((yes-or-no-p "Follow symbolic link? ")
+                        truename)
+                       (t path)))
+    (user-error "Cannot find library or its directory %s" x)))
 
 (use-package counsel-tramp
   :commands (counsel-tramp))
