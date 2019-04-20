@@ -833,6 +833,8 @@ I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
   (akirak/bind-key "M-o" #'ace-window)
+  ;; You can also display the help from the start
+  ;; (akirak/bind-key "M-o" #'aw-show-dispatch-help)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 #+end_src
 *** Visual cues and extra information display
