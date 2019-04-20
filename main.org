@@ -452,9 +452,7 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 #+end_src
 *** Hydra
 #+begin_src emacs-lisp
-  (use-package hydra
-    :custom
-    (hydra-hint-display-type 'posframe))
+  (akirak/require 'setup-hydra)
 #+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
