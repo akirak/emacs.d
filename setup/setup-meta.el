@@ -67,6 +67,7 @@
     setup-string-inflection
     setup-whitespace
     setup-pass
+    setup-epub
     setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)
