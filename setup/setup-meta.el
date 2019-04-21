@@ -66,6 +66,7 @@
     setup-screencast
     setup-string-inflection
     setup-whitespace
+    setup-pass
     setup-git-auto-commit))
 
 (mapc #'akirak/require akirak/feature-list)
