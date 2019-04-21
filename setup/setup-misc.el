@@ -170,5 +170,9 @@
   (direnv-mode 1)
   :ensure-system-package
   (direnv))
+(use-package disk-usage
+  :general
+  (:keymaps 'akirak/system-map
+            "D" 'disk-usage))
 
 (provide 'setup-misc)

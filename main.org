@@ -398,7 +398,8 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 :CREATED_TIME: [2019-04-13 Sat 09:43]
 :END:
 #+begin_src emacs-lisp
-(general-create-definer akirak/bind-system :prefix "<f12>")
+  (general-create-definer akirak/bind-system :prefix "<f12>"
+    :prefix-map 'akirak/system-map)
 #+end_src
 
 ** Dependencies for other packages
