@@ -624,7 +624,6 @@ I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it r
 The following packages extend the display of =magit-status=:
 
 - magit-todos
-- magithub
 
 #+begin_src emacs-lisp
   (general-def "<f7>" #'magit-status)
@@ -636,17 +635,17 @@ The following packages extend the display of =magit-status=:
     :config
     (magit-todos-mode 1))
 #+end_src
-**** magithub
-As magithub slows down magit-status, it sometimes causes problems,
-and I don't always need its features, I will disable it by default.
-I will load =setup-magithub= library if I need it.
-**** Forge
-For now, I will disable forge, since straight.el doesn't seem to install the package properly (possibly related [[https://github.com/raxod502/straight.el/issues/336][#336]]). 
+**** GitHub workflow
 #+begin_src emacs-lisp
-  (use-package forge
-    :disabled t
-    :straight (forge :host github :repo "magit/forge"))
+  (akirak/require 'setup-github)
 #+end_src
+
+I used magithub, but I'm trying to avoid it whenever possible.
+I sometimes use it for forking a repository, but I plan on removing it in the future.
+
+=forge.el= seems useful, but I will disable the package for now, since straight.el doesn't seem to install the package properly (possibly related [[https://github.com/raxod502/straight.el/issues/336][#336]]). 
+
+=github-review.el= looks useful for reviewing pull requests on GitHub, but I seldom receive pull requests, so I have never used it.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
 *** Chrome
