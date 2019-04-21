@@ -8,10 +8,14 @@
 
 (defvar akirak/hydra-stack nil)
 
+(defun akirak/hydra-should-avoid-posframe-p (caller)
+  (or (cl-member caller akirak/hydra-prevent-posframe-list)
+      (string-suffix-p "-mode-hydra" (symbol-name caller))))
+
 (defun akirak/ad-around-hydra-show-hint (orig hint caller)
   (push caller akirak/hydra-stack)
   (if (and (eq hydra-hint-display-type 'posframe)
-           (cl-member caller akirak/hydra-prevent-posframe-list))
+           (akirak/hydra-should-avoid-posframe-p caller))
       (let ((hydra-hint-display-type 'lv))
         (funcall orig hint caller))
     (funcall orig hint caller)))
@@ -21,7 +25,7 @@
 (defun akirak/ad-around-hydra-keyboard-quit (orig)
   (let ((caller (pop akirak/hydra-stack)))
     (if (and (eq hydra-hint-display-type 'posframe)
-             (cl-member caller akirak/hydra-prevent-posframe-list))
+             (akirak/hydra-should-avoid-posframe-p caller))
         (let ((hydra-hint-display-type 'lv))
           (funcall orig))
       (funcall orig))))
