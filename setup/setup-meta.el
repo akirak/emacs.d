@@ -17,6 +17,7 @@
     setup-dired                    ; File browser
     setup-multi-term               ; Terminal emulator
     setup-aweshell                 ; Enhance eshell
+    setup-devdocs
     setup-rename                   ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
     setup-google-translate          ; Translate a word in a buffer
