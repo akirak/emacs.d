@@ -16,7 +16,8 @@ nix: update-submodules
 emacsql-sqlite: update-submodules
 	which gcc || nix-env -i gcc
 	which as || nix-env -i binutils
-	PATH="$(PWD)/extras/bin:$(PATH)" $(MAKE) -C contrib/emacsql sqlite/emacsql-sqlite emacsql-sqlite.elc
+	PATH="$(PWD)/extras/bin:$(PATH)" $(MAKE) -C \
+	contrib/emacsql sqlite/emacsql-sqlite emacsql-sqlite.elc
 
 update-submodules:
 	if [ -d .git ]; then git submodule update --init --recursive; fi
@@ -45,4 +46,5 @@ test:
 	$(MAKE) -f test.mk all
 	$(MAKE) -C nix -f test/test.mk all
 
-.PHONY:	build update-submodules tangle init clear test install-hooks windows-deps emacsql-sqlite
+.PHONY:	build update-submodules tangle init clear test \
+install-hooks windows-deps emacsql-sqlite
