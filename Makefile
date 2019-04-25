@@ -2,9 +2,12 @@ USER_EMACS_DIR = $(shell pwd)
 export NIX_PATH = $(HOME)/.nix-defexpr/channels
 export HOME_MANAGER_CONFIG= $(USER_EMACS_DIR)/nix/home.nix
 
-build: tangle update-submodules
-	home-manager switch
+build: tangle
+	$(MAKE) nix
 	$(MAKE) emacsql-sqlite || echo "emacs-sqlite failed to build."
+
+nix: update-submodules
+	$(MAKE) -C nix
 
 # TODO: Use nix to build the executable
 #
