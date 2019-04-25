@@ -10,7 +10,7 @@ if grep --quiet -P "^\\w+!" "$1"; then
 fi
 COMMIT=$(git symbolic-ref HEAD)
 # Generate a commit message from the diff of the commit
-IFS="\n"
+IFS=$'\n'
 for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
     if [[ "$s" =~ setup-([^.]+) ]]; then
         FILENAME=${BASH_REMATCH[1]}
