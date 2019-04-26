@@ -1,9 +1,10 @@
 (use-package string-inflection
   :general
   (:keymaps 'akirak/generic-prefix-map
-            "." (defrepeater 'string-inflection-cycle)
+            "." #'string-inflection-cycle-repeat
             "c" #'akirak/string-inflection-hydra/body)
   :config
+  (defrepeater 'string-inflection-cycle)
   (akirak/bind-generic :keymaps 'java-mode-map
     "." (defrepeater 'string-inflection-java-style-cycle))
   (akirak/bind-generic :keymaps 'python-mode-map
