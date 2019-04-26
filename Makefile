@@ -32,7 +32,7 @@ init: update-submodules install-hooks
 	$(MAKE) build
 
 install-hooks:
-	if [ -d .git ]; then git config --add core.hooksPath .githooks; fi
+	if [ -d .git ]; then git config core.hooksPath .githooks; fi
 
 windows-deps:
 	choco install --yes mingw
