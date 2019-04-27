@@ -2,8 +2,8 @@
 (use-package whitespace
   :straight nil
   :diminish whitespace-mode
-  :config
-  (global-whitespace-mode t)
+  :hook
+  ((prog-mode text-mode) . whitespace-mode)
   :custom
   (whitespace-style '(face tabs indentation trailing tab-mark empty)))
 
