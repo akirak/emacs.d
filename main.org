@@ -897,22 +897,8 @@ Visualise (usually) 80 columns.
 #+end_src
 **** Whitespace
 Visualise unnecessary, extra whitespace characters in source code.
-#+begin_src emacs-lisp
-  (use-package whitespace
-    :straight nil
-    :diminish whitespace-mode
-    :hook
-    (prog-mode-hook . whitespace-mode)
-    :custom
-    (whitespace-display-mappings
-     ;; all numbers are Unicode codepoint in decimal. try (insert-char 182 ) to see it
-     '(
-       (space-mark 32 [183] [46]) ; 32 SPACE, 183 MIDDLE DOT 「·」, 46 FULL STOP 「.」
-       (newline-mark 10 [182 10]) ; 10 LINE FEED
-       (tab-mark 9 [187 9] [9655 9] [92 9]) ; 9 TAB, 9655 WHITE RIGHT-POINTING TRIANGLE 「▷」
-       ))
-    (whitespace-style '(face tabs trailing tab-mark)))
-#+end_src
+
+See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespace.el]].
 
 *** DSLs
 **** Meson                                                 :build__system:

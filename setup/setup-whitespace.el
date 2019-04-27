@@ -1,3 +1,12 @@
+;;;; Visualise whitespace
+(use-package whitespace
+  :straight nil
+  :diminish whitespace-mode
+  :config
+  (global-whitespace-mode t)
+  :custom
+  (whitespace-style '(face tabs indentation trailing tab-mark empty)))
+
 ;;;; shrink-whitepsace commmand
 
 (defun akirak/shrink-whitespace ()
