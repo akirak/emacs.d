@@ -7,6 +7,21 @@
   :custom
   (whitespace-style '(face tabs indentation trailing tab-mark empty)))
 
+;;;; Automatically cleaning up whitespace
+(use-package whitespace-cleanup-mode
+  :custom
+  (whitespace-cleanup-mode-enabled nil)
+  :config
+  (global-whitespace-mode t)
+  :hook
+  ;; Turn on whitespace-cleanup-mode if and only if you need it
+  ;;
+  ;; In `makefile-mode', whitespace-cleanup-mode automatically
+  ;; converts 8 spaces into a tab, because `indentation' is included
+  ;; in `whitespace-style' and `indent-tabs-mode' is on.
+  ((makefile-mode) .
+   whitespace-cleanup-mode))
+
 ;;;; shrink-whitepsace commmand
 
 (defun akirak/shrink-whitespace ()
