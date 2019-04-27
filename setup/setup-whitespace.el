@@ -22,7 +22,7 @@
   ((makefile-mode) .
    whitespace-cleanup-mode))
 
-;;;; shrink-whitepsace commmand
+;;;; Manually shrink whitespace
 
 (defun akirak/shrink-whitespace ()
   "An alternative to `delete-horizontal-space'."
