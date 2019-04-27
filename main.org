@@ -142,6 +142,12 @@ In principle, the main configuration file should be a thin layer of the Emacs co
 These packages are required in other use-package directives declared in this
 configuration.
 
+#+begin_src emacs-lisp
+  (use-package el-patch
+    :custom
+    (el-patch-enable-use-package-integration t))
+#+end_src
+
 Save efforts to configure individual variable files using no-littering
 
 #+begin_src emacs-lisp
