@@ -41,7 +41,7 @@
    ((and (not current-prefix-arg)
          (or (looking-at (rx (* space) eol))
              (looking-back (rx bol (+ space)))))
-    (delete-horizontal-space))                
+    (delete-horizontal-space))
    (t (call-interactively 'cycle-spacing))))
 (general-def [remap delete-horizontal-space] 'akirak/shrink-whitespace)
 
