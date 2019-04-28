@@ -859,9 +859,12 @@ I often lose sight of the cursor when I switch to another window, so this is nec
 **** Rainbow-delimiters
 This is especially useful in editing Lisp code.
 #+begin_src emacs-lisp
-(use-package rainbow-delimiters         ; Colourize parentheses in source code
-  :hook
-  (prog-mode-hook . rainbow-delimiters-mode))
+  (use-package rainbow-delimiters         ; Colourize parentheses in source code
+    :hook
+    ((lisp-mode
+      elixir-mode
+      haskell-mode
+      ) . rainbow-delimiters-mode))
 #+end_src
 **** Dimmer
 This package makes the focused window stands out by dimming the other windows. However, the dimness should be kept small to make referenced text readable.
