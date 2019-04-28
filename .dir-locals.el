@@ -6,4 +6,5 @@
  (magit-status-mode
   (magit-todos-depth . 1))
  (prog-mode
-  (whitespace-cleanup-mode-enabled . t)))
+  (mode . whitespace-cleanup)))
+

@@ -9,10 +9,7 @@
 
 ;;;; Automatically cleaning up whitespace
 (use-package whitespace-cleanup-mode
-  :custom
-  (whitespace-cleanup-mode-enabled nil)
-  :config
-  (global-whitespace-mode t)
+  :commands (whitespace-cleanup-mode)
   :hook
   ;; Turn on whitespace-cleanup-mode if and only if you need it
   ;;
