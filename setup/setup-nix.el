@@ -16,4 +16,10 @@
   :if (bound-and-true-p akirak/nixos-options-available)
   :straight nix-emacs)
 
+(use-package nix-update
+  :commands (nix-update-fetch))
+
+(akirak/bind-mode :keymaps 'nix-mode-map
+  "u" #'nix-update-fetch)
+
 (provide 'setup-nix)
