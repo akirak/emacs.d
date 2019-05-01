@@ -30,9 +30,13 @@ init: update-submodules install-hooks
 	nix-channel --update
 	nix-shell '<home-manager>' -A install
 	$(MAKE) build
+	$(MAKE) post-install
 
 install-hooks:
 	if [ -d .git ]; then git config core.hooksPath .githooks; fi
+
+post-install:
+	emacs --batch --load post-install.el
 
 windows-deps:
 	choco install --yes mingw
