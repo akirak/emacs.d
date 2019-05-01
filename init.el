@@ -46,6 +46,12 @@
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
+
+(unless (fboundp 'whitespace-cleanup-mode)
+  (defun whitespace-cleanup-mode (&rest args)
+    (require 'whitespace-cleanup-mode)
+    (apply #'whitespace-cleanup-mode args)))
+
 ;; Prevent a confirmation dialog when the org file is loaded.
 ;; Don't forget to revert this variable at the beginning of the Org file.
 (setq-default enable-local-variables :all)
