@@ -139,6 +139,10 @@ In principle, the main configuration file should be a thin layer of the Emacs co
 #+end_src
 
 ** Before using =use-package=
+#+begin_src emacs-lisp
+  (setq-default enable-local-variables :safe)
+#+end_src
+
 These packages are required in other use-package directives declared in this
 configuration.
 

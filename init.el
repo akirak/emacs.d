@@ -46,6 +46,10 @@
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
+;; Prevent a confirmation dialog when the org file is loaded.
+;; Don't forget to revert this variable at the beginning of the Org file.
+(setq-default enable-local-variables :all)
+
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 (run-with-idle-timer 3 nil #'akirak/restore-original-gc-threshold)
