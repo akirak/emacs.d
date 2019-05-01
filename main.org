@@ -567,7 +567,7 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 :END:
 #+begin_src emacs-lisp
   ;; desktop needs to be configured in prior to other convenience packages
-  (akirak/require 'setup-desktop t)
+  (akirak/require 'setup-desktop)
   (akirak/require 'setup-meta)
   (akirak/require 'setup-misc)
 #+end_src

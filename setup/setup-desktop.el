@@ -13,10 +13,12 @@
                       globals-to-clear)
     (general-add-hook 'desktop-locals-to-save
                       locals-to-save))
-  :custom
+  :config
   ;; Save the desktop when Emacs exits or switch to another desktop
   ;; directory.
-  (desktop-save-mode (not (daemonp)))
+  (unless (daemonp)
+    (desktop-save-mode t))
+  :custom
   ;; Always ask if `desktop-save-mode' should save the session.
   (desktop-save 'ask)
   ;; (desktop-restore-in-current-display)
