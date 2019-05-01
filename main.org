@@ -537,8 +537,25 @@ This feature is enabled if and only if a window system is
 available.
 
 #+begin_src emacs-lisp
-  (when (window-system)
+  (cond
+   ((window-system)
     (akirak/require 'setup-typeface))
+   ((daemonp)
+    (defun akirak/init-typeface ()
+      (let ((frame (make-frame `((window-system . ,(cl-case system-type
+                                                     (darwin 'ns)
+                                                     (windows-nt 'w32)
+                                                     (t 'x)))
+                                 (visibility . nil)))))
+        (unwind-protect
+            (progn
+              (defun akirak/ad-around-font-family-list (orig &optional _frame)
+                (funcall orig frame))
+              (advice-add 'font-family-list :around #'akirak/ad-around-font-family-list)
+              (akirak/require 'setup-typeface)
+              (advice-remove 'font-family-list #'akirak/ad-around-font-family-list))
+          (delete-frame frame))))
+    (add-hook 'after-init-hook #'akirak/init-typeface)))
 #+end_src
 
 If your operating system supports Docker, you can use [[https://github.com/akirak/fonts-container][fonts-container]] to install fonts used in the module.
