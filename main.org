@@ -501,22 +501,22 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
   (defcustom akirak/default-theme-module 'setup-dracula-theme
     "Symbol of a module to load the default theme."
     :type '(choice (const :tag "Dracula (dark bg)" setup-dracula-theme)
-		   (const :tag "Poet (light bg, especially nice for Org mode)" setup-poet-theme)
-		   (const :tag "Kaolin Light (light bg)" setup-kaolin-light-theme)
-		   (const :tag "Doom Solarized Light" setup-doom-solarized-light-theme)
-		   (const :tag "McCarthy (light bg)" setup-mccarthy-theme))
+                   (const :tag "Poet (light bg, especially nice for Org mode)" setup-poet-theme)
+                   (const :tag "Kaolin Light (light bg)" setup-kaolin-light-theme)
+                   (const :tag "Doom Solarized Light" setup-doom-solarized-light-theme)
+                   (const :tag "McCarthy (light bg)" setup-mccarthy-theme))
     :group 'akirak)
 
   (defun akirak/set-theme-from-command-line (_arg)
     (if-let ((theme-name (pop command-line-args-left)))
-	(or (akirak/require (intern (concat "setup-" theme-name "-theme")))
-	    (progn
-	      (message "%s failed to load. Fallback to the default theme.")
-	      (akirak/require akirak/default-theme-module)))
+        (or (akirak/require (intern (concat "setup-" theme-name "-theme")))
+            (progn
+              (message "%s failed to load. Fallback to the default theme.")
+              (akirak/require akirak/default-theme-module)))
       (error "--theme must be followed by a theme name")))
 
   (add-to-list 'command-switch-alist
-	       '("--theme" . akirak/set-theme-from-command-line))
+               '("--theme" . akirak/set-theme-from-command-line))
 
   ;; If the option is not given, load the default theme.
   (unless (member "--theme" (cdr command-line-args))
