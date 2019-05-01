@@ -16,7 +16,7 @@
   :custom
   ;; Save the desktop when Emacs exits or switch to another desktop
   ;; directory.
-  (desktop-save-mode t)
+  (desktop-save-mode (not (daemonp)))
   ;; Always ask if `desktop-save-mode' should save the session.
   (desktop-save 'ask)
   ;; (desktop-restore-in-current-display)
