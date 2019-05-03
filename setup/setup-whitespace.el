@@ -3,7 +3,7 @@
   :straight nil
   :diminish whitespace-mode
   :hook
-  ((prog-mode text-mode) . whitespace-mode)
+  ((prog-mode) . whitespace-mode)
   :custom
   (whitespace-style '(face tabs indentation trailing tab-mark empty)))
 
