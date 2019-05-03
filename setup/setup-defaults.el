@@ -38,8 +38,7 @@
 (dolist (mode-hook '(makefile-mode-hook))
   (add-hook mode-hook 'akirak/turn-on-indent-tabs-mode))
 
-(setq inhibit-startup-screen t
-      ring-bell-function 'ignore
+(setq ring-bell-function 'ignore
       x-gtk-use-system-tooltips nil
       use-dialog-box nil
       ediff-window-setup-function #'ediff-setup-windows-plain)

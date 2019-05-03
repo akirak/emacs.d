@@ -71,7 +71,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#window-management][Window management]]
       -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
       -  [[#dsls][DSLs]]
-      -  [[#startup-windows][Startup window(s)]]
+      -  [[#startup-buffer][Startup buffer]]
       -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
       -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
       -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
@@ -950,16 +950,13 @@ Ansible is based on YAML.
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
 #+end_src
-*** Startup window(s)
-By default, =*Messages*= buffer is shown at startup. This behaviour can be altered by overriding =akirak/setup-startup-windows= function.
-#+begin_src emacs-lisp
-  ;;;; Startup window
-  ;; Switch to *Messages* at startup
-  (defun akirak/setup-startup-windows ()
-    (switch-to-buffer "*Messages*"))
+*** Startup buffer
+By default, =*Messages*= buffer is shown at startup.
 
-  (add-hook 'emacs-startup-hook 'akirak/setup-startup-windows)
+#+begin_src emacs-lisp
+  (akirak/require 'setup-initial-buffer)
 #+end_src
+
 *** Auto saving and auto git-commit
 
 Files are automatically saved on certain events by =super-save-mode=:
