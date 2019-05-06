@@ -3,6 +3,7 @@
   :config
   (setq akirak/super-save-prevented-modes
         '(makefile-mode))
+  (add-to-list 'super-save-triggers 'delete-frame)
   (super-save-mode 1)
   :config/el-patch
   ;; (el-patch-feature super-save)
