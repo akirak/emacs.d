@@ -7,7 +7,7 @@ build: tangle
 	$(MAKE) emacsql-sqlite || echo "emacs-sqlite failed to build."
 
 nix: update-submodules
-	$(MAKE) -C nix
+	$(MAKE) -C nix home-manager
 
 # TODO: Use nix to build the executable
 #
@@ -27,8 +27,7 @@ tangle:
 	'emacs --batch -l ob-tangle -eval "(org-babel-tangle-file \"README.org\")"'
 
 init: update-submodules install-hooks
-	nix-channel --update
-	nix-shell '<home-manager>' -A install
+	$(MAKE) -C nix init
 	$(MAKE) build
 	$(MAKE) post-install
 
