@@ -32,6 +32,9 @@
   (unless (bound-and-true-p org-starter-path)
     (general-setq org-starter-path '("~/org/")))
   (require 'akirak/org-todo)
+  (org-starter-def "~/.emacs.d/main.org"
+    :key "m"
+    :refile (:maxlevel . 5))
   (require 'akirak/org-cpb)
   (require 'akirak/org-clock-capture)
   (require 'akirak/org-task-capture)
@@ -49,6 +52,7 @@
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
+  (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
 ;;;; Extra keybindings

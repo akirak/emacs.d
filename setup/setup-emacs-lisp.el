@@ -42,6 +42,11 @@
   :disabled t
   :commands (el2org-generate-readme))
 
+(use-package eros
+  :config
+  ;; TODO: Add an advice for lispy-eval
+  (eros-mode 1))
+
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
   "Pull the package recipe for the current projectile project."
@@ -66,8 +71,14 @@
         (load-file buffer-file-name)
       (eval-buffer))))
 
-(defun akirak/debug-emacs-startup ()
+(defun akirak/run-emacs-with-debug-init ()
+  "Run Emacs with \"--debug-init\" option."
   (interactive)
-  (async-start-process "emacs-debug" "emacs" nil "--debug-init"))
+  (if current-prefix-arg
+      (async-shell-command
+       (read-string "Command line: "
+                    (format "%s --debug-init "
+                            (shell-quote-argument (car command-line-args)))))
+    (async-start-process "emacs-debug" "emacs" nil "--debug-init")))
 
 (provide 'setup-emacs-lisp)

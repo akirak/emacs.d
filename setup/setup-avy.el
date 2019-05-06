@@ -2,8 +2,20 @@
   :custom
   (avy-style 'at)
   (avy-styles-alist '((ivy-avy . pre)
-                      (avy-goto-char-timer . at)))
+                      (avy-goto-char-timer . at)
+                      (akirak/avy-goto-symbol-in-window . pre)))
   (avy-keys (string-to-list "asdfghjkl")))
+
+(use-package akirak/avy-extra
+  :straight nil
+  :load-path "extras"
+  :general
+  (:keymaps 'akirak/insert-prefix-map
+            "s" #'akirak/insert-symbol)
+  (:prefix "M-g"
+           "d" #'akirak/avy-goto-defun
+           "s" #'akirak/avy-goto-symbol-in-window
+           "q" #'akirak/avy-goto-symbol-in-defun))
 
 ;;;; Inline jump
 (defun akirak/avy-goto-in-line (regexp)
@@ -46,25 +58,5 @@
     (avy--generic-jump "[({\[]" t avy-style
                        (1+ (point))
                        (save-excursion (end-of-defun) (point)))))
-
-;;;; Jump to the beginning of defun
-(defun akirak/avy-goto-defun (beg end)
-  (avy-with avy-goto-line
-    (avy--generic-jump (concat "^(\\|"
-                               (mapconcat (lambda (l)
-                                            (concat "\\(" (nth 1 l) "\\)"))
-                                          imenu-generic-expression
-                                          "\\|"))
-                       t avy-style beg end)))
-
-(defun akirak/avy-goto-defun-above ()
-  (interactive)
-  (akirak/avy-goto-defun (window-start) (point))
-  (back-to-indentation))
-
-(defun akirak/avy-goto-defun-below ()
-  (interactive)
-  (akirak/avy-goto-defun (1+ (point)) (window-end))
-  (back-to-indentation))
 
 (provide 'setup-avy)

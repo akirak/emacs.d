@@ -9,7 +9,7 @@
             (parent (intern (concat "org-level-" i))))
         (custom-theme-set-faces
          theme `(,target ((default :inherit ,parent)))))))
-  (eval-after-load 'dracula-theme
+  (with-eval-after-load 'dracula-theme
     (akirak/set-outshine-level-faces 'dracula))
   :general
   (:keymaps 'outline-minor-mode-map

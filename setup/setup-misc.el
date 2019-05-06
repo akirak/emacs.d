@@ -71,11 +71,8 @@
   :general
   ("M-;" 'comment-dwim-2))
 (use-package narrow-or-widen
-  :straight nil)
-(use-package counsel-org-clock
-  :custom
-  (counsel-org-clock-goto-fallback-function 'org-agenda)
-  (counsel-org-clock-default-action 'clock-in))
+  :straight nil
+  :load-path "contrib/misc")
 ;; Edit Org-Mode lists like in word processors
 (use-package org-autolist 
   :after org
@@ -113,17 +110,69 @@
   (undo-propose-mode)
   :general
   ("C-x u" 'undo-propose))
-(use-package perfect-margin
-  :straight (perfect-margin :host github :repo "mpwang/perfect-margin")
-  :config
-  (perfect-margin-mode 1)
-  :custom
-  (perfect-margin-visible-width 92))
 (use-package akirak/org-refile
   :straight nil)
 (use-package default-text-scale
   :commands (default-text-scale-increase default-text-scale-decrease)
   :custom
   (default-text-scale-amount 3))
+(use-package focus)
+(use-package beginend
+  :config
+  (beginend-global-mode 1))
+(use-package executable
+  :straight nil
+  :hook
+  (after-save . executable-make-buffer-file-executable-if-script-p))
+(use-package buffer-move
+  :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
+(use-package browse-at-remote
+  :commands (browse-at-remote))
+(use-package git-attr-linguist
+  :straight git-attr
+  :commands (git-attr-linguist)
+  :hook (find-file . git-attr-linguist))
+(use-package page-break-lines
+  :hook ((doc-mode
+          emacs-lisp-mode
+          compilation-mode
+          outline-mode
+          prog-mode
+          haskell-mode
+          help-mode
+          magit-mode) . page-break-lines-mode))
+(use-package comment-tags
+  :config
+  (akirak/bind-generic :keymaps 'comment-tags-mode-map
+    "'" (defrepeater 'comment-tags-next-tag))
+  :hook (prog-mode . comment-tags-mode)
+  :custom
+  (comment-tags-case-sensitive t)
+  (comment-tags-comment-start-only t))
+(use-package deadgrep
+  :commands deadgrep
+  :general
+  ("C-x ?" 'deadgrep))
+(use-package align
+  :general
+  (:keymaps 'akirak/align-prefix-map
+            "a" 'align))
+(use-package ansi-color
+  :ensure nil
+  :hook (compilation-filter . colorize-compilation-buffer)
+  :preface
+  (autoload 'ansi-color-apply-on-region "ansi-color")
+  (defun colorize-compilation-buffer ()
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max)))))
+(use-package direnv
+  :config
+  (direnv-mode 1)
+  :ensure-system-package
+  (direnv))
+(use-package disk-usage
+  :general
+  (:keymaps 'akirak/system-map
+            "D" 'disk-usage))
 
 (provide 'setup-misc)

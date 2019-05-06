@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Ensure that the Git submodules are checked out
+git submodule update --init --recursive
+
 # Based on https://gist.github.com/Quintok/815396509ff79d886656b2855e1a8a46
 
 # A pre-push hook based on the git template. This will verify that no WIP or
@@ -17,9 +20,6 @@
 # the standard input in the form:
 #
 #   <local ref> <local sha1> <remote ref> <remote sha1>
-
-remote="$1"
-url="$2"
 
 z40=0000000000000000000000000000000000000000
 
@@ -42,7 +42,7 @@ do
 
     # Check for WIP commits
     commit=`git rev-list -n 1 --grep '^WIP' "$range"`
-    if [ "$remote" = master -a -n "$commit" ]
+    if [ "${local_ref}" = refs/heads/master -a -n "$commit" ]
     then
       echo "\nPush rejected: WIP commit detected\n"
       exit 1
@@ -50,7 +50,8 @@ do
 
     # Check for autosquash commits
     commit=`git rev-list -n 1 --grep '^\(fixup\|squash\)!' "$range"`
-    if [ -n "$commit" ]
+    # maint branch is allowed to have autosquash commits
+    if [ "${local_ref}" != refs/heads/maint -a -n "$commit" ]
     then
       echo "\nPush rejected: autosquash commit detected\n"
       exit 1
@@ -58,10 +59,17 @@ do
   fi
 done
 
+# Check if the working tree is dirty
 git diff --exit-code --name-status HEAD
 if [ $? -gt 0 ]; then
     echo "Pre-push tests are prevented if the working tree is dirty" >&2
     exit 1
 fi
 
-sh test-docker.sh
+if [ $(git symbolic-ref --short HEAD) = master ]; then
+    # Run thorough tests on master branch
+    sh test-docker.sh
+else
+    # Otherwise run express tests
+    make test
+fi

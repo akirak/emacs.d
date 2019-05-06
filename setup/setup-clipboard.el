@@ -10,7 +10,7 @@
 (defun akirak/ad-after-interprogram-paste-function (r)
   ;; If the result from the original function is nil, use wl-paste
   ;; to get the clipboard content.
-  (or r (akirak/paste-using-wl-paste)))
+  (or r (ignore-errors (akirak/paste-using-wl-paste))))
 
 (defun akirak/paste-using-wl-paste ()
   (let ((s (shell-command-to-string "wl-paste")))

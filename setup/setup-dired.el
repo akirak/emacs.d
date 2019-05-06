@@ -36,6 +36,15 @@
 (use-package ls-lisp
   :after dired
   :straight nil
+  :config
+  (cond
+   ((eq system-type 'windows-nt)
+    (setq ls-lisp-verbosity nil))
+   ((or (akirak/running-on-crostini-p)
+        (executable-find "wsl.exe"))
+    (setq ls-lisp-verbosity '(links)))
+   (t
+    (setq ls-lisp-verbosity '(links uid gid))))
   :custom
   (ls-lisp-use-insert-directory-program nil))
 
@@ -169,6 +178,7 @@
 ;;;;; Appearances of directory entries
 
 (use-package all-the-icons-dired
+  :disabled t
   :after dired
   ;; :diminish 'all-the-icons-dired-mode
   :hook

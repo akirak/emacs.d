@@ -39,6 +39,10 @@
                     (all-the-icons-icon-for-buffer))
                mode-name))
     " "
+    (:eval (when buffer-file-name
+             (let ((project (projectile-project-name)))
+               (when project (format "[%s] " project)))))
+    " "
     ;; If it is a file-visiting buffer, show the file name.
     ;; Otherwise, show the buffer name.
     (:eval (akirak/header-line-buffer-segment))
@@ -68,10 +72,10 @@
   (unless header-line-format
     (setq header-line-format (akirak/make-header-line-format
                               ;; Omit which-func if the buffer is indirect
-                              (unless (buffer-base-buffer)
+                              (when (and (not (buffer-base-buffer))
+                                         (derived-mode-p 'prog-mode 'text-mode))
                                 `(which-function-mode
-                                  (:eval
-                                   ,(cadr which-func-current))))))))
+                                  ,which-func-current))))))
 
 ;;;;; Setting the default header line
 

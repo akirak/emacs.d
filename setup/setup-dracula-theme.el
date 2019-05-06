@@ -1,6 +1,4 @@
 (use-package dracula-theme
-  ;; TODO: Extend the theme to support outshine headings
-  ;; See https://github.com/dracula/emacs/blob/master/dracula-theme.el
   :config
   (let ((key2 "#0189cc")
         (bg0 "#000000")

@@ -2,6 +2,8 @@
 * emacs.d
 | Branch | CI                                                               |
 |--------+------------------------------------------------------------------|
+| [[https://github.com/akirak/emacs.d/][master]] | [[https://circleci.com/gh/akirak/emacs.d/tree/master][https://circleci.com/gh/akirak/emacs.d/tree/master.svg?style=svg]] |
+| [[https://github.com/akirak/emacs.d/tree/maint][maint]]  | [[https://circleci.com/gh/akirak/emacs.d/tree/maint][https://circleci.com/gh/akirak/emacs.d/tree/maint.svg?style=svg]]  |
 | [[https://github.com/akirak/emacs.d/tree/nixify][nixify]] | [[https://circleci.com/gh/akirak/emacs.d/tree/nixify][https://circleci.com/gh/akirak/emacs.d/tree/nixify.svg?style=svg]] |
 ** Table of contents
 :PROPERTIES:
@@ -19,20 +21,26 @@
    :CUSTOM_ID: prerequisites
    :END:
 
+- Linux or Window Subsystem for Linux
 - Emacs 26.1
 - Nix package manager for installing dependencies
 ** Installation
 :PROPERTIES:
 :CUSTOM_ID: installation
 :END:
+The following snippet uses [[https://github.com/akirak/nixmacs-bootstrap][an external script]] to install [[https://nixos.org/nix/][Nix]] and [[https://github.com/rycee/home-manager][home-manager]] and creates a Git repository in =~/.emacs.d=.
+=BRANCH= should be either =master= or =maint=:
+
 #+begin_src sh
   curl https://raw.githubusercontent.com/akirak/nixmacs-bootstrap/master/bootstrap.sh
        | sh
   cd ~/.emacs.d
-  git fetch BRANCH
+  git fetch origin BRANCH
   git checkout BRANCH
   make init
 #+end_src
+
+Inside an Emacs session, run =all-the-icons-install-fonts= command to install icon fonts.
 ** Overview
 Emacs loads [[file:init.el][~/.emacs.d/init.el]], which in turn loads [[file:main.org][main.org]].
 
@@ -48,7 +56,10 @@ There are great Emacs configuration repositories on GitHub. The following reposi
 :PROPERTIES:
 :CUSTOM_ID: license
 :END:
-GPL v3 for the most part.
+GPL v3.
+
+Emacs Lisp libraries in =contrib= directory were originally written by other people, and they may not be licensed under GPL.
+
 # Local Variables:
 # before-save-hook: org-make-toc
 # org-id-link-to-org-use-id: nil

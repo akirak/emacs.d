@@ -30,10 +30,7 @@
       (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo)))))
 
 (defun akirak/git-clone-some-repo (url name)
-  (let ((parent (completing-read
-                 "Parent directory: "
-                 (list akirak/git-clone-default-directory
-                       akirak/git-clone-user-directory))))
+  (let ((parent (read-directory-name "Parent directory: " "~/")))
     (akirak/git-clone-internal url (expand-file-name name parent))))
 
 (defun akirak/git-clone (url)
@@ -53,7 +50,7 @@
         (message "%s already exists" local-path)
         (funcall projectile-switch-project-action))
     (message "Cloning %s to %s..." url local-path)
-    (magit-clone url local-path)))
+    (magit-clone-regular url local-path nil)))
 
 (defun akirak//git-clone-default-directory (url name)
   (let ((local-repo-path (expand-file-name name akirak/default-git-clone-directory)))
