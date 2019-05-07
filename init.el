@@ -24,6 +24,11 @@
 (add-hook 'minibuffer-setup-hook #'akirak/expand-gc-threshold)
 (add-hook 'minibuffer-exit-hook #'akirak/restore-original-gc-threshold)
 
+(unless (fboundp 'whitespace-cleanup-mode)
+  (defun whitespace-cleanup-mode (&rest args)
+    (when (require 'whitespace-cleanup-mode nil t)
+      (apply #'whitespace-cleanup-mode args))))
+
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
 
@@ -46,11 +51,6 @@
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
-
-(unless (fboundp 'whitespace-cleanup-mode)
-  (defun whitespace-cleanup-mode (&rest args)
-    (require 'whitespace-cleanup-mode)
-    (apply #'whitespace-cleanup-mode args)))
 
 ;; Prevent a confirmation dialog when the org file is loaded.
 ;; Don't forget to revert this variable at the beginning of the Org file.
