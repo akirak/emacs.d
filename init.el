@@ -29,6 +29,8 @@
     (when (require 'whitespace-cleanup-mode nil t)
       (apply #'whitespace-cleanup-mode args))))
 
+(add-to-list 'exec-path (expand-file-name "~/.nix-profile/bin"))
+
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
 
