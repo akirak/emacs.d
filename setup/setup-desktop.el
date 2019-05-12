@@ -61,7 +61,7 @@ _w_: Another dir  _L_: Change dir   _F_: Clear
                  'abbreviate))
       (ts-format abs-format file-time))))
 
-(defun akirak/desktop-commmand ()
+(defun akirak/desktop-command ()
   (interactive)
   (unless (bound-and-true-p desktop-dirname)
     (require 'desktop)
