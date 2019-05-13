@@ -106,6 +106,8 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#org-agenda-keybindings][Org-agenda keybindings]]
       -  [[#beancount][Beancount]]
     -  [[#exwm][EXWM]]
+    -  [[#meta][Meta]]
+      -  [[#editing-the-commit-message][Editing the commit message]]
 
 ** Why?
 *** Literate configuration in Org mode
@@ -1334,6 +1336,17 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
   (add-to-list 'command-switch-alist '("--exwm" . (lambda (_) nil)))
 #+end_src
 ** Meta
+*** Editing the commit message
+If the beginning of the commit message is "[NAME]", then jump to the end of the line.
+
+#+begin_src emacs-lisp
+  (defun akirak/jump-in-commit-message ()
+    (when (and (equal (file-name-nondirectory (buffer-file-name))
+                      "COMMIT_EDITMSG")
+               (looking-at (rx bol "[" (+ (not (any space "]"))) "]" (* space) eol)))
+      (end-of-line 1)))
+#+end_src
+*** Ignore
 :PROPERTIES:
 :TOC:      ignore
 :END:
