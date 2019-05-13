@@ -763,14 +763,6 @@ The following keybindings have been replaced with smart-jump correspondents:
 
 *** Outline navigation                                         :navigation:
 #+begin_src emacs-lisp
-  (akirak/bind-jump :package 'outline :keymaps 'outline-minor-mode-map
-    "h" 'outline-up-heading)
-
-  (akirak/bind-jump  :package 'org :keymaps 'org-mode-map
-    "h" 'org-up-element)
-#+end_src
-
-#+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
     "o" 'counsel-org-goto)
