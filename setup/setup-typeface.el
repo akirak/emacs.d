@@ -199,12 +199,13 @@
                                     (t
                                      (message "Font family for %s is not set" key)))
                                 finally return new-value)))
-           ;; (cl-loop for )
            (set symbol value)
-           (apply 'akirak/use-face-fonts value)
-           (dolist (buf (buffer-list))
-             (with-current-buffer buf
-               (akirak/set-local-text-fonts))))))
+           (if (not default)
+               (message "The default font is nil, so skip setting")
+             (apply 'akirak/use-face-fonts value)
+             (dolist (buf (buffer-list))
+               (with-current-buffer buf
+                 (akirak/set-local-text-fonts)))))))
 
 ;;;; Fonts for specific fontsets
 
