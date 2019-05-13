@@ -7,34 +7,33 @@
   (interactive)
   (avy-with akirak/avy-goto-defun
     (let ((avy-all-windows nil))
-      (avy--generic-jump (mapconcat (lambda (l)
-                                      (concat "\\(" (nth 1 l) "\\)"))
-                                    imenu-generic-expression
-                                    "\\|")
-                         nil avy-style
-                         nil nil)))
+      (avy-jump (mapconcat (lambda (l)
+                             (concat "\\(" (nth 1 l) "\\)"))
+                           imenu-generic-expression
+                           "\\|"))))
   (back-to-indentation))
 
 ;;;###autoload
 (defun akirak/avy-goto-symbol-in-window ()
   (interactive)
   (avy-with akirak/avy-goto-symbol-in-window
-    (avy--generic-jump akirak/avy-symbol-regexp
-                       t avy-style (window-start) (window-end))))
+    (avy-jump akirak/avy-symbol-regexp
+              :window-flip t
+              :beg (window-start)
+              :end (window-end))))
 
 ;;;###autoload
 (defun akirak/avy-goto-symbol-in-defun ()
   (interactive)
   (avy-with akirak/avy-goto-symbol-in-defun
     (let ((avy-all-windows nil))
-      (avy--generic-jump akirak/avy-symbol-regexp
-                         nil avy-style
-                         (save-excursion
-                           (beginning-of-defun)
-                           (point))
-                         (save-excursion
-                           (end-of-defun)
-                           (point))))))
+      (avy-jump akirak/avy-symbol-regexp
+                :beg (save-excursion
+                       (beginning-of-defun)
+                       (point))
+                :end (save-excursion
+                       (end-of-defun)
+                       (point))))))
 
 ;;;###autoload
 (defun akirak/insert-symbol (&optional arg)
