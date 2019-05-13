@@ -35,7 +35,9 @@
                                       writing
                                       writing-italic
                                       heading
-                                      reading)
+                                      reading
+                                      quotes
+                                      tags)
   (unless default
     (user-error "Default font is nil"))
 
@@ -92,15 +94,23 @@
                         :family (or heading reading default)))
 
   ;; Other Org faces
-  (set-face-attribute 'org-quote nil :inherit 'italic
-                      :family (or writing-italic default))
+  (set-face-attribute 'org-quote nil :inherit 'default
+                      :slant 'normal
+                      :family (or quotes writing-italic default))
+  (set-face-attribute 'org-todo nil
+                      :foreground "grey"
+                      :background nil
+                      ;; :underline t
+                      :height 115
+                      :family (or tags writing-italic default)
+                      :inherit 'default)
   (set-face-attribute 'org-tag nil
                       :foreground "grey"
                       :background nil
-                      :underline t
+                      ;; :underline t
                       :height 115
-                      :family (or writing-italic default)
-                      :inherit 'italic))
+                      :family (or tags writing-italic default)
+                      :inherit 'default))
 
 (defun akirak/set-local-text-fonts ()
   (when (derived-mode-p 'text-mode)
@@ -119,34 +129,66 @@
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
         (the-list (cond
-                   ((or (eq system-type 'windows-nt)
-                        (executable-find "wsl.exe"))
-                    (list :default '("Consolas"
-                                     "Hack")
-                          :heading '("Calibri")
-                          :variable-pitch '("Calibri")))
-                   (t (list :default '("Overpass Mono"
+                   ;; ((or (eq system-type 'windows-nt)
+                   ;;      (executable-find "wsl.exe"))
+                   ;;  (list :default '("Consolas"
+                   ;;                   "Hack")
+                   ;;        :heading '("Calibri")
+                   ;;        :variable-pitch '("Calibri")))
+                   (t (list :default '("Fira Code"
+                                       "Overpass Mono"
                                        "Hack"
                                        "Noto Sans Mono"
                                        "Monofur"
                                        "Meslo LG S"
                                        "mononoki")
-                            :writing '("Monaco"
+                            :writing '(
+                                       "iA Writer Duospace"
+                                       ;; "Libre Baskerville"
+                                       "Fira Code"
+                                       "Monaco"
                                        "Fantasque Sans Mono"
                                        "Iosevka"
                                        "MMCedar")
-                            :writing-italic '("Fantasque Sans Mono")
+                            :tags '(
+                                    "Kalam"
+                                    ;; "Courgette"
+                                    )
+                            :quotes '(
+                                      "Libre Baskerville"
+                                      )
+                            :writing-italic '(
+                                              "Libre Baskerville"
+                                              "Courgette"
+                                              ;; "Just Me Again Down Here"
+                                              "Quintessential"
+                                              "Caveat"
+                                              "Yellowtail"
+                                              "Fantasque Sans Mono")
                             ;; Font for heading (primarily in org-mode)
-                            :heading '("Futura LT"
+                            :heading '(
+                                       "Lustria"
+                                       "Fauna One"
+                                       "Belleza"
+                                       "Cinzel"
+                                       "Futura LT"
                                        "Overpass")
                             ;; Monospace font for tables.
                             ;; (table "Overpass Mono")
-                            :reading '("Droid Sans Mono"
+                            :reading '("Noto Sans"
+                                       "Libre Baskerville"
+                                       "Droid Sans Mono"
                                        "Fira Code"
                                        "Droid Sans"
                                        "Merriweather"
                                        "Gotham")
-                            :variable-pitch '("Overpass"
+                            :variable-pitch '(
+                                              "Lustria"
+                                              "PT Sans"
+                                              "Tinos"
+                                              "Open Sans"
+                                              "Libre Baskerville"
+                                              "Overpass"
                                               "Droid Sans"))))))
     (cl-loop for (key families) on the-list by #'cddr
              append (list key (--find (member it family-list) families))))
