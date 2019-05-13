@@ -9,7 +9,13 @@
     (el-patch-swap (if (eq avy-command 'avy-goto-line)
                        (end-of-line)
                      (forward-sexp))
-                   (forward-sexp))
+                   (cond
+                    ((and (eq avy-command 'avy-goto-line)
+                          (not lisp-mode))
+                     (end-of-line))
+                    ((bound-and-true-p smartparens-mode)
+                     (sp-kill-hybrid-sexp nil))
+                    (t (forward-sexp))))
     (point))
   :custom
   (avy-style 'at)
