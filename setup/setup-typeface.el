@@ -128,68 +128,62 @@
 
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
-        (the-list (cond
-                   ;; ((or (eq system-type 'windows-nt)
-                   ;;      (executable-find "wsl.exe"))
-                   ;;  (list :default '("Consolas"
-                   ;;                   "Hack")
-                   ;;        :heading '("Calibri")
-                   ;;        :variable-pitch '("Calibri")))
-                   (t (list :default '("Fira Code"
-                                       "Overpass Mono"
-                                       "Hack"
-                                       "Noto Sans Mono"
-                                       "Monofur"
-                                       "Meslo LG S"
-                                       "mononoki")
-                            :writing '(
-                                       "iA Writer Duospace"
-                                       ;; "Libre Baskerville"
-                                       "Fira Code"
-                                       "Monaco"
-                                       "Fantasque Sans Mono"
-                                       "Iosevka"
-                                       "MMCedar")
-                            :tags '(
-                                    "Kalam"
-                                    ;; "Courgette"
-                                    )
-                            :quotes '(
-                                      "Libre Baskerville"
-                                      )
-                            :writing-italic '(
-                                              "Libre Baskerville"
-                                              "Courgette"
-                                              ;; "Just Me Again Down Here"
-                                              "Quintessential"
-                                              "Caveat"
-                                              "Yellowtail"
-                                              "Fantasque Sans Mono")
-                            ;; Font for heading (primarily in org-mode)
-                            :heading '(
-                                       "Lustria"
-                                       "Fauna One"
-                                       "Belleza"
-                                       "Cinzel"
-                                       "Futura LT"
-                                       "Overpass")
-                            ;; Monospace font for tables.
-                            ;; (table "Overpass Mono")
-                            :reading '("Noto Sans"
-                                       "Libre Baskerville"
-                                       "Droid Sans Mono"
-                                       "Fira Code"
-                                       "Droid Sans"
-                                       "Merriweather"
-                                       "Gotham")
-                            :variable-pitch '(
-                                              "Lustria"
-                                              "PT Sans"
-                                              "Tinos"
-                                              "Open Sans"
-                                              "Libre Baskerville"
-                                              "Overpass"
-                                              "Droid Sans"))))))
+        (the-list (list :default '("Fira Code"
+                                   "Overpass Mono"
+                                   "Hack"
+                                   "Noto Sans Mono"
+                                   "Consolas"
+                                   "Monofur"
+                                   "Meslo LG S"
+                                   "mononoki")
+                        :writing '(
+                                   "iA Writer Duospace"
+                                   ;; "Libre Baskerville"
+                                   "Fira Code"
+                                   "Monaco"
+                                   "Fantasque Sans Mono"
+                                   "Iosevka"
+                                   "MMCedar")
+                        :tags '(
+                                "Kalam"
+                                ;; "Courgette"
+                                )
+                        :quotes '(
+                                  "Libre Baskerville")
+                        :writing-italic '(
+                                          "Libre Baskerville"
+                                          "Courgette"
+                                          ;; "Just Me Again Down Here"
+                                          "Quintessential"
+                                          "Caveat"
+                                          "Yellowtail"
+                                          "Fantasque Sans Mono")
+                        ;; Font for heading (primarily in org-mode)
+                        :heading '(
+                                   "Lustria"
+                                   "Fauna One"
+                                   "Belleza"
+                                   "Cinzel"
+                                   "Futura LT"
+                                   "Overpass")
+                        ;; Monospace font for tables.
+                        ;; (table "Overpass Mono")
+                        :reading '("Noto Sans"
+                                   "Libre Baskerville"
+                                   "Droid Sans Mono"
+                                   "Fira Code"
+                                   "Droid Sans"
+                                   "Merriweather"
+                                   "Gotham")
+                        :variable-pitch '(
+                                          "Lustria"
+                                          "PT Sans"
+                                          "Tinos"
+                                          "Open Sans"
+                                          "Libre Baskerville"
+                                          "Overpass"
+                                          "Droid Sans"
+                                          "Calibri"))))
     (cl-loop for (key families) on the-list by #'cddr
              append (list key (--find (member it family-list) families))))
   "Plist of fonts to use in Emacs."
