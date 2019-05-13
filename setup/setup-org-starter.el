@@ -47,6 +47,8 @@
 "
     :clock-in t :clock-resume t :empty-lines 1)
   (add-to-list 'org-starter-extra-refile-map
+               '("'" avy-org-refile-as-child "avy") t)
+  (add-to-list 'org-starter-extra-refile-map
                '("?" akirak/org-refile-same-buffer "same buffer") t)
   :custom
   (org-starter-load-config-files t)
