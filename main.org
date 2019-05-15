@@ -98,6 +98,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#python][Python]]
       -  [[#rust][Rust]]
       -  [[#java][Java]]
+      -  [[#vbscript][VBScript]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#jump-to-the-current-context][Jump to the current context]]
@@ -1278,6 +1279,13 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 
   (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
 
+#+end_src
+*** VBScript
+:PROPERTIES:
+:CREATED_TIME: [2019-05-16 Thu 01:10]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-visual-basic)
 #+end_src
 ** Emacs applications
 *** Getting organised
