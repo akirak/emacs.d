@@ -952,6 +952,10 @@ See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespac
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
 #+end_src
+**** Dhall                                       :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dhall)
+#+end_src
 *** Startup buffer
 By default, =*Messages*= buffer is shown at startup.
 
