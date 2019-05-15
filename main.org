@@ -943,12 +943,6 @@ See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespac
 #+begin_src emacs-lisp
   (akirak/require 'setup-yaml)
 #+end_src
-***** Ansible
-Ansible is based on YAML.
-
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-ansible)
-#+end_src
 **** Dockerfile                                  :configuration__language:
 
 #+begin_src emacs-lisp
