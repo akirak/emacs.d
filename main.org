@@ -154,13 +154,26 @@ configuration.
     (el-patch-enable-use-package-integration t))
 #+end_src
 
-Save efforts to configure individual variable files using no-littering
+Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository. 
 
 #+begin_src emacs-lisp
-(use-package no-littering
-  :init
-  (setq no-littering-var-directory
-        (expand-file-name ".cache" user-emacs-directory)))
+  (defcustom akirak/no-littering-use-my-etc-library t
+    "Whether to use my configuration file library in ~/lib/emacs as `no-littering-etc-directory'.")
+
+  (use-package no-littering
+    :init
+    (setq no-littering-var-directory
+          (expand-file-name ".cache" user-emacs-directory))
+    (when akirak/no-littering-use-my-etc-library
+      (let ((dir "~/lib/emacs"))
+        (when (or (file-directory-p dir)
+                  (and (yes-or-no-p "~/lib/emacs does not exist. Clone it from GitHub?")
+                       (= 0 (call-process-shell-command
+                             (format "git clone %s %s"
+                                     "https://github.com/akirak/emacs-config-library.git"
+                                     (shell-quote-argument (expand-file-name dir)))
+                             nil nil nil))))
+          (setq no-littering-etc-directory dir)))))
 #+end_src
 
 Use the executable path from the shell
