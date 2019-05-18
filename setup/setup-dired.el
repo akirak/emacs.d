@@ -41,7 +41,7 @@
    ((eq system-type 'windows-nt)
     (setq ls-lisp-verbosity nil))
    ((or (akirak/running-on-crostini-p)
-        (executable-find "wsl.exe"))
+        (akirak/windows-subsystem-for-linux-p))
     (setq ls-lisp-verbosity '(links)))
    (t
     (setq ls-lisp-verbosity '(links uid gid))))
