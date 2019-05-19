@@ -70,6 +70,9 @@
                       :family (or heading default))
 
   ;; Org headings
+  (set-face-attribute 'org-document-title nil :height 1.6
+                      :family (or heading default)
+                      :inherit 'default)
   (set-face-attribute 'org-level-1 nil :height 1.75 :inherit 'italic)
   (set-face-attribute 'org-level-2 nil :height 1.6 :inherit 'italic)
   (set-face-attribute 'org-level-3 nil :height 1.5 :inherit 'italic)
