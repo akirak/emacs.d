@@ -77,4 +77,40 @@
                   (user-error "Doesn't seem to be a Git repository URL: %s" url))))
     (straight-use-package recipe)))
 
+(defcustom akirak/git-clone-parent-directories nil
+  "List of parent directories."
+  :type '(repeat string))
+
+(defun akirak/git-clone-parent-directories ()
+  (append (thread-last projectile-known-projects
+            (-map (-partial (-flip #'string-trim-right) "/"))
+            (-group-by #'f-parent)
+            (-sort (-on #'> #'seq-length))
+            (-map #'car)
+            (-map #'f-short)
+            (-filter (-partial #'string-prefix-p "~")))
+          akirak/git-clone-parent-directories))
+
+(defun akirak/get-repository-name (url)
+  (nth 1 (s-match (rx (or (and (group-n 1 (+ (not (any "/")))) ".git")
+                          (group-n 1 (+ (not (any "/")))))
+                      eos)
+                  url)))
+
+(defun akirak/git-clone-read-destination (url)
+  (let ((parent (completing-read (format-message "Choose a parent directory for %s: " url)
+                                 (akirak/git-clone-parent-directories)
+                                 nil nil)))
+    (if (and parent (not (string-empty-p parent)))
+        (let ((name (read-string "Name: " (akirak/get-repository-name url))))
+          (f-join parent name))
+      (read-directory-name (format-message "Clone the destination directory for %s: "
+                                           url)
+                           (car (akirak/git-clone-parent-directories))))))
+
+(defun akirak/git-clone-url (url)
+  (let ((directory (akirak/git-clone-read-destination url))
+        (args (transient-args 'magit-clone)))
+    (magit-clone-internal url directory args)))
+
 (provide 'setup-git-clone)
