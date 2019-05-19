@@ -34,6 +34,7 @@
                                       variable-pitch
                                       writing
                                       writing-italic
+                                      header-line
                                       heading
                                       reading
                                       quotes
@@ -57,14 +58,14 @@
 
   ;; Header line
   (set-face-attribute 'header-line nil
-                      :family (or heading default)
+                      :family (or header-line heading default)
                       :inherit 'italic)
   (set-face-attribute 'akirak/header-line-buffer-name nil
-                      :family (or heading default)
-                      :height 1.3
-                      :slant 'italic)
+                      :family (or header-line heading default)
+                      :slant 'normal
+                      :height 1.3)
   (set-face-attribute 'akirak/header-line-outline nil
-                      :family (or heading default)
+                      :family (or header-line heading default)
                       :height 1.3)
   (set-face-attribute 'info-title-4 nil :slant 'italic
                       :family (or heading default))
@@ -139,6 +140,8 @@
                                    "Monofur"
                                    "Meslo LG S"
                                    "mononoki")
+                        :header-line '("Fira Sans"
+                                       "Fira Code")
                         :writing '(
                                    "iA Writer Duospace"
                                    ;; "Libre Baskerville"
