@@ -4,13 +4,13 @@
 
 (defface akirak/header-line-non-file-buffer-name
   '((default :inherit 'akirak/header-line-buffer-name
-      :slant 'italic))
+      :slant italic))
   "Face for non-file buffer names.")
 
 (defface akirak/header-line-indirect-buffer-name
   '((default :inherit 'akirak/header-line-buffer-name
-      :weight 'bold
-      :slant 'italic))
+      :weight bold
+      :slant italic))
   "Face for the buffer names of indirect buffers.")
 
 (defface akirak/header-line-outline
