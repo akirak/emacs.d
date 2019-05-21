@@ -21,7 +21,10 @@
 (use-package counsel-projectile
   :after (projectile counsel)
   :init
-  (counsel-projectile-mode 1))
+  (counsel-projectile-mode 1)
+  :config
+  (ivy-add-actions 'counsel-projectile-switch-project
+                   '(("gs" magit-status "magit-status"))))
 ;; Distraction-free editing
 (use-package olivetti
   :disabled t

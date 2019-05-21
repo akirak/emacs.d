@@ -20,6 +20,8 @@
                      ("f" ,(-partial #'akirak/counsel-git-grep-action-with-find-file
                                      #'find-file-other-frame)
                       "other frame")))
+  (ivy-add-actions #'counsel-find-file
+                   '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
   :general
