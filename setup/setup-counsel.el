@@ -22,10 +22,18 @@
                       "other frame")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
+  :general
+  (:keymaps 'counsel-find-file-map
+            "C-c g" #'akirak/counsel-find-file-magit-status)
   :custom
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
   (counsel-find-file-at-point t))
+
+(defun akirak/counsel-find-file-magit-status ()
+  (interactive)
+  (ivy-exit-with-action
+   #'magit-status))
 
 (defun akirak/ad-after-counsel-org-goto-action (_x)
   (org-show-entry))
