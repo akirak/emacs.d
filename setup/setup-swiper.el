@@ -8,7 +8,7 @@
     (straight-rebuild-package "swiper")
     (load "swiper"))
   :general
-  ("C-s" #'swiper-isearch
-   "C-r" #'swiper-isearch))
+  ("C-s" #'swiper
+   "C-M-s" #'swiper-isearch))
 
 (provide 'setup-swiper)
