@@ -1,6 +1,7 @@
 (defvar akirak/feature-list
   '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
     setup-key-translation ; Translate certain key combinations for ergonomics
+    setup-exec-path
     setup-wrap
     setup-whitespace
     setup-counsel    ; Basic Counsel commands
