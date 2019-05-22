@@ -1,6 +1,14 @@
 (use-package counsel
   ;; :diminish counsel-mode
   :config
+  ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
+  ;; so I included the absolute path of rg in the command line.
+  (setq counsel-rg-base-command
+        (replace-regexp-in-string (rx bol "rg ")
+                                  (let ((exec-path (default-value 'exec-path)))
+                                    (concat (executable-find "rg")
+                                            " "))
+                                  counsel-rg-base-command))
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
