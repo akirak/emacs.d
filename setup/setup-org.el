@@ -30,6 +30,8 @@
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
               org-tags-exclude-from-inheritance '()
+              org-blank-before-new-entry '((heading . nil)
+                                           (plain-list-item . auto))
               org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
 
