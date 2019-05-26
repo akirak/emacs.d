@@ -46,6 +46,8 @@
 :END:
 "
     :clock-in t :clock-resume t :empty-lines 1)
+  (add-to-list 'org-starter-extra-alternative-find-file-map
+               '(";" org-starter-swiper-config-files "config") t)
   (add-to-list 'org-starter-extra-refile-map
                '("'" avy-org-refile-as-child "avy") t)
   (add-to-list 'org-starter-extra-refile-map
@@ -54,10 +56,14 @@
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
+  (org-starter-alternative-find-file-command #'helm-org-rifle-files)
   (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
 ;;;; Extra keybindings
+(akirak/bind-user
+  "j" #'org-starter-alternative-find-file-by-key)
+
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
 
