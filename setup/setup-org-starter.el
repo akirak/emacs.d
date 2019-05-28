@@ -24,12 +24,16 @@
        (add-to-list 'org-starter-extra-refile-map
                     '(,key ,name ,basename)))))
 
+(unless (bound-and-true-p org-starter-path)
+  (setq org-starter-path `(,(abbreviate-file-name
+                             (expand-file-name
+                              "org-starter"
+                              no-littering-etc-directory)))))
+
 (use-package org-starter
   :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
-  (unless (bound-and-true-p org-starter-path)
-    (general-setq org-starter-path '("~/org/")))
   (require 'akirak/org-todo)
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
