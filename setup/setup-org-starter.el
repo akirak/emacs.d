@@ -49,12 +49,13 @@
 :END:
 "
     :clock-in t :clock-resume t :empty-lines 1)
-  (add-to-list 'org-starter-extra-alternative-find-file-map
-               '(";" org-starter-swiper-config-files "config") t)
-  (add-to-list 'org-starter-extra-refile-map
-               '("'" avy-org-refile-as-child "avy") t)
-  (add-to-list 'org-starter-extra-refile-map
-               '("?" akirak/org-refile-same-buffer "same buffer") t)
+  (general-add-hook 'org-starter-extra-alternative-find-file-map
+                    '((";" org-starter-swiper-config-files "config"))
+                    t)
+  (general-add-hook 'org-starter-extra-refile-map
+                    '(("'" avy-org-refile-as-child "avy")
+                      ("?" akirak/org-refile-same-buffer "same buffer"))
+                    t)
   :custom
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
