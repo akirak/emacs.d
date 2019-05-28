@@ -177,6 +177,7 @@
 
 ;;;;; Appearances of directory entries
 
+;; Use treemacs-icons-dired-mode instead.
 (use-package all-the-icons-dired
   :disabled t
   :after dired
