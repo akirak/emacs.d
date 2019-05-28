@@ -55,10 +55,10 @@ else
             echo "The nix module has been updated. Needs updating..."
             set -e
             ${MAKE:-make}
-            cd ..
         else
             echo "The nix module has no changes."
         fi
+        cd ..
     fi
 fi
 
