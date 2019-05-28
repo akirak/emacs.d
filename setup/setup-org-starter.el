@@ -25,8 +25,7 @@
                     '(,key ,name ,basename)))))
 
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter"
-                         :branch "config-files")
+  :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
   (unless (bound-and-true-p org-starter-path)
