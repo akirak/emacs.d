@@ -62,17 +62,18 @@ else
     fi
 fi
 
-for dir in straight/repos/*; do
-    [ ! -d $dir ] && continue
-    echo "Entering $dir"
-    cd $dir
-    if [ -d .git ]; then
-        # I trust only my updates
-        if [[ $(git config --local --get remote.origin.url) = https://github.com/akirak/* ]]; then
-            git pull origin
-        else
-            git fetch --no-tags --recurse-submodules
+if command -v sk >/dev/null 2>&1; then
+    cd straight/repos
+    for dir in $(sk -m -p 'Select Emacs packages to update: ' -c ls); do
+        [ ! -d $dir ] && continue
+        echo "Entering $dir"
+        cd $dir
+        if [ -d .git ]; then
+            git pull --recurse-submodules origin
         fi
-    fi
-    cd ../../..
-done
+        cd ..
+    done
+    cd ../..
+else
+    echo "sk (skim) was unavailable, so Emacs packages weren't updated."
+fi
