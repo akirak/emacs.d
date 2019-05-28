@@ -7,5 +7,6 @@
 (advice-add #'direnv--detect :around #'akirak/with-default-exec-path)
 (advice-add #'vc-git-command :around #'akirak/with-default-exec-path)
 (advice-add #'magit-process-file :around #'akirak/with-default-exec-path)
+(advice-add #'mozc-helper-process-start :around #'akirak/with-default-exec-path)
 
 (provide 'setup-exec-path)
