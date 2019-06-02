@@ -804,6 +804,18 @@ The following keybindings have been replaced with smart-jump correspondents:
     "i" #'helm-info
     "m" #'woman)
 #+end_src
+
+I often consult the Emacs Lisp manual:
+
+#+begin_src emacs-lisp
+  (defun akirak/info-elisp ()
+    (interactive)
+    (info "elisp")
+    (call-interactively 'Info-menu))
+
+  (akirak/bind-help
+    "e" #'akirak/info-elisp)
+#+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
 #+begin_src emacs-lisp
