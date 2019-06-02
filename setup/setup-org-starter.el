@@ -38,16 +38,7 @@
     :key "m"
     :refile (:maxlevel . 5))
   (require 'akirak/org-cpb)
-  (require 'akirak/org-clock-capture)
-  (require 'akirak/org-task-capture)
-  (org-starter-def-capture "g" "Generic entry in the inbox (with %i as title)"
-    entry (file "scratch.org")
-    "* %i%?
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-"
-    :clock-in t :clock-resume t :empty-lines 1)
+  ;; (require 'akirak/org-clock-capture)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
                     t)
