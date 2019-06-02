@@ -34,7 +34,6 @@
   :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
-  (require 'akirak/org-todo)
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
     :refile (:maxlevel . 5))
