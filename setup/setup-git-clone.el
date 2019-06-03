@@ -109,6 +109,7 @@
                            (car (akirak/git-clone-parent-directories))))))
 
 (defun akirak/git-clone-url (url)
+  (require 'magit-clone)
   (let ((directory (akirak/git-clone-read-destination url))
         (args (transient-args 'magit-clone)))
     (magit-clone-internal url directory args)))
