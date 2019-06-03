@@ -961,6 +961,10 @@ See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespac
 #+begin_src emacs-lisp
   (akirak/require 'setup-dockerfile)
 #+end_src
+**** Systemd                                     :configuration__language:
+#+begin_src emacs-lisp
+(akirak/require 'setup-systemd)
+#+end_src
 **** Nix                                         :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
