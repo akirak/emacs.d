@@ -1,5 +1,7 @@
 (use-package magit
   :config
+  (when-let ((bin (executable-find "git")))
+    (setq magit-git-executable bin))
   (when (fboundp 'unpackaged/magit-log-date-headers-mode)
     (unpackaged/magit-log-date-headers-mode 1))
   :general
