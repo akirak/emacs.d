@@ -6,6 +6,4 @@
  (magit-status-mode
   (magit-todos-depth . 1))
  (prog-mode
-  (mode . whitespace-cleanup))
- (git-commit-mode
-  (find-file-hook . akirak/jump-in-commit-message)))
+  (mode . whitespace-cleanup)))
