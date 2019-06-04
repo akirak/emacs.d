@@ -109,6 +109,7 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#exwm][EXWM]]
     -  [[#meta][Meta]]
       -  [[#editing-the-commit-message][Editing the commit message]]
+      -  [[#updating-from-inside-emacs][Updating from inside Emacs]]
 
 ** Why?
 *** Literate configuration in Org mode
@@ -1373,6 +1374,13 @@ If the beginning of the commit message is "[NAME]", then jump to the end of the 
                       "COMMIT_EDITMSG")
                (looking-at (rx bol "[" (+ (not (any space "]"))) "]" (* space) eol)))
       (end-of-line 1)))
+#+end_src
+*** Updating from inside Emacs
+#+begin_src emacs-lisp
+  (defun akirak/update-emacs-config ()
+    (interactive)
+    (let ((default-directory user-emacs-directory))
+      (eshell-command "./update.bash")))
 #+end_src
 *** Ignore
 :PROPERTIES:
