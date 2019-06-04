@@ -102,8 +102,13 @@
                                  (akirak/git-clone-parent-directories)
                                  nil nil)))
     (if (and parent (not (string-empty-p parent)))
-        (let ((name (read-string "Name: " (akirak/get-repository-name url))))
-          (f-join parent name))
+        (progn
+          (unless (file-directory-p parent)
+            (if (yes-or-no-p (format-message "Directory %s does not exist. Create a directory?" parent))
+                (make-directory parent t)
+              (user-error "Directory %s does not exist" parent)))
+          (let ((name (read-string "Name: " (akirak/get-repository-name url))))
+            (f-join parent name)))
       (read-directory-name (format-message "Clone the destination directory for %s: "
                                            url)
                            (car (akirak/git-clone-parent-directories))))))
