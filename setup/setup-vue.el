@@ -1,5 +1,6 @@
 (use-package vue-mode
-  :disabled t
-  :mode "\\.vue\\'")
+  ;; Turn on vue-mode manually only when necessary
+  ;; :mode "\\.vue\\'"
+  )
 
 (provide 'setup-vue)
