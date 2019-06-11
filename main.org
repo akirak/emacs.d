@@ -66,6 +66,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#outline-navigation][Outline navigation]]
       -  [[#outline-editing][Outline editing]]
       -  [[#referencing][Referencing]]
+      -  [[#generic-source-code-editing-utilities][Generic source code editing utilities]]
       -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
       -  [[#miscellaneous-commands][Miscellaneous commands]]
       -  [[#poporg][Poporg]]
@@ -816,6 +817,13 @@ I often consult the Emacs Lisp manual:
 
   (akirak/bind-help
     "e" #'akirak/info-elisp)
+#+end_src
+*** Generic source code editing utilities
+:PROPERTIES:
+:CREATED_TIME: [2019-06-11 Tue 22:30]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-reformatter)
 #+end_src
 *** Editing specific types of formats
 :PROPERTIES:
