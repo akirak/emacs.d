@@ -66,6 +66,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#outline-navigation][Outline navigation]]
       -  [[#outline-editing][Outline editing]]
       -  [[#referencing][Referencing]]
+      -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
       -  [[#miscellaneous-commands][Miscellaneous commands]]
       -  [[#poporg][Poporg]]
       -  [[#window-management][Window management]]
@@ -815,6 +816,14 @@ I often consult the Emacs Lisp manual:
 
   (akirak/bind-help
     "e" #'akirak/info-elisp)
+#+end_src
+*** Editing specific types of formats
+:PROPERTIES:
+:CREATED_TIME: [2019-06-11 Tue 22:27]
+:END:
+Use emmet for editing SGML-based formats efficiently.
+#+begin_src emacs-lisp
+  (akirak/require 'setup-emmet)
 #+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
