@@ -48,6 +48,9 @@ else
             exit 1
         fi
 
+        # update the submodules
+        git submodule update --recursive --rebase
+
         # Update the Nix module if necessary
         cd nix
         current_nix_sha=$(git show-ref -s HEAD)
