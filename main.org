@@ -1386,7 +1386,8 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
   (defun akirak/update-emacs-config ()
     (interactive)
     (let ((default-directory user-emacs-directory))
-      (eshell-command "./update.bash")))
+      (ansi-term (expand-file-name "update.bash" user-emacs-directory)
+                 "*update config*")))
 #+end_src
 *** Ignore
 :PROPERTIES:
