@@ -37,7 +37,6 @@
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
     :refile (:maxlevel . 5))
-  (require 'akirak/org-cpb)
   ;; (require 'akirak/org-clock-capture)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
@@ -53,6 +52,9 @@
   (org-starter-alternative-find-file-command #'helm-org-rifle-files)
   (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
+
+(use-package org-starter-extras
+  :straight org-starter)
 
 ;;;; Extra keybindings
 (akirak/bind-user
