@@ -18,13 +18,6 @@
 (use-package helm-tail :after helm
   :straight (helm-tail :host github :repo "akirak/helm-tail")
   :commands (helm-tail))
-(use-package counsel-projectile
-  :after (projectile counsel)
-  :init
-  (counsel-projectile-mode 1)
-  :config
-  (ivy-add-actions 'counsel-projectile-switch-project
-                   '(("gs" magit-status "magit-status"))))
 ;; Distraction-free editing
 (use-package olivetti
   :disabled t

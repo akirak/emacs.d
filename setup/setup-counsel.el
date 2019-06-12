@@ -83,6 +83,22 @@
                        (t path)))
     (user-error "Cannot find library or its directory %s" x)))
 
+(use-package counsel-projectile
+  :after (projectile counsel)
+  :init
+  (counsel-projectile-mode 1)
+  :config
+  (defun counsel-projectile-other-frame-action (name)
+    "Switch to buffer or find file named NAME."
+    (if (member name counsel-projectile--buffers)
+        (switch-to-buffer-other-frame name)
+      (find-file-other-frame (projectile-expand-root name))
+      (run-hooks 'projectile-find-file-hook)))
+  (ivy-add-actions 'counsel-projectile
+                   '(("f" counsel-projectile-other-frame-action "frame")))
+  (ivy-add-actions 'counsel-projectile-switch-project
+                   '(("gs" magit-status "magit-status"))))
+
 (use-package counsel-tramp
   :commands (counsel-tramp))
 
