@@ -25,4 +25,13 @@
                                               (string-remove-prefix ":" (symbol-name key))))))
                     (fset name value))))))
 
+;;;; Workarounds for term-mode
+
+;; Render unicode characters properly.
+;;
+;; https://stackoverflow.com/questions/6820051/unicode-characters-in-emacs-term-mode
+(defadvice ansi-term (after advise-ansi-term-coding-system)
+  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix)) :config
+(ad-activate 'ansi-term)
+
 (provide 'setup-terminal)
