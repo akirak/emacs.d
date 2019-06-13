@@ -1,6 +1,22 @@
 (use-package counsel
   ;; :diminish counsel-mode
   :config
+  (ivy-decorator-set-intermediate 'counsel-M-x
+      #'intern-soft
+    (original 40)
+    (function-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-function
+      #'intern-soft
+    (original 40)
+    (function-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-variable
+      #'intern-soft
+    (original 30)
+    (variable-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-face
+      #'intern-soft
+    (face-name 30)
+    (face-doc))
   ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
   ;; so I included the absolute path of rg in the command line.
   (setq counsel-rg-base-command

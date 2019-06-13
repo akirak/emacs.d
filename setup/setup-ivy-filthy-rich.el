@@ -1,3 +1,11 @@
+(use-package all-the-icons-ivy
+  ;; Integrate it with ivy-filthy-rich
+  :disabled t
+  :after ivy
+  :straight (all-the-icons-ivy :host github :repo "asok/all-the-icons-ivy")
+  :config
+  (all-the-icons-ivy-setup))
+
 (use-package ivy-filthy-rich
   :straight (ivy-filthy-rich :host github :repo "akirak/ivy-filthy-rich"
                              :branch "fix-max-length")
