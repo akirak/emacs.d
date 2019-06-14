@@ -83,43 +83,4 @@
 
 (general-def "C-x b" #'ivy-switch-buffer-2)
 
-;;;; ivy-switch-to-org-buffer
-;; Deprecated. I will use ivy-omni-org instead:
-;; https://github.com/akirak/ivy-omni-org
-
-(defvar ivy-switch-to-org-buffer-map
-  (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
-    (define-key map (kbd "C-l") 'ivy-switch-to-org-buffer--load)
-    map))
-
-(defun ivy-switch-to-org-buffer--load ()
-  (interactive)
-  (let ((text ivy-text)
-        (index ivy--index))
-    (org-starter-load-all-known-files)
-    (message nil)
-    (ivy--set-candidates (cl-union ivy--all-candidates
-                                   (akirak/org-buffer-list)
-                                   :test #'string-equal))
-    (ivy--reset-state ivy-last)
-    (setf (ivy-state-text ivy-last) text)
-    ;; TODO: Restore the proper position of the last item
-    (setq ivy--index index)))
-
-(defun akirak/org-buffer-list (&rest _args)
-  (cl-remove-if-not
-   (lambda (bufname)
-     (with-current-buffer (get-buffer bufname)
-       (derived-mode-p 'org-mode)))
-   (internal-complete-buffer "" nil t)))
-
-(defun ivy-switch-to-org-buffer ()
-  "Switch to an open Org buffer."
-  (interactive)
-  (ivy-read "Org buffer: "
-            'akirak/org-buffer-list
-            :caller #'ivy-switch-buffer
-            :keymap ivy-switch-to-org-buffer-map
-            :action #'switch-to-buffer))
-
 (provide 'setup-ivy)
