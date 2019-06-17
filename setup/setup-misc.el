@@ -32,7 +32,7 @@
   :hook
   (prog-mode . (lambda () (rainbow-mode 1))))
 ;; Manage docker services
-(use-package docker)                    
+(use-package docker)
 ;; Manage daemons
 (use-package prodigy)
 (use-package helm-linux-disks
