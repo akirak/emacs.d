@@ -833,6 +833,10 @@ Use emmet for editing SGML-based formats efficiently.
 #+begin_src emacs-lisp
   (akirak/require 'setup-emmet)
 #+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-tagedit)
+#+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
 #+begin_src emacs-lisp
