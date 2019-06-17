@@ -235,11 +235,10 @@
   :after dired)
 
 ;;;; Additional keybindings in dired-mode
-(general-def dired-mode-map
+(general-def :keymaps 'dired-mode-map :package 'dired
   "h" #'dired-up-directory
   "z h" #'dired-hide-dotfiles-mode
+  "/" 'dired-filter-map
   "<S-return>" #'dired-open-xdg)
-
-(define-key dired-mode-map (kbd "/") dired-filter-map)
 
 (provide 'setup-dired)
