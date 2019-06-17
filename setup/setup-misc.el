@@ -165,5 +165,12 @@
   :general
   (:keymaps 'akirak/system-map
             "D" 'disk-usage))
+(use-package validate
+  :straight (validate :host github :repo "Malabarba/validate.el"))
+(use-package nameless
+  :commands (nameless-mode))
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
 
 (provide 'setup-misc)
