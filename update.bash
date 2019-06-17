@@ -64,19 +64,3 @@ else
         cd ..
     fi
 fi
-
-if command -v sk >/dev/null 2>&1; then
-    cd straight/repos
-    for dir in $(sk -m -p 'Select Emacs packages to update: ' -c ls); do
-        [ ! -d $dir ] && continue
-        echo "Entering $dir"
-        cd $dir
-        if [ -d .git ]; then
-            git pull --recurse-submodules origin
-        fi
-        cd ..
-    done
-    cd ../..
-else
-    echo "sk (skim) was unavailable, so Emacs packages weren't updated."
-fi
