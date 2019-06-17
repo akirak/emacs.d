@@ -20,7 +20,7 @@
     setup-multi-term               ; Terminal emulator
     setup-aweshell                 ; Enhance eshell
     setup-devdocs
-    setup-rename                   ; Utilities for rename operations
+    setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
     setup-google-translate          ; Translate a word in a buffer
     ;; setup-japanese
@@ -70,7 +70,9 @@
     setup-string-inflection
     setup-pass
     setup-epub
-    setup-git-auto-commit))
+    setup-git-auto-commit
+    setup-alert
+    setup-slack))
 
 (mapc #'akirak/require akirak/feature-list)
 
