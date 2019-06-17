@@ -66,4 +66,6 @@
   (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
 (ad-activate 'ansi-term)
 
+;; TODO: Workaround for unicode characters on shell-mode as well
+
 (provide 'setup-terminal)
