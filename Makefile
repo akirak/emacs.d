@@ -1,16 +1,8 @@
 USER_EMACS_DIR = $(shell pwd)
-export NIX_PATH = $(HOME)/.nix-defexpr/channels
-export HOME_MANAGER_CONFIG= $(USER_EMACS_DIR)/nix/home.nix
 
 build: tangle
-	$(MAKE) nix
 	$(MAKE) emacsql-sqlite || echo "emacs-sqlite failed to build."
 
-nix: update-submodules
-	$(MAKE) -C nix home-manager
-
-# TODO: Use nix to build the executable
-#
 # On WSL, proper versions of crtl.o and crti.o are missing, so
 # emacsql-sqlite fails to build.
 emacsql-sqlite: update-submodules
@@ -47,7 +39,6 @@ clear:
 
 test:
 	$(MAKE) -f test.mk all
-	$(MAKE) -C nix -f test/test.mk all
 
 .PHONY:	build update-submodules tangle init clear test \
 install-hooks windows-deps emacsql-sqlite
