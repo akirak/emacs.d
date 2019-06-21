@@ -18,10 +18,6 @@
 (use-package helm-tail :after helm
   :straight (helm-tail :host github :repo "akirak/helm-tail")
   :commands (helm-tail))
-(use-package counsel-projectile
-  :after (projectile counsel)
-  :init
-  (counsel-projectile-mode 1))
 ;; Distraction-free editing
 (use-package olivetti
   :disabled t
@@ -36,7 +32,7 @@
   :hook
   (prog-mode . (lambda () (rainbow-mode 1))))
 ;; Manage docker services
-(use-package docker)                    
+(use-package docker)
 ;; Manage daemons
 (use-package prodigy)
 (use-package helm-linux-disks
@@ -165,14 +161,16 @@
   (defun colorize-compilation-buffer ()
     (let ((inhibit-read-only t))
       (ansi-color-apply-on-region (point-min) (point-max)))))
-(use-package direnv
-  :config
-  (direnv-mode 1)
-  :ensure-system-package
-  (direnv))
 (use-package disk-usage
   :general
   (:keymaps 'akirak/system-map
             "D" 'disk-usage))
+(use-package validate
+  :straight (validate :host github :repo "Malabarba/validate.el"))
+(use-package nameless
+  :commands (nameless-mode))
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
 
 (provide 'setup-misc)

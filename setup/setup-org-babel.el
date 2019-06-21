@@ -13,6 +13,7 @@
 (unless (bound-and-true-p org-babel-load-languages)
   (setq org-babel-load-languages
         '((emacs-lisp . t)
+          (java . t)
           (shell . t)
           (python . t)
           (sqlite . t)

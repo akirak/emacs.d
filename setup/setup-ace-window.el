@@ -14,6 +14,7 @@
   (aw-dispatch-alist
    '((?o aw-swap-window "Swap Windows")
      (?p aw-delete-window "Delete Window")
+     (?m delete-other-windows "Delete Other Windows")
      (32 toggle-window-split)
      (?d delete-frame)
      (?f make-frame-command)

@@ -48,6 +48,9 @@ else
             exit 1
         fi
 
+        # update the submodules
+        git submodule update --recursive --rebase
+
         # Update the Nix module if necessary
         cd nix
         current_nix_sha=$(git show-ref -s HEAD)
@@ -55,24 +58,9 @@ else
             echo "The nix module has been updated. Needs updating..."
             set -e
             ${MAKE:-make}
-            cd ..
         else
             echo "The nix module has no changes."
         fi
+        cd ..
     fi
 fi
-
-for dir in straight/repos/*; do
-    [ ! -d $dir ] && continue
-    echo "Entering $dir"
-    cd $dir
-    if [ -d .git ]; then
-        # I trust only my updates
-        if [[ $(git config --local --get remote.origin.url) = https://github.com/akirak/* ]]; then
-            git pull origin
-        else
-            git fetch --no-tags --recurse-submodules
-        fi
-    fi
-    cd ../../..
-done

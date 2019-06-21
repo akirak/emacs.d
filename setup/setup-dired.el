@@ -41,7 +41,7 @@
    ((eq system-type 'windows-nt)
     (setq ls-lisp-verbosity nil))
    ((or (akirak/running-on-crostini-p)
-        (executable-find "wsl.exe"))
+        (akirak/windows-subsystem-for-linux-p))
     (setq ls-lisp-verbosity '(links)))
    (t
     (setq ls-lisp-verbosity '(links uid gid))))
@@ -177,6 +177,7 @@
 
 ;;;;; Appearances of directory entries
 
+;; Use treemacs-icons-dired-mode instead.
 (use-package all-the-icons-dired
   :disabled t
   :after dired
@@ -234,11 +235,10 @@
   :after dired)
 
 ;;;; Additional keybindings in dired-mode
-(general-def dired-mode-map
+(general-def :keymaps 'dired-mode-map :package 'dired
   "h" #'dired-up-directory
   "z h" #'dired-hide-dotfiles-mode
+  "/" 'dired-filter-map
   "<S-return>" #'dired-open-xdg)
-
-(define-key dired-mode-map (kbd "/") dired-filter-map)
 
 (provide 'setup-dired)

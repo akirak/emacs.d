@@ -7,34 +7,33 @@
   (interactive)
   (avy-with akirak/avy-goto-defun
     (let ((avy-all-windows nil))
-      (avy--generic-jump (mapconcat (lambda (l)
-                                      (concat "\\(" (nth 1 l) "\\)"))
-                                    imenu-generic-expression
-                                    "\\|")
-                         nil avy-style
-                         nil nil)))
+      (avy-jump (mapconcat (lambda (l)
+                             (concat "\\(" (nth 1 l) "\\)"))
+                           imenu-generic-expression
+                           "\\|"))))
   (back-to-indentation))
 
 ;;;###autoload
 (defun akirak/avy-goto-symbol-in-window ()
   (interactive)
   (avy-with akirak/avy-goto-symbol-in-window
-    (avy--generic-jump akirak/avy-symbol-regexp
-                       t avy-style (window-start) (window-end))))
+    (avy-jump akirak/avy-symbol-regexp
+              :window-flip t
+              :beg (window-start)
+              :end (window-end))))
 
 ;;;###autoload
 (defun akirak/avy-goto-symbol-in-defun ()
   (interactive)
   (avy-with akirak/avy-goto-symbol-in-defun
     (let ((avy-all-windows nil))
-      (avy--generic-jump akirak/avy-symbol-regexp
-                         nil avy-style
-                         (save-excursion
-                           (beginning-of-defun)
-                           (point))
-                         (save-excursion
-                           (end-of-defun)
-                           (point))))))
+      (avy-jump akirak/avy-symbol-regexp
+                :beg (save-excursion
+                       (beginning-of-defun)
+                       (point))
+                :end (save-excursion
+                       (end-of-defun)
+                       (point))))))
 
 ;;;###autoload
 (defun akirak/insert-symbol (&optional arg)
@@ -73,5 +72,48 @@
             '("`" . "'"))
            (t '(nil . nil)))))
     (insert (or open "") token (or close ""))))
+
+
+;;;; Inline jump
+(defun akirak/avy-goto-in-line (regexp)
+  (let (beg end)
+    (save-excursion
+      (beginning-of-line)
+      (setq beg (point))
+      (end-of-line)
+      (setq end (point)))
+    (avy-with avy-goto-char-in-line
+      (avy--generic-jump regexp t avy-style beg end))))
+
+(defun akirak/avy-goto-symbol-in-line ()
+  (interactive)
+  (akirak/avy-goto-in-line "\\_<\\sw"))
+
+(defun akirak/avy-goto-word-in-line ()
+  (interactive)
+  (akirak/avy-goto-in-line "\\b\\sw"))
+
+(defun akirak/avy-goto-quote-in-line ()
+  (interactive)
+  (akirak/avy-goto-in-line "\'\\S-"))
+
+(defun akirak/avy-goto-dquote-in-line ()
+  (interactive)
+  (akirak/avy-goto-in-line "\"\\<"))
+
+;;;; Jump to an open bracket in defun
+(defun akirak/avy-goto-open-bracket-above-in-defun ()
+  (interactive)
+  (avy-with avy-goto-char
+    (avy--generic-jump "[({\[]" t avy-style
+                       (save-excursion (beginning-of-defun) (point))
+                       (point))))
+
+(defun akirak/avy-goto-open-bracket-below-in-defun ()
+  (interactive)
+  (avy-with avy-goto-char
+    (avy--generic-jump "[({\[]" t avy-style
+                       (1+ (point))
+                       (save-excursion (end-of-defun) (point)))))
 
 (provide 'akirak/avy-extra)

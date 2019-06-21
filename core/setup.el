@@ -60,6 +60,19 @@ output file without the directory."
   "Return non-nil if Emacs is running on Crostini of Chrome OS."
   (stringp (getenv-internal "SOMMELIER_VERSION")))
 
+(defvar akirak/is-wsl)
+
+(defun akirak/windows-subsystem-for-linux-p ()
+  "Return non-nil if Emacs is running inside WSL."
+  (if (boundp 'akirak/is-wsl)
+      akirak/is-wsl
+    (setq akirak/is-wsl (and (eq system-type 'gnu/linux)
+                             (with-temp-buffer
+                               (insert-file-contents "/proc/sys/kernel/osrelease")
+                               (insert-file-contents "/proc/version")
+                               (string-match-p (rx (or "Microsoft" "WSL"))
+                                               (buffer-string)))))))
+
 (defun akirak/os-like-debian-p ()
   (when (file-exists-p "/etc/os-release")
     (with-temp-buffer

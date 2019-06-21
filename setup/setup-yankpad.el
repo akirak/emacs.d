@@ -1,5 +1,7 @@
 (use-package yankpad
-  :after (org yasnippet))
+  :after (org yasnippet)
+  :custom
+  (yankpad-file (expand-file-name "yankpad/yankpad.org" no-littering-etc-directory)))
 
 (defhydra yankpad-hydra (:hint nil)
   "

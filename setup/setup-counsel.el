@@ -1,6 +1,30 @@
 (use-package counsel
   ;; :diminish counsel-mode
   :config
+  (ivy-decorator-set-intermediate 'counsel-M-x
+      #'intern-soft
+    (original 40)
+    (function-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-function
+      #'intern-soft
+    (original 40)
+    (function-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-variable
+      #'intern-soft
+    (original 30)
+    (variable-doc))
+  (ivy-decorator-set-intermediate 'counsel-describe-face
+      #'intern-soft
+    (face-name 30)
+    (face-doc))
+  ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
+  ;; so I included the absolute path of rg in the command line.
+  (setq counsel-rg-base-command
+        (replace-regexp-in-string (rx bol "rg ")
+                                  (let ((exec-path (default-value 'exec-path)))
+                                    (concat (executable-find "rg")
+                                            " "))
+                                  counsel-rg-base-command))
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
@@ -20,12 +44,22 @@
                      ("f" ,(-partial #'akirak/counsel-git-grep-action-with-find-file
                                      #'find-file-other-frame)
                       "other frame")))
+  (ivy-add-actions #'counsel-find-file
+                   '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
+  :general
+  (:keymaps 'counsel-find-file-map
+            "C-c g" #'akirak/counsel-find-file-magit-status)
   :custom
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
   (counsel-find-file-at-point t))
+
+(defun akirak/counsel-find-file-magit-status ()
+  (interactive)
+  (ivy-exit-with-action
+   #'magit-status))
 
 (defun akirak/ad-after-counsel-org-goto-action (_x)
   (org-show-entry))
@@ -64,6 +98,22 @@
                         truename)
                        (t path)))
     (user-error "Cannot find library or its directory %s" x)))
+
+(use-package counsel-projectile
+  :after (projectile counsel)
+  :init
+  (counsel-projectile-mode 1)
+  :config
+  (defun counsel-projectile-other-frame-action (name)
+    "Switch to buffer or find file named NAME."
+    (if (member name counsel-projectile--buffers)
+        (switch-to-buffer-other-frame name)
+      (find-file-other-frame (projectile-expand-root name))
+      (run-hooks 'projectile-find-file-hook)))
+  (ivy-add-actions 'counsel-projectile
+                   '(("f" counsel-projectile-other-frame-action "frame")))
+  (ivy-add-actions 'counsel-projectile-switch-project
+                   '(("gs" magit-status "magit-status"))))
 
 (use-package counsel-tramp
   :commands (counsel-tramp))

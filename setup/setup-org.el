@@ -30,8 +30,14 @@
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
               org-tags-exclude-from-inheritance '()
+              org-blank-before-new-entry '((heading . nil)
+                                           (plain-list-item . auto))
               org-special-ctrl-a/e t
               org-M-RET-may-split-line nil)
+
+;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
+(setq-default org-cycle-separator-lines 0
+              org-catch-invisible-edits 'show-and-error)
 
 ;; Prevent from saving org-refile and org-capture locations to bookmarks
 (setq org-bookmark-names-plist nil)

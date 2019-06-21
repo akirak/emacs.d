@@ -23,6 +23,8 @@ string inflection
     ("=" string-inflection-capital-underscore)
     ("u" string-inflection-upcase)
     ("SPC" string-inflection-all-cycle "all cycle")
+    ("j" mozc-temp-convert "mozc" :exit t)
+    ("p" pyim-convert-string-at-point "pyim" :exit t)
     ("q" nil "quit" :exit t)))
 
 (provide 'setup-string-inflection)

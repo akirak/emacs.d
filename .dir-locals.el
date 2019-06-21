@@ -7,4 +7,3 @@
   (magit-todos-depth . 1))
  (prog-mode
   (mode . whitespace-cleanup)))
-

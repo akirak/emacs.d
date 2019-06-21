@@ -9,5 +9,17 @@
   (:keymaps 'yaml-mode-map
             "C-m" 'newline-and-indent))
 
+;; To activate this minor mode in specific projects, add the following
+;; configuration to =.dir-locals.el=:
+;;
+;; #+begin_src emacs-lisp
+;; ((yaml-mode
+;;   (mode . ansible)))
+;; #+end_src
+(use-package ansible
+  :commands (ansible)
+  :init
+  (defalias 'ansible-mode 'ansible))
+
 (provide 'setup-yaml)
 ;;; setup-yaml.el ends here

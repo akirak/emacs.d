@@ -34,8 +34,11 @@
                                       variable-pitch
                                       writing
                                       writing-italic
+                                      header-line
                                       heading
-                                      reading)
+                                      reading
+                                      quotes
+                                      tags)
   (unless default
     (user-error "Default font is nil"))
 
@@ -55,19 +58,22 @@
 
   ;; Header line
   (set-face-attribute 'header-line nil
-                      :family (or heading default)
+                      :family (or header-line heading default)
                       :inherit 'italic)
   (set-face-attribute 'akirak/header-line-buffer-name nil
-                      :family (or heading default)
-                      :height 1.3
-                      :slant 'italic)
+                      :family (or header-line heading default)
+                      :slant 'normal
+                      :height 1.3)
   (set-face-attribute 'akirak/header-line-outline nil
-                      :family (or heading default)
+                      :family (or header-line heading default)
                       :height 1.3)
   (set-face-attribute 'info-title-4 nil :slant 'italic
                       :family (or heading default))
 
   ;; Org headings
+  (set-face-attribute 'org-document-title nil :height 1.6
+                      :family (or heading default)
+                      :inherit 'default)
   (set-face-attribute 'org-level-1 nil :height 1.75 :inherit 'italic)
   (set-face-attribute 'org-level-2 nil :height 1.6 :inherit 'italic)
   (set-face-attribute 'org-level-3 nil :height 1.5 :inherit 'italic)
@@ -92,15 +98,23 @@
                         :family (or heading reading default)))
 
   ;; Other Org faces
-  (set-face-attribute 'org-quote nil :inherit 'italic
-                      :family (or writing-italic default))
+  (set-face-attribute 'org-quote nil :inherit 'default
+                      :slant 'normal
+                      :family (or quotes writing-italic default))
+  (set-face-attribute 'org-todo nil
+                      :foreground "grey"
+                      :background nil
+                      ;; :underline t
+                      :height 115
+                      :family (or tags writing-italic default)
+                      :inherit 'default)
   (set-face-attribute 'org-tag nil
                       :foreground "grey"
                       :background nil
-                      :underline t
+                      ;; :underline t
                       :height 115
-                      :family (or writing-italic default)
-                      :inherit 'italic))
+                      :family (or tags writing-italic default)
+                      :inherit 'default))
 
 (defun akirak/set-local-text-fonts ()
   (when (derived-mode-p 'text-mode)
@@ -118,36 +132,64 @@
 
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
-        (the-list (cond
-                   ((or (eq system-type 'windows-nt)
-                        (executable-find "wsl.exe"))
-                    (list :default '("Consolas"
-                                     "Hack")
-                          :heading '("Calibri")
-                          :variable-pitch '("Calibri")))
-                   (t (list :default '("Overpass Mono"
-                                       "Hack"
-                                       "Noto Sans Mono"
-                                       "Monofur"
-                                       "Meslo LG S"
-                                       "mononoki")
-                            :writing '("Monaco"
-                                       "Fantasque Sans Mono"
-                                       "Iosevka"
-                                       "MMCedar")
-                            :writing-italic '("Fantasque Sans Mono")
-                            ;; Font for heading (primarily in org-mode)
-                            :heading '("Futura LT"
-                                       "Overpass")
-                            ;; Monospace font for tables.
-                            ;; (table "Overpass Mono")
-                            :reading '("Droid Sans Mono"
-                                       "Fira Code"
-                                       "Droid Sans"
-                                       "Merriweather"
-                                       "Gotham")
-                            :variable-pitch '("Overpass"
-                                              "Droid Sans"))))))
+        (the-list (list :default '("Fira Code"
+                                   "Overpass Mono"
+                                   "Hack"
+                                   "Noto Sans Mono"
+                                   "Consolas"
+                                   "Monofur"
+                                   "Meslo LG S"
+                                   "mononoki")
+                        :header-line '("Fira Sans"
+                                       "Fira Code")
+                        :writing '(
+                                   "iA Writer Duospace"
+                                   ;; "Libre Baskerville"
+                                   "Fira Code"
+                                   "Monaco"
+                                   "Fantasque Sans Mono"
+                                   "Iosevka"
+                                   "MMCedar")
+                        :tags '(
+                                "Kalam"
+                                ;; "Courgette"
+                                )
+                        :quotes '(
+                                  "Libre Baskerville")
+                        :writing-italic '(
+                                          "Libre Baskerville"
+                                          "Courgette"
+                                          ;; "Just Me Again Down Here"
+                                          "Quintessential"
+                                          "Caveat"
+                                          "Yellowtail"
+                                          "Fantasque Sans Mono")
+                        ;; Font for heading (primarily in org-mode)
+                        :heading '(
+                                   "Lustria"
+                                   "Fauna One"
+                                   "Belleza"
+                                   "Cinzel"
+                                   "Futura LT"
+                                   "Overpass")
+                        ;; Monospace font for tables.
+                        ;; (table "Overpass Mono")
+                        :reading '("Noto Sans"
+                                   "Libre Baskerville"
+                                   "Droid Sans Mono"
+                                   "Fira Code"
+                                   "Droid Sans"
+                                   "Merriweather"
+                                   "Gotham")
+                        :variable-pitch '(
+                                          "Lustria"
+                                          "PT Sans"
+                                          "Tinos"
+                                          "Open Sans"
+                                          "Libre Baskerville"
+                                          "Overpass"
+                                          "Droid Sans"
+                                          "Calibri"))))
     (cl-loop for (key families) on the-list by #'cddr
              append (list key (--find (member it family-list) families))))
   "Plist of fonts to use in Emacs."
@@ -163,12 +205,13 @@
                                     (t
                                      (message "Font family for %s is not set" key)))
                                 finally return new-value)))
-           ;; (cl-loop for )
            (set symbol value)
-           (apply 'akirak/use-face-fonts value)
-           (dolist (buf (buffer-list))
-             (with-current-buffer buf
-               (akirak/set-local-text-fonts))))))
+           (if (not default)
+               (message "The default font is nil, so skip setting")
+             (apply 'akirak/use-face-fonts value)
+             (dolist (buf (buffer-list))
+               (with-current-buffer buf
+                 (akirak/set-local-text-fonts)))))))
 
 ;;;; Fonts for specific fontsets
 

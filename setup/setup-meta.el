@@ -1,14 +1,16 @@
 (defvar akirak/feature-list
   '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
     setup-key-translation ; Translate certain key combinations for ergonomics
+    setup-exec-path
     setup-wrap
+    setup-whitespace
     setup-counsel    ; Basic Counsel commands
     setup-projectile ; Manage projects
     setup-swiper     ; Incremental search through the buffer using Ivy
     setup-aggressive-indent
     setup-lispy                         ; Efficient lisp editing
     setup-git-identity
-    setup-ivy-filthy-rich ; Provide more information via Ivy/Counsel commands
+    setup-direnv
     setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
     setup-magit                    ; The Git porcelain for Emacs
     setup-helpful                  ; Extended helpful commands
@@ -18,7 +20,7 @@
     setup-multi-term               ; Terminal emulator
     setup-aweshell                 ; Enhance eshell
     setup-devdocs
-    setup-rename                   ; Utilities for rename operations
+    setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
     setup-google-translate          ; Translate a word in a buffer
     ;; setup-japanese
@@ -66,10 +68,11 @@
     setup-perfect-margin
     setup-screencast
     setup-string-inflection
-    setup-whitespace
     setup-pass
     setup-epub
-    setup-git-auto-commit))
+    setup-git-auto-commit
+    setup-alert
+    setup-slack))
 
 (mapc #'akirak/require akirak/feature-list)
 

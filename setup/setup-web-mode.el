@@ -3,6 +3,7 @@
          ("\\.mustache\\'" . web-mode)
          ("\\.html?\\'" . web-mode)
          ("\\.php\\'" . web-mode)
+         ("\\.vue\\'" . web-mode)
          ("\\.jsp\\'" . web-mode)
          ;; ("\\.jsx?$" . web-mode)
          ("\\.es6\\'" . web-mode)

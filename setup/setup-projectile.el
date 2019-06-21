@@ -15,12 +15,12 @@
   (projectile-ignored-project-function #'akirak/projectile-ignore-project-p)
   (projectile-keymap-prefix (kbd "C-x 9")))
 
-;;;; Function to determine if a directory is ignored by projectile
+;;;; Function to determine if a directory should be ignored by projectile
 
 (defun akirak/projectile-ignore-project-p (root)
   (or (file-equal-p "~/" root)
       (file-equal-p "~/org/" root)
-      (file-equal-p "~/annex/" root)
+      (string-prefix-p "/nix/" root)
       (string-prefix-p "/usr/" root)))
 
 (advice-add #'projectile-keep-project-p :after-while

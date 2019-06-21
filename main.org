@@ -66,6 +66,8 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#outline-navigation][Outline navigation]]
       -  [[#outline-editing][Outline editing]]
       -  [[#referencing][Referencing]]
+      -  [[#generic-source-code-editing-utilities][Generic source code editing utilities]]
+      -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
       -  [[#miscellaneous-commands][Miscellaneous commands]]
       -  [[#poporg][Poporg]]
       -  [[#window-management][Window management]]
@@ -98,6 +100,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#python][Python]]
       -  [[#rust][Rust]]
       -  [[#java][Java]]
+      -  [[#vbscript][VBScript]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#jump-to-the-current-context][Jump to the current context]]
@@ -106,6 +109,8 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#org-agenda-keybindings][Org-agenda keybindings]]
       -  [[#beancount][Beancount]]
     -  [[#exwm][EXWM]]
+    -  [[#meta][Meta]]
+      -  [[#updating-from-inside-emacs][Updating from inside Emacs]]
 
 ** Why?
 *** Literate configuration in Org mode
@@ -152,19 +157,33 @@ configuration.
     (el-patch-enable-use-package-integration t))
 #+end_src
 
-Save efforts to configure individual variable files using no-littering
+Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository. 
 
 #+begin_src emacs-lisp
-(use-package no-littering
-  :init
-  (setq no-littering-var-directory
-        (expand-file-name ".cache" user-emacs-directory)))
+  (defcustom akirak/no-littering-use-my-etc-library t
+    "Whether to use my configuration file library in ~/lib/emacs as `no-littering-etc-directory'.")
+
+  (use-package no-littering
+    :init
+    (setq no-littering-var-directory
+          (expand-file-name ".cache" user-emacs-directory))
+    (when akirak/no-littering-use-my-etc-library
+      (let ((dir "~/lib/emacs"))
+        (when (or (file-directory-p dir)
+                  (and (yes-or-no-p "~/lib/emacs does not exist. Clone it from GitHub?")
+                       (= 0 (call-process-shell-command
+                             (format "git clone %s %s"
+                                     "https://github.com/akirak/emacs-config-library.git"
+                                     (shell-quote-argument (expand-file-name dir)))
+                             nil nil nil))))
+          (setq no-littering-etc-directory dir)))))
 #+end_src
 
 Use the executable path from the shell
 
 #+begin_src emacs-lisp
 (use-package exec-path-from-shell
+  :disabled t
   :if (memq window-system '(mac ns x))
   :init
   (exec-path-from-shell-initialize))
@@ -761,14 +780,6 @@ The following keybindings have been replaced with smart-jump correspondents:
 
 *** Outline navigation                                         :navigation:
 #+begin_src emacs-lisp
-  (akirak/bind-jump :package 'outline :keymaps 'outline-minor-mode-map
-    "h" 'outline-up-heading)
-
-  (akirak/bind-jump  :package 'org :keymaps 'org-mode-map
-    "h" 'org-up-element)
-#+end_src
-
-#+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
     "o" 'counsel-org-goto)
@@ -794,6 +805,37 @@ The following keybindings have been replaced with smart-jump correspondents:
   (akirak/bind-specific-help
     "i" #'helm-info
     "m" #'woman)
+#+end_src
+
+I often consult the Emacs Lisp manual:
+
+#+begin_src emacs-lisp
+  (defun akirak/info-elisp ()
+    (interactive)
+    (info "elisp")
+    (call-interactively 'Info-menu))
+
+  (akirak/bind-help
+    "e" #'akirak/info-elisp)
+#+end_src
+*** Generic source code editing utilities
+:PROPERTIES:
+:CREATED_TIME: [2019-06-11 Tue 22:30]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-reformatter)
+#+end_src
+*** Editing specific types of formats
+:PROPERTIES:
+:CREATED_TIME: [2019-06-11 Tue 22:27]
+:END:
+Use emmet for editing SGML-based formats efficiently.
+#+begin_src emacs-lisp
+  (akirak/require 'setup-emmet)
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-tagedit)
 #+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
@@ -935,20 +977,22 @@ See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespac
 #+begin_src emacs-lisp
   (akirak/require 'setup-yaml)
 #+end_src
-***** Ansible
-Ansible is based on YAML.
-
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-ansible)
-#+end_src
 **** Dockerfile                                  :configuration__language:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-dockerfile)
 #+end_src
+**** Systemd                                     :configuration__language:
+#+begin_src emacs-lisp
+(akirak/require 'setup-systemd)
+#+end_src
 **** Nix                                         :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
+#+end_src
+**** Dhall                                       :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dhall)
 #+end_src
 *** Startup buffer
 By default, =*Messages*= buffer is shown at startup.
@@ -1204,6 +1248,9 @@ I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I 
   (akirak/require 'setup-json)
 #+end_src
 
+#+begin_src emacs-lisp
+  (akirak/require 'setup-typescript)
+#+end_src
 *** Vue
 :PROPERTIES:
 :CREATED_TIME: [2019-04-03 Wed 22:45]
@@ -1273,6 +1320,13 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
   (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
 
 #+end_src
+*** VBScript
+:PROPERTIES:
+:CREATED_TIME: [2019-05-16 Thu 01:10]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-visual-basic)
+#+end_src
 ** Emacs applications
 *** Getting organised
 **** Jump to the current context
@@ -1334,6 +1388,15 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
   (add-to-list 'command-switch-alist '("--exwm" . (lambda (_) nil)))
 #+end_src
 ** Meta
+*** Updating from inside Emacs
+#+begin_src emacs-lisp
+  (defun akirak/update-emacs-config ()
+    (interactive)
+    (let ((default-directory user-emacs-directory))
+      (ansi-term (expand-file-name "update.bash" user-emacs-directory)
+                 "*update config*")))
+#+end_src
+*** Ignore
 :PROPERTIES:
 :TOC:      ignore
 :END:

@@ -4,6 +4,7 @@ jobs:
     environment:
       IMAGE_NAME: akirak/emacs.d
       TERM: dumb
+      HOME_NIX_PROFILE_NOCONFIRM: 1
     docker:
       - image: akirak/nixmacs-bootstrap
     working_directory:

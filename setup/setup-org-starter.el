@@ -24,38 +24,45 @@
        (add-to-list 'org-starter-extra-refile-map
                     '(,key ,name ,basename)))))
 
+(unless (bound-and-true-p org-starter-path)
+  (setq org-starter-path `(,(abbreviate-file-name
+                             (expand-file-name
+                              "org-starter"
+                              no-littering-etc-directory)))))
+
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter"
-                         :branch "config-files")
+  :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
-  (unless (bound-and-true-p org-starter-path)
-    (general-setq org-starter-path '("~/org/")))
-  (require 'akirak/org-todo)
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
     :refile (:maxlevel . 5))
-  (require 'akirak/org-cpb)
-  (require 'akirak/org-clock-capture)
-  (require 'akirak/org-task-capture)
-  (org-starter-def-capture "g" "Generic entry in the inbox (with %i as title)"
-    entry (file "scratch.org")
-    "* %i%?
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-"
-    :clock-in t :clock-resume t :empty-lines 1)
-  (add-to-list 'org-starter-extra-refile-map
-               '("?" akirak/org-refile-same-buffer "same buffer") t)
+  (org-starter-def "~/.emacs.d/nix/README.org"
+    :key "n"
+    :refile (:maxlevel . 3))
+  ;; (require 'akirak/org-clock-capture)
+  (general-add-hook 'org-starter-extra-alternative-find-file-map
+                    '((";" org-starter-swiper-config-files "config"))
+                    t)
+  (general-add-hook 'org-starter-extra-refile-map
+                    '(("'" avy-org-refile-as-child "avy")
+                      ("?" akirak/org-refile-same-buffer "same buffer"))
+                    t)
   :custom
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
+  (org-starter-alternative-find-file-command #'helm-org-rifle-files)
   (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
+(use-package org-starter-extras
+  :straight org-starter)
+
 ;;;; Extra keybindings
+(akirak/bind-user
+  "j" #'org-starter-alternative-find-file-by-key)
+
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
 

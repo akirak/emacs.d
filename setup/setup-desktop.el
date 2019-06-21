@@ -28,16 +28,15 @@
 
 (defhydra akirak/desktop-hydra (:hint nil)
   "
-Desktop
-%s(when desktop-dirname (abbreviate-file-name desktop-dirname)) \
+desktop-dir: %s(when desktop-dirname (abbreviate-file-name desktop-dirname))
 %s(if (file-exists-p (desktop-full-file-name)) \
   (concat \"(exists, updated: \" (akirak/format-relative-filetime (desktop-full-file-name) t) \")\")\
 \"(does not exist)\")
 
-^^Save            ^^Load            ^^Kill
-^^--------------  ^^--------------  ^^-------------
-_s_: Current dir  _R_: Current dir  _D_: Purge file
-_w_: Another dir  _L_: Change dir   _F_: Clear
+[_s_]: Save (_w_ to save to another dir)
+[_R_]: Reload (_L_ to change the dir)
+[_D_]: Purge
+[_F_]: Clear
 "
   ("s" desktop-save-in-desktop-dir)
   ("w" desktop-save)
@@ -61,7 +60,8 @@ _w_: Another dir  _L_: Change dir   _F_: Clear
                  'abbreviate))
       (ts-format abs-format file-time))))
 
-(defun akirak/desktop-commmand ()
+(defun akirak/desktop-command ()
+  "My main entry point to commands provided by desktop.el."
   (interactive)
   (unless (bound-and-true-p desktop-dirname)
     (require 'desktop)
