@@ -22,12 +22,6 @@ else
     echo "No changes in the working tree."
 fi
 
-# Retrieve the current SHA of nix submodule
-
-cd nix
-previous_nix_sha=$(git show-ref -s HEAD)
-cd ..
-
 # Rebase HEAD onto its corresponding remote branch
 
 remote=origin
@@ -47,20 +41,5 @@ else
             read
             exit 1
         fi
-
-        # update the submodules
-        git submodule update --recursive --rebase
-
-        # Update the Nix module if necessary
-        cd nix
-        current_nix_sha=$(git show-ref -s HEAD)
-        if [ ${current_nix_sha} != ${previous_nix_sha} ]; then
-            echo "The nix module has been updated. Needs updating..."
-            set -e
-            ${MAKE:-make}
-        else
-            echo "The nix module has no changes."
-        fi
-        cd ..
     fi
 fi
