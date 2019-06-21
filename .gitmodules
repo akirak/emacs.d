@@ -1,6 +1,3 @@
-[submodule "nix"]
-	path = nix
-	url = https://github.com/akirak/home.nix.git
 [submodule "contrib/emacsql"]
 	path = contrib/emacsql
 	url = https://github.com/skeeto/emacsql.git
