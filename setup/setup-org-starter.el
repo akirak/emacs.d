@@ -37,7 +37,7 @@
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
     :refile (:maxlevel . 5))
-  (org-starter-def "~/.emacs.d/nix/README.org"
+  (org-starter-def "~/home.nix/README.org"
     :key "n"
     :refile (:maxlevel . 3))
   ;; (require 'akirak/org-clock-capture)
