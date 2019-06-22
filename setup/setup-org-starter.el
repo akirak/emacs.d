@@ -6,6 +6,13 @@
 
 (use-package org-reverse-datetree)
 
+(use-package org-super-agenda
+  :config
+  (org-super-agenda-mode 1))
+
+(use-package org-ql-agenda
+  :straight org-ql)
+
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
                              (expand-file-name
