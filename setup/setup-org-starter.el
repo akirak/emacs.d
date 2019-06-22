@@ -6,24 +6,6 @@
 
 (use-package org-reverse-datetree)
 
-(cl-defmacro akirak/def-org-reverse-datetree-refile (file
-                                                     &rest args
-                                                     &key key prefer
-                                                     &allow-other-keys)
-  "Define a refile function as well as a keybinding."
-  (declare (indent 1))
-  (let* ((basename (file-name-base file))
-         (name (intern (concat "akirak/org-refile-to-" basename))))
-    `(defun ,name (arg)
-       (interactive "P")
-       (org-reverse-datetree-refile-to-file
-        (org-starter-locate-file ,file nil t) nil
-        :prefer ,(or prefer '("CREATED_TIME" "CREATED_AT" "CLOSED"))
-        ,@args))
-    `(when (quote ,key)
-       (add-to-list 'org-starter-extra-refile-map
-                    '(,key ,name ,basename)))))
-
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
                              (expand-file-name
