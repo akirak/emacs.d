@@ -1,6 +1,4 @@
 (use-package feebleline
-  :straight (feebleline :host github :repo "tautologyclub/feebleline"
-                        :branch "development")
   :init
   (feebleline-mode 1)
   :config
