@@ -6,7 +6,7 @@
 ;; Save minibuffer history
 (use-package savehist)
 ;; Install system packages
-(use-package helm-system-packages :after helm 
+(use-package helm-system-packages :after helm
   :commands (helm-system-packages))
 ;; Run (root) systemd operations
 (use-package helm-systemd :after helm
@@ -59,7 +59,7 @@
   (add-to-list 'scratch-mode-alist '(helpful-mode . emacs-lisp-mode))
   (add-to-list 'scratch-mode-alist '(help-mode . emacs-lisp-mode)))
 (use-package dumb-jump
-  ;; Don't enable dumb-jump-mode. Bind only necessary commands. 
+  ;; Don't enable dumb-jump-mode. Bind only necessary commands.
   :custom
   (dumb-jump-selector 'ivy))
 (use-package iedit)
@@ -70,7 +70,7 @@
   :straight nil
   :load-path "contrib/misc")
 ;; Edit Org-Mode lists like in word processors
-(use-package org-autolist 
+(use-package org-autolist
   :after org
   ;; :diminish 'org-autolist-mode
   :init
