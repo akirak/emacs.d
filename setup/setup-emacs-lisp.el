@@ -47,6 +47,19 @@
   ;; TODO: Add an advice for lispy-eval
   (eros-mode 1))
 
+(use-package nameless
+  :commands (nameless-mode)
+  :config
+  (defvar-local akirak/avoid-nameless-mode nil)
+  (defun akirak/turn-on-nameless-mode-conditional ()
+    (unless akirak/avoid-nameless-mode
+      (nameless-mode 1)))
+  :general
+  (:keymaps 'nameless-mode-map
+            "-" 'nameless-insert-name-or-self-insert)
+  :hook
+  (emacs-lisp . akirak/turn-on-nameless-mode-conditional))
+
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
   "Pull the package recipe for the current projectile project."

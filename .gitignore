@@ -1,6 +1,8 @@
 .cask
 # Ignore packages installed by straight.el 
-straight/
+straight/repos
+straight/build
+straight/build-cache.el
 # Ignore packages installed in the standard way (possibly by mistake)
 elpa/
 # Ignore various local persistent files
