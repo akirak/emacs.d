@@ -1,13 +1,31 @@
 (use-package lsp-mode
-  :commands lsp)
+  :commands lsp
+  :config
+  (require 'lsp-clients))
 
+;; For company completion and snippets
+;;
+;; If the language server for the language doesn't support returning
+;; snippets, you can define one one your own by customizing the
+;; variable `company-lsp--snippet-functions'.
+;; See the following document for details.
+;; https://github.com/tigersoldier/company-lsp#defining-completion-snippet-for-a-certain-language
 (use-package company-lsp
+  :after (company lsp)
   :commands company-lsp
   :hook
   (company-backends . company-lsp))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
+  :general
+  ;; jump commands
+  ;; (#'lsp-ui-peek-find-definitions
+  ;;  #'lsp-ui-peek-find-references
+  ;;  #'lsp-ui-peek-jump-forward
+  ;;  #'lsp-ui-peek-jump-backward
+  ;;  )
+  ;; For browsing documentation, use lsp-ui-doc.
   :hook
   (lsp-mode . lsp-ui-mode))
 
@@ -41,6 +59,9 @@
   ("M-s" lsp-describe-session)
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace))
+
+;; lsp-treemacs provides project-wide error overview.
+(use-package lsp-treemacs)
 
 (akirak/bind-generic :keymaps 'lsp-mode-map
   "l" '(hydra-lsp/body :wk "hydra-lsp"))
