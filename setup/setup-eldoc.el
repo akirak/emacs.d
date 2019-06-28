@@ -2,6 +2,13 @@
 ;; e.g. lsp-mode, depending on the language.
 (global-eldoc-mode -1)
 
+;; I prefer displaying help for Emacs Lisp symbols in lv window,
+;; so I won't enable this package for now.
+(use-package eldoc-box
+  :disabled t
+  :config
+  (eldoc-box-hover-at-point-mode -1))
+
 (autoload 'lv-message "lv")
 (autoload 'lv-delete-window "lv")
 
