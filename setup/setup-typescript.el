@@ -1,6 +1,7 @@
 (use-package typescript-mode)
 
 (use-package tide
+  :disabled t
   :config
   (defun setup-tide-mode ()
     (interactive)
