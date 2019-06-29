@@ -45,6 +45,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#org-ql][org-ql]]
       -  [[#all-the-icons][all-the-icons]]
       -  [[#emacsql-sqlite][emacsql-sqlite]]
+      -  [[#polymode][polymode]]
     -  [[#appearances][Appearances]]
       -  [[#theme][Theme]]
       -  [[#frame-elements][Frame elements]]
@@ -1378,6 +1379,12 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 *** Beancount
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)
+#+end_src
+** Advanced features
+Some package need to be loaded after other packages, so they are put here.
+*** polymode
+#+begin_src emacs-lisp
+  (akirak/require 'setup-polymode)
 #+end_src
 ** EXWM
 #+begin_src emacs-lisp
