@@ -29,7 +29,6 @@
   (org-starter-def "~/home.nix/README.org"
     :key "n"
     :refile (:maxlevel . 3))
-  ;; (require 'akirak/org-clock-capture)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
                     t)
