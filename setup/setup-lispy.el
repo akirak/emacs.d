@@ -1,12 +1,9 @@
 (use-package lispy
   :hook
   ((emacs-lisp-mode
-    ielm-mode)
+    ielm-mode
+    eval-expression-minibuffer-setup)
    . lispy-mode)
-  (minibuffer-setup
-   . (lambda ()
-       (when (eq this-command 'eval-expression)
-         (lispy-mode 1))))
   :general
   (:keymaps 'lispy-mode-map
             ;; Bind M-m to easy-mark (from easy-kill package) instead
