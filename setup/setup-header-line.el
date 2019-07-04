@@ -94,6 +94,8 @@
 ;; a file, e.g. in a scratch buffer
 (add-hook 'prog-mode-hook #'akirak/set-default-header-line)
 
+(add-hook 'sgml-mode-hook #'akirak/set-default-header-line)
+
 ;; Magit buffers should display their names
 (add-hook 'magit-mode-hook #'akirak/set-default-header-line)
 
