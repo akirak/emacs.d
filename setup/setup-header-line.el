@@ -34,13 +34,21 @@
                    'akirak/header-line-non-file-buffer-name)))
    'face 'akirak/header-line-buffer-name))
 
+(defvar-local akirak/header-line-icon nil)
+
 (defun akirak/make-header-line-format (&rest body)
   "Build a header line format with the standard set of segments."
   `("  "
     ;; Display an icon for the mode if any
-    (:eval (or (and (featurep 'all-the-icons)
-                    (all-the-icons-icon-for-buffer))
-               mode-name))
+    (:eval (or akirak/header-line-icon
+               (setq akirak/header-line-icon
+                     (or (and (featurep 'all-the-icons)
+                              (let ((file-name (buffer-file-name)))
+                                (if (and file-name
+                                         (bound-and-true-p polymode-mode))
+                                    (all-the-icons-icon-for-file file-name)
+                                  (all-the-icons-icon-for-buffer))))
+                         mode-name))))
     " "
     (:eval (when buffer-file-name
              (let ((project (projectile-project-name)))
