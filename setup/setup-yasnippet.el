@@ -1,6 +1,9 @@
 (use-package yasnippet
   ;; :diminish 'yas-minor-mode
   :config
+  (defun akirak/visit-yas-snippet-dir ()
+    (interactive)
+    (find-file (car yas-snippet-dirs)))
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets
