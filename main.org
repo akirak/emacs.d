@@ -1259,10 +1259,6 @@ I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I 
   (akirak/require 'setup-javascript)
   (akirak/require 'setup-json)
 #+end_src
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-typescript)
-#+end_src
 *** Vue
 :PROPERTIES:
 :CREATED_TIME: [2019-04-03 Wed 22:45]
