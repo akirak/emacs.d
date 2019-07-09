@@ -64,3 +64,5 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 (run-with-idle-timer 3 nil #'akirak/restore-original-gc-threshold)
+
+(run-with-idle-timer 0 1.5 #'garbage-collect)
