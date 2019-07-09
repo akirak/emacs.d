@@ -8,7 +8,10 @@
 (defconst modi/gc-cons-threshold--orig gc-cons-threshold)
 
 (defsubst akirak/expand-gc-threshold ()
-  (setq gc-cons-threshold (* 100 1024 1024)))
+  (setq gc-cons-threshold most-positive-fixnum
+        ;; The previous value for gc-cons-threshold.
+        ;; (* 100 1024 1024)
+        ))
 
 (defsubst akirak/restore-original-gc-threshold ()
   ;; I am not sure if garbage collection should be run on minibuffer
