@@ -61,7 +61,8 @@
   ("S" lsp-shutdown-workspace))
 
 ;; lsp-treemacs provides project-wide error overview.
-(use-package lsp-treemacs)
+(use-package lsp-treemacs
+  :disabled t)
 
 (akirak/bind-generic :keymaps 'lsp-mode-map
   "l" '(hydra-lsp/body :wk "hydra-lsp"))
