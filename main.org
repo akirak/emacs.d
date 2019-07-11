@@ -964,17 +964,15 @@ This is helpful in programming languages that depend on indentation levels.
 **** Column-enforce-mode
 #+begin_src emacs-lisp
   (use-package column-enforce-mode
+    :disabled t
     :hook
     ((prog-mode markdown-mode)
      . 80-column-rule))
 #+end_src
 **** Fill-column-indicator
-Use column-enforce-mode instead.
-
 Visualise (usually) 80 columns.
 #+begin_src emacs-lisp
   (use-package fill-column-indicator
-    :disabled t
     :init
     (add-hook 'prog-mode-hook 'fci-mode))
 #+end_src
