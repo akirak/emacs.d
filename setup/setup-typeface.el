@@ -57,18 +57,19 @@
     (set-face-attribute 'variable-pitch nil :family variable-pitch))
 
   ;; Header line
-  (set-face-attribute 'header-line nil
-                      :family (or header-line heading default)
-                      :inherit 'italic)
-  (set-face-attribute 'akirak/header-line-buffer-name nil
-                      :family (or header-line heading default)
-                      :slant 'normal
-                      :height 1.3)
-  (set-face-attribute 'akirak/header-line-outline nil
-                      :family (or header-line heading default)
-                      :height 1.3)
-  (set-face-attribute 'info-title-4 nil :slant 'italic
-                      :family (or heading default))
+  (when (featurep 'akirak/setup-header-line)
+    (set-face-attribute 'header-line nil
+                        :family (or header-line heading default)
+                        :inherit 'italic)
+    (set-face-attribute 'akirak/header-line-buffer-name nil
+                        :family (or header-line heading default)
+                        :slant 'normal
+                        :height 1.3)
+    (set-face-attribute 'akirak/header-line-outline nil
+                        :family (or header-line heading default)
+                        :height 1.3)
+    (set-face-attribute 'info-title-4 nil :slant 'italic
+                        :family (or heading default)))
 
   ;; Org headings
   (set-face-attribute 'org-document-title nil :height 1.6
