@@ -34,6 +34,7 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#bind-specific-help-f1-esc-for-specific-help-commands][bind-specific-help (<f1> ESC) for specific help commands]]
         -  [[#bind-system-f12-for-system-commands][bind-system (<f12>) for system commands]]
     -  [[#dependencies-for-other-packages][Dependencies for other packages]]
+      -  [[#built-in][Built-in]]
       -  [[#dashel][dash.el]]
       -  [[#ivy][Ivy]]
       -  [[#helm][Helm]]
@@ -442,6 +443,10 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 :ID:       ee01d40d-51af-4598-825e-dc79e4e0c394
 :END:
 These packages may be required by other packages loaded later on.
+*** Built-in
+#+begin_src emacs-lisp
+(autoload 'setq-mode-local "mode-local")
+#+end_src
 *** dash.el
 Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they should be loaded in the very beginning of package declarations.
 
