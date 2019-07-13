@@ -148,6 +148,10 @@ In principle, the main configuration file should be a thin layer of the Emacs co
 
 ** Before using =use-package=
 #+begin_src emacs-lisp
+(akirak/require 'setup-gc)
+#+end_src
+
+#+begin_src emacs-lisp
   (setq-default enable-local-variables :safe)
 #+end_src
 
