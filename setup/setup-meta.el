@@ -2,6 +2,7 @@
   '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
     setup-key-translation ; Translate certain key combinations for ergonomics
     setup-exec-path
+    setup-profiling
     setup-wrap
     setup-whitespace
     setup-counsel    ; Basic Counsel commands
