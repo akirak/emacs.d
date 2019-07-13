@@ -1,6 +1,11 @@
 (use-package hydra
   :custom
-  (hydra-hint-display-type 'lv))
+  (hydra-hint-display-type 'posframe)
+  (hydra-posframe-show-params
+   (list :internal-border-width 1
+         :background-color "salmon4"
+         :internal-border-color "red"
+         :poshandler 'posframe-poshandler-frame-center)))
 
 (defvar akirak/hydra-stack nil)
 
