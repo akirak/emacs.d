@@ -43,3 +43,6 @@ else
         fi
     fi
 fi
+
+# Update the submodule
+git submodule update --recursive
