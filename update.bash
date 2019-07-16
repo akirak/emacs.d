@@ -46,3 +46,8 @@ fi
 
 # Update the submodule
 git submodule update --recursive
+
+# Update the MELPA package cache to prevent missing package errors
+cd straight/repos/melpa
+git pull
+cd ../../..
