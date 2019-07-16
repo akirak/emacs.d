@@ -221,7 +221,7 @@
   (let ((family-list (font-family-list))
         (the-alist (quote (
                            ;; 消費生活用製品の製造又は輸入事業者は、重大な製品事故が発生したことを知ったときは10日以内に消費者庁に報告しなければなりません。
-                           (kana . ("Harenosoramincho"
+                           (kana . ("Honoka Mincho"
                                     "Source Han Sans JP"
                                     "Noto Sans Mono CJK JP"
                                     "Ume Gothic C4"))
