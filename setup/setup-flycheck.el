@@ -20,4 +20,17 @@ Errors (flycheck): %s`flycheck-checker
   (flycheck-mode 1)
   (hydra-flycheck/body))
 
+(defun akirak/setup-flycheck-shellcheck ()
+  (interactive)
+  (unless (and flycheck-sh-shellcheck-executable
+               (file-executable-p flycheck-sh-shellcheck-executable))
+    (setq-default flycheck-sh-shellcheck-executable
+                  (concat (string-trim-right
+                           (shell-command-to-string
+                            "nix-build --no-out-link '<nixpkgs>' -A shellcheck"))
+                          "/bin/shellcheck")))
+  (add-to-list 'flycheck-checkers 'sh-shellcheck t)
+  (setq flycheck-checker 'sh-shellcheck)
+  (flycheck-mode 1))
+
 (provide 'setup-flycheck)
