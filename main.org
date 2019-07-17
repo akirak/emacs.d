@@ -1016,6 +1016,13 @@ See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespac
 #+begin_src emacs-lisp
   (akirak/require 'setup-dhall)
 #+end_src
+**** Bats                                                        :testing__framework:
+:PROPERTIES:
+:CREATED_TIME: [2019-07-17 Wed 22:25]
+:END:
+#+begin_src emacs-lisp
+  (use-package bats-mode)
+#+end_src
 *** Startup buffer
 By default, =*Messages*= buffer is shown at startup.
 
