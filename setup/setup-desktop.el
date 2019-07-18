@@ -26,24 +26,28 @@
 
 ;;;; Desktop hydra
 
-(defhydra akirak/desktop-hydra (:hint nil)
-  "
-desktop-dir: %s(when desktop-dirname (abbreviate-file-name desktop-dirname))
-%s(if (file-exists-p (desktop-full-file-name)) \
-  (concat \"(exists, updated: \" (akirak/format-relative-filetime (desktop-full-file-name) t) \")\")\
-\"(does not exist)\")
+(pretty-hydra-define akirak/context-hydra
+  (:title (string-join
+           `("Context"
+             ,(when desktop-dirname
+                (format "Desktop dir: %s\n%s"
+                        (abbreviate-file-name desktop-dirname)
+                        (if (file-exists-p (desktop-full-file-name))
+                            (format "(exists, updated: %s)"
+                                    (akirak/format-relative-filetime
+                                     (desktop-full-file-name) t))
+                          "(does not exist)"))))
+           "\n")
+          :quit-key "q")
+  ("Desktop"
+   (("s" desktop-save-in-desktop-dir "Save to the dir")
+    ("w" desktop-save "Save to another dir")
+    ("R" desktop-read "Reload from the dir")
+    ("D" desktop-remove "Purge")
+    ("L" desktop-change-dir "Change the dir")
+    ("F" desktop-clear "Clear"))))
 
-[_s_]: Save (_w_ to save to another dir)
-[_R_]: Reload (_L_ to change the dir)
-[_D_]: Purge
-[_F_]: Clear
-"
-  ("s" desktop-save-in-desktop-dir)
-  ("w" desktop-save)
-  ("R" desktop-read)
-  ("L" desktop-change-dir)
-  ("D" desktop-remove)
-  ("F" desktop-clear))
+(defalias 'akirak/desktop-hydra/body 'akirak/context-hydra/body)
 
 (defun akirak/format-relative-filetime (file &optional verbose type)
   (let* ((attrs (file-attributes file))
