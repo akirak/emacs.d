@@ -7,6 +7,8 @@
          :internal-border-color "red"
          :poshandler 'posframe-poshandler-frame-center)))
 
+(use-package major-mode-hydra)
+
 (defvar akirak/hydra-stack nil)
 
 ;;;; Displaying specific hydras in posframe
