@@ -44,7 +44,6 @@
 
   ;; Default fonts
   (set-face-attribute 'default nil
-                      :height akirak/font-height
                       :family default)
   (set-face-attribute 'fixed-pitch-serif nil
                       ;; Change the color for info-mode
@@ -108,14 +107,12 @@
                       :foreground "grey"
                       :background nil
                       ;; :underline t
-                      :height (ceiling (* akirak/font-height 1.1))
                       :family (or tags writing-italic default)
                       :inherit 'default)
   (set-face-attribute 'org-tag nil
                       :foreground "grey"
                       :background nil
                       ;; :underline t
-                      :height (ceiling (* akirak/font-height 1.1))
                       :family (or tags writing-italic default)
                       :inherit 'default))
 
@@ -136,7 +133,14 @@
 (defcustom akirak/font-height 105
   "Default height of the font."
   :group 'akirak
-  :type 'integer)
+  :type 'integer
+  :set (lambda (sym value)
+         (set-default sym value)
+         (set-face-attribute 'default nil :height value)
+         (set-face-attribute 'org-tag nil
+                             :height (ceiling (* value 1.1)))
+         (set-face-attribute 'org-todo nil
+                             :height (ceiling (* value 1.1)))))
 
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
