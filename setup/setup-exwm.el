@@ -7,6 +7,18 @@
   (exwm-update-title . akirak/exwm-rename-buffer)
   (exwm-manage-finish . akirak/exwm-manage-finish))
 
+(advice-add 'exwm-input-toggle-keyboard
+            :after #'akirak/ad-after-exwm-input-toggle-keyboard)
+
+(defun akirak/ad-after-exwm-input-toggle-keyboard (&optional id)
+  (let ((buffer (if id
+                    (exwm--id->buffer id)
+                  (current-buffer))))
+    (if (eq 'exwm-mode (buffer-local-value 'major-mode buffer))
+        (message "Input mode is now %s"
+                 (buffer-local-value 'exwm--input-mode buffer))
+      (user-error "Not in exwm-mode"))))
+
 (defun akirak/exwm-rename-buffer ()
   "Rename the buffer name after the title is changed."
   (exwm-workspace-rename-buffer exwm-title))
@@ -14,7 +26,9 @@
 (defun akirak/exwm-manage-finish ()
   (cond
    ;; Set char mode on specific window types
-   ((member exwm-class-name '("Chromium" "Termite" "Emacs" "Firefox"))
+   ((member exwm-class-name '("Termite" "Emacs" "Tilix"
+                              ;; "Chromium" "Firefox"
+                              ))
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer))))
    ;; Float specific window types
    ((member exwm-instance-name '("keybase"))
@@ -53,5 +67,50 @@
   (exwm-systemtray-enable)
   :custom
   (exwm-systemtray-height 16))
+
+;;;; Keybindings
+
+;;;;; Global keybindings
+(let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
+                        ("j" other-window)
+                        ("k" (lambda () (interactive) (other-window -1)))
+                        ;; You can't use s-l on Chrome OS since it locks the screen
+                        ;; (exwm-layout-shrink-window)
+                        ;; (exwm-layout-enlarge-window)
+                        ("p" (lambda () (interactive) (select-frame (next-frame))))
+                        ("P" (lambda () (interactive) (select-frame (previous-frame))))
+                        ("t" exwm-floating-toggle-floating)
+                        ("f" exwm-layout-toggle-fullscreen)
+                        ("d" ace-delete-window)
+                        ("s" ace-swap-window)
+                        ("x" counsel-linux-app)
+                        ("m" window-go-master)
+                        ("n" window-go-split-sensibly)
+                        ("'" ace-window)))
+       (keybindings (cl-loop for (char cmd) in char-bindings
+                             collect (cons (kbd (concat "s-" char))
+                                           cmd))))
+  (setq exwm-input-global-keys keybindings)
+  (cl-loop for (key . cmd) in keybindings
+           do (exwm-input--set-key key cmd))
+  (exwm-input--update-global-prefix-keys))
+
+;;;;; Local keybindings available in line-mode
+;; (general-def :keymaps 'exwm-mode-map)
+
+;;;; Simulation keys
+(let* ((bindings '(("C-f" "<right>")
+                   ("C-b" "<left>")
+                   ("C-n" "<down>")
+                   ("C-p" "<up>")
+                   ("C-w" "C-x")
+                   ("M-w" "C-c")
+                   ("C-y" "C-v")
+                   ("C-s" "C-f")))
+       (keybindings (cl-loop for (key key2) in bindings
+                             collect (cons (kbd key) (kbd key2)))))
+  (setq exwm-input-simulation-keys keybindings)
+  (dolist (binding bindings)
+    (exwm-input--set-simulation-keys bindings t)))
 
 (provide 'setup-exwm)

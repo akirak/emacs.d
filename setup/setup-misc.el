@@ -171,5 +171,7 @@
   :config
   (editorconfig-mode 1))
 (use-package git-link)
+(use-package window-go
+  :straight (window-go :host github :repo "akirak/emacs-window-go"))
 
 (provide 'setup-misc)
