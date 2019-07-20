@@ -29,7 +29,15 @@
 (use-package exwm-mff
   :straight (exwm-mff :host github :repo "ieure/exwm-mff"))
 
-(use-package exwm-edit)
+(use-package exwm-edit
+  :config
+  (defun akirak/exwm-edit-setup-compose ()
+    (let ((title (exwm-edit--buffer-title (buffer-name))))
+      (cond
+       ;; Add customization
+       )))
+  :hook
+  (exwm-edit-compose . akirak/exwm-edit-setup-compose))
 
 (use-package window-divider
   :disabled t
