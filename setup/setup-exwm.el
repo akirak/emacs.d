@@ -39,4 +39,11 @@
   (window-divider-default-right-width 2)
   (window-divider-default-bottom-width 2))
 
+(use-package exwm-systemtray
+  :straight exwm
+  :config
+  (exwm-systemtray-enable)
+  :custom
+  (exwm-systemtray-height 16))
+
 (provide 'setup-exwm)
