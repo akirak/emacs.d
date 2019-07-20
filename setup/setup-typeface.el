@@ -43,7 +43,9 @@
     (user-error "Default font is nil"))
 
   ;; Default fonts
-  (set-face-attribute 'default nil :height 105 :family default)
+  (set-face-attribute 'default nil
+                      :height akirak/font-height
+                      :family default)
   (set-face-attribute 'fixed-pitch-serif nil
                       ;; Change the color for info-mode
                       :foreground "gold"
@@ -106,14 +108,14 @@
                       :foreground "grey"
                       :background nil
                       ;; :underline t
-                      :height 115
+                      :height (ceiling (* akirak/font-height 1.1))
                       :family (or tags writing-italic default)
                       :inherit 'default)
   (set-face-attribute 'org-tag nil
                       :foreground "grey"
                       :background nil
                       ;; :underline t
-                      :height 115
+                      :height (ceiling (* akirak/font-height 1.1))
                       :family (or tags writing-italic default)
                       :inherit 'default))
 
@@ -130,6 +132,11 @@
         (face-remap-add-relative 'italic `(:family ,writing-italic)))))))
 
 (add-hook 'change-major-mode-hook 'akirak/set-local-text-fonts)
+
+(defcustom akirak/font-height 105
+  "Default height of the font."
+  :group 'akirak
+  :type 'integer)
 
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
