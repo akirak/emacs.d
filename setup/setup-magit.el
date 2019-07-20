@@ -10,7 +10,10 @@
   ("C-S-g" #'magit-dispatch
    "<S-f7>" #'magit-branch-checkout)
   :custom
-  (magit-display-buffer-function 'magit-display-buffer-fullframe-status-v1)
+  (magit-display-buffer-function
+   (if akirak/to-be-run-as-exwm
+       'magit-display-buffer-same-window-except-diff-v1
+     'magit-display-buffer-fullframe-status-v1))
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 

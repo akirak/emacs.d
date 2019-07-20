@@ -14,6 +14,8 @@
 
 (add-to-list 'exec-path (expand-file-name "~/.nix-profile/bin"))
 
+(defconst akirak/to-be-run-as-exwm (member "--exwm" command-line-args))
+
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
 
