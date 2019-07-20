@@ -38,7 +38,7 @@
                                      (desktop-full-file-name) t))
                           "(does not exist)"))))
            "\n")
-          :quit-key "q")
+          :quit-key "C-g")
   ("Desktop"
    (("s" desktop-save-in-desktop-dir "Save to the dir")
     ("w" desktop-save "Save to another dir")
