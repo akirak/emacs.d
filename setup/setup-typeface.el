@@ -142,6 +142,34 @@
          (set-face-attribute 'org-todo nil
                              :height (ceiling (* value 1.1)))))
 
+(defvar akirak/font-height-scale 8)
+
+(defun akirak/font-height-increase ()
+  (interactive)
+  (akirak/set-font-height (+ akirak/font-height akirak/font-height-scale)))
+
+(defun akirak/font-height-decrease ()
+  (interactive)
+  (akirak/set-font-height (- akirak/font-height akirak/font-height-scale)))
+
+(defun akirak/set-font-height (new-value)
+  (interactive (list (read-number (format "Font height [%d]: "
+                                          akirak/font-height))))
+  (general-setq akirak/font-height new-value)
+  (message "Font height set to %d" new-value))
+
+(pretty-hydra-define akirak/appearance-hydra
+  (:title (format "Font height: %d" akirak/font-height)
+          :quit-key ("q" "C-g"))
+  ("Font height"
+   (("=" akirak/font-height-increase "increase")
+    ("-" akirak/font-height-decrease "decrease")
+    ("s" akirak/set-font-height "set temporarily")
+    ("C-s" (customize-set-variable 'akirak/font-height akirak/font-height)
+     "save"))))
+
+(general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
+
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
         (the-list (list :default '("Fira Code"
