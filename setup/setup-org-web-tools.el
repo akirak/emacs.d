@@ -1,4 +1,6 @@
-(use-package org-web-tools)
+(use-package org-web-tools
+  :straight (org-web-tools :host github :repo "akirak/org-web-tools"
+                           :branch "encoding"))
 
 ;;;; Overriding the title function of org-web-tools-insert-link-for-url
 
