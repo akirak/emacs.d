@@ -37,6 +37,8 @@
            do (ivy-add-actions command
                                `(("j" ,(-compose find-other-window 'intern)
                                   "definition in other window"))))
+  (ivy-add-actions #'counsel-describe-function
+                   '(("e" akirak/open-eval-expression-with-function "eval")))
   (ivy-add-actions #'counsel-rg
                    `(("j" ,(-partial #'akirak/counsel-git-grep-action-with-find-file
                                      #'find-file-other-window)
@@ -65,6 +67,27 @@
   (org-show-entry))
 (advice-add 'counsel-org-goto-action :after
             'akirak/ad-after-counsel-org-goto-action)
+
+(defun akirak/open-eval-expression-with-function (x)
+  (let ((exp (let ((minibuffer-completing-symbol t)
+                   (prompt "Eval: ")
+                   (initial-contents (format "(%s )" x)))
+               ;; Stolen from the implementation of `read--expression' in simple.el.gz
+               (minibuffer-with-setup-hook
+                   (lambda ()
+                     ;; Put the cursor inside the brackets
+                     (backward-char 1)
+                     ;; FIXME: call emacs-lisp-mode?
+                     (add-function :before-until (local 'eldoc-documentation-function)
+                                   #'elisp-eldoc-documentation-function)
+                     (eldoc-mode 1)
+                     (add-hook 'completion-at-point-functions
+                               #'elisp-completion-at-point nil t)
+                     (run-hooks 'eval-expression-minibuffer-setup-hook))
+                 (read-from-minibuffer prompt initial-contents
+                                       read-expression-map t
+                                       'read-expression-history)))))
+    (pp-eval-expression exp)))
 
 (defun akirak/counsel-git-grep-action-with-find-file (find-file-func x)
   "Go to occurrence X in current Git repository."
