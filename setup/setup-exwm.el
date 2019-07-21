@@ -106,7 +106,8 @@
                    ("C-w" "C-x")
                    ("M-w" "C-c")
                    ("C-y" "C-v")
-                   ("C-s" "C-f")))
+                   ("C-s" "C-f")
+                   ("C-x k" "C-w")))
        (keybindings (cl-loop for (key key2) in bindings
                              collect (cons (kbd key) (kbd key2)))))
   (setq exwm-input-simulation-keys keybindings)
