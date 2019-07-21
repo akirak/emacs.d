@@ -29,7 +29,8 @@
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
                      ("g" akirak/magit-status-of-library "git repo")
-                     ("d" akirak/dired-of-library "dired")))
+                     ("d" akirak/dired-of-library "dired")
+                     ("r" akirak/open-library-readme "readme")))
   (cl-loop for (command find-other-window)
            in '((counsel-describe-function find-function-other-window)
                 (counsel-describe-variable find-variable-other-window)
@@ -121,6 +122,27 @@
                         truename)
                        (t path)))
     (user-error "Cannot find library or its directory %s" x)))
+
+(defun akirak/open-library-readme (x)
+  (let* ((path (find-library-name x))
+         (dir (file-name-directory (file-truename path)))
+         (files (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))))
+    (unless path
+      (user-error "Cannot find library %s" x))
+    (if files
+        (akirak/view-file (if (= 1 (length files))
+                              (car files)
+                            (completing-read (format "README for %s: " x)
+                                             files nil t)))
+      (dired-find-file-other-window dir)
+      (message "No readme found for %s" x))))
+
+(defun akirak/view-file (filename)
+  (let ((buffer (or (find-buffer-visiting filename)
+                    (find-file-noselect filename))))
+    (with-current-buffer buffer
+      (view-mode-enable))
+    (pop-to-buffer buffer)))
 
 (use-package counsel-projectile
   :after (projectile counsel)
