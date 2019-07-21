@@ -141,7 +141,7 @@
   (let ((buffer (or (find-buffer-visiting filename)
                     (find-file-noselect filename))))
     (with-current-buffer buffer
-      (view-mode-enable))
+      (view-mode 1))
     (pop-to-buffer buffer)))
 
 (use-package counsel-projectile
