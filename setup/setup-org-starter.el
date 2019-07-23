@@ -20,7 +20,6 @@
                               no-littering-etc-directory)))))
 
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
   (org-starter-def "~/.emacs.d/main.org"
@@ -50,8 +49,11 @@
   (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
+(use-package org-starter-swiper)
+
 (use-package org-starter-extras
-  :straight org-starter)
+  :straight (org-starter-extras :host github :repo "akirak/org-starter"
+                                :files ("org-starter-extras.el")))
 
 ;;;; Extra keybindings
 (akirak/bind-user
