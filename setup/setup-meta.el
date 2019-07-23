@@ -68,6 +68,7 @@
     setup-hyperspace
     setup-treemacs
     setup-perfect-margin
+    setup-web-browser
     setup-screencast
     setup-string-inflection
     setup-pass

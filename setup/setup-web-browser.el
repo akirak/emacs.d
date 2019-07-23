@@ -1,4 +1,15 @@
-;;; setup-web-browser.el --- Integration with an external web browser -*- lexical-binding: t -*-
+;;; setup-web-browser.el --- Integration with external web browsers -*- lexical-binding: t -*-
+
+;; In EXWM, prefer Chromium installed on the guest operating system
+;; over Chrome/Chromium installed on Chrome/Chromium OS.
+(when akirak/to-be-run-as-exwm
+  (setq-default browse-url-browser-function browse-url-generic
+                browse-url-generic-program "chromium"))
+
+(defcustom akirak/browser-class-names '("Chromium"
+                                        "Firefox")
+  "List of X class names of web browsers."
+  :type '(repeat string))
 
 (defun akirak/display-url-for-referencing (url)
   (interactive "sUrl: ")
@@ -14,12 +25,12 @@
                       (let ((buf (window-buffer window)))
                         (with-current-buffer buf
                           (and (eq major-mode 'exwm-mode)
-                               (equal exwm-class-name "Firefox")))))
+                               (member exwm-class-name akirak/browser-class-names)))))
                     (window-list)))
 
 (defun akirak/start-browser ()
   (interactive)
-  (start-process-shell-command "firefox" nil "firefox"))
+  (start-process-shell-command "chromium" nil "chromium"))
 
 (akirak/define-frame-workflow "web"
   :key "w"
