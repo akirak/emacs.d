@@ -58,7 +58,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#crux-and-file-operations][Crux and file operations]]
       -  [[#buffer-management][Buffer management]]
       -  [[#magit][Magit]]
-      -  [[#chrome][Chrome]]
+      -  [[#web-browser-integration][Web browser integration]]
       -  [[#company-completion][Company completion]]
       -  [[#yasnippet-and-auto-yasnippet][Yasnippet and auto-yasnippet]]
       -  [[#frequent-counsel-commands][Frequent counsel commands]]
@@ -710,7 +710,11 @@ I sometimes use it for forking a repository, but I plan on removing it in the fu
 =github-review.el= looks useful for reviewing pull requests on GitHub, but I seldom receive pull requests, so I have never used it.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
-*** Chrome
+*** Web browser integration
+#+begin_src emacs-lisp
+  (akirak/require 'setup-web-browser)
+#+end_src
+
 #+begin_src emacs-lisp
 (use-package atomic-chrome
   :disabled t
