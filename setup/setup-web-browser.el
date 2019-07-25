@@ -3,7 +3,7 @@
 ;; In EXWM, prefer Chromium installed on the guest operating system
 ;; over Chrome/Chromium installed on Chrome/Chromium OS.
 (when akirak/to-be-run-as-exwm
-  (setq-default browse-url-browser-function browse-url-generic
+  (setq-default browse-url-browser-function 'browse-url-generic
                 browse-url-generic-program "chromium"))
 
 (defcustom akirak/browser-class-names '("Chromium"
