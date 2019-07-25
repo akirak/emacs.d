@@ -113,7 +113,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#polymode][polymode]]
     -  [[#exwm][EXWM]]
     -  [[#meta][Meta]]
-      -  [[#updating-from-inside-emacs][Updating from inside Emacs]]
+      -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
 
 ** Why?
 *** Literate configuration in Org mode
@@ -1423,13 +1423,26 @@ Some package need to be loaded after other packages, so they are put here.
   (add-to-list 'command-switch-alist '("--exwm" . (lambda (_) nil)))
 #+end_src
 ** Meta
-*** Updating from inside Emacs
+*** Synchronizing my configuration repositories
+I am now using myrepos to synchronize my configuration repositories.
+
 #+begin_src emacs-lisp
-  (defun akirak/update-emacs-config ()
+  (defun akirak/mr-update ()
+    "Run 'mr update' in the home directory."
     (interactive)
-    (let ((default-directory user-emacs-directory))
-      (ansi-term (expand-file-name "update.bash" user-emacs-directory)
-                 "*update config*")))
+    (save-some-buffers)
+    (let ((default-directory "~"))
+      (eshell-command "mr update")
+      (pop-to-buffer "*Eshell Command Output*")))
+
+  (defalias 'akirak/update-configuration 'akirak/mr-update)
+#+end_src
+
+#+begin_src emacs-lisp
+  (defun akirak/mr-push ()
+    (interactive)
+    (let ((default-directory "~"))
+      (compile "mr push")))
 #+end_src
 *** Ignore
 :PROPERTIES:
