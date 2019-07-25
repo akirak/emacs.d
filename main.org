@@ -710,6 +710,10 @@ I sometimes use it for forking a repository, but I plan on removing it in the fu
 =github-review.el= looks useful for reviewing pull requests on GitHub, but I seldom receive pull requests, so I have never used it.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
+**** magit-list-repositories
+=magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
+
+To use it, you first have to customize =magit-repository-directories=.
 *** Web browser integration
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-browser)
