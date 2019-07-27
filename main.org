@@ -367,6 +367,7 @@ Generic prefix key for editing commands:
   (akirak/bind-generic
     "a" '(nil :wk "align")
     "b" '(nil :wk "barf")
+    "h" 'major-mode-hydra
     "i" '(nil :wk "insert")
     "j" '(nil :wk "join")
     "k" '(nil :wk "kill")
