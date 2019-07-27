@@ -65,7 +65,6 @@
     setup-clipurl
     setup-idle
     setup-multiple-cursors
-    setup-hyperspace
     setup-treemacs
     setup-perfect-margin
     setup-screencast
