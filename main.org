@@ -46,12 +46,13 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#org-ql][org-ql]]
       -  [[#all-the-icons][all-the-icons]]
       -  [[#emacsql-sqlite][emacsql-sqlite]]
+    -  [[#platform-workarounds][Platform workarounds]]
+      -  [[#chrome-os-support][Chrome OS support]]
     -  [[#appearances][Appearances]]
       -  [[#theme][Theme]]
       -  [[#frame-elements][Frame elements]]
       -  [[#typeface][Typeface]]
     -  [[#a-bunch-of-useful-features][A bunch of useful features]]
-      -  [[#chrome-os-support][Chrome OS support]]
       -  [[#frame-workflow][frame-workflow]]
       -  [[#terminal-and-shells][Terminal and shells]]
       -  [[#dired][Dired]]
@@ -522,6 +523,16 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 #+begin_src emacs-lisp
   (akirak/require 'setup-emacsql-sqlite)
 #+end_src
+** Platform workarounds
+I use Emacs on the following platforms:
+
+- Debian on Crostini on Chrome OS
+- Ubuntu/Debian on WSL on Windows 10
+*** Chrome OS support
+I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it runs on Chrome OS:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-chromeos t :when (akirak/running-on-crostini-p))
+#+end_src
 ** Appearances
 *** Theme
 - You can set the default theme using the customization interface.
@@ -605,11 +616,6 @@ If your operating system supports Docker, you can use [[https://github.com/akira
   (akirak/require 'setup-misc)
 #+end_src
 
-*** Chrome OS support
-I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it runs on Chrome OS:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-chromeos t :when (akirak/running-on-crostini-p))
-#+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
 
