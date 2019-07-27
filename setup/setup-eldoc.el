@@ -26,17 +26,20 @@
     (lv-delete-window)
     (setq akirak/eldoc-lv-window nil)))
 
+(defun akirak/eldoc-message-lv (format &rest args)
+  (let ((initial-window (selected-window)))
+    (unwind-protect
+        (if (and format
+                 (not (string-empty-p format)))
+            (apply #'akirak/eldoc-message format args)
+          (akirak/eldoc-delete-window))
+      (select-window initial-window))))
+
+(byte-compile #'akirak/eldoc-message-lv)
+
 ;; Use lv.el (which is in the same repo as hydra) to display
 ;; eldoc messages.
-(setq eldoc-message-function (cl-function
-                              (lambda (format &rest args)
-                                (let ((initial-window (selected-window)))
-                                  (unwind-protect
-                                      (if (and format
-                                               (not (string-empty-p format)))
-                                          (apply #'akirak/eldoc-message format args)
-                                        (akirak/eldoc-delete-window))
-                                    (select-window initial-window))))))
+(setq eldoc-message-function #'akirak/eldoc-message-lv)
 
 (advice-add #'display-buffer :before #'akirak/eldoc-delete-window)
 
