@@ -86,6 +86,7 @@
                         ("x" counsel-linux-app)
                         ("m" window-go-master)
                         ("n" window-go-split-sensibly)
+                        ("z" akirak/select-minibuffer-window)
                         ("'" ace-window)))
        (keybindings (cl-loop for (char cmd) in char-bindings
                              collect (cons (kbd (concat "s-" char))
@@ -94,6 +95,11 @@
   (cl-loop for (key . cmd) in keybindings
            do (exwm-input--set-key key cmd))
   (exwm-input--update-global-prefix-keys))
+
+(defun akirak/select-minibuffer-window ()
+  (interactive)
+  (when-let ((window (active-minibuffer-window)))
+    (select-window window)))
 
 ;;;;; Local keybindings available in line-mode
 ;; (general-def :keymaps 'exwm-mode-map)
