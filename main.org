@@ -1362,25 +1362,17 @@ Ideally, this section should be a portfolio of my skills.
 #+end_src
 **** Hydra
 #+begin_src emacs-lisp
-  (defhydra akirak/emacs-lisp-mode-hydra (:exit t :hint nil)
-    "
-  emacs-lisp
-
-  ^^Point/last sexp  ^^Buffer          ^^Help/doc
-  ^^---------------  ^^--------------  ----------
-  _._ helpful        _e_ eval          _i_ info symbol
-  _m_ macroexp       _l_ package-lint  _s_ suggest
-
-  "
-    ("i" counsel-info-lookup-symbol)
-    ("s" suggest)
-    ("." helpful-at-point)
-    ("e" akirak/eval-buffer-or-load-file)
-    ("l" package-lint-current-buffer)
-    ("m" pp-macroexpand-last-sexp)
-    ("q" nil "quit"))
-
-  (akirak/bind-mode-hydra 'emacs-lisp-mode)
+  (major-mode-hydra-define emacs-lisp-mode
+    (:title "emacs-lisp-mode"
+            :quit-key "q")
+    ("file/buffer"
+     (("e" akirak/eval-buffer-or-load-file "Eval or load file")
+      ("l" package-lint-current-buffer "package-lint"))
+     "point"
+     (("m" pp-macroexpand-last-sexp "macroexpand"))
+     "help/references"
+     (("s" suggest)
+      ("i" counsel-info-lookup-symbol "info symbol"))))
 #+end_src
 **** Frame
 #+begin_src emacs-lisp
