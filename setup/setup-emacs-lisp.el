@@ -1,6 +1,7 @@
 ;;; init-emacs-lisp.el --- Configuration for emacs-lisp-mode  -*- lexical-binding: t; -*-
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
 
 (setq-mode-local emacs-lisp-mode
                  imenu-generic-expression
