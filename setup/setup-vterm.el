@@ -4,6 +4,14 @@
   :config
   (defun akirak/vterm-exit (&optional buf)
     (kill-buffer (or buf (current-buffer))))
+  (defun akirak/run-interactive-shell-command (command)
+    (interactive "s")
+    (let ((buffer (generate-new-buffer "vterm")))
+      (with-current-buffer buffer
+        (vterm-mode)
+        (pop-to-buffer buffer)
+        (vterm-send-string command)
+        (vterm-send-return))))
   (add-hook 'vterm-exit-functions #'akirak/vterm-exit))
 
 (use-package vterm-toggle
