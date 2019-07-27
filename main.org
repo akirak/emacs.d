@@ -530,7 +530,8 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 =emacsql-sqlite= depends on a pre-built binary executable. To use this feature, you have to build dependencies beforehand using [[file:Makefile::emacsql-sqlite:][a make task]].
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-emacsql-sqlite)
+  (use-package emacsql-sqlite
+    :straight nil)
 #+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:
