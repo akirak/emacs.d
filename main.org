@@ -622,6 +622,7 @@ If your operating system supports Docker, you can use [[https://github.com/akira
   ;; C-c h
   (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
   (general-def "C-z" #'akirak/context-hydra/body)
+  (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
 #+end_src
 **** Context hydra
 :PROPERTIES:
@@ -701,6 +702,35 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("p" page-break-lines-mode :toggle t)
       ("n" line-number-mode :toggle t))))
 #+end_src
+**** Appearance hydra
+:PROPERTIES:
+:CREATED_TIME: [2019-07-27 Sat 22:11]
+:END:
+#+begin_src emacs-lisp
+  (pretty-hydra-define akirak/appearance-hydra
+    (:title (format "Font height: %d" akirak/font-height)
+            :quit-key "q")
+    ("Default font height"
+     (("=" akirak/font-height-increase "increase")
+      ("-" akirak/font-height-decrease "decrease")
+      ("s" akirak/set-font-height "set temporarily")
+      ("C-s" (customize-set-variable 'akirak/font-height akirak/font-height)
+       "save"))
+     "Buffer font height"
+     (("+" text-scale-increase "increase")
+      ("_" text-scale-decrease "decrease")
+      ("!" text-scale-set "default"))
+     ;; TODO: Add commands to change the theme and font families
+     ;; "Faces"
+     ;; (("t" akirak/load-theme-package "Change theme")
+     ;;  ("f" akirak/configure-font-families "Font families"))
+     "Inspect"
+     (("c" describe-char))))
+#+end_src
+**** TODO Emacs debugging hydra
+:PROPERTIES:
+:CREATED_TIME: [2019-07-27 Sat 17:43]
+:END:
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
 

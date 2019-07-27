@@ -158,18 +158,6 @@
   (general-setq akirak/font-height new-value)
   (message "Font height set to %d" new-value))
 
-(pretty-hydra-define akirak/appearance-hydra
-  (:title (format "Font height: %d" akirak/font-height)
-          :quit-key ("q" "C-g"))
-  ("Font height"
-   (("=" akirak/font-height-increase "increase")
-    ("-" akirak/font-height-decrease "decrease")
-    ("s" akirak/set-font-height "set temporarily")
-    ("C-s" (customize-set-variable 'akirak/font-height akirak/font-height)
-     "save"))))
-
-(general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
-
 (defcustom akirak/face-fonts
   (let ((family-list (font-family-list))
         (the-list (list :default '("Fira Code"
