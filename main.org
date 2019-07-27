@@ -1578,8 +1578,7 @@ I am now using myrepos to synchronize my configuration repositories.
     (interactive)
     (save-some-buffers)
     (let ((default-directory "~"))
-      (eshell-command "mr update")
-      (pop-to-buffer "*Eshell Command Output*")))
+      (akirak/run-interactive-shell-command "mr update")))
 
   (defalias 'akirak/update-configuration 'akirak/mr-update)
 #+end_src
@@ -1588,7 +1587,7 @@ I am now using myrepos to synchronize my configuration repositories.
   (defun akirak/mr-push ()
     (interactive)
     (let ((default-directory "~"))
-      (compile "mr push")))
+      (akirak/run-interactive-shell-command "mr push")))
 #+end_src
 *** Ignore
 :PROPERTIES:
