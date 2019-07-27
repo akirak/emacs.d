@@ -768,19 +768,25 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 #+begin_src emacs-lisp
   (akirak/require 'setup-terminal t)
 #+end_src
+**** Using vterm
+I will use vterm.
 
 #+begin_src emacs-lisp
-  (general-def
-    "<f6>" 'akirak/shell-new
-    "C-x T" #'akirak/shell-toggle-dedicated)
+  (akirak/require 'setup-vterm)
+#+end_src
+
+To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp.
+
+#+begin_src emacs-lisp
+  (akirak/bind-user "t" #'vterm-toggle-cd)
 #+end_src
 **** Frame
-
 #+begin_src emacs-lisp
   (akirak/define-frame-workflow "terminal"
     :key "t"
     :make-frame
     '(frame-purpose-make-frame :modes '(term-mode
+                                        vterm-mode
                                         eshell-mode
                                         shell-mode))
     :layout

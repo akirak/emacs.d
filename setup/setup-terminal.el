@@ -1,7 +1,8 @@
 ;;; Terminal-related settings
 
 ;;;; Configure the default terminal/shell application
-
+;; Since I have decided to use vterm, this section is no longer
+;; relevant.
 (setq akirak/shell-settings
       '((aweshell :open-dedicated aweshell-dedicated-open
                   :new aweshell-new
@@ -25,7 +26,7 @@
                                               (string-remove-prefix ":" (symbol-name key))))))
                     (fset name value))))))
 
-;;;; Workarounds for term-mode
+;;;; Workarounds for terminal and shell modes
 
 (use-package xterm-color
   :straight (xterm-color :host github :repo "atomontage/xterm-color")
