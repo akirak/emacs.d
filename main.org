@@ -621,6 +621,55 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 #+begin_src emacs-lisp
   ;; C-c h
   (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
+  (general-def "C-z" #'akirak/context-hydra/body)
+#+end_src
+**** Context hydra
+:PROPERTIES:
+:CREATED_TIME: [2019-07-27 Sat 17:43]
+:END:
+#+begin_src emacs-lisp
+  (pretty-hydra-define akirak/context-hydra
+    (:title (string-join
+             `("Context"
+               ,(when desktop-dirname
+                  (format "Desktop dir: %s\n%s"
+                          (abbreviate-file-name desktop-dirname)
+                          (if (file-exists-p (desktop-full-file-name))
+                              (format "(exists, updated: %s)"
+                                      (akirak/context-hydra-format-relative-filetime
+                                       (desktop-full-file-name) t))
+                            "(does not exist)"))))
+             "\n")
+            :quit-key "C-g"
+            :foreign-keys run)
+    ("Org"
+     (("j" org-clock-goto "Go to clock")
+      ("h" counsel-org-clock-history "History")
+      ("a" org-agenda "Agenda"))
+     "Desktop"
+     (("s" desktop-save-in-desktop-dir "Save to the dir")
+      ("w" desktop-save "Save to another dir")
+      ("R" desktop-read "Reload from the dir")
+      ("D" desktop-remove "Purge")
+      ("L" desktop-change-dir "Change the dir")
+      ("F" desktop-clear "Clear"))
+     "Projectile"
+     (("p" projectile-switch-project "Switch project"))))
+
+  (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
+    (let* ((attrs (file-attributes file))
+           (internal (pcase type
+                       ;; TODO: Add support for other time attributes, e.g. visited time
+                       (_ (file-attribute-modification-time attrs))))
+           (file-time (make-ts :unix (float-time internal)))
+           (abs-format "%Y-%m-%d %H:%M"))
+      (if verbose
+          (format "%s (%s)"
+                  (ts-format abs-format file-time)
+                  (ts-human-format-duration
+                   (ts-difference (ts-now) file-time)
+                   'abbreviate))
+        (ts-format abs-format file-time))))
 #+end_src
 **** Minor-mode-hydra: hydra for toggling minor modes
 #+begin_src emacs-lisp
