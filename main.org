@@ -53,6 +53,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#frame-elements][Frame elements]]
       -  [[#typeface][Typeface]]
     -  [[#a-bunch-of-useful-features][A bunch of useful features]]
+      -  [[#pretty-hydras][Pretty hydras]]
       -  [[#frame-workflow][frame-workflow]]
       -  [[#terminal-and-shells][Terminal and shells]]
       -  [[#dired][Dired]]
@@ -616,6 +617,41 @@ If your operating system supports Docker, you can use [[https://github.com/akira
   (akirak/require 'setup-misc)
 #+end_src
 
+*** Pretty hydras
+#+begin_src emacs-lisp
+  ;; C-c h
+  (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
+#+end_src
+**** Minor-mode-hydra: hydra for toggling minor modes
+#+begin_src emacs-lisp
+  (pretty-hydra-define akirak/minor-mode-hydra
+    (:title "Minor modes"
+            :foreign-keys nil
+            :quit-key "q")
+    ("Focus"
+     (("v" view-mode :toggle t)
+      ("fm" focus-mode :toggle t))
+     "Info/check/linting"
+     (("ed" eldoc-mode :toggle t)
+      ("fc" flycheck-mode :toggle t)
+      ("fs" flyspell-mode :toggle t)
+      ("fp" flyspell-prog-mode :toggle t))
+     "Edit/assistance"
+     (("s" smartparens-mode :toggle t)
+      ("S" smartparens-strict-mode :toggle t)
+      ("l" lispy-mode :toggle t)
+      ("L" lsp-mode :toggle t)
+      ("el" electric-layout-mode :toggle t)
+      ("ei" electric-indent-local-mode :toggle t)
+      ("eq" electric-quote-local-mode :toggle t)
+      ("ea" aggressive-indent-mode :toggle t)
+      ("W" whitespace-cleanup-mode))
+     "Visual"
+     (("w" whitespace-mode :toggle t)
+      ("r" rainbow-delimiters-mode :toggle t)
+      ("p" page-break-lines-mode :toggle t)
+      ("n" line-number-mode :toggle t))))
+#+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
 

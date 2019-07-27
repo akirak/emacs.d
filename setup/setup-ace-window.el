@@ -19,7 +19,6 @@
      (?d delete-frame)
      (?f make-frame-command)
      (?g magit-status)
-     (?z akirak/minor-mode-hydra/body)
      (?a treemacs)
      (?n aweshell-dedicated-open)
      (?b ibuffer-sidebar-toggle-sidebar)
