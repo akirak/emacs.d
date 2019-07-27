@@ -623,6 +623,7 @@ If your operating system supports Docker, you can use [[https://github.com/akira
   (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
   (general-def "C-z" #'akirak/context-hydra/body)
   (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
+  (general-def "<f1>j" #'akirak/emacs-lisp-debugging-hydra/body)
 #+end_src
 **** Context hydra
 :PROPERTIES:
@@ -727,10 +728,24 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      "Inspect"
      (("c" describe-char))))
 #+end_src
-**** TODO Emacs debugging hydra
+**** Emacs debugging hydra
 :PROPERTIES:
 :CREATED_TIME: [2019-07-27 Sat 17:43]
 :END:
+#+begin_src emacs-lisp
+  (pretty-hydra-define akirak/emacs-lisp-debugging-hydra
+    (:title (string-join `("Emacs Lisp Debugging"
+                           ,(format "GC verbose: %s" (if gcmh-verbose "Yes" "No")))
+                         "\n"))
+    ("Profiler"
+     (("pc" (profiler-cpu-start profiler-sampling-interval) "CPU start" :exit t)
+      ("pm" (profiler-memory-start) "Mem start" :exit t)
+      ("pr" (profiler-report) "Report" :exit t)
+      ("pS" (profiler-stop) "Stop" :exit t)
+      ("pR" (profiler-reset) "Reset"))
+     "GC"
+     (("g" (setq gcmh-verbose (not gcmh-verbose)) "Toggle"))))
+#+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
 
