@@ -641,15 +641,16 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 #+begin_src emacs-lisp
   (pretty-hydra-define akirak/context-hydra
     (:title (string-join
-             `("Context"
-               ,(when desktop-dirname
-                  (format "Desktop dir: %s\n%s"
-                          (abbreviate-file-name desktop-dirname)
-                          (if (file-exists-p (desktop-full-file-name))
-                              (format "(exists, updated: %s)"
-                                      (akirak/context-hydra-format-relative-filetime
-                                       (desktop-full-file-name) t))
-                            "(does not exist)"))))
+             `(,(concat "Desktop dir: "
+                        (if desktop-dirname
+                            (format "%s %s"
+                                    (abbreviate-file-name desktop-dirname)
+                                    (if (file-exists-p (desktop-full-file-name))
+                                        (format "(exists, updated: %s)"
+                                                (akirak/context-hydra-format-relative-filetime
+                                                 (desktop-full-file-name) t))
+                                      "(does not exist)"))
+                          "nil")))
              "\n")
             :quit-key "C-g"
             :foreign-keys run)
