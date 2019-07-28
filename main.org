@@ -664,8 +664,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("D" desktop-remove "Purge")
       ("L" desktop-change-dir "Change the dir")
       ("F" desktop-clear "Clear"))
-     "Projectile"
-     (("p" projectile-switch-project "Switch project"))))
+     "Projectile & Magit"
+     (("p" projectile-switch-project "Switch project")
+      ("g" magit-list-repositories "Git repo list"))))
 
   (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
     (let* ((attrs (file-attributes file))
