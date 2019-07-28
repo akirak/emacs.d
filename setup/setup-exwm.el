@@ -1,5 +1,7 @@
 (use-package exwm
   :commands (exwm-enable)
+  :config
+  (add-to-list 'exwm-input-prefix-keys ?\M-o)
   :custom
   (exwm-floating-border-width 3)
   (exwm-floating-border-color "orange")
@@ -86,8 +88,7 @@
                         ("x" counsel-linux-app)
                         ("m" window-go-master)
                         ("n" window-go-split-sensibly)
-                        ("z" akirak/select-minibuffer-window)
-                        ("'" ace-window)))
+                        ("z" akirak/select-minibuffer-window)))
        (keybindings (cl-loop for (char cmd) in char-bindings
                              collect (cons (kbd (concat "s-" char))
                                            cmd))))
