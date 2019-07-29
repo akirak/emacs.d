@@ -527,7 +527,7 @@ Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(r
 (use-package all-the-icons)
 #+end_src
 *** emacsql-sqlite
-=emacsql-sqlite= depends on a pre-built binary executable. To use this feature, you have to build dependencies beforehand using [[file:Makefile::emacsql-sqlite:][a make task]].
+=emacsql-sqlite= depends on a pre-built binary executable. This is built and installed by Nix package manager.
 
 #+begin_src emacs-lisp
   (use-package emacsql-sqlite
