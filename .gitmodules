@@ -1,6 +1,3 @@
-[submodule "contrib/emacsql"]
-	path = contrib/emacsql
-	url = https://github.com/skeeto/emacsql.git
 [submodule "contrib/yasnippet-snippets"]
 	path = contrib/yasnippet-snippets
 	url = https://github.com/AndreaCrotti/yasnippet-snippets.git
