@@ -998,8 +998,16 @@ I often consult the Emacs Lisp manual:
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
 :END:
+I will try out apheleia.
+
 #+begin_src emacs-lisp
-  (akirak/require 'setup-reformatter)
+  (akirak/require 'setup-apheleia)
+#+end_src
+
+Another option would be reformatter by Steve Purcell, but I haven't managed to configure it for Nix + npm projects yet.
+
+#+begin_src emacs-lisp
+  ;; (akirak/require 'setup-reformatter)
 #+end_src
 *** Editing specific types of formats
 :PROPERTIES:
