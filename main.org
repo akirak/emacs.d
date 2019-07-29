@@ -657,7 +657,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
     ("Org"
      (("j" org-clock-goto "Go to clock")
       ("h" counsel-org-clock-history "History")
-      ("a" org-agenda "Agenda"))
+      ("a" org-agenda "Agenda")
+      ("O" org-clock-out "Clock out")
+      ("C-q" org-clock-cancel "Cancel clock"))
      "Desktop"
      (("s" desktop-save-in-desktop-dir "Save to the dir")
       ("w" desktop-save "Save to another dir")
