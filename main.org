@@ -655,9 +655,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
             :quit-key "C-g"
             :foreign-keys run)
     ("Org"
-     (("j" org-clock-goto "Go to clock")
-      ("h" counsel-org-clock-history "History")
-      ("a" org-agenda "Agenda")
+     (("j" org-clock-goto "Go to clock" :exit t)
+      ("h" counsel-org-clock-history "History" :exit t)
+      ("a" org-agenda "Agenda" :exit t)
       ("O" org-clock-out "Clock out")
       ("C-q" org-clock-cancel "Cancel clock"))
      "Desktop"
@@ -668,8 +668,8 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("L" desktop-change-dir "Change the dir")
       ("F" desktop-clear "Clear"))
      "Projectile & Magit"
-     (("p" projectile-switch-project "Switch project")
-      ("g" magit-list-repositories "Git repo list"))))
+     (("p" projectile-switch-project "Switch project" :exit t)
+      ("g" magit-list-repositories "Git repo list" :exit t))))
 
   (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
     (let* ((attrs (file-attributes file))
