@@ -6,7 +6,7 @@
     (bury-buffer (or buf (current-buffer))))
   (defun akirak/run-interactive-shell-command (command &optional name)
     (interactive "s")
-    (let ((buffer (generate-new-buffer (or name "vterm"))))
+    (let ((buffer (generate-new-buffer (or name "*vterm*"))))
       (with-current-buffer buffer
         (let ((vterm-shell command))
           (vterm-mode))
