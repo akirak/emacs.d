@@ -3,7 +3,7 @@
   :straight nil
   :config
   (defun akirak/vterm-exit (&optional buf)
-    (kill-buffer (or buf (current-buffer))))
+    (bury-buffer (or buf (current-buffer))))
   (defun akirak/run-interactive-shell-command (command &optional name)
     (interactive "s")
     (let ((buffer (generate-new-buffer (or name "vterm"))))
