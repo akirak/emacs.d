@@ -750,7 +750,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
     (:title (string-join `("Emacs Lisp Debugging"
                            ,(format "GC verbose: %s" (if gcmh-verbose "Yes" "No")))
                          "\n"))
-    ("Profiler"
+    ("Debug"
+     (("d" toggle-debug-on-error :toggle (default-value 'debug-on-error)))
+     "Profiler"
      (("pc" (profiler-cpu-start profiler-sampling-interval) "CPU start" :exit t)
       ("pm" (profiler-memory-start) "Mem start" :exit t)
       ("pr" (profiler-report) "Report" :exit t)
