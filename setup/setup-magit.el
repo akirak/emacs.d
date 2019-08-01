@@ -35,6 +35,18 @@
     (string-trim-left (or (magit-git-string "remote" "get-url" "origin")
                           "")
                       (rx (or "https://" "git@" "git://"))))
+
+  (defun akirak/magit-repolist-column-dirty (_id)
+    "Insert a letter if there are uncommitted changes.
+
+Show N if there is at least one untracked file.
+Show U if there is at least one unstaged file.
+Show S if there is at least one staged file.
+Only one letter is shown, the first that applies."
+    (cond ((magit-untracked-files) "?")
+          ((magit-unstaged-files)  "*")
+          ((magit-staged-files)    "+")))
+
   :general
   ;; C-c M-g is bound to magit-file-dispatch by default.
   ;; I will bind C-c M-KEY to some other frequently used magit commands.
@@ -43,7 +55,7 @@
   (magit-repolist-columns
    '(("Path" 20 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
-     ("Drty" 4 magit-repolist-column-dirty nil)
+     ("Drty" 4 akirak/magit-repolist-column-dirty nil)
      ("Unmg" 5 akirak/magit-repolist-column-unmerged nil)
      ("Stsh" 4 magit-repolist-column-stashes nil)
      ("B<U" 3 magit-repolist-column-unpulled-from-upstream
