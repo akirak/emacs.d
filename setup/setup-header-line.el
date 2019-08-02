@@ -20,18 +20,23 @@
 (defun akirak/make-header-line-format (&rest body)
   "Build a header line format with the standard set of segments."
   (let* ((filep (when buffer-file-name t))
+         (base-buffer (unless filep (buffer-base-buffer)))
+         (indirectp (when base-buffer t))
+         (file-name (cond
+                     (filep buffer-file-name)
+                     (base-buffer (buffer-file-name base-buffer))))
          (project-root (projectile-project-root))
          (project-name (when project-root
                          (projectile-project-name)))
-         (relative-name (when (and filep project-root)
-                          (file-relative-name buffer-file-name project-root)))
-         (base-buffer (unless filep (buffer-base-buffer)))
-         (buffer-segment (if filep
-                             (propertize (or relative-name
-                                             (file-name-nondirectory buffer-file-name))
-                                         'face 'akirak/header-line-buffer-name)
+         (relative-name (when (and file-name project-root)
+                          (file-relative-name file-name project-root)))
+         (file-segment (when file-name
+                         (propertize (or relative-name
+                                         (file-name-nondirectory file-name))
+                                     'face 'akirak/header-line-buffer-name)))
+         (buffer-segment (unless filep
                            (propertize (buffer-name)
-                                       'face (if base-buffer
+                                       'face (if indirectp
                                                  'akirak/header-line-indirect-buffer-name
                                                'akirak/header-line-non-file-buffer-name))))
          (icon (or (and (featurep 'all-the-icons)
@@ -49,6 +54,7 @@
       " "
       ;; If it is a file-visiting buffer, show the file name.
       ;; Otherwise, show the buffer name.
+      ,file-segment
       ,buffer-segment
       "%* "
       ;; Display the statuses of the buffer
