@@ -17,61 +17,53 @@
   '((default :inherit font-lock-function-name-face))
   "Face for the function name or header in the header line.")
 
-(defun akirak/header-line-buffer-segment ()
-  "Generate the buffer segment in the header line."
-  (propertize
-   (if buffer-file-name
-       ;; If the file is inside a project, show the
-       ;; relative file path from the root.
-       (concat (if-let ((root (projectile-project-root)))
-                   (file-relative-name buffer-file-name root)
-                 (file-name-nondirectory buffer-file-name))
-               (when (buffer-modified-p) "*"))
-     (propertize (buffer-name)
-                 'face
-                 (if (buffer-base-buffer)
-                     'akirak/header-line-indirect-buffer-name
-                   'akirak/header-line-non-file-buffer-name)))
-   'face 'akirak/header-line-buffer-name))
-
-(defvar-local akirak/header-line-icon nil)
-
 (defun akirak/make-header-line-format (&rest body)
   "Build a header line format with the standard set of segments."
-  `("  "
-    ;; Display an icon for the mode if any
-    (:eval (or akirak/header-line-icon
-               (setq akirak/header-line-icon
-                     (or (and (featurep 'all-the-icons)
-                              (let ((file-name (buffer-file-name)))
-                                (if (and file-name
-                                         (bound-and-true-p polymode-mode))
-                                    (all-the-icons-icon-for-file file-name)
-                                  (all-the-icons-icon-for-buffer))))
-                         mode-name))))
-    " "
-    (:eval (when buffer-file-name
-             (let ((project (projectile-project-name)))
-               (when project (format "[%s] " project)))))
-    " "
-    ;; If it is a file-visiting buffer, show the file name.
-    ;; Otherwise, show the buffer name.
-    (:eval (akirak/header-line-buffer-segment))
-    " "
-    ;; Display the statuses of the buffer
-    (:eval (when (buffer-narrowed-p) "<N> "))
-    (read-only-mode "<RO> ")
-    ;; Display the column number if the buffer is in prog-mode
-    ,(if (derived-mode-p 'prog-mode)
-         "(%l,%3c) "
-       " ")
-    (:eval (if (bound-and-true-p rich-minority-mode)
-               (rm--mode-list-as-string-list)
-             ;; I am not sure if this works
-             (format-mode-line 'minor-mode-list)))
-    " "
-    ;; Append any segments
-    ,@body))
+  (let* ((filep (when buffer-file-name t))
+         (project-root (projectile-project-root))
+         (project-name (when project-root
+                         (projectile-project-name)))
+         (relative-name (when (and filep project-root)
+                          (file-relative-name buffer-file-name project-root)))
+         (base-buffer (unless filep (buffer-base-buffer)))
+         (buffer-segment (if filep
+                             (propertize (or relative-name
+                                             (file-name-nondirectory buffer-file-name))
+                                         'face 'akirak/header-line-buffer-name)
+                           (propertize (buffer-name)
+                                       'face (if base-buffer
+                                                 'akirak/header-line-indirect-buffer-name
+                                               'akirak/header-line-non-file-buffer-name))))
+         (icon (or (and (featurep 'all-the-icons)
+                        (let ((file-name (buffer-file-name)))
+                          (if (and file-name
+                                   (bound-and-true-p polymode-mode))
+                              (all-the-icons-icon-for-file file-name)
+                            (all-the-icons-icon-for-buffer))))
+                   mode-name)))
+    `("  "
+      ;; Display an icon for the mode if any
+      ,icon
+      " "
+      ,(when project-name (format "[%s]" project-name))
+      " "
+      ;; If it is a file-visiting buffer, show the file name.
+      ;; Otherwise, show the buffer name.
+      ,buffer-segment
+      "%* "
+      ;; Display the statuses of the buffer
+      "%n"
+      (read-only-mode "<RO> ")
+      ;; Display the column number if the buffer is in prog-mode
+      ,(if (derived-mode-p 'prog-mode)
+           "(%l,%3c) "
+         " ")
+      (:eval (if (bound-and-true-p rich-minority-mode)
+                 (rm--mode-list-as-string-list)
+               ;; I am not sure if this works
+               (format-mode-line 'minor-mode-list)))
+      ;; Append any segments
+      ,@body)))
 
 ;;;; Default header line with which-function
 
