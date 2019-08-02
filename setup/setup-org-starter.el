@@ -7,6 +7,7 @@
 (use-package org-reverse-datetree)
 
 (use-package org-super-agenda
+  :after org-agenda
   :config
   (org-super-agenda-mode 1))
 
