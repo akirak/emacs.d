@@ -1,12 +1,12 @@
 (use-package company
   ;; :diminish company-mode
-  :init
-  (add-hook 'after-init-hook 'global-company-mode)
   :general
   (:keymaps 'company-active-map :package 'company
             "C-n" #'company-select-next
             "C-p" #'company-select-previous
             "M-/" #'company-other-backend)
+  :hook
+  (prog-mode . company-mode)
   :custom
   (company-dabbrev-other-buffers 'all "Search all buffers for company-dabbrev")
   (company-tooltip-align-annotations t)
