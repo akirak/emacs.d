@@ -29,8 +29,7 @@ is an indirect buffer, this command doesn't do anything."
                       (end-of-defun)
                       (point)))
                (name (read-string "Name of the indirect buffer to create: "
-                                  (when (bound-and-true-p which-function-mode)
-                                    (which-function)))))
+                                  (akirak/default-name-for-indirect-buffer))))
            (clone-indirect-buffer name t)
            (narrow-to-region start end)
            (set-mark nil)))
@@ -49,5 +48,14 @@ is an indirect buffer, this command doesn't do anything."
         ((derived-mode-p 'latex-mode)
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
+
+(defun akirak/default-name-for-indirect-buffer ()
+  (let ((local-name (when (bound-and-true-p which-function-mode)
+                      (which-function)))
+        (file-name (buffer-file-name)))
+    (cond
+     ((and local-name file-name)
+      (format "%s in %s" local-name (file-name-nondirectory file-name)))
+     (t local-name))))
 
 (provide 'narrow-or-widen)
