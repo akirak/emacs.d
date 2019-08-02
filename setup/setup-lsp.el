@@ -3,19 +3,6 @@
   :config
   (require 'lsp-clients))
 
-;; For company completion and snippets
-;;
-;; If the language server for the language doesn't support returning
-;; snippets, you can define one one your own by customizing the
-;; variable `company-lsp--snippet-functions'.
-;; See the following document for details.
-;; https://github.com/tigersoldier/company-lsp#defining-completion-snippet-for-a-certain-language
-(use-package company-lsp
-  :after (company lsp)
-  :commands company-lsp
-  :hook
-  (company-backends . company-lsp))
-
 (use-package lsp-ui
   :commands lsp-ui-mode
   :general

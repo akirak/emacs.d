@@ -1457,12 +1457,6 @@ I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I 
 #+end_src
 *** Shell scripts (bash)
 
-#+begin_src emacs-lisp
-  (use-package company-shell
-    :init
-    (add-to-list 'company-backends 'company-shell))
-#+end_src
-
 *** Elm
 
 #+begin_src emacs-lisp

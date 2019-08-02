@@ -1,10 +1,6 @@
 (use-package ansible
   :commands (ansible))
 
-(use-package company-ansible
-  :after (company ansible)
-  :config (add-hook 'company-backends 'company-ansible))
-
 ;;;; Detecting Ansible projects
 
 (defun akirak/ansible-detect ()
