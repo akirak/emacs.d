@@ -71,10 +71,11 @@
   (unless header-line-format
     (setq header-line-format (akirak/make-header-line-format
                               ;; Omit which-func if the buffer is indirect
-                              (when (and (not (buffer-base-buffer))
-                                         (derived-mode-p 'prog-mode 'text-mode))
-                                `(which-function-mode
-                                  ,which-func-current))))))
+                              ;; (when (and (not (buffer-base-buffer))
+                              ;;            (derived-mode-p 'prog-mode 'text-mode))
+                              ;;   `(which-function-mode
+                              ;;     ,which-func-current))
+                              ))))
 
 ;;;;; Setting the default header line
 
