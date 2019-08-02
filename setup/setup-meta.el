@@ -49,6 +49,7 @@
     setup-link-hint                     ; Jumping to a URL
     setup-helm-org-rifle
     setup-ibuffer
+    setup-prescient
     setup-smart-jump                ; Jump to a definition / reference
     setup-lsp                       ; Language-agnostic IDE toolkit
     setup-rich-minority             ; Whitelist minor modes
