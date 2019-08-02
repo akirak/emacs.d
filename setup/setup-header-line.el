@@ -25,7 +25,8 @@
          (file-name (cond
                      (filep buffer-file-name)
                      (base-buffer (buffer-file-name base-buffer))))
-         (project-root (projectile-project-root))
+         (project-root (when (bound-and-true-p projectile-mode)
+                         (projectile-project-root)))
          (project-name (when project-root
                          (projectile-project-name)))
          (relative-name (when (and file-name project-root)
