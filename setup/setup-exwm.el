@@ -23,7 +23,10 @@
 
 (defun akirak/exwm-rename-buffer ()
   "Rename the buffer name after the title is changed."
-  (exwm-workspace-rename-buffer exwm-title))
+  (exwm-workspace-rename-buffer (format "*EXWM:%s*" exwm-title)))
+
+(defun akirak/exwm-list-buffers ()
+  (internal-complete-buffer "*EXWM:" nil t))
 
 (defun akirak/exwm-manage-finish ()
   (cond
@@ -86,7 +89,8 @@
                         ("x" counsel-linux-app)
                         ("m" window-go-master)
                         ("n" window-go-split-sensibly)
-                        ("z" akirak/select-minibuffer-window)))
+                        ("z" akirak/select-minibuffer-window)
+                        ("w" akirak/raise-browser)))
        (keybindings (cl-loop for (char cmd) in char-bindings
                              collect (cons (kbd (concat "s-" char))
                                            cmd))))

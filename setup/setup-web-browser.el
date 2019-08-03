@@ -6,11 +6,6 @@
   (setq-default browse-url-browser-function 'browse-url-generic
                 browse-url-generic-program "chromium"))
 
-(defcustom akirak/browser-class-names '("Chromium"
-                                        "Firefox")
-  "List of X class names of web browsers."
-  :type '(repeat string))
-
 (defun akirak/display-url-for-referencing (url)
   (interactive "sUrl: ")
   (let ((orig-win (selected-window)))
@@ -19,18 +14,67 @@
     (eww url)
     (select-window orig-win)))
 
-(defun akirak/browser-windows ()
-  "Return a list of web browser windows in the frame."
-  (cl-remove-if-not (lambda (window)
-                      (let ((buf (window-buffer window)))
-                        (with-current-buffer buf
-                          (and (eq major-mode 'exwm-mode)
-                               (member exwm-class-name akirak/browser-class-names)))))
-                    (window-list)))
+(defcustom akirak/browser-class-names '("Chromium"
+                                        "Chromium-browser"
+                                        "Firefox")
+  "List of X class names of web browsers."
+  :type '(repeat string))
 
-(defun akirak/start-browser ()
+(defun akirak/exwm-browser-buffer-p (buffer)
+  ;; (and (eq 'exwm-mode (buffer-local-value 'major-mode buffer))
+  ;;      (member (buffer-local-value 'exwm-class-name buffer)
+  ;;              akirak/browser-class-names))
+  (when (stringp buffer)
+    (setq buffer (get-buffer buffer)))
+  (unless buffer
+    (user-error "BUFFER cannot be nil"))
+  (member (buffer-local-value 'exwm-class-name buffer)
+          akirak/browser-class-names))
+
+(defun akirak/exwm-browser-windows ()
+  (-filter (lambda (w)
+             (akirak/exwm-browser-buffer-p (window-buffer w)))
+           (window-list)))
+
+(defun akirak/select-exwm-browser-window ()
+  (when-let ((browser-windows (akirak/exwm-browser-windows)))
+    (if (= 1 (length browser-windows))
+        (car browser-windows)
+      (get-buffer-window (get-buffer
+                          (completing-read "Browsers"
+                                           (mapcar (lambda (w)
+                                                     (buffer-name (window-buffer w)))
+                                                   browser-windows)))))))
+
+(defun akirak/exwm-browser-buffers ()
+  (-filter #'akirak/exwm-browser-buffer-p (akirak/exwm-list-buffers)))
+
+(defun akirak/select-exwm-browser-buffer ()
+  (when-let ((buffers (akirak/exwm-browser-buffers)))
+    (if (= 1 (length buffers))
+        (get-buffer (car buffers))
+      (get-buffer (completing-read "Browsers"
+                                   (mapcar #'buffer-name buffers))))))
+
+(defun akirak/start-web-browser ()
   (interactive)
-  (start-process-shell-command "chromium" nil "chromium"))
+  (start-process-shell-command "browser" nil
+                               (or browse-url-generic-program
+                                   "chromium")))
+
+(defun akirak/raise-browser (&optional arg)
+  (interactive "P")
+  (cond
+   ((featurep 'exwm)
+    (cl-case arg
+      ('(4)
+       (akirak/start-web-browser))
+      (otherwise
+       (if-let ((w (akirak/select-exwm-browser-window)))
+           (select-window w)
+         (if-let ((b (akirak/select-exwm-browser-buffer)))
+             (switch-to-buffer-other-window b)
+           (akirak/start-web-browser))))))))
 
 (akirak/define-frame-workflow "web"
   :key "w"
