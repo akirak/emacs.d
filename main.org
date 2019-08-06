@@ -581,7 +581,8 @@ Due to consistency with other applications on computer, my eyes tend to stay in 
   (akirak/require 'setup-header-line t)
                                           ; Hide the mode line and use the header line
   (akirak/require 'setup-feebleline t)  ; Display extra information in the echo area
-  (akirak/require 'setup-frame-title t) ; Configure a custom frame title format
+  ;; (akirak/require 'setup-frame-title t)
+                                          ; Configure a custom frame title format
 
   ;; (akirak/require 'setup-centaur-tabs)
 #+end_src
