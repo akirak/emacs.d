@@ -4,18 +4,14 @@
 ;; This can be changed in the future.
 (when (and (getenv "WAYLAND_DISPLAY")
            (executable-find "wl-paste"))
-  (advice-add 'interprogram-paste-function
-              :filter-return #'akirak/ad-after-interprogram-paste-function))
+  (advice-add 'interprogram-paste-function :override #'akirak/wayland-paste))
 
-(defun akirak/ad-after-interprogram-paste-function (r)
-  ;; If the result from the original function is nil, use wl-paste
-  ;; to get the clipboard content.
-  (or r (ignore-errors (akirak/paste-using-wl-paste))))
-
-(defun akirak/paste-using-wl-paste ()
-  (let ((s (shell-command-to-string "wl-paste")))
-    (unless (string-empty-p s)
-      (string-trim-right s))))
+(defun akirak/wayland-paste ()
+  (with-timeout 1
+    (ignore-errors
+      (let ((s (shell-command-to-string "wl-paste")))
+        (unless (string-empty-p s)
+          (string-trim-right s))))))
 
 (use-package clipsave
   :straight (clipurl :host github :repo "akirak/clipurl.el")
