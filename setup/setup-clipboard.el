@@ -15,7 +15,9 @@
 
 (use-package clipsave
   :straight (clipurl :host github :repo "akirak/clipurl.el")
-  :init
-  (clipsave-mode 1))
+  :config
+  (clipsave-mode 1)
+  :custom
+  (clipsave-timer-interval 1))
 
 (provide 'setup-clipboard)
