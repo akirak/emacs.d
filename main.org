@@ -997,6 +997,12 @@ I often consult the Emacs Lisp manual:
   (akirak/bind-help
     "e" #'akirak/info-elisp)
 #+end_src
+**** PDF
+=pdf-tools= is installed using Nix.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-pdf-tools)
+#+end_src
 *** Generic source code editing utilities
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
