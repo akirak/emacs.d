@@ -38,7 +38,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#dashel][dash.el]]
       -  [[#ivy][Ivy]]
       -  [[#helm][Helm]]
-      -  [[#org][Org]]
       -  [[#posframe][posframe]]
       -  [[#hydra][Hydra]]
       -  [[#ov-overlays][ov (overlays)]]
@@ -85,9 +84,6 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#writing][Writing]]
       -  [[#multi-lingual-support][Multi-lingual support]]
       -  [[#using-org-mode][Using Org mode]]
-      -  [[#graphviz][GraphViz]]
-      -  [[#ditaa][Ditaa]]
-      -  [[#exporting][Exporting]]
       -  [[#markdown][Markdown]]
     -  [[#programming-languages][Programming languages]]
       -  [[#emacs-lisp][Emacs Lisp]]
@@ -484,19 +480,6 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 *** Helm
 #+begin_src emacs-lisp
   (akirak/require 'setup-helm t)
-#+end_src
-*** Org
-**** Org-babel
-#+begin_src emacs-lisp
-  (akirak/require 'setup-org-babel t)
-#+end_src
-To add support for a language in org-babel, add the following configuration:
-
-- Add =(LANG . t)= to =org-babel-load-languages= in =:init= section of a =use-package= directive.
-- If necessary, add a custom mapping to =org-src-lang-modes=.
-****  Org-export
-#+begin_src emacs-lisp
-  (akirak/require 'setup-ox)
 #+end_src
 *** posframe
 :PROPERTIES:
@@ -1322,9 +1305,14 @@ Set basic options for org-mode:
   ;; org-starter should be loaded after org is loaded
   (akirak/require 'setup-org-starter)
 #+end_src
-**** Supported contents
+**** Org-babel
 - Graphviz (=graphviz-dot-mode=)
 - Ditaa
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-babel t)
+#+end_src
+
 **** Exporting
 - Exporting to Hugo
 

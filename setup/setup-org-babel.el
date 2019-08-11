@@ -10,6 +10,13 @@
   :hook
   (emacs-startup . akirak/org-babel-do-load-languages))
 
+;; To add support for a language in org-babel, add the following configuration:
+
+;; - Add =(LANG . t)= to =org-babel-load-languages= in =:init= section
+;;   of a =use-package= directive. If necessary, add a custom mapping
+;;
+;; - to =org-src-lang-modes=.
+
 (unless (bound-and-true-p org-babel-load-languages)
   (setq org-babel-load-languages
         '((emacs-lisp . t)
@@ -19,7 +26,7 @@
           (sqlite . t)
           (dot . t)
           (ditaa . t)
-          (restclient . t) ; requires ob-restclient
+          (restclient . t)              ; requires ob-restclient
           )))
 
 ;;;; Language supports
