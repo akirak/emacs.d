@@ -92,9 +92,10 @@
                          (projectile-project-name)))
          (relative-name (when (and file-name project-root)
                           (file-relative-name file-name project-root)))
-         (file-segment (propertize (or relative-name
-                                       (file-name-nondirectory file-name))
-                                   'face 'akirak/header-line-buffer-name))
+         (file-segment (when file-name
+                         (propertize (or relative-name
+                                         (file-name-nondirectory file-name))
+                                     'face 'akirak/header-line-buffer-name)))
          (buffer-segment (unless filep
                            (propertize (buffer-name)
                                        'face (if indirectp
