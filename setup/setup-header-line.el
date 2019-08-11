@@ -32,8 +32,9 @@
                 (akirak/make-header-line-format))
                ((memq 'org-mode modes)
                 (akirak/make-header-line-format
-                 '(:eval
-                   (akirak/header-line-org-outline-path))))
+                 ;; '(:eval
+                 ;;   (akirak/header-line-org-outline-path))
+                 ))
                ((memq 'org-agenda-mode modes)
                 '((:eval (and (featurep 'all-the-icons)
                               (all-the-icons-icon-for-buffer)))
