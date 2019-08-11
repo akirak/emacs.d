@@ -82,8 +82,6 @@
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))
 ;; Exporting mind maps
-(use-package org-mind-map
-  :after (org ox))
 (use-package easy-kill
   :general
   ([remap kill-ring-save] #'easy-kill

@@ -11,6 +11,9 @@
   ;; Workaround for preventing a loading error in some exporter packages
   (require 'ox-org))
 
+(use-package org-mind-map
+  :after ox)
+
 ;; Generate README from Emacs Lisp.
 (use-package ox-gfm
   :after ox)
