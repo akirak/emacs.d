@@ -79,10 +79,9 @@
                          (projectile-project-name)))
          (relative-name (when (and file-name project-root)
                           (file-relative-name file-name project-root)))
-         (file-segment (when file-name
-                         (propertize (or relative-name
-                                         (file-name-nondirectory file-name))
-                                     'face 'akirak/header-line-buffer-name)))
+         (file-segment (propertize (or relative-name
+                                       (file-name-nondirectory file-name))
+                                   'face 'akirak/header-line-buffer-name))
          (buffer-segment (unless filep
                            (propertize (buffer-name)
                                        'face (if indirectp
@@ -100,14 +99,16 @@
       ,icon
       " "
       ,(when project-name (format "[%s]" project-name))
-      " "
       ;; If it is a file-visiting buffer, show the file name.
       ;; Otherwise, show the buffer name.
-      ,file-segment
-      ,buffer-segment
-      " %* "
+      " "
+      ,(when indirectp "Indirect <")
+      ,(if filep
+           file-segment
+         "%b")
+      ,(when indirectp ">")
       ;; Display the statuses of the buffer
-      "%n"
+      " %* %n "
       ;; Display the column number if the buffer is in prog-mode
       ,(if (derived-mode-p 'prog-mode)
            "(%l,%3c) "
