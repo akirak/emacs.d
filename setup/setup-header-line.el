@@ -69,6 +69,13 @@
 (add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
 
+;; Make org-tree-to-indirect-buffer run clone-indirect-buffer-hook
+;; after creating its indirect buffer.
+(advice-add 'org-tree-to-indirect-buffer
+            :after (cl-function
+                    (lambda (&optional arg)
+                      (run-hooks 'clone-indirect-buffer-hook))))
+
 ;;;; Default header line format
 (cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
