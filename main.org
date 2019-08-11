@@ -75,7 +75,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#poporg][Poporg]]
       -  [[#window-management][Window management]]
       -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
-      -  [[#dsls][DSLs]]
       -  [[#startup-buffer][Startup buffer]]
       -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
       -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
@@ -85,6 +84,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
     -  [[#writing][Writing]]
       -  [[#multi-lingual-support][Multi-lingual support]]
+      -  [[#using-org-mode][Using Org mode]]
       -  [[#graphviz][GraphViz]]
       -  [[#ditaa][Ditaa]]
       -  [[#exporting][Exporting]]
@@ -104,6 +104,15 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#rust][Rust]]
       -  [[#java][Java]]
       -  [[#vbscript][VBScript]]
+    -  [[#dsls][DSLs]]
+      -  [[#meson][Meson]]
+      -  [[#yaml][YAML]]
+      -  [[#graphviz][Graphviz]]
+      -  [[#dockerfile][Dockerfile]]
+      -  [[#systemd][Systemd]]
+      -  [[#nix][Nix]]
+      -  [[#dhall][Dhall]]
+      -  [[#bats][Bats]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#jump-to-the-current-context][Jump to the current context]]
@@ -486,15 +495,8 @@ To add support for a language in org-babel, add the following configuration:
 - Add =(LANG . t)= to =org-babel-load-languages= in =:init= section of a =use-package= directive.
 - If necessary, add a custom mapping to =org-src-lang-modes=.
 ****  Org-export
-Some exporters, e.g. =ox-hugo=, depend on =ox-org=, and it is tedious to add =(require 'ox-org)= to all of their configurations, so I will load it immediately after =ox= is loaded.
-
 #+begin_src emacs-lisp
-  (use-package ox
-    :after org
-    :straight nil
-    :config
-    ;; Workaround for preventing a loading error in some exporter packages
-    (require 'ox-org))
+  (akirak/require 'setup-ox)
 #+end_src
 *** posframe
 :PROPERTIES:
@@ -1167,41 +1169,6 @@ Visualise unnecessary, extra whitespace characters in source code.
 
 See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespace.el]].
 
-*** DSLs
-**** Meson                                                 :build__system:
-
-#+begin_src emacs-lisp
-  (use-package meson-mode)
-#+end_src
-**** YAML                                        :configuration__language:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-yaml)
-#+end_src
-**** Dockerfile                                  :configuration__language:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-dockerfile)
-#+end_src
-**** Systemd                                     :configuration__language:
-#+begin_src emacs-lisp
-(akirak/require 'setup-systemd)
-#+end_src
-**** Nix                                         :configuration__language:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-nix)
-#+end_src
-**** Dhall                                       :configuration__language:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-dhall)
-#+end_src
-**** Bats                                                        :testing__framework:
-:PROPERTIES:
-:CREATED_TIME: [2019-07-17 Wed 22:25]
-:END:
-#+begin_src emacs-lisp
-  (use-package bats-mode)
-#+end_src
 *** Startup buffer
 By default, =*Messages*= buffer is shown at startup.
 
@@ -1314,14 +1281,6 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 :PROPERTIES:
 :TOC:      1
 :END:
-Set the basic options for org-mode:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-org t)
-
-  ;; org-starter should be loaded after org is loaded
-  (akirak/require 'setup-org-starter)
-#+end_src
 *** Multi-lingual support
 :PROPERTIES:
 :CREATED_TIME: [2019-03-23 Sat 16:36]
@@ -1342,41 +1301,35 @@ You can customize a list of modules for supported languages through the followin
   input method in the environment."
     :group 'akirak
     :type '(set (const :tag "Japanese/日本語 (mozc)" setup-japanese-mozc)
-		(const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim))
+                (const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim))
     :set (lambda (sym value)
-	   (set sym value)
-	   (dolist (module value)
-	     (akirak/require module))
-	   (when (= 1 (length value))
-	     (setq default-input-method
-		   (string-remove-prefix "setup-" (symbol-name (car value)))))))
+           (set sym value)
+           (dolist (module value)
+             (akirak/require module))
+           (when (= 1 (length value))
+             (setq default-input-method
+                   (string-remove-prefix "setup-" (symbol-name (car value)))))))
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
 
-*** GraphViz
-#+begin_src emacs-lisp
-  (use-package graphviz-dot-mode)
+*** Using Org mode
+Set basic options for org-mode:
 
-  (use-package ob-dot
-    :after ob
-    :straight nil
-    :init
-    (require 'ox-org)
-    (add-to-list 'org-babel-load-languages '(dot . t))
-    (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
-#+end_src
-*** Ditaa
 #+begin_src emacs-lisp
-  (use-package ob-ditaa
-    :after ob
-    :straight nil
-    :init
-    (add-to-list 'org-babel-load-languages '(ditaa . t)))
+  (akirak/require 'setup-org t)
+
+  ;; org-starter should be loaded after org is loaded
+  (akirak/require 'setup-org-starter)
 #+end_src
-*** Exporting
-**** ox-hugo
+**** Supported contents
+- Graphviz (=graphviz-dot-mode=)
+- Ditaa
+**** Exporting
+- Exporting to Hugo
+
 #+begin_src emacs-lisp
+  (akirak/require 'setup-ox)
   (akirak/require 'setup-org-hugo)
 #+end_src
 *** Markdown
@@ -1385,7 +1338,6 @@ Markdown is supported as well:
 #+begin_src emacs-lisp
   (akirak/require 'setup-markdown)
 #+end_src
-
 ** Programming languages
 :PROPERTIES:
 :TOC:      1
@@ -1516,6 +1468,44 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 :END:
 #+begin_src emacs-lisp
   (akirak/require 'setup-visual-basic)
+#+end_src
+** DSLs
+*** Meson                                                   :build__system:
+#+begin_src emacs-lisp
+  (use-package meson-mode)
+#+end_src
+*** YAML                                          :configuration__language:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-yaml)
+#+end_src
+*** Graphviz
+#+begin_src emacs-lisp
+  (akirak/require 'setup-graphviz-dot)
+#+end_src
+*** Dockerfile                                    :configuration__language:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dockerfile)
+#+end_src
+*** Systemd                                       :configuration__language:
+#+begin_src emacs-lisp
+(akirak/require 'setup-systemd)
+#+end_src
+*** Nix                                           :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-nix)
+#+end_src
+*** Dhall                                         :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dhall)
+#+end_src
+*** Bats                                               :testing__framework:
+:PROPERTIES:
+:CREATED_TIME: [2019-07-17 Wed 22:25]
+:END:
+#+begin_src emacs-lisp
+  (use-package bats-mode)
 #+end_src
 ** Emacs applications
 *** Getting organised
