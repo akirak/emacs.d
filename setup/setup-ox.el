@@ -15,4 +15,8 @@
 (use-package ox-gfm
   :after ox)
 
+;; Exporting to Markdown used in Qiita (a Japanese blog site).
+(use-package ox-qmd
+  :after ox)
+
 (provide 'setup-ox)
