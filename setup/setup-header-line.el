@@ -107,7 +107,6 @@
       " %* "
       ;; Display the statuses of the buffer
       "%n"
-      (read-only-mode "<RO> ")
       ;; Display the column number if the buffer is in prog-mode
       ,(if (derived-mode-p 'prog-mode)
            "(%l,%3c) "
