@@ -37,7 +37,6 @@
   :after ob
   :straight nil
   :init
-  (require 'ox-org)
   (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
 
 (use-package ob-ditaa
