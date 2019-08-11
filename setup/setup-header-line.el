@@ -32,6 +32,11 @@
                 (akirak/make-header-line-format))
                ((memq 'org-mode modes)
                 (akirak/make-header-line-format
+                 ;; Omit the project name if the file is in ~/lib/
+                 :omit-project (let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                                 (or (not (stringp file))
+                                     (string-prefix-p "~/lib/"
+                                                      (abbreviate-file-name file))))
                  ;; '(:eval
                  ;;   (akirak/header-line-org-outline-path))
                  ))
@@ -65,7 +70,7 @@
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
 
 ;;;; Default header line format
-(defun akirak/make-header-line-format (&rest body)
+(cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
   (let* ((filep (when buffer-file-name t))
          (base-buffer (unless filep (buffer-base-buffer)))
@@ -73,7 +78,8 @@
          (file-name (cond
                      (filep buffer-file-name)
                      (base-buffer (buffer-file-name base-buffer))))
-         (project-root (when (bound-and-true-p projectile-mode)
+         (project-root (when (and (not omit-project)
+                                  (bound-and-true-p projectile-mode))
                          (projectile-project-root)))
          (project-name (when project-root
                          (projectile-project-name)))
