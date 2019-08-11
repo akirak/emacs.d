@@ -104,7 +104,7 @@
       ;; Otherwise, show the buffer name.
       ,file-segment
       ,buffer-segment
-      "%* "
+      " %* "
       ;; Display the statuses of the buffer
       "%n"
       (read-only-mode "<RO> ")
