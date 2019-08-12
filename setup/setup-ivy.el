@@ -10,8 +10,8 @@
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
   (ivy-decorator-set-intermediate 'ivy-switch-buffer
       #'get-buffer
-    (original 25)
-    (buffer-major-mode 15)
+    (original 30)
+    (buffer-major-mode 20)
     (buffer-directory))
   :general
   (:keymaps 'ivy-occur-mode-map
