@@ -117,7 +117,9 @@
                    ([?\C-a] [home])
                    ([?\C-e] [end])
                    ([?\C-d] [delete])
-                   ([?\M-d] [C-S-right delete])
+                   ;; Since I use M-d to select the address bar on chromium,
+                   ;; I will disable this simulation key.
+                   ;; ([?\M-d] [C-S-right delete])
                    ([?\C-k] [S-end delete])
                    ([?\C-m] [return])
                    ([?\C-i] [tab])
