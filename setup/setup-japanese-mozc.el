@@ -24,8 +24,8 @@
             (message "Disabled mozc as mozc_emacs_helper is not installed")
             nil)))
 
-(use-package mozc-posframe
-  :straight (mozc-posframe :host github :repo "akirak/mozc-posframe")
+(use-package mozc-cand-posframe
+  :straight (mozc-cand-posframe :host github :repo "akirak/mozc-posframe")
   :after mozc
   :if (posframe-workable-p)
   :config
