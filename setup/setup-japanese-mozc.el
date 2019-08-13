@@ -24,11 +24,12 @@
             (message "Disabled mozc as mozc_emacs_helper is not installed")
             nil)))
 
-;; Better display of candidates
-(use-package mozc-popup
+(use-package mozc-posframe
+  :straight (mozc-posframe :host github :repo "akirak/mozc-posframe")
   :after mozc
+  :if (posframe-workable-p)
   :config
-  (setq mozc-candidate-style 'popup))
+  (setq mozc-candidate-style 'posframe))
 
 (use-package mozc-temp
   :commands (mozc-temp-convert mozc-temp-convert-dwim))
