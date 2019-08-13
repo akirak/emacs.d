@@ -7,9 +7,7 @@
   (:keymaps 'gif-screencast-mode-map
             "<S-f8>" 'gif-screencast-toggle-pause
             "<f8>" 'gif-screencast-stop)
-  :ensure-system-package
-  ((scrot . scrot)
-   (convert . imagemagick)
-   (gifsicle . gifsicle)))
+  :custom
+  (gif-screencast-output-directory "~/tmp/emacs-screencast"))
 
 (provide 'setup-screencast)
