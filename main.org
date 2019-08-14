@@ -74,29 +74,26 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#using-org-mode][Using Org mode]]
       -  [[#markdown][Markdown]]
     -  [[#programming-languages][Programming languages]]
-      -  [[#emacs-lisp][Emacs Lisp]]
       -  [[#elixir][Elixir]]
-      -  [[#haskell][Haskell]]
-      -  [[#javascript][JavaScript]]
-      -  [[#vue][Vue]]
-      -  [[#web-mode][Web-mode]]
-      -  [[#shell-scripts-bash][Shell scripts (bash)]]
       -  [[#elm][Elm]]
+      -  [[#emacs-lisp][Emacs Lisp]]
+      -  [[#haskell][Haskell]]
+      -  [[#java][Java]]
+      -  [[#javascript][JavaScript]]
       -  [[#kotlin][Kotlin]]
       -  [[#nim][Nim]]
       -  [[#python][Python]]
       -  [[#rust][Rust]]
-      -  [[#java][Java]]
+      -  [[#shell-scripts-bash][Shell scripts (bash)]]
       -  [[#vbscript][VBScript]]
+      -  [[#vue][Vue]]
+      -  [[#web-mode][Web-mode]]
     -  [[#dsls][DSLs]]
-      -  [[#meson][Meson]]
-      -  [[#yaml][YAML]]
-      -  [[#graphviz][Graphviz]]
-      -  [[#dockerfile][Dockerfile]]
-      -  [[#systemd][Systemd]]
-      -  [[#nix][Nix]]
-      -  [[#dhall][Dhall]]
       -  [[#bats][Bats]]
+      -  [[#dhall][Dhall]]
+      -  [[#dockerfile][Dockerfile]]
+      -  [[#nix][Nix]]
+      -  [[#systemd][Systemd]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#jump-to-the-current-context][Jump to the current context]]
@@ -109,6 +106,7 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#exwm][EXWM]]
     -  [[#meta][Meta]]
       -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
+      -  [[#sort-entries-in-this-file][Sort entries in this file]]
 
 ** Why?
 *** Literate configuration in Org mode
@@ -1320,8 +1318,21 @@ Markdown is supported as well:
 ** Programming languages
 :PROPERTIES:
 :TOC:      1
+:sort:     a
 :END:
 Ideally, this section should be a portfolio of my skills.
+*** Elixir
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-elixir)
+#+end_src
+
+*** Elm
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-elm)
+#+end_src
+
 *** Emacs Lisp
 #+begin_src emacs-lisp
 (akirak/require 'setup-emacs-lisp)
@@ -1361,46 +1372,27 @@ Ideally, this section should be a portfolio of my skills.
 **** Makel
 I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
 
-*** Elixir
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-elixir)
-#+end_src
-
 *** Haskell
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-haskell)
 #+end_src
 
+*** Java
+#+begin_src emacs-lisp
+  (defcustom akirak/java-support-module 'setup-java-lsp
+    "Module for supporting Java."
+    :type '(choice (const setup-java-lsp)
+                   (const setup-java-meghanada)))
+
+  (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
+
+#+end_src
 *** JavaScript
 #+begin_src emacs-lisp
   (akirak/require 'setup-javascript)
   (akirak/require 'setup-json)
 #+end_src
-*** Vue
-:PROPERTIES:
-:CREATED_TIME: [2019-04-03 Wed 22:45]
-:END:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-vue)
-#+end_src
-*** Web-mode
-#+begin_src emacs-lisp
-  (akirak/require 'setup-web-mode)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-restclient)
-#+end_src
-*** Shell scripts (bash)
-
-*** Elm
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-elm)
-#+end_src
-
 *** Kotlin
 
 #+begin_src emacs-lisp
@@ -1431,16 +1423,8 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
   (use-package rust-mode)
 #+end_src
 
-*** Java
-#+begin_src emacs-lisp
-  (defcustom akirak/java-support-module 'setup-java-lsp
-    "Module for supporting Java."
-    :type '(choice (const setup-java-lsp)
-                   (const setup-java-meghanada)))
+*** Shell scripts (bash)
 
-  (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
-
-#+end_src
 *** VBScript
 :PROPERTIES:
 :CREATED_TIME: [2019-05-16 Thu 01:10]
@@ -1448,43 +1432,49 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-visual-basic)
 #+end_src
+*** Vue
+:PROPERTIES:
+:CREATED_TIME: [2019-04-03 Wed 22:45]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-vue)
+#+end_src
+*** Web-mode
+#+begin_src emacs-lisp
+  (akirak/require 'setup-web-mode)
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-restclient)
+#+end_src
 ** DSLs
-*** Meson                                                   :build__system:
-#+begin_src emacs-lisp
-  (use-package meson-mode)
-#+end_src
-*** YAML                                          :configuration__language:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-yaml)
-#+end_src
-*** Graphviz
-#+begin_src emacs-lisp
-  (akirak/require 'setup-graphviz-dot)
-#+end_src
-*** Dockerfile                                    :configuration__language:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-dockerfile)
-#+end_src
-*** Systemd                                       :configuration__language:
-#+begin_src emacs-lisp
-(akirak/require 'setup-systemd)
-#+end_src
-*** Nix                                           :configuration__language:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-nix)
-#+end_src
-*** Dhall                                         :configuration__language:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-dhall)
-#+end_src
+:PROPERTIES:
+:TOC:      1
+:sort:     a
+:END:
 *** Bats                                               :testing__framework:
 :PROPERTIES:
 :CREATED_TIME: [2019-07-17 Wed 22:25]
 :END:
 #+begin_src emacs-lisp
   (use-package bats-mode)
+#+end_src
+*** Dhall                                         :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dhall)
+#+end_src
+*** Dockerfile                                    :configuration__language:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-dockerfile)
+#+end_src
+*** Nix                                           :configuration__language:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-nix)
+#+end_src
+*** Systemd                                       :configuration__language:
+#+begin_src emacs-lisp
+(akirak/require 'setup-systemd)
 #+end_src
 ** Emacs applications
 *** Getting organised
@@ -1573,11 +1563,26 @@ I am now using myrepos to synchronize my configuration repositories.
     (let ((default-directory "~"))
       (akirak/run-interactive-shell-command "mr push")))
 #+end_src
+*** Sort entries in this file
+#+begin_src emacs-lisp
+  (defun akirak/org-sort-entries-as-desired ()
+    (interactive)
+    (org-with-wide-buffer
+     (goto-char (point-min))
+     (while (re-search-forward (org-re-property "sort") nil t)
+       (let ((line (thing-at-point 'line t)))
+         (if (string-match org-property-re line)
+             (pcase (match-string 3 line)
+               ("a" (org-sort-entries nil ?a)))
+           (error "Property didn't match")))
+       (org-end-of-subtree)))
+    (when (org-find-property "TOC")
+      (org-make-toc)))
+#+end_src
 *** Ignore
 :PROPERTIES:
 :TOC:      ignore
 :END:
 # Local Variables:
-# before-save-hook: org-make-toc
+# before-save-hook: akirak/org-sort-entries-as-desired
 # org-id-link-to-org-use-id: nil
-# End:
