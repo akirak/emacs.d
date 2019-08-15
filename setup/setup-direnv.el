@@ -1,6 +1,8 @@
 (use-package direnv
   :config
-  (direnv-mode 1))
+  (direnv-mode 1)
+  :custom
+  (direnv-always-show-summary nil))
 
 (use-package projectile-direnv
   :disabled t
