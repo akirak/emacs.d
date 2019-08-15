@@ -3,7 +3,7 @@
   (feebleline-mode 1)
   :config
   (setq feebleline-msg-functions
-        '(
+        '(((lambda () (format-mode-line "%e")))
           ;; ((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
           (akirak/feebleline-time-string :post " " :face font-lock-comment-face)
           (akirak/feebleline-input-method :post " " :face font-lock-constant-face)
