@@ -256,7 +256,8 @@
                                     "Noto Sans Mono CJK JP"
                                     "Ume Gothic C4"))
                            ;; 2日早上，海关关员在办理“广州东至香港红磡”直通列车的通关手续时，发现6名中国籍旅客结伴走“无申报通道”出境，且神色慌张、眼神躲闪。
-                           (han . ("AR PL UKai CN"
+                           (han . ("Adobe Fangsong Std"
+                                   "AR PL UKai CN"
                                    "Adobe Heiti Std R"
                                    "Noto Sans Mono CJK SC"
                                    "WenQuanYi Micro Hei Mono"))
