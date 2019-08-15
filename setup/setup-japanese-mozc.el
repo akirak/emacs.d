@@ -7,10 +7,6 @@
 
 (straight-use-package '(mozc :type built-in))
 
-;; Lock the version as mozc.el is local
-(straight-use-package '(mozc-popup :host github :repo "d5884/mozc-popup"
-                                   :branch "f0684b875a7427ec08f8df13939a486e5d5cf420"))
-
 ;; mozc-mode lets you write Japanese
 (use-package mozc
   ;; If you want to disable this package, set :disabled to t.
