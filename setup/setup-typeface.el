@@ -222,6 +222,8 @@
              append (list key (--find (member it family-list) families))))
   "Plist of fonts to use in Emacs."
   :group 'akirak
+  :type '(plist :key-type symbol
+                :value-type string)
   :set (lambda (symbol value)
          (let* ((family-list (font-family-list))
                 (value (cl-loop for (key family . _) on value by 'cddr with new-value
