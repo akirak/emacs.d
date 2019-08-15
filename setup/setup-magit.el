@@ -4,6 +4,16 @@
     (setq magit-git-executable bin))
   (when (fboundp 'unpackaged/magit-log-date-headers-mode)
     (unpackaged/magit-log-date-headers-mode 1))
+
+  ;; It seems that magit fails to check out a branch containing
+  ;; non-latin characters. This is caused by mistakenly encoding
+  ;; command line arguments passed to git. The cdr of
+  ;; default-process-coding-system is iso-latin-1-unix, but I will use
+  ;; utf-8 instead as a workaround. If this causes trouble, I will
+  ;; look for an alternative solution.
+  (advice-add 'magit--process-coding-system :override
+              (lambda () '(utf-8-unix . utf-8-unix)))
+
   ;; Functions for magit-list-repositories.
   (defun akirak/magit-repolist-column-group (_id)
     (f-filename (abbreviate-file-name (f-parent default-directory))))
