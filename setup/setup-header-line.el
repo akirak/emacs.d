@@ -1,3 +1,44 @@
+;;;; Tabs
+(defvar-local akirak/centaur-tabs-buffer-groups nil
+  "Explicitly-set groups of the current buffer.
+
+This is intended to be set inside `akirak/set-header-line' function.")
+
+(use-package centaur-tabs
+  :config
+  (defun ceutaur-tabs-hide-tab (x)
+    (or (string-match-p (rx (or "*helm"
+                                "*direnv*"
+                                "special*"
+                                "*LV*"))
+                        (format "%s" x))
+        (derived-mode-p 'magit-process-mode)))
+  (defun centaur-tabs-buffer-groups ()
+    (or (and (eq major-mode 'exwm-mode)
+             (list (format "EXWM-%s" exwm-class-name)))
+        akirak/centaur-tabs-buffer-groups
+        (and (string-match-p (rx bol (or "*Messages*"
+                                         "*Warnings*"
+                                         "*Backtrace*"))
+                             (buffer-name))
+             '("Errors"))
+        ;; (list (centaur-tabs-get-group-name (current-buffer)))
+        ))
+  (centaur-tabs-mode 1)
+  :general
+  (:keymaps 'centaur-tabs-mode-map
+            "<S-right>" #'centaur-tabs-forward
+            "<S-left>" #'centaur-tabs-backward)
+  :custom
+  (centaur-tabs-style "bar")
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-gray-out-icons 'buffer)
+  (centaur-tabs-set-bar 'over)
+  (centaur-tabs-set-close-button nil)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-modified-marker "*")
+  (centaur-tabs-cycle-scope 'tabs))
+
 ;;;; Faces
 (defface akirak/header-line-buffer-name
   '()
@@ -27,19 +68,25 @@
                       (push mode modes)
                       (setq mode (get mode 'derived-mode-parent))))
                   modes))
+         (project (projectile-project-name))
+         group
          (fmt (cond
+               ((memq 'lisp-interaction-mode modes)
+                (setq groups '("Scratch"))
+                nil)
                ((memq 'prog-mode modes)
+                (setq groups (list (if project
+                                       (format "@%s:%s" project mode-name)
+                                     mode-name)))
                 (akirak/make-header-line-format))
                ((memq 'org-mode modes)
-                (akirak/make-header-line-format
-                 ;; Omit the project name if the file is in ~/lib/
-                 :omit-project (let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
-                                 (or (not (stringp file))
-                                     (string-prefix-p "~/lib/"
-                                                      (abbreviate-file-name file))))
-                 ;; '(:eval
-                 ;;   (akirak/header-line-org-outline-path))
-                 ))
+                (when (buffer-base-buffer)
+                  (akirak/make-header-line-format
+                   ;; Omit the project name if the file is in ~/lib/
+                   :omit-project (let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                                   (or (not (stringp file))
+                                       (string-prefix-p "~/lib/"
+                                                        (abbreviate-file-name file)))))))
                ((memq 'org-agenda-mode modes)
                 '((:eval (and (featurep 'all-the-icons)
                               (all-the-icons-icon-for-buffer)))
@@ -51,6 +98,17 @@
                                                    org-agenda-custom-commands))))
                               (format "[%s]%s" key (car (split-string desc ":")))))
                            (x (prin1-to-string x))))))
+               ((or (memq 'helpful-mode modes)
+                    (memq 'help-mode modes)
+                    (memq 'Info-mode modes)
+                    (memq 'eww-mode modes))
+                (setq groups '("Emacs Help"))
+                nil)
+               ((memq 'comint-mode modes)
+                (setq groups '("REPL"))
+                nil)
+               ((memq 'exwm-mode modes)
+                nil)
                ((memq 'dired-mode modes)
                 (progn
                   (setq dired-filter-header-line-format
@@ -62,9 +120,23 @@
                           dired-directory
                           " "
                           (:eval (dired-filter--describe-filters))))
-                  nil)))))
+                  nil))
+               ((memq 'vterm-mode modes)
+                (setq groups (list (if project
+                                       (format "@%s:Terminal" project)
+                                     "Terminal")))
+                nil)
+               ((string-prefix-p "magit-" (format "%s" major-mode))
+                (setq groups (list (if project
+                                       (format "%s:Magit" project)
+                                     "Magit")))
+                nil))))
     (when fmt
-      (setq header-line-format fmt))))
+      (unless groups
+        (setq groups (list mode-name)))
+      (centaur-tabs-local-mode 1)
+      (setq header-line-format fmt))
+    (setq akirak/centaur-tabs-buffer-groups groups)))
 
 (add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
