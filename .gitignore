@@ -5,8 +5,8 @@ straight/build
 straight/build-cache.el
 # Ignore packages installed in the standard way (possibly by mistake)
 elpa/
-# Ignore various local persistent files
-.cache/
+# Ignore the data directory of no-littering
+/var
 # Ignore files created by emacs-application-framework
 eaf/
 mastodon.plstore
