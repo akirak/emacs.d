@@ -9,7 +9,7 @@
                    (process-send-string vterm--process "\C-m")))
   :config
   (defun akirak/vterm-exit (&optional buf)
-    (bury-buffer (or buf (current-buffer))))
+    (quit-window nil (get-buffer-window buf)))
   (defun akirak/run-interactive-shell-command (command &optional name)
     (interactive "s")
     (let ((buffer (generate-new-buffer (or name "*vterm*"))))
