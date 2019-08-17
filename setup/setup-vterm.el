@@ -14,8 +14,10 @@
                             "M-g"
                             "M-s")
                           #'string-equal))
-  (defun akirak/vterm-exit (&optional buf)
-    (quit-window nil (get-buffer-window buf)))
+  (defun akirak/vterm-exit (&optional buf event)
+    (message "%s: %s" (buffer-name) (or event "finished with unknown status"))
+    (when (equal "finished\n" event)
+      (quit-window nil (get-buffer-window buf))))
   (defun akirak/run-interactive-shell-command (command &optional name)
     (interactive "s")
     (let ((buffer (generate-new-buffer (or name "*vterm*"))))
