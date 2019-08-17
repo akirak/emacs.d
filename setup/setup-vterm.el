@@ -8,6 +8,12 @@
     (el-patch-swap (vterm-send-key "<return>")
                    (process-send-string vterm--process "\C-m")))
   :config
+  (general-setq vterm-keymap-exceptions
+                (cl-merge 'list vterm-keymap-exceptions
+                          '("M-r"
+                            "M-g"
+                            "M-s")
+                          #'string-equal))
   (defun akirak/vterm-exit (&optional buf)
     (quit-window nil (get-buffer-window buf)))
   (defun akirak/run-interactive-shell-command (command &optional name)
