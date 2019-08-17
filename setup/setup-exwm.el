@@ -11,6 +11,10 @@
 
 (advice-add 'exwm-input-toggle-keyboard
             :after #'akirak/ad-after-exwm-input-toggle-keyboard)
+;; Disable posframe inside EXWM.
+(add-hook 'exwm-mode-hook #'akirak/clear-ivy-posframe-display-functions-alist-locally)
+(defun akirak/clear-ivy-posframe-display-functions-alist-locally ()
+  (set (make-local-variable 'ivy-posframe-display-functions-alist) nil))
 
 (defun akirak/ad-after-exwm-input-toggle-keyboard (&optional id)
   (let ((buffer (if id
