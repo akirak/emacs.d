@@ -83,6 +83,10 @@
 
 (general-def "C-x b" #'ivy-switch-buffer-2)
 
+(defcustom akirak/ivy-posframe-width-alist
+  nil
+  "Alist of height.")
+
 (use-package ivy-posframe
   ;; Use posframe to display candidates in ivy commands.
   ;;
@@ -103,6 +107,15 @@
      ;; :min-height (or ivy-posframe-min-height (+ ivy-height 1))
      ;; :min-width (or ivy-posframe-min-width (round (* (frame-width) 0.62)))
      ))
+  (defun akirak/ivy-posframe-default-size ()
+    "The default functon used by `ivy-posframe-size-function'."
+    (let ((caller (ivy-state-caller ivy-last)))
+      (list
+       :height ivy-posframe-height
+       :width (or (cdr (assoc caller akirak/ivy-posframe-width-alist))
+                  ivy-posframe-width)
+       :min-height (or ivy-posframe-min-height (+ ivy-height 1))
+       :min-width (or ivy-posframe-min-width (round (* (frame-width) 0.62))))))
   (defun akirak/ad-around-ivy-posframe-display-at-frame-center (orig str)
     (if (akirak/frame-contains-exwm-window-p)
         (ivy-posframe-display-at-window-center str)
@@ -117,6 +130,12 @@
   :custom
   (ivy-posframe-height 12)
   (ivy-posframe-width 100)
+  (akirak/ivy-posframe-width-alist
+   `(,@(--map (cons it 130)
+              '(counsel-describe-function
+                counsel-describe-variable
+                counsel-M-x))))
+  (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
    `(,@(--map (cons it #'ivy-posframe-display-at-window-bottom-left)
