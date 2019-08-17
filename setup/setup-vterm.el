@@ -1,6 +1,12 @@
 (use-package vterm
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
+  :config/el-patch
+  ;; fzy doesn't seem to work with the default implementation.
+  (el-patch-defun vterm-send-return ()
+    (interactive)
+    (el-patch-swap (vterm-send-key "<return>")
+                   (process-send-string vterm--process "\C-m")))
   :config
   (defun akirak/vterm-exit (&optional buf)
     (bury-buffer (or buf (current-buffer))))
