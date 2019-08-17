@@ -13,8 +13,23 @@
           ;; ((lambda () (when (and buffer-file-name (require 'magit nil t))
           ;;               (magit-get-current-branch))) :face font-lock-string-face :post " ")
           ((lambda () mode-name) :post " " :face font-lock-comment-face)
+          (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
+
+(defface akirak/feebleline-buffer-group-face
+  '((t :weight bold :inherit font-lock-comment-face))
+  "Face for buffer group identification in the feeble line.")
+
+(defvar-local akirak/feebleline-buffer-group nil)
+
+(defun akirak/feebleline-buffer-group ()
+  (or akirak/feebleline-buffer-group
+      (when (featurep 'centaur-tabs)
+        (when-let ((groups (centaur-tabs-buffer-groups)))
+          (setq-local akirak/feebleline-buffer-group (string-join groups "|"))))))
+
+(byte-compile #'akirak/feebleline-buffer-group)
 
 (defvar akirak/feebleline-last-buffer nil)
 
