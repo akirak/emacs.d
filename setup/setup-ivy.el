@@ -122,12 +122,16 @@
       (funcall orig str)))
   (advice-add 'ivy-posframe-display-at-frame-center
               :around 'akirak/ad-around-ivy-posframe-display-at-frame-center)
+  (defun akirak/ivy-decorator-width ()
+    (let ((caller (ivy-state-caller ivy-last)))
+      (cdr (assoc caller akirak/ivy-posframe-width-alist))))
   :config/el-patch
   (el-patch-defun ivy-posframe-display-at-window-bottom-left (str)
     (el-patch-wrap 1
       (let ((ivy-posframe-size-function #'akirak/ivy-posframe-window-bottom-left-size))
         (ivy-posframe--display str #'posframe-poshandler-window-bottom-left-corner))))
   :custom
+  (ivy-decorator-width #'akirak/ivy-decorator-width)
   (ivy-posframe-height 12)
   (ivy-posframe-width 100)
   (akirak/ivy-posframe-width-alist
