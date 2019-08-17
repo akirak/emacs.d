@@ -1,7 +1,11 @@
 (use-package exwm
   :commands (exwm-enable)
   :config
-  (add-to-list 'exwm-input-prefix-keys ?\M-o)
+  (general-add-hook 'exwm-input-prefix-keys
+                    '(?\M-o
+                      ?\M-r
+                      ?\M-s
+                      ?\M-g))
   :custom
   (exwm-floating-border-width 3)
   (exwm-floating-border-color "orange")
