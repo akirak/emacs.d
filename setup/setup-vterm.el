@@ -1,6 +1,6 @@
 (use-package vterm
   ;; Use the package installed using nix
-  :straight nil
+  :straight (vterm :type built-in)
   :config
   (defun akirak/vterm-exit (&optional buf)
     (bury-buffer (or buf (current-buffer))))
