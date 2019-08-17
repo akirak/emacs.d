@@ -172,8 +172,6 @@ Package-specific configuration files, including snippets, are kept in [[https://
 
   (use-package no-littering
     :init
-    (setq no-littering-var-directory
-          (expand-file-name ".cache" user-emacs-directory))
     (when akirak/no-littering-use-my-etc-library
       (let ((dir "~/lib/emacs"))
         (when (or (file-directory-p dir)
