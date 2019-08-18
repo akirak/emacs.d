@@ -473,7 +473,7 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 :CREATED_TIME: [2019-03-31 Sun 01:55]
 :END:
 #+begin_src emacs-lisp
-  (use-package posframe)
+  (akirak/require 'setup-posframe)
 #+end_src
 *** Hydra
 #+begin_src emacs-lisp

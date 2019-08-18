@@ -116,12 +116,8 @@
                   ivy-posframe-width)
        :min-height (or ivy-posframe-min-height (+ ivy-height 1))
        :min-width (or ivy-posframe-min-width (round (* (frame-width) 0.62))))))
-  (defun akirak/ad-around-ivy-posframe-display-at-frame-center (orig str)
-    (if (akirak/frame-contains-exwm-window-p)
-        (ivy-posframe-display-at-window-center str)
-      (funcall orig str)))
-  (advice-add 'ivy-posframe-display-at-frame-center
-              :around 'akirak/ad-around-ivy-posframe-display-at-frame-center)
+  (defun akirak/ivy-posframe-display-smart-center (str)
+    (ivy-posframe--display str #'akirak/posframe-poshandler-smart-center))
   (defun akirak/ivy-decorator-width ()
     (let ((caller (ivy-state-caller ivy-last)))
       (cdr (assoc caller akirak/ivy-posframe-width-alist))))
@@ -146,10 +142,6 @@
               '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
-     (t . ivy-posframe-display-at-frame-center))))
-
-(defun akirak/frame-contains-exwm-window-p (&optional frame)
-  (--any (eq 'exwm-mode (buffer-local-value 'major-mode (window-buffer it)))
-         (window-list frame)))
+     (t . akirak/ivy-posframe-display-smart-center))))
 
 (provide 'setup-ivy)

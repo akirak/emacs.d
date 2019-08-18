@@ -10,15 +10,16 @@
   (exwm-floating-border-width 3)
   (exwm-floating-border-color "orange")
   :hook
+  (exwm-mode . akirak/disable-posframe-from-this-buffer)
   (exwm-update-title . akirak/exwm-rename-buffer)
   (exwm-manage-finish . akirak/exwm-manage-finish))
 
+(defun akirak/disable-posframe-from-this-buffer ()
+  (set (make-local-variable 'ivy-posframe-display-functions-alist) nil)
+  (set (make-local-variable 'hydra-hint-display-type) 'lv))
+
 (advice-add 'exwm-input-toggle-keyboard
             :after #'akirak/ad-after-exwm-input-toggle-keyboard)
-;; Disable posframe inside EXWM.
-(add-hook 'exwm-mode-hook #'akirak/clear-ivy-posframe-display-functions-alist-locally)
-(defun akirak/clear-ivy-posframe-display-functions-alist-locally ()
-  (set (make-local-variable 'ivy-posframe-display-functions-alist) nil))
 
 (defun akirak/ad-after-exwm-input-toggle-keyboard (&optional id)
   (let ((buffer (if id

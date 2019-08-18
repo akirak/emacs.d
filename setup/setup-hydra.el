@@ -5,7 +5,7 @@
    (list :internal-border-width 1
          :background-color "salmon4"
          :internal-border-color "red"
-         :poshandler 'posframe-poshandler-frame-center)))
+         :poshandler 'akirak/posframe-poshandler-smart-center)))
 
 (use-package major-mode-hydra)
 
