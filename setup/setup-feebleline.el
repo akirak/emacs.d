@@ -86,7 +86,11 @@
 
 (defun akirak/update-feebleline-file-or-buffer-name ()
   (setq akirak/feebleline-file-or-buffer-name
-        (feebleline-file-or-buffer-name)))
+        (let ((s (feebleline-file-or-buffer-name))
+              (max-length 30))
+          (if (> (length s) max-length)
+              (substring s 1 max-length)
+            s))))
 
 (byte-compile #'akirak/update-feebleline-file-or-buffer-name)
 
