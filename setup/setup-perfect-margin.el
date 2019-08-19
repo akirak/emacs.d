@@ -1,8 +1,4 @@
 (use-package perfect-margin
-  :straight
-  ;; (perfect-margin :host github :repo "mpwang/perfect-margin")
-  (perfect-margin :host github :repo "akirak/perfect-margin"
-                  :branch "split-window")
   :config
   (perfect-margin-mode 1)
   :custom
