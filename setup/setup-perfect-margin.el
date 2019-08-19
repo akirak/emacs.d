@@ -5,6 +5,7 @@
   (perfect-margin-visible-width 92)
   (perfect-margin-ignore-modes '(exwm-mode
                                  doc-view-mode
+                                 pdf-view-mode
                                  nov-mode
                                  vterm-mode))
   (perfect-margin-ignore-regexps `("^minibuf" "^[*]"
