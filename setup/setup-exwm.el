@@ -42,6 +42,7 @@
    ;; Set char mode on specific window types
    ((member exwm-class-name '("Termite" "Emacs" "Tilix"
                               "Slack"
+                              "Code"
                               ;; "Chromium" "Firefox"
                               ))
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer))))
