@@ -215,6 +215,8 @@ Deprecated: Allow installation of system packages via use-package
 
 #+begin_src emacs-lisp
   (use-package use-package-company
+    :preface
+    (autoload 'seq-subseq "seq")
     :straight (use-package-company :host github :repo "Foltik/use-package-company"))
 #+end_src
 
