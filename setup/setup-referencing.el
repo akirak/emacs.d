@@ -15,4 +15,14 @@
   :config
   (pdf-tools-install))
 
-(provide 'setup-pdf-tools)
+(use-package org-pdftools
+  :straight (org-pdftools :host github :repo "fuxialexander/org-pdftools"))
+
+(use-package org-noter
+  :after org-starter
+  :custom
+  (org-noter-default-notes-file-names
+   `("noter-notes.org"
+     ,(org-starter-locate-file "noter-notes.org" nil t))))
+
+(provide 'setup-referencing)
