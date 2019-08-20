@@ -1,8 +1,7 @@
 (use-package vterm
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
-  :if (ignore-errors (find-library-name "vterm"))
-  :init (setq akirak/vterm-built t)
+  :if (akirak/library-exists-p "vterm" 'verbose)
   :config/el-patch
   ;; fzy doesn't seem to work with the default implementation.
   (el-patch-defun vterm-send-return ()
@@ -30,6 +29,7 @@
   (add-hook 'vterm-exit-functions #'akirak/vterm-exit))
 
 (use-package vterm-toggle
+  :if (featurep 'vterm)
   :straight (vterm-toggle :host github :repo "jixiuf/vterm-toggle")
   :custom
   ;; vterm-toggle uses pop-to-buffer to display the buffer, but it

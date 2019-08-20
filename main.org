@@ -506,8 +506,7 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 #+begin_src emacs-lisp
   (use-package emacsql-sqlite
     :straight (emacsql-sqlite :type built-in)
-    :if (ignore-errors (find-library-name "emacsql-sqlite"))
-    :init (setq akirak/emacsql-sqlite-built t))
+    :if (akirak/library-exists-p "emacsql-sqlite"))
 #+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:

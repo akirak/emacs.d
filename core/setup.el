@@ -56,6 +56,13 @@ output file without the directory."
     (message "%s does not exist. Maybe you haven't checked out submodules"
              config)))
 
+(defun akirak/library-exists-p (name &optional verbose)
+  (if (ignore-errors (find-library-name name))
+      t
+    (when verbose
+      (message "%s package is unavailable" name))
+    nil))
+
 (defun akirak/running-on-crostini-p ()
   "Return non-nil if Emacs is running on Crostini of Chrome OS."
   (stringp (getenv-internal "SOMMELIER_VERSION")))
