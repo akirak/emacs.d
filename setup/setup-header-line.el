@@ -6,6 +6,12 @@ This is intended to be set inside `akirak/set-header-line' function.")
 
 (use-package centaur-tabs
   :config
+  ;; Disable centaur-tabs in any buffers that are displayed using
+  ;; org-fit-window-to-buffer.
+  (advice-add #'org-fit-window-to-buffer
+              :before #'akirak/centaur-tabs-disable-current-buffer)
+  (defun akirak/centaur-tabs-disable-current-buffer ()
+    (centaur-tabs-local-mode 1))
   (defun ceutaur-tabs-hide-tab (x)
     (or (string-match-p (rx (or "*helm"
                                 "*direnv*"
