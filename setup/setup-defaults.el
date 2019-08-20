@@ -31,6 +31,8 @@
               delete-by-moving-to-trash t
               delete-old-versions t)
 
+(set-language-environment "UTF-8")
+
 (defun akirak/turn-on-indent-tabs-mode ()
   (interactive)
   (setq indent-tabs-mode 1))
