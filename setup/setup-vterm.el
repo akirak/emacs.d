@@ -1,6 +1,8 @@
 (use-package vterm
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
+  :if (ignore-errors (find-library-name "vterm"))
+  :init (setq akirak/vterm-built t)
   :config/el-patch
   ;; fzy doesn't seem to work with the default implementation.
   (el-patch-defun vterm-send-return ()
