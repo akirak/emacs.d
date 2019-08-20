@@ -8,12 +8,10 @@
         (or (executable-find "gopass")
             ;; fallback to pass
             (executable-find "pass")))
-  :if (if password-store-executable
-          t
-        (user-error "gopass or pass is not installed")
-        nil)
-  :ensure-system-package
-  ((gopass . "nix-env -i gopass")))
+  :if (or password-store-executable
+          (progn
+            (message "gopass or pass is not installed, so password-store won't be available"))
+          nil))
 
 (use-package auth-source-pass
   :config
