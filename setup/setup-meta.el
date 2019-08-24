@@ -20,6 +20,7 @@
     setup-dired                    ; File browser
     setup-multi-term               ; Terminal emulator
     setup-aweshell                 ; Enhance eshell
+    setup-ediff
     setup-devdocs
     setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
