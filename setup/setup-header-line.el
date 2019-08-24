@@ -74,8 +74,8 @@ This is intended to be set inside `akirak/set-header-line' function.")
                       (push mode modes)
                       (setq mode (get mode 'derived-mode-parent))))
                   modes))
-         (project (projectile-project-name))
-         group
+         (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
+         groups
          (fmt (cond
                ((memq 'lisp-interaction-mode modes)
                 (setq groups '("Scratch"))
