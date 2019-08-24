@@ -47,7 +47,8 @@
                               ))
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer))))
    ;; Float specific window types
-   ((member exwm-instance-name '("keybase"))
+   ((member exwm-instance-name '("keybase"
+                                 "GNOME-software"))
     (exwm-floating-toggle-floating))))
 
 (use-package exwm-config
