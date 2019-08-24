@@ -30,7 +30,8 @@
                    '(("l" load-library "load")
                      ("g" akirak/magit-status-of-library "git repo")
                      ("d" akirak/dired-of-library "dired")
-                     ("r" akirak/open-library-readme "readme")))
+                     ("r" akirak/open-library-readme "readme")
+                     ("u" akirak/straight-update-package "update package")))
   (cl-loop for (command find-other-window)
            in '((counsel-describe-function find-function-other-window)
                 (counsel-describe-variable find-variable-other-window)
@@ -58,6 +59,12 @@
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
   (counsel-find-file-at-point t))
+
+(defun akirak/straight-update-package (x)
+  (let ((package x))
+    (straight-pull-package-and-deps package)
+    (straight-rebuild-package package)
+    (load-library x)))
 
 (defun akirak/counsel-find-file-magit-status ()
   (interactive)
