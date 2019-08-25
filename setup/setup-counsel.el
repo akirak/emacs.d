@@ -1,5 +1,21 @@
 (use-package counsel
   ;; :diminish counsel-mode
+  :config/el-patch
+  (el-patch-defun counsel-linux-apps-parse (desktop-entries-alist)
+    (let (result)
+      (setq counsel-linux-apps-faulty nil)
+      (dolist (entry desktop-entries-alist result)
+        (let* ((id (car entry))
+               (file (cdr entry))
+               (r (counsel-linux-app--parse-file file)))
+          (when r
+            (push (el-patch-swap (cons r id)
+                                 (cons r file))
+                  result))))))
+  (el-patch-defun counsel-linux-app-action-default (desktop-shortcut)
+    "Launch DESKTOP-SHORTCUT."
+    (el-patch-swap (call-process "gtk-launch" nil 0 nil (cdr desktop-shortcut))
+                   (async-start-process "dex" "dex" nil (cdr desktop-shortcut))))
   :config
   (ivy-decorator-set-intermediate 'counsel-M-x
       #'intern-soft
