@@ -1,3 +1,6 @@
+;; Install exwm using Nix
+(straight-use-package '(exwm :type built-in))
+
 (use-package exwm
   :commands (exwm-enable)
   :config
