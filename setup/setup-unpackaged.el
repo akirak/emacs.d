@@ -1,3 +1,5 @@
+(straight-use-package '(cus-edit :type built-in))
+
 (use-package unpackaged
   :straight (unpackaged :host github :repo "alphapapa/unpackaged.el")
   :config
