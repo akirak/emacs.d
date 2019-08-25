@@ -63,6 +63,7 @@
     setup-spell
     setup-git-clone
     setup-clipurl
+    setup-org-offtime
     setup-idle
     setup-multiple-cursors
     setup-treemacs
