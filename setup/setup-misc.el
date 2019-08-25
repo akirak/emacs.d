@@ -171,5 +171,7 @@
 (use-package git-link)
 (use-package window-go
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
+(use-package org-offtime
+  :straight (org-offtime :host github :repo "akirak/org-offtime"))
 
 (provide 'setup-misc)
