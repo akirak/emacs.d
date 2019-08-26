@@ -162,15 +162,32 @@
         (async-start-process "webapp" akirak/web-app-browser-program nil
                              (concat "--app=" url)))))
 
+(cl-defun akirak/exwm-raise-desktop-app (desktop-name &optional (select t))
+  (let ((desktop-file (akirak/locate-xdg-desktop-file desktop-name)))
+    (if desktop-file
+        (let ((class (akirak/get-xdg-desktop-window-class desktop-file)))
+          (or (and class
+                   (akirak/exwm-find-by-class-name class select))
+              (akirak/run-desktop-file desktop-file)))
+      (user-error "Not found in application directories: %s" desktop-file))))
+
 (defun akirak/exwm-find-web-app-by-url (url &optional select)
   ;; TODO: Handle path properly
   (let ((instance-name (string-remove-prefix "https://" url)))
     (akirak/exwm-find-by-instance-name instance-name select)))
 
+(defun akirak/exwm-find-by-class-name (name &optional select)
+  (akirak/exwm-find-by-predicate
+   (lambda (buf) (equal name (buffer-local-value 'exwm-class-name buf)))
+   select))
+
 (defun akirak/exwm-find-by-instance-name (name &optional select)
-  (let ((buf (-find (lambda (buf)
-                      (equal name (buffer-local-value 'exwm-instance-name buf)))
-                    (akirak/real-buffer-list))))
+  (akirak/exwm-find-by-predicate
+   (lambda (buf) (equal name (buffer-local-value 'exwm-instance-name buf)))
+   select))
+
+(defun akirak/exwm-find-by-predicate (predicate &optional select)
+  (let ((buf (-find predicate (akirak/real-buffer-list))))
     (when buf
       (message "Find an existing buffer %s" buf)
       (cond
@@ -194,6 +211,23 @@
 
 (defun akirak/real-buffer-list ()
   (mapcar #'get-buffer (internal-complete-buffer "" nil t)))
+
+;;;;; Utilities for XDG desktop files
+
+(defun akirak/locate-xdg-desktop-file (desktop)
+  (-some (lambda (root)
+           (when (file-directory-p root)
+             (car (directory-files-recursively root
+                                               (concat "^" (regexp-quote desktop) "$")
+                                               t))))
+         counsel-linux-apps-directories))
+
+(defun akirak/get-xdg-desktop-window-class (desktop-file)
+  (with-temp-buffer
+    (insert-file-contents desktop-file)
+    (goto-char (point-min))
+    (when (re-search-forward (rx bol "StartupWmClass=") nil t)
+      (buffer-substring-no-properties (point) (line-end-position)))))
 
 ;;;; Keybindings
 

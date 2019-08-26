@@ -1,3 +1,6 @@
+(defun akirak/run-desktop-file (desktop-file)
+  (async-start-process "dex" "dex" nil desktop-file))
+
 (use-package counsel
   ;; :diminish counsel-mode
   :config/el-patch
@@ -15,7 +18,7 @@
   (el-patch-defun counsel-linux-app-action-default (desktop-shortcut)
     "Launch DESKTOP-SHORTCUT."
     (el-patch-swap (call-process "gtk-launch" nil 0 nil (cdr desktop-shortcut))
-                   (async-start-process "dex" "dex" nil (cdr desktop-shortcut))))
+                   (akirak/run-desktop-file (cdr desktop-shortcut))))
   :config
   (ivy-decorator-set-intermediate 'counsel-M-x
       #'intern-soft

@@ -1585,6 +1585,24 @@ I use Slack inside EXWM at work.
     :after-kill-buffer
     '(delete-frame))
 #+end_src
+*** Visual Studio Code
+I use Visual Studio Code for work.
+
+#+begin_src emacs-lisp
+  (defun akirak/raise-vscode-here ()
+    (interactive)
+    (akirak/exwm-raise-desktop-app "code.desktop"
+                                   'akirak/exwm-select-buffer-window))
+
+  (frame-workflow-define-subject "vscode"
+    :key "V"
+    :layout
+    '(akirak/raise-vscode-here)
+    :refocus
+    '(akirak/raise-vscode-here)
+    :after-kill-buffer
+    '(delete-frame))
+#+end_src
 ** Meta
 *** Synchronizing my configuration repositories
 I am now using myrepos to synchronize my configuration repositories.
