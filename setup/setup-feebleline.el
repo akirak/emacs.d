@@ -183,6 +183,7 @@
 
 (defun akirak/feebleline-org-clock-update ()
   (pcase akirak/org-clock-current-duration-seconds
+    ('nil)
     ((pred (> 3600))
      (cl-incf akirak/org-clock-current-duration-seconds))
     (3600
