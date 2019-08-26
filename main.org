@@ -645,7 +645,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("F" desktop-clear "Clear"))
      "Projectile & Magit"
      (("p" projectile-switch-project "Switch project" :exit t)
-      ("g" magit-list-repositories "Git repo list" :exit t))))
+      ("g" magit-list-repositories "Git repo list" :exit t))
+     "Lock"
+     (("o" org-offtime-ivy "Offtime"))))
 
   (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
     (let* ((attrs (file-attributes file))
