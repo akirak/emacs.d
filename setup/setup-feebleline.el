@@ -221,8 +221,9 @@
 
 (with-eval-after-load 'exwm
   (general-add-hook '(exwm-workspace-list-change-hook
+                      exwm-randr-screen-change-hook
                       exwm-workspace-switch-hook
-                      frame-workflow-set-prototype-hook)
+                      frame-workflow-select-frame-hook)
                     'akirak/feebleline-exwm-workspaces-update))
 
 (provide 'setup-feebleline)

@@ -1562,6 +1562,29 @@ Some package need to be loaded after other packages, so they are put here.
 #+end_src
 
 When you connect/disconnect to an external monitor, run =akirak/exwm-configure-screens= command, unless it is automatically called by the screen change hook.
+I use EXWM for development both on Chrome OS (at home) and on NixOS (at work).
+*** Slack
+I use Slack inside EXWM at work.
+
+#+begin_src emacs-lisp
+  (defcustom akirak/slack-app-url ""
+    "URL to the Slack workspace I am working for."
+    :type 'string)
+
+  (defun akirak/exwm-open-slack-this-workspace ()
+    (interactive)
+    (akirak/exwm-raise-web-app akirak/slack-app-url
+                               #'akirak/exwm-select-buffer-window))
+
+  (frame-workflow-define-subject "slack"
+    :key "S"
+    :layout
+    '(akirak/exwm-open-slack-this-workspace)
+    :refocus
+    '(akirak/exwm-open-slack-this-workspace)
+    :after-kill-buffer
+    '(delete-frame))
+#+end_src
 ** Meta
 *** Synchronizing my configuration repositories
 I am now using myrepos to synchronize my configuration repositories.

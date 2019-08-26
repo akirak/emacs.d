@@ -147,11 +147,62 @@
            (add-hook 'exwm-randr-screen-change
                      (lambda () (call-interactively 'akirak/exwm-configure-screens))))))
 
+;;;; Exwm-Specific commands
+(defcustom akirak/web-app-browser-program "chromium"
+  "Web browse used to open web apps."
+  :type 'string)
+
+(defvar akirak/exwm-web-app-history nil)
+
+(cl-defun akirak/exwm-raise-web-app (url &optional (select t))
+  (interactive (list (read-string "URL: " nil akirak/exwm-web-app-history)))
+  (or (akirak/exwm-find-web-app-by-url url select)
+      (progn
+        (message "Opening %s" url)
+        (async-start-process "webapp" akirak/web-app-browser-program nil
+                             (concat "--app=" url)))))
+
+(defun akirak/exwm-find-web-app-by-url (url &optional select)
+  ;; TODO: Handle path properly
+  (let ((instance-name (string-remove-prefix "https://" url)))
+    (akirak/exwm-find-by-instance-name instance-name select)))
+
+(defun akirak/exwm-find-by-instance-name (name &optional select)
+  (let ((buf (-find (lambda (buf)
+                      (equal name (buffer-local-value 'exwm-instance-name buf)))
+                    (akirak/real-buffer-list))))
+    (when buf
+      (message "Find an existing buffer %s" buf)
+      (cond
+       ((functionp select)
+        (funcall select buf))
+       (select
+        (akirak/exwm-select-buffer-window buf)))
+      buf)))
+
+(cl-defun akirak/exwm-select-buffer-window (buf &key all-frames)
+  (let ((window (get-buffer-window buf all-frames)))
+    (cond
+     ((and window (window-live-p window))
+      (select-window window))
+     (t
+      (window-go-split-sensibly)
+      (switch-to-buffer buf)))))
+
+(cl-defun akirak/exwm-select-buffer-window-all-frames (buf)
+  (akirak/exwm-select-buffer-window buf :all-frames t))
+
+(defun akirak/real-buffer-list ()
+  (mapcar #'get-buffer (internal-complete-buffer "" nil t)))
+
 ;;;; Keybindings
 
 ;;;;; Global keybindings
+(use-package window-go
+  :straight (window-go :host github :repo "akirak/emacs-window-go"))
+
 (use-package exwm-window-go
-  :straight (:host github :repo "akirak/emacs-window-go"))
+  :straight window-go)
 
 (let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
                         ("j" other-window)
