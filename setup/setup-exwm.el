@@ -40,7 +40,12 @@
 (defun akirak/exwm-list-buffers ()
   (internal-complete-buffer "*EXWM:" nil t))
 
+(defvar akirak/exwm-class-name-history nil)
+(defvar akirak/exwm-instance-name-history nil)
+
 (defun akirak/exwm-manage-finish ()
+  (add-to-list 'akirak/exwm-class-name-history exwm-class-name)
+  (add-to-list 'akirak/exwm-instance-name-history exwm-instance-name)
   (cond
    ;; Set char mode on specific window types
    ((member exwm-class-name '("Termite" "Emacs" "Tilix"
