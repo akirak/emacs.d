@@ -12,7 +12,7 @@
           (akirak/feebleline-vc :face font-lock-string-face)
           ;; ((lambda () (when (and buffer-file-name (require 'magit nil t))
           ;;               (magit-get-current-branch))) :face font-lock-string-face :post " ")
-          ((lambda () mode-name) :post " " :face font-lock-comment-face)
+          ((lambda () (format-mode-line mode-name)) :post " " :face font-lock-comment-face)
           (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
