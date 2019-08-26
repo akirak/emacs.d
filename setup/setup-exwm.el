@@ -103,19 +103,32 @@
   :type '(alist :key-type (repeat string)
                 :value-type string))
 
-(defun akirak/exwm-configure-screens ()
-  (interactive)
-  (setq exwm-randr-workspace-output-plist
-        (cl-loop for monitor being the elements of
-                 (akirak/exwm-xrandr-get-connected-monitors)
-                 using (index i)
-                 append (list i monitor)))
-  (let* ((monitors (akirak/exwm-xrandr-get-connected-monitors))
-         (command (or (cdr (assoc monitors akirak/exwm-xrandr-command-alist
-                                  'seq-set-equal-p))
-                      "xrandr --auto")))
-    (shell-command command)
-    (message command)))
+(defvar akirak/exwm-xrandr-output-list-history nil)
+
+(defvar akirak/exwm-xrandr-command-history nil)
+
+(defun akirak/exwm-configure-screens (output-plist command)
+  (interactive
+   (let* ((monitors (akirak/exwm-xrandr-get-connected-monitors))
+          (default-output-plist (cl-loop for monitor being the elements of monitors
+                                         using (index i)
+                                         append (list i monitor)))
+          (output-plist (if current-prefix-arg
+                            (read-from-minibuffer "List of monitors: "
+                                                  (prin1-to-string default-output-plist)
+                                                  nil nil akirak/exwm-xrandr-output-list-history)
+                          default-output-plist))
+          (default-command (or (cdr (assoc monitors akirak/exwm-xrandr-command-alist
+                                           'seq-set-equal-p))
+                               "xrandr --auto"))
+          (command (if current-prefix-arg
+                       (read-string "Command: " default-command
+                                    akirak/exwm-xrandr-command-history)
+                     default-command)))
+     (list output-plist command)))
+  (setq exwm-randr-workspace-output-plist output-plist)
+  (shell-command command)
+  (message command))
 
 (defcustom akirak/exwm-xrandr-enabled nil
   "Enable exwm-xrandr if non-nil."
@@ -125,7 +138,8 @@
          (when value
            (require 'exwm-randr)
            (exwm-randr-enable)
-           (add-hook 'exwm-randr-screen-change 'akirak/exwm-configure-screens))))
+           (add-hook 'exwm-randr-screen-change
+                     (lambda () (call-interactively 'akirak/exwm-configure-screens))))))
 
 ;;;; Keybindings
 
