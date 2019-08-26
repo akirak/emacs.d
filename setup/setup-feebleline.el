@@ -15,6 +15,7 @@
           ((lambda () mode-name) :post " " :face font-lock-comment-face)
           (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
+          (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
 
 (defface akirak/feebleline-buffer-group-face
@@ -191,5 +192,36 @@
            (run-with-timer 60 60 #'akirak/feebleline-org-clock-update)))
     ((pred (< 3600))
      (cl-incf akirak/org-clock-current-duration-seconds 60))))
+
+(defvar akirak/feebleline-exwm-workspaces nil)
+
+(defun akirak/feebleline-exwm-workspaces ()
+  akirak/feebleline-exwm-workspaces)
+
+(defun akirak/feebleline-exwm-workspaces-update ()
+  (setq akirak/feebleline-exwm-workspaces
+        (mapconcat (lambda (i)
+                     (let* ((frm (exwm-workspace--workspace-from-frame-or-index i))
+                            (name (when (fboundp 'frame-workflow--frame-subject-name)
+                                    (frame-workflow--frame-subject-name frm))))
+                       (format
+                        (cond
+                         ((equal frm (selected-frame)) "[%s*]")
+                         ;; TODO: A better way to detect active workspaces
+                         ;; This does not always detect all active workspaces.
+                         ((exwm-workspace--active-p frm) "[%s]")
+                         (t "%s"))
+                        (concat (int-to-string i)
+                                (if name
+                                    (concat ":" name)
+                                  "")))))
+                   (number-sequence 0 (1- (exwm-workspace--count)))
+                   " ")))
+
+(with-eval-after-load 'exwm
+  (general-add-hook '(exwm-workspace-list-change-hook
+                      exwm-workspace-switch-hook
+                      frame-workflow-set-prototype-hook)
+                    'akirak/feebleline-exwm-workspaces-update))
 
 (provide 'setup-feebleline)
