@@ -766,15 +766,37 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+end_src
 **** Frame
 #+begin_src emacs-lisp
-  (akirak/define-frame-workflow "terminal"
+  (defun akirak/vterm-buffer-live-p ()
+    (and (derived-mode-p 'vterm-mode)
+         (let ((process (get-buffer-process (current-buffer))))
+           (and process
+                (process-live-p process)))))
+
+  (defun akirak/get-live-vterm-buffer ()
+    (car (-filter (lambda (buf)
+                    (with-current-buffer buf
+                      (akirak/vterm-buffer-live-p)))
+                  (buffer-list))))
+
+  (defun akirak/get-or-create-vterm-buffer ()
+    (or (akirak/vterm-buffer-live-p)
+        (akirak/get-live-vterm-buffer)
+        (progn
+          (vterm)
+          (current-buffer))))
+
+  (frame-workflow-define-subject "terminal"
     :key "t"
     :make-frame
-    '(frame-purpose-make-frame :modes '(term-mode
-                                        vterm-mode
-                                        eshell-mode
-                                        shell-mode))
+    '(let ((frame-purpose--initial-buffer-fn #'akirak/get-or-create-vterm-buffer))
+       (frame-purpose-make-frame :modes '(term-mode
+                                          vterm-mode
+                                          eshell-mode
+                                          shell-mode)))
     :layout
-    '(ibuffer-sidebar-show-sidebar))
+    '(switch-to-buffer (akirak/get-or-create-vterm-buffer))
+    :refocus
+    '(switch-to-buffer (akirak/get-or-create-vterm-buffer)))
 #+end_src
 
 *** Dired
