@@ -133,9 +133,11 @@
 (let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
                         ("j" other-window)
                         ("k" (lambda () (interactive) (other-window -1)))
-                        ;; You can't use s-l on Chrome OS since it locks the screen
                         ;; (exwm-layout-shrink-window)
                         ;; (exwm-layout-enlarge-window)
+                        ;; You can't use s-l on Chrome OS since it locks the screen
+                        ;; It locks the screen anyway
+                        ("l" offtime-lock)
                         ("p" (lambda () (interactive) (select-frame (next-frame))))
                         ("P" (lambda () (interactive) (select-frame (previous-frame))))
                         ("f" exwm-layout-toggle-fullscreen)
@@ -144,7 +146,9 @@
                         ("m" window-go-master)
                         ("n" window-go-split-sensibly)
                         ("z" akirak/select-minibuffer-window)
-                        ("w" akirak/raise-browser)))
+                        ("w" akirak/raise-browser)
+                        ("=" exwm-workspace-add)
+                        ("-" exwm-workspace-delete)))
        (keybindings (cl-loop for (char cmd) in char-bindings
                              collect (cons (kbd (concat "s-" char))
                                            cmd))))
