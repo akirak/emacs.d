@@ -130,6 +130,9 @@
 ;;;; Keybindings
 
 ;;;;; Global keybindings
+(use-package exwm-window-go
+  :straight (:host github :repo "akirak/emacs-window-go"))
+
 (let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
                         ("j" other-window)
                         ("k" (lambda () (interactive) (other-window -1)))
@@ -147,6 +150,8 @@
                         ("n" window-go-split-sensibly)
                         ("z" akirak/select-minibuffer-window)
                         ("w" akirak/raise-browser)
+                        ("[" exwm-window-go-previous-hidden-workspace)
+                        ("]" exwm-window-go-next-hidden-workspace)
                         ("=" exwm-workspace-add)
                         ("-" exwm-workspace-delete)))
        (keybindings (cl-loop for (char cmd) in char-bindings
