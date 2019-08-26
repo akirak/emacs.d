@@ -28,6 +28,7 @@
     ;; setup-japanese
     setup-helm-descbinds            ; Better keybinding search
     setup-helm-make                 ; Choose a make command via Helm
+    setup-prism
     setup-anzu                      ; Provide info in search & replace
     setup-smartparens               ; Parenthesis editing
     setup-org-make-toc              ; Generating TOCs
