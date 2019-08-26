@@ -78,7 +78,7 @@
 
 (defun akirak/straight-update-package (x)
   (let ((package x))
-    (straight-pull-package-and-deps package)
+    (straight-pull-package package)
     (straight-rebuild-package package)
     (load-library x)))
 
