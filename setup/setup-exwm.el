@@ -154,9 +154,18 @@
                         ("]" exwm-window-go-next-hidden-workspace)
                         ("=" exwm-workspace-add)
                         ("-" exwm-workspace-delete)))
-       (keybindings (cl-loop for (char cmd) in char-bindings
-                             collect (cons (kbd (concat "s-" char))
-                                           cmd))))
+       (keybindings (append (cl-loop for (char cmd) in char-bindings
+                                     collect (cons (kbd (concat "s-" char))
+                                                   cmd))
+                            (cl-loop for num in (number-sequence 0 9)
+                                     append (list (cons (kbd (format "s-%d" num))
+                                                        `(lambda ()
+                                                           (interactive)
+                                                           (exwm-workspace-switch-create ,num)))
+                                                  (cons (kbd (format "S-s-%d" num))
+                                                        `(lambda ()
+                                                           (interactive)
+                                                           (exwm-workspace-move-window ,num))))))))
   (setq exwm-input-global-keys keybindings)
   (cl-loop for (key . cmd) in keybindings
            do (exwm-input--set-key key cmd))
