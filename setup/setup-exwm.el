@@ -51,6 +51,7 @@
     (exwm-input-release-keyboard (exwm--buffer->id (window-buffer))))
    ;; Float specific window types
    ((member exwm-instance-name '("keybase"
+                                 ".blueman-manager-wrapped"
                                  "GNOME-software"))
     (exwm-floating-toggle-floating))))
 
