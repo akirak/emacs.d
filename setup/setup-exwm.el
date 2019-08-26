@@ -88,6 +88,45 @@
   :custom
   (exwm-systemtray-height 16))
 
+;;;; xrandr
+
+(defun akirak/exwm-xrandr-get-connected-monitors ()
+  (->> (process-lines "xrandr" "-q")
+       (-filter (lambda (s) (string-match-p (rx " connected ") s)))
+       (-map (lambda (s) (car (split-string s))))))
+
+(defcustom akirak/exwm-xrandr-command-alist
+  '(
+    ;; My work laptop.
+    (("eDP1" "HDMI2") . "xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto"))
+  "Alist of a set of monitor names and xrandr command line to configure the screens."
+  :type '(alist :key-type (repeat string)
+                :value-type string))
+
+(defun akirak/exwm-configure-screens ()
+  (interactive)
+  (setq exwm-randr-workspace-output-plist
+        (cl-loop for monitor being the elements of
+                 (akirak/exwm-xrandr-get-connected-monitors)
+                 using (index i)
+                 append (list i monitor)))
+  (let* ((monitors (akirak/exwm-xrandr-get-connected-monitors))
+         (command (or (cdr (assoc monitors akirak/exwm-xrandr-command-alist
+                                  'seq-set-equal-p))
+                      "xrandr --auto")))
+    (shell-command command)
+    (message command)))
+
+(defcustom akirak/exwm-xrandr-enabled nil
+  "Enable exwm-xrandr if non-nil."
+  :type 'boolean
+  :set (lambda (sym value)
+         (set sym value)
+         (when value
+           (require 'exwm-randr)
+           (exwm-randr-enable)
+           (add-hook 'exwm-randr-screen-change 'akirak/exwm-configure-screens))))
+
 ;;;; Keybindings
 
 ;;;;; Global keybindings
