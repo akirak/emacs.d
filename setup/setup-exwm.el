@@ -109,9 +109,20 @@
   :type '(alist :key-type (repeat string)
                 :value-type string))
 
-(defvar akirak/exwm-xrandr-output-list-history nil)
+(defcustom akirak/exwm-xrandr-output-plist-list nil
+  "Options for an output plist."
+  :type '(repeat (repeat string)))
 
-(defvar akirak/exwm-xrandr-command-history nil)
+(defvar akirak/exwm-xrandr-output-list-history akirak/exwm-xrandr-output-plist-list)
+
+(defvar akirak/exwm-xrandr-command-history akirak/exwm-xrandr-command-alist)
+
+(defcustom akirak/exwm-xrandr-command-list nil
+  "Options for an xrandr command."
+  :type '(repeat string)
+  :set (lambda (sym value)
+         (set sym value)
+         (set 'akirak/exwm-xrandr-command-history value)))
 
 (defun akirak/exwm-configure-screens (output-plist command)
   (interactive
@@ -132,6 +143,10 @@
                                     akirak/exwm-xrandr-command-history)
                      default-command)))
      (list output-plist command)))
+  (customize-save-variable 'akirak/exwm-xrandr-output-plist-list
+                           akirak/exwm-xrandr-output-list-history)
+  (customize-save-variable 'akirak/exwm-xrandr-command-list
+                           akirak/exwm-xrandr-command-history)
   (setq exwm-randr-workspace-output-plist output-plist)
   (shell-command command)
   (message command))
