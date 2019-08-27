@@ -1290,6 +1290,10 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 
   (akirak/bind-generic "f" 'akirak/flyspell-hydra/body)
 #+end_src
+*** Optimization
+#+begin_src emacs-lisp
+  (akirak/require 'optimize-minibuf)
+#+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1
