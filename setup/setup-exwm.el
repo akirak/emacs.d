@@ -264,7 +264,7 @@
                                      append (list (cons (kbd (format "s-%d" num))
                                                         `(lambda ()
                                                            (interactive)
-                                                           (exwm-workspace-switch-create ,num)))
+                                                           (exwm-workspace-switch ,num)))
                                                   (cons (kbd (format "S-s-%d" num))
                                                         `(lambda ()
                                                            (interactive)
