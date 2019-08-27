@@ -236,7 +236,8 @@
 (use-package exwm-window-go
   :straight window-go)
 
-(let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
+(let* ((char-bindings '(("b" akirak/helm-web-browser)
+                        ("i" exwm-input-toggle-keyboard)
                         ("j" other-window)
                         ("k" (lambda () (interactive) (other-window -1)))
                         ;; (exwm-layout-shrink-window)

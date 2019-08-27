@@ -16,6 +16,9 @@
 
 (defconst akirak/to-be-run-as-exwm (member "--exwm" command-line-args))
 
+(defun akirak/exwm-session-p ()
+  akirak/to-be-run-as-exwm)
+
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
 

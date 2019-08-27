@@ -6,6 +6,76 @@
   (setq-default browse-url-browser-function 'browse-url-generic
                 browse-url-generic-program "chromium"))
 
+(defcustom akirak/web-browser-application-list
+  '(("chromium-browser.desktop" :key ?c)
+    ("chromium.desktop" :key ?c)
+    ("firefox.desktop" :key ?f)
+    ("qutebrowser.desktop" :key ?q))
+  "File names of desktop files."
+  :type '(repeat (cons string (plist))))
+
+(defun akirak/web-browser-available-desktop-files ()
+  (->> akirak/web-browser-application-list
+       (mapcar #'car)
+       (mapcar #'akirak/locate-xdg-desktop-file)
+       (delq nil)))
+
+(defcustom akirak/web-browser-default-program
+  (let ((desktop (cl-find-if #'akirak/locate-xdg-desktop-file
+                             (mapcar #'car akirak/web-browser-application-list))))
+    (if desktop
+        `(desktop ,desktop)
+      'eww))
+  "Default web browser used to read web pages.")
+
+(defun akirak/web-browser-default-function (url &rest args)
+  (interactive)
+  (pcase akirak/web-browser-default-program
+    (`(desktop ,desktop)
+     ;; TODO: Run a desktop file with argument
+     )
+    ('eww
+     (eww url))))
+
+(defun akirak/web-browser-x-class-names ()
+  (->> (akirak/web-browser-available-desktop-files)
+       (mapcar #'akirak/get-xdg-desktop-window-class)
+       (mapcar #'s-capitalize)))
+
+(defun akirak/web-browser-buffers ()
+  (-filter (if (akirak/exwm-session-p)
+               (lambda (buffer)
+                 (or (member (buffer-local-value 'exwm-class-name buffer)
+                             (akirak/web-browser-x-class-names))
+                     (eq 'eww-mode (buffer-local-value 'major-mode buffer))))
+             (lambda (buffer)
+               (eq 'eww-mode (buffer-local-value 'major-mode buffer))))
+           (akirak/real-buffer-list)))
+
+(defun akirak/helm-web-browser ()
+  (interactive)
+  (helm :prompt (format "Web browser [%s]: "
+                        (pcase akirak/web-browser-default-program
+                          (`(desktop ,file) file)
+                          ('eww "eww")))
+        :sources
+        (list (helm-build-sync-source "Browser buffers"
+                :candidates
+                (--map (cons (buffer-name it) it)
+                       (akirak/web-browser-buffers))
+                :action
+                (quote (("Select window or pop to buffer" .
+                         (lambda (buffer)
+                           (if-let ((window (get-buffer-window buffer t)))
+                               (select-window window)
+                             (pop-to-buffer buffer))))
+                        ("Switch to buffer other window" . switch-to-buffer-other-window)
+                        ("Switch to buffer this window" . switch-to-buffer)
+                        ("Kill buffer" . kill-buffer))))
+              (helm-build-dummy-source "Search"))))
+
+;;;; Deprecated
+
 (defun akirak/display-url-for-referencing (url)
   (interactive "sUrl: ")
   (let ((orig-win (selected-window)))
@@ -75,26 +145,6 @@
          (if-let ((b (akirak/select-exwm-browser-buffer)))
              (switch-to-buffer-other-window b)
            (akirak/start-web-browser))))))))
-
-(akirak/define-frame-workflow "web"
-  :key "w"
-  :layout
-  ;; Start a browser and delete the other windows
-  '(progn
-     (akirak/start-browser)
-     (delete-other-windows))
-  :refocus
-  ;; If there is no browser window in the frame, open a new
-  ;; browser instance.
-  '(unless (akirak/browser-windows)
-     (akirak/start-browser))
-  :after-kill-buffer
-  ;; Delete the frame.
-  ;; If there is a browser window in the frame, don't delete the frame.
-  ;; If the frame is the only frame, don't delete the frame.
-  '(unless (or (akirak/browser-windows)
-               (= 1 (length (frame-list))))
-     (delete-frame)))
 
 (provide 'setup-web-browser)
 ;;; setup-web-browser.el ends here

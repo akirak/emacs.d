@@ -1646,6 +1646,18 @@ I use Visual Studio Code for work.
     :after-kill-buffer
     '(delete-frame))
 #+end_src
+*** Web browser
+#+begin_src emacs-lisp
+  (akirak/require 'setup-web-browser)
+#+end_src
+
+#+begin_src emacs-lisp
+  (when (akirak/exwm-session-p)
+    (frame-workflow-define-subject "web"
+      :key "w"
+      :layout
+      '(akirak/helm-web-browser)))
+#+end_src
 ** Meta
 *** Synchronizing my configuration repositories
 I am now using myrepos to synchronize my configuration repositories.
