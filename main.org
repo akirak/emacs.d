@@ -508,6 +508,23 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
     :straight (emacsql-sqlite :type built-in)
     :if (akirak/library-exists-p "emacsql-sqlite"))
 #+end_src
+*** desktop integration
+#+begin_src emacs-lisp
+  (defun akirak/locate-xdg-desktop-file (desktop)
+    (-some (lambda (root)
+             (when (file-directory-p root)
+               (car (directory-files-recursively root
+                                                 (concat "^" (regexp-quote desktop) "$")
+                                                 t))))
+           counsel-linux-apps-directories))
+
+  (defun akirak/get-xdg-desktop-window-class (desktop-file)
+    (with-temp-buffer
+      (insert-file-contents desktop-file)
+      (goto-char (point-min))
+      (when (re-search-forward (rx bol "StartupWmClass=") nil t)
+        (buffer-substring-no-properties (point) (line-end-position)))))
+#+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:
 

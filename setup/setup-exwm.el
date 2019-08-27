@@ -227,23 +227,6 @@
 (defun akirak/real-buffer-list ()
   (mapcar #'get-buffer (internal-complete-buffer "" nil t)))
 
-;;;;; Utilities for XDG desktop files
-
-(defun akirak/locate-xdg-desktop-file (desktop)
-  (-some (lambda (root)
-           (when (file-directory-p root)
-             (car (directory-files-recursively root
-                                               (concat "^" (regexp-quote desktop) "$")
-                                               t))))
-         counsel-linux-apps-directories))
-
-(defun akirak/get-xdg-desktop-window-class (desktop-file)
-  (with-temp-buffer
-    (insert-file-contents desktop-file)
-    (goto-char (point-min))
-    (when (re-search-forward (rx bol "StartupWmClass=") nil t)
-      (buffer-substring-no-properties (point) (line-end-position)))))
-
 ;;;; Keybindings
 
 ;;;;; Global keybindings
