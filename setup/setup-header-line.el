@@ -15,8 +15,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
     (let ((buffer (if window
                       (window-buffer window)
                     (current-buffer))))
-      (with-current-buffer buffer
-        (centaur-tabs-local-mode 1))))
+      (unless (local-variable-p 'centaur-tabs--local-hlf buffer)
+        (with-current-buffer buffer
+          (centaur-tabs-local-mode 1)))))
   (defun ceutaur-tabs-hide-tab (x)
     (or (string-match-p (rx (or "*helm"
                                 "*direnv*"
