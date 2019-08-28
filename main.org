@@ -694,7 +694,9 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      (("ed" eldoc-mode :toggle t)
       ("fc" flycheck-mode :toggle t)
       ("fs" flyspell-mode :toggle t)
-      ("fp" flyspell-prog-mode :toggle t))
+      ("fp" flyspell-prog-mode :toggle t)
+      ("a" apheleia-mode :toggle t)
+      ("A" apheleia-global-mode :toggle t))
      "Edit/assistance"
      (("s" smartparens-mode :toggle t)
       ("S" smartparens-strict-mode :toggle t)
