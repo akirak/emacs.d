@@ -1,5 +1,6 @@
+(straight-use-package '(pdf-tools :type built-in))
+
 (use-package pdf-tools
-  :straight nil
   :preface
   (autoload 'pdf-annot-minor-mode "pdf-annot")
   (autoload 'pdf-cache-minor-mode "pdf-cache")
