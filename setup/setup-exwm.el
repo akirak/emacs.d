@@ -256,6 +256,7 @@
                         ("w" akirak/raise-browser)
                         ("[" exwm-window-go-previous-hidden-workspace)
                         ("]" exwm-window-go-next-hidden-workspace)
+                        ("," frame-workflow-last-frame)
                         ("=" exwm-workspace-add)
                         ("-" exwm-workspace-delete)))
        (keybindings (append (cl-loop for (char cmd) in char-bindings
