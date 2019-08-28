@@ -988,6 +988,10 @@ The following keybindings have been replaced with smart-jump correspondents:
 #+end_src
 *** Referencing                                               :referencing:
 #+begin_src emacs-lisp
+(akirak/require 'setup-referencing)
+#+end_src
+
+#+begin_src emacs-lisp
   (akirak/bind-specific-help
     "d" #'helm-dash)
 
@@ -1014,17 +1018,11 @@ I often consult the Emacs Lisp manual:
     "e" #'akirak/info-elisp)
 #+end_src
 **** PDF
+Use =pdf-tools=.
+
 =pdf-tools= is installed using Nix.
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-pdf-tools)
-#+end_src
 **** Annotating documents
-You can use org-noter to annotate PDF documents as well as other formats supported by doc-view:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-org-noter)
-#+end_src
+You can use org-noter to annotate PDF documents as well as other formats supported by doc-view.
 
 I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
 
