@@ -96,71 +96,43 @@
 
 ;;;; xrandr
 
+(pretty-hydra-define akirak/exwm-xrandr-hydra
+  (:title (format "RandR
+  output plist: %s" exwm-randr-workspace-output-plist))
+  ("xrandr"
+   (("o" akirak/exwm-xrandr-set-output-plist "Set output list")
+    ("c" akirak/exwm-configure-screens "Configure screens"))))
+
 (defun akirak/exwm-xrandr-get-connected-monitors ()
   (->> (process-lines "xrandr" "-q")
        (-filter (lambda (s) (string-match-p (rx " connected ") s)))
        (-map (lambda (s) (car (split-string s))))))
 
-(defcustom akirak/exwm-xrandr-command-alist
-  '(
-    ;; My work laptop.
-    (("eDP1" "HDMI2") . "xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto"))
-  "Alist of a set of monitor names and xrandr command line to configure the screens."
-  :type '(alist :key-type (repeat string)
-                :value-type string))
+(defun akirak/exwm-xrandr-set-output-plist ()
+  (interactive)
+  (let* ((monitors (split-string (read-string "List of monitors separated by space: "
+                                              (string-join (akirak/exwm-xrandr-get-connected-monitors)
+                                                           " "))))
+         (output-plist (cl-loop for monitor being the elements of monitors
+                                using (index i)
+                                append (list i monitor))))
+    (princ (setq exwm-randr-workspace-output-plist output-plist))))
 
-(defcustom akirak/exwm-xrandr-output-plist-list nil
-  "Options for an output plist."
-  :type '(repeat (repeat string)))
+(defcustom akirak/exwm-xrandr-command-list
+  '(("xrandr --output HDMI2 --auto && xrandr --output eDP1 --off")
+    ("xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto"))
+  "List of xrandr commands to configure the screens."
+  :type '(repeat string))
 
-(defvar akirak/exwm-xrandr-output-list-history akirak/exwm-xrandr-output-plist-list)
-
-(defvar akirak/exwm-xrandr-command-history akirak/exwm-xrandr-command-alist)
-
-(defcustom akirak/exwm-xrandr-command-list nil
-  "Options for an xrandr command."
-  :type '(repeat string)
-  :set (lambda (sym value)
-         (set sym value)
-         (set 'akirak/exwm-xrandr-command-history value)))
-
-(defun akirak/exwm-configure-screens (output-plist command)
-  (interactive
-   (let* ((monitors (akirak/exwm-xrandr-get-connected-monitors))
-          (default-output-plist (cl-loop for monitor being the elements of monitors
-                                         using (index i)
-                                         append (list i monitor)))
-          (output-plist (if current-prefix-arg
-                            (read-from-minibuffer "List of monitors: "
-                                                  (prin1-to-string default-output-plist)
-                                                  nil nil akirak/exwm-xrandr-output-list-history)
-                          default-output-plist))
-          (default-command (or (cdr (assoc monitors akirak/exwm-xrandr-command-alist
-                                           'seq-set-equal-p))
-                               "xrandr --auto"))
-          (command (if current-prefix-arg
-                       (read-string "Command: " default-command
-                                    akirak/exwm-xrandr-command-history)
-                     default-command)))
-     (list output-plist command)))
-  (customize-save-variable 'akirak/exwm-xrandr-output-plist-list
-                           akirak/exwm-xrandr-output-list-history)
-  (customize-save-variable 'akirak/exwm-xrandr-command-list
-                           akirak/exwm-xrandr-command-history)
-  (setq exwm-randr-workspace-output-plist output-plist)
-  (shell-command command)
-  (message command))
-
-(defcustom akirak/exwm-xrandr-enabled nil
-  "Enable exwm-xrandr if non-nil."
-  :type 'boolean
-  :set (lambda (sym value)
-         (set sym value)
-         (when value
-           (require 'exwm-randr)
-           (exwm-randr-enable)
-           (add-hook 'exwm-randr-screen-change
-                     (lambda () (call-interactively 'akirak/exwm-configure-screens))))))
+(defun akirak/exwm-configure-screens ()
+  (interactive)
+  (let ((command (completing-read "Command: "
+                                  akirak/exwm-xrandr-command-list
+                                  nil nil
+                                  (string-join (akirak/exwm-xrandr-get-connected-monitors)
+                                               " "))))
+    (shell-command command)
+    (message command)))
 
 ;;;; Exwm-Specific commands
 (defcustom akirak/web-app-browser-program "chromium"
