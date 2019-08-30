@@ -29,6 +29,9 @@
   (org-starter-def "~/home.nix/README.org"
     :key "n"
     :refile (:maxlevel . 3))
+  (general-add-hook 'org-starter-find-file-map
+                    '((";" org-starter-find-config-file "config"))
+                    t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
                     t)
