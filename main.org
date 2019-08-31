@@ -1356,6 +1356,12 @@ Set basic options for org-mode:
   ;; org-starter should be loaded after org is loaded
   (akirak/require 'setup-org-starter)
 #+end_src
+**** org-plain-wiki
+Use org-plain-wiki experimentally.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-wiki)
+#+end_src
 **** Org-babel
 - Graphviz (=graphviz-dot-mode=)
 - Ditaa
