@@ -44,7 +44,7 @@
 
 ;;;; Window management rules that can't be configured by shackle
 ;;;;; org-mode
-(setq-default org-agenda-window-setup 'only-window
+(setq-default org-agenda-window-setup 'current-window
               org-src-window-setup 'split-window-below
               org-indirect-buffer-display 'current-window)
 
