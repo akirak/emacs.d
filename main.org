@@ -1714,3 +1714,4 @@ I am now using myrepos to synchronize my configuration repositories.
 # Local Variables:
 # before-save-hook: akirak/org-sort-entries-as-desired
 # org-id-link-to-org-use-id: nil
+# End:
