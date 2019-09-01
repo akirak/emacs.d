@@ -5,7 +5,9 @@
   (general-translate-key nil 'org-mode-map
     :package 'org akirak/mode-prefix-key "C-c C-x"))
 
-(setq-default org-clock-history-length 20
+(setq-default org-agenda-start-with-clockreport-mode t
+              org-agenda-sticky t
+              org-clock-history-length 20
               org-clock-mode-line-total (quote today)
               org-clock-out-remove-zero-time-clocks t
               org-clock-persist t
@@ -17,13 +19,15 @@
               org-outline-path-complete-in-steps nil
               org-refile-allow-creating-parent-nodes (quote confirm)
               org-refile-use-outline-path (quote full-file-path)
+              org-habit-following-days 7
+              org-habit-graph-column 45
+              org-habit-preceding-days 21
+              org-habit-scheduled-past-days 7
+              org-habit-show-done-always-green t
               org-src-tab-acts-natively t
               org-startup-indented t
               org-startup-truncated nil
               org-use-speed-commands t
-              org-habit-graph-column 1
-              org-habit-preceding-days 21
-              org-habit-following-days 7
               org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
               org-group-tags t
               ;; org-use-fast-tag-selection t
