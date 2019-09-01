@@ -1362,6 +1362,12 @@ Use org-plain-wiki experimentally.
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-wiki)
 #+end_src
+**** Org hydra
+Use major-mode-hydra to define a hydra for Org mode:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-hydra)
+#+end_src
 **** Org-babel
 - Graphviz (=graphviz-dot-mode=)
 - Ditaa
