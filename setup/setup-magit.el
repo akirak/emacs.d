@@ -62,6 +62,12 @@ Only one letter is shown, the first that applies."
   ;; I will bind C-c M-KEY to some other frequently used magit commands.
   ("C-S-g" #'magit-dispatch)
   :custom
+  (magit-repository-directories
+   '(("~/.emacs.d" . 0)
+     ("~/arts" . 2)
+     ("~/home.nix" . 0)
+     ("~/lib" . 1)
+     ("/etc/nixos")))
   (magit-repolist-columns
    '(("Path" 20 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
