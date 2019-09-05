@@ -119,8 +119,8 @@
     (princ (setq exwm-randr-workspace-output-plist output-plist))))
 
 (defcustom akirak/exwm-xrandr-command-list
-  '(("xrandr --output HDMI2 --auto && xrandr --output eDP1 --off")
-    ("xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto"))
+  '("xrandr --output HDMI2 --auto && xrandr --output eDP1 --off"
+    "xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto")
   "List of xrandr commands to configure the screens."
   :type '(repeat string))
 
