@@ -27,10 +27,9 @@ fi
 remote=origin
 branch=$(git symbolic-ref --short HEAD)
 git fetch $remote
-if git diff-tree --quiet HEAD..$remote/$branch; then
+if git --no-pager log --exit-code --oneline --summary HEAD..$remote/$branch; then
     echo "The branch is up-to-date."
 else
-    git --no-pager log --oneline --summary HEAD..$remote/$branch
     echo -n "Rebase onto $remote/$branch? (y/n): "
     read need_rebase
     if [[ ${need_rebase} = [Yy]* ]]; then
