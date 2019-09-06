@@ -1,7 +1,7 @@
 (use-package yankpad
-  :after (org yasnippet)
-  :custom
-  (yankpad-file (expand-file-name "yankpad/yankpad.org" no-littering-etc-directory)))
+  :config
+  (akirak/bind-register
+    "M-y" #'yankpad-repeat))
 
 (defhydra yankpad-hydra (:hint nil)
   "
@@ -11,16 +11,7 @@ Yankpad: Category: %s`yankpad-category (_C_: Set, _A_: Append)
   ("C" yankpad-set-category)
   ("A" yankpad-append-category)
   ("i" yankpad-insert :exit t)
-  ("r" yankpad-repeat :exit t)
   ("a" yankpad-aya-persist)
-  ("c" yankpad-capture-snippet :exit t)
-  ("E" yankpad-edit :exit t)
-  ("R" yankpad-reload :exit t))
-
-(defun akirak/yankpad-insert (&optional arg)
-  (interactive "P")
-  (if arg
-      (yankpad-hydra/body)
-    (yankpad-insert)))
+  ("c" yankpad-capture-snippet :exit t))
 
 (provide 'setup-yankpad)
