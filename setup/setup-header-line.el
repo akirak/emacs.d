@@ -91,6 +91,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
                                        (format "@%s:%s" project mode-name)
                                      mode-name)))
                 (akirak/make-header-line-format))
+               ((memq 'conf-mode modes)
+                ;; TODO: Set groups
+                (akirak/make-header-line-format))
                ((memq 'org-mode modes)
                 (when (buffer-base-buffer)
                   (akirak/make-header-line-format
