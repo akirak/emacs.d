@@ -46,7 +46,20 @@ fi
 # Update the submodule
 git submodule update --recursive
 
-# Update the MELPA package cache to prevent missing package errors
-cd straight/repos/melpa
-git pull
-cd ../../..
+# Auto-update packages I want to keep up-to-date
+# It is important to update the MELPA package cache to prevent missing package errors
+cd straight/repos
+for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree; do
+    [[ ! -d $pkg ]] && continue
+    cd $pkg
+    # Run git-safe-update if the program exists
+    if command -v git-safe-update >/dev/null; then
+        git-safe-update
+    else
+        git pull
+    fi
+    if [[ $? -gt 0 ]]; then
+        echo "Failed to update the repository of $pkg package"
+    fi
+    cd ..
+done
