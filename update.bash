@@ -7,6 +7,13 @@
 
 # Clean the working tree
 
+section() {
+    # TODO: Colourize the output
+    echo "$*"
+}
+
+section "Updating the Emacs configuration..."
+
 echo "Checking if $PWD has changes..."
 if ! git diff-index --name-status --exit-code HEAD; then
     echo "The working tree has changes. Please stash or commit them."
@@ -43,14 +50,19 @@ else
     fi
 fi
 
+section "Updating the submodules in the Emacs configuration..."
+
 # Update the submodule
 git submodule update --recursive
+
+section "Updating my favorite packages..."
 
 # Auto-update packages I want to keep up-to-date
 # It is important to update the MELPA package cache to prevent missing package errors
 cd straight/repos
 for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree; do
     [[ ! -d $pkg ]] && continue
+    echo "Trying to update $pkg package..."
     cd $pkg
     # Run git-safe-update if the program exists
     if command -v git-safe-update >/dev/null; then
