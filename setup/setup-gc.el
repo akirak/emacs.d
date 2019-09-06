@@ -2,6 +2,7 @@
   :config
   (gcmh-mode 1)
   :custom
-  (gcmh-idle-delay 3))
+  (gcmh-verbose t)
+  (gcmh-idle-delay 15))
 
 (provide 'setup-gc)
