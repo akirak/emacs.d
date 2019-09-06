@@ -744,19 +744,15 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 :END:
 #+begin_src emacs-lisp
   (pretty-hydra-define akirak/emacs-lisp-debugging-hydra
-    (:title (string-join `("Emacs Lisp Debugging"
-                           ,(format "GC verbose: %s" (if gcmh-verbose "Yes" "No")))
-                         "\n"))
+    (:title "Emacs Lisp Debugging")
     ("Debug"
      (("d" toggle-debug-on-error :toggle (default-value 'debug-on-error)))
      "Profiler"
-     (("pc" (profiler-cpu-start profiler-sampling-interval) "CPU start" :exit t)
-      ("pm" (profiler-memory-start) "Mem start" :exit t)
-      ("pr" (profiler-report) "Report" :exit t)
-      ("pS" (profiler-stop) "Stop" :exit t)
-      ("pR" (profiler-reset) "Reset"))
-     "GC"
-     (("g" (setq gcmh-verbose (not gcmh-verbose)) "Toggle"))))
+     (("s" profiler-start "Start" :exit t)
+      ("S" (progn
+             (profiler-report)
+             (profiler-stop)) "Report" :exit t)
+      ("R" profiler-reset "Reset"))))
 #+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
