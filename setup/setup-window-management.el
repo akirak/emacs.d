@@ -8,12 +8,12 @@
   (shackle-rules '(
                    ("\\*ivy-occur counsel-projectile " :regexp t :align left :ratio 0.15)
                    ;; Shackle rules for org-mode
-                   ("*Org Select*" :ratio 0.25 :align below)
+                   ;; org-mks should be substituted with the menu function in org-starter.
+                   ("*Org Select*" :align below :ratio 0.3)
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
                    ("*org clocking*" :other t)
                    ("*Org Note*" :align below :ratio 0.3)
-                   ("*Capture*" :ratio 0.4 :align below)
                    ("*compilation*" :align below :ratio 0.4)
                    ("*lispy-message*" :align below :ratio 0.4)
                    ;; org-capture to org-journal needs a big window
@@ -22,7 +22,8 @@
                    ;; ("^CAPTURE-\\(journal\\)" :regexp t :other t)
                    ;; ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
                    ;; ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
-                   ("^CAPTURE-" :regexp t :other t)
+                   ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
+                   ("^CAPTURE-" :inhbit-window-quit t :custom akirak/display-org-capture-buffer)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
                    ("*helm-descbinds*" :other t)
@@ -35,18 +36,106 @@
                    ("*Org Links*" :ratio 0.1 :align below)
                    ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
-                   ("\\*Org Agenda" :regexp t :other t)))
-  )
+                   ("\\*Org Agenda" :regexp t :other t))))
 
 (with-eval-after-load 'org
   (advice-add 'org-switch-to-buffer-other-window
-              :override 'switch-to-buffer-other-window))
+              :override #'switch-to-buffer-other-window))
+
+(defun akirak/display-buffer-split-below (buf alist)
+  "Split the current window below and display the buffer in the new window.
+
+Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
+  (let ((window (selected-window))
+        (height (cdr (assq 'window-height alist)))
+        newwin)
+    (when height
+      (when (floatp height)
+        (setq height (round (* height (frame-height)))))
+      (setq height (- (max height window-min-height))))
+    (setq newwin (window--display-buffer
+                  buf
+                  (split-window-below height)
+                  'window alist))
+    (set-window-dedicated-p newwin t)
+    newwin))
+
+(defun akirak/display-org-capture-temp-buffer (buffer-or-name &rest _args)
+  (let ((bottom-left-window (cl-find-if (lambda (w)
+                                          (and (window-at-side-p w 'bottom)
+                                               (window-at-side-p w 'left)))
+                                        (window-list))))
+    (if (and bottom-left-window
+             (not (eq 'exwm-mode (buffer-local-value
+                                  'major-mode
+                                  (window-buffer bottom-left-window)))))
+        (posframe-show buffer-or-name
+                       :poshandler #'posframe-poshandler-frame-bottom-left-corner
+                       ;; TODO: Fix the border color of the posframe
+                       :internal-border-color "White"
+                       :internal-border-width 2
+                       :width 80
+                       :height 20)
+      (display-buffer-in-side-window buffer-or-name
+                                     '((side . bottom))))))
+
+(defun akirak/display-org-capture-buffer (buffer &rest args)
+  (cond
+   ((one-window-p)
+    (split-window-sensibly)
+    (switch-to-buffer buffer))
+   ((> (window-height) 30)
+    (akirak/display-buffer-split-below buffer args))
+   (t
+    (switch-to-buffer-other-window buffer))))
 
 ;;;; Window management rules that can't be configured by shackle
 ;;;;; org-mode
 (setq-default org-agenda-window-setup 'current-window
               org-src-window-setup 'split-window-below
               org-indirect-buffer-display 'current-window)
+
+;; Use el-patch to prevent the other windows from being deleted.
+(el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
+  "Insert the template at the target location, and display the buffer.
+When `inhibit-wconf-store', don't store the window configuration, as it
+may have been stored before."
+  (unless inhibit-wconf-store
+    (org-capture-put :return-to-wconf (current-window-configuration)))
+  (el-patch-remove (delete-other-windows))
+  (org-switch-to-buffer-other-window
+   (org-capture-get-indirect-buffer (org-capture-get :buffer) "CAPTURE"))
+  (widen)
+  (org-show-all)
+  (goto-char (org-capture-get :pos))
+  (setq-local outline-level 'org-outline-level)
+  (pcase (org-capture-get :type)
+    ((or `nil `entry) (org-capture-place-entry))
+    (`table-line (org-capture-place-table-line))
+    (`plain (org-capture-place-plain-text))
+    (`item (org-capture-place-item))
+    (`checkitem (org-capture-place-item)))
+  (org-capture-mode 1)
+  (setq-local org-capture-current-plist org-capture-plist))
+
+(el-patch-defun org-completing-read (prompt &optional collection predicate require-match
+                                            initial-input hist def inherit-input-method
+                                            &rest args)
+  "Completing-read with SPACE being a normal character."
+  (let ((enable-recursive-minibuffers t)
+        (candidates (cadr args))
+        (minibuffer-local-completion-map
+         (copy-keymap minibuffer-local-completion-map)))
+    (define-key minibuffer-local-completion-map " " 'self-insert-command)
+    (define-key minibuffer-local-completion-map "?" 'self-insert-command)
+    (define-key minibuffer-local-completion-map (kbd "C-c !")
+      'org-time-stamp-inactive)
+    (if (or candidates
+            (not (eq hist 'org-capture--prompt-history)))
+        (apply #'completing-read prompt collection predicate require-match
+               initial-input hist def inherit-input-method
+               args)
+      (read-string prompt initial-input hist def inherit-input-method))))
 
 ;;;; Delete compilation window
 
