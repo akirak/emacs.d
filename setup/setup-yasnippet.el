@@ -37,6 +37,11 @@
 (use-package auto-yasnippet
   :commands (aya-create aya-expand))
 
+(use-package yankpad
+  :config
+  (akirak/bind-register
+    "M-y" #'yankpad-repeat))
+
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
 
