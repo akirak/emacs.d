@@ -648,6 +648,17 @@ If your operating system supports Docker, you can use [[https://github.com/akira
                                                 (akirak/context-hydra-format-relative-filetime
                                                  (desktop-full-file-name) t))
                                       "(does not exist)"))
+                          "nil"))
+               ,(concat " Current clock: "
+                        (if (markerp org-clock-marker)
+                            (with-current-buffer (marker-buffer org-clock-marker)
+                              (concat (buffer-name)
+                                      ": "
+                                      (org-with-wide-buffer
+                                       (goto-char (marker-position org-clock-marker))
+                                       (substring-no-properties
+                                        (org-format-outline-path
+                                         (org-get-outline-path t t))))))
                           "nil")))
              "\n")
             :quit-key "C-g"
