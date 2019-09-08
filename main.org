@@ -1275,6 +1275,9 @@ To visit a URL, use =browse-url-at-point=:
 #+begin_src emacs-lisp
   (general-def
     "C-x n" #'akirak/narrow-or-widen-dwim)
+
+  (general-def :keymaps 'org-mode-map
+    "C-x n" #'akirak/narrow-or-widen-dwim)
 #+end_src
 
 *** Development workflow
