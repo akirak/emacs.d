@@ -63,7 +63,7 @@
                   (if-let ((mode (apply #'derived-mode-p
                                         (mapcar #'car akirak/company-major-backend-alist))))
                       (list (alist-get mode akirak/company-major-backend-alist)
-                            company-capf)
+                            'company-capf)
                     default-backends))))))
 
 ;;;; Completion backends based on a minor mode
@@ -76,10 +76,7 @@
   ;; variable `company-lsp--snippet-functions'.
   ;; See the following document for details.
   ;; https://github.com/tigersoldier/company-lsp#defining-completion-snippet-for-a-certain-language
-  :after (company lsp)
-  :commands company-lsp
-  :hook
-  (company-backends . company-lsp))
+  :after (company lsp))
 
 ;;;; Completion backends based on a major mode
 
@@ -90,7 +87,6 @@
   :after (company shell))
 
 (use-package company-restclient
-  :after (company restclient)
-  :company restclient-mode)
+  :after (company restclient))
 
 (provide 'setup-company)
