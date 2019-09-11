@@ -89,4 +89,8 @@
 (use-package company-shell
   :after (company shell))
 
+(use-package company-restclient
+  :after (company restclient)
+  :company restclient-mode)
+
 (provide 'setup-company)
