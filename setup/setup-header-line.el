@@ -72,6 +72,8 @@ This is intended to be set inside `akirak/set-header-line' function.")
   "Face for the function name or header in the header line.")
 
 ;;;; Setting the header line
+(defvar-local akirak/orig-header-line-format nil)
+
 (defun akirak/set-header-line ()
   (let* ((modes (let ((mode major-mode)
                       modes)
@@ -95,13 +97,19 @@ This is intended to be set inside `akirak/set-header-line' function.")
                 ;; TODO: Set groups
                 (akirak/make-header-line-format))
                ((memq 'org-mode modes)
-                (when (buffer-base-buffer)
-                  (akirak/make-header-line-format
-                   ;; Omit the project name if the file is in ~/lib/
-                   :omit-project (let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
-                                   (or (not (stringp file))
-                                       (string-prefix-p "~/lib/"
-                                                        (abbreviate-file-name file)))))))
+                (cond
+                 ;; An Org buffer has a header line if it is either an indirect buffer
+                 ;; or a file buffer which does not reside inside ~/lib
+                 ((and (buffer-base-buffer)
+                       (not (string-prefix-p "CAPTURE-" (buffer-name))))
+                  (akirak/make-header-line-format))
+                 ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                    (and (stringp file)
+                         (not (string-prefix-p "~/lib/" (abbreviate-file-name file)))))
+                  (akirak/make-header-line-format))
+                 (t
+                  (setq groups '("Org"))
+                  nil)))
                ((memq 'org-agenda-mode modes)
                 '((:eval (and (featurep 'all-the-icons)
                               (all-the-icons-icon-for-buffer)))
@@ -163,9 +171,20 @@ This is intended to be set inside `akirak/set-header-line' function.")
                     (lambda (&optional arg)
                       (run-hooks 'clone-indirect-buffer-hook))))
 
+(add-hook 'org-capture-mode-hook #'akirak/set-up-org-capture-header-line)
+
+(defun akirak/set-up-org-capture-header-line ()
+  (unless akirak/orig-header-line-format
+    (setq akirak/orig-header-line-format header-line-format)
+    (setq header-line-format nil
+          mode-line-format akirak/orig-header-line-format))
+  (centaur-tabs-local-mode 0)
+  (setq akirak/centaur-tabs-buffer-groups '("Org-Capture")))
+
 ;;;; Default header line format
 (cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
+  (cl-remprop :omit-project body)
   (let* ((filep (when buffer-file-name t))
          (base-buffer (unless filep (buffer-base-buffer)))
          (indirectp (when base-buffer t))
