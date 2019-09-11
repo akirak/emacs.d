@@ -156,7 +156,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
                 nil))))
     (when fmt
       (unless groups
-        (setq groups (list mode-name)))
+        (setq groups (ignore-errors
+                       (list (cl-etypecase mode-name
+                               (string mode-name)
+                               (list (car mode-name)))))))
       (centaur-tabs-local-mode 1)
       (setq header-line-format fmt))
     (setq akirak/centaur-tabs-buffer-groups groups)))
