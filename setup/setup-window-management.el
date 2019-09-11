@@ -11,7 +11,7 @@
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
-                   ("\\*Org todo*" :regexp t :ratio 0.15 :align above)
+                   (" *Org todo*" :custom akirak/display-org-todo-buffer)
                    ("*org clocking*" :other t)
                    ("*Org Note*" :align below :ratio 0.3)
                    ("*compilation*" :align below :ratio 0.4)
@@ -60,6 +60,23 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
     (set-window-dedicated-p newwin t)
     newwin))
 
+(defun akirak/display-org-todo-buffer (buffer &rest _args)
+  ;; Delete an existing window for the buffer
+  (delete-window (get-buffer-window buffer))
+  (posframe-show buffer
+                 :width
+                 (- (window-width) (car (posn-actual-col-row (posn-at-point (point)))))
+                 :height
+                 (1+ (length org-todo-sets))
+                 :poshandler #'posframe-poshandler-point-bottom-left-corner)
+  (set-buffer buffer))
+
+(advice-add #'org-fast-todo-selection :around
+            (lambda (orig &optional _arg)
+              (unwind-protect
+                  (funcall orig _arg)
+                (posframe-delete " *Org todo*"))))
+
 (defun akirak/display-org-capture-temp-buffer (buffer-or-name &rest _args)
   (let ((bottom-left-window (cl-find-if (lambda (w)
                                           (and (window-at-side-p w 'bottom)
@@ -94,6 +111,12 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
 (setq-default org-agenda-window-setup 'current-window
               org-src-window-setup 'split-window-below
               org-indirect-buffer-display 'current-window)
+
+(advice-add 'delete-other-windows
+            :before-while #'akirak/allow-delete-other-windows-p)
+
+(defun akirak/allow-delete-other-windows-p (&rest _args)
+  (not (memq this-command '(org-todo))))
 
 ;; Use el-patch to prevent the other windows from being deleted.
 (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
