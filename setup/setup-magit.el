@@ -67,7 +67,7 @@ Only one letter is shown, the first that applies."
      ("~/arts" . 2)
      ("~/home.nix" . 0)
      ("~/lib" . 1)
-     ("/etc/nixos")))
+     ("/etc/nixos" . 0)))
   (magit-repolist-columns
    '(("Path" 20 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
