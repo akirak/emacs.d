@@ -33,4 +33,6 @@ Errors (flycheck): %s`flycheck-checker
   (setq flycheck-checker 'sh-shellcheck)
   (flycheck-mode 1))
 
+(use-package attrap)
+
 (provide 'setup-flycheck)
