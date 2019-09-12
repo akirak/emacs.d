@@ -61,15 +61,17 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
     newwin))
 
 (defun akirak/display-org-todo-buffer (buffer &rest _args)
-  ;; Delete an existing window for the buffer
-  (delete-window (get-buffer-window buffer))
-  (posframe-show buffer
-                 :width
-                 (- (window-width) (car (posn-actual-col-row (posn-at-point (point)))))
-                 :height
-                 (1+ (length org-todo-sets))
-                 :poshandler #'posframe-poshandler-point-bottom-left-corner)
-  (set-buffer buffer))
+  ;; Don't use posframe from inside org-agenda
+  (unless (with-current-buffer (window-buffer) (derived-mode-p 'org-agenda-mode))
+    ;; Delete an existing window for the buffer
+    (delete-window (get-buffer-window buffer))
+    (posframe-show buffer
+                   :width
+                   (- (window-width) (car (posn-actual-col-row (posn-at-point (point)))))
+                   :height
+                   (1+ (length org-todo-sets))
+                   :poshandler #'posframe-poshandler-point-bottom-left-corner)
+    (set-buffer buffer)))
 
 (advice-add #'org-fast-todo-selection :around
             (lambda (orig &optional _arg)
@@ -116,7 +118,8 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
             :before-while #'akirak/allow-delete-other-windows-p)
 
 (defun akirak/allow-delete-other-windows-p (&rest _args)
-  (not (memq this-command '(org-todo))))
+  (not (memq this-command '(org-todo
+                            org-agenda-todo))))
 
 ;; Use el-patch to prevent the other windows from being deleted.
 (el-patch-defun org-capture-place-template (&optional inhibit-wconf-store)
