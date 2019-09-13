@@ -72,6 +72,8 @@
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
   :general
+  (:keymaps 'counsel-mode-map
+            "C-x b" #'counsel-ibuffer)
   (:keymaps 'counsel-find-file-map
             "C-c g" #'akirak/counsel-find-file-magit-status)
   :custom

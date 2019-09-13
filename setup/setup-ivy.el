@@ -81,7 +81,8 @@
               :keymap ivy-switch-buffer-2-map
               :caller 'ivy-switch-buffer)))
 
-(general-def "C-x b" #'ivy-switch-buffer-2)
+;; Use counsel-ibuffer for now.
+;; (general-def "C-x b" #'ivy-switch-buffer-2)
 
 (defcustom akirak/ivy-posframe-width-alist
   nil
@@ -131,7 +132,8 @@
   (ivy-posframe-height 12)
   (ivy-posframe-width 100)
   (akirak/ivy-posframe-width-alist
-   `(,@(--map (cons it 130)
+   `((counsel-ibuffer . 120)
+     ,@(--map (cons it 130)
               '(counsel-describe-function
                 counsel-describe-variable
                 counsel-M-x))))
