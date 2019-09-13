@@ -111,16 +111,18 @@ This is intended to be set inside `akirak/set-header-line' function.")
                   (setq groups '("Org"))
                   nil)))
                ((memq 'org-agenda-mode modes)
-                '((:eval (and (featurep 'all-the-icons)
-                              (all-the-icons-icon-for-buffer)))
-                  " "
-                  (:eval (pcase org-agenda-redo-command
-                           (`(org-agenda-run-series ,desc . ,_)
-                            (when-let ((key (caar (cl-remove-if-not
-                                                   (lambda (list) (equal (nth 1 list) desc))
-                                                   org-agenda-custom-commands))))
-                              (format "[%s]%s" key (car (split-string desc ":")))))
-                           (x (prin1-to-string x))))))
+                ;; '((:eval (and (featurep 'all-the-icons)
+                ;;               (all-the-icons-icon-for-buffer)))
+                ;;   " "
+                ;;   (:eval (pcase org-agenda-redo-command
+                ;;            (`(org-agenda-run-series ,desc . ,_)
+                ;;             (when-let ((key (caar (cl-remove-if-not
+                ;;                                    (lambda (list) (equal (nth 1 list) desc))
+                ;;                                    org-agenda-custom-commands))))
+                ;;               (format "[%s]%s" key (car (split-string desc ":")))))
+                ;;            (x (prin1-to-string x)))))
+                (setq groups '("Org Agenda"))
+                nil)
                ((or (memq 'helpful-mode modes)
                     (memq 'help-mode modes)
                     (memq 'Info-mode modes)
