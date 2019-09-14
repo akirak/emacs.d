@@ -37,6 +37,10 @@
                                 "/"
                                 _
                                 "\")"))
+                          (("/notes/wiki/\[^/\]+\.org\\'" . "My wiki")
+                           . (> "* " (akirak/unescape-wiki-file-name (file-name-base (buffer-file-name))) "\n"
+                                ":PROPERTIES:\n:CREATED_TIME: " (format-time-string (org-time-stamp-format t t))
+                                "\n:END:\n"))
                           (("README\.org\\'" . "README")
                            . (> "# -*- mode: org; mode: org-make-toc; -*-\n"
                                 "* " (f-filename default-directory) "\n"
