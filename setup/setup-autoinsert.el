@@ -37,6 +37,18 @@
                                 "/"
                                 _
                                 "\")"))
+                          (("README\.org\\'" . "README")
+                           . (> "# -*- mode: org; mode: org-make-toc; -*-\n"
+                                "* " (f-filename default-directory) "\n"
+                                _
+                                "\n\n"
+                                "# Add CI badges here\n\n"
+                                "#+BEGIN_HTML\n#+END_HTML\n"
+                                "** Table of contents\n:PROPERTIES:\n:TOC: siblings\n:END:\n"
+                                "\n"
+                                "** COMMENT Meta :noexport:\n"
+                                ":PROPERTIES:\n:TOC:      ignore\n:END:\n"
+                                "# The COMMENT keyword prevents GitHub's renderer from showing this entry.\n"))
                           ;; Fallback to "auto-insert" yasnippet template
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
