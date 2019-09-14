@@ -69,6 +69,9 @@
   "M-L" 'org-shiftmetaright
   "C-1" 'counsel-org-tag)
 
+(general-def :keymaps 'org-agenda-mode-map :package 'org
+  "C-1" 'counsel-org-tag)
+
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "t" 'akirak/org-table-create-or-edit)
 
