@@ -1,3 +1,45 @@
+(major-mode-hydra-define org-mode
+  (:title (string-join `(,(s-append " " (substring-no-properties (org-format-outline-path (org-get-outline-path t nil)
+                                                                                          nil nil " > ")))
+                         " ------------------------------------- "
+                         ,(format " Created at %s, total clocked %s"
+                                  (org-entry-get nil "CREATED_TIME")
+                                  (org-duration-from-minutes (org-clock-sum-current-item)))
+                         ,(format " Custom ID: %s,  ID: %s"
+                                  (org-entry-get nil "CUSTOM_ID")
+                                  (org-entry-get nil "ID"))
+                         ,@(let ((trigger (org-entry-get nil "TRIGGER"))
+                                 (blocker (org-entry-get nil "BLOCKER")))
+                             (when (or trigger blocker)
+                               (delq nil
+                                     (list
+                                      (when trigger (format " Dependencies: Trigger: %s" trigger))
+                                      (when blocker (format "               Blocker: %s" blocker)))))))
+                       "\n")
+          :foreign-keys t)
+  ("Store link"
+   (("li" (progn
+            (org-id-get-create)
+            (call-interactively 'org-store-link))
+     "With ID")
+    ("lc" (progn
+            (akirak/org-set-custom-id-property)
+            (call-interactively 'org-store-link))
+     "With custom ID"))
+   "Set"
+   (("sh" akirak/org-set-habit "Set habit")
+    ("st" (unless (org-entry-get nil "CREATED_TIME")
+            (org-entry-put nil "CREATED_TIME"
+                           ;; TODO: Check for clock data in the entry
+                           (format-time-string (org-time-stamp-format t t))))
+     "Set created time")
+    ;; TODO: Show history
+    )
+   "Extras"
+   (("d" org-edna-edit "Dependencies"))))
+
+;;;; org-habit support
+
 (defvar-local akirak/org-allow-habits nil
   "Allow creating habit entries if this variable is non-nil.")
 
@@ -40,10 +82,5 @@
   (goto-char (point-min))
   (while (re-search-forward (rx bol (+ "*") (+ space) "HABIT") nil t)
     (akirak/org-set-habit)))
-
-(major-mode-hydra-define org-mode
-  (:title "Org" :foreign-keys t)
-  ("Type"
-   (("th" akirak/org-set-habit "Set habit"))))
 
 (provide 'setup-org-hydra)
