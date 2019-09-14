@@ -1,5 +1,6 @@
 (use-package plain-org-wiki
   :straight (plain-org-wiki :host github :repo "abo-abo/plain-org-wiki")
+  :after org-starter
   :config/el-patch
   (el-patch-defun plain-org-wiki-find-file (x)
     "Open X as a file with org extension in `plain-org-wiki-directory'."

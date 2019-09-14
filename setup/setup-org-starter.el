@@ -30,10 +30,12 @@
     :key "n"
     :refile (:maxlevel . 3))
   (general-add-hook 'org-starter-find-file-map
-                    '((";" org-starter-find-config-file "config"))
+                    '((";" org-starter-find-config-file "config")
+                      ("w" org-plain-wiki "wiki"))
                     t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
-                    '((";" org-starter-swiper-config-files "config"))
+                    '((";" org-starter-swiper-config-files "config")
+                      ("w" helm-org-rifle-wiki "wiki/writing"))
                     t)
   (general-add-hook 'org-starter-extra-refile-map
                     '(("'" avy-org-refile-as-child "avy")
