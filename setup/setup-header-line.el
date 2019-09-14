@@ -88,6 +88,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
                ((memq 'lisp-interaction-mode modes)
                 (setq groups '("Scratch"))
                 nil)
+               ((bound-and-true-p git-commit-mode)
+                (setq groups '("Git"))
+                nil)
                ((memq 'prog-mode modes)
                 (setq groups (list (if project
                                        (format "@%s:%s" project mode-name)
@@ -154,7 +157,7 @@ This is intended to be set inside `akirak/set-header-line' function.")
                ((string-prefix-p "magit-" (format "%s" major-mode))
                 (setq groups (list (if project
                                        (format "%s:Magit" project)
-                                     "Magit")))
+                                     "Git")))
                 nil))))
     (when fmt
       (unless groups
