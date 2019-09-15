@@ -6,7 +6,52 @@
     ;; :internal-border-width 1
     :background-color "salmon4"
     ;; :internal-border-color "red"
-    :poshandler 'akirak/posframe-poshandler-smart-center)))
+    :poshandler 'akirak/posframe-poshandler-smart-center))
+  )
+
+(use-package pretty-hydra
+  :config/el-patch
+  (defun pretty-hydra--generate (name body heads-plist)
+    "Helper function to generate expressions with given NAME, BODY, HEADS-PLIST.
+See `pretty-hydra-define' and `pretty-hydra-define+'."
+    (let* ((separator (or (plist-get body :separator) "─"))
+           (title (plist-get body :title))
+           (formatter (or (plist-get body :formatter)
+                          #'identity))
+           (quit-key (plist-get body :quit-key))
+           (docstring (->> heads-plist
+                           (pretty-hydra--gen-body-docstring separator)
+                           (pretty-hydra--maybe-add-title title)
+                           (funcall formatter)
+                           (s-prepend "\n")
+                           ;; Work around for an issue
+                           ;; that`fit-frame-to-buffer' seems to
+                           ;; ignore trailing newlines.
+                           ;;
+                           ;; I don't know why this doesn't happen for
+                           ;; other people, but this is necessary for
+                           ;; displaying a hydra in a posframe.
+                           (el-patch-add (s-append "\n "))))
+           (heads (pretty-hydra--get-heads heads-plist))
+           (heads (if quit-key
+                      (if (listp quit-key)
+                          (append heads (--map (list it nil) quit-key))
+                        (append heads `((,quit-key nil))))
+                    heads))
+           (body (lax-plist-put body :hint nil)))
+      `(progn
+         (eval-and-compile
+           (set (defvar ,(intern (format "%S/heads-plist" name))
+                  nil
+                  ,(format "heads-plist of %S." name))
+                (quote ,heads-plist))
+           (set (defvar ,(intern (format "%S/pretty-body" name))
+                  nil
+                  ,(format "pretty-body of %S." name))
+                (quote ,body)))
+         (defhydra ,name ,(pretty-hydra--remove-custom-opts body)
+           ,docstring
+           ,@heads)))))
 
 (use-package major-mode-hydra)
 
