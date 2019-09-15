@@ -2,10 +2,11 @@
   :custom
   (hydra-hint-display-type 'posframe)
   (hydra-posframe-show-params
-   (list :internal-border-width 1
-         :background-color "salmon4"
-         :internal-border-color "red"
-         :poshandler 'akirak/posframe-poshandler-smart-center)))
+   (list
+    ;; :internal-border-width 1
+    :background-color "salmon4"
+    ;; :internal-border-color "red"
+    :poshandler 'akirak/posframe-poshandler-smart-center)))
 
 (use-package major-mode-hydra)
 
