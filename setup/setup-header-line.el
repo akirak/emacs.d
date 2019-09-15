@@ -83,7 +83,7 @@ This is intended to be set inside `akirak/set-header-line' function.")
                       (setq mode (get mode 'derived-mode-parent))))
                   modes))
          (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
-         groups
+         (groups nil)
          (fmt (cond
                ((memq 'lisp-interaction-mode modes)
                 (setq groups '("Scratch"))
@@ -159,15 +159,19 @@ This is intended to be set inside `akirak/set-header-line' function.")
                                        (format "%s:Magit" project)
                                      "Git")))
                 nil))))
-    (when fmt
+    (cond
+     (fmt
+      (setq header-line-format fmt)
       (unless groups
         (setq groups (ignore-errors
                        (list (cl-etypecase mode-name
                                (string mode-name)
-                               (list (car mode-name)))))))
+                               (list (car mode-name))))))))
+     (groups
+      (setq akirak/centaur-tabs-buffer-groups groups))
+     (t
       (centaur-tabs-local-mode 1)
-      (setq header-line-format fmt))
-    (setq akirak/centaur-tabs-buffer-groups groups)))
+      (setq header-line-format nil)))))
 
 (add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
