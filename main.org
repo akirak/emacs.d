@@ -1369,6 +1369,8 @@ Set basic options for org-mode:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-org t)
+  ;; Use org-edna for dependency management
+  (akirak/require 'setup-org-edna)
 
   ;; org-starter should be loaded after org is loaded
   (akirak/require 'setup-org-starter)
