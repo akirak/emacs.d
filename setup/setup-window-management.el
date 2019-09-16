@@ -13,6 +13,7 @@
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
                    (" *Org todo*" :custom akirak/display-org-todo-buffer)
                    ("*org clocking*" :other t)
+                   ("*Org Edna Edit Blocker/Trigger*" :align below :ratio 0.3)
                    ("*Org Note*" :align below :ratio 0.3)
                    ("*compilation*" :align below :ratio 0.4)
                    ("*lispy-message*" :align below :ratio 0.4)
