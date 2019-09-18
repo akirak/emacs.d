@@ -15,10 +15,12 @@ If URL is not given, look for first URL in `kill-ring'."
     (let ((repo-path (match-string 1 url)))
       (org-make-link-string (concat "https://github.com/" repo-path) repo-path)))
    (t
-    (let* ((html (org-web-tools--get-url url))
-           (title (org-web-tools--html-title html))
-           (link (org-make-link-string url title)))
-      link))))
+    (with-timeout (3 (message "Timeout while retrieving %s" url)
+                     url)
+      (let* ((html (org-web-tools--get-url url))
+             (title (org-web-tools--html-title html))
+             (link (org-make-link-string url title)))
+        link)))))
 
 (advice-add 'org-web-tools--org-link-for-url
             :override #'akirak/org-web-tools--org-link-for-url)
