@@ -1,15 +1,25 @@
-;; If WAYLAND_DISPLAY environment variable is defined, the machine
-;; is considered to be running on Chrome OS, because I am currently
-;; using Xorg in non Chrome OS Linux environments.
-;; This can be changed in the future.
-(when (and (getenv "WAYLAND_DISPLAY")
-           (executable-find "wl-paste"))
-  (advice-add 'interprogram-paste-function :override #'akirak/wayland-paste))
+(defcustom akirak/clipboard-paste-command
+  (cond
+   ((and (eq akirak/window-system 'wayland)
+         (executable-find "wl-paste"))
+    "wl-paste")
+   ((and (eq akirak/window-system 'x)
+         (executable-find "xclip"))
+    "xclip -o"))
+  "Command used to get the content of the system clipboard."
+  :type 'string
+  :set (lambda (sym val)
+         (set sym val)
+         (if val
+             (advice-add 'interprogram-paste-function
+                         :override #'akirak/interprogram-paste)
+           (advice-remove 'interprogram-paste-function
+                          #'akirak/interprogram-paste))))
 
-(defun akirak/wayland-paste ()
+(defun akirak/interprogram-paste ()
   (with-timeout 1
     (ignore-errors
-      (let ((s (shell-command-to-string "wl-paste")))
+      (let ((s (shell-command-to-string akirak/clipboard-paste-command)))
         (unless (string-empty-p s)
           (string-trim-right s))))))
 

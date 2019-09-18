@@ -103,3 +103,14 @@ output file without the directory."
                              nil t)
           (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
                              nil t)))))
+
+(defconst akirak/window-system
+  (cond
+   ((and (getenv "WAYLAND_DISPLAY")
+         ;; I use :2 for Xephyr sessions
+         (not (equal x-display-name ":2")))
+    'wayland)
+   ((eq window-system 'x)
+    'x)
+   (t
+    window-system)))
