@@ -60,7 +60,8 @@ section "Updating my favorite packages..."
 # Auto-update packages I want to keep up-to-date
 # It is important to update the MELPA package cache to prevent missing package errors
 cd straight/repos
-for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree; do
+for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree \
+           transient magit org-ql company-mode lsp-mode treemacs; do
     [[ ! -d $pkg ]] && continue
     echo "Trying to update $pkg package..."
     cd $pkg
