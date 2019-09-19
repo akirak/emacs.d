@@ -1,4 +1,9 @@
+(use-package js
+  :straight (:type built-in))
+
+;; Prefer js-mode for LSP support
 (use-package js2-mode
+  :disabled t
   :mode (("\\.js\\'" . js2-mode))
   :interpreter "node")
 

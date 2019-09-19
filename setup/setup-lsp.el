@@ -1,7 +1,25 @@
 (use-package lsp-mode
-  :commands lsp
+  :commands lsp)
+
+(use-package lsp-clients
+  :straight lsp-mode
+  :init
+  (make-variable-buffer-local 'lsp-clients-typescript-server)
+  (make-variable-buffer-local 'lsp-clients-javascript-typescript-server)
   :config
-  (require 'lsp-clients))
+  (defun akirak/javascript-setup-lsp ()
+    (if (executable-find "npm")
+        (let* ((node-root (locate-dominating-file default-directory "node_modules"))
+               (node-bin (expand-file-name "node_modules/.bin" node-root)))
+          (when (file-executable-p (expand-file-name "javascript-typescript-stdio" node-bin))
+            (setq-local lsp-clients-javascript-typescript-server
+                        (expand-file-name "javascript-typescript-stdio" node-bin)))
+          (when (file-executable-p (expand-file-name "typescript-language-server" node-bin))
+            (setq-local lsp-clients-typescript-server
+                        (expand-file-name "typescript-language-server" node-bin))))
+      (user-error "npm is not found on the path"))
+    (lsp))
+  :hook (js-mode . akirak/javascript-setup-lsp))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
