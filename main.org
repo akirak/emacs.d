@@ -756,6 +756,32 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      "Inspect"
      (("c" describe-char))))
 #+end_src
+**** Layout hydra
+:PROPERTIES:
+:CREATED_TIME: [2019-09-20 Fri 12:47]
+:END:
+#+begin_src emacs-lisp
+  (pretty-hydra-define akirak/window-layout-hydra
+    (:title (format "Layout\nSize %sx%s"
+                    (window-width)
+                    (window-height))
+            :quit-key "q")
+    ("Window size"
+     (("h" enlarge-window-horizontally)
+      ("H" shrink-window-horizontally)
+      ("w" enlarge-window)
+      ("W" shrink-window))
+     "Layout"
+     (("b" balance-windows)
+      ("B" (balance-windows (selected-window)))
+      ("s" split-window-below)
+      ("v" split-window-right)
+      ("d" delete-window))
+     "Switch window/buffer"
+     (("j" other-window "Next window")
+      ("k" (other-window -1) "Previous window")
+      ("l" counsel-ibuffer "Switch buffer"))))
+#+end_src
 **** Emacs debugging hydra
 :PROPERTIES:
 :CREATED_TIME: [2019-07-27 Sat 17:43]
