@@ -3,36 +3,21 @@
 
 (use-package lsp-clients
   :straight lsp-mode
-  :init
-  (make-variable-buffer-local 'lsp-clients-typescript-server)
-  (make-variable-buffer-local 'lsp-clients-javascript-typescript-server)
-  :config
-  (defun akirak/javascript-setup-lsp ()
-    (if (executable-find "npm")
-        (let* ((node-root (locate-dominating-file default-directory "node_modules"))
-               (node-bin (expand-file-name "node_modules/.bin" node-root)))
-          (when (file-executable-p (expand-file-name "javascript-typescript-stdio" node-bin))
-            (setq-local lsp-clients-javascript-typescript-server
-                        (expand-file-name "javascript-typescript-stdio" node-bin)))
-          (when (file-executable-p (expand-file-name "typescript-language-server" node-bin))
-            (setq-local lsp-clients-typescript-server
-                        (expand-file-name "typescript-language-server" node-bin))))
-      (user-error "npm is not found on the path"))
-    (lsp))
-  :hook (js-mode . akirak/javascript-setup-lsp))
+  :hook ((prog-mode
+          web-mode
+          css-mode)
+         . lsp-deferred))
 
 (use-package lsp-ui
   :commands lsp-ui-mode
-  :general
-  ;; jump commands
-  ;; (#'lsp-ui-peek-find-definitions
-  ;;  #'lsp-ui-peek-find-references
-  ;;  #'lsp-ui-peek-jump-forward
-  ;;  #'lsp-ui-peek-jump-backward
-  ;;  )
-  ;; For browsing documentation, use lsp-ui-doc.
   :hook
-  (lsp-mode . lsp-ui-mode))
+  (lsp-mode . lsp-ui-mode)
+  (lsp-ui-mode . lsp-ui-doc-mode)
+  (lsp-ui-mode . lsp-ui-peek-mode)
+  (lsp-ui-mode . lsp-ui-sideline-mode))
+
+(use-package lsp-treemacs
+  :after lsp)
 
 (use-package dap-mode
   :after lsp-mode
@@ -64,10 +49,6 @@
   ("M-s" lsp-describe-session)
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace))
-
-;; lsp-treemacs provides project-wide error overview.
-(use-package lsp-treemacs
-  :after (treemacs lsp))
 
 (akirak/bind-generic :keymaps 'lsp-mode-map
   "l" '(hydra-lsp/body :wk "hydra-lsp"))
