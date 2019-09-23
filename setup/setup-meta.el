@@ -54,7 +54,6 @@
     setup-treemacs
     setup-screencast
     setup-pass
-    setup-git-auto-commit
     setup-alert))
 
 (mapc #'akirak/require akirak/feature-list)
