@@ -767,10 +767,10 @@ If your operating system supports Docker, you can use [[https://github.com/akira
                     (window-height))
             :quit-key "q")
     ("Window size"
-     (("h" enlarge-window-horizontally)
-      ("H" shrink-window-horizontally)
-      ("w" enlarge-window)
-      ("W" shrink-window))
+     (("w" enlarge-window-horizontally)
+      ("W" shrink-window-horizontally)
+      ("h" enlarge-window)
+      ("H" shrink-window))
      "Layout"
      (("b" balance-windows)
       ("B" (balance-windows (selected-window)))
@@ -780,7 +780,13 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      "Switch window/buffer"
      (("j" other-window "Next window")
       ("k" (other-window -1) "Previous window")
-      ("l" counsel-ibuffer "Switch buffer"))))
+      ("l" counsel-ibuffer "Switch buffer"))
+     "Extra windows"
+     (("tt" treemacs)
+      ("te" lsp-treemacs-error-list)
+      ;; FIXME: Correct name
+      ("ti" lsp-treemacs-imenu)
+      ("tb" ibuffer-sidebar))))
 #+end_src
 **** Emacs debugging hydra
 :PROPERTIES:
