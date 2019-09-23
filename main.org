@@ -984,6 +984,7 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
 
 #+begin_src emacs-lisp
   (akirak/bind-user "p" 'akirak/yankpad-insert)
+  (akirak/bind-generic "y" #'yankpad-map)
 #+end_src
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
