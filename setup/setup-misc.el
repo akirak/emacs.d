@@ -58,10 +58,6 @@
   :config
   (add-to-list 'scratch-mode-alist '(helpful-mode . emacs-lisp-mode))
   (add-to-list 'scratch-mode-alist '(help-mode . emacs-lisp-mode)))
-(use-package dumb-jump
-  ;; Don't enable dumb-jump-mode. Bind only necessary commands.
-  :custom
-  (dumb-jump-selector 'ivy))
 (use-package iedit)
 (use-package comment-dwim-2
   :general

@@ -1008,16 +1008,15 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
   (akirak/bind-jump "f" 'akirak/link-hint-open-link)
 #+end_src
 *** Source code navigation                                     :navigation:
-
-I used =dumb-jump=, but now I will try =smart-jump= instead.
-
-The following keybindings have been replaced with smart-jump correspondents:
-
 #+begin_src emacs-lisp
-  ;; Use smart-jump instead.
-  ;; (akirak/bind-jump
-  ;;   "." #'dumb-jump-go
-  ;;   "," #'dumb-jump-back)
+  (use-package dumb-jump
+    ;; Don't enable dumb-jump-mode. Bind only necessary commands.
+    :custom
+    (dumb-jump-selector 'ivy))
+
+  (akirak/bind-jump
+    ". " #'dumb-jump-go
+    "," #'dumb-jump-back)
 #+end_src
 
 #+begin_src emacs-lisp
