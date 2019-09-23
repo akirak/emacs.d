@@ -20,9 +20,9 @@
 
 (use-package dap-mode
   :after lsp-mode
-  :config
-  (dap-mode 1)
-  (dap-ui-mode 1))
+  :hook
+  (lsp-mode . dap-mode)
+  (dap-mode . dap-ui-mode))
 
 ;; https://github.com/abo-abo/hydra/wiki/lsp-mode
 (defhydra hydra-lsp (:exit t :hint nil)
