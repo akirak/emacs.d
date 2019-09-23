@@ -714,12 +714,14 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("fs" flyspell-mode :toggle t)
       ("fp" flyspell-prog-mode :toggle t)
       ("a" apheleia-mode :toggle t)
-      ("A" apheleia-global-mode :toggle t))
+      ("A" apheleia-global-mode :toggle t)
+      ("ld" lsp-ui-doc-mode :toggle t)
+      ("lp" lsp-ui-peek-mode :toggle t)
+      ("ls" lsp-ui-sideline-mode))
      "Edit/assistance"
      (("s" smartparens-mode :toggle t)
       ("S" smartparens-strict-mode :toggle t)
-      ("l" lispy-mode :toggle t)
-      ("L" lsp-mode :toggle t)
+      ("y" lispy-mode :toggle t)
       ("el" electric-layout-mode :toggle t)
       ("ei" electric-indent-local-mode :toggle t)
       ("eq" electric-quote-local-mode :toggle t)
@@ -729,7 +731,11 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      (("w" whitespace-mode :toggle t)
       ("r" rainbow-delimiters-mode :toggle t)
       ("p" page-break-lines-mode :toggle t)
-      ("n" line-number-mode :toggle t))))
+      ("n" line-number-mode :toggle t))
+     "LSP"
+     (("lh" lsp-describe-session)
+      ("lR" lsp-restart-workspace)
+      ("lS" lsp-shutdown-workspace))))
 #+end_src
 **** Appearance hydra
 :PROPERTIES:
