@@ -93,6 +93,9 @@
     (akirak/org-hugo-get-section 'use-cache)))
 
 ;;;;; Finding a root subtree
+(defconst akirak/org-hugo-root-regexp
+  (rx bol (0+ space) ":EXPORT_FILE_NAME:"))
+
 (defun akirak/org-hugo-find-root ()
   (interactive)
   (let (level
@@ -102,8 +105,7 @@
     (while (and (setq level (org-current-level))
                 (not (setq export-file-name
                            (save-excursion
-                             (and (re-search-forward (rx bol (0+ space)
-                                                         ":EXPORT_FILE_NAME:")
+                             (and (re-search-forward akirak/org-hugo-root-regexp
                                                      (save-excursion (org-end-of-subtree))
                                                      t)
                                   (progn
@@ -161,7 +163,29 @@
   (save-excursion
     (when (akirak/org-hugo-find-root)
       (akirak/org-hugo-configure-subtree-post arg)
-      (org-hugo-export-wim-to-md))))
+      (org-hugo-export-wim-to-md)
+      (akirak/org-hugo-open-exported-file))))
+
+(defun akirak/org-hugo-export-subtrees-in-file ()
+  "Export all subtrees in the file/buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (save-excursion
+      (while (re-search-forward akirak/org-hugo-root-regexp nil t)
+        (org-hugo-export-wim-to-md)
+        (org-end-of-subtree)))))
+
+(define-minor-mode akirak/org-hugo-subtree-export-mode
+  "Toggle auto exporting the Org file using `ox-hugo'."
+  :global nil
+  :lighter "Hugo Subtree"
+  (if akirak/org-hugo-subtree-export-mode
+      ;; When the mode is enabled
+      (progn
+        (add-hook 'after-save-hook #'akirak/org-hugo-export-subtrees-in-file :append :local))
+    ;; When the mode is disabled
+    (remove-hook 'after-save-hook #'akirak/org-hugo-export-subtrees-in-file :local)))
 
 ;;;; Opening the exported file
 
@@ -185,8 +209,6 @@
           (pop-to-buffer (current-buffer)))
       (find-file-other-window outfile)
       (goto-char (point-min)))))
-
-(advice-add 'org-hugo-export-wim-to-md :after 'akirak/org-hugo-open-exported-file)
 
 (provide 'setup-org-hugo)
 ;;; setup-org-hugo.el ends here
