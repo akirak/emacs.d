@@ -52,4 +52,22 @@
 (akirak/bind-generic :keymaps 'lsp-mode-map
   "l" '(hydra-lsp/body :wk "hydra-lsp"))
 
+;;;; Extra clients
+(use-package lsp-dockerfile
+  :straight (lsp-dockerfile :host github :repo "emacs-lsp/lsp-dockerfile")
+  :after dockerfile-mode
+  :hook
+  (dockerfile-mode . lsp-dockerfile-enable)
+  ;; :ensure-system-package
+  ;; (docker-langserver . "sudo npm i -g dockerfile-language-server-nodejs")
+  )
+
+(use-package lsp-python
+  :after python-mode
+  :hook
+  (python-mode . lsp-python-enable)
+  ;; TODO: Install the executable using nix or something
+  ;; :ensure-system-package python-language-server
+  )
+
 (provide 'setup-lsp)

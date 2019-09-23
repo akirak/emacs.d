@@ -210,14 +210,6 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
     (diminish 'flyspell-mode))
 #+end_src
 
-Deprecated: Allow installation of system packages via use-package
-
-#+begin_src emacs-lisp
-  (use-package system-packages)
-
-  (use-package use-package-ensure-system-package)
-#+end_src
-
 #+begin_src emacs-lisp
   (use-package use-package-company
     :preface
@@ -611,6 +603,53 @@ available.
 #+end_src
 
 If your operating system supports Docker, you can use [[https://github.com/akirak/fonts-container][fonts-container]] to install fonts used in the module.
+*** Visual enhancements
+**** page-break-lines
+:PROPERTIES:
+:CREATED_TIME: [2019-09-24 Tue 00:49]
+:END:
+#+begin_src emacs-lisp
+(use-package page-break-lines
+  :hook ((doc-mode
+          emacs-lisp-mode
+          compilation-mode
+          outline-mode
+          prog-mode
+          haskell-mode
+          help-mode
+          magit-mode) . page-break-lines-mode))
+#+end_src
+**** Color support in terminal and compilation buffers
+#+begin_src emacs-lisp
+  (akirak/require 'setup-terminal-colors)
+  #+end_src
+**** Colorize color names
+#+begin_src emacs-lisp
+(use-package rainbow-mode
+  ;; :diminish 'rainbow-mode
+  :commands (rainbow-mode)
+  :hook
+  (prog-mode . (lambda () (rainbow-mode 1))))
+#+end_src
+**** fontify-face
+#+begin_src emacs-lisp
+(use-package fontify-face
+  :hook
+  (emacs-lisp . (lambda () (fontify-face-mode 1))))
+#+end_src
+**** Centralizing window contents
+#+begin_src emacs-lisp
+  (akirak/require 'setup-perfect-margin)
+  #+end_src
+
+I'm not using olivetti-mode
+
+#+begin_src emacs-lisp
+(use-package olivetti
+  :disabled t
+  :commands (turn-on-olivetti-mode)
+  :custom (olivetti-body-width 92))
+#+end_src
 ** A bunch of useful features
 :PROPERTIES:
 :TOC:      1
@@ -909,13 +948,24 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
     "C-x k" #'kill-this-buffer  
     "C-x C-b" #'ibuffer)
 #+end_src
-*** Magit
+*** Git
 The following packages extend the display of =magit-status=:
 
 - magit-todos
 
 #+begin_src emacs-lisp
   (general-def "<f7>" #'magit-status)
+#+end_src
+**** Git modes
+#+begin_src emacs-lisp
+(use-package git-modes)
+#+end_src
+**** Git attr linguist
+#+begin_src emacs-lisp
+(use-package git-attr-linguist
+  :straight git-attr
+  :commands (git-attr-linguist)
+  :hook (find-file . git-attr-linguist))
 #+end_src
 **** magit-todos
 #+begin_src emacs-lisp
@@ -941,6 +991,18 @@ I sometimes use it for forking a repository, but I plan on removing it in the fu
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
 To use it, you first have to customize =magit-repository-directories=.
+*** Project management
+**** Projectile
+**** EditorConfig
+#+begin_src emacs-lisp
+(use-package editorconfig
+  :config
+  (editorconfig-mode 1))
+#+end_src
+**** DirEnv
+#+begin_src emacs-lisp
+  (akirak/require 'setup-direnv)
+  #+end_src
 *** Web browser integration
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-browser)
@@ -957,8 +1019,11 @@ To use it, you first have to customize =magit-repository-directories=.
 (general-def :package 'company :keymaps 'company-mode-map
   "M-/" #'company-complete)
 #+end_src
-*** Yasnippet and auto-yasnippet
-
+*** Templates
+**** Yasnippet and auto-yasnippet
+:PROPERTIES:
+:CREATED_TIME: [2019-09-24 Tue 00:45]
+:END:
 I prefer using =ivy-yasnippet= for choosing a snippet:
 
 #+begin_src emacs-lisp
@@ -979,13 +1044,20 @@ I prefer using =ivy-yasnippet= for choosing a snippet:
 #+begin_src emacs-lisp
   (general-def "C-o" 'aya-open-line)
 #+end_src
-
-Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
+**** Yankpad
+:PROPERTIES:
+:CREATED_TIME: [2019-09-24 Tue 00:45]
+:END:
+Yankpad is more useful in writing.
 
 #+begin_src emacs-lisp
-  (akirak/bind-user "p" 'akirak/yankpad-insert)
+  (akirak/bind-user "p" #'yankpad-insert)
   (akirak/bind-generic "y" #'yankpad-map)
 #+end_src
+**** File templates
+#+begin_src emacs-lisp
+  (akirak/require 'setup-autoinsert)
+  #+end_src
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
@@ -1009,6 +1081,10 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
   (akirak/bind-jump "f" 'akirak/link-hint-open-link)
 #+end_src
 *** Source code navigation                                     :navigation:
+**** dumb-jump
+:PROPERTIES:
+:CREATED_TIME: [2019-09-24 Tue 00:30]
+:END:
 #+begin_src emacs-lisp
   (use-package dumb-jump
     ;; Don't enable dumb-jump-mode. Bind only necessary commands.
@@ -1019,21 +1095,22 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
     ". " #'dumb-jump-go
     "," #'dumb-jump-back)
 #+end_src
-
+**** IMenu
+:PROPERTIES:
+:CREATED_TIME: [2019-09-24 Tue 00:30]
+:END:
 #+begin_src emacs-lisp
   (akirak/bind-search "i" 'counsel-imenu)
 
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
     "i" 'counsel-org-goto)
 #+end_src
-
-*** Outline navigation                                         :navigation:
+**** Outline navigation                                       :navigation:
 #+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
     "o" 'counsel-org-goto)
 #+end_src
-
 *** Outline editing                                              :outlines:
 #+begin_src emacs-lisp
   (general-def :keymaps 'outline-minor-mode-map :package 'outshine
@@ -1045,15 +1122,28 @@ Yankpad is more useful in writing, so bind a key to =yankpad-insert=:
 (akirak/require 'setup-referencing)
 #+end_src
 
+**** PDF
+Use =pdf-tools=.
+
+=pdf-tools= is installed using Nix.
+**** EPUB
 #+begin_src emacs-lisp
-  (akirak/bind-specific-help
-    "d" #'helm-dash)
-
-  ;; "a" #'helm-dash-activate-docset
-  ;; "d" #'helm-dash-at-point
-  ;; "+" #'helm-dash-install-docset
+  (akirak/require 'setup-epub)
 #+end_src
+**** Annotating documents
+You can use org-noter to annotate PDF documents as well as other formats supported by doc-view.
 
+I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
+
+#+begin_src emacs-lisp
+  (general-def :keymaps 'doc-view-mode-map :package 'doc-view
+    "A" #'org-noter)
+
+  (general-def :keymaps 'pdf-view-mode-map :package 'pdf-view
+    "A" #'org-noter)
+#+end_src
+**** Finding documentation
+***** Built-in help system
 #+begin_src emacs-lisp
   (akirak/bind-specific-help
     "i" #'helm-info
@@ -1071,25 +1161,39 @@ I often consult the Emacs Lisp manual:
   (akirak/bind-help
     "e" #'akirak/info-elisp)
 #+end_src
-**** PDF
-Use =pdf-tools=.
-
-=pdf-tools= is installed using Nix.
-**** Annotating documents
-You can use org-noter to annotate PDF documents as well as other formats supported by doc-view.
-
-I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
-
+***** DevDocs
 #+begin_src emacs-lisp
-  (general-def :keymaps 'doc-view-mode-map :package 'doc-view
-    "A" #'org-noter)
+  (use-package devdocs-lookup
+    :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
+    :commands (devdocs-lookup))
 
-  (general-def :keymaps 'pdf-view-mode-map :package 'pdf-view
-    "A" #'org-noter)
+  (akirak/bind-help "/" #'devdocs-lookup)
 #+end_src
-*** Generic source code editing utilities
+***** Dash
+#+begin_src emacs-lisp
+  (use-package helm-dash :after helm
+    :custom
+    (helm-dash-browser-func #'akirak/display-url-for-referencing))
+
+  (akirak/bind-specific-help
+    "d" #'helm-dash)
+
+  ;; "a" #'helm-dash-activate-docset
+  ;; "d" #'helm-dash-at-point
+  ;; "+" #'helm-dash-install-docset
+#+end_src
+***** Remote repositories
+#+begin_src emacs-lisp
+(use-package browse-at-remote
+  :commands (browse-at-remote))
+#+end_src
+*** General tools for editing source code
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
+:END:
+**** Formatting
+:PROPERTIES:
+:CREATED_TIME: [2019-09-23 Mon 22:48]
 :END:
 I will try out apheleia.
 
@@ -1101,6 +1205,48 @@ Another option would be reformatter by Steve Purcell, but I haven't managed to c
 
 #+begin_src emacs-lisp
   ;; (akirak/require 'setup-reformatter)
+#+end_src
+**** Commenting
+#+begin_src emacs-lisp
+(use-package comment-dwim-2
+  :general
+  ("M-;" 'comment-dwim-2))
+#+end_src
+**** Case conversion
+#+begin_src emacs-lisp
+(use-package fix-word
+  :commands (fix-word-upcase fix-word-downcase fix-word-capitalize)
+  :hook
+  (prog-mode . (lambda () (setq fix-word-thing 'symbol)))
+  :general
+  ([remap upcase-word] 'fix-word-upcase
+   [remap downcase-word] 'fix-word-downcase
+   [remap capitalize-word] 'fix-word-capitalize))
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-string-inflection)
+  #+end_src
+**** Highlighting todos
+Use hl-todo by tarsius
+
+#+begin_src emacs-lisp
+(use-package hl-todo
+  :hook (prog-mode . hl-todo-mode))
+#+end_src
+
+There is another package named comment-tags for the same purpose, but I won't use it since there is hl-todo
+
+#+begin_src emacs-lisp
+  (use-package comment-tags
+    :disabled t
+    :config
+    (akirak/bind-generic :keymaps 'comment-tags-mode-map
+      "'" (defrepeater 'comment-tags-next-tag))
+    :hook (prog-mode . comment-tags-mode)
+    :custom
+    (comment-tags-case-sensitive t)
+    (comment-tags-comment-start-only t))
 #+end_src
 *** Editing specific types of formats
 :PROPERTIES:
@@ -1185,6 +1331,15 @@ I created a hydra for managing frames and windows.
   ;; (akirak/bind-key "M-o" #'aw-show-dispatch-help)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
 #+end_src
+**** Other packages for window management
+#+begin_src emacs-lisp
+(use-package fwb-cmds
+  :straight (fwb-cmds :host github :repo "tarsius/fwb-cmds"))
+(use-package buffer-move
+  :commands (buf-move-up buf-move-down buf-move-left buf-move-right))
+(use-package window-go
+  :straight (window-go :host github :repo "akirak/emacs-window-go"))
+#+end_src
 *** Visual cues and extra information display
 
 Additional visual cues can increase productivity, but they can be noisy at the same time. Therefore I need to justify each package added to my config.
@@ -1231,6 +1386,10 @@ This is helpful in programming languages that depend on indentation levels.
     :init
     (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
 #+end_src
+**** Prism
+#+begin_src emacs-lisp
+  (akirak/require 'setup-prism)
+#+end_src
 **** Column-enforce-mode
 #+begin_src emacs-lisp
   (use-package column-enforce-mode
@@ -1249,8 +1408,19 @@ Visualise (usually) 80 columns.
 **** Whitespace
 Visualise unnecessary, extra whitespace characters in source code.
 
-See [[file:setup/setup-whitespace.el::(use-package%20whitespace][setup-whitespace.el]].
-
+#+begin_src emacs-lisp
+  (akirak/require 'setup-whitespacemodule)
+  #+end_src
+**** Manual highlighting
+***** Symbol overlays
+#+begin_src emacs-lisp
+(use-package symbol-overlay
+  :commands (symbol-overlay-put symbol-overlay-mode))
+#+end_src
+***** Visual bookmarks
+#+begin_src emacs-lisp
+  (akirak/require 'setup-bm)
+  #+end_src
 *** Startup buffer
 By default, =*Messages*= buffer is shown at startup.
 
@@ -1366,6 +1536,17 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 #+begin_src emacs-lisp
   (akirak/require 'optimize-minibuf)
 #+end_src
+**** Startup
+Use esup for profiling startup time
+
+#+begin_src emacs-lisp
+(use-package esup
+  :commands (esup))
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-init-time-log)
+  #+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1
@@ -1401,7 +1582,10 @@ You can customize a list of modules for supported languages through the followin
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
-
+**** Google Translate
+#+begin_src emacs-lisp
+  (akirak/require 'setup-google-translate)
+#+end_src
 *** Using Org mode
 Set basic options for org-mode:
 
@@ -1536,11 +1720,6 @@ I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I 
 #+end_src
 
 *** Python
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-python)
-#+end_src
-
 *** Rust
 :PROPERTIES:
 :CREATED_TIME: [2019-01-01 Tue 15:54]
@@ -1658,7 +1837,41 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 #+begin_src emacs-lisp
   (akirak/require 'setup-beancount)
 #+end_src
-** Advanced features
+*** System tools
+**** System services
+#+begin_src emacs-lisp
+;; Run (root) systemd operations
+(use-package helm-systemd :after helm
+  :commands (helm-systemd))
+#+end_src
+
+I'm not using the following packages:
+
+#+begin_src emacs-lisp
+  ;; Manage docker services
+  (use-package docker
+    :disabled t)
+  ;; Manage daemons
+  (use-package prodigy
+    :disabled t)
+#+end_src
+**** Mounting disks
+#+begin_src emacs-lisp
+(use-package helm-linux-disks
+  :straight (helm-linux-disks :host github
+                              :repo "akirak/helm-linux-disks")
+  :commands (helm-linux-disks)
+  :custom
+  (linux-disk-terminal-type 'akirak/shell-new))
+#+end_src
+**** Disk usage
+#+begin_src emacs-lisp
+(use-package disk-usage
+  :general
+  (:keymaps 'akirak/system-map
+            "D" 'disk-usage))
+#+end_src
+** Multiple major modes
 Some package need to be loaded after other packages, so they are put here.
 *** polymode
 #+begin_src emacs-lisp
@@ -1769,6 +1982,5 @@ I am now using myrepos to synchronize my configuration repositories.
 :TOC:      ignore
 :END:
 # Local Variables:
-# before-save-hook: akirak/org-sort-entries-as-desired
 # org-id-link-to-org-use-id: nil
 # End:

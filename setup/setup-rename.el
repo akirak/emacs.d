@@ -37,5 +37,8 @@ The function takes the following arguments:
     ))
 
 (add-hook 'akirak/rename-file-hook #'projectile-cache-current-file)
+;; Defined in setup-header-line.el
+(when (fboundp #'akirak/set-header-line)
+  (add-hook 'akirak/rename-file-hook #'akirak/set-header-line))
 
 (provide 'setup-rename)
