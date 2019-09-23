@@ -737,7 +737,7 @@ If your operating system supports Docker, you can use [[https://github.com/akira
       ("lR" lsp-restart-workspace)
       ("lS" lsp-shutdown-workspace))))
 #+end_src
-**** Appearance hydra
+**** Hydra for changing the appearance
 :PROPERTIES:
 :CREATED_TIME: [2019-07-27 Sat 22:11]
 :END:
@@ -762,7 +762,7 @@ If your operating system supports Docker, you can use [[https://github.com/akira
      "Inspect"
      (("c" describe-char))))
 #+end_src
-**** Layout hydra
+**** Hydra for managing window layouts
 :PROPERTIES:
 :CREATED_TIME: [2019-09-20 Fri 12:47]
 :END:
