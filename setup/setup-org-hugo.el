@@ -16,7 +16,7 @@
 
 ;;;; Custom variables
 
-(defcustom akirak/hugo-default-project-directory "~/hugo"
+(defcustom akirak/hugo-default-project-directory ""
   "The root directory of my Hugo project."
   :type 'string)
 
