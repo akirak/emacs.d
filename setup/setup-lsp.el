@@ -3,8 +3,7 @@
 
 (use-package lsp-clients
   :straight lsp-mode
-  :hook ((prog-mode
-          web-mode
+  :hook ((web-mode
           css-mode)
          . lsp-deferred))
 
