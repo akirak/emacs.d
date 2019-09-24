@@ -669,6 +669,7 @@ I'm not using olivetti-mode
   (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
   (general-def "C-z" #'akirak/context-hydra/body)
   (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
+  (akirak/bind-user "k" #'akirak/window-layout-hydra/body)
   (general-def "<f1>j" #'akirak/emacs-lisp-debugging-hydra/body)
 #+end_src
 **** Context hydra
