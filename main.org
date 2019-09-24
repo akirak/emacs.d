@@ -505,6 +505,11 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
     :straight (emacsql-sqlite :type built-in)
     :if (akirak/library-exists-p "emacsql-sqlite"))
 #+end_src
+*** nix-env-install
+#+begin_src emacs-lisp
+  (use-package nix-env-install
+    :straight (:host github :repo "akirak/nix-env-install"))
+#+end_src
 *** desktop integration
 #+begin_src emacs-lisp
   (defun akirak/locate-xdg-desktop-file (desktop)

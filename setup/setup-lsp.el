@@ -7,6 +7,10 @@
           css-mode)
          . lsp-deferred))
 
+(use-package lsp-server
+  :straight (:host github :repo "akirak/lsp-server.el")
+  :commands (nix-server-install))
+
 (use-package lsp-ui
   :commands lsp-ui-mode
   :hook
