@@ -1227,12 +1227,15 @@ Another option would be reformatter by Steve Purcell, but I haven't managed to c
 #+begin_src emacs-lisp
   (akirak/require 'setup-string-inflection)
   #+end_src
-**** Highlighting todos
+**** Highlighting todos via hl-todo
 Use hl-todo by tarsius
 
 #+begin_src emacs-lisp
-(use-package hl-todo
-  :hook (prog-mode . hl-todo-mode))
+  (use-package hl-todo
+    :config
+    (akirak/bind-jump :keymaps 'hl-todo-mode-map "t" #'hl-todo-next)
+    (akirak/bind-insert :keymaps 'hl-todo-mode-map "t" #'hl-todo-insert)
+    :hook (prog-mode . hl-todo-mode))
 #+end_src
 
 There is another package named comment-tags for the same purpose, but I won't use it since there is hl-todo

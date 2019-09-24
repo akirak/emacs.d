@@ -81,6 +81,8 @@
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
   (counsel-find-file-at-point t))
 
+;; TODO: Add todo occur command based on counsel-rg
+
 (defun akirak/straight-update-package (x)
   (let ((package x))
     (straight-pull-package package)
