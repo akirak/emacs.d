@@ -762,7 +762,7 @@ I'm not using olivetti-mode
       ("A" apheleia-global-mode :toggle t)
       ("ld" lsp-ui-doc-mode :toggle t)
       ("lp" lsp-ui-peek-mode :toggle t)
-      ("ls" lsp-ui-sideline-mode))
+      ("ls" lsp-ui-sideline-mode :toggle t))
      "Edit/assistance"
      (("s" smartparens-mode :toggle t)
       ("S" smartparens-strict-mode :toggle t)
