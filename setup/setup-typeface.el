@@ -167,7 +167,8 @@
                                    "Consolas"
                                    "Monofur"
                                    "Meslo LG S"
-                                   "mononoki")
+                                   "mononoki"
+                                   "DejaVu Sans Mono")
                         :header-line '("Fira Sans"
                                        "Fira Code")
                         :writing '(
