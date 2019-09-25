@@ -1,5 +1,7 @@
 (use-package lsp-mode
-  :commands lsp)
+  :commands lsp
+  :hook
+  (lsp-mode . (lambda () (flycheck-mode 1))))
 
 (use-package lsp-clients
   :straight lsp-mode
@@ -18,7 +20,13 @@
   (lsp-mode . lsp-ui-mode)
   (lsp-ui-mode . lsp-ui-doc-mode)
   (lsp-ui-mode . lsp-ui-peek-mode)
-  (lsp-ui-mode . lsp-ui-sideline-mode))
+  (lsp-ui-mode . lsp-ui-sideline-mode)
+  (lsp-ui-mode . (lambda () (eldoc-mode (not lsp-ui-mode))))
+  :custom
+  (lsp-ui-doc-delay 0.3)
+  (lsp-ui-doc-header t)
+  (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-position (quote at-point)))
 
 (use-package lsp-treemacs
   :after lsp)
