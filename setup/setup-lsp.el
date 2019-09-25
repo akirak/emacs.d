@@ -4,6 +4,7 @@
 (use-package lsp-clients
   :straight lsp-mode
   :hook ((web-mode
+          vue-html-mode
           css-mode)
          . lsp-deferred))
 

@@ -5,8 +5,6 @@
 
 (use-package lsp-vetur
   :straight lsp-mode
-  :after vue-mode
-  :custom
-  (lsp-vetur-server "lsp"))
+  :after vue-mode)
 
 (provide 'setup-vue)
