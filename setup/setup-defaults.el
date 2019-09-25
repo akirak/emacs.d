@@ -45,8 +45,6 @@
       use-dialog-box nil
       ediff-window-setup-function #'ediff-setup-windows-plain)
 
-(setq bookmark-default-file "~/.emacs-bookmarks")
-
 (add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
 (add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
 
