@@ -29,7 +29,10 @@
                (derived-mode-p 'haskell-mode))
       (dante-mode -1)))
   :hook
-  (lsp-mode . akirak/maybe-turn-off-dante-mode))
+  (lsp-mode . akirak/maybe-turn-off-dante-mode)
+  :custom
+  (lsp-haskell-process-path-hie "ghcide")
+  (lsp-haskell-process-args-hie nil))
 
 (use-package haskell-interactive-mode
   ;; I was unable to set up interactive-haskell-mode for snack.
