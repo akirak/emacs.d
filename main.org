@@ -988,7 +988,9 @@ The following packages extend the display of =magit-status=:
   (use-package magit-todos :after (magit hl-todo)
     :straight (magit-todos :host github :repo "alphapapa/magit-todos")
     :config
-    (magit-todos-mode 1))
+    (magit-todos-mode 1)
+    :custom
+    (magit-todos-exclude-globs '("**/*.map")))
 #+end_src
 **** GitHub workflow
 #+begin_src emacs-lisp
