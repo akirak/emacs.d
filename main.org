@@ -1111,6 +1111,13 @@ Yankpad is more useful in writing.
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
     "i" 'counsel-org-goto)
 #+end_src
+
+=imenu-list= is a useful package which displays an overview of the current buffer.
+I've added it to =akirak/window-layout-hydra=.
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-imenu-list)
+  #+end_src
 **** Outline navigation                                       :navigation:
 #+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
