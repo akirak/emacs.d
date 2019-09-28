@@ -2,14 +2,15 @@
   :mode ("\\.hs\\'" . haskell-mode)
   :config
   (defun akirak/setup-haskell-mode ()
+    "Turn on either lsp-mode or dante-mode."
     (interactive)
     (unless (derived-mode-p 'haskell-mode)
       (user-error "Not haskell-mode"))
     (cond
-     ((and (executable-find "haskell-ide-server")
-           (featurep 'lsp-haskell))
-      (lsp-haskell-enable))
-     ((featurep 'dante)
+     ((and (executable-find "ghcide")
+           (require 'lsp-haskell nil t))
+      (lsp))
+     ((require 'dante nil t)
       (dante-mode 1))))
   :hook
   (haskell-mode . akirak/setup-haskell-mode))
