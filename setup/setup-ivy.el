@@ -100,6 +100,7 @@
   ;; If the current focus is on an EXWM window, ivy-posframe is never used.
   ;; Instead, the default display function is used. This is configured in setup-exwm.el.
   :config
+  (general-add-hook 'ivy-height-alist '((ivy-omni-org . 13)) t)
   (ivy-posframe-mode 1)
   (defun akirak/ivy-posframe-window-bottom-left-size ()
     (list
@@ -112,7 +113,8 @@
     "The default functon used by `ivy-posframe-size-function'."
     (let ((caller (ivy-state-caller ivy-last)))
       (list
-       :height ivy-posframe-height
+       :height (or (cdr (assoc caller akirak/ivy-posframe-height-alist))
+                   ivy-posframe-height)
        :width (or (cdr (assoc caller akirak/ivy-posframe-width-alist))
                   ivy-posframe-width)
        :min-height (or ivy-posframe-min-height (+ ivy-height 1))
@@ -133,10 +135,13 @@
   (ivy-posframe-width 100)
   (akirak/ivy-posframe-width-alist
    `((counsel-ibuffer . 120)
+     (ivy-omni-org . 50)
      ,@(--map (cons it 130)
               '(counsel-describe-function
                 counsel-describe-variable
                 counsel-M-x))))
+  (akirak/ivy-posframe-height-alist
+   '((ivy-omni-org . 15)))
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
