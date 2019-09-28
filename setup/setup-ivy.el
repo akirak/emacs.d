@@ -135,7 +135,7 @@
   (ivy-posframe-width 100)
   (akirak/ivy-posframe-width-alist
    `((counsel-ibuffer . 120)
-     (ivy-omni-org . 50)
+     (ivy-omni-org . 70)
      ,@(--map (cons it 130)
               '(counsel-describe-function
                 counsel-describe-variable
