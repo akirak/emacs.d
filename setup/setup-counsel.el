@@ -32,10 +32,6 @@
       #'intern-soft
     (original 30)
     (variable-doc))
-  (ivy-decorator-set-intermediate 'counsel-describe-face
-      #'intern-soft
-    (face-name 30)
-    (face-doc))
   ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
   ;; so I included the absolute path of rg in the command line.
   (setq counsel-rg-base-command

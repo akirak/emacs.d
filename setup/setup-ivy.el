@@ -139,6 +139,7 @@
      ,@(--map (cons it 130)
               '(counsel-describe-function
                 counsel-describe-variable
+                counsel-faces
                 counsel-M-x))))
   (akirak/ivy-posframe-height-alist
    '((ivy-omni-org . 15)))

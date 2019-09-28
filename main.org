@@ -421,7 +421,7 @@ Prefix for mode-specific keys:
 #+begin_src emacs-lisp
   (akirak/bind-extra-help
     "c" #'describe-char
-    "f" #'counsel-describe-face)
+    "f" #'counsel-faces)
 #+end_src
 **** bind-specific-help (<f1> ESC) for specific help commands
 :PROPERTIES:
