@@ -1595,6 +1595,21 @@ I don't set the default input method here. Set =default-input-method= in your =c
 #+begin_src emacs-lisp
   (akirak/require 'setup-google-translate)
 #+end_src
+*** Utilities
+#+begin_src emacs-lisp
+  (akirak/require 'akirak/setup-writing)
+  #+end_src
+**** Quotation marks
+***** Typo
+Typo.el is a successor to [[https://www.emacswiki.org/emacs/TypographicalPunctuationMarks][typopunct.el]].
+
+Note it doesn’t support CJK languages.
+It can be useful for European languages.
+**** Counting words
+Use =wc-mode= or =org-wc= for counting words.
+**** WriteGood mode
+- [[http://bnbeckwith.com/code/writegood-mode.html][WriteGood Mode]]
+- [[http://matt.might.net/articles/shell-scripts-for-passive-voice-weasel-words-duplicates/][3 shell scripts: Kill weasel words, avoid the passive, eliminate duplicates]]
 *** Using Org mode
 Set basic options for org-mode:
 
