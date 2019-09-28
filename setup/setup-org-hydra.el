@@ -45,6 +45,8 @@
                            ;; TODO: Check for clock data in the entry
                            (format-time-string (org-time-stamp-format t t))))
      "Set created time")
+    ("s%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
+    ("s/" (akirak/org-add-statistics-cookie "/") "Add [/]")
     ;; TODO: Show history
     )
    "Extras"
@@ -94,5 +96,30 @@
   (goto-char (point-min))
   (while (re-search-forward (rx bol (+ "*") (+ space) "HABIT") nil t)
     (akirak/org-set-habit)))
+
+;;;; Adding a statistics cookie
+
+(defun akirak/org-add-statistics-cookie (type)
+  (save-excursion
+    (if (org-at-heading-p)
+        (progn
+          (org-back-to-heading)
+          (re-search-forward org-complex-heading-regexp))
+      (re-search-backward org-complex-heading-regexp))
+    (let* ((start (match-beginning 4))
+           (end (match-end 4))
+           (heading (buffer-substring start end))
+           (placeholder (format " [%s]" type)))
+      (if (string-match (rx (* (any space))
+                            "["
+                            (or (and (* digit) "%")
+                                (and (* digit) "/" (* digit)))
+                            "]"
+                            (* (any space)))
+                        heading)
+          (replace-string (match-string 0 heading) placeholder nil start end)
+        (goto-char end)
+        (insert placeholder)))
+    (org-update-statistics-cookies nil)))
 
 (provide 'setup-org-hydra)
