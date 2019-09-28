@@ -588,7 +588,7 @@ available.
 #+begin_src emacs-lisp
   (cond
    ((window-system)
-    (akirak/require 'setup-typeface))
+    (akirak/require 'setup-typeface2))
    ((daemonp)
     (defun akirak/init-typeface ()
       (let ((frame (make-frame `((window-system . ,(cl-case system-type
@@ -601,7 +601,7 @@ available.
               (defun akirak/ad-around-font-family-list (orig &optional _frame)
                 (funcall orig frame))
               (advice-add 'font-family-list :around #'akirak/ad-around-font-family-list)
-              (akirak/require 'setup-typeface)
+              (akirak/require 'setup-typeface2)
               (advice-remove 'font-family-list #'akirak/ad-around-font-family-list))
           (delete-frame frame))))
     (add-hook 'after-init-hook #'akirak/init-typeface)))
