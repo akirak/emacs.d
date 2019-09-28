@@ -11,7 +11,10 @@
   :config
   (org-super-agenda-mode 1))
 
-(use-package org-ql-agenda
+(use-package org-ql-search
+  :straight org-ql)
+
+(use-package org-ql-view
   :straight org-ql)
 
 (unless (bound-and-true-p org-starter-path)
