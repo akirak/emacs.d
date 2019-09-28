@@ -25,8 +25,8 @@
                              (when (or trigger blocker)
                                (delq nil
                                      (list
-                                      (when trigger (format " Dependencies: Trigger: %s" trigger))
-                                      (when blocker (format "               Blocker: %s" blocker)))))))
+                                      (when trigger (format " Trigger: %s" trigger))
+                                      (when blocker (format " Blocker: %s" blocker)))))))
                        "\n")
           :foreign-keys t)
   ("Store link"
