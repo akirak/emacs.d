@@ -834,10 +834,15 @@ I'm not using olivetti-mode
       ("l" counsel-ibuffer "Switch buffer"))
      "Extra windows"
      (("tt" treemacs)
-      ("te" lsp-treemacs-error-list)
-      ;; FIXME: Correct name
-      ("ti" lsp-treemacs-imenu)
+      ("te" akirak/toggle-flycheck-error-list)
+      ("ti" imenu-list-smart-toggle)
       ("tb" ibuffer-sidebar))))
+
+  (defun akirak/toggle-flycheck-error-list ()
+    (interactive)
+    (if-let ((window (get-buffer-window "*Flycheck errors*")))
+        (quit-window nil window)
+      (flycheck-list-errors)))
 #+end_src
 **** Emacs debugging hydra
 :PROPERTIES:
