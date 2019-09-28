@@ -22,7 +22,7 @@
   :config
   (ivy-decorator-set-intermediate 'counsel-M-x
       #'intern-soft
-    (original 40)
+    (command-name-and-key 30)
     (function-doc))
   (ivy-decorator-set-intermediate 'counsel-describe-function
       #'intern-soft
