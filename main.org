@@ -813,30 +813,35 @@ I'm not using olivetti-mode
 :END:
 #+begin_src emacs-lisp
   (pretty-hydra-define akirak/window-layout-hydra
-    (:title (format "Layout\nSize %sx%s"
+    (:title (format "Layout\n Window size %sx%s"
                     (window-width)
                     (window-height))
             :quit-key "q")
     ("Window size"
-     (("w" enlarge-window-horizontally)
-      ("W" shrink-window-horizontally)
-      ("h" enlarge-window)
-      ("H" shrink-window))
+     (("w" enlarge-window-horizontally "width+")
+      ("W" shrink-window-horizontally "width-")
+      ("h" enlarge-window "height+")
+      ("H" shrink-window "height-")
+      ("ah" (set-window-text-height (selected-window) current-prefix-arg) "abs h"))
      "Layout"
-     (("b" balance-windows)
-      ("B" (balance-windows (selected-window)))
-      ("s" split-window-below)
-      ("v" split-window-right)
-      ("d" delete-window))
-     "Switch window/buffer"
-     (("j" other-window "Next window")
-      ("k" (other-window -1) "Previous window")
-      ("l" counsel-ibuffer "Switch buffer"))
+     (("b" balance-windows "Balance frm")
+      ("B" (balance-windows (selected-window)) "Balance win")
+      ("s" split-window-below "Split below")
+      ("v" split-window-right "Split right")
+      ("d" delete-window "Delete win"))
+     "Switch win/buf"
+     (("j" other-window "Next win")
+      ("k" (other-window -1) "Prev win")
+      ("l" counsel-ibuffer "Switch buf"))
      "Extra windows"
      (("tt" treemacs)
-      ("te" akirak/toggle-flycheck-error-list)
-      ("ti" imenu-list-smart-toggle)
-      ("tb" ibuffer-sidebar))))
+      ("te" akirak/toggle-flycheck-error-list "flycheck")
+      ("ti" imenu-list-smart-toggle "imenu")
+      ("tb" ibuffer-sidebar "buffers"))
+     "Views"
+     (("pv" ivy-pop-view "pop")
+      ("pV" ivy-push-view "push")
+      ("ps" ivy-switch-view "switch"))))
 
   (defun akirak/toggle-flycheck-error-list ()
     (interactive)
