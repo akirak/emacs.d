@@ -65,7 +65,7 @@
 (akirak/bind-generic :keymaps 'lsp-mode-map
   "l" '(hydra-lsp/body :wk "hydra-lsp"))
 
-;;;; Extra clients
+;;;; Configuration for specific clients
 (use-package lsp-dockerfile
   :straight (lsp-dockerfile :host github :repo "emacs-lsp/lsp-dockerfile")
   :after dockerfile-mode
@@ -82,5 +82,27 @@
   ;; TODO: Install the executable using nix or something
   ;; :ensure-system-package python-language-server
   )
+
+(use-package lsp-haskell
+  :after haskell-mode
+  ;; To use lsp-haskell, you also need to install haskell-ide-server.
+  ;; This can take a lot of time, so install it manually if you want
+  ;; to write Haskell code.
+  :straight (lsp-haskell :host github :repo "emacs-lsp/lsp-haskell")
+  :config
+  (defun akirak/maybe-turn-off-dante-mode ()
+    (when (and (bound-and-true-p lsp-mode)
+               (bound-and-true-p dante-mode)
+               (derived-mode-p 'haskell-mode))
+      (dante-mode -1)))
+  :hook
+  (lsp-mode . akirak/maybe-turn-off-dante-mode)
+  :custom
+  (lsp-haskell-process-path-hie "ghcide")
+  (lsp-haskell-process-args-hie nil))
+
+(use-package lsp-vetur
+  :straight lsp-mode
+  :after vue-mode)
 
 (provide 'setup-lsp)

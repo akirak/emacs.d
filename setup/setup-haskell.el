@@ -17,23 +17,6 @@
 (use-package dante
   :commands (dante-mode))
 
-(use-package lsp-haskell
-  ;; To use lsp-haskell, you also need to install haskell-ide-server.
-  ;; This can take a lot of time, so install it manually if you want
-  ;; to write Haskell code.
-  :straight (lsp-haskell :host github :repo "emacs-lsp/lsp-haskell")
-  :config
-  (defun akirak/maybe-turn-off-dante-mode ()
-    (when (and (bound-and-true-p lsp-mode)
-               (bound-and-true-p dante-mode)
-               (derived-mode-p 'haskell-mode))
-      (dante-mode -1)))
-  :hook
-  (lsp-mode . akirak/maybe-turn-off-dante-mode)
-  :custom
-  (lsp-haskell-process-path-hie "ghcide")
-  (lsp-haskell-process-args-hie nil))
-
 (use-package haskell-interactive-mode
   ;; I was unable to set up interactive-haskell-mode for snack.
   ;; Maybe I'll work on it later.
