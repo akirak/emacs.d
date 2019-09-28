@@ -49,6 +49,10 @@
     ("s/" (akirak/org-add-statistics-cookie "/") "Add [/]")
     ;; TODO: Show history
     )
+   "Media (org-download)"
+   (("is" org-download-screenshot "Screenshot")
+    ("iy" org-download-yank "Yank")
+    ("iR" org-download-rename-last-file "Rename last"))
    "Extras"
    (("d" org-edna-edit "Dependencies"))))
 
