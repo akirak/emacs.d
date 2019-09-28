@@ -1,6 +1,18 @@
+(defvar akirak/org-mode-hydra-outline-width 80)
+
+(defun akirak/org-mode-hydra--generate-path ()
+  (--> (org-get-outline-path t nil)
+       (org-format-outline-path it 240 nil " > ")
+       (substring-no-properties it)
+       (let* ((len (length it))
+              (p akirak/org-mode-hydra-outline-width)
+              (n (+ (/ len p) (if (= 0 (mod len p)) 0 1))))
+         (mapcar (lambda (i) (substring it (* i p) (min len (* (1+ i) p))))
+                 (number-sequence 0 (1- n))))
+       (string-join it "\n ")))
+
 (major-mode-hydra-define org-mode
-  (:title (string-join `(,(s-append " " (substring-no-properties (org-format-outline-path (org-get-outline-path t nil)
-                                                                                          nil nil " > ")))
+  (:title (string-join `(,(akirak/org-mode-hydra--generate-path)
                          " ------------------------------------- "
                          ,(format " Created at %s, total clocked %s"
                                   (org-entry-get nil "CREATED_TIME")
