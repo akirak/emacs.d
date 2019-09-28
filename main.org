@@ -1418,7 +1418,7 @@ Visualise (usually) 80 columns.
 Visualise unnecessary, extra whitespace characters in source code.
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-whitespacemodule)
+  (akirak/require 'setup-whitespace)
   #+end_src
 **** Manual highlighting
 ***** Symbol overlays
