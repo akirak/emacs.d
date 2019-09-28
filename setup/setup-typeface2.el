@@ -65,6 +65,13 @@
   (set-face-attribute 'dired-filter-group-header nil :height 1.2 :inherit 'default))
 (with-eval-after-load 'info
   (set-face-attribute 'info-menu-header nil :height 1.2 :inherit 'default))
+(with-eval-after-load 'markdown-mode
+  (set-face-attribute 'markdown-header-face-1 nil :height 1.7 :inherit 'markdown-header-face)
+  (set-face-attribute 'markdown-header-face-2 nil :height 1.5 :inherit 'markdown-header-face)
+  (set-face-attribute 'markdown-header-face-3 nil :height 1.4 :inherit 'markdown-header-face)
+  (set-face-attribute 'markdown-header-face-4 nil :height 1.3 :inherit 'markdown-header-face)
+  (set-face-attribute 'markdown-header-face-5 nil :height 1.2 :inherit 'markdown-header-face)
+  (set-face-attribute 'markdown-header-face-6 nil :height 1.1 :inherit 'markdown-header-face))
 
 ;;;;; Documents, e.g. Org and Markdown
 (set-face-attribute 'org-quote nil :inherit 'default
@@ -211,6 +218,9 @@
         (with-eval-after-load 'info
           (akirak/set-font-family-if-existing heading
             'info-menu-header))
+        (with-eval-after-load 'markdown-mode
+          (akirak/set-font-family-if-existing heading
+            'markdown-header-face))
 
         ;; Other faces
         (with-eval-after-load 'org
