@@ -230,4 +230,14 @@
         (akirak/set-fontset-font 'han han))
     (setq akirak/font-family-list nil)))
 
+;; Use Hasklig in haskell-mode and enable ligatures.
+(use-package hasklig-mode
+  :straight (:host github :repo "minad/hasklig-mode")
+  :config
+  (defun akirak/use-hasklig-font-locally ()
+    (face-remap-add-relative 'default '(:family "Hasklig")))
+  :hook
+  (haskell-mode . hasklig-mode)
+  (hasklig-mode . akirak/use-hasklig-font-locally))
+
 (provide 'setup-typeface2)
