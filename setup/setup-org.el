@@ -67,7 +67,8 @@
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft
   "M-L" 'org-shiftmetaright
-  "C-1" 'counsel-org-tag)
+  "C-1" 'counsel-org-tag
+  "C-3" 'akirak/avy-add-org-edna-id-blocker)
 
 (general-def :keymaps 'org-agenda-mode-map :package 'org
   "C-1" 'counsel-org-tag)

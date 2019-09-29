@@ -22,6 +22,10 @@
                '("Store link with custom ID"
                  . helm-org-rifle--store-link-with-custom-id)
                t)
+  (add-to-list 'helm-org-rifle-actions
+               '("Add org-edna dependency on this entry (with ID)"
+                 . akirak/helm-org-rifle-add-edna-blocker-with-id)
+               t)
   (defun helm-org-rifle--store-link (candidate &optional use-custom-id)
     "Store a link to CANDIDATE."
     (-let (((buffer . pos) candidate))
