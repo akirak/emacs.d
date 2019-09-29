@@ -17,22 +17,38 @@
           (s-replace (match-string 0 old) new-ids old))
       (format "%s ids(%s)" old id)))
   (defun akirak/org-edna-add-id-blocker (id)
-    (unless (derived-mode-p 'org-mode)
-      (user-error "Not in org mode"))
-    (let* ((old (org-entry-get nil "BLOCKER")))
-      (org-set-property "BLOCKER"
-                        (if old
-                            (akirak/org-edna--add-id id old)
-                          (format "ids(%s)" id)))))
+    (cond
+     ((derived-mode-p 'org-mode)
+      (let* ((old (org-entry-get nil "BLOCKER")))
+        (org-set-property "BLOCKER"
+                          (if old
+                              (akirak/org-edna--add-id id old)
+                            (format "ids(%s)" id)))))
+     ((derived-mode-p 'org-agenda-mode)
+      (let* ((buffer-orig (buffer-name))
+             (marker (or (org-get-at-bol 'org-hd-marker)
+                         (org-agenda-error)))
+             (buffer (marker-buffer marker))
+             (pos (marker-position marker)))
+        (with-current-buffer buffer
+          (org-with-wide-buffer
+           (goto-char marker)
+           (let ((old (org-entry-get nil "BLOCKER")))
+             (org-set-property "BLOCKER"
+                               (if old
+                                   (akirak/org-edna--add-id id old)
+                                 (format "ids(%s)" id))))))
+        (org-agenda-redo)))
+     (t (user-error "Unsupported mode"))))
   (defun akirak/avy-add-org-edna-id-blocker ()
     (interactive)
-    (unless (derived-mode-p 'org-mode)
-      (user-error "Not in org-mode"))
+    (unless (derived-mode-p 'org-mode 'org-agenda-mode)
+      (user-error "Not in org-mode or org-agenda-mode"))
     (let ((id (save-selected-window (org-starter-utils-avy-id))))
       (akirak/org-edna-add-id-blocker id)))
   (defun akirak/helm-org-rifle-add-edna-blocker-with-id (candidate)
-    (unless (derived-mode-p 'org-mode)
-      (user-error "Not in org mode"))
+    (unless (derived-mode-p 'org-mode 'org-agenda-mode)
+      (user-error "Not in org-mode or org-agenda-mode"))
     (let ((id (with-current-buffer (car candidate)
                 (org-with-wide-buffer
                  (goto-char (cdr candidate))
