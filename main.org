@@ -320,7 +320,7 @@ There are not so many commands that need to be add to the map:
   (akirak/bind-customization
     "" '(nil :wk "customize")
     "f" #'customize-face-other-window
-    "g" #'customize-group-other-window
+    "o" #'customize-group-other-window
     "l" #'counsel-find-library
     "p" '((lambda () (interactive)
             (if (featurep 'straight)
