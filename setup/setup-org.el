@@ -174,4 +174,32 @@ from running."
 (advice-add #'org-insert-heading
             :after #'akirak/org-set-created-timestamp)
 
+;;;; org-open-at-point
+
+(defcustom akirak/desktop-file-extension-list
+  '("xlsx")
+  "List of file extensions to be handled by desktop applications.")
+
+(defun akirak/org-open-at-point-with-xdg ()
+  (let* ((link (substring-no-properties (plist-get (get-text-property (point) 'htmlize-link) :uri)))
+         (filename (and (string-match (rx bol "file:" (group (+ anything))) link)
+                        (match-string 1 link))))
+    (when (and filename
+               (member (file-name-extension filename) akirak/desktop-file-extension-list))
+      (let* ((sha1 (car (s-match (rx bol (+ (not space)))
+                                 (shell-command-to-string
+                                  (format "sha1sum %s" (shell-quote-argument
+                                                        (expand-file-name filename)))))))
+             (directory (f-join (xdg-cache-home) "emacs" "xdg-open" (concat sha1 ".sha1")))
+             (tmp-file-name (expand-file-name (s-match (rx (+ (any alpha digit "-_"))) (file-name-nondirectory filename))
+                                              directory)))
+        (unless (file-directory-p directory)
+          (make-directory directory t))
+        (make-symbolic-link filename tmp-file-name t)
+        (message "Opening %s" tmp-file-name)
+        (sleep-for 0 500)
+        (start-process "xdg-open" nil "xdg-open" (expand-file-name tmp-file-name))))))
+
+(add-to-list 'org-open-at-point-functions 'akirak/org-open-at-point-with-xdg)
+
 (provide 'setup-org)
