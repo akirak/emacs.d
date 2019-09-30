@@ -15,8 +15,13 @@
   :mode "\\.ts\\'")
 
 (use-package tide
+  :init
+  (defun akirak/maybe-tide-setup ()
+    (when (and (buffer-file-name)
+               (not (derived-mode-p 'json-mode)))
+      (tide-setup)))
   :hook
-  ((js-mode typescript-mode) . tide-setup)
+  ((js-mode typescript-mode) . akirak/maybe-tide-setup)
   (tide-mode . tide-hl-identifier-mode)
   (tide-mode . flycheck-mode))
 
