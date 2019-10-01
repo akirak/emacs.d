@@ -2,10 +2,10 @@
   :custom
   (ivy-omni-org-file-sources '(org-starter-known-files
                                akirak/conflict-org-files))
-  (ivy-omni-org-content-types '(bookmarks
-                                agenda-commands
+  (ivy-omni-org-content-types '(agenda-commands
                                 buffers
-                                files)))
+                                files
+                                bookmarks)))
 
 (defun akirak/conflict-org-files ()
   "List of Syncthing conflict files in `org-directory'.g"
