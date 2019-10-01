@@ -751,8 +751,7 @@ I'm not using olivetti-mode
             :foreign-keys nil
             :quit-key "q")
     ("Focus"
-     (("v" view-mode :toggle t)
-      ("fm" focus-mode :toggle t))
+     (("v" view-mode :toggle t))
      "Info/check/linting"
      (("ed" eldoc-mode :toggle t)
       ("fc" flycheck-mode :toggle t)
@@ -776,7 +775,9 @@ I'm not using olivetti-mode
      (("w" whitespace-mode :toggle t)
       ("r" rainbow-delimiters-mode :toggle t)
       ("p" page-break-lines-mode :toggle t)
-      ("n" line-number-mode :toggle t))
+      ("n" line-number-mode :toggle t)
+      ("hi" highlight-indent-guides-mode :toggle t)
+      ("hc" fci-mode :toggle t))
      "LSP"
      (("lh" lsp-describe-session)
       ("lR" lsp-restart-workspace)
