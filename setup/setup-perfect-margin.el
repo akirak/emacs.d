@@ -7,7 +7,8 @@
                                  doc-view-mode
                                  pdf-view-mode
                                  nov-mode
-                                 vterm-mode))
+                                 vterm-mode
+                                 html-mode))
   (perfect-margin-ignore-regexps `("^minibuf" "^[*]"
                                    "^ \\*LV\\*"
                                    "^ \\*which-key\\*")))
