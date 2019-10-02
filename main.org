@@ -1919,8 +1919,9 @@ I'm not using the following packages:
 ** Multiple major modes
 Some package need to be loaded after other packages, so they are put here.
 *** polymode
+This could be useful, but I am not using any of the derived modes for now.
 #+begin_src emacs-lisp
-  (akirak/require 'setup-polymode)
+  ;; (akirak/require 'setup-polymode)
 #+end_src
 ** EXWM
 #+begin_src emacs-lisp

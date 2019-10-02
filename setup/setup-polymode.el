@@ -1,6 +1,7 @@
 (use-package polymode)
 
-(use-package poly-markdown)
+(use-package poly-markdown
+  :disabled t)
 
 ;; poly-org is a questionable package, because it seems to break
 ;; indentation in existing files.
