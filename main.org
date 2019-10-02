@@ -1338,12 +1338,7 @@ Use poporg rather than outorg.
 - [X] Remap keys
 
 #+begin_src emacs-lisp
-  (use-package poporg)
-  (akirak/bind-user "'" 'poporg-dwim)
-  ;; The default keybindings in poporg-mode-map are not intuitive to me,
-  (akirak/bind-key :keymaps 'poporg-mode-map
-    "C-c C-c" 'poporg-edit-exit
-    "C-x C-s" 'poporg-update-and-save)
+  ;; (akirak/require 'setup-poporg)
 #+end_src
 *** Window management
 :PROPERTIES:
