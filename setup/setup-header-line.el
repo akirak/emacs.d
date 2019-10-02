@@ -97,9 +97,6 @@ This is intended to be set inside `akirak/set-header-line' function.")
                                        (format "@%s:%s" project mode-name)
                                      mode-name)))
                 (akirak/make-header-line-format))
-               ((memq 'conf-mode modes)
-                ;; TODO: Set groups
-                (akirak/make-header-line-format))
                ((memq 'org-mode modes)
                 (cond
                  ;; An Org buffer has a header line if it is either an indirect buffer
@@ -115,6 +112,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
                  (t
                   (setq groups '("Org"))
                   nil)))
+               ((and (buffer-file-name)
+                     project)
+                (setq groups `(,project))
+                nil)
                ((memq 'org-agenda-mode modes)
                 ;; '((:eval (and (featurep 'all-the-icons)
                 ;;               (all-the-icons-icon-for-buffer)))
