@@ -30,7 +30,7 @@
               backup-by-copying t
               delete-by-moving-to-trash t
               delete-old-versions t
-              large-file-warning-threshold (* 20 1024))
+              large-file-warning-threshold (* 100 1024))
 
 (set-language-environment "UTF-8")
 
