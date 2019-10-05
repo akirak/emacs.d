@@ -122,7 +122,7 @@
 
 (cl-defun akirak/set-font-family-if-existing (family &rest faces)
   (declare (indent 1))
-  (if (member family akirak/font-family-list)
+  (if (member family (or akirak/font-family-list (font-family-list)))
       (dolist (face faces)
         (set-face-attribute face nil :family family))
     (message "Font family %s does not exist, so the following faces won't have expected settings: %s"
@@ -131,7 +131,7 @@
 
 (cl-defun akirak/set-fontset-font (fontset family)
   (declare (indent 1))
-  (if (member family akirak/font-family-list)
+  (if (member family (or akirak/font-family-list (font-family-list)))
       (set-fontset-font "fontset-default" fontset family)
     (message "Font family %s does not exist, so %s fontset won't get a proper font setting."
              family fontset)))
