@@ -1832,20 +1832,21 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+end_src
 ** Emacs applications
 *** Getting organised
-**** Jump to the current context
-Use =my-goto= function to locate the current context.
-
+**** Global bindings related to Org mode
  #+begin_src emacs-lisp
    (akirak/bind-key "M-g M-j" #'counsel-org-clock-goto)
+   (akirak/bind-search
+     "M-o" #'helm-org-rifle-known-files
+     "M-h" #'org-recent-headings-helm)
+   (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
+   (akirak/bind-user
+     "c" #'org-capture
+     "l" 'org-store-link
+     "n" #'counsel-org-capture-string)
  #+end_src
-**** Org anywhere
+***** On navigation
 #+begin_src emacs-lisp
-  (akirak/bind-search "M-o" #'helm-org-rifle-known-files)
-  (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
-  (akirak/bind-user
-    "c" #'org-capture
-    "l" 'org-store-link
-    "n" #'counsel-org-capture-string)
+  (akirak/require 'setup-org-recent-headings)
 #+end_src
 **** Frame
 :PROPERTIES:
