@@ -52,9 +52,6 @@
   (org-starter-find-file-visit-window t)
   (org-starter-enable-local-variables :all))
 
-(use-package org-starter-utils
-  :straight org-starter)
-
 (use-package org-starter-swiper)
 
 (use-package org-starter-extras
