@@ -3,6 +3,7 @@
   (ivy-omni-org-file-sources '(org-starter-known-files
                                akirak/conflict-org-files))
   (ivy-omni-org-content-types '(agenda-commands
+                                org-ql-views
                                 buffers
                                 files
                                 bookmarks)))
