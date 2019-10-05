@@ -44,12 +44,6 @@
                     '(("'" avy-org-refile-as-child "avy")
                       ("?" akirak/org-refile-same-buffer "same buffer"))
                     t)
-  (org-starter-def-capture "e" "Personal Emacs configuration"
-    plain (function (lambda ()
-                      (org-starter-find-config-file)
-                      (goto-char (point-max))))
-    "%i"
-    :unnarrowed t)
   :custom
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
