@@ -527,6 +527,12 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
       (when (re-search-forward (rx bol "StartupWmClass=") nil t)
         (buffer-substring-no-properties (point) (line-end-position)))))
 #+end_src
+*** language-detection
+language-detection is used by eww.
+
+#+begin_src emacs-lisp
+  (akirak/require 'language-detection)
+#+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:
 
@@ -1034,6 +1040,12 @@ To use it, you first have to customize =magit-repository-directories=.
   :disabled t
   :init
   (atomic-chrome-start-server))
+#+end_src
+
+Emacs also provides eww:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-eww)
 #+end_src
 *** Company completion
 #+begin_src emacs-lisp
