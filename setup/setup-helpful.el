@@ -12,8 +12,6 @@
   (with-eval-after-load 'counsel
     (ivy-add-actions 'counsel-M-x
                      `(("h" ,(-compose 'helpful-command 'intern) "helpful"))))
-  :general
-  ([help ?.] 'helpful-at-point)
   :custom
   (helpful-switch-buffer-function 'akirak/helpful-switch-buffer))
 

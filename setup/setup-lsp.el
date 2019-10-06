@@ -62,9 +62,6 @@
   ("M-r" lsp-restart-workspace)
   ("S" lsp-shutdown-workspace))
 
-(akirak/bind-generic :keymaps 'lsp-mode-map
-  "l" '(hydra-lsp/body :wk "hydra-lsp"))
-
 ;;;; Configuration for specific clients
 (use-package lsp-dockerfile
   :straight (lsp-dockerfile :host github :repo "emacs-lsp/lsp-dockerfile")

@@ -365,13 +365,14 @@ Generic prefix key for editing commands:
   (akirak/bind-generic
     "a" '(nil :wk "align")
     "b" '(nil :wk "barf")
+    "f" '(nil :wk "format")
     "h" 'major-mode-hydra
     "i" '(nil :wk "insert")
     "j" '(nil :wk "join")
     "k" '(nil :wk "kill")
     "m" '(nil :wk "mark")
     "o" #'split-line                      ; Originally C-M-o
-    "r" '(nil :wk "re")
+    "r" '(nil :wk "rename/refactor")
     "s" '(nil :wk "slurp/split")
     "u" '(nil :wk "splice/unwrap"))
 
@@ -1566,9 +1567,11 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
       (flyspell-mode-on)))
 
   (advice-add 'akirak/flyspell-hydra/body
-	      :before 'akirak/turn-on-flyspell-mode-in-text-mode)
-
-  (akirak/bind-generic "f" 'akirak/flyspell-hydra/body)
+              :before 'akirak/turn-on-flyspell-mode-in-text-mode)
+#+end_src
+*** Integrating language servers
+#+begin_src emacs-lisp
+  (akirak/require 'setup-bold)
 #+end_src
 *** Optimization
 #+begin_src emacs-lisp
