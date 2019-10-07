@@ -7,7 +7,21 @@
      (setq treemacs-git-mode 'deferred))
     (`(t . _)
      (setq treemacs-git-mode 'simple)))
+  :general
+  ("C-0" #'akirak/treemacs)
   :config
+  (defvar akirak/treemacs-origin-window nil)
+  (defun akirak/treemacs ()
+    (interactive)
+    (cond
+     ((derived-mode-p 'treemacs-mode)
+      (when akirak/treemacs-origin-window
+        (select-window akirak/treemacs-origin-window)))
+     (current-prefix-arg
+      (treemacs))
+     (t
+      (setq akirak/treemacs-origin-window (selected-window))
+      (treemacs-select-window))))
   (treemacs-follow-mode 1)
   (treemacs-filewatch-mode 1)
   (treemacs-fringe-indicator-mode 1))
