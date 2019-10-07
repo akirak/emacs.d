@@ -405,9 +405,14 @@ may have been stored before."
   '(" *LV*")
   "List of buffer names whose windows should never be selected.")
 
+(defcustom akirak/skipped-window-major-modes
+  '(treemacs-mode)
+  "List of buffer names whose windows should never be selected.")
+
 (defun akirak/ad-around-next-window--for-ignore-window (orig &rest args)
   (let ((window (apply orig args)))
-    (if (member (buffer-name (window-buffer window)) akirak/skipped-window-buffers)
+    (if (or (member (buffer-name (window-buffer window)) akirak/skipped-window-buffers)
+            (memq (buffer-local-value 'major-mode (window-buffer window)) akirak/skipped-window-major-modes))
         (apply orig window (cdr args))
       window)))
 
