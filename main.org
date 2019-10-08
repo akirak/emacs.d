@@ -1422,8 +1422,8 @@ This lets you know which parts of the buffers are modified since the last commit
 This is helpful in programming languages that depend on indentation levels.
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
-    :init
-    (add-hook 'prog-mode-hook 'highlight-indent-guides-mode))
+    :hook
+    ((python-mode nim-mode) . highlight-indent-guides-mode))
 #+end_src
 **** Prism
 #+begin_src emacs-lisp
