@@ -1,6 +1,7 @@
 (use-package bold
   :straight (:host github :repo "akirak/bold.el")
   :config
+  (require 'bold-setup)
   (bold-setup-hooks)
   :general
   (:keymaps 'bold-mode-map :package 'bold
