@@ -141,7 +141,7 @@
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
-   `(,@(--map (cons it #'ivy-posframe-display-at-window-bottom-left)
+   `(,@(--map (cons it nil)
               '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
