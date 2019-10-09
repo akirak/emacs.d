@@ -532,7 +532,7 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 language-detection is used by eww.
 
 #+begin_src emacs-lisp
-  (akirak/require 'language-detection)
+  (akirak/require 'setup-language-detection)
 #+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:
