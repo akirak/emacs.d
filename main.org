@@ -1863,6 +1863,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-recent-headings)
 #+end_src
+**** Org Journal
+#+begin_src emacs-lisp
+  (akirak/require 'setup-org-journal)
+#+end_src
 **** Frame
 :PROPERTIES:
 :ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
