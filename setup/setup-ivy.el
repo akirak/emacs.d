@@ -8,11 +8,6 @@
   :config
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
-  (ivy-decorator-set-intermediate 'ivy-switch-buffer
-      #'get-buffer
-    (original 30)
-    (buffer-major-mode 20)
-    (buffer-directory))
   :general
   (:keymaps 'ivy-occur-mode-map
             "n" #'ivy-occur-next-line
