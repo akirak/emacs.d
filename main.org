@@ -371,7 +371,7 @@ Generic prefix key for editing commands:
     "j" '(nil :wk "join")
     "k" '(nil :wk "kill")
     "m" '(nil :wk "mark")
-    "o" #'split-line                      ; Originally C-M-o
+    "o" '(nil :wk "origami")
     "r" '(nil :wk "rename/refactor")
     "s" '(nil :wk "slurp/split")
     "u" '(nil :wk "splice/unwrap"))
@@ -388,6 +388,8 @@ Generic prefix key for editing commands:
     :prefix-map 'akirak/kill-prefix-map)
   (general-create-definer akirak/bind-mark :prefix "C-. m"
     :prefix-map 'akirak/mark-prefix-map)
+  (general-create-definer akirak/bind-fold :prefix "C-. o"
+    :prefix-map 'akirak/fold-prefix-map)
   (general-create-definer akirak/bind-split :prefix "C-. s"
     :prefix-map 'akirak/split-prefix-map)
   (general-create-definer akirak/bind-replace :prefix "C-. r"
@@ -777,6 +779,7 @@ I'm not using olivetti-mode
       ("ei" electric-indent-local-mode :toggle t)
       ("eq" electric-quote-local-mode :toggle t)
       ("ea" aggressive-indent-mode :toggle t)
+      ("o" origami-mode :toggle t)
       ("W" whitespace-cleanup-mode))
      "Visual"
      (("w" whitespace-mode :toggle t)
@@ -1157,6 +1160,10 @@ I've added it to =akirak/window-layout-hydra=.
   (general-def :keymaps 'outline-minor-mode-map :package 'outshine
     "M-RET" 'outshine-insert-heading)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-RET")
+#+end_src
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-origami)
 #+end_src
 *** Referencing                                               :referencing:
 #+begin_src emacs-lisp
