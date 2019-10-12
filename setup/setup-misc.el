@@ -43,8 +43,8 @@
   (after-save . executable-make-buffer-file-executable-if-script-p))
 (use-package deadgrep
   :commands deadgrep
-  :general
-  ("C-x ?" 'deadgrep))
+  :config
+  (akirak/bind-search "M-p" #'deadgrep))
 (use-package align
   :general
   (:keymaps 'akirak/align-prefix-map
