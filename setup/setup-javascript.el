@@ -11,6 +11,8 @@
   :straight js2-mode
   :hook (js2-mode . js2-imenu-extras-mode))
 
+(use-package js-comint)
+
 (use-package typescript-mode
   :mode "\\.ts\\'")
 

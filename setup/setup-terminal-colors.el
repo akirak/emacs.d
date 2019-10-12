@@ -1,6 +1,9 @@
 (use-package ansi-color
   :ensure nil
-  :hook (compilation-filter . colorize-compilation-buffer)
+  :config
+  (add-hook 'comint-preoutput-filter-functions 'ansi-color-filter-apply)
+  :hook
+  (compilation-filter . colorize-compilation-buffer)
   :preface
   (autoload 'ansi-color-apply-on-region "ansi-color")
   (defun colorize-compilation-buffer ()
