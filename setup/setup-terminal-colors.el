@@ -39,8 +39,8 @@
          (funcall 'compilation-filter proc
                   (xterm-color-filter string))))))
   :hook
-  (shell-mode-hook . akirak/xterm-color-shell-mode-hook)
-  (compilation-start-hook . akirak/xterm-color-compilation-start))
+  (shell-mode . akirak/xterm-color-shell-mode-hook)
+  (compilation-start . akirak/xterm-color-compilation-start))
 
 ;; Render unicode characters properly.
 ;;
