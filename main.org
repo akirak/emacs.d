@@ -1239,6 +1239,10 @@ I often consult the Emacs Lisp manual:
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
 :END:
+**** Expand Region
+#+begin_src emacs-lisp
+  (akirak/require 'setup-expand-region)
+#+end_src
 **** Formatting
 :PROPERTIES:
 :CREATED_TIME: [2019-09-23 Mon 22:48]

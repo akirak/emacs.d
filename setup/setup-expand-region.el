@@ -1,0 +1,18 @@
+(use-package expand-region
+  :general
+  ;; This mark behaviour is similar to that of easy-mark command from
+  ;; easy-kill package.
+  ("M-m" (general-predicate-dispatch #'er/expand-region
+           (and (not (region-active-p))
+                (looking-at (rx (any alnum))))
+           #'er/mark-symbol-with-prefix)))
+
+;; embrace.el is based on expand-region
+(use-package embrace
+  :init
+  (general-unbind :keymaps 'lispy-mode-map :package 'lispy
+    "M-i")
+  :general
+  ("M-i" #'embrace-commander))
+
+(provide 'setup-expand-region)
