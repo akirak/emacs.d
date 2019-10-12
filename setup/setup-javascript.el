@@ -1,14 +1,15 @@
 (use-package js
-  :straight (:type built-in))
+  :straight (:type built-in)
+  :custom
+  (js-indent-level 2 "Fallback set in use-package"))
 
 ;; Prefer js-mode for LSP support
 (use-package js2-mode
-  :disabled t
-  :mode (("\\.js\\'" . js2-mode))
-  :interpreter "node")
+  :mode (("\\.js\\'" . js2-mode)))
 
 (use-package js2-imenu-extras
   :straight js2-mode
+  :after js2-mode
   :hook (js2-mode . js2-imenu-extras-mode))
 
 (use-package js-comint)
@@ -16,7 +17,11 @@
 (use-package add-node-modules-path
   :after js
   :hook
-  (js-mode . add-node-modules-path))
+  ((js-mode js2-mode) . add-node-modules-path))
+
+(use-package skewer-mode
+  :hook
+  (js2-mode . skewer-mode))
 
 (use-package typescript-mode
   :mode "\\.ts\\'")
