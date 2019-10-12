@@ -9,6 +9,9 @@
   :hook
   (after-change-major-mode . akirak/setup-smartparens-mode))
 
+(akirak/bind-user :keymaps 'smartparens-mode-map
+  "e" #'sp-change-enclosing)
+
 (akirak/bind-generic :keymaps 'smartparens-mode-map
   "bb" 'sp-backward-slurp-command
   "bf" 'sp-forward-slurp-command
