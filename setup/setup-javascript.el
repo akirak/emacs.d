@@ -13,6 +13,11 @@
 
 (use-package js-comint)
 
+(use-package add-node-modules-path
+  :after js
+  :hook
+  (js-mode . add-node-modules-path))
+
 (use-package typescript-mode
   :mode "\\.ts\\'")
 
