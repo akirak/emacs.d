@@ -32,10 +32,6 @@
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))
 ;; Exporting mind maps
-(use-package easy-kill
-  :general
-  ([remap kill-ring-save] #'easy-kill
-   "M-m" #'easy-mark))
 (use-package plumber
   :straight (plumber :host github :repo "akirak/plumber.el")
   :config
