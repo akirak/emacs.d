@@ -32,14 +32,6 @@
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))
 ;; Exporting mind maps
-(use-package plumber
-  :straight (plumber :host github :repo "akirak/plumber.el")
-  :config
-  (require 'plumber-config)
-  (plumber-global-mode 1)
-  :custom
-  (plumber-avy-word-style 'pre)
-  (plumber-enable-keybindings t))
 (use-package akirak/org-refile
   :straight nil)
 (use-package beginend
