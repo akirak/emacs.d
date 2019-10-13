@@ -50,6 +50,7 @@
   (org-starter-exclude-from-recentf '(known-files path))
   (org-starter-alternative-find-file-command #'helm-org-rifle-files)
   (org-starter-find-file-visit-window t)
+  (org-starter-override-agenda-window-setup 'other-window)
   (org-starter-enable-local-variables :all))
 
 (use-package org-starter-swiper)
