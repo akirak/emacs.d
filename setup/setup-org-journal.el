@@ -41,6 +41,16 @@ This can be used for an org-capture template to create an entry in the journal."
 :END:
 "
     :unnarrowed t :clock-in t :clock-resume t)
+  (org-starter-def-capture "j" "Journal")
+  (org-starter-def-capture "jo" "Operation log"
+    entry (function org-journal-find-location)
+    "* %^{Title} :operation:
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+%?
+"
+    :clock-start t :clock-resume t)
   ;; Don't bind C-c C-j to org-journal-new-entry
   (general-unbind "C-c C-j")
   :custom
