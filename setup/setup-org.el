@@ -202,4 +202,15 @@ from running."
 
 (add-to-list 'org-open-at-point-functions 'akirak/org-open-at-point-with-xdg)
 
+;;;; Misc
+(use-package org-entry-links
+  :after org
+  :straight (:host github :repo "akirak/org-entry-links")
+  :config
+  (akirak/bind-jump :keymaps 'org-mode-map :package 'org
+    "L" #'org-entry-links-ivy)
+  :general
+  (:keymaps 'org-agenda-mode-map :package 'org-agenda
+            "L" #'org-entry-links-ivy))
+
 (provide 'setup-org)
