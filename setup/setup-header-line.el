@@ -4,6 +4,12 @@
 
 This is intended to be set inside `akirak/set-header-line' function.")
 
+(defsubst akirak/unset-buffer-group (&optional buffer-or-name)
+  (with-current-buffer (or buffer-or-name (current-buffer))
+    (setq akirak/centaur-tabs-buffer-groups nil)))
+
+(advice-add #'bury-buffer :after #'akirak/unset-buffer-group)
+
 (use-package centaur-tabs
   :config
   ;; Disable centaur-tabs in any buffers that are displayed using
