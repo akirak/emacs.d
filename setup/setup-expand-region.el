@@ -4,7 +4,7 @@
   ;; easy-kill package.
   ("M-m" (general-predicate-dispatch #'er/expand-region
            (and (not (region-active-p))
-                (looking-at (rx (any alnum))))
+                (looking-at (rx (any alnum "-_"))))
            #'er/mark-symbol-with-prefix)))
 
 ;; embrace.el is based on expand-region
