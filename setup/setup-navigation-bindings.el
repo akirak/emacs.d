@@ -32,7 +32,7 @@
    (t (forward-sexp))))
 (advice-add 'akirak/ctrl-meta-f
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-f" 'akirak/ctrl-meta-f)
+;; (general-def "C-M-f" 'akirak/ctrl-meta-f)
 
 (defun akirak/ctrl-meta-b ()
   (interactive)
@@ -44,7 +44,7 @@
    (t (call-interactively 'backward-sexp))))
 (advice-add 'akirak/ctrl-meta-b
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-b" 'akirak/ctrl-meta-b)
+;; (general-def "C-M-b" 'akirak/ctrl-meta-b)
 
 (defun akirak/ctrl-meta-p ()
   (interactive)
