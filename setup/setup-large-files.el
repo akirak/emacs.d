@@ -4,7 +4,8 @@
   (when (> (buffer-size) (* 512 1024))
     (setq buffer-read-only t)
     (buffer-disable-undo)
-    (fundamental-mode)))
+    (unless (derived-mode-p 'pdf-view-mode 'nov-mode)
+      (fundamental-mode))))
 
 (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
