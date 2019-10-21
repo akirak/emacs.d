@@ -7,7 +7,8 @@
         (turn-on-smartparens-strict-mode)
         (show-smartparens-mode 1))))
   :hook
-  (after-change-major-mode . akirak/setup-smartparens-mode))
+  (after-change-major-mode . akirak/setup-smartparens-mode)
+  (minibuffer-setup . smartparens-mode))
 
 (akirak/bind-user :keymaps 'smartparens-mode-map
   "e" #'sp-change-enclosing)
