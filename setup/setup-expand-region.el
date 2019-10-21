@@ -4,6 +4,9 @@
   ;; easy-kill package.
   ("M-m" (general-predicate-dispatch #'er/expand-region
            (and (not (region-active-p))
+                (looking-at (rx (eval comment-start))))
+           #'er/mark-comment
+           (and (not (region-active-p))
                 (looking-at (rx (any alnum "-_"))))
            #'er/mark-symbol-with-prefix)))
 
