@@ -123,7 +123,8 @@
    ((derived-mode-p 'python-mode)
     (call-interactively 'python-nav-backward-up-list))
    ((derived-mode-p 'org-mode)
-    (call-interactively 'org-up-element))
+    (org-up-element)
+    (org-show-entry))
    ((bound-and-true-p smartparens-mode)
     (call-interactively 'sp-backward-up-sexp))))
 (advice-add 'akirak/ctrl-meta-u
