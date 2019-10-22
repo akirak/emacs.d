@@ -1022,6 +1022,12 @@ I sometimes use it for forking a repository, but I plan on removing it in the fu
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
 To use it, you first have to customize =magit-repository-directories=.
+**** Git-Annex
+Use =magit-annex= for working with =git-annex= repositories:
+
+#+begin_src emacs-lisp
+  (akirak/require 'setup-git-annex)
+#+end_src
 *** Project management
 **** Projectile
 **** EditorConfig
