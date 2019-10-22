@@ -27,7 +27,7 @@
           (dot . t)
           (ditaa . t)
           (restclient . t)              ; requires ob-restclient
-          )))
+          (typescript . t))))
 
 (use-package ob-async)
 
@@ -60,6 +60,10 @@
 ;;;;; Third-party packages
 
 (use-package ob-restclient
+  :after ob)
+
+;; You'll need tsc and node in the path to use this package.
+(use-package ob-typescript
   :after ob)
 
 (provide 'setup-org-babel)
