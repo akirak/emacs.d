@@ -35,6 +35,18 @@
 
 ;;;;; Contributed packages shipped with the main org package
 
+(use-package ob-shell
+  :straight (:type built-in))
+
+(use-package ob-python
+  :straight (:type built-in))
+
+(use-package ob-emacs-lisp
+  :straight (:type built-in))
+
+(use-package ob-sqlite
+  :straight (:type built-in))
+
 (use-package ob-dot
   :after ob
   :straight nil
