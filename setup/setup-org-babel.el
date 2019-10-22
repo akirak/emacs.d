@@ -29,6 +29,8 @@
           (restclient . t)              ; requires ob-restclient
           )))
 
+(use-package ob-async)
+
 ;;;; Language supports
 
 ;;;;; Contributed packages shipped with the main org package
