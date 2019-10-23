@@ -29,6 +29,7 @@
 (use-package org-bookmark-heading
   :after org)
 (use-package org-bullets :after org
+  :disabled t
   :init
   (add-hook 'org-mode-hook 'org-bullets-mode))
 ;; Exporting mind maps
