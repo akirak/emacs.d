@@ -2,6 +2,30 @@
   :straight (org-web-tools :host github :repo "akirak/org-web-tools"
                            :branch "encoding"))
 
+(defun akirak/read-local-html-as-org (file)
+  (-let* ((file (thread-last file
+                  (string-remove-prefix "file:///")
+                  (string-remove-prefix "file:/")))
+          (html (with-temp-buffer
+                  (insert-file-contents file)
+                  (buffer-string)))
+          (html (org-web-tools--sanitize-html html))
+          ((title . readable) (org-web-tools--eww-readable html))
+          (title (org-web-tools--cleanup-title (or title "")))
+          (converted (org-web-tools--html-to-org-with-pandoc readable)))
+    (with-current-buffer (generate-new-buffer "*html*")
+      (org-mode)
+      (when (fboundp 'org-indent-mode)
+        (org-indent-mode -1))
+      ;; Insert article text
+      (insert converted)
+      ;; Demote in-article headings
+      ;; MAYBE: Use `org-paste-subtree' instead of demoting headings ourselves.
+      (org-web-tools--demote-headings-below 2)
+      ;; Insert headings at top
+      (goto-char (point-min))
+      (pop-to-buffer (current-buffer)))))
+
 ;;;; Overriding the title function of org-web-tools-insert-link-for-url
 
 (cl-defun akirak/org-web-tools--org-link-for-url

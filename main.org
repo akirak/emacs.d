@@ -1229,9 +1229,11 @@ I often consult the Emacs Lisp manual:
 #+end_src
 ***** Dash
 #+begin_src emacs-lisp
-  (use-package helm-dash :after helm
+  (use-package dash-docs)
+
+  (use-package helm-dash
     :custom
-    (helm-dash-browser-func #'akirak/display-url-for-referencing))
+    (helm-dash-browser-func #'akirak/read-local-html-as-org))
 
   (akirak/bind-specific-help
     "d" #'helm-dash)
