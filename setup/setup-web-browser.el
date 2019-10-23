@@ -1,10 +1,14 @@
 ;;; setup-web-browser.el --- Integration with external web browsers -*- lexical-binding: t -*-
 
-;; In EXWM, prefer Chromium installed on the guest operating system
-;; over Chrome/Chromium installed on Chrome/Chromium OS.
-(when akirak/to-be-run-as-exwm
+(cond
+ ;; In EXWM, prefer Chromium installed on the guest operating system
+ ;; over Chrome/Chromium installed on Chrome/Chromium OS.
+ (akirak/to-be-run-as-exwm
   (setq-default browse-url-browser-function 'browse-url-generic
                 browse-url-generic-program "chromium"))
+ ((akirak/running-on-crostini-p)
+  (setq-default browse-url-browser-function 'browse-url-generic
+                browse-url-generic-program "garcon-url-handler")))
 
 (defcustom akirak/web-browser-application-list
   '(("chromium-browser.desktop" :key ?c)
