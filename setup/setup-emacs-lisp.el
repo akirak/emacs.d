@@ -32,9 +32,7 @@
                               :repo "akirak/package-requires.el"))
 
 (use-package flycheck-package
-  :commands (flycheck-package-setup)
-  :hook
-  (emacs-lisp . flycheck-package-setup))
+  :commands (flycheck-package-setup))
 
 (use-package suggest
   :commands (suggest))
@@ -50,16 +48,29 @@
 
 (use-package nameless
   :commands (nameless-mode)
-  :config
-  (defvar-local akirak/avoid-nameless-mode nil)
   (defun akirak/turn-on-nameless-mode-conditional ()
     (unless akirak/avoid-nameless-mode
       (nameless-mode 1)))
   :general
   (:keymaps 'nameless-mode-map
-            "-" 'nameless-insert-name-or-self-insert)
-  :hook
-  (emacs-lisp . akirak/turn-on-nameless-mode-conditional))
+            "-" 'nameless-insert-name-or-self-insert))
+
+;;;; Package editing
+(defun akirak/emacs-lisp-setup-package ()
+  (let ((dir (when (buffer-file-name)
+               (abbreviate-file-name (file-name-directory (buffer-file-name))))))
+    (when (and dir
+               (or (string-prefix-p (concat user-emacs-directory "straight/") dir)
+                   (not (or (string-prefix-p user-emacs-directory dir)
+                            (equal "~/" dir)
+                            (member (file-name-nondirectory (buffer-file-name))
+                                    '(".dir-locals.el"))))))
+      (flycheck-package-setup)
+      (flycheck-mode 1)
+      (when (fboundp 'nameless-mode)
+        (nameless-mode 1)))))
+
+(add-hook 'emacs-lisp-mode-hook #'akirak/emacs-lisp-setup-package)
 
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
