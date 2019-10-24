@@ -1,7 +1,6 @@
 (use-package feebleline
-  :init
-  (feebleline-mode 1)
   :config
+  (feebleline-mode 1)
   (setq feebleline-msg-functions
         '(((lambda () (format-mode-line "%e")))
           ;; ((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
