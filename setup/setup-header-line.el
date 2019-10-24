@@ -208,6 +208,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
   (centaur-tabs-local-mode 0)
   (setq akirak/centaur-tabs-buffer-groups '("Org-Capture")))
 
+;;;; Helper packages
+(use-package flycheck-indicator
+  :after flycheck)
+
 ;;;; Default header line format
 (cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
@@ -260,6 +264,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
       ,(if (derived-mode-p 'prog-mode)
            "(%l,%3c) "
          " ")
+      ;; Display the flycheck status in prog-mode
+      ,(when (derived-mode-p 'prog-mode)
+         (cond
+          ((boundp 'flycheck-indicator-mode-line) flycheck-indicator-mode-line)))
       ;; Append any segments
       ,@body)))
 
