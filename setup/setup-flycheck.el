@@ -33,6 +33,21 @@ Errors (flycheck): %s`flycheck-checker
   (setq flycheck-checker 'sh-shellcheck)
   (flycheck-mode 1))
 
+;;;; UI
+(use-package flycheck-posframe
+  :after flycheck
+  :custom-face
+  ;; https://www.reddit.com/r/emacs/comments/couaey/how_to_set_color_of_flycheckposframe/ewlbfbz/
+  ;; TODO: Refine face settings
+  (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-border-face ((t (:background "DarkBlue"))))
+  :hook
+  (flycheck-mode . flycheck-posframe-mode))
+
+;;;; Other helper packages
+
+;; Used in dante
 (use-package attrap)
 
 (provide 'setup-flycheck)
