@@ -764,6 +764,7 @@ I'm not using olivetti-mode
      "Info/check/linting"
      (("ed" eldoc-mode :toggle t)
       ("fc" flycheck-mode :toggle t)
+      ("fv" flycheck-verify-setup)
       ("fs" flyspell-mode :toggle t)
       ("fp" flyspell-prog-mode :toggle t)
       ("a" apheleia-mode :toggle t)
