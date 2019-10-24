@@ -1,5 +1,8 @@
 (use-package feebleline
   :config
+  (defvar akirak/orig-mode-line-format nil)
+  (unless akirak/orig-mode-line-format
+    (setq akirak/orig-mode-line-format mode-line-format))
   (feebleline-mode 1)
   (setq feebleline-msg-functions
         '(((lambda () (format-mode-line "%e")))
