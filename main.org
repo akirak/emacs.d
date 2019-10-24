@@ -969,6 +969,9 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
     "C-x x" #'crux-open-with)
 #+end_src
 
+#+begin_src emacs-lisp
+  (akirak/require 'setup-files)
+#+end_src
 *** Buffer management
 #+begin_src emacs-lisp
   ;; buffer management
