@@ -1,3 +1,9 @@
+(use-package flycheck
+  :general
+  (:keymaps 'flycheck-mode-map
+            [remap next-error] #'flycheck-next-error
+            [remap previous-error] #'flycheck-previous-error))
+
 ;; Based on an example in https://github.com/abo-abo/hydra/wiki/Flycheck
 (defhydra hydra-flycheck
   (
