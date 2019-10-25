@@ -808,7 +808,7 @@ I'm not using olivetti-mode
      (("=" akirak/font-height-increase "increase")
       ("-" akirak/font-height-decrease "decrease")
       ("s" akirak/set-font-height "set temporarily")
-      ("C-s" (customize-set-variable 'akirak/font-height akirak/font-height)
+      ("C-s" (customize-save-variable 'akirak/font-height akirak/font-height)
        "save"))
      "Buffer font height"
      (("+" text-scale-increase "increase")
