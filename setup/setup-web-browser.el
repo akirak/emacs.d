@@ -150,5 +150,14 @@
              (switch-to-buffer-other-window b)
            (akirak/start-web-browser))))))))
 
+(defun akirak/browse-localhost (port)
+  (interactive "nport: ")
+  (start-process "localhost" "chromium" "chromium"
+                 (format "http://localhost:%d" port)))
+
+(defun akirak/browse-syncthing ()
+  (interactive)
+  (akirak/browse-localhost 8384))
+
 (provide 'setup-web-browser)
 ;;; setup-web-browser.el ends here
