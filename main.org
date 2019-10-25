@@ -1814,7 +1814,9 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+end_src
 
 *** Shell scripts (bash)
-
+#+begin_src emacs-lisp
+  (akirak/require 'setup-shell-scripts)
+#+end_src
 *** VBScript
 :PROPERTIES:
 :CREATED_TIME: [2019-05-16 Thu 01:10]
