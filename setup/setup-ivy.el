@@ -131,13 +131,15 @@
   (akirak/ivy-posframe-width-alist
    `((counsel-ibuffer . 120)
      (ivy-omni-org . 70)
+     (all-the-icons-ivy . 50)
      ,@(--map (cons it 130)
               '(counsel-describe-function
                 counsel-describe-variable
                 counsel-faces
                 counsel-M-x))))
   (akirak/ivy-posframe-height-alist
-   '((ivy-omni-org . 15)))
+   '((ivy-omni-org . 15)
+     (all-the-icons-ivy . 30)))
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
@@ -145,6 +147,7 @@
               '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
+     (all-the-icons-ivy . ivy-posframe-display-at-point)
      (t . akirak/ivy-posframe-display-smart-center))))
 
 (provide 'setup-ivy)

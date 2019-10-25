@@ -498,7 +498,9 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 #+end_src
 *** all-the-icons
 #+begin_src emacs-lisp
-(use-package all-the-icons)
+  (use-package all-the-icons
+    :general
+    ("C-x 8 i" #'all-the-icons-ivy))
 #+end_src
 *** emacsql-sqlite
 =emacsql-sqlite= depends on a pre-built binary executable. This is built and installed by Nix package manager.
