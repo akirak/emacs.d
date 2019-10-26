@@ -48,9 +48,6 @@
 
 (use-package nameless
   :commands (nameless-mode)
-  (defun akirak/turn-on-nameless-mode-conditional ()
-    (unless akirak/avoid-nameless-mode
-      (nameless-mode 1)))
   :general
   (:keymaps 'nameless-mode-map
             "-" 'nameless-insert-name-or-self-insert))
