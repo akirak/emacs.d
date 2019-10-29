@@ -3,7 +3,9 @@
 
 (when (bound-and-true-p akirak/mode-prefix-key)
   (general-translate-key nil 'org-mode-map
-    :package 'org akirak/mode-prefix-key "C-c C-x"))
+    :package 'org akirak/mode-prefix-key "C-c C-x")
+  (general-translate-key nil 'org-agenda-mode-map
+    :package 'org-agenda akirak/mode-prefix-key "C-c C-x"))
 
 (setq-default org-agenda-start-with-clockreport-mode t
               org-agenda-sticky t
