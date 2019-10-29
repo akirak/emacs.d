@@ -57,10 +57,15 @@ Only one letter is shown, the first that applies."
           ((magit-unstaged-files)  "*")
           ((magit-staged-files)    "+")))
 
-  :general
-  ;; C-c M-g is bound to magit-file-dispatch by default.
-  ;; I will bind C-c M-KEY to some other frequently used magit commands.
-  ("C-S-g" #'magit-dispatch)
+  (akirak/bind-f8
+    ;; <f8> <f8>
+    "<f8>" #'magit-status
+    ;; <f8> <f7>
+    "<f7>" #'magit-stage-file
+    ;; <f8> <f9>
+    "<f9>" #'magit-dispatch
+    ;; <f8> <f10>
+    "<f10>" #'magit-file-dispatch)
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)

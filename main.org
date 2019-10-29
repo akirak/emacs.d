@@ -435,6 +435,15 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-specific-help :prefix "<f1> ESC")
 #+end_src
+**** <f8> to projectile commands
+#+begin_src emacs-lisp
+  (general-def "<f8>" #'projectile-command-map)
+
+  (general-create-definer akirak/bind-f8
+    :keymaps 'projectile-command-map)
+#+end_src
+
+I bind ~<f8>~ followed by another function key press to magit commands.
 **** bind-system (<f12>) for system commands
 :PROPERTIES:
 :CREATED_TIME: [2019-04-13 Sat 09:43]

@@ -13,8 +13,7 @@
   (projectile-enable-caching nil)
   (projectile-require-project-root nil)
   (projectile-ignored-project-function #'akirak/projectile-ignore-project-p)
-  (projectile-globally-ignored-file-suffixes '("hi" "o"))
-  (projectile-keymap-prefix (kbd "C-x 9")))
+  (projectile-globally-ignored-file-suffixes '("hi" "o")))
 
 ;;;; Function to determine if a directory should be ignored by projectile
 
