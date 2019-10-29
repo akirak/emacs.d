@@ -1246,7 +1246,7 @@ I often consult the Emacs Lisp manual:
     :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
     :commands (devdocs-lookup))
 
-  (akirak/bind-help "/" #'devdocs-lookup)
+  (akirak/bind-user "d" #'devdocs-lookup)
 #+end_src
 ***** Dash
 #+begin_src emacs-lisp
