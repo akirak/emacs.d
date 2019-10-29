@@ -435,6 +435,14 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 #+begin_src emacs-lisp
   (general-create-definer akirak/bind-specific-help :prefix "<f1> ESC")
 #+end_src
+**** <f6> to global file commands
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-file-extra :prefix "<f6>")
+#+end_src
+**** <f7> to hydra commands
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-hydra :prefix "<f7>")
+#+end_src
 **** <f8> to projectile commands
 #+begin_src emacs-lisp
   (general-def "<f8>" #'projectile-command-map)
