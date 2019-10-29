@@ -10,7 +10,7 @@
   :custom
   (projectile-completion-system (quote ivy))
   (projectile-create-missing-test-files t)
-  (projectile-enable-caching t)
+  (projectile-enable-caching nil)
   (projectile-require-project-root nil)
   (projectile-ignored-project-function #'akirak/projectile-ignore-project-p)
   (projectile-globally-ignored-file-suffixes '("hi" "o"))
