@@ -503,7 +503,9 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 *** org-ql
 #+begin_src emacs-lisp
   (use-package org-ql
-    :straight (org-ql :host github :repo "alphapapa/org-ql"))
+    :straight (org-ql :host github :repo "alphapapa/org-ql")
+    :custom
+    (org-ql-views nil))
 #+end_src
 *** all-the-icons
 #+begin_src emacs-lisp
