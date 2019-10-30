@@ -1331,6 +1331,10 @@ Another option would be reformatter by Steve Purcell, but I haven't managed to c
   :general
   ("M-;" 'comment-dwim-2))
 #+end_src
+**** Refactoring
+#+begin_src emacs-lisp
+  (akirak/require 'setup-refactor)
+#+end_src
 **** Case conversion
 #+begin_src emacs-lisp
 (use-package fix-word
