@@ -8,10 +8,8 @@
   (:keymaps 'lispy-mode-map
             ;; Bind M-m to easy-mark (from easy-kill package) instead
             "M-m" nil
-            ;; Use outline-insert-heading rather than lispy-meta-return
             [remap lispy-outline-promote] 'outline-promote
-            [remap lispy-outline-demote] 'outline-demote
-            [remap lispy-meta-return] 'outline-insert-heading))
+            [remap lispy-outline-demote] 'outline-demote))
 
 (defun akirak/lispy-goto-symbol-elisp-other-window (symbol)
   "Goto definition of an Elisp SYMBOL in other window."
