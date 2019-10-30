@@ -388,8 +388,6 @@ Generic prefix key for editing commands:
     :prefix-map 'akirak/kill-prefix-map)
   (general-create-definer akirak/bind-mark :prefix "C-. m"
     :prefix-map 'akirak/mark-prefix-map)
-  (general-create-definer akirak/bind-fold :prefix "C-. o"
-    :prefix-map 'akirak/fold-prefix-map)
   (general-create-definer akirak/bind-split :prefix "C-. s"
     :prefix-map 'akirak/split-prefix-map)
   (general-create-definer akirak/bind-replace :prefix "C-. r"

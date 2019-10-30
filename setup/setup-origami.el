@@ -1,18 +1,27 @@
 (use-package origami
   :config
-  (akirak/bind-user :keymaps 'origami-mode-map "z" #'origami-toggle-node)
-  (akirak/bind-fold :keymaps 'origami-mode-map
-    ;; Particularly useful bold commands
-    "SPC" #'origami-recursively-toggle-node
-    "o" #'origami-show-only-noode
-    "i" #'origami-redo
-    "u" #'origami-undo
-    ;; Other commands I may or may not use
-    "f" #'origami-forward-fold-same-level
-    "b" #'origami-backward-fold-same-level
-    "n" #'origami-next-fold
-    "p" #'origami-previous-fold
-    "q" #'origami-reset))
+  (akirak/bind-generic :keymaps 'origami-mode-map
+    "<tab>" (defrepeater #'origami-forward-toggle-node)
+    "o" #'akirak/origami-hydra/body)
+  (pretty-hydra-define akirak/origami-hydra
+    (:title "origami" :quit-key ("C-g" "q"))
+    ("Toggle"
+     (("TAB" origami-forward-toggle-node "fwd toggle")
+      ("SPC" origami-recursively-toggle-node "toggle rec.")
+      ("o" origami-show-only-node "show")
+      ("a" origami-toggle-all-nodes "toggle all"))
+     "Navigation"
+     (("f" origami-forward-fold "fwd")
+      ("b" origami-backward-fold "bwd")
+      ("j" origami-forward-fold-same-level "fwd same lv.")
+      ("k" origami-backward-fold-same-level "bwd same lv.")
+      ("n" origami-next-fold "next")
+      ("p" origami-previous-foldp "prev"))
+     "State management"
+     (("U" origami-redo "redo")
+      ("u" origami-undo "undo")
+      ("C-q" origami-reset "reset")
+      ("RET" origami-mode :toggle t)))))
 
 (use-package lsp-origami
   :hook
