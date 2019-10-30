@@ -366,7 +366,6 @@ Generic prefix key for editing commands:
     "a" '(nil :wk "align")
     "b" '(nil :wk "barf")
     "f" '(nil :wk "format")
-    "h" 'major-mode-hydra
     "i" '(nil :wk "insert")
     "j" '(nil :wk "join")
     "k" '(nil :wk "kill")
@@ -508,6 +507,13 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 *** Hydra
 #+begin_src emacs-lisp
   (akirak/require 'setup-hydra)
+#+end_src
+
+Bind ~M-SPC~ to =major-mode-hydra=.
+This key was originally bound to =just-one-space=, but I replaced it with =akirak/shrink-whitespace=:
+
+#+begin_src emacs-lisp
+  (general-def "M-SPC" #'major-mode-hydra)
 #+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
