@@ -2,7 +2,9 @@
 ;; much configuration
 
 ;; Install smex for sorting M-x candidates
-(use-package smex)
+(use-package smex
+  ;; Disabled in favour of prescient
+  :disabled t)
 ;; Save minibuffer history
 (use-package savehist)
 
