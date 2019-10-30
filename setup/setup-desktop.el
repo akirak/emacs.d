@@ -19,8 +19,7 @@
   (unless (daemonp)
     (desktop-save-mode t))
   :custom
-  ;; Always ask if `desktop-save-mode' should save the session.
-  (desktop-save 'ask)
+  (desktop-save 'ask-if-exists)
   ;; (desktop-restore-in-current-display)
   (desktop-restore-reuses-frames 'keep))
 
