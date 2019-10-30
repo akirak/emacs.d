@@ -52,6 +52,9 @@
   (:keymaps 'nameless-mode-map
             "-" 'nameless-insert-name-or-self-insert))
 
+(use-package elx
+  :straight (elx :host github :repo "emacscollective/elx"))
+
 ;;;; Package editing
 (defun akirak/emacs-lisp-setup-package ()
   (let ((dir (when (buffer-file-name)
