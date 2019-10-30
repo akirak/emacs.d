@@ -12,12 +12,15 @@
   :after js2-mode
   :hook (js2-mode . js2-imenu-extras-mode))
 
-(use-package js-comint)
+(use-package js-comint
+  :config
+  (akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
+    "" #'js-comint-repl))
 
 (use-package add-node-modules-path
   :after js
   :hook
-  ((js-mode js2-mode) . add-node-modules-path))
+  ((js-mode js2-mode typescript-mode) . add-node-modules-path))
 
 (use-package skewer-mode
   :hook
