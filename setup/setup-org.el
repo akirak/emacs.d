@@ -39,7 +39,8 @@
               org-blank-before-new-entry '((heading . nil)
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
-              org-M-RET-may-split-line nil)
+              org-M-RET-may-split-line nil
+              org-imenu-depth 6)
 
 ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
 (setq-default org-cycle-separator-lines 0
