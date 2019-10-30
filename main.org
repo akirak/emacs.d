@@ -458,7 +458,20 @@ I bind ~<f8>~ followed by another function key press to magit commands.
   (general-create-definer akirak/bind-system :prefix "<f12>"
     :prefix-map 'akirak/system-map)
 #+end_src
+*** Other custom key definitions
+Use ~<C-return>~ for starting a REPL session:
 
+#+begin_src emacs-lisp
+  (general-create-definer akirak/bind-mode-repl
+    :prefix "<C-return>")
+#+end_src
+
+Example usage:
+
+#+begin_src emacs-lisp :tangle no
+  (akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
+    "" #'js-comint-repl)
+#+end_src
 ** Dependencies for other packages
 :PROPERTIES:
 :TOC:      1
