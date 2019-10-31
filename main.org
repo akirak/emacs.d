@@ -442,9 +442,13 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 #+end_src
 **** <f8> to projectile commands
 #+begin_src emacs-lisp
-  (general-def "<f8>" #'projectile-command-map)
+  (general-def
+    :keymaps 'projectile-mode-map
+    :package 'projectile
+    "<f8>" #'projectile-command-map)
 
   (general-create-definer akirak/bind-f8
+    :package 'projectile
     :keymaps 'projectile-command-map)
 #+end_src
 
@@ -1020,13 +1024,6 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
     "C-x C-b" #'ibuffer)
 #+end_src
 *** Git
-The following packages extend the display of =magit-status=:
-
-- magit-todos
-
-#+begin_src emacs-lisp
-  (general-def "<f7>" #'magit-status)
-#+end_src
 **** Git modes
 #+begin_src emacs-lisp
 (use-package git-modes)
