@@ -11,7 +11,7 @@
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
                    ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
-                   (" *Org todo*" :custom akirak/display-org-todo-buffer)
+                   ;; (" *Org todo*" :custom akirak/display-org-todo-buffer)
                    ("*org clocking*" :other t)
                    ("*Org Edna Edit Blocker/Trigger*" :align below :ratio 0.3)
                    ("*Org Note*" :align below :ratio 0.3)
@@ -75,11 +75,11 @@ Based on `display-buffer-split-below-and-attach' in pdf-utils.el."
                    :poshandler #'posframe-poshandler-point-bottom-left-corner)
     (set-buffer buffer)))
 
-(advice-add #'org-fast-todo-selection :around
-            (lambda (orig &optional _arg)
-              (unwind-protect
-                  (funcall orig _arg)
-                (posframe-delete " *Org todo*"))))
+;; (advice-add #'org-fast-todo-selection :around
+;;             (lambda (orig &optional _arg)
+;;               (unwind-protect
+;;                   (funcall orig _arg)
+;;                 (posframe-delete " *Org todo*"))))
 
 (defun akirak/display-org-capture-temp-buffer (buffer-or-name &rest _args)
   (let ((bottom-left-window (cl-find-if (lambda (w)
