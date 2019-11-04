@@ -34,6 +34,7 @@
                    ("*Backtrace*" :align below :ratio 0.4 :noselect t)
                    (" *Agenda Commands*" :align below :ratio 0.3)
                    ("*Calendar*" :align below :ratio 0.3)
+                   ("*Google Translate*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
                    ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
