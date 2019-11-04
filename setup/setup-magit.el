@@ -70,6 +70,7 @@ Only one letter is shown, the first that applies."
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
      ("~/arts" . 2)
+     ("~/projects" . 2)
      ("~/home.nix" . 0)
      ("~/lib" . 1)
      ("/etc/nixos" . 0)))
