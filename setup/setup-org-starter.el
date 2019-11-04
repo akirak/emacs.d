@@ -32,7 +32,7 @@
   (org-starter-def "~/home.nix/README.org"
     :key "n"
     :refile (:maxlevel . 3))
-  (general-add-hook 'org-starter-find-file-map
+  (general-add-hook 'org-starter-extra-find-file-map
                     '((";" org-starter-find-config-file "config")
                       ("w" org-plain-wiki "wiki"))
                     t)
