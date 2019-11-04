@@ -96,4 +96,12 @@ Only one letter is shown, the first that applies."
 
 (use-package orgit)
 
+(use-package hotplate
+  :straight (:host github :repo "akirak/hotplate.el")
+  :custom
+  (hotplate-root "~/lib/src/")
+  ;; TODO: Create a remote repository
+  ;; (hotplate-remote-repository "https://github.com/akirak/repo-collection")
+  )
+
 (provide 'setup-magit)
