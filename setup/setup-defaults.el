@@ -33,8 +33,7 @@
               truncate-lines t
               backup-by-copying t
               delete-by-moving-to-trash t
-              delete-old-versions t
-              large-file-warning-threshold (* 200 1024))
+              delete-old-versions t)
 
 (set-language-environment "UTF-8")
 
