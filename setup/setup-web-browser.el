@@ -150,10 +150,31 @@
              (switch-to-buffer-other-window b)
            (akirak/start-web-browser))))))))
 
-(defun akirak/browse-localhost (port)
-  (interactive "nport: ")
-  (start-process "localhost" "chromium" "chromium"
-                 (format "http://localhost:%d" port)))
+(defcustom akirak/localhost-url-list nil
+  "History of URLs"
+  :type '(repeat string))
+
+(defvar akirak/localhost-history nil)
+
+(defun akirak/browse-localhost (port-or-url &optional path)
+  (interactive (let* ((port-or-url (completing-read "Port or URL: "
+                                                    akirak/localhost-url-list
+                                                    nil nil nil))
+                      (port (ignore-errors
+                              (string-to-number port-or-url)))
+                      (port (unless (= port 0) port))
+                      (path (when port
+                              (read-string "Path: "))))
+                 (list (or port port-or-url) path)))
+  (let ((url (cond
+              ((numberp port-or-url)
+               (format "http://localhost:%d%s"
+                       port-or-url
+                       (or path "")))
+              ((stringp port-or-url)
+               port-or-url))))
+    (add-to-list 'akirak/localhost-url-list url)
+    (start-process "localhost" "chromium" "chromium" url)))
 
 (defun akirak/browse-syncthing ()
   (interactive)
