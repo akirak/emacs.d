@@ -20,6 +20,8 @@
 
 (use-package helm-frame-workflow :after (frame-workflow helm)
   :straight frame-workflow
-  :commands (helm-frame-workflow))
+  :commands (helm-frame-workflow)
+  :general
+  ("<f10>" #'helm-frame-workflow))
 
 (provide 'setup-frame-workflow)
