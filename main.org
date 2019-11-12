@@ -1952,15 +1952,14 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Getting organised
 **** Global bindings related to Org mode
  #+begin_src emacs-lisp
-   (akirak/bind-key "M-g M-j" #'counsel-org-clock-goto)
+   (akirak/bind-key "M-g M-j" #'org-clock-goto)
    (akirak/bind-search
      "M-o" #'helm-org-rifle-known-files
      "M-h" #'org-recent-headings-helm)
    (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
    (akirak/bind-user
      "c" #'org-capture
-     "l" 'org-store-link
-     "n" #'counsel-org-capture-string)
+     "l" 'org-store-link)
  #+end_src
 ***** On navigation
 #+begin_src emacs-lisp
