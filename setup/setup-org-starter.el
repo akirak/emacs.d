@@ -9,6 +9,27 @@
 (use-package org-super-agenda
   :after org-agenda
   :config
+  (ignore-errors
+    ;; Basically stolen from org-super-agenda.el
+    (org-super-agenda--def-auto-group ts-desc
+      "the date of their latest timestamp anywhere in the entry (formatted according to `org-super-agenda-date-format', which see)"
+      :keyword :auto-ts-desc
+      :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
+                  (let* ((limit (org-entry-end-position))
+                         (latest-ts (->> (cl-loop for next-ts =
+                                                  (when (re-search-forward org-element--timestamp-regexp limit t)
+                                                    (ts-parse-org (match-string 1)))
+                                                  while next-ts
+                                                  collect next-ts)
+                                         (-sort #'ts>)
+                                         car)))
+                    (when latest-ts
+                      (propertize (ts-format org-super-agenda-date-format latest-ts)
+                                  'org-super-agenda-ts latest-ts))))
+      :key-sort-fn (lambda (a b)
+                     ;; This part has been changed from `ts<' to `ts>'.
+                     (ts> (get-text-property 0 'org-super-agenda-ts a)
+                          (get-text-property 0 'org-super-agenda-ts b)))))
   (org-super-agenda-mode 1))
 
 (use-package org-ql-search
