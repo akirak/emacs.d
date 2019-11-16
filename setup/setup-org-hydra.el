@@ -29,7 +29,7 @@
                                       (when blocker (format " Blocker: %s" blocker)))))))
                        "\n")
           :foreign-keys t)
-  ("Store link"
+  ("Store link to this entry"
    (("li" (progn
             (org-id-get-create)
             (call-interactively 'org-store-link))
@@ -38,23 +38,23 @@
             (akirak/org-set-custom-id-property)
             (call-interactively 'org-store-link))
      "With custom ID"))
-   "Set"
-   (("sh" akirak/org-set-habit "Set habit")
-    ("st" (unless (org-entry-get nil "CREATED_TIME")
+   "Mark/config"
+   (("mh" akirak/org-set-habit "Set habit")
+    ("mc" (unless (org-entry-get nil "CREATED_TIME")
             (org-entry-put nil "CREATED_TIME"
                            ;; TODO: Check for clock data in the entry
                            (format-time-string (org-time-stamp-format t t))))
      "Set created time")
-    ("s%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
-    ("s/" (akirak/org-add-statistics-cookie "/") "Add [/]")
+    ("%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
+    ("/" (akirak/org-add-statistics-cookie "/") "Add [/]")
     ;; TODO: Show history
     )
    "Media (org-download)"
-   (("is" org-download-screenshot "Screenshot")
-    ("iy" org-download-yank "Yank")
-    ("iR" org-download-rename-last-file "Rename last"))
+   (("is" org-download-screenshot "Ins screenshot")
+    ("yi" org-download-yank "Yank image")
+    ("ril" org-download-rename-last-file "Rename last"))
    "Extras"
-   (("d" org-edna-edit "Dependencies"))))
+   (("ed" org-edna-edit "Edit deps"))))
 
 ;;;; org-habit support
 
