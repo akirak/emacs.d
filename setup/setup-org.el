@@ -7,6 +7,20 @@
   (general-translate-key nil 'org-agenda-mode-map
     :package 'org-agenda akirak/mode-prefix-key "C-c C-x"))
 
+(defmacro akirak/org-with-maybe-agenda-origin (&rest progn)
+  `(cond
+    ((derived-mode-p 'org-mode)
+     ,@progn)
+    ((derived-mode-p 'org-agenda-mode)
+     (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                       (org-agenda-error))))
+       (with-current-buffer (marker-buffer marker)
+         (org-with-wide-buffer
+          (goto-char (marker-position marker))
+          ,@progn))))
+    (t
+     (user-error "Neither in org-mode nor org-agenda-mode"))))
+
 (setq-default org-agenda-start-with-clockreport-mode t
               org-agenda-sticky t
               org-clock-history-length 20

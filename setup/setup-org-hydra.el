@@ -11,23 +11,27 @@
                  (number-sequence 0 (1- n))))
        (string-join it "\n ")))
 
+(defun akirak/org-agenda-hydra-title ()
+  (akirak/org-with-maybe-agenda-origin
+   (string-join `(,(akirak/org-mode-hydra--generate-path)
+                  " ------------------------------------- "
+                  ,(format " Created at %s, total clocked %s"
+                           (org-entry-get nil "CREATED_TIME")
+                           (org-duration-from-minutes (org-clock-sum-current-item)))
+                  ,(format " Custom ID: %s,  ID: %s"
+                           (org-entry-get nil "CUSTOM_ID")
+                           (org-entry-get nil "ID"))
+                  ,@(let ((trigger (org-entry-get nil "TRIGGER"))
+                          (blocker (org-entry-get nil "BLOCKER")))
+                      (when (or trigger blocker)
+                        (delq nil
+                              (list
+                               (when trigger (format " Trigger: %s" trigger))
+                               (when blocker (format " Blocker: %s" blocker)))))))
+                "\n")))
+
 (major-mode-hydra-define org-mode
-  (:title (string-join `(,(akirak/org-mode-hydra--generate-path)
-                         " ------------------------------------- "
-                         ,(format " Created at %s, total clocked %s"
-                                  (org-entry-get nil "CREATED_TIME")
-                                  (org-duration-from-minutes (org-clock-sum-current-item)))
-                         ,(format " Custom ID: %s,  ID: %s"
-                                  (org-entry-get nil "CUSTOM_ID")
-                                  (org-entry-get nil "ID"))
-                         ,@(let ((trigger (org-entry-get nil "TRIGGER"))
-                                 (blocker (org-entry-get nil "BLOCKER")))
-                             (when (or trigger blocker)
-                               (delq nil
-                                     (list
-                                      (when trigger (format " Trigger: %s" trigger))
-                                      (when blocker (format " Blocker: %s" blocker)))))))
-                       "\n")
+  (:title (akirak/org-agenda-hydra-title)
           :foreign-keys t)
   ("Store link to this entry"
    (("li" (progn
@@ -49,11 +53,30 @@
     ("/" (akirak/org-add-statistics-cookie "/") "Add [/]")
     ;; TODO: Show history
     )
+   "Set"
+   (("sc" akirak/org-set-category "Category"))
    "Media (org-download)"
    (("is" org-download-screenshot "Ins screenshot")
     ("yi" org-download-yank "Yank image")
     ("ril" org-download-rename-last-file "Rename last"))
    "Extras"
+   (("ed" org-edna-edit "Edit deps"))))
+
+(major-mode-hydra-define org-agenda-mode
+  (:title (akirak/org-agenda-hydra-title)
+          :foreign-keys t)
+  ("Store link to this entry"
+   (("li" (progn
+            (org-id-get-create)
+            (call-interactively 'org-store-link))
+     "With ID")
+    ("lc" (progn
+            (akirak/org-set-custom-id-property)
+            (call-interactively 'org-store-link))
+     "With custom ID"))
+   "Set"
+   (("sc" akirak/org-set-category "Category"))
+   "Edit"
    (("ed" org-edna-edit "Edit deps"))))
 
 ;;;; org-habit support
@@ -125,5 +148,17 @@
         (goto-char end)
         (insert placeholder)))
     (org-update-statistics-cookies nil)))
+
+;;;; Commands
+
+(defun akirak/org-set-property-interactively (propname)
+  (akirak/org-with-maybe-agenda-origin
+   (org-set-property propname nil))
+  (when (derived-mode-p 'org-agenda-mode)
+    (org-agenda-redo)))
+
+(defun akirak/org-set-category ()
+  (interactive)
+  (akirak/org-set-property-interactively "CATEGORY"))
 
 (provide 'setup-org-hydra)
