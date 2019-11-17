@@ -750,6 +750,8 @@ I'm not using olivetti-mode
 :PROPERTIES:
 :CREATED_TIME: [2019-07-27 Sat 17:43]
 :END:
+The following hydra is deprecated:
+
 #+begin_src emacs-lisp
   (pretty-hydra-define akirak/context-hydra
     (:title (string-join
@@ -812,6 +814,20 @@ I'm not using olivetti-mode
                    (ts-difference (ts-now) file-time)
                    'abbreviate))
         (ts-format abs-format file-time))))
+#+end_src
+
+Instead, I will bind ~<f10>~ to a context-sensitive command:
+
+#+begin_src emacs-lisp
+  (defun akirak/contextual-f10 ()
+    (interactive)
+    (cond
+     ((org-clocking-p)
+      (message "This command currently does nothing when you are clocking in"))
+     (t
+      (call-interactively 'org-agenda))))
+
+  (general-def "<f10>" #'akirak/contextual-f10)
 #+end_src
 **** Minor-mode-hydra: hydra for toggling minor modes
 #+begin_src emacs-lisp
