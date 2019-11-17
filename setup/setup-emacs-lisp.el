@@ -27,6 +27,8 @@
 (use-package package-lint
   :commands (package-lint-current-buffer))
 
+(use-package buttercup)
+
 (use-package package-requires
   :straight (package-requires :host github
                               :repo "akirak/package-requires.el"))
