@@ -17,6 +17,7 @@
 ;;   (mode . ansible)))
 ;; #+end_src
 (use-package ansible
+  :disabled t
   :commands (ansible)
   :init
   (defalias 'ansible-mode 'ansible))
