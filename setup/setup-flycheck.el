@@ -2,7 +2,9 @@
   :general
   (:keymaps 'flycheck-mode-map
             [remap next-error] #'flycheck-next-error
-            [remap previous-error] #'flycheck-previous-error))
+            [remap previous-error] #'flycheck-previous-error)
+  :custom
+  (flycheck-relevant-error-other-file-show nil))
 
 ;; Based on an example in https://github.com/abo-abo/hydra/wiki/Flycheck
 (defhydra hydra-flycheck
