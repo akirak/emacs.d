@@ -36,8 +36,8 @@
               org-refile-allow-creating-parent-nodes (quote confirm)
               org-refile-use-outline-path (quote full-file-path)
               org-habit-following-days 7
-              org-habit-graph-column 45
-              org-habit-preceding-days 21
+              org-habit-graph-column 55
+              org-habit-preceding-days 14
               org-habit-scheduled-past-days 7
               org-habit-show-done-always-green t
               org-src-tab-acts-natively t
