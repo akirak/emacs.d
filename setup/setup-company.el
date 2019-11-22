@@ -77,6 +77,8 @@
   (company-mode . company-posframe-mode))
 
 (use-package company-quickhelp
+  :straight (:host github :repo "akirak/company-quickhelp"
+                   :branch "dedicated-window")
   :after company
   :hook
   (company-mode . company-quickhelp-local-mode))
