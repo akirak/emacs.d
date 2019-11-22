@@ -30,14 +30,56 @@
   (company-tooltip-align-annotations nil))
 
 (use-package company-posframe
+  :config/el-patch
+  ;; Override company-posframe-show for displaying the list of active
+  ;; backends in the mode line.
+  (defface company-posframe-active-backend-name
+    '((nil :inherit mode-line-emphasis))
+    "Face for the active backend name in the header line.")
+
+  (defun company-posframe-format-backend-name (backend)
+    (cl-typecase backend
+      (symbol (string-remove-prefix "company-" (symbol-name backend)))
+      (list (format "[%s]" (mapconcat #'company-posframe-format-backend-name backend "|")))
+      (otherwise "-")))
+
+  (el-patch-defun company-posframe-show ()
+    "Show company-posframe candidate menu."
+    (let* ((height (min company-tooltip-limit company-candidates-length))
+           (length company-candidates-length)
+           (lines (company--create-lines company-selection height))
+           (backend-names (mapconcat
+                           (lambda (backend)
+                             (if (equal backend company-backend)
+                                 (propertize (company-posframe-format-backend-name backend)
+                                             'face 'company-posframe-active-backend-name)
+                               (company-posframe-format-backend-name backend)))
+                           company-backends "|"))
+           (width (length (car lines)))
+           (contents (mapconcat #'identity lines "\n"))
+           (buffer (get-buffer-create company-posframe-buffer)))
+      ;; FIXME: Do not support mouse at the moment, so remove mouse-face
+      (setq contents (copy-sequence contents))
+      (remove-text-properties 0 (length contents) '(mouse-face nil) contents)
+      (with-current-buffer buffer
+        (setq-local overriding-local-map company-posframe-active-map)
+        (setq-local mode-line-format `(,backend-names)))
+      (posframe-show buffer
+                     :string contents
+                     :position (- (point) (length company-prefix))
+                     :height (1+ height) :width width
+                     :x-pixel-offset (* -1 company-tooltip-margin (default-font-width))
+                     :respect-mode-line t
+                     :font company-posframe-font
+                     :min-width company-tooltip-minimum-width
+                     :background-color (face-attribute 'company-tooltip :background))))
   :hook
   (company-mode . company-posframe-mode))
 
 (use-package company-quickhelp
   :after company
-  :disabled t
   :hook
-  (after-init . company-quickhelp-mode))
+  (company-mode . company-quickhelp-local-mode))
 
 ;;;; Specific backend configurations
 
