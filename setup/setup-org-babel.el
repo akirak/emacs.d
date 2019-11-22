@@ -22,6 +22,7 @@
         '((emacs-lisp . t)
           (java . t)
           (shell . t)
+          (elixir . t)
           (python . t)
           (sqlite . t)
           (dot . t)
@@ -64,6 +65,10 @@
 
 ;; You'll need tsc and node in the path to use this package.
 (use-package ob-typescript
+  :after ob)
+
+(use-package ob-elixir
+  :straight (:host github :repo "zweifisch/ob-elixir")
   :after ob)
 
 (provide 'setup-org-babel)
