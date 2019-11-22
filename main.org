@@ -1691,16 +1691,11 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
   (akirak/require 'optimize-minibuf)
 #+end_src
 **** Startup
-Use esup for profiling startup time
+Use =benchmark-init= for profiling of the startup time.
 
 #+begin_src emacs-lisp
-(use-package esup
-  :commands (esup))
+(akirak/require 'setup-init-time-log)
 #+end_src
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-init-time-log)
-  #+end_src
 ** Writing
 :PROPERTIES:
 :TOC:      1

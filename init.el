@@ -28,6 +28,11 @@
 ;; Use straight.el by default in use-package directives
 (setq straight-use-package-by-default t)
 
+;;;; Benchmarking the startup process
+(use-package benchmark-init
+  :hook
+  (after-init . benchmark-init/deactivate))
+
 ;;;; Use the latest Git version of Org mode
 (require 'cl-lib)
 (require 'subr-x)
