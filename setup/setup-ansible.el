@@ -1,5 +1,15 @@
+;; To activate =ansible= minor mode in specific projects, add the
+;; following configuration to =.dir-locals.el=:
+;;
+;; #+begin_src emacs-lisp
+;; ((yaml-mode
+;;   (mode . ansible)))
+;; #+end_src
 (use-package ansible
-  :commands (ansible))
+  :after yaml
+  :commands (ansible)
+  :init
+  (defalias 'ansible-mode 'ansible))
 
 ;;;; Detecting Ansible projects
 
