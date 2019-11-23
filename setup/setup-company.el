@@ -133,4 +133,9 @@
 (use-package company-restclient
   :after (company restclient))
 
+(use-package company-nixos-options
+  :after (company nix-mode)
+  :straight (:host github :repo "travisbhartwell/nix-emacs")
+  :company (nix-mode . company-nixos-options))
+
 (provide 'setup-company)
