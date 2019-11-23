@@ -39,6 +39,8 @@
   ((js-mode typescript-mode) . akirak/maybe-tide-setup)
   (tide-mode . tide-hl-identifier-mode)
   (tide-mode . eldoc-mode)
-  (tide-mode . flycheck-mode))
+  (tide-mode . flycheck-mode)
+  :company
+  (tide-mode . company-tide))
 
 (provide 'setup-javascript)

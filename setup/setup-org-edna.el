@@ -1,12 +1,9 @@
 (use-package org-edna
   :after org
   :straight (org-edna :host github :repo "akirak/org-edna" :branch "edit")
-  :init
-  (defun akirak/org-edna-edit-setup-company ()
-    (setq company-backends '(company-capf))
-    (company-mode 1))
-  (org-edna-load)
   :config
+  (org-edna-load)
+  (setq-mode-local org-edna-edit-mode company-backends '(company-capf))
   (defun akirak/org-edna--add-id (id old)
     (if (string-match (rx "ids("
                           (group (+ (any digit "-a-f"))
@@ -55,6 +52,6 @@
                  (org-id-get-create t)))))
       (akirak/org-edna-add-id-blocker id)))
   :hook
-  (org-edna-edit-mode . akirak/org-edna-edit-setup-company))
+  (org-edna-edit-mode . company-mode))
 
 (provide 'setup-org-edna)

@@ -2,7 +2,6 @@
 
 (use-package company
   :general
-  ("C-M-/" #'company-complete)
   (:keymaps 'company-mode-map
             "M-/" #'company-complete)
   (:keymaps 'company-active-map :package 'company
@@ -11,9 +10,33 @@
             "C-p" #'company-select-previous
             "M-/" #'company-other-backend
             "<f1>" #'company-show-doc-buffer)
+  :config
+  (defun akirak/set-default-company-backends ()
+    (set (make-local-variable 'company-backends)
+         ;; TODO: Refine the default backend configuration
+         (cond
+          ((derived-mode-p 'prog-mode)
+           '(company-capf
+             (company-dabbrev-code
+              company-gtags
+              company-etags
+              company-keywords)
+             company-files
+             company-dabbrev))
+          ((and (fboundp 'text-mode)
+                (derived-mode-p 'text-mode))
+           '((company-capf
+              company-dabbrev)
+             company-keywords
+             company-files))
+          (t
+           (company-capf
+            company-keywords)
+           company-dabbrev
+           company-files))))
   :hook
-  (prog-mode . company-mode)
-  (company-mode . akirak/setup-company-backend)
+  ((prog-mode text-mode) . company-mode)
+  (company-mode . akirak/set-default-company-backends)
   :custom
   (company-idle-delay nil)
   (company-require-match nil)
@@ -85,34 +108,17 @@
   :hook
   (company-mode . company-quickhelp-local-mode))
 
-;;;; Specific backend configurations
+;;;; Specific backends
 
-(defvar akirak/company-major-backend-alist
-  (mapcar (lambda (sym)
-            (let ((name (symbol-name sym)))
-              (cons (intern (concat name "-mode"))
-                    (intern (concat "company-" name)))))
-          '(shell
-            restclient)))
+;;;;; General
+(use-package company-emoji
+  :after company
+  :company text-mode)
 
-(defun akirak/setup-company-backend ()
-  (setq-local company-backends
-              (let ((default-backends
-                      '(company-capf
-                        company-dabbrev
-                        company-files
-                        company-keywords)))
-                (cond
-                 ((bound-and-true-p lsp-mode)
-                  (cons 'company-lsp default-backends))
-                 (t
-                  (if-let ((mode (apply #'derived-mode-p
-                                        (mapcar #'car akirak/company-major-backend-alist))))
-                      (list (alist-get mode akirak/company-major-backend-alist)
-                            'company-capf)
-                    default-backends))))))
+(use-package company-dict
+  :disabled t)
 
-;;;; Completion backends based on a minor mode
+;;;;; Mode-specific backends
 
 (use-package company-lsp
   ;; For company completion and snippets
@@ -122,22 +128,24 @@
   ;; variable `company-lsp--snippet-functions'.
   ;; See the following document for details.
   ;; https://github.com/tigersoldier/company-lsp#defining-completion-snippet-for-a-certain-language
-  :after (company lsp))
-
-;;;; Completion backends based on a major mode
+  :after (company lsp)
+  :company lsp-mode)
 
 (use-package company-ansible
-  :after (company ansible))
+  :after (company ansible)
+  :company ansible)
 
 (use-package company-shell
-  :after (company shell))
+  :after (company shell)
+  :company shell-script-mode)
 
 (use-package company-restclient
-  :after (company restclient))
+  :after (company restclient)
+  :company restclient-mode)
 
 (use-package company-nixos-options
   :after (company nix-mode)
   :straight (:host github :repo "travisbhartwell/nix-emacs")
-  :company (nix-mode . company-nixos-options))
+  :company nix-mode)
 
 (provide 'setup-company)

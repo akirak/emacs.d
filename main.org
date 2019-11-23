@@ -230,9 +230,8 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 
 #+begin_src emacs-lisp
   (use-package use-package-company
-    :preface
-    (autoload 'seq-subseq "seq")
-    :straight (use-package-company :host github :repo "Foltik/use-package-company"))
+    ;; Originally written by Foltik, but I use my fork
+    :straight (use-package-company :host github :repo "akirak/use-package-company"))
 #+end_src
 
 ** Overriding defaults
