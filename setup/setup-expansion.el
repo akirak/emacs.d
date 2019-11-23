@@ -77,7 +77,7 @@
 
 (use-package emmet-mode
   :hook
-  (html-mode . emmet-mode))
+  ((html-mode css-mode) . emmet-mode))
 
 (defhydra yankpad-hydra (:hint nil)
   ("C" yankpad-set-category)
