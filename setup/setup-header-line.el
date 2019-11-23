@@ -268,6 +268,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
       ,(when (derived-mode-p 'prog-mode)
          (cond
           ((boundp 'flycheck-indicator-mode-line) flycheck-indicator-mode-line)))
+      ;; Coding system
+      ,(if filep
+           '(:eval save-buffer-coding-system)
+         "")
       ;; Append any segments
       ,@body)))
 
