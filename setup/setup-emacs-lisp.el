@@ -57,6 +57,8 @@
 (use-package elx
   :straight (elx :host github :repo "emacscollective/elx"))
 
+(use-package lisp-extra-font-lock)
+
 ;;;; Package editing
 (defun akirak/emacs-lisp-setup-package ()
   (let ((dir (when (buffer-file-name)
