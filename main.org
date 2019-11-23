@@ -1195,6 +1195,10 @@ Yankpad is more useful in writing.
 #+begin_src emacs-lisp
   (akirak/require 'setup-autoinsert)
   #+end_src
+**** Abbrev
+#+begin_src emacs-lisp
+  (akirak/require 'setup-abbrev)
+#+end_src
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
