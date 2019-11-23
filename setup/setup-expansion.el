@@ -1,3 +1,15 @@
+(use-package abbrev
+  :straight (:type built-in)
+  :init
+  (setq abbrev-mode t)
+  :config
+  (akirak/bind-register
+    "g" #'add-global-abbrev
+    "l" #'edit-abbrevs)
+  :custom
+  ;; abbrev-file-name is set externally
+  (save-abbrev 'silently))
+
 (use-package yasnippet
   ;; :diminish 'yas-minor-mode
   :config
@@ -45,4 +57,15 @@
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
 
-(provide 'setup-yasnippet)
+(use-package emmet-mode
+  :hook
+  (html-mode . emmet-mode))
+
+(defhydra yankpad-hydra (:hint nil)
+  ("C" yankpad-set-category)
+  ("A" yankpad-append-category)
+  ("i" yankpad-insert :exit t)
+  ("a" yankpad-aya-persist)
+  ("c" yankpad-capture-snippet :exit t))
+
+(provide 'setup-expansion)

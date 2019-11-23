@@ -28,8 +28,6 @@
     setup-locate          ; Configure locate and updatedb
     setup-org-custom-commands
     setup-ace-window      ; An alternative way for window manipulation
-    setup-yasnippet       ; Snippets for programming
-    setup-yankpad
     setup-outshine                 ; Extra support for outline editing
     setup-counsel-org-capture-string
     setup-org-refile                    ; Enhance org-refile

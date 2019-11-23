@@ -1157,6 +1157,10 @@ Emacs also provides eww:
   "M-/" #'company-complete)
 #+end_src
 *** Templates
+#+begin_src emacs-lisp
+  (akirak/require 'setup-expansion)
+#+end_src
+
 **** Yasnippet and auto-yasnippet
 :PROPERTIES:
 :CREATED_TIME: [2019-09-24 Tue 00:45]
@@ -1195,10 +1199,11 @@ Yankpad is more useful in writing.
 #+begin_src emacs-lisp
   (akirak/require 'setup-autoinsert)
   #+end_src
-**** Abbrev
-#+begin_src emacs-lisp
-  (akirak/require 'setup-abbrev)
-#+end_src
+**** Emmet
+:PROPERTIES:
+:CREATED_TIME: [2019-11-24 Sun 02:23]
+:END:
+Use emmet for producing HTML tags.
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
@@ -1412,11 +1417,6 @@ There is another package named comment-tags for the same purpose, but I won't us
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:27]
 :END:
-Use emmet for editing SGML-based formats efficiently.
-#+begin_src emacs-lisp
-  (akirak/require 'setup-emmet)
-#+end_src
-
 #+begin_src emacs-lisp
   (akirak/require 'setup-tagedit)
 #+end_src
