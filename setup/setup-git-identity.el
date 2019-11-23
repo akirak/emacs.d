@@ -1,10 +1,10 @@
 (use-package git-identity
   :after magit
   :straight (git-identity :host github :repo "akirak/git-identity.el")
-  :config
-  (git-identity-magit-mode 1)
   :general
   (:keymaps 'magit-status-mode-map :package 'magit
-            "I" #'git-identity-info))
+            "I" #'git-identity-info)
+  :custom
+  (git-identity-magit-mode t))
 
 (provide 'setup-git-identity)

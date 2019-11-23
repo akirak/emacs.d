@@ -6,23 +6,37 @@
 
 (use-package org-reverse-datetree)
 
-(cl-defmacro akirak/def-org-reverse-datetree-refile (file
-                                                     &rest args
-                                                     &key key prefer
-                                                     &allow-other-keys)
-  "Define a refile function as well as a keybinding."
-  (declare (indent 1))
-  (let* ((basename (file-name-base file))
-         (name (intern (concat "akirak/org-refile-to-" basename))))
-    `(defun ,name (arg)
-       (interactive "P")
-       (org-reverse-datetree-refile-to-file
-        (org-starter-locate-file ,file nil t) nil
-        :prefer ,(or prefer '("CREATED_TIME" "CREATED_AT" "CLOSED"))
-        ,@args))
-    `(when (quote ,key)
-       (add-to-list 'org-starter-extra-refile-map
-                    '(,key ,name ,basename)))))
+(use-package org-super-agenda
+  :after org-agenda
+  :config
+  (ignore-errors
+    ;; Basically stolen from org-super-agenda.el
+    (org-super-agenda--def-auto-group ts-desc
+      "the date of their latest timestamp anywhere in the entry (formatted according to `org-super-agenda-date-format', which see)"
+      :keyword :auto-ts-desc
+      :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
+                  (let* ((limit (org-entry-end-position))
+                         (latest-ts (->> (cl-loop for next-ts =
+                                                  (when (re-search-forward org-element--timestamp-regexp limit t)
+                                                    (ts-parse-org (match-string 1)))
+                                                  while next-ts
+                                                  collect next-ts)
+                                         (-sort #'ts>)
+                                         car)))
+                    (when latest-ts
+                      (propertize (ts-format org-super-agenda-date-format latest-ts)
+                                  'org-super-agenda-ts latest-ts))))
+      :key-sort-fn (lambda (a b)
+                     ;; This part has been changed from `ts<' to `ts>'.
+                     (ts> (get-text-property 0 'org-super-agenda-ts a)
+                          (get-text-property 0 'org-super-agenda-ts b)))))
+  (org-super-agenda-mode 1))
+
+(use-package org-ql-search
+  :straight org-ql)
+
+(use-package org-ql-view
+  :straight org-ql)
 
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
@@ -31,18 +45,21 @@
                               no-littering-etc-directory)))))
 
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter")
   :config
   (org-starter-mode 1)
   (org-starter-def "~/.emacs.d/main.org"
     :key "m"
     :refile (:maxlevel . 5))
-  (org-starter-def "~/.emacs.d/nix/README.org"
+  (org-starter-def "~/home.nix/README.org"
     :key "n"
     :refile (:maxlevel . 3))
-  ;; (require 'akirak/org-clock-capture)
+  (general-add-hook 'org-starter-extra-find-file-map
+                    '((";" org-starter-find-config-file "config")
+                      ("w" org-plain-wiki "wiki"))
+                    t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
-                    '((";" org-starter-swiper-config-files "config"))
+                    '((";" org-starter-swiper-config-files "config")
+                      ("w" helm-org-rifle-wiki "wiki/writing"))
                     t)
   (general-add-hook 'org-starter-extra-refile-map
                     '(("'" avy-org-refile-as-child "avy")
@@ -54,10 +71,14 @@
   (org-starter-exclude-from-recentf '(known-files path))
   (org-starter-alternative-find-file-command #'helm-org-rifle-files)
   (org-starter-find-file-visit-window t)
+  (org-starter-override-agenda-window-setup 'other-window)
   (org-starter-enable-local-variables :all))
 
+(use-package org-starter-swiper)
+
 (use-package org-starter-extras
-  :straight org-starter)
+  :straight (org-starter-extras :host github :repo "akirak/org-starter"
+                                :files ("org-starter-extras.el")))
 
 ;;;; Extra keybindings
 (akirak/bind-user

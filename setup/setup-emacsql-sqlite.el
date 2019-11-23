@@ -1,3 +1,6 @@
+;; This module is deprecated, since I now install the package using
+;; nix rather than bundle it as a submodule.
+
 (defconst akirak/emacsql-directory
   (expand-file-name "contrib/emacsql" user-emacs-directory))
 

@@ -26,6 +26,14 @@
         (display-buffer "*Backtrace*"))
     (message "No broken module left")))
 
+(defcustom akirak/blacklisted-features nil
+  "List of features to prevent loading.
+
+This is applicable for modules loaded by `akirak/setup-load' and
+`akirak/require'."
+  :type '(repeat symbol)
+  :group 'akirak)
+
 (cl-defun akirak/setup-load (feature &optional severity
                                      &key (when t))
   "Load a configuration module.
@@ -33,7 +41,13 @@
 FEATURE should be a module in ~/.emacs.d/setup.
 
 If SEVERITY is non-nil, abort the initialization process."
-  (when (and when (not (require feature nil t)))
+  (when (and when
+             (if (member feature akirak/blacklisted-features)
+                 (progn
+                   (message "Module %s is blacklisted. See akirak/blacklisted-features" feature)
+                   nil)
+               t)
+             (not (require feature nil t)))
     (add-to-list 'akirak/setup-failed-modules feature t)
     (message "Failed to load %s" feature)
     (when severity
@@ -55,6 +69,13 @@ output file without the directory."
         (load-file outpath))
     (message "%s does not exist. Maybe you haven't checked out submodules"
              config)))
+
+(defun akirak/library-exists-p (name &optional verbose)
+  (if (ignore-errors (find-library-name name))
+      t
+    (when verbose
+      (message "%s package is unavailable" name))
+    nil))
 
 (defun akirak/running-on-crostini-p ()
   "Return non-nil if Emacs is running on Crostini of Chrome OS."
@@ -82,3 +103,14 @@ output file without the directory."
                              nil t)
           (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
                              nil t)))))
+
+(defconst akirak/window-system
+  (cond
+   ((and (getenv "WAYLAND_DISPLAY")
+         ;; I use :2 for Xephyr sessions
+         (not (equal x-display-name ":2")))
+    'wayland)
+   ((eq window-system 'x)
+    'x)
+   (t
+    window-system)))

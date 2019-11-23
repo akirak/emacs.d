@@ -1,3 +1,63 @@
+;;;; Tabs
+(defvar-local akirak/centaur-tabs-buffer-groups nil
+  "Explicitly-set groups of the current buffer.
+
+This is intended to be set inside `akirak/set-header-line' function.")
+
+(defsubst akirak/unset-buffer-group (&optional buffer-or-name)
+  (with-current-buffer (or buffer-or-name (current-buffer))
+    (setq akirak/centaur-tabs-buffer-groups nil)))
+
+(advice-add #'bury-buffer :after #'akirak/unset-buffer-group)
+
+(use-package centaur-tabs
+  :config
+  ;; Disable centaur-tabs in any buffers that are displayed using
+  ;; fit-window-to-buffer.
+  (advice-add #'fit-window-to-buffer
+              :before #'akirak/disable-centaur-tabs-before-fit-window-buffer)
+  (defun akirak/disable-centaur-tabs-before-fit-window-buffer
+      (&optional window &rest args)
+    (let ((buffer (if window
+                      (window-buffer window)
+                    (current-buffer))))
+      (unless (local-variable-p 'centaur-tabs--local-hlf buffer)
+        (with-current-buffer buffer
+          (centaur-tabs-local-mode 1)))))
+  (defun ceutaur-tabs-hide-tab (x)
+    (or (string-match-p (rx (or "*helm"
+                                "*direnv*"
+                                "special*"
+                                "*LV*"))
+                        (format "%s" x))
+        (derived-mode-p 'magit-process-mode)))
+  (defun centaur-tabs-buffer-groups ()
+    (or (and (eq major-mode 'exwm-mode)
+             (list (format "EXWM-%s" exwm-class-name)))
+        akirak/centaur-tabs-buffer-groups
+        (and (string-match-p (rx bol (or "*Messages*"
+                                         "*Warnings*"
+                                         "*Backtrace*"))
+                             (buffer-name))
+             '("Errors"))
+        ;; (list (centaur-tabs-get-group-name (current-buffer)))
+        ))
+  (centaur-tabs-mode 1)
+  :general
+  (:keymaps 'centaur-tabs-mode-map
+            "<S-right>" #'centaur-tabs-forward
+            "<S-left>" #'centaur-tabs-backward)
+  :custom
+  (centaur-tabs-style "bar")
+  (centaur-tabs-set-icons t)
+  (centaur-tabs-gray-out-icons 'buffer)
+  (centaur-tabs-set-bar 'over)
+  (centaur-tabs-set-close-button nil)
+  (centaur-tabs-set-modified-marker t)
+  (centaur-tabs-modified-marker "*")
+  (centaur-tabs-cycle-scope 'tabs))
+
+;;;; Faces
 (defface akirak/header-line-buffer-name
   '()
   "Face for the buffer name segment in a header line.")
@@ -17,97 +77,201 @@
   '((default :inherit font-lock-function-name-face))
   "Face for the function name or header in the header line.")
 
-(defun akirak/header-line-buffer-segment ()
-  "Generate the buffer segment in the header line."
-  (propertize
-   (if buffer-file-name
-       ;; If the file is inside a project, show the
-       ;; relative file path from the root.
-       (concat (if-let ((root (projectile-project-root)))
-                   (file-relative-name buffer-file-name root)
-                 (file-name-nondirectory buffer-file-name))
-               (when (buffer-modified-p) "*"))
-     (propertize (buffer-name)
-                 'face
-                 (if (buffer-base-buffer)
-                     'akirak/header-line-indirect-buffer-name
-                   'akirak/header-line-non-file-buffer-name)))
-   'face 'akirak/header-line-buffer-name))
+;;;; Setting the header line
+(defvar-local akirak/orig-header-line-format nil)
 
-(defun akirak/make-header-line-format (&rest body)
+(defun akirak/set-header-line ()
+  (let* ((modes (let ((mode major-mode)
+                      modes)
+                  (catch 'ok
+                    (while mode
+                      (push mode modes)
+                      (setq mode (get mode 'derived-mode-parent))))
+                  modes))
+         (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
+         (groups nil)
+         (fmt (cond
+               ((memq 'lisp-interaction-mode modes)
+                (setq groups '("Scratch"))
+                nil)
+               ((bound-and-true-p git-commit-mode)
+                (setq groups '("Git"))
+                nil)
+               ((or (memq 'prog-mode modes)
+                    (memq 'sgml-mode modes))
+                (setq groups (list (if project
+                                       (format "@%s:%s" project mode-name)
+                                     mode-name)))
+                (akirak/make-header-line-format))
+               ((memq 'org-mode modes)
+                (cond
+                 ;; An Org buffer has a header line if it is either an indirect buffer
+                 ;; or a file buffer which does not reside inside ~/lib
+                 ((and (buffer-base-buffer)
+                       (not (string-prefix-p "CAPTURE-" (buffer-name))))
+                  (akirak/make-header-line-format))
+                 ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                    (and (stringp file)
+                         (string-prefix-p (abbreviate-file-name org-journal-dir)
+                                          (abbreviate-file-name file))))
+                  (setq groups '("OrgJournal"))
+                  nil)
+                 ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                    (and (stringp file)
+                         (or (not (string-prefix-p "~/lib/" (abbreviate-file-name file)))
+                             (string-prefix-p "~/lib/notes/writing/" (abbreviate-file-name file)))))
+                  (akirak/make-header-line-format))
+                 (t
+                  (setq groups '("Org"))
+                  nil)))
+               ((and (buffer-file-name)
+                     project)
+                (setq groups `(,project))
+                nil)
+               ((memq 'org-agenda-mode modes)
+                ;; '((:eval (and (featurep 'all-the-icons)
+                ;;               (all-the-icons-icon-for-buffer)))
+                ;;   " "
+                ;;   (:eval (pcase org-agenda-redo-command
+                ;;            (`(org-agenda-run-series ,desc . ,_)
+                ;;             (when-let ((key (caar (cl-remove-if-not
+                ;;                                    (lambda (list) (equal (nth 1 list) desc))
+                ;;                                    org-agenda-custom-commands))))
+                ;;               (format "[%s]%s" key (car (split-string desc ":")))))
+                ;;            (x (prin1-to-string x)))))
+                (setq groups '("Org Agenda"))
+                nil)
+               ((or (memq 'helpful-mode modes)
+                    (memq 'help-mode modes)
+                    (memq 'Info-mode modes)
+                    (memq 'eww-mode modes))
+                (setq groups '("Emacs Help"))
+                nil)
+               ((memq 'comint-mode modes)
+                (setq groups '("REPL"))
+                nil)
+               ((memq 'exwm-mode modes)
+                nil)
+               ((memq 'dired-mode modes)
+                (progn
+                  (setq dired-filter-header-line-format
+                        `("  "
+                          ,(if (featurep 'all-the-icons)
+                               (all-the-icons-icon-for-buffer)
+                             'mode-name)
+                          " "
+                          dired-directory
+                          " "
+                          (:eval (dired-filter--describe-filters))))
+                  nil))
+               ((memq 'vterm-mode modes)
+                (setq groups (list (if project
+                                       (format "@%s:Terminal" project)
+                                     "Terminal")))
+                nil)
+               ((string-prefix-p "magit-" (format "%s" major-mode))
+                (setq groups (list (if project
+                                       (format "%s:Magit" project)
+                                     "Git")))
+                nil))))
+    (cond
+     (fmt
+      (setq header-line-format fmt)
+      (unless groups
+        (setq groups (ignore-errors
+                       (list (cl-etypecase mode-name
+                               (string mode-name)
+                               (list (car mode-name))))))))
+     (groups
+      (setq akirak/centaur-tabs-buffer-groups groups))
+     (t
+      (centaur-tabs-local-mode 1)
+      (setq header-line-format nil)))))
+
+(add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
+(add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
+
+;; Make org-tree-to-indirect-buffer run clone-indirect-buffer-hook
+;; after creating its indirect buffer.
+(advice-add 'org-tree-to-indirect-buffer
+            :after (cl-function
+                    (lambda (&optional arg)
+                      (run-hooks 'clone-indirect-buffer-hook))))
+
+(add-hook 'org-capture-mode-hook #'akirak/set-up-org-capture-header-line)
+
+(defun akirak/set-up-org-capture-header-line ()
+  (unless akirak/orig-header-line-format
+    (setq akirak/orig-header-line-format header-line-format)
+    (setq header-line-format nil
+          mode-line-format akirak/orig-header-line-format))
+  (centaur-tabs-local-mode 0)
+  (setq akirak/centaur-tabs-buffer-groups '("Org-Capture")))
+
+;;;; Helper packages
+(use-package flycheck-indicator
+  :after flycheck)
+
+;;;; Default header line format
+(cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
-  `("  "
-    ;; Display an icon for the mode if any
-    (:eval (or (and (featurep 'all-the-icons)
-                    (all-the-icons-icon-for-buffer))
-               mode-name))
-    " "
-    (:eval (when buffer-file-name
-             (let ((project (projectile-project-name)))
-               (when project (format "[%s] " project)))))
-    " "
-    ;; If it is a file-visiting buffer, show the file name.
-    ;; Otherwise, show the buffer name.
-    (:eval (akirak/header-line-buffer-segment))
-    " "
-    ;; Display the statuses of the buffer
-    (:eval (when (buffer-narrowed-p) "<N> "))
-    (read-only-mode "<RO> ")
-    ;; Display the column number if the buffer is in prog-mode
-    ,(if (derived-mode-p 'prog-mode)
-         "(%l,%3c) "
-       " ")
-    (:eval (if rich-minority-mode
-               (rm--mode-list-as-string-list)
-             ;; I am not sure if this works
-             (format-mode-line 'minor-mode-list)))
-    " "
-    ;; Append any segments
-    ,@body))
+  (cl-remprop :omit-project body)
+  (let* ((filep (when buffer-file-name t))
+         (base-buffer (unless filep (buffer-base-buffer)))
+         (indirectp (when base-buffer t))
+         (file-name (cond
+                     (filep buffer-file-name)
+                     (base-buffer (buffer-file-name base-buffer))))
+         (project-root (when (and (not omit-project)
+                                  (bound-and-true-p projectile-mode))
+                         (projectile-project-root)))
+         (project-name (when project-root
+                         (projectile-project-name)))
+         (relative-name (when (and file-name project-root)
+                          (file-relative-name file-name project-root)))
+         (file-segment (when file-name
+                         (propertize (or relative-name
+                                         (file-name-nondirectory file-name))
+                                     'face 'akirak/header-line-buffer-name)))
+         (buffer-segment (unless filep
+                           (propertize (buffer-name)
+                                       'face (if indirectp
+                                                 'akirak/header-line-indirect-buffer-name
+                                               'akirak/header-line-non-file-buffer-name))))
+         (icon (or (and (featurep 'all-the-icons)
+                        (let ((file-name (buffer-file-name)))
+                          (if (and file-name
+                                   (bound-and-true-p polymode-mode))
+                              (all-the-icons-icon-for-file file-name)
+                            (all-the-icons-icon-for-buffer))))
+                   mode-name)))
+    `("  "
+      ;; Display an icon for the mode if any
+      ,icon
+      " "
+      ,(when project-name (format "[%s]" project-name))
+      ;; If it is a file-visiting buffer, show the file name.
+      ;; Otherwise, show the buffer name.
+      " "
+      ,(when indirectp "Indirect <")
+      ,(if filep
+           file-segment
+         "%b")
+      ,(when indirectp ">")
+      ;; Display the statuses of the buffer
+      " %* %n "
+      ;; Display the column number if the buffer is in prog-mode
+      ,(if (derived-mode-p 'prog-mode)
+           "(%l,%3c) "
+         " ")
+      ;; Display the flycheck status in prog-mode
+      ,(when (derived-mode-p 'prog-mode)
+         (cond
+          ((boundp 'flycheck-indicator-mode-line) flycheck-indicator-mode-line)))
+      ;; Append any segments
+      ,@body)))
 
-;;;; Default header line with which-function
-
-;; The default header line format with which-function.
-(which-function-mode 1)
-
-(defun akirak/set-default-header-line ()
-  "Set the default header line with which-function."
-  (unless header-line-format
-    (setq header-line-format (akirak/make-header-line-format
-                              ;; Omit which-func if the buffer is indirect
-                              (when (and (not (buffer-base-buffer))
-                                         (derived-mode-p 'prog-mode 'text-mode))
-                                `(which-function-mode
-                                  ,which-func-current))))))
-
-;;;;; Setting the default header line
-
-;; As I don't know how to disable the header line in the which-key window
-;; (I tried `which-key-init-buffer-hook', but it didn't work),
-;; I turn on the default header line only in certain groups of buffers
-;; rather than setting it using `setq-default'.
-
-;; Display a header line whenever you visit a file
-(add-hook 'find-file-hook #'akirak/set-default-header-line)
-
-;; Display a header line in prog-mode even if you are not visiting
-;; a file, e.g. in a scratch buffer
-(add-hook 'prog-mode-hook #'akirak/set-default-header-line)
-
-;; Magit buffers should display their names
-(add-hook 'magit-mode-hook #'akirak/set-default-header-line)
-
-;; Help buffers should display their names
-(add-hook 'help-mode-hook #'akirak/set-default-header-line)
-(add-hook 'helpful-mode-hook #'akirak/set-default-header-line)
-
-;; Interactive shells
-(add-hook 'eshell-mode-hook #'akirak/set-default-header-line)
-(add-hook 'term-mode-hook #'akirak/set-default-header-line)
-(add-hook 'comint-mode-hook #'akirak/set-default-header-line)
-
-;;;; Header line formats for specific modes
-;;;;; org-mode
+;;;; org-mode
 ;; Set the header line format for org-mode with the outline path.
 (defvar akirak/header-line-org-outline-path-root-level nil)
 (make-variable-buffer-local 'akirak/header-line-org-outline-path-root-level)
@@ -141,39 +305,5 @@
                               (substring s 0 seg-length)
                             s))
                         (cdr orig-rev)))))))))
-
-(require 'mode-local)
-(setq-mode-local org-mode
-                 header-line-format
-                 (akirak/make-header-line-format
-                  '(:eval
-                    (akirak/header-line-org-outline-path))))
-
-;;;;; org-agenda-mode
-(defun akirak/set-org-agenda-header-line ()
-  (setq header-line-format
-        '((:eval (and (featurep 'all-the-icons)
-                      (all-the-icons-icon-for-buffer)))
-          " "
-          (:eval (pcase org-agenda-redo-command
-                   (`(org-agenda-run-series ,desc . ,_)
-                    (when-let ((key (caar (cl-remove-if-not
-                                           (lambda (list) (equal (nth 1 list) desc))
-                                           org-agenda-custom-commands))))
-                      (format "[%s]%s" key (car (split-string desc ":")))))
-                   (x (prin1-to-string x)))))))
-
-(add-hook 'org-agenda-mode-hook #'akirak/set-org-agenda-header-line)
-
-;;;;; dired with dired-filter
-(setq dired-filter-header-line-format
-      `("  "
-        (:eval (or (and (featurep 'all-the-icons)
-                        (all-the-icons-icon-for-buffer))
-                   mode-name))
-        " "
-        dired-directory
-        " "
-        (:eval (dired-filter--describe-filters))))
 
 (provide 'setup-header-line)

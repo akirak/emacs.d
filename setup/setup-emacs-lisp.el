@@ -1,6 +1,7 @@
 ;;; init-emacs-lisp.el --- Configuration for emacs-lisp-mode  -*- lexical-binding: t; -*-
 
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+(add-hook 'emacs-lisp-mode-hook 'rainbow-delimiters-mode-enable)
 
 (setq-mode-local emacs-lisp-mode
                  imenu-generic-expression
@@ -26,17 +27,17 @@
 (use-package package-lint
   :commands (package-lint-current-buffer))
 
+(use-package buttercup)
+
+(use-package package-requires
+  :straight (package-requires :host github
+                              :repo "akirak/package-requires.el"))
+
 (use-package flycheck-package
-  :commands (flycheck-package-setup)
-  :hook
-  (emacs-lisp . flycheck-package-setup))
+  :commands (flycheck-package-setup))
 
 (use-package suggest
   :commands (suggest))
-
-;; Generate README from Emacs Lisp.
-(use-package ox-gfm
-  :after ox)
 
 (use-package el2org
   :disabled t
@@ -46,6 +47,32 @@
   :config
   ;; TODO: Add an advice for lispy-eval
   (eros-mode 1))
+
+(use-package nameless
+  :commands (nameless-mode)
+  :general
+  (:keymaps 'nameless-mode-map
+            "-" 'nameless-insert-name-or-self-insert))
+
+(use-package elx
+  :straight (elx :host github :repo "emacscollective/elx"))
+
+;;;; Package editing
+(defun akirak/emacs-lisp-setup-package ()
+  (let ((dir (when (buffer-file-name)
+               (abbreviate-file-name (file-name-directory (buffer-file-name))))))
+    (when (and dir
+               (or (string-prefix-p (concat user-emacs-directory "straight/") dir)
+                   (not (or (string-prefix-p user-emacs-directory dir)
+                            (equal "~/" dir)
+                            (member (file-name-nondirectory (buffer-file-name))
+                                    '(".dir-locals.el"))))))
+      (flycheck-package-setup)
+      (flycheck-mode 1)
+      (when (fboundp 'nameless-mode)
+        (nameless-mode 1)))))
+
+(add-hook 'emacs-lisp-mode-hook #'akirak/emacs-lisp-setup-package)
 
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)

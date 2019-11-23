@@ -58,18 +58,3 @@ do
     fi
   fi
 done
-
-# Check if the working tree is dirty
-git diff --exit-code --name-status HEAD
-if [ $? -gt 0 ]; then
-    echo "Pre-push tests are prevented if the working tree is dirty" >&2
-    exit 1
-fi
-
-if [ $(git symbolic-ref --short HEAD) = master ]; then
-    # Run thorough tests on master branch
-    sh test-docker.sh
-else
-    # Otherwise run express tests
-    make test
-fi

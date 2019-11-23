@@ -32,7 +32,7 @@
    (t (forward-sexp))))
 (advice-add 'akirak/ctrl-meta-f
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-f" 'akirak/ctrl-meta-f)
+;; (general-def "C-M-f" 'akirak/ctrl-meta-f)
 
 (defun akirak/ctrl-meta-b ()
   (interactive)
@@ -44,7 +44,7 @@
    (t (call-interactively 'backward-sexp))))
 (advice-add 'akirak/ctrl-meta-b
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-b" 'akirak/ctrl-meta-b)
+;; (general-def "C-M-b" 'akirak/ctrl-meta-b)
 
 (defun akirak/ctrl-meta-p ()
   (interactive)
@@ -123,7 +123,8 @@
    ((derived-mode-p 'python-mode)
     (call-interactively 'python-nav-backward-up-list))
    ((derived-mode-p 'org-mode)
-    (call-interactively 'org-up-element))
+    (org-up-element)
+    (org-show-entry))
    ((bound-and-true-p smartparens-mode)
     (call-interactively 'sp-backward-up-sexp))))
 (advice-add 'akirak/ctrl-meta-u

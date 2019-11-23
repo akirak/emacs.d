@@ -9,4 +9,10 @@
   :config
   (make-local-variable 'js-indent-level))
 
+(use-package counsel-jq
+  :straight (counsel-jq :host github :repo "200ok-ch/counsel-jq")
+  :config
+  (akirak/bind-mode :package 'json-mode :keymaps 'json-mode-map
+    "q" #'counsel-jq))
+
 (provide 'setup-json)

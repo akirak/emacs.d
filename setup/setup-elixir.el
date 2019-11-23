@@ -1,8 +1,11 @@
+(use-package elixir-mode)
+
 ;; Alchemist package for Elixir support on Emacs
 ;; See https://alchemist.readthedocs.io/en/latest/configuration/ for setup
 (defconst akirak/alchemist-key-command-prefix "C-,")
 
 (use-package alchemist
+  :disabled t
   :after elixir-mode
   :general
   ;; alchemist-mode-keymap is defined as a prefix command, so this

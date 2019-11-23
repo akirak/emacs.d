@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # A script for getting configuration updates from origin
 
@@ -6,6 +6,13 @@
 # starts.
 
 # Clean the working tree
+
+section() {
+    # TODO: Colourize the output
+    echo "$*"
+}
+
+section "Updating the Emacs configuration..."
 
 echo "Checking if $PWD has changes..."
 if ! git diff-index --name-status --exit-code HEAD; then
@@ -22,21 +29,14 @@ else
     echo "No changes in the working tree."
 fi
 
-# Retrieve the current SHA of nix submodule
-
-cd nix
-previous_nix_sha=$(git show-ref -s HEAD)
-cd ..
-
 # Rebase HEAD onto its corresponding remote branch
 
 remote=origin
 branch=$(git symbolic-ref --short HEAD)
 git fetch $remote
-if git diff-tree --quiet HEAD..$remote/$branch; then
+if git --no-pager log --exit-code --oneline --summary HEAD..$remote/$branch; then
     echo "The branch is up-to-date."
 else
-    git --no-pager log --oneline --summary HEAD..$remote/$branch
     echo -n "Rebase onto $remote/$branch? (y/n): "
     read need_rebase
     if [[ ${need_rebase} = [Yy]* ]]; then
@@ -47,20 +47,32 @@ else
             read
             exit 1
         fi
-
-        # update the submodules
-        git submodule update --recursive --rebase
-
-        # Update the Nix module if necessary
-        cd nix
-        current_nix_sha=$(git show-ref -s HEAD)
-        if [ ${current_nix_sha} != ${previous_nix_sha} ]; then
-            echo "The nix module has been updated. Needs updating..."
-            set -e
-            ${MAKE:-make}
-        else
-            echo "The nix module has no changes."
-        fi
-        cd ..
     fi
 fi
+
+section "Updating the submodules in the Emacs configuration..."
+
+# Update the submodule
+git submodule update --recursive
+
+section "Updating my favorite packages..."
+
+# Auto-update packages I want to keep up-to-date
+# It is important to update the MELPA package cache to prevent missing package errors
+cd straight/repos
+for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree \
+           transient magit org-ql company-mode lsp-mode treemacs; do
+    [[ ! -d $pkg ]] && continue
+    echo "Trying to update $pkg package..."
+    cd $pkg
+    # Run git-safe-update if the program exists
+    if command -v git-safe-update >/dev/null; then
+        git-safe-update
+    else
+        git pull
+    fi
+    if [[ $? -gt 0 ]]; then
+        echo "Failed to update the repository of $pkg package"
+    fi
+    cd ..
+done

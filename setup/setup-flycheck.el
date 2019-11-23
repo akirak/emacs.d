@@ -1,3 +1,11 @@
+(use-package flycheck
+  :general
+  (:keymaps 'flycheck-mode-map
+            [remap next-error] #'flycheck-next-error
+            [remap previous-error] #'flycheck-previous-error)
+  :custom
+  (flycheck-relevant-error-other-file-show nil))
+
 ;; Based on an example in https://github.com/abo-abo/hydra/wiki/Flycheck
 (defhydra hydra-flycheck
   (
@@ -19,5 +27,22 @@ Errors (flycheck): %s`flycheck-checker
   (interactive)
   (flycheck-mode 1)
   (hydra-flycheck/body))
+
+;;;; UI
+(use-package flycheck-posframe
+  :after flycheck
+  :custom-face
+  ;; https://www.reddit.com/r/emacs/comments/couaey/how_to_set_color_of_flycheckposframe/ewlbfbz/
+  ;; TODO: Refine face settings
+  (flycheck-posframe-error-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-warning-face ((t (:background "DarkSlateBlue"))))
+  (flycheck-posframe-border-face ((t (:background "DarkBlue"))))
+  :hook
+  (flycheck-mode . flycheck-posframe-mode))
+
+;;;; Other helper packages
+
+;; Used in dante
+(use-package attrap)
 
 (provide 'setup-flycheck)

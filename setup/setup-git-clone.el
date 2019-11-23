@@ -12,7 +12,7 @@
 (defcustom akirak/git-clone-default-directory "~/tmp"
   "Default directory in which Git repositories are created.")
 
-(defcustom akirak/git-clone-user-directory "~/github"
+(defcustom akirak/git-clone-user-directory "~/projects/github"
   "Default directory in which your own Git repositories are created.")
 
 (defcustom akirak/github-login "akirak"

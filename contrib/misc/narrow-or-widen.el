@@ -13,14 +13,26 @@ is an indirect buffer, this command doesn't do anything."
   (declare (interactive-only))
   (cond ((and arg (buffer-base-buffer)) nil)
         ((and arg (region-active-p))
-         ;; TODO: Create an indirect buffer for the current region
-         )
+         (let ((start (region-beginning))
+               (end (region-end))
+               (name (read-string "Name of the indirect buffer to create: ")))
+           (clone-indirect-buffer name t)
+           (narrow-to-region start end)
+           (set-mark nil)))
         ((and arg (derived-mode-p 'org-mode))
          (org-tree-to-indirect-buffer))
         (arg
-         ;; TODO: Create an indirect buffer for the current defun
-         (clone-indirect-buffer )
-         )
+         (let ((start (save-excursion
+                        (beginning-of-defun)
+                        (point)))
+               (end (save-excursion
+                      (end-of-defun)
+                      (point)))
+               (name (read-string "Name of the indirect buffer to create: "
+                                  (akirak/default-name-for-indirect-buffer))))
+           (clone-indirect-buffer name t)
+           (narrow-to-region start end)
+           (set-mark nil)))
         ((buffer-narrowed-p) (widen))
         ((region-active-p)
          (narrow-to-region (region-beginning)
@@ -36,5 +48,14 @@ is an indirect buffer, this command doesn't do anything."
         ((derived-mode-p 'latex-mode)
          (LaTeX-narrow-to-environment))
         (t (narrow-to-defun))))
+
+(defun akirak/default-name-for-indirect-buffer ()
+  (let ((local-name (when (bound-and-true-p which-function-mode)
+                      (which-function)))
+        (file-name (buffer-file-name)))
+    (cond
+     ((and local-name file-name)
+      (format "%s in %s" local-name (file-name-nondirectory file-name)))
+     (t local-name))))
 
 (provide 'narrow-or-widen)

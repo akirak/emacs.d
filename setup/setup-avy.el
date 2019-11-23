@@ -1,7 +1,6 @@
 (use-package avy
   :general
   (:prefix "M-g"
-           "w" #'avy-goto-char-2
            "l" #'avy-goto-line
            "o" #'avy-org-goto-heading-timer)
   :config
@@ -39,6 +38,8 @@
 
 (use-package akirak/avy-extra
   :straight nil
-  :load-path "extras")
+  :load-path "extras"
+  :general
+  ("M-z" #'akirak/M-z))
 
 (provide 'setup-avy)

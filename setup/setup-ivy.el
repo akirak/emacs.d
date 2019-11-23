@@ -8,11 +8,6 @@
   :config
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
-  (ivy-decorator-set-intermediate 'ivy-switch-buffer
-      #'get-buffer
-    (original 25)
-    (buffer-major-mode 15)
-    (buffer-directory))
   :general
   (:keymaps 'ivy-occur-mode-map
             "n" #'ivy-occur-next-line
@@ -81,6 +76,81 @@
               :keymap ivy-switch-buffer-2-map
               :caller 'ivy-switch-buffer)))
 
-(general-def "C-x b" #'ivy-switch-buffer-2)
+;; Use counsel-ibuffer for now.
+;; (general-def "C-x b" #'ivy-switch-buffer-2)
+
+(defcustom akirak/ivy-posframe-width-alist
+  nil
+  "Alist of height.")
+
+(use-package ivy-posframe
+  ;; Use posframe to display candidates in ivy commands.
+  ;;
+  ;; 1. The default display function is ivy-posframe-display-at-frame-center.
+  ;;    However, if there is an EXWM window in the frame, use
+  ;;    ivy-posframe-display-at-window-center instead.
+  ;; 2. For swiper commands, display the posframe at the window bottom.
+  ;; 3. There may be specific situations where I prefer other display functions.
+  ;;
+  ;; If the current focus is on an EXWM window, ivy-posframe is never used.
+  ;; Instead, the default display function is used. This is configured in setup-exwm.el.
+  :config
+  (general-add-hook 'ivy-height-alist akirak/ivy-posframe-height-alist)
+  (ivy-posframe-mode 1)
+  (defun akirak/ivy-posframe-window-bottom-left-size ()
+    (list
+     :height ivy-posframe-height
+     :width (window-body-width)
+     ;; :min-height (or ivy-posframe-min-height (+ ivy-height 1))
+     ;; :min-width (or ivy-posframe-min-width (round (* (frame-width) 0.62)))
+     ))
+  (defun akirak/ivy-posframe-default-size ()
+    "The default functon used by `ivy-posframe-size-function'."
+    (let ((caller (ivy-state-caller ivy-last)))
+      (list
+       :height (or (cdr (assoc caller akirak/ivy-posframe-height-alist))
+                   ivy-posframe-height)
+       :width (or (cdr (assoc caller akirak/ivy-posframe-width-alist))
+                  ivy-posframe-width)
+       :min-height (or ivy-posframe-min-height (+ ivy-height 1))
+       :min-width (unless (member caller '(ivy-omni-org
+                                           all-the-icons-ivy))
+                    (or ivy-posframe-min-width
+                        (round (* (frame-width) 0.62)))))))
+  (defun akirak/ivy-posframe-display-smart-center (str)
+    (ivy-posframe--display str #'akirak/posframe-poshandler-smart-center))
+  (defun akirak/ivy-decorator-width ()
+    (let ((caller (ivy-state-caller ivy-last)))
+      (cdr (assoc caller akirak/ivy-posframe-width-alist))))
+  :config/el-patch
+  (el-patch-defun ivy-posframe-display-at-window-bottom-left (str)
+    (el-patch-wrap 1
+      (let ((ivy-posframe-size-function #'akirak/ivy-posframe-window-bottom-left-size))
+        (ivy-posframe--display str #'posframe-poshandler-window-bottom-left-corner))))
+  :custom
+  (ivy-decorator-width #'akirak/ivy-decorator-width)
+  (ivy-posframe-height 12)
+  (ivy-posframe-width 100)
+  (akirak/ivy-posframe-width-alist
+   `((counsel-ibuffer . 120)
+     (ivy-omni-org . 80)
+     (all-the-icons-ivy . 50)
+     ,@(--map (cons it 130)
+              '(counsel-describe-function
+                counsel-describe-variable
+                counsel-faces
+                counsel-M-x))))
+  (akirak/ivy-posframe-height-alist
+   '((ivy-omni-org . 30)
+     (all-the-icons-ivy . 30)))
+  (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
+  (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
+  (ivy-posframe-display-functions-alist
+   `(,@(--map (cons it nil)
+              '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
+     (counsel-minibuffer-history . nil)
+     (counsel-yank-pop . ivy-posframe-display-at-point)
+     (all-the-icons-ivy . ivy-posframe-display-at-point)
+     (t . akirak/ivy-posframe-display-smart-center))))
 
 (provide 'setup-ivy)

@@ -1,27 +1,11 @@
 version: 2
 jobs:
   build:
-    environment:
-      IMAGE_NAME: akirak/emacs.d
-      TERM: dumb
-      HOME_NIX_PROFILE_NOCONFIRM: 1
     docker:
-      - image: akirak/nixmacs-bootstrap
+      - image: akirak/home.nix
     working_directory:
       ~/.emacs.d
     steps:
       - checkout
       - run: git submodule update --init --recursive
-      - run: make init
-      - run: make test
-workflows:
-  version: 2
-  build:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-                - maint
-                - nixify
+      - run: nix-shell -p gnumake --run make

@@ -37,6 +37,24 @@
                                 "/"
                                 _
                                 "\")"))
+                          (("/notes/wiki/\[^/\]+\.org\\'" . "My wiki")
+                           . (> "* " (akirak/unescape-wiki-file-name (file-name-base (buffer-file-name))) "\n"
+                                ":PROPERTIES:\n:CREATED_TIME: " (format-time-string (org-time-stamp-format t t))
+                                "\n:END:\n"))
+                          (("README\.org\\'" . "README")
+                           . (> "* " (f-filename default-directory) "\n"
+                                _
+                                "\n\n"
+                                "# Add CI badges here\n\n"
+                                "#+BEGIN_HTML\n#+END_HTML\n"
+                                "** Table of contents\n:PROPERTIES:\n:TOC: siblings\n:END:\n"
+                                "\n"
+                                "** COMMENT Meta :noexport:\n"
+                                ":PROPERTIES:\n:TOC:      ignore\n:END:\n"
+                                "# The COMMENT keyword prevents GitHub's renderer from showing this entry.\n"
+                                "# Local Variables:\n"
+                                "# eval: (when (require (quote org-make-toc) nil t) (org-make-toc-mode t))\n"
+                                "# End:\n"))
                           ;; Fallback to "auto-insert" yasnippet template
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))

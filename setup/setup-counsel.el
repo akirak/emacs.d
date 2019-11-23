@@ -1,9 +1,28 @@
+(defun akirak/run-desktop-file (desktop-file)
+  (async-start-process "dex" "dex" nil desktop-file))
+
 (use-package counsel
   ;; :diminish counsel-mode
+  :config/el-patch
+  (el-patch-defun counsel-linux-apps-parse (desktop-entries-alist)
+    (let (result)
+      (setq counsel-linux-apps-faulty nil)
+      (dolist (entry desktop-entries-alist result)
+        (let* ((id (car entry))
+               (file (cdr entry))
+               (r (counsel-linux-app--parse-file file)))
+          (when r
+            (push (el-patch-swap (cons r id)
+                                 (cons r file))
+                  result))))))
+  (el-patch-defun counsel-linux-app-action-default (desktop-shortcut)
+    "Launch DESKTOP-SHORTCUT."
+    (el-patch-swap (call-process "gtk-launch" nil 0 nil (cdr desktop-shortcut))
+                   (akirak/run-desktop-file (cdr desktop-shortcut))))
   :config
   (ivy-decorator-set-intermediate 'counsel-M-x
       #'intern-soft
-    (original 40)
+    (command-name-and-key 35)
     (function-doc))
   (ivy-decorator-set-intermediate 'counsel-describe-function
       #'intern-soft
@@ -13,10 +32,6 @@
       #'intern-soft
     (original 30)
     (variable-doc))
-  (ivy-decorator-set-intermediate 'counsel-describe-face
-      #'intern-soft
-    (face-name 30)
-    (face-doc))
   ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
   ;; so I included the absolute path of rg in the command line.
   (setq counsel-rg-base-command
@@ -29,7 +44,9 @@
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
                      ("g" akirak/magit-status-of-library "git repo")
-                     ("d" akirak/dired-of-library "dired")))
+                     ("d" akirak/dired-of-library "dired")
+                     ("r" akirak/open-library-readme "readme")
+                     ("u" akirak/straight-update-package "update package")))
   (cl-loop for (command find-other-window)
            in '((counsel-describe-function find-function-other-window)
                 (counsel-describe-variable find-variable-other-window)
@@ -37,6 +54,8 @@
            do (ivy-add-actions command
                                `(("j" ,(-compose find-other-window 'intern)
                                   "definition in other window"))))
+  (ivy-add-actions #'counsel-describe-function
+                   '(("e" akirak/open-eval-expression-with-function "eval")))
   (ivy-add-actions #'counsel-rg
                    `(("j" ,(-partial #'akirak/counsel-git-grep-action-with-find-file
                                      #'find-file-other-window)
@@ -48,13 +67,23 @@
                    '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
+  (akirak/bind-file-extra :keymaps 'counsel-mode-map
+    "c" #'counsel-compile)
   :general
-  (:keymaps 'counsel-find-file-map
-            "C-c g" #'akirak/counsel-find-file-magit-status)
+  (:keymaps 'counsel-mode-map
+            "C-x b" #'counsel-ibuffer)
   :custom
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
   (counsel-find-file-at-point t))
+
+;; TODO: Add todo occur command based on counsel-rg
+
+(defun akirak/straight-update-package (x)
+  (let ((package x))
+    (straight-pull-package package)
+    (straight-rebuild-package package)
+    (load-library x)))
 
 (defun akirak/counsel-find-file-magit-status ()
   (interactive)
@@ -65,6 +94,27 @@
   (org-show-entry))
 (advice-add 'counsel-org-goto-action :after
             'akirak/ad-after-counsel-org-goto-action)
+
+(defun akirak/open-eval-expression-with-function (x)
+  (let ((exp (let ((minibuffer-completing-symbol t)
+                   (prompt "Eval: ")
+                   (initial-contents (format "(%s )" x)))
+               ;; Stolen from the implementation of `read--expression' in simple.el.gz
+               (minibuffer-with-setup-hook
+                   (lambda ()
+                     ;; Put the cursor inside the brackets
+                     (backward-char 1)
+                     ;; FIXME: call emacs-lisp-mode?
+                     (add-function :before-until (local 'eldoc-documentation-function)
+                                   #'elisp-eldoc-documentation-function)
+                     (eldoc-mode 1)
+                     (add-hook 'completion-at-point-functions
+                               #'elisp-completion-at-point nil t)
+                     (run-hooks 'eval-expression-minibuffer-setup-hook))
+                 (read-from-minibuffer prompt initial-contents
+                                       read-expression-map t
+                                       'read-expression-history)))))
+    (pp-eval-expression exp)))
 
 (defun akirak/counsel-git-grep-action-with-find-file (find-file-func x)
   "Go to occurrence X in current Git repository."
@@ -98,6 +148,27 @@
                         truename)
                        (t path)))
     (user-error "Cannot find library or its directory %s" x)))
+
+(defun akirak/open-library-readme (x)
+  (let* ((path (find-library-name x))
+         (dir (file-name-directory (file-truename path)))
+         (files (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))))
+    (unless path
+      (user-error "Cannot find library %s" x))
+    (if files
+        (akirak/view-file (if (= 1 (length files))
+                              (car files)
+                            (completing-read (format "README for %s: " x)
+                                             files nil t)))
+      (dired-find-file-other-window dir)
+      (message "No readme found for %s" x))))
+
+(defun akirak/view-file (filename)
+  (let ((buffer (or (find-buffer-visiting filename)
+                    (find-file-noselect filename))))
+    (with-current-buffer buffer
+      (view-mode 1))
+    (pop-to-buffer buffer)))
 
 (use-package counsel-projectile
   :after (projectile counsel)

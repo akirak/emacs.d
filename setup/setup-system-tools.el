@@ -4,7 +4,6 @@
   "i" 'docker-images
   "k" 'docker-containers
   "p" 'prodigy
-  "P" 'helm-system-packages
   "S" 'helm-systemd
   "t" 'helm-top
   "u" 'uptimes)

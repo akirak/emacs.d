@@ -1,6 +1,9 @@
 (use-package yasnippet
   ;; :diminish 'yas-minor-mode
   :config
+  (defun akirak/visit-yas-snippet-dir ()
+    (interactive)
+    (find-file (car yas-snippet-dirs)))
   (yas-global-mode 1))
 
 (use-package yasnippet-snippets
@@ -33,6 +36,11 @@
 
 (use-package auto-yasnippet
   :commands (aya-create aya-expand))
+
+(use-package yankpad
+  :config
+  (akirak/bind-register
+    "M-y" #'yankpad-repeat))
 
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))

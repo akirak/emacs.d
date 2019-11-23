@@ -3,9 +3,27 @@
 
 (when (bound-and-true-p akirak/mode-prefix-key)
   (general-translate-key nil 'org-mode-map
-    :package 'org akirak/mode-prefix-key "C-c C-x"))
+    :package 'org akirak/mode-prefix-key "C-c C-x")
+  (general-translate-key nil 'org-agenda-mode-map
+    :package 'org-agenda akirak/mode-prefix-key "C-c C-x"))
 
-(setq-default org-clock-history-length 20
+(defmacro akirak/org-with-maybe-agenda-origin (&rest progn)
+  `(cond
+    ((derived-mode-p 'org-mode)
+     ,@progn)
+    ((derived-mode-p 'org-agenda-mode)
+     (let ((marker (or (org-get-at-bol 'org-hd-marker)
+                       (org-agenda-error))))
+       (with-current-buffer (marker-buffer marker)
+         (org-with-wide-buffer
+          (goto-char (marker-position marker))
+          ,@progn))))
+    (t
+     (user-error "Neither in org-mode nor org-agenda-mode"))))
+
+(setq-default org-agenda-start-with-clockreport-mode t
+              org-agenda-sticky t
+              org-clock-history-length 20
               org-clock-mode-line-total (quote today)
               org-clock-out-remove-zero-time-clocks t
               org-clock-persist t
@@ -17,13 +35,15 @@
               org-outline-path-complete-in-steps nil
               org-refile-allow-creating-parent-nodes (quote confirm)
               org-refile-use-outline-path (quote full-file-path)
+              org-habit-following-days 7
+              org-habit-graph-column 55
+              org-habit-preceding-days 14
+              org-habit-scheduled-past-days 7
+              org-habit-show-done-always-green t
               org-src-tab-acts-natively t
               org-startup-indented t
               org-startup-truncated nil
               org-use-speed-commands t
-              org-habit-graph-column 1
-              org-habit-preceding-days 21
-              org-habit-following-days 7
               org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
               org-group-tags t
               ;; org-use-fast-tag-selection t
@@ -33,7 +53,8 @@
               org-blank-before-new-entry '((heading . nil)
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
-              org-M-RET-may-split-line nil)
+              org-M-RET-may-split-line nil
+              org-imenu-depth 6)
 
 ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
 (setq-default org-cycle-separator-lines 0
@@ -63,6 +84,10 @@
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft
   "M-L" 'org-shiftmetaright
+  "C-1" 'counsel-org-tag
+  "C-3" 'akirak/avy-add-org-edna-id-blocker)
+
+(general-def :keymaps 'org-agenda-mode-map :package 'org
   "C-1" 'counsel-org-tag)
 
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
@@ -165,5 +190,44 @@ from running."
 
 (advice-add #'org-insert-heading
             :after #'akirak/org-set-created-timestamp)
+
+;;;; org-open-at-point
+
+(defcustom akirak/desktop-file-extension-list
+  '("xlsx")
+  "List of file extensions to be handled by desktop applications.")
+
+(defun akirak/org-open-at-point-with-xdg ()
+  (let* ((link (substring-no-properties (plist-get (get-text-property (point) 'htmlize-link) :uri)))
+         (filename (and (string-match (rx bol "file:" (group (+ anything))) link)
+                        (match-string 1 link))))
+    (when (and filename
+               (member (file-name-extension filename) akirak/desktop-file-extension-list))
+      (let* ((sha1 (car (s-match (rx bol (+ (not space)))
+                                 (shell-command-to-string
+                                  (format "sha1sum %s" (shell-quote-argument
+                                                        (expand-file-name filename)))))))
+             (directory (f-join (xdg-cache-home) "emacs" "xdg-open" (concat sha1 ".sha1")))
+             (tmp-file-name (expand-file-name (s-match (rx (+ (any alpha digit "-_"))) (file-name-nondirectory filename))
+                                              directory)))
+        (unless (file-directory-p directory)
+          (make-directory directory t))
+        (make-symbolic-link filename tmp-file-name t)
+        (message "Opening %s" tmp-file-name)
+        (sleep-for 0 500)
+        (start-process "xdg-open" nil "xdg-open" (expand-file-name tmp-file-name))))))
+
+(add-to-list 'org-open-at-point-functions 'akirak/org-open-at-point-with-xdg)
+
+;;;; Misc
+(use-package org-entry-links
+  :after org
+  :straight (:host github :repo "akirak/org-entry-links")
+  :config
+  (akirak/bind-jump :keymaps 'org-mode-map :package 'org
+    "L" #'org-entry-links-ivy)
+  :general
+  (:keymaps 'org-agenda-mode-map :package 'org-agenda
+            "L" #'org-entry-links-ivy))
 
 (provide 'setup-org)

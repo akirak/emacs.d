@@ -2,6 +2,54 @@
   "Regular expression for a symbol.")
 
 ;;;###autoload
+(defun akirak/M-z (key)
+  ;; Because interactive "c" doesn't accept escape characters,
+  ;; I use `read-char' here.
+  (interactive (list (read-key-sequence-vector "Char: ")))
+  (unless (equal key [7])
+    (push-mark)
+    (let* ((char (char-to-string (seq-elt key 0))))
+      (pcase current-prefix-arg
+        ('(4)
+         (avy-with avy-goto-word-1
+           (avy-jump (cond
+                      ((string= char ".") "\\.")
+                      (t (concat "\\_<" (regexp-quote char))))
+                     :beg (line-beginning-position)
+                     :end (line-end-position))))
+        ('(16)
+         (avy-with avy-goto-word-1
+           (avy-jump (cond
+                      ((string= char ".") "\\.")
+                      (t (concat "\\_<" (regexp-quote char))))
+                     :beg (save-excursion (beginning-of-defun) (point))
+                     :end (save-excursion (end-of-defun) (point)))))
+        ((or 'nil
+             (and (pred numberp)
+                  n
+                  (guard (> n 0))))
+         (let ((pos (progn
+                      (forward-char)
+                      (re-search-forward char (line-end-position)
+                                         t current-prefix-arg))))
+           (if pos
+               (goto-char (1- pos))
+             (pop-mark)
+             (user-error "Not found %s after the cursor in the line" char))))
+        ((or '-
+             (pred numberp))
+         (let ((pos (progn
+                      (backward-char)
+                      (re-search-backward char (line-beginning-position)
+                                          t (when (numberp current-prefix-arg)
+                                              (- current-prefix-arg))))))
+           (if pos
+               (goto-char pos)
+             (pop-mark)
+             (user-error "Not found %s after the cursor in the line" char))))
+        (_ (user-error "Unsupported prefix argument %s" current-prefix-arg))))))
+
+;;;###autoload
 (defun akirak/avy-goto-defun ()
   "Jump to the beginning of defun."
   (interactive)

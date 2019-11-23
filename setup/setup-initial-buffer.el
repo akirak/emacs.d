@@ -6,6 +6,7 @@
                            (get-buffer "*Messages*"))))))
 
 (use-package org-status
+  :disabled t
   :straight (org-status :host github :repo "akirak/org-status")
   :config
   (unless debug-on-error

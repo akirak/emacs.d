@@ -1,5 +1,6 @@
 (use-package smart-jump
   :config
+  (add-to-list 'smart-jump-default-mode-list '(elisp-mode lisp-interaction-mode))
   (smart-jump-setup-default-registers)
   :custom
   (smart-jump-jump-key "M-g .")

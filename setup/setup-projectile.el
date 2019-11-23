@@ -10,10 +10,10 @@
   :custom
   (projectile-completion-system (quote ivy))
   (projectile-create-missing-test-files t)
-  (projectile-enable-caching t)
+  (projectile-enable-caching nil)
   (projectile-require-project-root nil)
   (projectile-ignored-project-function #'akirak/projectile-ignore-project-p)
-  (projectile-keymap-prefix (kbd "C-x 9")))
+  (projectile-globally-ignored-file-suffixes '("hi" "o")))
 
 ;;;; Function to determine if a directory should be ignored by projectile
 

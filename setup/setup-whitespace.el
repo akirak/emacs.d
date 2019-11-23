@@ -5,7 +5,7 @@
   :hook
   ((prog-mode) . whitespace-mode)
   :custom
-  (whitespace-style '(face tabs indentation trailing tab-mark empty)))
+  (whitespace-style '(face tabs indentation trailing tab-mark)))
 
 ;;;; Automatically cleaning up whitespace
 (use-package whitespace-cleanup-mode

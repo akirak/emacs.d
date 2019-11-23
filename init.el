@@ -2,27 +2,10 @@
 (when (version< emacs-version "25.1")
   (error "Use GNU Emacs version 25.1 or later"))
 
-;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
-;; http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/
-;; https://github.com/kaushalmodi/.emacs.d/blob/master/init.el
-(defconst modi/gc-cons-threshold--orig gc-cons-threshold)
-
-(defsubst akirak/expand-gc-threshold ()
-  (setq gc-cons-threshold (* 100 1024 1024)))
-
-(defsubst akirak/restore-original-gc-threshold ()
-  ;; I am not sure if garbage collection should be run on minibuffer
-  ;; exit events. If I remove this line, I will change the
-  ;; `after-init-hook' to include garbage collection.
-  (garbage-collect)
-  (setq gc-cons-threshold modi/gc-cons-threshold--orig))
-
-;; GC hack for startup
-(akirak/expand-gc-threshold)
-
-;; GC hack for minibuffers
-(add-hook 'minibuffer-setup-hook #'akirak/expand-gc-threshold)
-(add-hook 'minibuffer-exit-hook #'akirak/restore-original-gc-threshold)
+;; Expand the GC threshold until gcmh-mode is activated.
+;; gcmh-mode updates this value later, so you don't have to reset it.
+;; The value is stolen from http://akrl.sdf.org/
+(setq gc-cons-threshold #x40000000)
 
 (unless (fboundp 'whitespace-cleanup-mode)
   (defun whitespace-cleanup-mode (&rest args)
@@ -30,6 +13,11 @@
       (apply #'whitespace-cleanup-mode args))))
 
 (add-to-list 'exec-path (expand-file-name "~/.nix-profile/bin"))
+
+(defconst akirak/to-be-run-as-exwm (member "--exwm" command-line-args))
+
+(defun akirak/exwm-session-p ()
+  akirak/to-be-run-as-exwm)
 
 ;;;; Configure straight.el
 (load-file (expand-file-name "core/straight.el" user-emacs-directory))
@@ -39,6 +27,11 @@
 
 ;; Use straight.el by default in use-package directives
 (setq straight-use-package-by-default t)
+
+;;;; Benchmarking the startup process
+(use-package benchmark-init
+  :hook
+  (after-init . benchmark-init/deactivate))
 
 ;;;; Use the latest Git version of Org mode
 (require 'cl-lib)
@@ -59,5 +52,3 @@
 (setq-default enable-local-variables :all)
 
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
-
-(run-with-idle-timer 3 nil #'akirak/restore-original-gc-threshold)
