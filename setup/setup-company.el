@@ -148,4 +148,9 @@
   :straight (:host github :repo "travisbhartwell/nix-emacs")
   :company nix-mode)
 
+(use-package readline-complete
+  :after (company comint)
+  :company
+  ((comint-mode shell-mode) . company-readline))
+
 (provide 'setup-company)
