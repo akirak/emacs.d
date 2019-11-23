@@ -10,6 +10,24 @@
   ;; abbrev-file-name is set externally
   (save-abbrev 'silently))
 
+(use-package hippie-exp
+  :straight (:type built-in)
+  :general
+  ("C-S-f" #'hippie-expand)
+  :config
+  ;; Expand emmet templates
+  ;; https://emacs.stackexchange.com/a/22527/18360
+  (defun try-expand-emmet (args)
+    "Expand emmet templates."
+    (interactive "P")
+    (when (bound-and-true-p emmet-mode)
+      (emmet-exand-line args)))
+  (setq-default hippie-expand-try-functions-list
+                '(yas-hippie-try-expand
+                  try-expand-emmet
+                  try-complete-file-name-partially
+                  try-complete-file-name)))
+
 (use-package yasnippet
   ;; :diminish 'yas-minor-mode
   :config
