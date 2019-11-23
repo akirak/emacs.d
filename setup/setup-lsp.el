@@ -28,6 +28,13 @@
   (lsp-ui-doc-include-signature t)
   (lsp-ui-doc-position (quote at-point)))
 
+(use-package lsp-ivy
+  :straight (:host github :repo "emacs-lsp/lsp-ivy")
+  :config
+  (akirak/bind-search :keymaps 'lsp-mode-map
+    "s" #'lsp-ivy-workspace-symbol
+    "M-s" #'lsp-ivy-global-workspace-symbol))
+
 (use-package lsp-treemacs
   :after lsp)
 
