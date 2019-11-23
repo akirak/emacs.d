@@ -34,6 +34,8 @@
             company-keywords)
            company-dabbrev
            company-files))))
+  (cl-delete 'company-echo-metadata-frontend
+             (default-value 'company-frontends))
   :hook
   ((prog-mode text-mode) . company-mode)
   (company-mode . akirak/set-default-company-backends)
@@ -71,8 +73,13 @@
   (el-patch-defun company-posframe-show ()
     "Show company-posframe candidate menu."
     (let* ((height (min company-tooltip-limit company-candidates-length))
-           (length company-candidates-length)
-           (lines (company--create-lines company-selection height))
+           (meta (company-fetch-metadata))
+           (length (+ company-candidates-length
+                      (if meta 1 0)))
+           (lines (mapcar (lambda (x)
+                            (let ((meta (get-text-property 0 'meta x)))
+                              (concat x "  " (or meta ""))))
+                          (company--create-lines company-selection height)))
            (backend-names (mapconcat
                            (lambda (backend)
                              (if (equal backend company-backend)
@@ -81,7 +88,14 @@
                                (company-posframe-format-backend-name backend)))
                            company-backends "|"))
            (width (length (car lines)))
-           (contents (mapconcat #'identity lines "\n"))
+           (contents (concat (mapconcat #'identity lines "\n")
+                             (if meta
+                                 (format "\n%s"
+                                         (propertize (if (> (length meta) width)
+                                                         (substring meta 0 width)
+                                                       meta)
+                                                     'face 'font-lock-comment-face))
+                               "")))
            (buffer (get-buffer-create company-posframe-buffer)))
       ;; FIXME: Do not support mouse at the moment, so remove mouse-face
       (setq contents (copy-sequence contents))
@@ -94,6 +108,7 @@
                      :position (- (point) (length company-prefix))
                      :height (1+ height) :width width
                      :x-pixel-offset (* -1 company-tooltip-margin (default-font-width))
+                     ;; :respect-header-line t
                      :respect-mode-line t
                      :font company-posframe-font
                      :min-width company-tooltip-minimum-width
