@@ -18,8 +18,15 @@
           ;; Disable this segment for now.
           ;; (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
+          (akirak/feebleline-process-status)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
+
+(defun akirak/feebleline-process-status ()
+  (let ((status (format-mode-line "%s")))
+    (if (equal "no process" status)
+        ""
+      status)))
 
 (defface akirak/feebleline-buffer-group-face
   '((t :weight bold :inherit font-lock-comment-face))
