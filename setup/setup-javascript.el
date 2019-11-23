@@ -26,6 +26,13 @@
   :hook
   (js2-mode . skewer-mode))
 
+(use-package jest
+  :config
+  (akirak/bind-mode :keymaps 'js-mode-map :package 'js
+    "t" #'jest-file-dwim)
+  (akirak/bind-mode :keymaps 'typescript-mode-map :package 'typescript-mode
+    "t" #'jest-file-dwim))
+
 (use-package typescript-mode
   :mode "\\.ts\\'")
 
