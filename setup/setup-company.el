@@ -16,6 +16,8 @@
   (company-mode . akirak/setup-company-backend)
   :custom
   (company-idle-delay nil)
+  (company-require-match nil)
+  (company-dabbrev-downcase nil)
   (company-auto-complete (lambda ()
                            (and (company-tooltip-visible-p)
                                 (company-explicit-action-p))))
