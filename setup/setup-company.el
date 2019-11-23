@@ -29,6 +29,9 @@
               company-dabbrev)
              company-keywords
              company-files))
+          ((derived-mode-p 'git-commit-mode)
+           '((company-dabbrev company-yankpad company-yasnippet)
+             (company-dabbrev-code company-gtags company-etags)))
           (t
            (company-capf
             company-keywords)
@@ -37,7 +40,7 @@
   (cl-delete 'company-echo-metadata-frontend
              (default-value 'company-frontends))
   :hook
-  ((prog-mode text-mode) . company-mode)
+  ((prog-mode text-mode git-commit-mode) . company-mode)
   (company-mode . akirak/set-default-company-backends)
   :custom
   (company-idle-delay nil)
@@ -53,7 +56,8 @@
                                    comint-previous-matching-input-from-input
                                    comint-next-matching-input-from-input
                                    completion-at-point))
-  (company-dabbrev-other-buffers 'all "Search all buffers for company-dabbrev")
+  (company-dabbrev-other-buffers t "Search all buffers for company-dabbrev")
+  (company-dabbrev-code-other-buffers 'code)
   (company-tooltip-align-annotations nil))
 
 (use-package company-posframe
