@@ -1,4 +1,5 @@
 (use-package perfect-margin
+  :straight (:host github :repo "akirak/perfect-margin")
   :config
   (perfect-margin-mode 1)
   :custom
