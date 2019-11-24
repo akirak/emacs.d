@@ -114,3 +114,11 @@ output file without the directory."
     'x)
    (t
     window-system)))
+
+;; Somehow X popup widgets freezes the GTK version of Emacs on
+;; Crostini on Chrome OS, so I will disable those functions.
+(when (and (eq system-type 'gnu/linux)
+           (window-system)
+           (akirak/running-on-crostini-p))
+  (fset #'x-popup-menu nil)
+  (fset #'x-popup-dialog nil))
