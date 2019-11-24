@@ -543,6 +543,10 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 #+begin_src emacs-lisp
   (general-def "M-SPC" #'major-mode-hydra)
 #+end_src
+*** frog-menu
+#+begin_src emacs-lisp
+  (akirak/require 'setup-frog-menu)
+#+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
 (use-package ov
@@ -1749,7 +1753,20 @@ I don't set the default input method here. Set =default-input-method= in your =c
 #+begin_src emacs-lisp
   (akirak/require 'akirak/setup-writing)
   #+end_src
-**** Spell checking
+**** Spell checking with flyspell
+I will use [[https://github.com/d12frosted/flyspell-correct][flyspell-correct]] to run flyspell.
+
+- =flyspell-correct-wrapper= is the main entry point to the package.
+  I bind ~C-c f~ to the command.
+  - When =flyspell-mode= is not on, the key sequence turns the mode on.
+
+#+begin_src emacs-lisp
+  (akirak/bind-user
+    "f" #'flyspell-spell-mode)
+
+  (akirak/bind-user :keymaps 'flyspell-mode-map
+    "f" #'flyspell-correct-wrapper)
+#+end_src
 **** Quotation marks
 ***** Typo
 Typo.el is a successor to [[https://www.emacswiki.org/emacs/TypographicalPunctuationMarks][typopunct.el]].
