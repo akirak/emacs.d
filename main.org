@@ -1751,8 +1751,8 @@ I don't set the default input method here. Set =default-input-method= in your =c
 #+end_src
 *** Utilities
 #+begin_src emacs-lisp
-  (akirak/require 'akirak/setup-writing)
-  #+end_src
+  (akirak/require 'setup-writing)
+#+end_src
 **** Spell checking with flyspell
 I will use [[https://github.com/d12frosted/flyspell-correct][flyspell-correct]] to run flyspell.
 
