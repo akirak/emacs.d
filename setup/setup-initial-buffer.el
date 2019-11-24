@@ -1,15 +1,14 @@
 (setq inhibit-startup-screen nil
       initial-buffer-choice
-      (unless initial-buffer-choice
-        (cond
-         (debug-on-error (lambda ()
-                           (get-buffer "*Messages*"))))))
+      (when (and (not initial-buffer-choice)
+                 init-file-debug)
+        (lambda () (get-buffer "*Messages*"))))
 
 (use-package org-status
   :disabled t
   :straight (org-status :host github :repo "akirak/org-status")
   :config
-  (unless debug-on-error
+  (unless init-file-debug
     (org-status-initial-buffer-mode 1))
   :custom
   (org-status-default-directory user-emacs-directory)
