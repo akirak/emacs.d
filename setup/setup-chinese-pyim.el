@@ -6,7 +6,8 @@
 (use-package liberime-config
   ;; TODO: Use nix for installation
   ;; Install librime-data and librime-data-luna-pinyin from the Debian repo
-  :straight (liberime-config :host gitlab :repo "liberime/liberime"
+  :straight (liberime-config :host github :repo "akirak/liberime"
+                             :branch "custom-path"
                              :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el"))
   :config/el-patch
   (el-patch-defun liberime--build ()
