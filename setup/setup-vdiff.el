@@ -1,4 +1,10 @@
-(use-package vdiff)
+(use-package vdiff
+  :config
+  (akirak/bind-file-extra
+    "d" #'vdiff-files)
+  :general
+  (:keymaps 'vdiff-mode-map
+            akirak/major-mode-hydra-key #'vdiff-hydra/body))
 
 (use-package vdiff-magit
   :after magit

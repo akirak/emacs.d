@@ -542,6 +542,8 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 
 #+begin_src emacs-lisp
   (general-def "M-SPC" #'major-mode-hydra)
+
+  (defconst akirak/major-mode-hydra-key "M-SPC")
 #+end_src
 *** frog-menu
 #+begin_src emacs-lisp
