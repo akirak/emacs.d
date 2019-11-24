@@ -47,7 +47,7 @@ If SEVERITY is non-nil, abort the initialization process."
                    (message "Module %s is blacklisted. See akirak/blacklisted-features" feature)
                    nil)
                t)
-             (not (require feature nil t)))
+             (not (require feature nil (not init-file-debug))))
     (add-to-list 'akirak/setup-failed-modules feature t)
     (message "Failed to load %s" feature)
     (when severity
