@@ -8,7 +8,7 @@
 ;; Enable faces for contents inside blocks
 (setq-default org-fontify-quote-and-verse-blocks t)
 
-;;;;; Line spacing 
+;;;;; Line spacing
 ;; Line spacing for writing
 (setq-mode-local org-mode line-spacing 0.3)
 (setq-mode-local markdown-mode line-spacing 0.3)
