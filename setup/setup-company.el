@@ -9,7 +9,9 @@
             "C-n" #'company-select-next
             "C-p" #'company-select-previous
             "M-/" #'company-other-backend
-            "<f1>" #'company-show-doc-buffer)
+            ;; Docstring is automatically displayed on idle
+            ;; "<f1>" #'company-show-doc-buffer
+            )
   :config
   (defun akirak/set-default-company-backends ()
     (set (make-local-variable 'company-backends)
