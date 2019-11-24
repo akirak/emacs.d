@@ -1749,6 +1749,7 @@ I don't set the default input method here. Set =default-input-method= in your =c
 #+begin_src emacs-lisp
   (akirak/require 'akirak/setup-writing)
   #+end_src
+**** Spell checking
 **** Quotation marks
 ***** Typo
 Typo.el is a successor to [[https://www.emacswiki.org/emacs/TypographicalPunctuationMarks][typopunct.el]].

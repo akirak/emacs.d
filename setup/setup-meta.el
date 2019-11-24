@@ -45,7 +45,6 @@
     setup-system-tools
     setup-flycheck
     setup-navigation-bindings
-    setup-spell
     setup-git-clone
     setup-clipurl
     setup-org-offtime

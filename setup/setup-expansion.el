@@ -1,11 +1,11 @@
 (use-package abbrev
   :straight (:type built-in)
-  :init
-  (setq abbrev-mode t)
   :config
   (akirak/bind-register
     "g" #'add-global-abbrev
     "l" #'edit-abbrevs)
+  :hook
+  (text-mode abbrev-mode)
   :custom
   ;; abbrev-file-name is set externally
   (save-abbrev 'silently))
