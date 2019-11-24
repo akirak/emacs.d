@@ -9,8 +9,8 @@
 (use-package org-super-agenda
   :after org-agenda
   :config
-  (ignore-errors
-    ;; Basically stolen from org-super-agenda.el
+  ;; Basically stolen from org-super-agenda.el
+  (eval-when-compile
     (org-super-agenda--def-auto-group ts-desc
       "the date of their latest timestamp anywhere in the entry (formatted according to `org-super-agenda-date-format', which see)"
       :keyword :auto-ts-desc
