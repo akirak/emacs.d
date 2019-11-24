@@ -2178,6 +2178,12 @@ I am now using myrepos to synchronize my configuration repositories.
     (let ((default-directory "~"))
       (akirak/run-interactive-shell-command "mr push")))
 #+end_src
+*** Rebuild packages
+During the first idle of 10 minutes, rebuild the outdated packages.
+
+#+begin_src emacs-lisp
+  (run-with-idle-timer 600 nil #'straight-rebuild-all)
+#+end_src
 *** Sort entries in this file
 #+begin_src emacs-lisp
   (defun akirak/org-sort-entries-as-desired ()
