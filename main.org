@@ -1081,7 +1081,7 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
   :commands (git-attr-linguist)
   :hook (find-file . git-attr-linguist))
 #+end_src
-**** magit-todos
+**** Magit-Todos
 #+begin_src emacs-lisp
   (use-package magit-todos :after (magit hl-todo)
     :straight (magit-todos :host github :repo "alphapapa/magit-todos")
@@ -1125,7 +1125,7 @@ Differences between =browse-at-remote= and equivalent commands from =forge= pack
 - =browse-at-remote= opens a link with a line number.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
-**** magit-list-repositories
+**** Magit-List-Repositories
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
 To use it, you first have to customize =magit-repository-directories=.
