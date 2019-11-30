@@ -66,6 +66,9 @@ Only one letter is shown, the first that applies."
     "<f9>" #'magit-dispatch
     ;; <f8> <f10>
     "<f10>" #'magit-file-dispatch)
+  (akirak/bind-user
+    "g" (lambda () (interactive) (magit-show-commit "HEAD"))
+    "G" #'magit-blob-visit-file)
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
