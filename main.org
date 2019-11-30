@@ -1061,6 +1061,15 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+begin_src emacs-lisp
   (akirak/require 'setup-files)
 #+end_src
+*** Full-text search (and replace)                                 :search:
+#+begin_src emacs-lisp
+  (akirak/bind-search
+    "M-f" #'org-recoll-search)
+#+end_src
+**** Recoll
+#+begin_src emacs-lisp
+  (akirak/require 'setup-recoll)
+#+end_src
 *** Buffer management
 #+begin_src emacs-lisp
   ;; buffer management
