@@ -1144,6 +1144,12 @@ Differences between =browse-at-remote= and equivalent commands from =forge= pack
 - =browse-at-remote= opens a link with a line number.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
+**** Vc-Msg
+#+begin_src emacs-lisp
+  (akirak/require 'setup-vc-msg)
+
+  (akirak/bind-user "v" #'vc-msg-show)
+#+end_src
 **** Magit-List-Repositories
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
