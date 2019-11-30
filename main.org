@@ -29,6 +29,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#helm][Helm]]
       -  [[#posframe][posframe]]
       -  [[#hydra][Hydra]]
+      -  [[#frog-menu][frog-menu]]
       -  [[#ov-overlays][ov (overlays)]]
       -  [[#ts-date-time-library-by-alphapapa][ts (date-time library by alphapapa)]]
       -  [[#org-ql][org-ql]]
@@ -55,6 +56,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#terminal-and-shells][Terminal and shells]]
       -  [[#dired][Dired]]
       -  [[#crux-and-file-operations][Crux and file operations]]
+      -  [[#full-text-search-and-replace][Full-text search (and replace)]]
       -  [[#buffer-management][Buffer management]]
       -  [[#git][Git]]
       -  [[#project-management][Project management]]
@@ -109,6 +111,8 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#nix][Nix]]
       -  [[#pug][Pug]]
       -  [[#systemd][Systemd]]
+      -  [[#yaml][YAML]]
+      -  [[#css][CSS]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
@@ -129,6 +133,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#web-browser][Web browser]]
     -  [[#meta][Meta]]
       -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
+      -  [[#rebuild-packages][Rebuild packages]]
       -  [[#sort-entries-in-this-file][Sort entries in this file]]
 
 ** Why?
