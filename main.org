@@ -2222,4 +2222,5 @@ I am now using myrepos to synchronize my configuration repositories.
 :END:
 # Local Variables:
 # org-id-link-to-org-use-id: nil
+# eval: (when (fboundp 'org-make-toc-mode) (org-make-toc-mode t))
 # End:
