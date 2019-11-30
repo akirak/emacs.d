@@ -35,6 +35,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#org-ql][org-ql]]
       -  [[#all-the-icons][all-the-icons]]
       -  [[#emacsql-sqlite][emacsql-sqlite]]
+      -  [[#memoize][memoize]]
       -  [[#nix-env-install][nix-env-install]]
       -  [[#desktop-integration][desktop integration]]
       -  [[#language-detection][language-detection]]
@@ -584,6 +585,10 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
   (use-package emacsql-sqlite
     :straight (emacsql-sqlite :type built-in)
     :if (akirak/library-exists-p "emacsql-sqlite"))
+#+end_src
+*** memoize
+#+begin_src emacs-lisp
+  (use-package memoize)
 #+end_src
 *** nix-env-install
 #+begin_src emacs-lisp

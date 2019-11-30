@@ -230,4 +230,41 @@ from running."
   (:keymaps 'org-agenda-mode-map :package 'org-agenda
             "L" #'org-entry-links-ivy))
 
+(use-package company-org-block
+  :after (company org)
+  :straight (:host github :repo "xenodium/dotsies"
+                   :files ("emacs/ar/company-org-block.el"))
+  :functions (company-org-block)
+  :company org-mode
+  :config
+  ;; Originally from akirak/major-mode-list in my emacs-config-library repo
+  (defmemoize company-org-block--major-mode-list ()
+    (let (modes)
+      (do-all-symbols (sym)
+        (when-let* ((_nonminor (not (memq sym minor-mode-list)))
+                    (name (symbol-name sym))
+                    (_command (commandp sym))
+                    (language (when (string-suffix-p "-mode" name)
+                                (string-remove-suffix "-mode" name))))
+          (when (and (let ((case-fold-search nil))
+                       (string-match-p "^[a-z]" language))
+                     (not (string-match-p (rx (or "global" "/" "-")) language)))
+            (push language modes))))
+      modes))
+  :config/el-patch
+  (el-patch-defun company-org-block--candidates (prefix)
+    "Return a list of org babel languages matching PREFIX."
+    (seq-filter (lambda (language)
+                  (string-prefix-p prefix language))
+                ;; Flatten `org-babel-load-languages' and
+                ;; `org-structure-template-alist', join, and sort.
+                (seq-sort
+                 #'string-lessp
+                 (append
+                  (el-patch-swap
+                    (mapcar #'prin1-to-string
+                            (map-keys org-babel-load-languages))
+                    (company-org-block--major-mode-list))
+                  (map-values org-structure-template-alist))))))
+
 (provide 'setup-org)
