@@ -1,34 +1,25 @@
 (use-package ob
   :after org
   :straight nil
-  :init
+  :config
   (defun akirak/org-babel-do-load-languages ()
     (org-babel-do-load-languages 'org-babel-load-languages
                                  org-babel-load-languages))
-  :config
-  (setq org-confirm-babel-evaluate nil)
+  (setq-default org-babel-load-languages
+                '((emacs-lisp . t)
+                  (java . t)
+                  (shell . t)
+                  (elixir . t)
+                  (python . t)
+                  (sqlite . t)
+                  (dot . t)
+                  (ditaa . t)
+                  (restclient . t)
+                  (typescript . t)))
   :hook
-  (emacs-startup . akirak/org-babel-do-load-languages))
-
-;; To add support for a language in org-babel, add the following configuration:
-
-;; - Add =(LANG . t)= to =org-babel-load-languages= in =:init= section
-;;   of a =use-package= directive. If necessary, add a custom mapping
-;;
-;; - to =org-src-lang-modes=.
-
-(unless (bound-and-true-p org-babel-load-languages)
-  (setq org-babel-load-languages
-        '((emacs-lisp . t)
-          (java . t)
-          (shell . t)
-          (elixir . t)
-          (python . t)
-          (sqlite . t)
-          (dot . t)
-          (ditaa . t)
-          (restclient . t)              ; requires ob-restclient
-          (typescript . t))))
+  (emacs-startup . akirak/org-babel-do-load-languages)
+  :custom
+  (org-confirm-babel-evaluate nil))
 
 (use-package ob-async)
 
