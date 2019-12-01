@@ -16,13 +16,9 @@
      (?p aw-delete-window "Delete Window")
      (?m delete-other-windows "Delete Other Windows")
      (32 toggle-window-split)
+     (?T tear-off-window)
      (?d delete-frame)
      (?f make-frame-command)
-     (?g magit-status)
-     (?a treemacs)
-     (?n aweshell-dedicated-open)
-     (?b ibuffer-sidebar-toggle-sidebar)
-     (?x dired-sidebar-toggle-sidebar)
      (?h windmove-left)
      (?j windmove-down)
      (?k windmove-up)
@@ -31,7 +27,6 @@
      (?J buf-move-down)
      (?K buf-move-up)
      (?L buf-move-right)
-     (?B magit-branch-or-checkout)
      (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
