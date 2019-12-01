@@ -107,6 +107,7 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#dsls][DSLs]]
       -  [[#bats][Bats]]
       -  [[#dhall][Dhall]]
+      -  [[#plantuml][PlantUML]]
       -  [[#dockerfile][Dockerfile]]
       -  [[#graphviz][GraphViz]]
       -  [[#nix][Nix]]
@@ -1987,6 +1988,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Dhall                                         :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-dhall)
+#+end_src
+*** PlantUML                                                  :diagramming:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-plantuml)
 #+end_src
 *** Dockerfile                                    :configuration__language:
 
