@@ -176,4 +176,11 @@
   :company
   ((comint-mode shell-mode) . company-readline))
 
+(use-package company-web-html
+  :after (company)
+  :straight company-web
+  :functions (company-web-html)
+  :company
+  ((html-mode mhtml-mode) . company-web-html))
+
 (provide 'setup-company)
