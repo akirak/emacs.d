@@ -18,6 +18,9 @@
   "File names of desktop files."
   :type '(repeat (cons string (plist))))
 
+(defcustom akirak/localhost-browser-executable "chromium"
+  "Browser program for localhost.")
+
 (defun akirak/web-browser-available-desktop-files ()
   (->> akirak/web-browser-application-list
        (mapcar #'car)
@@ -174,7 +177,8 @@
               ((stringp port-or-url)
                port-or-url))))
     (add-to-list 'akirak/localhost-url-list url)
-    (start-process "localhost" "chromium" "chromium" url)))
+    (start-process "localhost" "localhost"
+                   akirak/localhost-browser-executable url)))
 
 (defun akirak/browse-syncthing ()
   (interactive)

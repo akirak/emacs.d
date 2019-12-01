@@ -23,8 +23,30 @@
   ((js-mode js2-mode typescript-mode) . add-node-modules-path))
 
 (use-package skewer-mode
+  :config/el-patch
+  (el-patch-defun run-skewer (&optional arg)
+    "Attach a browser to Emacs for a skewer JavaScript REPL. Uses
+`browse-url' to launch a browser.
+
+With a prefix arugment (C-u), it will ask the filename of the
+root document.  With two prefix arguments (C-u C-u), it will use
+the contents of the current buffer as the root document."
+    (interactive "p")
+    (cl-case arg
+      (4 (setf skewer-demo-source (read-file-name "Skewer filename: ")))
+      (16 (setf skewer-demo-source (current-buffer))))
+    (httpd-start)
+    (el-patch-swap
+      (browse-url (format "http://127.0.0.1:%d/skewer/demo" httpd-port))
+      (if (fboundp 'akirak/browse-localhost)
+          (akirak/browse-localhost httpd-port "/skewer/demo")
+        (message "%s is undefined, so falling back to the default implementation"
+                 'akirak/browse-localhost)
+        (browse-url (format "http://127.0.0.1:%d/skewer/demo" httpd-port)))))
   :hook
-  (js2-mode . skewer-mode))
+  (js2-mode . skewer-mode)
+  (css-mode . skewer-css-mode)
+  (html-mode . skewer-html-mode))
 
 (use-package jest
   :config
