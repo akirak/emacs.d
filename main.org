@@ -1971,6 +1971,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+end_src
 *** Web-mode
 #+begin_src emacs-lisp
+  (akirak/require 'setup-sgml)
+#+end_src
+
+#+begin_src emacs-lisp
   (akirak/require 'setup-web-mode)
 #+end_src
 
