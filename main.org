@@ -93,6 +93,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#elixir][Elixir]]
       -  [[#elm][Elm]]
       -  [[#emacs-lisp][Emacs Lisp]]
+      -  [[#golang][Golang]]
       -  [[#haskell][Haskell]]
       -  [[#java][Java]]
       -  [[#javascript][JavaScript]]
@@ -1904,7 +1905,10 @@ Ideally, this section should be a portfolio of my skills.
 #+end_src
 **** Makel
 I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
-
+*** Golang
+#+begin_src emacs-lisp
+  (akirak/require 'setup-go)
+#+end_src
 *** Haskell
 
 #+begin_src emacs-lisp
