@@ -1,8 +1,14 @@
 ;;; Word wrap and visual-line-mode
-(general-add-hook '(org-mode-hook
-                    markdown-mode-hook)
-                  '((lambda () (toggle-word-wrap 1))
-                    (lambda () (visual-line-mode 1))))
+(use-package adaptive-wrap
+  :commands (adaptive-wrap-prefix-mode)
+  :config
+  (defun akirak/adaptive-wrap-prefix-mode ()
+    (unless (derived-mode-p 'org-mode)
+      (adaptive-wrap-prefix-mode)))
+  :hook
+  (visual-line-mode . akirak/adaptive-wrap-prefix-mode))
+
+(global-visual-line-mode t)
 
 ;; Suppress a message by `toggle-word-wrap' unless the function is
 ;; called interactively. The message is annoying as the option is set
