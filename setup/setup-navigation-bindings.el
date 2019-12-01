@@ -21,30 +21,34 @@
 (defun akirak/ctrl-meta-f ()
   (interactive)
   (cond
-   ((bound-and-true-p smartparens-mode)
-    (let* ((thing (sp-get-thing))
-           (op (sp-get thing :op)))
-      (if (and (not (string-empty-p op))
-               (string-equal op (thing-at-point 'char)))
-          (call-interactively 'sp-down-sexp)
-        (let ((sp-navigate-interactive-always-progress-point t))
-          (call-interactively 'sp-next-sexp)))))
-   (t (forward-sexp))))
-(advice-add 'akirak/ctrl-meta-f
-            :around 'akirak/ad-around-verbose-call-interactively)
-;; (general-def "C-M-f" 'akirak/ctrl-meta-f)
+
+   ;; ((bound-and-true-p smartparens-mode)
+   ;;  (let* ((thing (sp-get-thing))
+   ;;         (op (sp-get thing :op)))
+   ;;    (if (and (not (string-empty-p op))
+   ;;             (string-equal op (thing-at-point 'char)))
+   ;;        (call-interactively 'sp-down-sexp)
+   ;;      (let ((sp-navigate-interactive-always-progress-point t))
+   ;;        (call-interactively 'sp-next-sexp)))))
+   (t (call-interactively 'forward-whitespace))))
+;; (advice-add 'akirak/ctrl-meta-f
+;;             :around 'akirak/ad-around-verbose-call-interactively)
+(general-def "C-M-f" 'akirak/ctrl-meta-f)
 
 (defun akirak/ctrl-meta-b ()
   (interactive)
   (cond
    ((bound-and-true-p smartparens-mode)
-    (progn
-      (message "Go to the closest sexp beginning before the point")
-      (goto-char (sp-get (sp-get-thing t) :beg))))
-   (t (call-interactively 'backward-sexp))))
-(advice-add 'akirak/ctrl-meta-b
-            :around 'akirak/ad-around-verbose-call-interactively)
-;; (general-def "C-M-b" 'akirak/ctrl-meta-b)
+    (sp-backward-symbol)
+    ;; (progn
+    ;;   (message "Go to the closest sexp beginning before the point")
+    ;;   (goto-char (sp-get (sp-get-thing t) :beg)))
+    )
+   (t
+    (call-interactively 'backward-sexp))))
+;; (advice-add 'akirak/ctrl-meta-b
+;;             :around 'akirak/ad-around-verbose-call-interactively)
+(general-def "C-M-b" 'akirak/ctrl-meta-b)
 
 (defun akirak/ctrl-meta-p ()
   (interactive)
@@ -125,10 +129,32 @@
    ((derived-mode-p 'org-mode)
     (org-up-element)
     (org-show-entry))
+   ((derived-mode-p 'sgml-mode)
+    ;; This doesn't go to the parent tag based on the tree structure;
+    ;; It just goes to the beginning of the previous tag.
+    ;; TODO: Properly go up the hierarchy
+    (sgml-skip-tag-backward (or current-prefix-arg 1)))
    ((bound-and-true-p smartparens-mode)
     (call-interactively 'sp-backward-up-sexp))))
 (advice-add 'akirak/ctrl-meta-u
             :around 'akirak/ad-around-verbose-call-interactively)
 (general-def "C-M-u" 'akirak/ctrl-meta-u)
+
+(defun akirak/ctrl-meta-d ()
+  (interactive)
+  (cond
+   ((bound-and-true-p tagedit-mode)
+    (tagedit-goto-tag-content)
+    (when (and (looking-at (rx (any space)))
+               (re-search-forward (rx (not (any space))) nil t))
+      (backward-char 1)))
+   ((bound-and-true-p smartparens-mode)
+    (sp-down-sexp)
+    (when (and (looking-at (rx (any space)))
+               (re-search-forward (rx (not (any space))) nil t))
+      (backward-char 1)))
+   (t
+    (down-list current-prefix-arg))))
+(general-def "C-M-d" 'akirak/ctrl-meta-d)
 
 (provide 'setup-navigation-bindings)
