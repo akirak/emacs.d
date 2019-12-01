@@ -2,6 +2,10 @@
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
   :if (akirak/library-exists-p "vterm" 'verbose)
+  :general
+  (:keymaps 'vterm-mode-map
+            "C-c C-t" #'vterm-copy-mode
+            "C-c C-c" #'vterm-send-ctrl-c)
   :config/el-patch
   ;; fzy doesn't seem to work with the default implementation.
   (el-patch-defun vterm-send-return ()
