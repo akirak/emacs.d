@@ -1039,15 +1039,6 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+begin_src emacs-lisp
   (general-def "C-x C-j" #'dired-jump)
 #+end_src
-**** Hydra
-#+begin_src emacs-lisp
-  (major-mode-hydra-define dired-mode
-    (:title "Dired")
-    ("Open/execute"
-     (("x" dired-open-xdg))
-     "Transfer"
-     (("r" dired-rsync))))
-#+end_src
 **** Frame
 #+begin_src emacs-lisp
   (akirak/define-frame-workflow "dired"

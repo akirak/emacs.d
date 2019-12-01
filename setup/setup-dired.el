@@ -240,5 +240,14 @@
   "z h" #'dired-hide-dotfiles-mode
   "/" 'dired-filter-map
   "<S-return>" #'dired-open-xdg)
+;;;; Hydra
+(major-mode-hydra-define dired-mode
+  (:title "Dired")
+  ("Open/execute"
+   (("x" dired-open-xdg))
+   "Transfer"
+   (("r" dired-rsync))
+   "Toggle"
+   (("tc" dired-collapse-mode "Collapse" :toggle t))))
 
 (provide 'setup-dired)
