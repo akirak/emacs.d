@@ -169,10 +169,7 @@ Navigation: _n_ _p_ _f_ _b_
   "hs" '(org-insert-subheading :wk "ins subheading")
   "hS" '(org-insert-todo-subheading :wk "ins todo subheading")
   "hr" '(org-insert-heading-respect-content :wk "ins respect")
-  "hR" '(org-insert-todo-heading-respect-content :wk "ins todo respect")
-  "M-p" '(nil :wk "common props")
-  "M-p c" 'akirak/org-set-custom-id-property
-  "M-p i" 'org-id-get-create)
+  "hR" '(org-insert-todo-heading-respect-content :wk "ins todo respect"))
 
 (general-def :keymaps 'org-read-date-minibuffer-local-map
   "C-p" (lambda () (interactive)
