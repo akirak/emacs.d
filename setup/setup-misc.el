@@ -31,9 +31,10 @@
 (use-package org-bookmark-heading
   :after org)
 (use-package org-bullets :after org
-  :disabled t
-  :init
-  (add-hook 'org-mode-hook 'org-bullets-mode))
+  :custom
+  (org-bullets-bullet-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
+  :hook
+  (org-mode . org-bullets-mode))
 ;; Exporting mind maps
 (use-package akirak/org-refile
   :straight nil)

@@ -54,7 +54,14 @@
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
               org-M-RET-may-split-line nil
-              org-imenu-depth 6)
+              org-imenu-depth 6
+              ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
+              org-ellipsis " ⌄ "
+              org-pretty-entities t
+              org-hide-emphasis-markers t
+              org-fontify-whole-heading-line t
+              org-fontify-done-headline t
+              org-fontify-quote-and-verse-blocks t)
 
 ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
 (setq-default org-cycle-separator-lines 0
