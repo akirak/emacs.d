@@ -107,14 +107,13 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#dsls][DSLs]]
       -  [[#bats][Bats]]
       -  [[#dhall][Dhall]]
-      -  [[#plantuml][PlantUML]]
       -  [[#dockerfile][Dockerfile]]
       -  [[#graphviz][GraphViz]]
       -  [[#nix][Nix]]
+      -  [[#plantuml][PlantUML]]
       -  [[#pug][Pug]]
       -  [[#systemd][Systemd]]
       -  [[#yaml][YAML]]
-      -  [[#css][CSS]]
     -  [[#emacs-applications][Emacs applications]]
       -  [[#getting-organised][Getting organised]]
         -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
@@ -1973,6 +1972,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-restclient)
 #+end_src
+**** CSS
+#+begin_src emacs-lisp
+  (akirak/require 'setup-css)
+#+end_src
 ** DSLs
 :PROPERTIES:
 :TOC:      1
@@ -1989,10 +1992,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-dhall)
 #+end_src
-*** PlantUML                                                  :diagramming:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-plantuml)
-#+end_src
 *** Dockerfile                                    :configuration__language:
 
 #+begin_src emacs-lisp
@@ -2005,6 +2004,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Nix                                           :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
+#+end_src
+*** PlantUML                                                  :diagramming:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-plantuml)
 #+end_src
 *** Pug                                                :template__language:
 #+begin_src emacs-lisp
@@ -2021,10 +2024,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 **** Ansible
 #+begin_src emacs-lisp
   (akirak/require 'setup-ansible)
-#+end_src
-*** CSS
-#+begin_src emacs-lisp
-  (akirak/require 'setup-css)
 #+end_src
 ** Emacs applications
 *** Getting organised
