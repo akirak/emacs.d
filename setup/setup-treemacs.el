@@ -27,9 +27,9 @@
   (treemacs-fringe-indicator-mode 1))
 
 (use-package treemacs-icons-dired
-  :after (treemacs dired)
-  :config
-  (treemacs-icons-dired-mode))
+  :after (dired)
+  :hook
+  (dired-mode . treemacs-icons-dired-mode))
 
 (use-package treemacs-magit
   :after (treemacs magit))
