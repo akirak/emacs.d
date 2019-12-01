@@ -1507,6 +1507,15 @@ Use poporg rather than outorg.
   "u" #'winner-undo-repeat)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun akirak/switch-to-last-buffer-other-window ()
+    (interactive)
+    (switch-to-buffer-other-window (other-buffer)))
+
+  (general-def ctl-x-map
+    "B" #'akirak/switch-to-last-buffer-other-window)
+#+end_src
+
 I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
