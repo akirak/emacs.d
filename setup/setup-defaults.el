@@ -50,6 +50,11 @@
       use-dialog-box nil
       ediff-window-setup-function #'ediff-setup-windows-plain)
 
+(use-package view
+  :straight (:type built-in)
+  :custom
+  (view-inhibit-help-message t))
+
 (add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
 (add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
 
