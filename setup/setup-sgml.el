@@ -1,4 +1,3 @@
-
 (use-package sgml-mode
   :straight (:type built-in)
   :config
@@ -7,8 +6,5 @@
     "ic" #'sgml-name-char
     "ia" #'sgml-attributes
     "kt" #'sgml-delete-tag))
-
-(use-package html-mode
-  :straight (:type built-in))
 
 (provide 'setup-sgml)
