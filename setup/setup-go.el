@@ -1,7 +1,6 @@
-(use-package go-mode
-  :hook
-  (go-mode . lsp-deferred)
-  (go-mode . flycheck-mode))
+(use-package go-mode)
+
+;; Use lsp-mode
 
 (use-package go-rename
   ;; Prefer LSP.

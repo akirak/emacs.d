@@ -1,31 +1,40 @@
 (use-package lsp-mode
-  :commands lsp
+  :commands (lsp lsp-deferred)
+  :config
+  (require 'lsp-clients)
+  (defun akirak/setup-lsp ()
+    (company-mode t)
+    (eldoc-mode t)
+    (flycheck-mode t))
+  ;; Update direnv to detect locally installed lsp servers
+  (advice-add 'lsp :before
+              (lambda (&rest _args) (direnv-update-environment)))
   :hook
-  (lsp-mode . (lambda () (flycheck-mode 1))))
-
-(use-package lsp-clients
-  :straight lsp-mode
-  :hook ((web-mode
-          vue-html-mode
-          css-mode)
-         . lsp-deferred))
+  (lsp-mode . akirak/setup-lsp)
+  ((web-mode
+    vue-html-mode
+    css-mode
+    go-mode)
+   . lsp-deferred)
+  :custom
+  (lsp-eldoc-render-all t))
 
 (use-package lsp-server
   :straight (:host github :repo "akirak/lsp-server.el")
   :commands (lsp-server-install))
 
 (use-package lsp-ui
+  :disabled t
   :commands lsp-ui-mode
   :hook
   (lsp-mode . lsp-ui-mode)
-  (lsp-ui-mode . lsp-ui-doc-mode)
-  (lsp-ui-mode . lsp-ui-peek-mode)
   (lsp-ui-mode . lsp-ui-sideline-mode)
-  (lsp-ui-mode . (lambda () (eldoc-mode (not lsp-ui-mode))))
   :custom
-  (lsp-ui-doc-delay 0.3)
-  (lsp-ui-doc-header t)
+  (lsp-ui-doc-delay 0.8)
+  (lsp-ui-doc-header nil)
   (lsp-ui-doc-include-signature t)
+  (lsp-ui-doc-alignment 'window)
+  (lsp-ui-doc-use-childframe t)
   (lsp-ui-doc-position (quote at-point)))
 
 (use-package lsp-ivy
@@ -36,7 +45,8 @@
     "M-s" #'lsp-ivy-global-workspace-symbol))
 
 (use-package lsp-treemacs
-  :after lsp)
+  :disabled t
+  :after lsp-mode)
 
 (use-package dap-mode
   :after lsp-mode
@@ -44,32 +54,7 @@
   (lsp-mode . dap-mode)
   (dap-mode . dap-ui-mode))
 
-;; https://github.com/abo-abo/hydra/wiki/lsp-mode
-(defhydra hydra-lsp (:exit t :hint nil)
-  "
- Buffer^^               Server^^                   Symbol
--------------------------------------------------------------------------------------
- [_f_] format           [_M-r_] restart            [_d_] declaration  [_i_] implementation  [_o_] documentation
- [_m_] imenu            [_S_]   shutdown           [_D_] definition   [_t_] type            [_r_] rename
- [_x_] execute action   [_M-s_] describe session   [_R_] references   [_s_] signature"
-  ("d" lsp-find-declaration)
-  ("D" lsp-ui-peek-find-definitions)
-  ("R" lsp-ui-peek-find-references)
-  ("i" lsp-ui-peek-find-implementation)
-  ("t" lsp-find-type-definition)
-  ("s" lsp-signature-help)
-  ("o" lsp-describe-thing-at-point)
-  ("r" lsp-rename)
-
-  ("f" lsp-format-buffer)
-  ("m" lsp-ui-imenu)
-  ("x" lsp-execute-code-action)
-
-  ("M-s" lsp-describe-session)
-  ("M-r" lsp-restart-workspace)
-  ("S" lsp-shutdown-workspace))
-
-;;;; Configuration for specific clients
+;;;; Additional LSP client packages which are not part of lsp-mode
 (use-package lsp-dockerfile
   :straight (lsp-dockerfile :host github :repo "emacs-lsp/lsp-dockerfile")
   :after dockerfile-mode
@@ -104,9 +89,5 @@
   :custom
   (lsp-haskell-process-path-hie "ghcide")
   (lsp-haskell-process-args-hie nil))
-
-(use-package lsp-vetur
-  :straight lsp-mode
-  :after vue-mode)
 
 (provide 'setup-lsp)
