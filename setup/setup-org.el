@@ -252,7 +252,7 @@ from running."
                                 (string-remove-suffix "-mode" name))))
           (when (and (let ((case-fold-search nil))
                        (string-match-p "^[a-z]" language))
-                     (not (string-match-p (rx (or "global" "/" "-")) language)))
+                     (not (string-match-p (rx (or "global" "/")) language)))
             (push language modes))))
       modes))
   :config/el-patch
