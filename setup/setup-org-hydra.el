@@ -51,6 +51,7 @@
      "Set created time")
     ("%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
     ("/" (akirak/org-add-statistics-cookie "/") "Add [/]")
+    ("ms" org-sidebar-tree)
     ;; TODO: Show history
     )
    "Set"

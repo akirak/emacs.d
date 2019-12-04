@@ -271,4 +271,9 @@ from running."
                     (company-org-block--major-mode-list))
                   (map-values org-structure-template-alist))))))
 
+(use-package org-sidebar
+  :custom
+  (org-sidebar-side 'right)
+  (org-sidebar-tree-side 'right))
+
 (provide 'setup-org)
