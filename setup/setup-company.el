@@ -63,6 +63,7 @@
   (company-tooltip-align-annotations nil))
 
 (use-package company-posframe
+  :if (posframe-workable-p)
   :config/el-patch
   ;; Override company-posframe-show for displaying the list of active
   ;; backends in the mode line.
