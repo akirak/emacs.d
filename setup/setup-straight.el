@@ -31,6 +31,6 @@
       (push package akirak/straight-rebuilt-outdated-packages))))
 
 ;; During the first idle of 5 minutes, rebuild the outdated packages.
-(run-with-idle-timer 300 nil #'akirak/straight-rebuild-outdated-packages)
+(run-with-idle-timer 300 nil #'straight-check-all)
 
 (provide 'setup-straight)
