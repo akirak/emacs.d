@@ -150,7 +150,7 @@
       ;; Used for normal text in programming and message buffers.
       (default
         ;; Available from my agave package
-        "Agave")
+        "agave")
       ;; Monospace or duospace of any type
       ;; used for writing
       (monospace-or-duospace
