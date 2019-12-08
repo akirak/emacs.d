@@ -1878,7 +1878,11 @@ Ideally, this section should be a portfolio of my skills.
             :quit-key "q")
     ("file/buffer"
      (("e" akirak/eval-buffer-or-load-file "Eval or load file")
-      ("l" package-lint-current-buffer "package-lint"))
+      ("l" package-lint-current-buffer "package-lint")
+      ("pb" (straight-rebuild-package (file-name-base (buffer-file-name)))
+       "Rebuild package" :exit nil)
+      ("pl" (load-library (file-name-base (buffer-file-name)))
+       "Load library" :exit nil))
      "point"
      (("m" pp-macroexpand-last-sexp "macroexpand"))
      "help/references"
