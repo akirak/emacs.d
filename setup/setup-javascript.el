@@ -8,6 +8,21 @@
   :after (js json-mode)
   :mode (("\\.js\\'" . js2-mode))
   :config/el-patch
+  (el-patch-defun js2-get-element-index-from-array-node (elem array-node &optional hardcoded-array-index)
+    "Get index of ELEM from ARRAY-NODE or 0 and return it as string."
+    (let ((idx 0) elems (rlt hardcoded-array-index))
+      (setq elems (js2-array-node-elems array-node))
+      (if (and elem (not hardcoded-array-index))
+          (setq rlt (catch 'nth-elt
+                      (dolist (x elems)
+                        ;; We know the ELEM does belong to ARRAY-NODE,
+                        (if (eq elem x) (throw 'nth-elt idx))
+                        (setq idx (1+ idx)))
+                      0)))
+      (el-patch-swap
+        (format "[%s]" rlt)
+        (when rlt
+          (format "[%s]" rlt)))))
   (el-patch-defun js2-print-json-path (&optional hardcoded-array-index)
     "Print the path to the JSON value under point, and save it in the kill ring.
 If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it."
@@ -24,10 +39,19 @@ If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it.
       (while (not (js2-ast-root-p current-node))
         (cond
          ;; JSON property node
-         ((js2-object-prop-node-p current-node)
-          (setq key-name (js2-prop-node-name (js2-object-prop-node-left current-node)))
-          (if rlt (setq rlt (concat "." key-name rlt))
-            (setq rlt (concat "." key-name))))
+         (el-patch-swap
+           ((js2-object-prop-node-p current-node)
+            (setq key-name (js2-prop-node-name (js2-object-prop-node-left current-node)))
+            (if rlt (setq rlt (concat "." key-name rlt))
+              (setq rlt (concat "." key-name))))
+           ((js2-object-prop-node-p current-node)
+            (let ((key-name (js2-prop-node-name
+                             (js2-object-prop-node-left current-node))))
+              (setq rlt (concat
+                         (if (string-match-p (rx bol (+ (any alnum)) eol) key-name)
+                             (concat "." key-name)
+                           (format "[\"%s\"]" key-name))
+                         (or rlt ""))))))
 
          ;; Array node
          ((or (js2-array-node-p current-node))
@@ -43,8 +67,9 @@ If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it.
         (setq previous-node current-node)
         ;; Get parent node and continue the loop
         (setq current-node (js2-node-parent current-node)))
-      ;; Remove side effects intended for interactive use
-      (el-patch-swap
+      ;; Remove side effects intended for interactive use.
+      ;; Also, don't strip the preceding period, since it's useful in jq
+      (el-patch-remove
         (cond
          (rlt
           ;; Clean the final result
@@ -52,10 +77,7 @@ If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it.
           (kill-new rlt)
           (message "%s => kill-ring" rlt))
          (t
-          (message "No JSON path found!")))
-        (when rlt
-          ;; Clean the final result
-          (setq rlt (replace-regexp-in-string "^\\." "" rlt))))
+          (message "No JSON path found!"))))
       rlt))
   :config
   ;; Based on http://blog.binchen.org/posts/use-js2-mode-as-minor-mode-to-process-json.html
