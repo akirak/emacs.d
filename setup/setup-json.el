@@ -1,13 +1,15 @@
 (use-package json-mode
-  :mode (("\\.bowerrc$"     . json-mode)
-         ("\\.jshintrc$"    . json-mode)
+  :mode (("\\.bowerrc$" . json-mode)
+         ("\\.jshintrc$" . json-mode)
          ("\\.json_schema$" . json-mode)
          ("\\.json\\'" . json-mode))
   :bind (:package json-mode-map
                   :map json-mode-map
                   ("C-c <tab>" . json-mode-beautify))
   :config
-  (make-local-variable 'js-indent-level))
+  (make-local-variable 'js-indent-level)
+  :hook
+  (json-mode . akirak/turn-on-eldoc-mode))
 
 (use-package counsel-jq
   :straight (counsel-jq :host github :repo "200ok-ch/counsel-jq")
