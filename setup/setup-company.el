@@ -35,10 +35,10 @@
            '((company-dabbrev company-yankpad company-yasnippet)
              (company-dabbrev-code company-gtags company-etags)))
           (t
-           (company-capf
-            company-keywords)
-           company-dabbrev
-           company-files))))
+           '((company-capf
+              company-keywords)
+             company-dabbrev
+             company-files)))))
   (cl-delete 'company-echo-metadata-frontend
              (default-value 'company-frontends))
   :hook
