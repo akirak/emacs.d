@@ -55,12 +55,42 @@ section "Updating the submodules in the Emacs configuration..."
 # Update the submodule
 git submodule update --recursive
 
-echo -n "Update the packages? (y/n): "
+pull_all_packages_ff() {
+    cd straight/repos
+    for d in *; do
+        cd $d
+        git pull --ff-only origin HEAD
+        cd ..
+    done
+    cd ../..
+}
+
+pull_package() {
+    cd straight/repos/$1
+    git pull --ff-only origin HEAD
+    cd ../../..
+}
+
+echo -n "Rebuild the updated packages? (y/n): "
 read update
 if [[ ${update} = [Yy]* ]]; then
-    section "Updating the packages..."
-    emacs --batch --load init.el --eval '(straight-pull-all)' \
-          --eval '(straight-rebuild-all)'
+    echo -n "Pull all packages? (y/n): "
+    read fetch
+    if [[ ${fetch} = [Yy]* ]]; then
+        pull_all_packages_ff
+    else
+        pull_package melpa
+    fi
+
+    section "Rebuilding org autoloads..."
+    cd straight/repos/org
+    make autoloads
+    cd ../../..
+
+    section "Rebuilding outdated packages..."
+    emacs --batch --load init.el \
+          --eval '(akirak/straight-rebuild-outdated-packages)' \
+          --eval '(kill-emacs)'
 fi
 
 echo "Done."
