@@ -7,9 +7,7 @@
                   :map json-mode-map
                   ("C-c <tab>" . json-mode-beautify))
   :config
-  (make-local-variable 'js-indent-level)
-  :hook
-  (json-mode . akirak/turn-on-eldoc-mode))
+  (make-local-variable 'js-indent-level))
 
 (use-package counsel-jq
   :straight (counsel-jq :host github :repo "200ok-ch/counsel-jq")

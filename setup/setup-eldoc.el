@@ -43,8 +43,4 @@
 
 (advice-add #'display-buffer :before #'akirak/eldoc-delete-window)
 
-(defun akirak/turn-on-eldoc-mode ()
-  (interactive)
-  (eldoc-mode 1))
-
 (provide 'setup-eldoc)

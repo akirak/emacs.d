@@ -104,15 +104,17 @@ If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it.
             (when (called-interactively-p 'any)
               (message path))
             path))))))
-  ;; Set eldoc-documentation-function in json-mode.
-  (setq-mode-local json-mode
-                   eldoc-documentation-function
-                   (byte-compile
-                    (lambda ()
-                      (when-let ((path (akirak/print-json-path)))
-                        (concat (propertize "JSON path: "
-                                            'face 'font-lock-comment-face)
-                                path))))))
+  (defun akirak/json-mode-eldoc-function ()
+    (when-let ((path (akirak/print-json-path)))
+      (concat (propertize "JSON path: "
+                          'face 'font-lock-comment-face)
+              path)))
+  (defun akirak/setup-json-eldoc ()
+    (setq-local eldoc-documentation-function
+                #'akirak/json-mode-eldoc-function)
+    (eldoc-mode 1))
+  :hook
+  (json-mode . akirak/setup-json-eldoc))
 
 (use-package js2-imenu-extras
   :straight js2-mode
