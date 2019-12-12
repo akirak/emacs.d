@@ -72,11 +72,7 @@
   (company-mode . company-posframe-mode))
 
 (use-package company-quickhelp
-  :straight (:host github :repo "akirak/company-quickhelp"
-                   :branch "dedicated-window")
   :after company
-  :custom
-  (company-quickhelp-margin 15)
   :hook
   (company-mode . company-quickhelp-local-mode))
 
