@@ -2,13 +2,13 @@
   :config
   (require 'smartparens-config)
   (defun akirak/setup-smartparens-mode ()
+    (interactive)
     (unless (bound-and-true-p polymode-mode)
-      (when (derived-mode-p 'prog-mode)
-        (turn-on-smartparens-strict-mode)
-        (show-smartparens-mode 1))))
+      (when (derived-mode-p 'prog-mode 'json-mode 'sgml-mode)
+        (turn-on-smartparens-strict-mode))))
   :hook
   (after-change-major-mode . akirak/setup-smartparens-mode)
-  (minibuffer-setup . smartparens-mode))
+  (minibuffer-setup . turn-on-smartparens-strict-mode))
 
 (akirak/bind-user :keymaps 'smartparens-mode-map
   "e" #'sp-change-enclosing)
