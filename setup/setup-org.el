@@ -272,6 +272,7 @@ from running."
                   (map-values org-structure-template-alist))))))
 
 (use-package org-sidebar
+  :straight (:host github :repo "alphapapa/org-sidebar")
   :custom
   (org-sidebar-side 'right)
   (org-sidebar-tree-side 'right))
