@@ -1,6 +1,8 @@
 ;; The following packages are enhancements to Emacs that don't require
 ;; much configuration
 
+(use-package restart-emacs)
+
 ;; Install smex for sorting M-x candidates
 (use-package smex
   ;; Disabled in favour of prescient
