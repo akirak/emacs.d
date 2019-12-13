@@ -46,6 +46,7 @@
         (load package))
       (setq i (1+ i)))
     (setq finish-time (current-time))
+    (garbage-collect)
     (message "Finished rebuilding %d package in %.1f seconds."
              total (float-time (time-subtract finish-time start-time)))))
 
