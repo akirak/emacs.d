@@ -49,7 +49,7 @@
     (message "Finished rebuilding %d package in %.1f seconds."
              total (float-time (time-subtract finish-time start-time)))))
 
-;; During the first idle of 10 minutes, rebuild the outdated packages.
+;; After an idle of 10 minutes, rebuild the outdated packages.
 (run-with-idle-timer 600 nil #'akirak/straight-rebuild-outdated-packages)
 
 (provide 'setup-straight)
