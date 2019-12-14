@@ -19,7 +19,7 @@
   "The user name on GitHub.")
 
 (defun akirak/git-clone-github-repo (path)
-  (interactive (list (read-string "GitHub repo: ")))
+  (interactive (list (akirak/select-github-repo "Clone a GitHub repo: ")))
   (-let (((user repo) (s-split-up-to "/" path 1)))
     (cond
      ((string-equal user akirak/github-login)

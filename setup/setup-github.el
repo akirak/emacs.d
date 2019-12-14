@@ -4,6 +4,12 @@
   ;; TODO: Collect more information
   akirak/github-repository-history)
 
+(defun akirak/select-github-repo (&optional prompt)
+  (completing-read (or prompt "GitHub repository: ")
+                   (akirak/interesting-github-repos)
+                   nil nil nil
+                   'akirak/github-repository-history))
+
 (use-package forge
   :config
   (akirak/bind-browse-at-remote
@@ -18,10 +24,7 @@
   :commands (github-review-forge-pr-at-point))
 
 (defun akirak/browse-github-readme (repo &optional ref)
-  (interactive (list (completing-read "GitHub repository: "
-                                      (akirak/interesting-github-repos)
-                                      nil nil nil
-                                      'akirak/github-repository-history)))
+  (interactive (list (akirak/select-github-repo "README of GitHub repo: ")))
   (let* ((endpoint (concat (format "/repos/%s/readme" repo)
                            (if ref
                                (concat "?ref=" ref)
