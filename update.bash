@@ -88,9 +88,8 @@ if [[ ${update} = [Yy]* ]]; then
     cd ../../..
 
     section "Rebuilding outdated packages..."
-    emacs --batch --load init.el \
-          --eval '(akirak/straight-rebuild-outdated-packages)' \
-          --eval '(kill-emacs)'
+    emacs -nw -q --load init.el \
+          --eval '(progn (akirak/straight-rebuild-outdated-packages) (kill-emacs))'
 fi
 
 echo "Done."
