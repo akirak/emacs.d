@@ -17,12 +17,8 @@
                  (package (when (string-match (rx (group (+ (not (any "/"))))
                                                   "/" (+ (not (any "/"))) eol)
                                               fpath)
-                            (match-string 1 fpath)))
-                 (real-package (cl-case package
-                                 ("helm-core" "helm")
-                                 (otherwise package))))
-            (when package
-              (push package result)))))
+                            (match-string 1 fpath))))
+            (push package result))))
       (set-difference (cl-remove-duplicates (nreverse result)
                                             :test #'string-equal)
                       akirak/straight-rebuilt-outdated-packages))))
