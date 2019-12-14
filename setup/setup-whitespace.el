@@ -3,9 +3,9 @@
   :straight nil
   :diminish whitespace-mode
   :hook
-  ((prog-mode) . whitespace-mode)
+  ((prog-mode sgml-mode) . whitespace-mode)
   :custom
-  (whitespace-style '(face tabs indentation trailing tab-mark)))
+  (whitespace-style '(trailing)))
 
 ;;;; Automatically cleaning up whitespace
 (use-package whitespace-cleanup-mode
