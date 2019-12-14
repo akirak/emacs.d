@@ -22,7 +22,7 @@ if ! git diff-index --name-status --exit-code HEAD; then
     if ! git diff-index --name-status --exit-code HEAD; then
         echo "There are still changes. Aborting." >&2
         echo "Press enter to exit"
-        read
+        read -r
         exit 1
     fi
 else
@@ -38,13 +38,12 @@ if git --no-pager log --exit-code --oneline --summary HEAD..$remote/$branch; the
     echo "The branch is up-to-date."
 else
     echo -n "Rebase onto $remote/$branch? (y/n): "
-    read need_rebase
+    read -r need_rebase
     if [[ ${need_rebase} = [Yy]* ]]; then
-        git rebase $remote/$branch
-        if [ $? -gt 0 ]; then
+        if ! git rebase "$remote/$branch"; then
             echo "There was an error during the rebase."
             echo "Press enter."
-            read
+            read -r
             exit 1
         fi
     fi
@@ -72,10 +71,10 @@ pull_package() {
 }
 
 echo -n "Rebuild the updated packages? (y/n): "
-read update
+read -r update
 if [[ ${update} = [Yy]* ]]; then
     echo -n "Pull all packages? (y/n): "
-    read fetch
+    read -r fetch
     if [[ ${fetch} = [Yy]* ]]; then
         pull_all_packages_ff
     else
