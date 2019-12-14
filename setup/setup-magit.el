@@ -69,6 +69,15 @@ Only one letter is shown, the first that applies."
   (akirak/bind-user
     "g" (lambda () (interactive) (magit-show-commit "HEAD"))
     "G" #'magit-blob-visit-file)
+
+  (defun akirak/add-magit-repositories-to-projectile ()
+    (interactive)
+    (message "Adding magit repositories to projectile projects...")
+    (mapc #'projectile-add-known-project (magit-list-repos)))
+
+  (run-with-idle-timer
+   900 nil
+   #'akirak/add-magit-repositories-to-projectile)
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
