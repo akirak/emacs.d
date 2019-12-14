@@ -142,12 +142,14 @@
                 counsel-M-x))))
   (akirak/ivy-posframe-height-alist
    '((ivy-omni-org . 30)
-     (all-the-icons-ivy . 30)))
+     (all-the-icons-ivy . 30)
+     (counsel-yank-pop . 15)))
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
    `(,@(--map (cons it nil)
-              '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
+              '(swiper swiper-all swiper-multi org-starter-swiper-config-files
+                       counsel-locate))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
      (all-the-icons-ivy . ivy-posframe-display-at-point)
