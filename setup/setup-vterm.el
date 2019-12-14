@@ -4,6 +4,8 @@
   :if (akirak/library-exists-p "vterm" 'verbose)
   :general
   (:keymaps 'vterm-mode-map
+            "<S-prior>" #'scroll-down-command
+            "<S-next>" #'scroll-up-command
             "C-c C-t" #'vterm-copy-mode
             "C-c C-c" #'vterm-send-ctrl-c)
   :config/el-patch
@@ -35,7 +37,6 @@
 
 (use-package vterm-toggle
   :if (featurep 'vterm)
-  :straight (vterm-toggle :host github :repo "jixiuf/vterm-toggle")
   :custom
   ;; vterm-toggle uses pop-to-buffer to display the buffer, but it
   ;; deletes all the other windows by default.
