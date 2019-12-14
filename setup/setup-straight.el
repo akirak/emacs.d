@@ -77,16 +77,20 @@
 
 (ivy-add-actions 'akirak/ivy-emacs-package
                  '(("u" straight-use-package "Install")
+                   ("r" akirak/find-readme-or-browse-emacs-package "Readme")
                    ("b" akirak/browse-emacs-package "Browse source repo")))
 
 (defun akirak/find-readme-or-browse-emacs-package (package)
-  (let* ((recipe (akirak/get-emacs-package-recipe package))
+  (let* ((recipe (akirak/get-emacs-package-recipe
+                  (cl-etypecase package
+                    (string (intern package))
+                    (symbol package))))
          (plist (if (string-prefix-p ":" (symbol-name (car recipe)))
                     recipe
                   (cdr recipe))))
     (cl-case (plist-get plist :host)
       ('github
-       (princ package))
+       (akirak/browse-github-readme (plist-get plist :repo)))
       ('gitlab
        (princ package))
       (otherwise
