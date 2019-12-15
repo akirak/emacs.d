@@ -1,5 +1,13 @@
 ;;;; Visualise whitespace
+
+(defun akirak/show-trailing-whitespace ()
+  (setq-local prog-mode show-trailing-whitespace t))
+
+(general-add-hook '(prog-mode text-mode sgml-mode)
+                  #'akirak/show-trailing-whitespace)
+
 (use-package whitespace
+  :disabled t
   :straight nil
   :diminish whitespace-mode
   :hook
