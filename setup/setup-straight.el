@@ -99,7 +99,7 @@
       (otherwise
        (user-error "Unsupported recipe %s" recipe)))))
 
-(defun akirak/emacs-package-repository-url (package)
+(defun akirak/emacs-package-repository-html-url (package)
   (pcase-let*
       ((recipe (akirak/get-emacs-package-recipe
                 (cl-etypecase package
@@ -130,7 +130,7 @@
         (t `(recipe ,recipe)))))))
 
 (defun akirak/browse-emacs-package (package)
-  (pcase (akirak/emacs-package-repository-url package)
+  (pcase (akirak/emacs-package-repository-html-url package)
     (`(url ,url)
      (browse-url url))
     (`(recipe ,recipe)
@@ -155,7 +155,7 @@
        (browse-url (format "https://melpa.org/#/%s" package))))))
 
 (defun akirak/copy-emacs-package-repository-url (package)
-  (pcase (akirak/emacs-package-repository-url package)
+  (pcase (akirak/emacs-package-repository-html-url package)
     (`(url ,url)
      (progn
        (kill-new url)
@@ -169,7 +169,7 @@
 
 (defun akirak/store-emacs-package-repository-link (package)
   (require 'ol)
-  (let ((url (pcase (akirak/emacs-package-repository-url package)
+  (let ((url (pcase (akirak/emacs-package-repository-html-url package)
                (`(url ,url)
                 url)
                (`(recipe ,recipe)
