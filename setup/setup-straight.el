@@ -78,7 +78,9 @@
 (ivy-add-actions 'akirak/ivy-emacs-package
                  '(("u" straight-use-package "Install")
                    ("r" akirak/find-readme-or-browse-emacs-package "Readme")
-                   ("b" akirak/browse-emacs-package "Browse source repo")))
+                   ("b" akirak/browse-emacs-package "Browse source repo")
+                   ("lo" akirak/store-emacs-package-repository-link "Store org link")
+                   ("lw" akirak/copy-emacs-package-repository-url "Copy repository URL")))
 
 (defun akirak/find-readme-or-browse-emacs-package (package)
   (let* ((recipe (akirak/get-emacs-package-recipe
@@ -96,7 +98,7 @@
       (otherwise
        (user-error "Unsupported recipe %s" recipe)))))
 
-(defun akirak/browse-emacs-package (package)
+(defun akirak/emacs-package-repository-url (package)
   (pcase-let*
       ((recipe (akirak/get-emacs-package-recipe
                 (cl-etypecase package
@@ -112,23 +114,56 @@
        (url (plist-get plist :url)))
     (cl-case host
       (github
-       (browse-url (concat "https://github.com/"
-                           repo (if (or commit branch)
-                                    (concat "/tree/" (or commit branch))
-                                  ""))))
+       (concat "https://github.com/"
+               repo (if (or commit branch)
+                        (concat "/tree/" (or commit branch))
+                      "")))
       (gitlab
-       (browse-url (concat "https://gitlab.com/"
-                           repo (if (or commit branch)
-                                    (concat "/tree/" (or commit branch))
-                                  ""))))
+       (concat "https://gitlab.com/"
+               repo (if (or commit branch)
+                        (concat "/tree/" (or commit branch))
+                      "")))
       (otherwise
        (cond
-        (url (progn
-               (kill-new url)
-               (message "Saved %s to the kill ring" url)))
-        (t (progn
-             (kill-new (prin1-to-string recipe))
-             (message "Copied %s to the kill ring" recipe))))))))
+        (url `(url ,url))
+        (t `(recipe ,recipe)))))))
+
+(defun akirak/browse-emacs-package (package)
+  (pcase (akirak/emacs-package-repository-url package)
+    (`(url ,url)
+     (progn
+       (kill-new url)
+       (message "Saved %s to the kill ring" url)))
+    (`(recipe ,recipe)
+     (progn
+       (kill-new (prin1-to-string recipe))
+       (message "Copied %s to the kill ring" recipe)))
+    (url
+     (browse-url url))))
+
+(defun akirak/copy-emacs-package-repository-url (package)
+  (pcase (akirak/emacs-package-repository-url package)
+    (`(url ,url)
+     (progn
+       (kill-new url)
+       (message "Copied the Git repository URL instead" url)))
+    (`(recipe ,recipe)
+     (progn
+       (kill-new (prin1-to-string recipe))
+       (message "Copied %s to the kill ring" recipe)))
+    (url
+     (kill-new url))))
+
+(defun akirak/store-emacs-package-repository-link (package)
+  (require 'ol)
+  (let ((url (pcase (akirak/emacs-package-repository-url package)
+               (`(url ,url)
+                url)
+               (`(recipe ,recipe)
+                (user-error "URL not available from recipe %s" recipe))
+               (url
+                url))))
+    (push (list url package) org-stored-links)))
 
 (pretty-hydra-define akirak/package-hydra
   (:title "Packages"
