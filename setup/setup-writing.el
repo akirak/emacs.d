@@ -1,3 +1,14 @@
+;;;; Sentences
+;; Based on https://gitlab.com/rycee/configurations/blob/d6dcf6480e29588fd473bd5906cd226b49944019/user/emacs.nix#L73
+(setq-default sentence-end
+              (rx (or (and (any ".?!")
+                           (optional (any "]\"')}"))
+                           (or bol (any space))
+                           (* space))))
+              sentence-end-double-space nil)
+
+(setq-mode-local emacs-lisp-mode sentence-end-double-space t)
+
 ;;;; Spell checking
 (use-package flyspell
   :if (executable-find "ispell")
