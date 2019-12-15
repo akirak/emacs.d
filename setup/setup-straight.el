@@ -81,7 +81,8 @@
                    ("b" akirak/browse-emacs-package "Browse source repo")
                    ("m" akirak/browse-emacs-package-in-registry "Browse in MELPA")
                    ("lo" akirak/store-emacs-package-repository-link "Store org link")
-                   ("lw" akirak/copy-emacs-package-repository-url "Copy repository URL")))
+                   ("lw" akirak/copy-emacs-package-repository-url "Copy repository URL")
+                   ("C" akirak/git-clone-emacs-package "Clone")))
 
 (defun akirak/find-readme-or-browse-emacs-package (package)
   (let* ((recipe (akirak/get-emacs-package-recipe
@@ -128,6 +129,34 @@
        (cond
         (url `(url ,url))
         (t `(recipe ,recipe)))))))
+
+(defun akirak/git-clone-emacs-package (package)
+  (pcase-let*
+      ((recipe (akirak/get-emacs-package-recipe
+                (cl-etypecase package
+                  (string (intern package))
+                  (symbol package))))
+       (plist (if (string-prefix-p ":" (symbol-name (car recipe)))
+                  recipe
+                (cdr recipe)))
+       (host (plist-get plist :host))
+       (repo (plist-get plist :repo))
+       (branch (plist-get plist :branch))
+       (commit (plist-get plist :commit))
+       (url (plist-get plist :url)))
+    (cl-case host
+      (github
+       (akirak/git-clone (format "https://github.com/%s.git" repo)
+                         (when branch
+                           (list "-b" branch))))
+      (gitlab
+       (akirak/git-clone (format "https://gitlab.com/%s.git" repo)
+                         (when branch
+                           (list "-b" branch))))
+      (otherwise
+       (cond
+        (url (akirak/git-clone url (when branch (list "-b" branch))))
+        (t (error "Cannot get the repository URL for %s" recipe)))))))
 
 (defun akirak/browse-emacs-package (package)
   (pcase (akirak/emacs-package-repository-html-url package)

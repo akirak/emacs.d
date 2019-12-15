@@ -18,39 +18,40 @@
 (defcustom akirak/github-login "akirak"
   "The user name on GitHub.")
 
-(defun akirak/git-clone-github-repo (path)
+(defun akirak/git-clone-github-repo (path args)
   (interactive (list (akirak/select-github-repo "Clone a GitHub repo: ")))
   (-let (((user repo) (s-split-up-to "/" path 1)))
     (cond
      ((string-equal user akirak/github-login)
       (akirak/git-clone-internal (concat "git@github.com:" path ".git")
                                  (expand-file-name repo
-                                                   akirak/git-clone-user-directory)))
+                                                   akirak/git-clone-user-directory)
+                                 args))
      (t
-      (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo)))))
+      (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo args)))))
 
-(defun akirak/git-clone-some-repo (url name)
+(defun akirak/git-clone-some-repo (url name &optional args)
   (let ((parent (read-directory-name "Parent directory: " "~/")))
-    (akirak/git-clone-internal url (expand-file-name name parent))))
+    (akirak/git-clone-internal url (expand-file-name name parent) args)))
 
-(defun akirak/git-clone (url)
+(defun akirak/git-clone (url &optional args)
   (interactive (list (read-string "Repository URL: ")))
   (cond
    ((string-match akirak/github-https-url-regexp url)
-    (akirak/git-clone-github-repo (match-string 1 url)))
+    (akirak/git-clone-github-repo (match-string 1 url) args))
    ((string-match (concat "^" akirak/github-repo-path-pattern "$") url)
-    (akirak/git-clone-github-repo (match-string 1 url)))
+    (akirak/git-clone-github-repo (match-string 1 url) args))
    ((string-match (rx "/" (group (1+ (any "-" alnum))) ".git" bol) url)
-    (akirak/git-clone-some-repo url (match-string 1 url)))))
+    (akirak/git-clone-some-repo url (match-string 1 url) args))))
 
-(defun akirak/git-clone-internal (url local-path)
+(defun akirak/git-clone-internal (url local-path &optional args)
   "Call `magit-clone' on URL if LOCAL-PATH does not exist or otherwise open it."
   (if (file-exists-p local-path)
       (let ((default-directory local-path))
         (message "%s already exists" local-path)
         (funcall projectile-switch-project-action))
     (message "Cloning %s to %s..." url local-path)
-    (magit-clone-regular url local-path nil)))
+    (magit-clone-regular url local-path args)))
 
 (defun akirak//git-clone-default-directory (url name)
   (let ((local-repo-path (expand-file-name name akirak/default-git-clone-directory)))
