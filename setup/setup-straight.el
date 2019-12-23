@@ -79,6 +79,7 @@
                  '(("u" straight-use-package "Install")
                    ("r" akirak/find-readme-or-browse-emacs-package "Readme")
                    ("b" akirak/browse-emacs-package "Browse source repo")
+                   ("m" akirak/browse-emacs-package-in-registry "Browse in MELPA")
                    ("lo" akirak/store-emacs-package-repository-link "Store org link")
                    ("lw" akirak/copy-emacs-package-repository-url "Copy repository URL")))
 
@@ -138,6 +139,20 @@
        (message "Copied %s to the kill ring" recipe)))
     (url
      (browse-url url))))
+
+(defun akirak/browse-emacs-package-in-registry (package)
+  (pcase-let*
+      ((recipe (akirak/get-emacs-package-recipe
+                (cl-etypecase package
+                  (string (intern package))
+                  (symbol package))))
+       (plist (if (string-prefix-p ":" (symbol-name (car recipe)))
+                  recipe
+                (cdr recipe)))
+       (flavour (plist-get plist :flavor)))
+    (cl-ecase flavour
+      (melpa
+       (browse-url (format "https://melpa.org/#/%s" package))))))
 
 (defun akirak/copy-emacs-package-repository-url (package)
   (pcase (akirak/emacs-package-repository-url package)
