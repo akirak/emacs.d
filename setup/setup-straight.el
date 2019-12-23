@@ -131,9 +131,7 @@
 (defun akirak/browse-emacs-package (package)
   (pcase (akirak/emacs-package-repository-url package)
     (`(url ,url)
-     (progn
-       (kill-new url)
-       (message "Saved %s to the kill ring" url)))
+     (browse-url url))
     (`(recipe ,recipe)
      (progn
        (kill-new (prin1-to-string recipe))
