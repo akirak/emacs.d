@@ -212,7 +212,8 @@
           :exit t)
   ("Straight.el"
    (("el" akirak/ivy-emacs-package "List all")
-    ("e!" akirak/straight-rebuild-outdated-packages "Rbld outdtd"))))
+    ("eb" straight-rebuild-package "Rebuild")
+    ("e!" akirak/straight-rebuild-outdated-packages "Rb outdated"))))
 
 (general-def "C-x M-p" #'akirak/package-hydra/body)
 
