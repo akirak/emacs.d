@@ -2184,7 +2184,7 @@ I am now using myrepos to synchronize my configuration repositories.
     (when (org-find-property "TOC")
       (org-make-toc)))
 #+end_src
-*** Ignore
+*** COMMENT Ignore                                                       :noexport:
 :PROPERTIES:
 :TOC:      ignore
 :END:
