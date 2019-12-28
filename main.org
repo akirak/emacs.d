@@ -383,42 +383,17 @@ Generic prefix key for editing commands:
 
 #+begin_src emacs-lisp
   (akirak/bind-generic
-    "a" '(nil :wk "align")
-    "b" '(nil :wk "barf")
     "f" '(nil :wk "format")
-    "i" '(nil :wk "insert")
-    "j" '(nil :wk "join")
     "k" '(nil :wk "kill")
     "m" '(nil :wk "mark")
-    "o" '(nil :wk "origami")
-    "r" '(nil :wk "rename/refactor")
-    "s" '(nil :wk "slurp/split")
-    "u" '(nil :wk "splice/unwrap"))
+    "r" '(nil :wk "rename/refactor"))
 
-  (general-create-definer akirak/bind-align :prefix "C-. a"
-    :prefix-map 'akirak/align-prefix-map)
-  (general-create-definer akirak/bind-barf :prefix "C-. b"
-    :prefix-map 'akirak/barf-prefix-map)
-  (general-create-definer akirak/bind-insert :prefix "C-. i"
-    :prefix-map 'akirak/insert-prefix-map)
-  (general-create-definer akirak/bind-join :prefix "C-. j"
-    :prefix-map akirak/join)
   (general-create-definer akirak/bind-kill :prefix "C-. k"
     :prefix-map 'akirak/kill-prefix-map)
   (general-create-definer akirak/bind-mark :prefix "C-. m"
     :prefix-map 'akirak/mark-prefix-map)
-  (general-create-definer akirak/bind-split :prefix "C-. s"
-    :prefix-map 'akirak/split-prefix-map)
   (general-create-definer akirak/bind-replace :prefix "C-. r"
     :prefix-map 'akirak/replace-prefix-map)
-  (general-create-definer akirak/bind-unwrap :prefix "C-. u"
-    :prefix-map 'akirak/unwrap-prefix-map)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-kill
-   "f" 'flush-lines
-   "l" 'delete-blank-lines)
 #+end_src
 **** bind-mode (C-,) for major-mode-specific commands
 :PROPERTIES:
@@ -1389,6 +1364,9 @@ I often consult the Emacs Lisp manual:
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
 :END:
+#+begin_src emacs-lisp
+(akirak/require 'setup-edit)
+#+end_src
 **** Expand Region
 #+begin_src emacs-lisp
   (akirak/require 'setup-expand-region)
@@ -1440,7 +1418,6 @@ Use hl-todo by tarsius
   (use-package hl-todo
     :config
     (akirak/bind-jump :keymaps 'hl-todo-mode-map "t" #'hl-todo-next)
-    (akirak/bind-insert :keymaps 'hl-todo-mode-map "t" #'hl-todo-insert)
     :hook (prog-mode . hl-todo-mode))
 #+end_src
 
