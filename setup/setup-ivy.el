@@ -2,12 +2,14 @@
   :straight (ivy-decorator :host github :repo "akirak/ivy-decorator"))
 
 (use-package ivy
-  ;; :diminish (ivy-mode)
-  :init
-  (ivy-mode 1)               ; Use ivy as completing-read-function
   :config
+  (ivy-mode 1)                   ; Use ivy as completing-read-function
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
+  (defvar ivy-switch-buffer-2-map
+    (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
+      (define-key map (kbd "C-c C-p") 'ivy-switch-buffer-2-toggle-mode)
+      map))
   :general
   (:keymaps 'ivy-occur-mode-map
             "n" #'ivy-occur-next-line
@@ -35,11 +37,6 @@
         (time-less-p y-mtime x-mtime)))))
 
 ;;;; ivy-switch-buffer-2
-
-(defvar ivy-switch-buffer-2-map
-  (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
-    (define-key map (kbd "C-c C-p") 'ivy-switch-buffer-2-toggle-mode)
-    map))
 
 (defun ivy-switch-buffer-2--complete (&rest args)
   (mapcar #'buffer-name (buffer-list)))
@@ -84,6 +81,7 @@
   "Alist of height.")
 
 (use-package ivy-posframe
+  :after ivy
   ;; Use posframe to display candidates in ivy commands.
   ;;
   ;; 1. The default display function is ivy-posframe-display-at-frame-center.
