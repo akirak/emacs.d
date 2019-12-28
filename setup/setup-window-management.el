@@ -1,3 +1,6 @@
+(setq split-height-threshold nil
+      split-width-threshold 160)
+
 (use-package shackle
   :init
   (shackle-mode 1)
