@@ -1386,6 +1386,20 @@ Another option would be reformatter by Steve Purcell, but I haven't managed to c
 #+begin_src emacs-lisp
   ;; (akirak/require 'setup-reformatter)
 #+end_src
+**** Search and replace
+I prefer =swiper== and =counsel-rg=.
+I added additional keybindings to the keymaps of those commands, so I can now dispatch an occur/noccur session from those commands.
+
+#+begin_src emacs-lisp
+(akirak/require 'setup-occur)
+#+end_src
+
+Another useful command is =projectile-replace= (and its regexp variant =projectile-replace-regexp=).
+
+Resources:
+
+- [[https://with-emacs.com/posts/tutorials/using-occur-for-search-and-replace-across-files/][with-emacs · Using Occur for Search and Replace across Files]]
+- [[https://with-emacs.com/posts/tutorials/search-and-replacement-techniques/][with-emacs · Search and Replacement Techniques]]
 **** Commenting
 #+begin_src emacs-lisp
 (use-package comment-dwim-2
