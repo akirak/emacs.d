@@ -13,6 +13,20 @@
 
 (defvar akirak/setup-module-worked-on nil)
 
+(defun akirak/setup-display-failed-modules-if-any ()
+  (when akirak/setup-failed-modules
+    (with-current-buffer (generate-new-buffer "*failed modules*")
+      (insert "The following modules have failed to load:\n"
+              (mapconcar
+               (lambda (module)
+                 (propertize module
+                             'button
+                             (lambda (&rest _) (find-file (find-library-name module)))))
+               akirak/setup-failed-modules "\n"))
+      (pop-to-buffer (current-buffer)))))
+
+(add-hook 'emacs-startup-hook 'akirak/setup-display-failed-modules-if-any)
+
 (defun akirak/setup-find-failed-module ()
   "Open a module which has been failed to load."
   (interactive)
