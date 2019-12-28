@@ -11,7 +11,7 @@
                 (org-with-wide-buffer
                  (goto-char (cdr candidate))
                  (org-id-get-create t)))))
-      (akirak/org-edna-add-id-blocker id)))
+      (org-edna-add-id-blocker id)))
   :hook
   (org-edna-edit-mode . company-mode))
 
