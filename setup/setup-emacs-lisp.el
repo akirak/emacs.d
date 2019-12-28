@@ -13,7 +13,7 @@
                    ("Types" "^\\s-*(\\(cl-def\\(?:struct\\|type\\)\\|def\\(?:class\\|face\\|group\\|ine-\\(?:condition\\|error\\|widget\\)\\|package\\|struct\\|t\\(?:\\(?:hem\\|yp\\)e\\)\\)\\)\\s-+'?\\(\\(?:\\sw\\|\\s_\\|\\\\.\\)+\\)" 2)
                    ;; Only in my configuration
                    ("use-package" ,(rx "(use-package" (+ space)
-                                       (group (+ nonl)))
+                                       (group (+ (any alnum "-"))))
                     1)
                    ("org-capture" ,(rx "(org-starter-def-capture" (+ space)
                                        (+ (not space)) (+ space)
