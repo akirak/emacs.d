@@ -13,7 +13,7 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#cons][Cons]]
       -  [[#organizational-policies][Organizational policies]]
     -  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
-    -  [[#before-using-use-package][Before using use-package]]
+    -  [[#things-to-set-up-before-loading-use-package][Things to set up before loading use-package]]
     -  [[#overriding-defaults][Overriding defaults]]
     -  [[#keybindings-infrastructure][Keybindings infrastructure]]
       -  [[#repeatable-keys][Repeatable keys]]
@@ -165,7 +165,7 @@ In principle, the main configuration file should be a thin layer of the Emacs co
         (function-put #'if-let* 'lisp-indent-function 2))))
 #+end_src
 
-** Before using =use-package=
+** Things to set up before loading =use-package=
 #+begin_src emacs-lisp
 (akirak/require 'setup-gc)
 #+end_src
