@@ -163,6 +163,8 @@
         (t (error "Cannot get the repository URL for %s" recipe)))))))
 
 (defun akirak/browse-emacs-package (package)
+  (interactive (list (completing-read "Emacs package: "
+                                      #'akirak/emacs-package-list)))
   (pcase (akirak/emacs-package-repository-html-url package)
     (`(url ,url)
      (browse-url url))
@@ -211,14 +213,10 @@
                 url))))
     (push (list url package) org-stored-links)))
 
-(pretty-hydra-define akirak/package-hydra
-  (:title "Packages"
-          :exit t)
-  ("Straight.el"
-   (("el" akirak/ivy-emacs-package "List all")
-    ("eb" straight-rebuild-package "Rebuild")
-    ("e!" akirak/straight-rebuild-outdated-packages "Rb outdated"))))
-
-(general-def "C-x M-p" #'akirak/package-hydra/body)
+(akirak/bind-admin
+  "el" 'akirak/ivy-emacs-package
+  "ew" 'akirak/browse-emacs-package
+  "eb" 'straight-rebuild-package
+  "eB" '(akirak/straight-rebuild-outdated-packages :wk "Rebuild outdated"))
 
 (provide 'setup-straight)

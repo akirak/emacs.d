@@ -444,7 +444,7 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 #+end_src
 
 I bind ~<f8>~ followed by another function key press to magit commands.
-**** bind-system (<f12>) for system commands
+**** bind-admin (<f12>) for administration commands
 :PROPERTIES:
 :CREATED_TIME: [2019-04-13 Sat 09:43]
 :END:
@@ -1301,17 +1301,22 @@ I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
 ***** Built-in help system
 #+begin_src emacs-lisp
   (akirak/bind-specific-help
-    "i" #'helm-info
     "m" #'woman)
 #+end_src
 
 I often consult the Emacs Lisp manual:
 
 #+begin_src emacs-lisp
+  (defun akirak/info-menu (file)
+    (save-window-excursion
+      (info file))
+    (with-current-buffer "*info*"
+      (call-interactively 'Info-menu)
+      (pop-to-buffer (current-buffer))))
+
   (defun akirak/info-elisp ()
     (interactive)
-    (info "elisp")
-    (call-interactively 'Info-menu))
+    (akirak/info-menu "elisp"))
 
   (akirak/bind-help
     "e" #'akirak/info-elisp)

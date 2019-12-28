@@ -6,11 +6,15 @@
     eval-expression-minibuffer-setup)
    . lispy-mode)
   :general
-  (:keymaps 'lispy-mode-map
-            ;; Bind M-m to easy-mark (from easy-kill package) instead
+  ;; Disable keybindings I don't like
+  (:keymaps 'lispy-mode-map-lispy
+            "M-<left>" nil
+            "M-<right>" nil
             "M-m" nil
-            [remap lispy-outline-promote] 'outline-promote
-            [remap lispy-outline-demote] 'outline-demote))
+            "<M-return>" nil
+            "<M-RET>" nil)
+  :custom
+  (lispy-key-theme '(special lispy)))
 
 (defun akirak/lispy-goto-symbol-elisp-other-window (symbol)
   "Goto definition of an Elisp SYMBOL in other window."
@@ -47,6 +51,7 @@
              (error "Couldn't find definition of %s"
                     symbol))))))
 
-(advice-add 'lispy-goto-symbol-elisp :override #'akirak/lispy-goto-symbol-elisp-other-window)
+(advice-add 'lispy-goto-symbol-elisp
+            :override #'akirak/lispy-goto-symbol-elisp-other-window)
 
 (provide 'setup-lispy)

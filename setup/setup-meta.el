@@ -42,7 +42,6 @@
     setup-clipboard                    ; Clipboard integration
     setup-ivy-omni-org
     setup-window-management
-    setup-system-tools
     setup-flycheck
     setup-navigation-bindings
     setup-git-clone
