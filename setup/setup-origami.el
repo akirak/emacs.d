@@ -1,9 +1,8 @@
 (use-package origami
   :config
   (akirak/bind-generic
-    "o" `(,(general-predicate-dispatch #'origami-mode
-             (bound-and-true-p origami-mode) #'akirak/origami-hydra/body)
-          :wk "origami"))
+    "o" (general-predicate-dispatch #'origami-mode
+          (bound-and-true-p origami-mode) #'akirak/origami-hydra/body))
   (akirak/bind-generic :keymaps 'origami-mode-map
     "<tab>" (defrepeater #'origami-forward-toggle-node))
   (pretty-hydra-define akirak/origami-hydra
