@@ -84,6 +84,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#scratch-buffers][Scratch buffers]]
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
       -  [[#integrating-language-servers][Integrating language servers]]
+      -  [[#external-tools][External tools]]
       -  [[#optimization][Optimization]]
     -  [[#writing][Writing]]
       -  [[#multi-lingual-support][Multi-lingual support]]
@@ -117,19 +118,12 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#pug][Pug]]
       -  [[#systemd][Systemd]]
       -  [[#yaml][YAML]]
-    -  [[#emacs-applications][Emacs applications]]
-      -  [[#getting-organised][Getting organised]]
-        -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
-          -  [[#on-navigation][On navigation]]
-        -  [[#org-journal][Org Journal]]
-        -  [[#frame][Frame]]
-        -  [[#org-agenda-keybindings][Org-agenda keybindings]]
-      -  [[#beancount][Beancount]]
-      -  [[#system-tools][System tools]]
-        -  [[#system-services][System services]]
-        -  [[#mounting-disks][Mounting disks]]
-        -  [[#disk-usage][Disk usage]]
-    -  [[#multiple-major-modes][Multiple major modes]]
+    -  [[#org-mode][Org mode]]
+      -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
+        -  [[#on-navigation][On navigation]]
+      -  [[#org-journal][Org Journal]]
+      -  [[#frame][Frame]]
+      -  [[#org-agenda-keybindings][Org-agenda keybindings]]
     -  [[#meta][Meta]]
       -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
       -  [[#rebuild-packages][Rebuild packages]]
@@ -454,8 +448,10 @@ I bind ~<f8>~ followed by another function key press to magit commands.
 :CREATED_TIME: [2019-04-13 Sat 09:43]
 :END:
 #+begin_src emacs-lisp
-  (general-create-definer akirak/bind-system :prefix "<f12>"
-    :prefix-map 'akirak/system-map)
+  (general-create-definer akirak/bind-admin :prefix "<f12>"
+    :prefix-map 'akirak/admin-map)
+
+  (define-obsolete-function-alias 'akirak/bind-system 'akirak/bind-admin)
 #+end_src
 *** Other custom key definitions
 Use ~<C-return>~ for starting a REPL session:
@@ -1732,6 +1728,19 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 #+begin_src emacs-lisp
   (akirak/require 'setup-bold)
 #+end_src
+*** External tools
+**** Storage management
+#+begin_src emacs-lisp
+  (akirak/require 'setup-storage)
+#+end_src
+**** Background services
+#+begin_src emacs-lisp
+  (akirak/require 'setup-services)
+#+end_src
+**** Personal finance (beancount)
+#+begin_src emacs-lisp
+  (akirak/require 'setup-beancount)
+#+end_src
 *** Optimization
 #+begin_src emacs-lisp
   (akirak/require 'optimize-minibuf)
@@ -2050,9 +2059,8 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-ansible)
 #+end_src
-** Emacs applications
-*** Getting organised
-**** Global bindings related to Org mode
+** Org mode
+*** Global bindings related to Org mode
  #+begin_src emacs-lisp
    (akirak/bind-key "M-g M-j" #'org-clock-goto)
    (akirak/bind-search
@@ -2063,15 +2071,15 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
      "c" #'org-capture
      "l" 'org-store-link)
  #+end_src
-***** On navigation
+**** On navigation
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-recent-headings)
 #+end_src
-**** Org Journal
+*** Org Journal
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-journal)
 #+end_src
-**** Frame
+*** Frame
 :PROPERTIES:
 :ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
 :END:
@@ -2089,7 +2097,7 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
     :make-frame '(frame-purpose-make-mode-frame 'org-mode))
 #+end_src
 
-**** Org-agenda keybindings                              :Emacs:Org__Mode:
+*** Org-agenda keybindings                                :Emacs:Org__Mode:
 :PROPERTIES:
 :CREATED_TIME: [2019-01-19 Sat 12:22]
 :END:
@@ -2102,45 +2110,10 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
     "M-n" #'org-agenda-drag-line-forward
     "M-p" #'org-agenda-drag-line-backward)
 #+end_src
-*** Beancount
-#+begin_src emacs-lisp
-  (akirak/require 'setup-beancount)
-#+end_src
-*** System tools
-**** System services
-#+begin_src emacs-lisp
-;; Run (root) systemd operations
-(use-package helm-systemd :after helm
-  :commands (helm-systemd))
-#+end_src
-
-I'm not using the following packages:
-
-#+begin_src emacs-lisp
-  ;; Manage docker services
-  (use-package docker
-    :disabled t)
-  ;; Manage daemons
-  (use-package prodigy
-    :disabled t)
-#+end_src
-**** Mounting disks
-#+begin_src emacs-lisp
-(use-package helm-linux-disks
-  :straight (helm-linux-disks :host github
-                              :repo "akirak/helm-linux-disks")
-  :commands (helm-linux-disks)
-  :custom
-  (linux-disk-terminal-type 'akirak/shell-new))
-#+end_src
-**** Disk usage
-#+begin_src emacs-lisp
-(use-package disk-usage
-  :general
-  (:keymaps 'akirak/system-map
-            "D" 'disk-usage))
-#+end_src
-** Multiple major modes
+** COMMENT Multiple major modes                                   :noexport:
+:PROPERTIES:
+:TOC:      ignore
+:END:
 Some package need to be loaded after other packages, so they are put here.
 ** Meta
 *** Synchronizing my configuration repositories
