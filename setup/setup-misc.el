@@ -1,13 +1,5 @@
 ;; The following packages are enhancements to Emacs that don't require
 ;; much configuration
-
-(use-package restart-emacs)
-
-;; Install smex for sorting M-x candidates
-(use-package smex
-  ;; Disabled in favour of prescient
-  :disabled t)
-;; Save minibuffer history
 (use-package savehist)
 
 (use-package helm-tail :after helm
@@ -24,29 +16,13 @@
   :straight nil
   :load-path "contrib/misc")
 ;; Edit Org-Mode lists like in word processors
-(use-package org-autolist
-  :after org
-  ;; :diminish 'org-autolist-mode
-  :init
-  (add-hook 'org-mode-hook #'org-autolist-mode))
-;; Allow you to bookmark headings in Org-Mode
-(use-package org-bookmark-heading
-  :after org)
-(use-package org-bullets :after org
-  :custom
-  (org-bullets-bullet-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
-  :hook
-  (org-mode . org-bullets-mode))
 ;; Exporting mind maps
 (use-package akirak/org-refile
   :straight nil)
 (use-package beginend
-  :config
-  (beginend-global-mode 1))
-(use-package executable
-  :straight nil
-  :hook
-  (after-save . executable-make-buffer-file-executable-if-script-p))
+:config
+(beginend-global-mode 1))
+
 (use-package deadgrep
   :commands deadgrep
   :config

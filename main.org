@@ -83,6 +83,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#development-workflow][Development workflow]]
       -  [[#scratch-buffers][Scratch buffers]]
       -  [[#spell-checking-and-iedit][Spell checking and iedit]]
+      -  [[#debugging-emacs][Debugging Emacs]]
       -  [[#integrating-language-servers][Integrating language servers]]
       -  [[#external-tools][External tools]]
       -  [[#optimization][Optimization]]
@@ -751,7 +752,6 @@ I'm not using olivetti-mode
   (general-def "C-z" #'akirak/context-hydra/body)
   (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
   (akirak/bind-user "k" #'akirak/window-layout-hydra/body)
-  (general-def "<f1>j" #'akirak/emacs-lisp-debugging-hydra/body)
 #+end_src
 **** Context hydra
 :PROPERTIES:
@@ -943,22 +943,6 @@ Instead, I will bind ~<f10>~ to a context-sensitive command:
     (if-let ((window (get-buffer-window "*Flycheck errors*")))
         (quit-window nil window)
       (flycheck-list-errors)))
-#+end_src
-**** Emacs debugging hydra
-:PROPERTIES:
-:CREATED_TIME: [2019-07-27 Sat 17:43]
-:END:
-#+begin_src emacs-lisp
-  (pretty-hydra-define akirak/emacs-lisp-debugging-hydra
-    (:title "Emacs Lisp Debugging")
-    ("Debug"
-     (("d" toggle-debug-on-error :toggle (default-value 'debug-on-error)))
-     "Profiler"
-     (("s" profiler-start "Start" :exit t)
-      ("S" (progn
-             (profiler-report)
-             (profiler-stop)) "Report" :exit t)
-      ("R" profiler-reset "Reset"))))
 #+end_src
 *** frame-workflow
 [[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
@@ -1723,6 +1707,10 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 
   (advice-add 'akirak/flyspell-hydra/body
               :before 'akirak/turn-on-flyspell-mode-in-text-mode)
+#+end_src
+*** Debugging Emacs
+#+begin_src emacs-lisp
+(akirak/require 'setup-debug-emacs)
 #+end_src
 *** Integrating language servers
 #+begin_src emacs-lisp

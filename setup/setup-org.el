@@ -234,6 +234,22 @@ from running."
   (:keymaps 'org-agenda-mode-map :package 'org-agenda
             "L" #'org-entry-links-ivy))
 
+(use-package org-autolist
+  :after org
+  ;; :diminish 'org-autolist-mode
+  :init
+  (add-hook 'org-mode-hook #'org-autolist-mode))
+
+;; Allow you to bookmark headings in Org-Mode
+(use-package org-bookmark-heading
+  :after org)
+
+(use-package org-bullets :after org
+  :custom
+  (org-bullets-bullet-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
+  :hook
+  (org-mode . org-bullets-mode))
+
 (use-package company-org-block
   :after (company org)
   :straight (:host github :repo "xenodium/dotsies"
