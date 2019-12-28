@@ -76,13 +76,17 @@
             :require-match t))
 
 (ivy-add-actions 'akirak/ivy-emacs-package
-                 '(("u" straight-use-package "Install")
+                 '(("u" akirak/straight-use-package "Install")
                    ("r" akirak/find-readme-or-browse-emacs-package "Readme")
                    ("b" akirak/browse-emacs-package "Browse source repo")
                    ("m" akirak/browse-emacs-package-in-registry "Browse in MELPA")
                    ("lo" akirak/store-emacs-package-repository-link "Store org link")
                    ("lw" akirak/copy-emacs-package-repository-url "Copy repository URL")
                    ("C" akirak/git-clone-emacs-package "Clone")))
+
+(defun akirak/straight-use-package (name)
+  "A variant of `straight-use-package' that accepts a package name."
+  (straight-use-package (intern name)))
 
 (defun akirak/find-readme-or-browse-emacs-package (package)
   (let* ((recipe (akirak/get-emacs-package-recipe
