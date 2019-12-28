@@ -39,6 +39,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#nix-env-install][nix-env-install]]
       -  [[#desktop-integration][desktop integration]]
       -  [[#language-detection][language-detection]]
+      -  [[#elexandria][elexandria]]
     -  [[#platform-workarounds][Platform workarounds]]
       -  [[#chrome-os-support][Chrome OS support]]
     -  [[#appearances][Appearances]]
@@ -607,6 +608,11 @@ language-detection is used by eww.
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-language-detection)
+#+end_src
+*** elexandria
+#+begin_src emacs-lisp
+  (use-package elexandria
+    :straight (:host github :repo "alphapapa/elexandria"))
 #+end_src
 ** Platform workarounds
 I use Emacs on the following platforms:
