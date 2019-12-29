@@ -1,5 +1,6 @@
 (use-package feebleline
   :config
+  (require 'font-lock)
   (defvar akirak/orig-mode-line-format nil)
   (unless akirak/orig-mode-line-format
     (setq akirak/orig-mode-line-format mode-line-format))
