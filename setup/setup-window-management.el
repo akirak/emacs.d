@@ -1,6 +1,8 @@
 (setq split-height-threshold nil
       split-width-threshold 160)
 
+;;;; display-buffer configuration
+
 (use-package shackle
   :init
   (shackle-mode 1)
@@ -435,11 +437,48 @@ may have been stored before."
 (advice-add 'find-function-do-it
             :around 'akirak/ad-around-find-function-do-it)
 
+;;;; Window manipulation commands
+
 (defun akirak/switch-buffer-maybe-same-window (buffer &rest args)
   "Display BUFFER in the same window if the buffer refers to the same file."
   (if (file-equal-p (buffer-file-name (current-buffer))
                     (buffer-file-name buffer))
       (apply 'pop-to-buffer-same-window buffer args)
     (apply 'pop-to-buffer buffer args)))
+
+(defun akirak/split-window-aggressively (&optional window)
+  (let ((orig-window (or window (selected-window))))
+    (or (split-window-sensibly orig-window)
+        ;; Give slightly more opportunities to split the window.
+        (and
+         ;; (let ((frame (window-frame window)))
+         ;;   (eq window (frame-root-window frame)))
+         (not (window-dedicated-p window))
+         (not (window-minibuffer-p window))
+         (let ((split-height-threshold 40))
+           (when (window-splittable-p orig-window)
+             (with-selected-window orig-window
+               (split-window-below))))))))
+
+(defun akirak/split-window-and-select ()
+  (interactive)
+  (pcase current-prefix-arg
+    ('(4)
+     (progn
+       (delete-window)
+       (balance-windows)))
+    ('(16)
+     (call-interactively #'jump-to-register))
+    (_
+     (if-let ((window (akirak/split-window-aggressively)))
+         (progn
+           (select-window window)
+           (balance-windows))
+       (message "No window was created")))))
+
+(general-def
+  "C-3" #'other-window
+  "C-4" #'akirak/split-window-and-select
+  "C-=" #'window-configuration-to-register)
 
 (provide 'setup-window-management)
