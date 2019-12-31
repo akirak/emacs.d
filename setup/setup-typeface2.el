@@ -186,6 +186,17 @@
           'fixed-pitch-serif
           'org-code
           'org-block)
+        (with-eval-after-load 'info
+          (let ((ref-faces (let (faces)
+                             (mapatoms
+                              (lambda (sym)
+                                (when (and (face-documentation sym)
+                                           (string-prefix-p "info-colors-ref-item-"
+                                                            (symbol-name sym)))
+                                  (push sym faces))))
+                             faces)))
+            (apply #'akirak/set-font-family-if-existing default
+                   ref-faces)))
 
         (akirak/set-font-family-if-existing paragraph
           'variable-pitch)
@@ -217,7 +228,11 @@
             'dired-filter-group-header))
         (with-eval-after-load 'info
           (akirak/set-font-family-if-existing heading
-            'info-menu-header))
+            'info-menu-header
+            'info-title-1
+            'info-title-2
+            'info-title-3
+            'info-title-4))
         (with-eval-after-load 'markdown-mode
           (akirak/set-font-family-if-existing heading
             'markdown-header-face))
@@ -226,7 +241,10 @@
         (with-eval-after-load 'org
           (akirak/set-font-family-if-existing handwriting
             'org-todo
-            'org-tag))
+            'org-tag)
+          (akirak/set-font-family-if-existing info-paragraph
+            'org-link))
+
 
         (setq akirak/paragraph-font info-paragraph)
         (setq akirak/maybe-duospace-font monospace-or-duospace)
