@@ -216,6 +216,7 @@ This is intended to be set inside `akirak/set-header-line' function.")
 ;;;; Default header line format
 (cl-defun akirak/make-header-line-format (&rest body &key omit-project &allow-other-keys)
   "Build a header line format with the standard set of segments."
+  (require 'all-the-icons)
   (cl-remprop :omit-project body)
   (let* ((filep (when buffer-file-name t))
          (base-buffer (unless filep (buffer-base-buffer)))

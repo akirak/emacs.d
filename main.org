@@ -538,24 +538,25 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 *** all-the-icons
 #+begin_src emacs-lisp
   (use-package all-the-icons
-    :preface
-    (defconst akirak/all-the-icons-status-file
-      (no-littering-expand-var-file-name "all-the-icons"))
-    (defvar akirak/all-the-icons-fonts-installed
-      (file-exists-p akirak/all-the-icons-status-file))
-    :config
-    (defun akirak/all-the-icons-install-fonts-if-missing ()
-      (unless akirak/all-the-icons-fonts-installed
-        (all-the-icons-install-fonts t)))
-    (defun akirak/all-the-icons-mark-as-fonts-installed ()
-      (with-temp-buffer
-        (write-file akirak/all-the-icons-status-file))
-      (setq akirak/all-the-icons-fonts-installed t))
-    (advice-add #'all-the-icons-install-fonts
-                :after #'akirak/all-the-icons-mark-as-fonts-installed)
-    (when (and (window-system)
-               (not akirak/all-the-icons-fonts-installed))
-      (all-the-icons-install-fonts))
+    ;; I prefer install fonts using Nix
+    ;; :preface
+    ;; (defconst akirak/all-the-icons-status-file
+    ;;   (no-littering-expand-var-file-name "all-the-icons"))
+    ;; (defvar akirak/all-the-icons-fonts-installed
+    ;;   (file-exists-p akirak/all-the-icons-status-file))
+    ;; :config
+    ;; (defun akirak/all-the-icons-install-fonts-if-missing ()
+    ;;   (unless akirak/all-the-icons-fonts-installed
+    ;;     (all-the-icons-install-fonts t)))
+    ;; (defun akirak/all-the-icons-mark-as-fonts-installed ()
+    ;;   (with-temp-buffer
+    ;;     (write-file akirak/all-the-icons-status-file))
+    ;;   (setq akirak/all-the-icons-fonts-installed t))
+    ;; (advice-add #'all-the-icons-install-fonts
+    ;;             :after #'akirak/all-the-icons-mark-as-fonts-installed)
+    ;; (when (and (window-system)
+    ;;            (not akirak/all-the-icons-fonts-installed))
+    ;;   (all-the-icons-install-fonts))
     :general
     ("C-x 8 i" #'all-the-icons-ivy))
 #+end_src
