@@ -25,8 +25,7 @@
 
 ;;;; Basic configuration (without external dependencies)
 
-(setq-default dired-dwim-target t
-              dired-recursive-copies 'always
+(setq-default dired-recursive-copies 'always
               dired-recursive-deletes 'top)
 
 ;;;; dired-open-functions
