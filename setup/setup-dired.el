@@ -29,6 +29,10 @@
               dired-recursive-copies 'always
               dired-recursive-deletes 'top)
 
+;;;; dired-open-functions
+(general-add-hook 'dired-open-extensions
+                  '(("gif" . "mpv --loop")))
+
 ;;;; Formatting
 
 (setq-default dired-listing-switches "-alh")

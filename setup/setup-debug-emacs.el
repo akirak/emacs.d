@@ -23,6 +23,7 @@
   "<f12>" #'toggle-debug-on-error
   "e" '(nil :wk "emacs")
   "ed" #'akirak/run-emacs-with-debug-init
+  "eg" #'akirak/gif-screencast
   "ep" (general-predicate-dispatch #'profiler-start
          :docstring "profiler"
          (profiler-running-p) #'akirak/profiler-stop-and-report)

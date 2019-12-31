@@ -45,25 +45,33 @@
          ,@progn)
      (akirak/x-screenshot-stop-xephyr)))
 
-(cl-defun akirak/gif-screencast-start-new-frame (&key screen)
-  (interactive (list :screen (when current-prefix-arg
-                               (read-string "Screen size [WxH]: "))))
-  (akirak/x-screenshot-start-xephyr :screen screen)
-  (let ((display akirak/x-screenshot-xephyr-display))
-    (x-open-connection display)
-    (let ((frame (make-frame-on-display display)))
-      (setq akirak/x-screenshot-frame frame)
-      (select-frame frame)
-      (add-hook 'gif-screencast-mode-hook
-                'akirak/gif-screencast-finalize-frame)
-      (advice-add 'gif-screencast-capture
-                  :around #'akirak/ad-around-gif-screencast-capture)
-      (setq akirak/gif-screencast-file-list
-            (directory-files gif-screencast-output-directory t))
-      (file-notify-add-watch gif-screencast-output-directory
-                             '(change) 'akirak/gif-screencast-handle-change)
-      (with-selected-frame frame
-        (gif-screencast)))))
+(cl-defun akirak/gif-screencast (&key screen)
+  (interactive (when (equal current-prefix-arg '(4))
+                 (list :screen (read-string "Screen size [WxH]: "))))
+  (pcase current-prefix-arg
+    ('(16)
+     (dired-other-window gif-screencast-output-directory))
+    (_
+     (condition-case _
+         (let ((display akirak/x-screenshot-xephyr-display)
+               (dir gif-screencast-output-directory))
+           (akirak/x-screenshot-start-xephyr :screen screen)
+           (x-open-connection display)
+           (let ((frame (make-frame-on-display display)))
+             (setq akirak/x-screenshot-frame frame)
+             (select-frame frame)
+             (add-hook 'gif-screencast-mode-hook
+                       'akirak/gif-screencast-finalize-frame)
+             (advice-add 'gif-screencast-capture
+                         :around #'akirak/ad-around-gif-screencast-capture)
+             (unless (file-directory-p dir)
+               (make-directory dir t))
+             (setq akirak/gif-screencast-file-list
+                   (directory-files dir t))
+             (file-notify-add-watch dir '(change) 'akirak/gif-screencast-handle-change)
+             (with-selected-frame frame
+               (gif-screencast))))
+       (error (akirak/gif-screencast-finalize-frame))))))
 
 (defun akirak/gif-screencast-handle-change (event)
   (pcase event
@@ -91,11 +99,7 @@
     (advice-remove 'gif-screencast-capture
                    #'akirak/ad-around-gif-screencast-capture)
     (let ((display akirak/x-screenshot-xephyr-display)
-          (frame akirak/x-screenshot-frame)
-          (outfile (car-safe
-                    (seq-difference (directory-files gif-screencast-output-directory t)
-                                    akirak/gif-screencast-file-list
-                                    #'file-equal-p))))
+          (frame akirak/x-screenshot-frame))
       (when (and frame (frame-live-p frame))
         (delete-frame frame))
       (x-close-connection display)
