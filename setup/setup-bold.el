@@ -1,5 +1,5 @@
 (use-package bold
-  :straight (:host github :repo "akirak/bold.el")
+  :straight (bold :host github :repo "akirak/bold.el")
   :config
   (require 'bold-setup)
   (bold-setup-hooks)
@@ -20,5 +20,10 @@
             "C-. i b" #'bold-insert-block-comment)
   :custom
   (bold-documentation-at-point-fallback #'helpful-at-point))
+
+(use-package bold-avy
+  :straight bold
+  :custom
+  (bold-avy-prefix-key "C-;"))
 
 (provide 'setup-bold)

@@ -1219,10 +1219,6 @@ Use emmet for producing HTML tags.
 *** Avy                                                        :navigation:
 #+begin_src emacs-lisp
   (akirak/require 'setup-avy)
-
-  (akirak/bind-key "C-'" 'avy-goto-char-timer)
-
-  (general-unbind "C-'" :keymaps 'org-mode-map :package 'org)
 #+end_src
 
 =link-hint= is not part of =avy= package, but it is covenient for following a link:
@@ -1692,11 +1688,16 @@ To visit a URL, use =browse-url-at-point=:
   "i" 'scratch)
 #+end_src
 *** Spell checking and iedit                               :editor:writing:
+#+begin_src emacs-lisp
+  (use-package iedit
+    :straight (:type built-in)
+    :general
+    ("C-;" nil))
+#+end_src
+
 Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-cursors]]. You can first select all the occurrences of a symbol using multiple-cursors and then edit them using iedit.
 
 #+begin_src emacs-lisp
-  (general-def "C-;" 'akirak/iedit-or-flyspell)
-
   (defun akirak/iedit-or-flyspell ()
     "With a prefix argument, run iedit in the function. Otherwise, run iedit or flyspell.
 
