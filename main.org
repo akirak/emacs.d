@@ -53,6 +53,7 @@ for a better understanding of my previous work and organizing it in a more sensi
         -  [[#fontify-face][fontify-face]]
         -  [[#centralizing-window-contents][Centralizing window contents]]
     -  [[#a-bunch-of-useful-features][A bunch of useful features]]
+      -  [[#customizing-emacs][Customizing Emacs]]
       -  [[#pretty-hydras][Pretty hydras]]
       -  [[#frame-workflow][frame-workflow]]
       -  [[#terminal-and-shells][Terminal and shells]]
@@ -746,6 +747,10 @@ I'm not using olivetti-mode
   (akirak/require 'setup-misc)
 #+end_src
 
+*** Customizing Emacs
+#+begin_src emacs-lisp
+  (akirak/require 'setup-custom)
+#+end_src
 *** Pretty hydras
 #+begin_src emacs-lisp
   ;; C-c h
