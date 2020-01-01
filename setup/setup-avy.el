@@ -1,8 +1,4 @@
 (use-package avy
-  :general
-  (:prefix "M-g"
-           "l" #'avy-goto-line
-           "o" #'avy-org-goto-heading-timer)
   :config
   (add-to-list 'avy-dispatch-alist
                `(?K . akirak/avy-action-kill-line)
@@ -20,6 +16,9 @@
                      (sp-kill-hybrid-sexp nil))
                     (t (forward-sexp))))
     (point))
+  :general
+  ("M-z" #'avy-goto-char-in-line
+   "C-'" #'avy-goto-char-timer)
   :custom
   (avy-style 'at)
   (avy-styles-alist '((ivy-avy . pre)
@@ -35,11 +34,5 @@
    (t
     (kill-line)))
   (message "Killed: %s" (current-kill 0)))
-
-(use-package akirak/avy-extra
-  :straight nil
-  :load-path "extras"
-  :general
-  ("M-z" #'akirak/M-z))
 
 (provide 'setup-avy)

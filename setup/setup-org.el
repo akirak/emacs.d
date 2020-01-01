@@ -1,6 +1,8 @@
 (require 'org-habit)
 (add-hook 'org-modules 'org-protocol)
 
+(general-unbind "C-'" :keymaps 'org-mode-map :package 'org)
+
 (when (bound-and-true-p akirak/mode-prefix-key)
   (general-translate-key nil 'org-mode-map
     :package 'org akirak/mode-prefix-key "C-c C-x")
