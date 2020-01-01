@@ -73,6 +73,9 @@ Only one letter is shown, the first that applies."
     "g" #'magit-blob-visit-file
     "l" #'magit-log-buffer-file
     "s" #'magit-stage-file)
+  (akirak/bind-admin
+    "g" '(nil :wk "git")
+    "gl" #'magit-list-repositories)
 
   (defun akirak/add-magit-repositories-to-projectile ()
     (interactive)
