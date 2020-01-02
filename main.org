@@ -36,7 +36,6 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#all-the-icons][all-the-icons]]
       -  [[#emacsql-sqlite][emacsql-sqlite]]
       -  [[#memoize][memoize]]
-      -  [[#nix-env-install][nix-env-install]]
       -  [[#desktop-integration][desktop integration]]
       -  [[#language-detection][language-detection]]
       -  [[#elexandria][elexandria]]
@@ -572,11 +571,6 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 *** memoize
 #+begin_src emacs-lisp
   (use-package memoize)
-#+end_src
-*** nix-env-install
-#+begin_src emacs-lisp
-  (use-package nix-env-install
-    :straight (:host github :repo "akirak/nix-env-install"))
 #+end_src
 *** desktop integration
 #+begin_src emacs-lisp

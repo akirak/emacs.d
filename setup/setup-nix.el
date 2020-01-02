@@ -13,4 +13,11 @@
 
 (use-package nix-sandbox)
 
+(use-package nix-env-install
+  :config
+  (akirak/bind-admin
+    "n" '(nil :wk "nix")
+    "nC" #'nix-env-install-cachix-use
+    "nu" #'nix-env-install-uninstall))
+
 (provide 'setup-nix)
