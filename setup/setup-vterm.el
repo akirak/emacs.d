@@ -1,7 +1,6 @@
 (use-package vterm
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
-  :if (akirak/library-exists-p "vterm" 'verbose)
   :general
   (:keymaps 'vterm-mode-map
             "<S-prior>" #'scroll-down-command
@@ -21,7 +20,7 @@
                             "M-g"
                             "M-s")
                           #'string-equal))
-  (defun akirak/vterm-quit-window (&optional buf)
+  (defun akirak/vterm-quit-window (&optional buf _event)
     (if-let ((window (get-buffer-window buf)))
         (quit-window nil window)
       (bury-buffer buf)))
@@ -36,7 +35,6 @@
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
 
 (use-package vterm-toggle
-  :if (featurep 'vterm)
   :custom
   ;; vterm-toggle uses pop-to-buffer to display the buffer, but it
   ;; deletes all the other windows by default.
