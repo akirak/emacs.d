@@ -244,7 +244,31 @@ from running."
 
 ;; Allow you to bookmark headings in Org-Mode
 (use-package org-bookmark-heading
-  :after org)
+  :after org
+  :custom
+  (org-bookmark-heading-filename-fn
+   (defun akirak/org-bookmark-heading-filename (path)
+     (let* ((path (expand-file-name path))
+            (project (project-current))
+            (dir (abbreviate-file-name (file-name-directory path)))
+            (filename (file-name-nondirectory path))
+            (root (car-safe (project-roots project))))
+       (if root
+           (f-relative path (f-parent root))
+         path))))
+  (org-bookmark-heading-name-fn
+   (defun akirak/org-bookmark-heading (path heading)
+     (let ((ancestors (org-get-outline-path)))
+       (format "\"%s\" in %s%s"
+               (substring-no-properties
+                (org-link-display-format heading))
+               (akirak/org-bookmark-heading-filename path)
+               (if ancestors
+                   (substring-no-properties
+                    (concat ":" (org-format-outline-path
+                                 (mapcar #'org-link-display-format ancestors)
+                                 nil nil "/")))
+                 ""))))))
 
 (use-package org-bullets :after org
   :custom
