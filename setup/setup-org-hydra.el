@@ -60,8 +60,9 @@
    (("is" org-download-screenshot "Ins screenshot")
     ("yi" org-download-yank "Yank image")
     ("ril" org-download-rename-last-file "Rename last"))
-   "Extras"
-   (("ed" org-edna-edit "Edit deps"))))
+   "Deps"
+   (("de" org-edna-edit "Edit deps")
+    ("da" akirak/avy-add-org-edna-id-blocker "Avy (ID)"))))
 
 (major-mode-hydra-define org-agenda-mode
   (:title (akirak/org-agenda-hydra-title)
