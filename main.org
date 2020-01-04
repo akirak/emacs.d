@@ -1794,7 +1794,7 @@ I will use [[https://github.com/d12frosted/flyspell-correct][flyspell-correct]] 
 
 #+begin_src emacs-lisp
   (akirak/bind-user
-    "f" #'flyspell-spell-mode)
+    "f" #'flyspell-mode)
 
   (akirak/bind-user :keymaps 'flyspell-mode-map
     "f" #'flyspell-correct-wrapper)
