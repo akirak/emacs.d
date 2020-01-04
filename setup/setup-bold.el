@@ -26,4 +26,7 @@
   :custom
   (bold-avy-prefix-key "C-;"))
 
+(akirak/bind-file-extra
+  "e" #'bold-error-list)
+
 (provide 'setup-bold)
