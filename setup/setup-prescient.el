@@ -16,6 +16,9 @@
                       (org-starter-swiper-config-files . nil)
                       (counsel-minibuffer-history . nil)
                       (counsel-mark-ring . nil)))
+  (general-add-hook 'ivy-sort-functions-alist
+                    '((akirak/org-capture-bookmark-destination
+                       . ivy-prescient-sort-function)))
   ;; Don't fallback to ivy-prescient.
   (general-remove-hook 'ivy-sort-functions-alist
                        '((t . ivy-prescient-sort-function))))
