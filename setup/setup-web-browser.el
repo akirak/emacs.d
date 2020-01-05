@@ -10,6 +10,19 @@
   (setq-default browse-url-browser-function 'browse-url-generic
                 browse-url-generic-program "garcon-url-handler")))
 
+(advice-add 'browse-url
+            :around
+            (defun akirak/ad-around-browse-url (orig url &rest args)
+              (message "Opening %s" url)
+              (if (and (akirak/running-on-crostini-p)
+                       (string-match-p (rx bol (or "http://penguin.linux.test"
+                                                   "http://localhost")
+                                           (?  ":" (+ digit))
+                                           (?  "/" (* anything)) eol)
+                                       url))
+                  (apply #'browse-url-chromium url args)
+                (apply orig url args))))
+
 (defcustom akirak/web-browser-application-list
   '(("chromium-browser.desktop" :key ?c)
     ("chromium.desktop" :key ?c)
