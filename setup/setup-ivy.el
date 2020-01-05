@@ -141,7 +141,8 @@
   (akirak/ivy-posframe-height-alist
    '((ivy-omni-org . 30)
      (all-the-icons-ivy . 30)
-     (counsel-yank-pop . 15)))
+     (ivy-clipurl . 15)
+     (counsel-yank-pop . 20)))
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
