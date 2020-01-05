@@ -241,6 +241,7 @@
         (with-eval-after-load 'org
           (akirak/set-font-family-if-existing handwriting
             'org-todo
+            'org-checkbox-statistics-done
             'org-tag)
           (akirak/set-font-family-if-existing info-paragraph
             'org-link))
