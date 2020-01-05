@@ -1,14 +1,9 @@
-(defcustom akirak/ledger-primary-currency "JPY"
-  "The currency primarily used in the country I am living in.")
-
 (use-package beancount
-  :disabled t
-  :straight (beancount :host bitbucket
-                       :repo "blais/beancount"
-                       :files ("editors/emacs/*.el"))
-  :mode ("\\.bean\\'" . beancount-mode)
+  ;; Install beancount.el using nix.
+  :straight (:type built-in)
+  :mode ("\\.beancount\\'" . beancount-mode)
   :custom
-  (beancount-mode-map-prefix (kbd "<menu>"))
+  (beancount-mode-map-prefix (kbd akirak/mode-prefix-key))
   (beancount-use-ido nil)
   :init
   (defun akirak/remove-id-from-beancount-capture ()
