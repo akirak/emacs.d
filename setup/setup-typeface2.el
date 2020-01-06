@@ -34,6 +34,10 @@
 
 (set-face-attribute 'fixed-pitch-serif nil :foreground "gold" :inherit 'default)
 
+(set-face-attribute 'italic nil :underline nil :slant 'italic)
+(with-eval-after-load 'org
+  (set-face-attribute 'org-verbatim nil :inherit 'org-code))
+
 ;;;;; Header line
 (when (featurep 'akirak/setup-header-line)
   (set-face-attribute 'header-line nil
