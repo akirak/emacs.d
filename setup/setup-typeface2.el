@@ -150,12 +150,34 @@
    ((derived-mode-p 'org-mode 'markdown-mode)
     (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font)))))
 
-(let (;; Default font family.
-      ;; Used for normal text in programming and message buffers.
-      (default
-        ;; Available from my agave package
-        "agave")
-      ;; Monospace or duospace of any type
+;; Set the default font
+(defcustom akirak/default-font-family
+  ;; Available from my agave package
+  "agave"
+  "Font family used as the default font."
+  :type 'string
+  :set (lambda (sym default)
+         (set sym default)
+         (akirak/set-font-family-if-existing default
+           'default
+           ;; text in Info-Mode
+           'fixed-pitch-serif
+           'org-code
+           'org-block)
+         (with-eval-after-load 'info
+           (let ((ref-faces (let (faces)
+                              (mapatoms
+                               (lambda (sym)
+                                 (when (and (face-documentation sym)
+                                            (string-prefix-p "info-colors-ref-item-"
+                                                             (symbol-name sym)))
+                                   (push sym faces))))
+                              faces)))
+             (apply #'akirak/set-font-family-if-existing default
+                    ref-faces)))))
+
+;; Set the other font families
+(let (;; Monospace or duospace of any type
       ;; used for writing
       (monospace-or-duospace
        ;; Nerd font variant of Go Mono
@@ -184,23 +206,6 @@
   (setq akirak/font-family-list (font-family-list))
   (unwind-protect
       (progn
-        (akirak/set-font-family-if-existing default
-          'default
-          ;; text in Info-Mode
-          'fixed-pitch-serif
-          'org-code
-          'org-block)
-        (with-eval-after-load 'info
-          (let ((ref-faces (let (faces)
-                             (mapatoms
-                              (lambda (sym)
-                                (when (and (face-documentation sym)
-                                           (string-prefix-p "info-colors-ref-item-"
-                                                            (symbol-name sym)))
-                                  (push sym faces))))
-                             faces)))
-            (apply #'akirak/set-font-family-if-existing default
-                   ref-faces)))
 
         (akirak/set-font-family-if-existing paragraph
           'variable-pitch)
