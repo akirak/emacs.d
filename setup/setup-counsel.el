@@ -69,6 +69,11 @@
   (global-set-key [remap insert-char] 'counsel-unicode-char)
   (akirak/bind-file-extra :keymaps 'counsel-mode-map
     "c" #'counsel-compile)
+  (cl-loop for (command . str) in ivy-initial-inputs-alist
+           do (when (and (symbolp command)
+                         (string-prefix-p "counsel-" (symbol-name command)))
+                (delq (assoc command  ivy-initial-inputs-alist)
+                      ivy-initial-inputs-alist)))
   :general
   (:keymaps 'counsel-mode-map
             "C-x b" #'counsel-ibuffer)
