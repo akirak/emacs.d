@@ -65,31 +65,32 @@
            finally return (cl-remove-duplicates (cl-sort result #'string<)
                                                 :test #'string-equal)))
 
-(ivy-set-actions
- 'akirak/ivy-file-variable
- '(("d" dired-jump-other-window "dired-jump")
-   ("I" (lambda (inp)
-          (insert (symbol-value inp)))
-    "Insert value")
-   ("s" (lambda (x)
-          (let* ((type (read-char-choice
-                        (format "Edit variable %s [p: path, x: executable, o: other]: "
-                                x)
-                        (string-to-list "pxo")))
-                 (sym (intern-soft x))
-                 (value (cl-case type
-                          (?p (read-file-name (format "File path for %s: " x)
-                                              nil (symbol-value sym)))
-                          (?x (completing-read (format "Executable for %s: " x)
-                                               (akirak/executables-in-path)))
-                          (?o (read-string (format "Value for %s: " x)))))
-                 (to-save (yes-or-no-p (format "Save the value of %s? " x))))
-            (if to-save
-                (customize-save-variable sym value
-                                         "Set by ivy-file-variable.")
-              (customize-set-variable sym value
-                                      "Set by ivy-file-variable."))))
-    "Set a value")))
+(with-eval-after-load 'ivy
+  (ivy-set-actions
+   'akirak/ivy-file-variable
+   '(("d" dired-jump-other-window "dired-jump")
+     ("I" (lambda (inp)
+            (insert (symbol-value inp)))
+      "Insert value")
+     ("s" (lambda (x)
+            (let* ((type (read-char-choice
+                          (format "Edit variable %s [p: path, x: executable, o: other]: "
+                                  x)
+                          (string-to-list "pxo")))
+                   (sym (intern-soft x))
+                   (value (cl-case type
+                            (?p (read-file-name (format "File path for %s: " x)
+                                                nil (symbol-value sym)))
+                            (?x (completing-read (format "Executable for %s: " x)
+                                                 (akirak/executables-in-path)))
+                            (?o (read-string (format "Value for %s: " x)))))
+                   (to-save (yes-or-no-p (format "Save the value of %s? " x))))
+              (if to-save
+                  (customize-save-variable sym value
+                                           "Set by ivy-file-variable.")
+                (customize-set-variable sym value
+                                        "Set by ivy-file-variable."))))
+      "Set a value"))))
 
 (defun akirak/documentation-first-line (str)
   (if str
@@ -100,21 +101,22 @@
           str))
     ""))
 
-(ivy-set-display-transformer
- 'akirak/ivy-file-variable
- (defun akirak/ivy-file-variable-display-transformer (input)
-   (format "%-30s  %s %s"
-           (propertize input 'face 'font-lock-variable-name-face)
-           (let ((value (get-char-property 0 'symbol-value input)))
-             (if (and (stringp value) (not (string-empty-p value)))
-                 (format "(%s)" (abbreviate-file-name value))
-               ""))
-           (or (ignore-errors
-                 (propertize
-                  (akirak/documentation-first-line
-                   (get-char-property 0 'documentation input))
-                  'face 'font-lock-doc-face))
-               ""))))
+(with-eval-after-load 'ivy
+  (ivy-set-display-transformer
+   'akirak/ivy-file-variable
+   (defun akirak/ivy-file-variable-display-transformer (input)
+     (format "%-30s  %s %s"
+             (propertize input 'face 'font-lock-variable-name-face)
+             (let ((value (get-char-property 0 'symbol-value input)))
+               (if (and (stringp value) (not (string-empty-p value)))
+                   (format "(%s)" (abbreviate-file-name value))
+                 ""))
+             (or (ignore-errors
+                   (propertize
+                    (akirak/documentation-first-line
+                     (get-char-property 0 'documentation input))
+                    'face 'font-lock-doc-face))
+                 "")))))
 
 (akirak/bind-customization "f" #'akirak/ivy-file-variable)
 
