@@ -2,15 +2,10 @@
   (expand-file-name ".cache/lsp-java" user-emacs-directory))
 
 (use-package lsp-java
-  :init
-  (unless (file-directory-p akirak/lsp-java-directory)
-    (make-directory akirak/lsp-java-directory))
+  :config
   (require 'dap-java)
-  (require 'lsp-java)
   :hook
-  (java-mode . lsp)
-  :custom
-  (lsp-java-server-install-dir akirak/lsp-java-directory))
+  (java-mode . lsp))
 
 (use-package javadoc-lookup
   :commands (javadoc-lookup)
