@@ -23,14 +23,6 @@
      (?T tear-off-window)
      (?d delete-frame)
      (?f make-frame-command)
-     (?h windmove-left)
-     (?j windmove-down)
-     (?k windmove-up)
-     (?l windmove-right)
-     (?H buf-move-left)
-     (?J buf-move-down)
-     (?K buf-move-up)
-     (?L buf-move-right)
      (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
