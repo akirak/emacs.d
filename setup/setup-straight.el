@@ -88,6 +88,15 @@
   "A variant of `straight-use-package' that accepts a package name."
   (straight-use-package (intern name)))
 
+(defun akirak/straight-rebuild-package (package &optional reload)
+  (interactive
+   (list
+    (straight--select-package "Rebuild package" 'for-build 'installed)
+    current-prefix-arg))
+  (straight-rebuild-package package)
+  (when reload
+    (load-library package)))
+
 (defun akirak/find-readme-or-browse-emacs-package (package)
   (let* ((recipe (akirak/get-emacs-package-recipe
                   (cl-etypecase package
@@ -213,10 +222,17 @@
                 url))))
     (push (list url package) org-stored-links)))
 
+(defun akirak/straight-browse-source (package)
+  (interactive
+   (list (straight--select-package "Fetch and browse: " nil 'installed)))
+  (straight-fetch-package package 'upstream)
+  (magit-status (file-name-directory (file-truename (find-library-name package)))))
+
 (akirak/bind-admin
   "el" 'akirak/ivy-emacs-package
   "ew" 'akirak/browse-emacs-package
-  "eb" 'straight-rebuild-package
-  "eB" '(akirak/straight-rebuild-outdated-packages :wk "Rebuild outdated"))
+  "eb" 'akirak/straight-rebuild-package
+  "eB" '(akirak/straight-rebuild-outdated-packages :wk "Rebuild outdated")
+  "ef" 'akirak/straight-browse-source)
 
 (provide 'setup-straight)
