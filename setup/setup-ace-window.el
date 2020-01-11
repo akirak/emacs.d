@@ -5,6 +5,10 @@
                             ((default
                                :background "gray18" :foreground "tan"
                                :height 250))))
+  (advice-add 'aw-delete-window
+              :after
+              (defun akirak/ad-after-aw-delete-window (&rest _args)
+                (balance-windows)))
   :custom
   (aw-keys (string-to-list "qwertyui"))
   (aw-background nil)
