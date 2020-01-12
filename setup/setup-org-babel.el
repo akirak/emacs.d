@@ -12,6 +12,7 @@
                   (elixir . t)
                   (python . t)
                   (sqlite . t)
+                  (mermaid . t)
                   (dot . t)
                   (ditaa . t)
                   (restclient . t)
@@ -50,6 +51,9 @@
   :straight nil)
 
 ;;;;; Third-party packages
+
+(use-package ob-mermaid
+  :after ob)
 
 (use-package ob-restclient
   :after ob)

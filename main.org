@@ -114,6 +114,7 @@ for a better understanding of my previous work and organizing it in a more sensi
       -  [[#dhall][Dhall]]
       -  [[#dockerfile][Dockerfile]]
       -  [[#graphviz][GraphViz]]
+      -  [[#mermaid][Mermaid]]
       -  [[#nix][Nix]]
       -  [[#plantuml][PlantUML]]
       -  [[#pug][Pug]]
@@ -1943,6 +1944,7 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
 (akirak/require 'setup-graphviz-dot)
 #+end_src
+*** Mermaid                                         :diagramming:org_babel:
 *** Nix                                           :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-nix)
