@@ -310,4 +310,6 @@ from running."
   (org-sidebar-side 'right)
   (org-sidebar-tree-side 'right))
 
+(general-def "<f10>" #'org-agenda)
+
 (provide 'setup-org)

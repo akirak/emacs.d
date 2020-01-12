@@ -750,89 +750,6 @@ I'm not using olivetti-mode
   (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
   (akirak/bind-user "k" #'akirak/window-layout-hydra/body)
 #+end_src
-**** Context hydra
-:PROPERTIES:
-:CREATED_TIME: [2019-07-27 Sat 17:43]
-:END:
-The following hydra is deprecated:
-
-#+begin_src emacs-lisp
-  (pretty-hydra-define akirak/context-hydra
-    (:title (string-join
-             `(,(concat "Desktop dir: "
-                        (or (ignore-errors
-                              (and desktop-dirname
-                                   (format "%s %s"
-                                           (abbreviate-file-name desktop-dirname)
-                                           (if (file-exists-p (desktop-full-file-name))
-                                               (format "(exists, updated: %s)"
-                                                       (akirak/context-hydra-format-relative-filetime
-                                                        (desktop-full-file-name) t))
-                                             "(does not exist)"))))
-                            "nil"))
-               ,(concat " Current clock: "
-                        (or (ignore-errors
-                              (and (markerp org-clock-marker)
-                                   (with-current-buffer (marker-buffer org-clock-marker)
-                                     (concat (buffer-name)
-                                             ": "
-                                             (org-with-wide-buffer
-                                              (goto-char (marker-position org-clock-marker))
-                                              (substring-no-properties
-                                               (org-format-outline-path
-                                                (org-get-outline-path t t))))))))
-                            "nil")))
-             "\n")
-            :quit-key "C-g"
-            :foreign-keys run)
-    ("Org"
-     (("j" org-clock-goto "Go to clock" :exit t)
-      ("h" counsel-org-clock-history "History" :exit t)
-      ("a" org-agenda "Agenda" :exit t)
-      ("O" org-clock-out "Clock out")
-      ("C-q" org-clock-cancel "Cancel clock"))
-     "Desktop"
-     (("s" desktop-save-in-desktop-dir "Save to the dir")
-      ("w" desktop-save "Save to another dir")
-      ("R" desktop-read "Reload from the dir")
-      ("D" desktop-remove "Purge")
-      ("L" desktop-change-dir "Change the dir")
-      ("F" desktop-clear "Clear"))
-     "Projectile & Magit"
-     (("p" projectile-switch-project "Switch project" :exit t)
-      ("g" magit-list-repositories "Git repo list" :exit t))
-     "Lock"
-     (("o" org-offtime-ivy "Offtime"))))
-
-  (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
-    (let* ((attrs (file-attributes file))
-           (internal (pcase type
-                       ;; TODO: Add support for other time attributes, e.g. visited time
-                       (_ (file-attribute-modification-time attrs))))
-           (file-time (make-ts :unix (float-time internal)))
-           (abs-format "%Y-%m-%d %H:%M"))
-      (if verbose
-          (format "%s (%s)"
-                  (ts-format abs-format file-time)
-                  (ts-human-format-duration
-                   (ts-difference (ts-now) file-time)
-                   'abbreviate))
-        (ts-format abs-format file-time))))
-#+end_src
-
-Instead, I will bind ~<f10>~ to a context-sensitive command:
-
-#+begin_src emacs-lisp
-  (defun akirak/contextual-f10 ()
-    (interactive)
-    (cond
-     ((org-clocking-p)
-      (message "This command currently does nothing when you are clocking in"))
-     (t
-      (call-interactively 'org-agenda))))
-
-  (general-def "<f10>" #'akirak/contextual-f10)
-#+end_src
 **** Minor-mode-hydra: hydra for toggling minor modes
 #+begin_src emacs-lisp
   (pretty-hydra-define akirak/minor-mode-hydra
@@ -2084,8 +2001,7 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
                  (ibuffer-sidebar-show-sidebar)
                  (with-current-buffer (ibuffer-sidebar-buffer (selected-frame))
                    (ibuffer-projectile-set-filter-groups)
-                   (ibuffer-update nil))))
-    :make-frame '(frame-purpose-make-mode-frame 'org-mode))
+                   (ibuffer-update nil)))))
 #+end_src
 
 *** Org-agenda keybindings                                :Emacs:Org__Mode:
