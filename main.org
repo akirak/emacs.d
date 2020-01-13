@@ -2020,6 +2020,17 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
 :TOC:      ignore
 :END:
 Some package need to be loaded after other packages, so they are put here.
+** EXWM
+#+begin_src emacs-lisp
+  (when (member "--exwm" command-line-args)
+    (akirak/require 'setup-exwm)
+    (exwm-enable))
+
+  (add-to-list 'command-switch-alist '("--exwm" . (lambda (_) nil)))
+#+end_src
+
+When you connect/disconnect to an external monitor, run =akirak/exwm-configure-screens= command, unless it is automatically called by the screen change hook.
+
 ** Meta
 *** Synchronizing my configuration repositories
 I am now using myrepos to synchronize my configuration repositories.
