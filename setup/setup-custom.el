@@ -2,7 +2,8 @@
 (defgroup akirak/local
   '((treemacs-persist-file custom-variable)
     (git-identity-list custom-variable)
-    (org-starter-path custom-variable))
+    (org-starter-path custom-variable)
+    (akirak/org-wiki-default-dir custom-variable))
   "Variables that should be specific to machines."
   :group 'akirak)
 

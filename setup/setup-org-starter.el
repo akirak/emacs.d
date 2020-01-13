@@ -53,12 +53,10 @@
     :key "n"
     :refile (:maxlevel . 3))
   (general-add-hook 'org-starter-extra-find-file-map
-                    '((";" org-starter-find-config-file "config")
-                      ("w" org-plain-wiki "wiki"))
+                    '((";" org-starter-find-config-file "config"))
                     t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
-                    '((";" org-starter-swiper-config-files "config")
-                      ("w" helm-org-rifle-wiki "wiki/writing"))
+                    '((";" org-starter-swiper-config-files "config"))
                     t)
   (general-add-hook 'org-starter-extra-refile-map
                     '(("'" avy-org-refile-as-child "avy")
@@ -86,7 +84,8 @@
 (akirak/bind-search
   "M-a" #'helm-org-ql-agenda-files
   "M-k" #'akirak/helm-org-ql-known-files
-  "M-o" #'org-starter-alternative-find-file-by-key)
+  "M-o" #'org-starter-alternative-find-file-by-key
+  "M-w" #'akirak/helm-org-ql-wiki)
 (akirak/bind-jump
   "M-o" #'org-starter-find-file-by-key)
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
