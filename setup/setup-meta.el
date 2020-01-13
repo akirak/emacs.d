@@ -34,7 +34,6 @@
     setup-org-download                  ; Screenshots
     setup-counsel-org-clock
     setup-link-hint                     ; Jumping to a URL
-    setup-helm-org-rifle
     setup-ibuffer
     setup-prescient
     setup-lsp                          ; Language-agnostic IDE toolkit

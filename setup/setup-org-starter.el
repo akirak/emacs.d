@@ -1,9 +1,3 @@
-(autoload 'helm-org-rifle-files "helm-org-rifle")
-
-(defun helm-org-rifle-known-files ()
-  (interactive)
-  (helm-org-rifle-files org-starter-known-files))
-
 (use-package org-reverse-datetree)
 
 (use-package org-super-agenda
@@ -38,6 +32,9 @@
 (use-package org-ql-view
   :straight org-ql)
 
+(use-package helm-org-ql
+  :straight org-ql)
+
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
                              (expand-file-name
@@ -67,11 +64,14 @@
                     '(("'" avy-org-refile-as-child "avy")
                       ("?" akirak/org-refile-same-buffer "same buffer"))
                     t)
+  (defun akirak/helm-org-ql-known-files ()
+    (interactive)
+    (helm-org-ql org-starter-known-files))
   :custom
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
-  (org-starter-alternative-find-file-command #'helm-org-rifle-files)
+  (org-starter-alternative-find-file-command #'helm-org-ql)
   (org-starter-find-file-visit-window t)
   (org-starter-override-agenda-window-setup 'other-window)
   (org-starter-enable-local-variables :all))
@@ -83,9 +83,12 @@
   :straight org-starter)
 
 ;;;; Extra keybindings
-(akirak/bind-user
-  "j" #'org-starter-alternative-find-file-by-key)
-
+(akirak/bind-search
+  "M-a" #'helm-org-ql-agenda-files
+  "M-k" #'akirak/helm-org-ql-known-files
+  "M-o" #'org-starter-alternative-find-file-by-key)
+(akirak/bind-jump
+  "M-o" #'org-starter-find-file-by-key)
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
 

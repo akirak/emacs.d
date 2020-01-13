@@ -1171,7 +1171,7 @@ I've added it to =akirak/window-layout-hydra=.
 #+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    "o" 'counsel-org-goto)
+    "o" #'helm-org-ql)
 #+end_src
 *** Outline editing                                              :outlines:
 #+begin_src emacs-lisp
@@ -1973,10 +1973,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Global bindings related to Org mode
  #+begin_src emacs-lisp
    (akirak/bind-key "M-g M-j" #'org-clock-goto)
-   (akirak/bind-search
-     "M-o" #'helm-org-rifle-known-files
-     "M-h" #'org-recent-headings-helm)
-   (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
    (akirak/bind-user
      "c" #'org-capture
      "l" 'org-store-link)

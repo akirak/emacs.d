@@ -24,15 +24,15 @@ This can be used for an org-capture template to create an entry in the journal."
   (defun akirak/org-journal-files ()
     (directory-files org-journal-dir t
                      (file-name-nondirectory org-journal-file-pattern)))
-  (defun akirak/helm-org-rifle-org-journal ()
+  (defun akirak/helm-org-ql-journal ()
     (interactive)
-    (helm-org-rifle-files (nreverse (akirak/org-journal-files))))
+    (helm-org-ql (nreverse (akirak/org-journal-files))))
   (add-to-list 'org-starter-extra-find-file-map
                '("J" akirak/org-journal-open-today "org-journal"))
   (add-to-list 'org-starter-extra-find-file-map
                '("C-j" org-journal-new-scheduled-entry "org-journal (schedule)"))
   (add-to-list 'org-starter-extra-alternative-find-file-map
-               '("J" akirak/helm-org-rifle-org-journal "org-journal"))
+               '("J" akirak/helm-org-ql-journal "org-journal"))
   (org-starter-def-capture "J" "org-journal (plain)"
     entry (function org-journal-find-location)
     "* %?
