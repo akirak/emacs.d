@@ -217,6 +217,28 @@ from running."
 (add-to-list 'org-open-at-point-functions 'akirak/org-open-at-point-with-xdg)
 
 ;;;; Misc
+(defun akirak/org-yank-into-new-block ()
+  (interactive)
+  (let ((begin (point))
+        done)
+    (unwind-protect
+        (progn
+          (yank)
+          (push-mark begin)
+          (setq mark-active t)
+          (call-interactively #'org-insert-structure-template)
+          (setq done t)
+          (deactivate-mark)
+          (let ((case-fold-search nil))
+            (re-search-forward (rx bol "#+end_")))
+          (forward-line 1))
+      (unless done
+        (deactivate-mark)
+        (delete-region begin (point))))))
+
+(general-def :package 'org :keymaps 'org-mode-map :prefix "C-,"
+  "y" #'akirak/org-yank-into-new-block)
+
 (use-package org-entry-links
   :after org
   :straight (:host github :repo "akirak/org-entry-links")
