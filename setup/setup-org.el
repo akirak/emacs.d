@@ -219,6 +219,11 @@ from running."
 ;;;; Misc
 (defun akirak/org-yank-into-new-block ()
   (interactive)
+  (unless (derived-mode-p 'org-mode)
+    (user-error "Not in org-mode"))
+  ;; TODO: Check if already inside a block
+  (unless (looking-back (rx bol))
+    (beginning-of-line 1))
   (let ((begin (point))
         done)
     (unwind-protect
@@ -231,7 +236,10 @@ from running."
           (deactivate-mark)
           (let ((case-fold-search nil))
             (re-search-forward (rx bol "#+end_")))
-          (forward-line 1))
+          (forward-line 1)
+          (unless (looking-at (rx eol))
+            (insert "\n\n")
+            (beginning-of-line 0)))
       (unless done
         (deactivate-mark)
         (delete-region begin (point))))))
