@@ -243,6 +243,19 @@
   "z h" #'dired-hide-dotfiles-mode
   "/" 'dired-filter-map
   "<S-return>" #'dired-open-xdg)
+
+;;;; Bookmark support
+(defun akirak/dired-bookmark-make-record (&rest args)
+  (let* ((default (apply #'bookmark-make-record-default args))
+         (filename (alist-get 'filename default)))
+    (cons (abbreviate-file-name (expand-file-name filename))
+          default)))
+
+(add-hook 'dired-mode-hook
+          (defun akirak/dired-setup-bookmark-function ()
+            (set
+             (make-local-variable 'bookmark-make-record-function) 'akirak/dired-bookmark-make-record)))
+
 ;;;; Hydra
 (major-mode-hydra-define dired-mode
   (:title "Dired")
