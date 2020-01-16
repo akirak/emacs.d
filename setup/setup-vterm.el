@@ -15,12 +15,11 @@
     (el-patch-swap (vterm-send-key "<return>")
                    (process-send-string vterm--process "\C-m")))
   :config
-  (general-setq vterm-keymap-exceptions
-                (cl-merge 'list vterm-keymap-exceptions
-                          '("M-r"
-                            "M-g"
-                            "M-s")
-                          #'string-equal))
+  (mapc (lambda (key)
+          (define-key vterm-mode-map (kbd key) nil))
+        '("M-r"
+          "M-g"
+          "M-s"))
   (defun akirak/vterm-quit-window (&optional buf _event)
     (if-let ((window (get-buffer-window buf)))
         (quit-window nil window)
