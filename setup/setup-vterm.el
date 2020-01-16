@@ -1,6 +1,7 @@
 (use-package vterm
   ;; Use the package installed using nix
   :straight (vterm :type built-in)
+  :commands (vterm)
   :general
   (:keymaps 'vterm-mode-map
             "<S-prior>" #'scroll-down-command
@@ -35,6 +36,7 @@
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
 
 (use-package vterm-toggle
+  :commands (vterm-toggle)
   :custom
   ;; vterm-toggle uses pop-to-buffer to display the buffer, but it
   ;; deletes all the other windows by default.
