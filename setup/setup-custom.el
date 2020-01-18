@@ -12,6 +12,7 @@
   (setq custom-file (read-file-name "Custom file: "
                                     (when custom-file (file-name-directory custom-file))
                                     custom-file))
+  (load-file custom-file)
   (find-file "~/.emacs-profiles.el")
   (customize-group-other-window 'akirak/local))
 
