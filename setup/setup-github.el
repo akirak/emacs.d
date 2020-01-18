@@ -10,6 +10,8 @@
                    nil nil nil
                    'akirak/github-repository-history))
 
+(use-package treepy)
+
 (use-package forge
   :config
   (akirak/bind-browse-at-remote
