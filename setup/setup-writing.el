@@ -56,12 +56,13 @@ of (command . word) to be used by `flyspell-do-correct'."
 ;;;; Counting words
 (use-package wc-mode
   ;; TODO: Configure modelines
-  )
+  :disabled t)
 
 (use-package org-wc
   :after org)
 
 ;;;; Writegood
-(use-package writegood-mode)
+(use-package writegood-mode
+  :disabled t)
 
 (provide 'setup-writing)
