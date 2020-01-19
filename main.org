@@ -908,12 +908,6 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 
   (frame-workflow-define-subject "terminal"
     :key "t"
-    :make-frame
-    '(let ((frame-purpose--initial-buffer-fn #'akirak/get-or-create-vterm-buffer))
-       (frame-purpose-make-frame :modes '(term-mode
-                                          vterm-mode
-                                          eshell-mode
-                                          shell-mode)))
     :layout
     '(switch-to-buffer (akirak/get-or-create-vterm-buffer))
     :refocus
@@ -928,8 +922,8 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+begin_src emacs-lisp
   (akirak/define-frame-workflow "dired"
     :key "d"
-    :make-frame
-    '(frame-purpose-make-mode-frame 'dired-mode)
+    ;; :make-frame
+    ;; '(frame-purpose-make-mode-frame 'dired-mode)
     :layout
     '(when (fboundp 'ibuffer-sidebar-show-sidebar)
        (ibuffer-sidebar-show-sidebar)))
@@ -1794,7 +1788,8 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/define-frame-workflow "emacs-lisp"
     :key "e"
-    :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
+    ;; :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode)
+    )
 #+end_src
 **** Frame for the Emacs config
 #+begin_src emacs-lisp
@@ -1805,8 +1800,9 @@ Ideally, this section should be a portfolio of my skills.
        (delete-other-windows)
        (let ((default-directory user-emacs-directory))
          (frame-workflow-magit-same-window)))
-    :make-frame
-    '(frame-purpose-make-directory-frame user-emacs-directory))
+    ;; :make-frame
+    ;; '(frame-purpose-make-directory-frame user-emacs-directory)
+    )
 #+end_src
 **** Makel
 I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
