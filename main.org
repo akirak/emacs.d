@@ -883,7 +883,7 @@ I will use vterm.
 To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp.
 
 #+begin_src emacs-lisp
-  (akirak/bind-user "t" #'vterm-toggle-cd)
+  (akirak/bind-user "t" #'akirak/vterm-toggle-cd)
 #+end_src
 **** Frame
 #+begin_src emacs-lisp
