@@ -19,9 +19,13 @@
     (f-filename (abbreviate-file-name (f-parent default-directory))))
 
   (defun akirak/magit-repolist-column-path (_id)
-    (string-join `(,@(--map (if (string-prefix-p "." it)
-                                (substring it 0 1)
-                              (substring it 0 1))
+    (string-join `(,@(--map (cond
+                             ((string-empty-p it)
+                              "")
+                             ((string-prefix-p "." it)
+                              (substring it 1 2))
+                             (t
+                              (substring it 0 1)))
                             (split-string (f-short (f-parent default-directory)) "/"))
                    ,(f-filename default-directory))
                  "/"))
