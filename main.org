@@ -82,7 +82,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
   -  [[#development-workflow][Development workflow]]
   -  [[#scratch-buffers][Scratch buffers]]
-  -  [[#spell-checking-and-iedit][Spell checking and iedit]]
+  -  [[#iedit][iedit]]
   -  [[#debugging-emacs][Debugging Emacs]]
   -  [[#integrating-language-servers][Integrating language servers]]
   -  [[#external-tools][External tools]]
@@ -1597,7 +1597,9 @@ To visit a URL, use =browse-url-at-point=:
 (akirak/bind-user
   "i" 'scratch)
 #+end_src
-*** Spell checking and iedit                               :editor:writing:
+*** iedit
+I am not using iedit-mode now, so I will disable its default keybinding:
+
 #+begin_src emacs-lisp
   (use-package iedit
     :straight (:type built-in)
@@ -1606,30 +1608,6 @@ To visit a URL, use =browse-url-at-point=:
 #+end_src
 
 Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-cursors]]. You can first select all the occurrences of a symbol using multiple-cursors and then edit them using iedit.
-
-#+begin_src emacs-lisp
-  (defun akirak/iedit-or-flyspell ()
-    "With a prefix argument, run iedit in the function. Otherwise, run iedit or flyspell.
-
-  With a prefix argument, call `unpackaged/iedit-scoped'.
-  Otherwise, call `unpackaged/iedit-or-flyspell'."
-    (interactive)
-    (if current-prefix-arg
-	(unpackaged/iedit-scoped)
-      (unpackaged/iedit-or-flyspell)))
-
-  (defhydra akirak/flyspell-hydra ()
-    "flyspell"
-    ("n" flyspell-goto-next-error)
-    ("c" flyspell-correct-word))
-
-  (defun akirak/turn-on-flyspell-mode-in-text-mode ()
-    (when (derived-mode-p 'text-mode)
-      (flyspell-mode-on)))
-
-  (advice-add 'akirak/flyspell-hydra/body
-              :before 'akirak/turn-on-flyspell-mode-in-text-mode)
-#+end_src
 *** Debugging Emacs
 #+begin_src emacs-lisp
 (akirak/require 'setup-debug-emacs)
