@@ -2,22 +2,18 @@
   (cond
    ((and (eq akirak/window-system 'wayland)
          (executable-find "wl-paste"))
-    "wl-paste")
-   ((and (eq akirak/window-system 'x)
-         (executable-find "xclip"))
-    "xclip -o"))
+    "wl-paste"))
   "Command used to get the content of the system clipboard."
   :type 'string
   :set (lambda (sym val)
          (set sym val)
-         (if val
-             (advice-add 'interprogram-paste-function
-                         :override #'akirak/interprogram-paste)
-           (advice-remove 'interprogram-paste-function
-                          #'akirak/interprogram-paste))))
+         (setq interprogram-paste-function
+               (if val
+                   #'akirak/interprogram-paste
+                 #'gui-selection-value))))
 
 (defun akirak/interprogram-paste ()
-  (with-timeout 1
+  (with-timeout (1 nil)
     (ignore-errors
       (let ((s (shell-command-to-string akirak/clipboard-paste-command)))
         (unless (string-empty-p s)
