@@ -6,8 +6,7 @@
   (:keymaps 'vterm-mode-map
             "<S-prior>" #'scroll-down-command
             "<S-next>" #'scroll-up-command
-            "C-c C-t" #'vterm-copy-mode
-            "C-c C-c" #'vterm-send-ctrl-c)
+            "C-c C-t" #'vterm-copy-mode)
   :config/el-patch
   ;; fzy doesn't seem to work with the default implementation.
   (el-patch-defun vterm-send-return ()
@@ -19,7 +18,8 @@
           (define-key vterm-mode-map (kbd key) nil))
         '("M-r"
           "M-g"
-          "M-s"))
+          "M-s"
+          "<f1>"))
   (defun akirak/vterm-quit-window (&optional buf _event)
     (if-let ((window (get-buffer-window buf)))
         (quit-window nil window)
