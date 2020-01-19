@@ -3,6 +3,8 @@
   (add-to-list 'avy-dispatch-alist
                `(?K . akirak/avy-action-kill-line)
                t)
+  (akirak/bind-jump
+    "'" #'avy-org-goto-heading-timer)
   :config/el-patch
   (el-patch-defun avy-forward-item ()
     (el-patch-swap (if (eq avy-command 'avy-goto-line)
