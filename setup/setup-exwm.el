@@ -70,12 +70,21 @@
   :straight (exwm-mff :host github :repo "ieure/exwm-mff"))
 
 (use-package exwm-edit
+  :after exwm
+  :commands (exwm-edit-compose)
   :config
   (defun akirak/exwm-edit-setup-compose ()
     (let ((title (exwm-edit--buffer-title (buffer-name))))
-      (cond
-       ;; Add customization
-       )))
+      (pcase title
+        ((rx "Slack")
+         (gfm-mode))
+        (_
+         (akirak/language-detection-auto-major-mode)))))
+  :general
+  (:keymaps 'exwm-mode-map
+            "C-c '" #'exwm-edit-compose)
+  :custom
+  (exwm-edit-split-below t)
   :hook
   (exwm-edit-compose . akirak/exwm-edit-setup-compose))
 
