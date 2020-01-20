@@ -52,9 +52,7 @@
                              (message "language-detection: Cannot find mode for %s"
                                       language)
                              nil))))
-      (cl-find-if #'fboundp modes))
-    (akirak/language-detection-find-mode-from-string
-     (buffer-substring-no-properties (point-min) (point-max))))
+      (cl-find-if #'fboundp modes)))
   (defun akirak/language-detection-auto-major-mode ()
     (interactive)
     (when-let ((mode (akirak/language-detection-buffer-mode )))
