@@ -14,8 +14,4 @@
   :custom
   (javadoc-lookup-completing-read-function 'ivy-completing-read))
 
-(use-package lsp-java-treemacs
-  :straight lsp-java
-  :after treemacs)
-
 (provide 'setup-java-lsp)
