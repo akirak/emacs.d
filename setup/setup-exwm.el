@@ -9,11 +9,23 @@
                       ?\M-r
                       ?\M-s
                       ?\M-g))
+  (defun akirak/exwm-mode-line-setup ()
+    (set (make-local-variable 'mode-line-format)
+         '(" "
+           (:eval (cl-case exwm--input-mode
+                    (line-mode "[line]")
+                    (char-mode "[char]")))
+           " "
+           (:eval exwm-title)
+           " "
+           (:eval (propertize exwm-instance-name 'face 'font-lock-comment-face)))))
   :custom
+  (exwm-workspace-number 2)
   (exwm-floating-border-width 3)
   (exwm-floating-border-color "orange")
   :hook
   (exwm-mode . akirak/disable-posframe-from-this-buffer)
+  (exwm-mode . akirak/exwm-mode-line-setup)
   (exwm-update-title . akirak/exwm-rename-buffer)
   (exwm-manage-finish . akirak/exwm-manage-finish))
 
@@ -128,8 +140,9 @@
     (princ (setq exwm-randr-workspace-output-plist output-plist))))
 
 (defcustom akirak/exwm-xrandr-command-list
-  '("xrandr --output HDMI2 --auto && xrandr --output eDP1 --off"
-    "xrandr --output HDMI2 --auto && xrandr --output eDP1 --right-of HDMI2 --auto")
+  '("xrandr --output HDMI-2 --auto && xrandr --output eDP-1 --off"
+    "xrandr --output HDMI-2 --auto && xrandr --output eDP-1 --left-of HDMI-2 --auto"
+    "xrandr --output HDMI-2 --auto && xrandr --output eDP-1 --right-of HDMI-2 --auto")
   "List of xrandr commands to configure the screens."
   :type '(repeat string))
 
@@ -137,11 +150,8 @@
   (interactive)
   (let ((command (completing-read "Command: "
                                   akirak/exwm-xrandr-command-list
-                                  nil nil
-                                  (string-join (akirak/exwm-xrandr-get-connected-monitors)
-                                               " "))))
-    (shell-command command)
-    (message command)))
+                                  nil nil)))
+    (message (shell-command-to-string command))))
 
 ;;;; Exwm-Specific commands
 (defcustom akirak/web-app-browser-program "chromium"
@@ -218,40 +228,21 @@
   :straight window-go)
 
 (let* ((char-bindings '(("b" akirak/helm-web-browser)
-                        ("i" exwm-input-toggle-keyboard)
-                        ("j" other-window)
-                        ("k" (lambda () (interactive) (other-window -1)))
-                        ;; (exwm-layout-shrink-window)
-                        ;; (exwm-layout-enlarge-window)
-                        ;; You can't use s-l on Chrome OS since it locks the screen
-                        ;; It locks the screen anyway
-                        ("l" offtime-lock)
-                        ("p" (lambda () (interactive) (select-frame (next-frame))))
-                        ("P" (lambda () (interactive) (select-frame (previous-frame))))
                         ("f" exwm-layout-toggle-fullscreen)
-                        ("s" ace-swap-window)
-                        ("x" counsel-linux-app)
+                        ("h" exwm-workspace-move-window)
+                        ("i" exwm-input-toggle-keyboard)
+                        ("j" exwm-workspace-switch)
                         ("m" window-go-master)
                         ("n" window-go-split-sensibly)
-                        ("z" akirak/select-minibuffer-window)
+                        ;; You can't use s-l on Chrome OS since it locks the screen
+                        ;; It locks the screen anyway
+                        ("p" (lambda () (interactive) (select-frame (next-frame))))
+                        ("P" (lambda () (interactive) (select-frame (previous-frame))))
+                        ("x" counsel-linux-app)
                         ("w" akirak/raise-browser)
+                        ("z" akirak/select-minibuffer-window)
                         ("[" exwm-window-go-previous-hidden-workspace)
-                        ("]" exwm-window-go-next-hidden-workspace)
-                        ("," frame-workflow-last-frame)
-                        ("=" exwm-workspace-add)
-                        ("-" exwm-workspace-delete)))
-       (keybindings (append (cl-loop for (char cmd) in char-bindings
-                                     collect (cons (kbd (concat "s-" char))
-                                                   cmd))
-                            (cl-loop for num in (number-sequence 0 9)
-                                     append (list (cons (kbd (format "s-%d" num))
-                                                        `(lambda ()
-                                                           (interactive)
-                                                           (exwm-workspace-switch ,num)))
-                                                  (cons (kbd (format "S-s-%d" num))
-                                                        `(lambda ()
-                                                           (interactive)
-                                                           (exwm-workspace-move-window ,num))))))))
+                        ("]" exwm-window-go-next-hidden-workspace))))
   (setq exwm-input-global-keys keybindings)
   (cl-loop for (key . cmd) in keybindings
            do (exwm-input--set-key key cmd))
@@ -291,5 +282,16 @@
   (setq exwm-input-simulation-keys keybindings)
   (dolist (binding bindings)
     (exwm-input--set-simulation-keys bindings t)))
+
+(defun akirak/exwm-lock-screen ()
+  "Lock screen using gnome-screensaver-command."
+  (interactive)
+  (cond
+   ;; GNOME Fallback
+   ((equal (getenv "GDMSESSION") "gnome-flashback-metacity")
+    (shell-command "gnome-screensaver-command -l"))
+   ((executable-find "physlock")
+    (shell-command "physlock"))))
+
 
 (provide 'setup-exwm)

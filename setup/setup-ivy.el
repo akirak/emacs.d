@@ -120,6 +120,8 @@
   (defun akirak/ivy-decorator-width ()
     (let ((caller (ivy-state-caller ivy-last)))
       (cdr (assoc caller akirak/ivy-posframe-width-alist))))
+  (when (akirak/exwm-session-p)
+    (setq ivy-posframe-parameters '((parent-frame nil))))
   :config/el-patch
   (el-patch-defun ivy-posframe-display-at-window-bottom-left (str)
     (el-patch-wrap 1

@@ -9,6 +9,9 @@
               :after
               (defun akirak/ad-after-aw-delete-window (&rest _args)
                 (balance-windows)))
+  (setq aw-scope (cond
+                  (akirak/to-be-run-as-exwm 'visible)
+                  (t 'frame)))
   :custom
   (aw-keys (string-to-list "qwertyui"))
   (aw-background nil)
@@ -30,7 +33,6 @@
                         ibuffer-sidebar-mode
                         "*Calc Trail*"))
   (aw-dispatch-always t)
-  (aw-scope 'frame)
   (aw-ignore-on t))
 
 (defun akirak/ad-around-aw-show-dispatch-help (orig)
