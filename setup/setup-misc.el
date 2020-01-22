@@ -23,10 +23,6 @@
 :config
 (beginend-global-mode 1))
 
-(use-package deadgrep
-  :commands deadgrep
-  :config
-  (akirak/bind-search "M-p" #'deadgrep))
 (use-package align
   :general
   (:keymaps 'akirak/align-prefix-map
