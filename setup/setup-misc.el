@@ -19,8 +19,8 @@
 (use-package akirak/org-refile
   :straight nil)
 (use-package beginend
-:config
-(beginend-global-mode 1))
+  :config
+  (beginend-global-mode 1))
 
 (use-package align
   :general
