@@ -11,7 +11,6 @@
   :config
   (add-to-list 'scratch-mode-alist '(helpful-mode . emacs-lisp-mode))
   (add-to-list 'scratch-mode-alist '(help-mode . emacs-lisp-mode)))
-(use-package iedit)
 (use-package narrow-or-widen
   :straight nil
   :load-path "contrib/misc")
