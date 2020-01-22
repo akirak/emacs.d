@@ -27,8 +27,6 @@
   :general
   (:keymaps 'akirak/align-prefix-map
             "a" 'align))
-(use-package validate
-  :straight (validate :host github :repo "Malabarba/validate.el"))
 (use-package git-link)
 
 (provide 'setup-misc)
