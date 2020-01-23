@@ -37,6 +37,8 @@
 
 (byte-compile #'akirak/eldoc-message-lv)
 
+(advice-add #'other-window :after #'akirak/eldoc-delete-window)
+
 ;; Use lv.el (which is in the same repo as hydra) to display
 ;; eldoc messages.
 (setq eldoc-message-function #'akirak/eldoc-message-lv)
