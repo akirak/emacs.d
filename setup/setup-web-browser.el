@@ -34,11 +34,15 @@
 (defcustom akirak/localhost-browser-executable "chromium"
   "Browser program for localhost.")
 
+(defvar akirak/web-browser-available-desktop-files nil)
+
 (defun akirak/web-browser-available-desktop-files ()
-  (->> akirak/web-browser-application-list
-       (mapcar #'car)
-       (mapcar #'akirak/locate-xdg-desktop-file)
-       (delq nil)))
+  (or akirak/web-browser-available-desktop-files
+      (setq akirak/web-browser-available-desktop-files
+            (->> akirak/web-browser-application-list
+                 (mapcar #'car)
+                 (mapcar #'akirak/locate-xdg-desktop-file)
+                 (delq nil)))))
 
 (defcustom akirak/web-browser-default-program
   (let ((desktop (cl-find-if #'akirak/locate-xdg-desktop-file
@@ -60,6 +64,7 @@
 (defun akirak/web-browser-x-class-names ()
   (->> (akirak/web-browser-available-desktop-files)
        (mapcar #'akirak/get-xdg-desktop-window-class)
+       (delq nil)
        (mapcar #'s-capitalize)))
 
 (defun akirak/web-browser-buffers ()
