@@ -242,7 +242,10 @@
                         ("w" akirak/raise-browser)
                         ("z" akirak/select-minibuffer-window)
                         ("[" exwm-window-go-previous-hidden-workspace)
-                        ("]" exwm-window-go-next-hidden-workspace))))
+                        ("]" exwm-window-go-next-hidden-workspace)))
+       (keybindings (append (cl-loop for (char cmd) in char-bindings
+                                     collect (cons (kbd (concat "s-" char))
+                                                   cmd)))))
   (setq exwm-input-global-keys keybindings)
   (cl-loop for (key . cmd) in keybindings
            do (exwm-input--set-key key cmd))
