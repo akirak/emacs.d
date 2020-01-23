@@ -233,6 +233,7 @@
   "ew" 'akirak/browse-emacs-package
   "eb" 'akirak/straight-rebuild-package
   "eB" '(akirak/straight-rebuild-outdated-packages :wk "Rebuild outdated")
+  "eF" #'straight-pull-package
   "ef" 'akirak/straight-browse-source)
 
 (provide 'setup-straight)
