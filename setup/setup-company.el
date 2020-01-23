@@ -113,6 +113,10 @@
   :after (company restclient)
   :company restclient-mode)
 
+(use-package nix-company
+  :straight nix-mode
+  :company nix-mode)
+
 (use-package company-nixos-options
   :after (company nix-mode)
   :straight (:host github :repo "travisbhartwell/nix-emacs")
