@@ -12,6 +12,7 @@
                   (elixir . t)
                   (python . t)
                   (sqlite . t)
+                  (go . t)
                   (mermaid . t)
                   (dot . t)
                   (ditaa . t)
@@ -64,6 +65,9 @@
 
 (use-package ob-elixir
   :straight (:host github :repo "akirak/ob-elixir" :branch "lexical-binding")
+  :after ob)
+
+(use-package ob-go
   :after ob)
 
 (provide 'setup-org-babel)
