@@ -225,7 +225,17 @@
   :straight (window-go :host github :repo "akirak/emacs-window-go"))
 
 (use-package exwm-window-go
-  :straight window-go)
+  :after exwm
+  :straight window-go
+  :config
+  ;; Select windows from visible EXWM workspaces
+  (advice-add 'aw-window-list
+              :around
+              (defun akirak/ad-around-aw-window-list (orig)
+                (if (eq aw-scope 'visible)
+                    (sort (cl-mapcan #'window-list (exwm-window-go--visible-workspaces))
+                          'aw-window<)
+                  (funcall orig)))))
 
 (let* ((char-bindings '(("b" akirak/helm-web-browser)
                         ("f" exwm-layout-toggle-fullscreen)
