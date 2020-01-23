@@ -20,8 +20,14 @@
           ;; (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
           (akirak/feebleline-process-status)
+          (akirak/feebleline-gcmh-status :face font-lock-warning-face)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
+
+(defun akirak/feebleline-gcmh-status ()
+  (if (bound-and-true-p akirak/gcmh-status)
+      (concat akirak/gcmh-status " ")
+    ""))
 
 (defun akirak/feebleline-process-status ()
   (let ((status (format-mode-line "%s")))
