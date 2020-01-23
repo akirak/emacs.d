@@ -63,7 +63,7 @@
   :after ob)
 
 (use-package ob-elixir
-  :straight (:host github :repo "zweifisch/ob-elixir")
+  :straight (:host github :repo "akirak/ob-elixir" :branch "lexical-binding")
   :after ob)
 
 (provide 'setup-org-babel)
