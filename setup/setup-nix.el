@@ -4,6 +4,9 @@
   (akirak/bind-mode :keymaps 'nix-mode-map
     "u" #'nix-update-fetch))
 
+(use-package nix-buffer
+  :commands (nix-buffer))
+
 (use-package helm-nixos-options
   :after (nixos-options)
   :straight (:host github :repo "travisbhartwell/nix-emacs"))
