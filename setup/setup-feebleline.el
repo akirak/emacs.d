@@ -218,23 +218,27 @@
 
 (defun akirak/feebleline-exwm-workspaces-update ()
   (setq akirak/feebleline-exwm-workspaces
-        (mapconcat (lambda (i)
-                     (let* ((frm (exwm-workspace--workspace-from-frame-or-index i))
-                            (name (when (fboundp 'frame-workflow--frame-subject-name)
-                                    (frame-workflow--frame-subject-name frm))))
-                       (format
-                        (cond
-                         ((equal frm (selected-frame)) "[%s*]")
-                         ;; TODO: A better way to detect active workspaces
-                         ;; This does not always detect all active workspaces.
-                         ((exwm-workspace--active-p frm) "[%s]")
-                         (t "%s"))
-                        (concat (int-to-string i)
-                                (if name
-                                    (concat ":" name)
-                                  "")))))
-                   (number-sequence 0 (1- (exwm-workspace--count)))
-                   " ")))
+        (cl-labels
+            ((current-p (frm) (equal frm (selected-frame)))
+             ;; TODO: A better way to detect active workspaces
+             ;; This does not always detect all active workspaces.
+             (visible-p (frm) (exwm-workspace--active-p frm))
+             (get-frame (i) (exwm-workspace--workspace-from-frame-or-index i))
+             (get-name (frm) (when (fboundp 'frame-workflow--frame-subject-name)
+                               (frame-workflow--frame-subject-name frm)))
+             (format-workspace (i)
+                               (let* ((frm (get-frame i))
+                                      (name (get-name frm)))
+                                 (format (cond
+                                          ((current-p frm) "[%s%s*]")
+                                          ((visible-p frm) "[%s%s]")
+                                          (t "%s%s"))
+                                         (int-to-string i)
+                                         (if name
+                                             (concat ":" name)
+                                           "")))))
+          (let ((workspaces (number-sequence 0 (1- (exwm-workspace--count)))))
+            (mapconcat #'format-workspace workspaces " ")))))
 
 (with-eval-after-load 'exwm
   (general-add-hook '(exwm-workspace-list-change-hook
