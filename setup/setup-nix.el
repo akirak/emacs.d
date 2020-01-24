@@ -7,6 +7,13 @@
 (use-package nix-buffer
   :commands (nix-buffer))
 
+(use-package nix-shebang
+  :straight nix-mode
+  :functions (nix-shebang-mode)
+  :config
+  (add-to-list 'magic-mode-alist
+               (cons (rx bol "#!/usr/bin/env nix-shell") 'nix-shebang-mode)))
+
 (use-package helm-nixos-options
   :after (nixos-options)
   :straight (:host github :repo "travisbhartwell/nix-emacs"))
