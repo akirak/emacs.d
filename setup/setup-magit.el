@@ -1,3 +1,5 @@
+(use-package magit-section)
+
 (use-package magit
   :config
   (when-let ((bin (executable-find "git")))
