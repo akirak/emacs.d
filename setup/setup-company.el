@@ -29,7 +29,8 @@
                 (derived-mode-p 'text-mode))
            '((company-capf
               company-dabbrev)
-             company-keywords
+             (company-keywords
+              company-emoji)
              company-files))
           ((derived-mode-p 'git-commit-mode)
            '((company-dabbrev company-yankpad company-yasnippet)
@@ -82,8 +83,7 @@
 
 ;;;;; General
 (use-package company-emoji
-  :after company
-  :company text-mode)
+  :after company)
 
 (use-package company-dict
   :disabled t)
