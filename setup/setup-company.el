@@ -115,7 +115,7 @@
 
 (use-package nix-company
   :straight nix-mode
-  :company nix-mode)
+  :company (nix-mode . company-nix))
 
 (use-package company-nixos-options
   :after (company nix-mode)
