@@ -113,6 +113,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#bats][Bats]]
   -  [[#dhall][Dhall]]
   -  [[#dockerfile][Dockerfile]]
+  -  [[#graphql][GraphQL]]
   -  [[#graphviz][GraphViz]]
   -  [[#mermaid][Mermaid]]
   -  [[#nix][Nix]]
@@ -1914,6 +1915,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-dockerfile)
+#+end_src
+*** GraphQL
+#+begin_src emacs-lisp
+  (akirak/require 'setup-graphql)
 #+end_src
 *** GraphViz                                           :diagramming:org_babel:
 #+begin_src emacs-lisp

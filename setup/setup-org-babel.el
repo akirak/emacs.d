@@ -13,6 +13,7 @@
                   (python . t)
                   (sqlite . t)
                   (go . t)
+                  (graphql . t)
                   (mermaid . t)
                   (dot . t)
                   (ditaa . t)
@@ -68,6 +69,9 @@
   :after ob)
 
 (use-package ob-go
+  :after ob)
+
+(use-package ob-graphql
   :after ob)
 
 (provide 'setup-org-babel)
