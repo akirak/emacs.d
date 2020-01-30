@@ -1,11 +1,6 @@
-(defconst akirak/lsp-java-directory
-  (expand-file-name ".cache/lsp-java" user-emacs-directory))
-
 (use-package lsp-java
   :config
-  (require 'dap-java)
-  :hook
-  (java-mode . lsp))
+  (require 'dap-java))
 
 (use-package javadoc-lookup
   :commands (javadoc-lookup)
