@@ -1,20 +1,38 @@
 (use-package clipurl
   :straight (clipurl :host github :repo "akirak/clipurl.el"))
 
+(defmacro akirak/def-org-capture-url-to-toplevel (filename &optional template-fn)
+  `(defun ,(intern (format "akirak/org-capture-url-to-%s-toplevel"
+                           (file-name-base filename)))
+       (url)
+     (if-let ((file (org-starter-locate-file ,filename nil t)))
+         (let ((org-capture-entry `("b" "Bookmark" entry (file ,file)
+                                    ,(funcall (or ,template-fn #'akirak/org-capture-url-bookmark-template) url))))
+           (org-capture))
+       (user-error "File not found: %s" ,filename))))
+
+(defmacro akirak/def-org-capture-url-to-reverse-datetree (filename &optional template-fn)
+  `(defun ,(intern (format "akirak/org-capture-url-to-%s-datetree"
+                           (file-name-base filename)))
+       (url)
+     (if-let ((file (org-starter-locate-file ,filename nil t)))
+         (let ((org-capture-entry `("b" "Bookmark" entry (file+function ,file org-reverse-datetree-goto-date-in-file)
+                                    ,(funcall (or ,template-fn #'akirak/org-capture-url-bookmark-template) url))))
+           (org-capture))
+       (user-error "File not found: %s" ,filename))))
+
 (use-package ivy-clipurl
   :straight clipurl
   :commands (ivy-clipurl)
   :config
   (ivy-add-actions 'ivy-clipurl
-                   '(("C" akirak/git-clone-url "git clone")
-                     ("r" org-web-tools-read-url-as-org "Read as Org")
-                     ("u" akirak/straight-use-package-git-url "use-package")
-                     ("cc" akirak/capture-url-as-link-item "Append item to clock")
-                     ("cb" akirak/org-capture-url-to-bookmark "Bookmark to bookmark"))))
-
-(defun akirak/capture-url-as-link-item (url)
-  (akirak/org-capture-item
-   (org-web-tools--org-link-for-url url)))
+                   `(("cl" ,(akirak/def-org-capture-url-to-toplevel "library.org")
+                      "Bookmark to library")
+                     ("cc" ,(akirak/def-org-capture-url-to-reverse-datetree "cpb.org")
+                      "Bookmark to cpb")
+                     ("cn" ,(akirak/def-org-capture-url-to-toplevel "nixrepos.org")
+                      "Bookmark to nixrepos")
+                     ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark"))))
 
 (defun akirak/org-capture-url-bookmark-template (url)
   (let* ((html (with-timeout (3)
