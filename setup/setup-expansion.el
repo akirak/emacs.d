@@ -69,8 +69,20 @@
 
 (use-package yankpad
   :config
-  (akirak/bind-register
-    "M-y" #'yankpad-repeat))
+  (defun akirak/yankpad-ql (buffers query)
+    (let ((snippets (-flatten-n 1 (org-ql-select buffers query
+                                    :action
+                                    '(let ((heading (car (helm-org-ql--heading 80)))
+                                           (snippets (yankpad-snippets-at-point)))
+                                       (if (= 1 (length snippets))
+                                           (list (cons heading
+                                                       (cadr snippets)))
+                                         snippets))))))
+      (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
+
+  (defun akirak/yankpad-insert ()
+    (interactive)
+    (akirak/yankpad-ql yankpad-file '(level 2))))
 
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
@@ -78,12 +90,5 @@
 (use-package emmet-mode
   :hook
   ((html-mode css-mode) . emmet-mode))
-
-(defhydra yankpad-hydra (:hint nil)
-  ("C" yankpad-set-category)
-  ("A" yankpad-append-category)
-  ("i" yankpad-insert :exit t)
-  ("a" yankpad-aya-persist)
-  ("c" yankpad-capture-snippet :exit t))
 
 (provide 'setup-expansion)

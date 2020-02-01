@@ -1095,14 +1095,8 @@ I prefer using =ivy-yasnippet= for choosing a snippet:
   (general-def "C-o" 'aya-open-line)
 #+end_src
 **** Yankpad
-:PROPERTIES:
-:CREATED_TIME: [2019-09-24 Tue 00:45]
-:END:
-Yankpad is more useful in writing.
-
 #+begin_src emacs-lisp
-  (akirak/bind-user "p" #'yankpad-insert)
-  (akirak/bind-generic "y" #'yankpad-map)
+  (akirak/bind-user "p" #'akirak/yankpad-insert)
 #+end_src
 **** File templates
 #+begin_src emacs-lisp
