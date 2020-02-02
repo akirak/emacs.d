@@ -32,7 +32,8 @@
                       "Bookmark to cpb")
                      ("cn" ,(akirak/def-org-capture-url-to-toplevel "nixrepos.org")
                       "Bookmark to nixrepos")
-                     ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark"))))
+                     ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark")
+                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy"))))
 
 (defun akirak/org-capture-url-bookmark-template (url)
   (let* ((html (with-timeout (3)
@@ -67,5 +68,20 @@
                    (save-window-excursion
                      (bookmark-jump bookmark)
                      (point-marker))))))))
+
+(defun akirak/org-capture-url-to-avy (url)
+  (interactive)
+  (let* ((marker (avy-with avy-goto-line
+                   (avy-jump (rx bol (1+ "*") (1+ space)))
+                   :action (point-marker)))
+         (org-capture-entry
+          `("b" "Bookmark" entry
+            (function (lambda () (org-goto-marker-or-bmk ,marker)))
+            ,(akirak/org-capture-url-bookmark-template url)
+            ;; Unlike the case of a bookmark destination, this
+            ;; finishes immediately, because the entry is already
+            ;; visible.
+            :immediate-finish t)))
+    (org-capture)))
 
 (provide 'setup-clipurl)
