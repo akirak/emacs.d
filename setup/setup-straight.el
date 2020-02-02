@@ -126,7 +126,8 @@
        (repo (plist-get plist :repo))
        (branch (plist-get plist :branch))
        (commit (plist-get plist :commit))
-       (url (plist-get plist :url)))
+       (url (plist-get plist :url))
+       (type (plist-get plist :type)))
     (cl-case host
       (github
        (concat "https://github.com/"
@@ -141,6 +142,7 @@
       (otherwise
        (cond
         (url `(url ,url))
+        ((and (eq type 'git) repo) repo)
         (t `(recipe ,recipe)))))))
 
 (defun akirak/git-clone-emacs-package (package)
