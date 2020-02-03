@@ -24,7 +24,7 @@ git submodule update --init --recursive
 z40=0000000000000000000000000000000000000000
 
 IFS=' '
-while read local_ref local_sha remote_ref remote_sha
+while read -r local_ref local_sha remote_ref remote_sha
 do
   if [ "$local_sha" = $z40 ]
   then
@@ -41,19 +41,21 @@ do
     fi
 
     # Check for WIP commits
-    commit=`git rev-list -n 1 --grep '^WIP' "$range"`
-    if [ "${local_ref}" = refs/heads/master -a -n "$commit" ]
+    commit=$(git rev-list -n 1 --grep '^WIP' "$range")
+    if [ "${local_ref}" = refs/heads/master ] && [ -n "$commit" ]
     then
-      echo "\nPush rejected: WIP commit detected\n"
+      printf "\nPush rejected: WIP commit detected\n\n"
       exit 1
     fi
 
+    echo "$remote_ref" > /dev/null
+
     # Check for autosquash commits
-    commit=`git rev-list -n 1 --grep '^\(fixup\|squash\)!' "$range"`
+    commit=$(git rev-list -n 1 --grep '^\(fixup\|squash\)!' "$range")
     # maint branch is allowed to have autosquash commits
-    if [ "${local_ref}" != refs/heads/maint -a -n "$commit" ]
+    if [ "${local_ref}" != refs/heads/maint ] && [ -n "$commit" ]
     then
-      echo "\nPush rejected: autosquash commit detected\n"
+      printf "\nPush rejected: autosquash commit detected\n\n"
       exit 1
     fi
   fi
