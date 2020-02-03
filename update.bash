@@ -91,8 +91,5 @@ if [[ ${update} = [Yy]* ]]; then
           --eval '(progn (akirak/straight-rebuild-outdated-packages) (kill-emacs))'
 fi
 
-section "Testing non-GUI startup..."
-emacs -nw --debug-init --eval '(unless (get-buffer "*Backtrace*") (kill-emacs))'
-
 echo "Done."
 exit 0
