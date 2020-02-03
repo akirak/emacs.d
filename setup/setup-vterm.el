@@ -24,15 +24,16 @@
     (if-let ((window (get-buffer-window buf)))
         (quit-window nil window)
       (bury-buffer buf)))
-  (defun akirak/run-interactive-shell-command (command &optional name)
-    (interactive "s")
-    (let ((buffer (generate-new-buffer (or name (format "*%s*" command)))))
-      (with-current-buffer buffer
-        (let ((vterm-shell command))
-          (vterm-mode))
-        (pop-to-buffer buffer)
-        (remove-hook 'vterm-exit-functions #'akirak/vterm-quit-window :local))))
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
+
+(defun akirak/run-interactive-shell-command (command &optional name)
+  (interactive "s")
+  (let ((buffer (generate-new-buffer (or name (format "*%s*" command)))))
+    (with-current-buffer buffer
+      (let ((vterm-shell command))
+        (vterm-mode))
+      (pop-to-buffer buffer)
+      (remove-hook 'vterm-exit-functions #'akirak/vterm-quit-window :local))))
 
 (use-package vterm-toggle
   :commands (vterm-toggle)
