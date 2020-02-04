@@ -16,6 +16,7 @@
    (lambda (_name root) (abbreviate-file-name root))))
 
 (use-package ibuffer-vc
+  :disabled t
   :config
   (defun akirak/ibuffer-vc ()
     (ibuffer-vc-set-filter-groups-by-vc-root)
@@ -23,5 +24,12 @@
       (ibuffer-do-sort-by-alphabetic)))
   :hook
   (ibuffer . akirak/ibuffer-vc))
+
+(use-package ibuffer-project
+  :config
+  (defun ibuffer-project-setup ()
+    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
+  :hook
+  (ibuffer . ibuffer-project-setup))
 
 (provide 'setup-ibuffer)
