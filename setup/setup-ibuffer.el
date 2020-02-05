@@ -26,6 +26,8 @@
   (ibuffer . akirak/ibuffer-vc))
 
 (use-package ibuffer-project
+  :straight (:host github :repo "akirak/emacs-ibuffer-project"
+                   :branch "tramp")
   :config
   (defun ibuffer-project-setup ()
     (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
