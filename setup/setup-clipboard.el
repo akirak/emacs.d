@@ -21,6 +21,7 @@
 
 (use-package clipsave
   :straight (clipurl :host github :repo "akirak/clipurl.el")
+  :if (not (akirak/running-on-crostini-p))
   :config
   (clipsave-mode 1)
   :custom
