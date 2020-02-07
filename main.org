@@ -123,7 +123,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#yaml][YAML]]
 -  [[#org-mode][Org mode]]
   -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
-    -  [[#on-navigation][On navigation]]
   -  [[#org-journal][Org Journal]]
   -  [[#frame][Frame]]
   -  [[#org-agenda-keybindings][Org-agenda keybindings]]
@@ -1955,10 +1954,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
      "c" #'org-capture
      "l" 'org-store-link)
  #+end_src
-**** On navigation
-#+begin_src emacs-lisp
-  (akirak/require 'setup-org-recent-headings)
-#+end_src
 *** Org Journal
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-journal)
