@@ -1949,7 +1949,8 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 ** Org mode
 *** Global bindings related to Org mode
  #+begin_src emacs-lisp
-   (akirak/bind-key "M-g M-j" #'org-clock-goto)
+   (akirak/bind-jump "M-j" #'counsel-org-clock-goto)
+   (akirak/bind-search "M-c" #'counsel-org-clock-context)
    (akirak/bind-user
      "c" #'org-capture
      "l" 'org-store-link)
