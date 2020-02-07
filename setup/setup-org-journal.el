@@ -53,9 +53,14 @@ This can be used for an org-capture template to create an entry in the journal."
     :clock-start t :clock-resume t)
   ;; Don't bind C-c C-j to org-journal-new-entry
   (general-unbind "C-c C-j")
+  (defun akirak/org-journal-weekly-header ()
+    (format-time-string "#+TITLE: Week %-W, %Y"))
   :custom
   (org-extend-today-until 4)
   (org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
-  (org-journal-date-format "%F (%a)"))
+  (org-journal-file-type 'weekly)
+  (org-journal-date-format "%F (%a)")
+  (org-journal-file-format "%Y%m%d.org")
+  (org-journal-file-header #'akirak/org-journal-weekly-header))
 
 (provide 'setup-org-journal)

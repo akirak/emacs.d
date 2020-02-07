@@ -61,9 +61,11 @@
 
 (defun akirak/yas-auto-insert ()
   ;; Expand a snippet named \"auto-insert\" if and only if it exists
-  (unless (and (eq major-mode 'emacs-lisp-mode)
-               (member (file-name-base (buffer-file-name))
-                       '(".dir-locals.el" "init.el")))
+  (unless (or (and (eq major-mode 'emacs-lisp-mode)
+                   (member (file-name-base (buffer-file-name))
+                           '(".dir-locals.el" "init.el")))
+              ;; Respect org-journal-file-header in org-journal
+              (eq major-mode 'org-journal-mode))
     (when-let ((snippet (condition-case nil
                             (yas-lookup-snippet "auto-insert")
                           (error nil))))
