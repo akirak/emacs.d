@@ -15,7 +15,7 @@ for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
     if [[ "$s" =~ setup-([^.]+) ]]; then
         FILENAME=${BASH_REMATCH[1]}
         # Prevent from inserting a message if the file is setup-misc.el
-        if [[ ${FILENAME} =~ '^(meta|misc)$' ]]; then
+        if [[ ${FILENAME} =~ ^(meta|misc)$ ]]; then
             continue
         fi
         # Insert a line into the message depending on the status of the file
