@@ -14,7 +14,7 @@
 (setq-mode-local markdown-mode line-spacing 0.3)
 
 ;; Line spacing for reading
-(setq-mode-local Info-mode jline-spacing 0.5)
+(setq-mode-local Info-mode line-spacing 0.5)
 
 ;; Browser
 ;; This does not seem to effect
