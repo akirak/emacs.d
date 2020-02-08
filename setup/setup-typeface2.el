@@ -8,18 +8,6 @@
 ;; Enable faces for contents inside blocks
 (setq-default org-fontify-quote-and-verse-blocks t)
 
-;;;;; Line spacing
-;; Line spacing for writing
-(setq-mode-local org-mode line-spacing 0.3)
-(setq-mode-local markdown-mode line-spacing 0.3)
-
-;; Line spacing for reading
-(setq-mode-local Info-mode line-spacing 0.5)
-
-;; Browser
-;; This does not seem to effect
-;; (setq-mode-local eww-mode line-spacing 0.3)
-
 ;;;; Utilities for fonts
 (defun akirak/check-fonts (list)
   "Check availablity of fonts in LIST and transform it into an alist."
@@ -148,7 +136,15 @@
    ((derived-mode-p 'Info-mode 'eww-mode 'help-mode 'helpful-mode)
     (face-remap-add-relative 'default `(:family ,akirak/paragraph-font)))
    ((derived-mode-p 'org-mode 'markdown-mode)
-    (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font)))))
+    (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font))))
+  ;; Set line-spacing depending on the mode
+  (-some->> (or (and (derived-mode-p 'org-mode) 0.5)
+                (and (derived-mode-p 'markdown-mode) 0.6)
+                (and (derived-mode-p 'helpful-mode 'help-mode) 0.3)
+                (cl-case major-mode
+                  ('Info-mode 0.3)
+                  ('eww-mode 0.35)))
+    (setq-local line-spacing)))
 
 ;; Set the default font
 (defcustom akirak/default-font-family
@@ -200,7 +196,7 @@
        "Hack NF")
       ;; A fixed/variable pitch font for text body.
       (paragraph
-       "Tinos Nerd Font")
+       "Hack NF")
       (kana "HannariMincho")
       (han "Adobe Fangsong Std"))
   (setq akirak/font-family-list (font-family-list))
