@@ -35,6 +35,19 @@
 (use-package helm-org-ql
   :straight org-ql)
 
+(use-package org-multi-wiki
+  :straight (org-multi-wiki :host github :repo "akirak/org-multi-wiki")
+  :config
+  (defun akirak/org-multi-wiki-entry-template-fn (heading)
+    (concat "* " heading "\n:PROPERTIES:\n"
+            ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
+            "\n:END:\n"))
+  :custom
+  (-org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
+
+(use-package helm-org-multi-wiki
+  :straight org-multi-wiki)
+
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
                              (expand-file-name
@@ -85,7 +98,7 @@
   "M-a" #'helm-org-ql-agenda-files
   "M-k" #'akirak/helm-org-ql-known-files
   "M-o" #'org-starter-alternative-find-file-by-key
-  "M-w" #'akirak/helm-org-ql-wiki)
+  "M-w" #'helm-org-multi-wiki-all)
 (akirak/bind-jump
   "M-o" #'org-starter-find-file-by-key)
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
