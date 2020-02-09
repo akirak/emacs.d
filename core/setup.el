@@ -17,7 +17,7 @@
   (when akirak/setup-failed-modules
     (with-current-buffer (generate-new-buffer "*failed modules*")
       (insert "The following modules have failed to load:\n"
-              (mapconcar
+              (mapconcat
                (lambda (module)
                  (propertize module
                              'button
