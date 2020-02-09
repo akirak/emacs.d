@@ -94,7 +94,7 @@ Only one letter is shown, the first that applies."
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
-     ("~/arts" . 2)
+     ("~/archive" . 1)
      ("~/projects" . 2)
      ("~/home.nix" . 0)
      ("~/lib" . 1)
