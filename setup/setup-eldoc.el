@@ -14,7 +14,7 @@
 
 (defvar akirak/eldoc-lv-window nil)
 
-(defun akirak/eldoc-message (message &rest args)
+(defun akirak/eldoc-message (format &rest args)
   (let ((window (setq akirak/eldoc-lv-window (lv-window)))
         (buffer (get-buffer " *LV*")))
     (unless (eql buffer (get-buffer-window buffer))
@@ -27,7 +27,8 @@
     (setq akirak/eldoc-lv-window nil)))
 
 (defun akirak/eldoc-message-lv (format &rest args)
-  (let ((initial-window (selected-window)))
+  (let* (buffer-list-update-hook
+         (initial-window (selected-window)))
     (unwind-protect
         (if (and format
                  (not (string-empty-p format)))
