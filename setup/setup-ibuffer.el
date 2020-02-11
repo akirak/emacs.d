@@ -26,12 +26,25 @@
   (ibuffer . akirak/ibuffer-vc))
 
 (use-package ibuffer-project
-  :straight (:host github :repo "akirak/emacs-ibuffer-project"
-                   :branch "tramp")
   :config
   (defun ibuffer-project-setup ()
-    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups)))
+    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
+    (unless (eq ibuffer-sorting-mode 'project-file-relative)
+      (ibuffer-do-sort-by-project-file-relative)))
+  ;; Group buffers by remote connections
+  (general-add-hook 'ibuffer-project-root-functions
+                    '((tramp-file-remote-p . "Remote")))
   :hook
-  (ibuffer . ibuffer-project-setup))
+  (ibuffer . ibuffer-project-setup)
+  :custom
+  (ibuffer-project-use-cache t)
+  (ibuffer-formats
+   '((mark modified read-only locked " "
+           (name 18 18 :left :elide)
+           " "
+           (size 9 -1 :right)
+           " "
+           (mode 16 16 :left :elide)
+           " " project-file-relative))))
 
 (provide 'setup-ibuffer)
