@@ -61,14 +61,15 @@
 
 ;;;; Package editing
 (defun akirak/emacs-lisp-setup-package ()
-  (let ((dir (when (buffer-file-name)
-               (abbreviate-file-name (file-name-directory (buffer-file-name))))))
-    (when (and dir
+  (let* ((filename (buffer-file-name))
+         (filename-nondir (and filename (file-name-nondirectory filename)))
+         (dir (and filename (abbreviate-file-name (file-name-directory filename)))))
+    (when (and filename
                (or (string-prefix-p (concat user-emacs-directory "straight/") dir)
                    (not (or (string-prefix-p user-emacs-directory dir)
                             (equal "~/" dir)
-                            (member (file-name-nondirectory (buffer-file-name))
-                                    '(".dir-locals.el"))))))
+                            (member filename-nondir '(".dir-locals.el"))
+                            (string-match-p "-tests?\\.el\\'" filename)))))
       (flycheck-package-setup)
       (flycheck-mode 1)
       (when (fboundp 'nameless-mode)
