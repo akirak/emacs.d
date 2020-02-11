@@ -1767,7 +1767,8 @@ Ideally, this section should be a portfolio of my skills.
       ("pl" (load-library (file-name-base (buffer-file-name)))
        "Load library" :exit nil))
      "point"
-     (("m" pp-macroexpand-last-sexp "macroexpand"))
+     (("m" pp-macroexpand-last-sexp "macroexpand")
+      ("tb" buttercup-run-at-point "buttercup"))
      "help/references"
      (("s" suggest)
       ("i" counsel-info-lookup-symbol "info symbol"))))
