@@ -32,8 +32,8 @@
     (unless (eq ibuffer-sorting-mode 'project-file-relative)
       (ibuffer-do-sort-by-project-file-relative)))
   ;; Group buffers by remote connections
-  (general-add-hook 'ibuffer-project-root-functions
-                    '((tramp-file-remote-p . "Remote")))
+  (add-to-list 'ibuffer-project-root-functions
+               '(file-remote-p . "Remote"))
   :hook
   (ibuffer . ibuffer-project-setup)
   :custom
