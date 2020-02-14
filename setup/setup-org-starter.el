@@ -43,7 +43,7 @@
             ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
             "\n:END:\n"))
   :custom
-  (-org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
+  (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
 
 (use-package helm-org-multi-wiki
   :straight org-multi-wiki)
@@ -82,7 +82,7 @@
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
-  (org-starter-alternative-find-file-command #'helm-org-ql)
+  (org-starter-alternative-find-function #'helm-org-ql)
   (org-starter-find-file-visit-window t)
   (org-starter-override-agenda-window-setup 'other-window)
   (org-starter-enable-local-variables :all))
