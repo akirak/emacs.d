@@ -29,28 +29,8 @@ This can be used for an org-capture template to create an entry in the journal."
     (helm-org-ql (nreverse (akirak/org-journal-files))))
   (add-to-list 'org-starter-extra-find-file-map
                '("J" akirak/org-journal-open-today "org-journal"))
-  (add-to-list 'org-starter-extra-find-file-map
-               '("C-j" org-journal-new-scheduled-entry "org-journal (schedule)"))
   (add-to-list 'org-starter-extra-alternative-find-file-map
                '("J" akirak/helm-org-ql-journal "org-journal"))
-  (org-starter-def-capture "J" "org-journal (plain)"
-    entry (function org-journal-find-location)
-    "* %?
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-"
-    :unnarrowed t :clock-in t :clock-resume t)
-  (org-starter-def-capture "j" "Journal")
-  (org-starter-def-capture "jo" "Operation log"
-    entry (function org-journal-find-location)
-    "* %^{Title} :operation:
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-%?
-"
-    :clock-start t :clock-resume t)
   ;; Don't bind C-c C-j to org-journal-new-entry
   (general-unbind "C-c C-j")
   (defun akirak/org-journal-weekly-header ()
