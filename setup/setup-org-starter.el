@@ -33,7 +33,36 @@
   :straight org-ql)
 
 (use-package helm-org-ql
-  :straight org-ql)
+  :straight org-ql
+  :config
+  (defun akirak/helm-org-ql-refile-action (marker)
+    (unless (derived-mode-p 'org-mode)
+      (user-error "Not in org-mode"))
+    (unless (markerp marker)
+      (user-error "Not a marker: %s" marker))
+    (let ((filename (buffer-file-name (or (buffer-base-buffer (marker-buffer marker))
+                                          (marker-buffer marker))))
+          (heading (with-current-buffer (marker-buffer marker)
+                     (org-with-wide-buffer
+                      (goto-char marker)
+                      (org-get-heading t t t t)))))
+      (org-refile nil nil (list heading filename nil marker))))
+  (defun akirak/helm-org-ql-add-child-entry (marker)
+    (let* ((heading (read-string (format "Heading of the new entry in \"%s\": "
+                                         (with-current-buffer (marker-buffer marker)
+                                           (org-with-wide-buffer
+                                            (goto-char marker)
+                                            (substring-no-properties (org-get-heading t t t t)))))))
+           (org-capture-entry `("c" "Child entry" entry
+                                (function (lambda () (org-goto-marker-or-bmk ,marker)))
+                                ,(concat "* " heading "\n:PROPERTIES:\n"
+                                         ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
+                                         "\n:END:\n"))))
+      (org-capture)))
+  (general-add-hook 'helm-org-ql-actions
+                    '(("Refile the current org entry" . akirak/helm-org-ql-refile-action)
+                      ("Create a new entry" . akirak/helm-org-ql-add-child-entry))
+                    t))
 
 (use-package org-multi-wiki
   :straight (org-multi-wiki :host github :repo "akirak/org-multi-wiki")
