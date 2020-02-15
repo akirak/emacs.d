@@ -1,5 +1,8 @@
 (use-package org-reverse-datetree)
 
+(use-package org-clock-childframe
+  :straight (org-clock-childframe :host github :repo "akirak/org-clock-childframe"))
+
 (use-package org-super-agenda
   :after org-agenda
   :config
