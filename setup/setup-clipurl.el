@@ -26,7 +26,8 @@
   :commands (ivy-clipurl)
   :config
   (ivy-add-actions 'ivy-clipurl
-                   `(("cl" ,(akirak/def-org-capture-url-to-toplevel "library.org")
+                   `(("p" pocket-lib-add-urls "Add to Pocket")
+                     ("cl" ,(akirak/def-org-capture-url-to-toplevel "library.org")
                       "Bookmark to library")
                      ("cc" ,(akirak/def-org-capture-url-to-reverse-datetree "cpb.org")
                       "Bookmark to cpb")

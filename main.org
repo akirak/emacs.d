@@ -69,7 +69,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#avy][Avy]]
   -  [[#source-code-navigation][Source code navigation]]
   -  [[#outline-editing][Outline editing]]
-  -  [[#referencing][Referencing]]
+  -  [[#referencing-and-reading][Referencing and reading]]
   -  [[#general-tools-for-editing-source-code][General tools for editing source code]]
   -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
   -  [[#miscellaneous-commands][Miscellaneous commands]]
@@ -1172,7 +1172,7 @@ I've added it to =akirak/window-layout-hydra=.
 #+begin_src emacs-lisp
   (akirak/require 'setup-origami)
 #+end_src
-*** Referencing                                               :referencing:
+*** Referencing and reading                                   :referencing:
 #+begin_src emacs-lisp
 (akirak/require 'setup-referencing)
 #+end_src
@@ -1184,6 +1184,11 @@ Use =pdf-tools=.
 **** EPUB
 #+begin_src emacs-lisp
   (akirak/require 'setup-epub)
+#+end_src
+**** Pocket
+Read =pocket-reader= to read web pages on Emacs.
+#+begin_src emacs-lisp
+(akirak/require 'setup-pocket)
 #+end_src
 **** Annotating documents
 You can use org-noter to annotate PDF documents as well as other formats supported by doc-view.
