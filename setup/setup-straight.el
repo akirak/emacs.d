@@ -88,13 +88,30 @@
   "A variant of `straight-use-package' that accepts a package name."
   (straight-use-package (intern name)))
 
-(defun akirak/straight-rebuild-package (package &optional reload)
+(defun akirak/straight-rebuild-package (package &optional recursive)
   (interactive
-   (list
-    (straight--select-package "Rebuild package" 'for-build 'installed)
-    current-prefix-arg))
+   (list (let ((packages (let ((packages nil))
+                           (maphash (lambda (package recipe)
+                                      (unless (or (plist-get recipe :no-build)
+                                                  (or (null (plist-get recipe :local-repo))
+                                                      (not (straight--repository-is-available-p
+                                                            recipe))))
+                                        (push package packages)))
+                                    straight--recipe-cache)
+                           packages))
+               (dirname (f-filename default-directory))
+               (basename (and (eq major-mode 'emacs-lisp-mode)
+                              (file-name-base (buffer-file-name)))))
+           (completing-read "Rebuild package: "
+                            packages
+                            (lambda (_) t)
+                            'require-match
+                            nil nil
+                            (or (and (member basename packages) basename)
+                                (and (member dirname packages) dirname))))
+         current-prefix-arg))
   (straight-rebuild-package package)
-  (when reload
+  (when (yes-or-no-p "Reload the package? ")
     (load-library package)))
 
 (defun akirak/find-readme-or-browse-emacs-package (package)
