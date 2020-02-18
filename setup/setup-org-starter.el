@@ -69,6 +69,11 @@
 
 (use-package org-multi-wiki
   :straight (org-multi-wiki :host github :repo "akirak/org-multi-wiki")
+  :init
+  (defvar akirak/org-multi-wiki-initialized nil)
+  (unless akirak/org-multi-wiki-initialized
+    (setq org-multi-wiki-directories nil
+          akirak/org-multi-wiki-initialized t))
   :config
   (defun akirak/org-multi-wiki-entry-template-fn (heading)
     (concat "* " heading "\n:PROPERTIES:\n"
