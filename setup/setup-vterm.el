@@ -27,6 +27,7 @@
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
 
 (defun akirak/run-interactive-shell-command (command &optional name)
+  (declare (indent 1))
   (interactive "s")
   (let ((buffer (generate-new-buffer (or name (format "*%s*" command)))))
     (with-current-buffer buffer
