@@ -1,6 +1,4 @@
-(use-package org-web-tools
-  :straight (org-web-tools :host github :repo "akirak/org-web-tools"
-                           :branch "encoding"))
+(use-package org-web-tools)
 
 (defun akirak/read-local-html-as-org (file)
   (-let* ((file (thread-last file

@@ -45,6 +45,9 @@
 
 ;;;; Load configuration files
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
+
+(load-file (expand-file-name "straight-recipes.el" user-emacs-directory))
+
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 
 ;; Prevent a confirmation dialog when the org file is loaded.
