@@ -80,9 +80,25 @@
                                          snippets))))))
       (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
 
+  (pretty-hydra-define akirak/yankpad-hydra
+    (:title (format "Yankpad (category %s)" yankpad-category))
+    ("Category"
+     (("s" yankpad-set-category "Set")
+      ("a" yankpad-append-category "Append")
+      ("l" yankpad-set-category "Set locally"))
+     "Dispatch"
+     (("i" yankpad-insert "Select")
+      ("r" yankpad-repeat "Repeat last"))
+     "Create/edit snippet"
+     (("c" yankpad-capture-snippet "Capture")
+      ("e" yankpad-edit "Edit file")
+      ("p" yankpad-aya-persist "Persist aya"))))
+
   (defun akirak/yankpad-insert ()
     (interactive)
-    (akirak/yankpad-ql yankpad-file '(level 2))))
+    (pcase current-prefix-arg
+      ('(4) (akirak/yankpad-hydra/body))
+      (_ (yankpad-insert)))))
 
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
