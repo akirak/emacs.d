@@ -4,30 +4,13 @@
 
 ;; Install librime using nix-env -i librime
 (use-package liberime-config
-  ;; TODO: Use nix for installation
-  ;; Install librime-data and librime-data-luna-pinyin from the Debian repo
-  :straight (liberime-config :host github :repo "akirak/liberime"
-                             :branch "custom-path"
-                             :files ("CMakeLists.txt" "Makefile" "src" "liberime-config.el"))
-  :config/el-patch
-  (el-patch-defun liberime--build ()
-    (let ((default-directory liberime--root))
-      (set-process-sentinel
-       (el-patch-swap (start-process "liberime-build" "*liberime build*"
-                                     "make")
-                      (start-process "liberime-build" "*liberime build*"
-                                     "nix-shell" "-p" "librime" "cmake"
-                                     "--command" "make"))
-       (lambda (proc _event)
-         (when (eq 'exit (process-status proc))
-           (if (= 0 (process-exit-status proc))
-               (liberime--load)
-             (pop-to-buffer "*liberime build*")
-             (error "liberime: building failed with exit code %d" (process-exit-status proc))))))))
+  :straight (:type built-in)
   :init
   (add-hook 'after-liberime-load-hook
             (lambda ()
-              (liberime-select-schema "luna_pinyin_simp"))))
+              (liberime-select-schema "luna_pinyin_simp")))
+  :custom
+  (liberime-user-data-dir (no-littering-expand-var-file-name "rime")))
 
 (use-package pyim
   :custom
