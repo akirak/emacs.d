@@ -14,5 +14,6 @@
                                 (string-remove-prefix ,prefix (cdr kb))))))))
 
 (akirak/which-key-add-stripped-prefix "akirak/")
+(akirak/which-key-add-stripped-prefix "helm-org-multi-wiki-create/")
 
 (provide 'setup-which-key)

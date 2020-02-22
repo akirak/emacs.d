@@ -83,7 +83,15 @@
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
 
 (use-package helm-org-multi-wiki
-  :straight org-multi-wiki)
+  :straight org-multi-wiki
+  :general
+  (:keymaps 'helm-org-multi-wiki-dummy-source-map :package 'helm-org-multi-wiki
+            :prefix "C-c C-c"
+            "" '(:wk "Create wiki entry")
+            "n" (helm-org-multi-wiki-def-create-entry-action notes)
+            "p" (helm-org-multi-wiki-def-create-entry-action programming)
+            "b" (helm-org-multi-wiki-def-create-entry-action project)
+            "o" (helm-org-multi-wiki-def-create-entry-action organiser)))
 
 (unless (bound-and-true-p org-starter-path)
   (setq org-starter-path `(,(abbreviate-file-name
