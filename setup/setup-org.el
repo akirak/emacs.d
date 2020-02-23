@@ -346,4 +346,14 @@ from running."
 
 (general-def "<f10>" #'org-agenda)
 
+(use-package org-clock-convenience
+  :after org-agenda
+  :general
+  (:keymaps 'org-agenda-mode-map
+            "<S-up>" 'org-clock-convenience-timestamp-up
+            "<S-down>" 'org-clock-convenience-timestamp-down
+            ;; "ö" 'org-clock-convenience-fill-gap
+            ;; "é" 'org-clock-convenience-fill-gap-both
+            ))
+
 (provide 'setup-org)
