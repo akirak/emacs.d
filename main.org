@@ -84,7 +84,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#scratch-buffers][Scratch buffers]]
   -  [[#iedit][iedit]]
   -  [[#debugging-emacs][Debugging Emacs]]
-  -  [[#integrating-language-servers][Integrating language servers]]
   -  [[#external-tools][External tools]]
   -  [[#optimization][Optimization]]
 -  [[#writing][Writing]]
@@ -1593,10 +1592,6 @@ Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-curs
 *** Debugging Emacs
 #+begin_src emacs-lisp
 (akirak/require 'setup-debug-emacs)
-#+end_src
-*** Integrating language servers
-#+begin_src emacs-lisp
-  (akirak/require 'setup-bold)
 #+end_src
 *** External tools
 **** Storage management
