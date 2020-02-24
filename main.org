@@ -1584,6 +1584,7 @@ I am not using iedit-mode now, so I will disable its default keybinding:
 #+begin_src emacs-lisp
   (use-package iedit
     :straight (:type built-in)
+    :disabled t
     :general
     ("C-;" nil))
 #+end_src
