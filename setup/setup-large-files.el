@@ -12,8 +12,7 @@
 (add-hook 'find-file-hook 'my-find-file-check-make-large-file-read-only-hook)
 
 (defun akirak/ad-before-while-abort-if-file-too-large (size op-type filename)
-  (or (not (member (file-name-nondirectory filename) '("TAGS")))
-      (not (member (file-name-extension filename) '(".el" ".el.gz")))))
+  (not (member (file-name-nondirectory filename) '("TAGS"))))
 
 (advice-add 'abort-if-file-too-large :before-while
             #'akirak/ad-before-while-abort-if-file-too-large)
