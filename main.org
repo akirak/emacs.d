@@ -63,7 +63,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#git][Git]]
   -  [[#project-management][Project management]]
   -  [[#web-browser-integration][Web browser integration]]
-  -  [[#company-completion][Company completion]]
   -  [[#templates][Templates]]
   -  [[#frequent-counsel-commands][Frequent counsel commands]]
   -  [[#avy][Avy]]
@@ -1058,11 +1057,6 @@ Emacs also provides eww:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-eww)
-#+end_src
-*** Company completion
-#+begin_src emacs-lisp
-(general-def :package 'company :keymaps 'company-mode-map
-  "M-/" #'company-complete)
 #+end_src
 *** Templates
 #+begin_src emacs-lisp
