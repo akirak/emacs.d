@@ -62,9 +62,15 @@
                                          ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
                                          "\n:END:\n"))))
       (org-capture)))
+  (defun akirak/org-clock-in (marker)
+    (with-current-buffer (marker-buffer marker)
+      (org-with-wide-buffer
+       (goto-char marker)
+       (org-clock-in))))
   (general-add-hook 'helm-org-ql-actions
                     '(("Refile the current org entry" . akirak/helm-org-ql-refile-action)
-                      ("Create a new entry" . akirak/helm-org-ql-add-child-entry))
+                      ("Create a new entry" . akirak/helm-org-ql-add-child-entry)
+                      ("Clock in" . akirak/org-clock-in))
                     t))
 
 (use-package org-multi-wiki
