@@ -1,27 +1,5 @@
 ;;; setup-web-browser.el --- Integration with external web browsers -*- lexical-binding: t -*-
 
-(cond
- ;; In EXWM, prefer Chromium installed on the guest operating system
- ;; over Chrome/Chromium installed on Chrome/Chromium OS.
- (akirak/to-be-run-as-exwm
-  (setq-default browse-url-browser-function 'browse-url-generic
-                browse-url-generic-program "chromium"))
- ((akirak/running-on-crostini-p)
-  (setq-default browse-url-browser-function 'browse-url-generic
-                browse-url-generic-program "garcon-url-handler")))
-
-(advice-add 'browse-url
-            :around
-            (defun akirak/ad-around-browse-url (orig url &rest args)
-              (message "Opening %s" url)
-              (if (and (akirak/running-on-crostini-p)
-                       (string-match-p (rx bol (or "http://penguin.linux.test"
-                                                   "http://localhost")
-                                           (?  ":" (+ digit))
-                                           (?  "/" (* anything)) eol)
-                                       url))
-                  (apply #'browse-url-chromium url args)
-                (apply orig url args))))
 
 (defcustom akirak/web-browser-application-list
   '(("chromium-browser.desktop" :key ?c)
@@ -170,37 +148,6 @@
          (if-let ((b (akirak/select-exwm-browser-buffer)))
              (switch-to-buffer-other-window b)
            (akirak/start-web-browser))))))))
-
-(defcustom akirak/localhost-url-list nil
-  "History of URLs"
-  :type '(repeat string))
-
-(defvar akirak/localhost-history nil)
-
-(defun akirak/browse-localhost (port-or-url &optional path)
-  (interactive (let* ((port-or-url (completing-read "Port or URL: "
-                                                    akirak/localhost-url-list
-                                                    nil nil nil))
-                      (port (ignore-errors
-                              (string-to-number port-or-url)))
-                      (port (unless (= port 0) port))
-                      (path (when port
-                              (read-string "Path: "))))
-                 (list (or port port-or-url) path)))
-  (let ((url (cond
-              ((numberp port-or-url)
-               (format "http://localhost:%d%s"
-                       port-or-url
-                       (or path "")))
-              ((stringp port-or-url)
-               port-or-url))))
-    (add-to-list 'akirak/localhost-url-list url)
-    (start-process "localhost" "localhost"
-                   akirak/localhost-browser-executable url)))
-
-(defun akirak/browse-syncthing ()
-  (interactive)
-  (akirak/browse-localhost 8384))
 
 (provide 'setup-web-browser)
 ;;; setup-web-browser.el ends here

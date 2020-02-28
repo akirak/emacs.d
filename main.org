@@ -1043,6 +1043,8 @@ Use =magit-annex= for working with =git-annex= repositories:
   #+end_src
 *** Web browser integration
 #+begin_src emacs-lisp
+  (akirak/require 'setup-browse-url)
+  ;; deprecated
   (akirak/require 'setup-web-browser)
 #+end_src
 
