@@ -71,6 +71,8 @@
     (browse-url-chromium url))
    (t (browse-url-generic url))))
 
+(akirak/bind-search "M-g" #'akirak/browse-url)
+
 (defvar akirak/read-url-history nil)
 
 (defun akirak/read-url ()
