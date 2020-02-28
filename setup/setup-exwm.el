@@ -237,22 +237,10 @@
                           'aw-window<)
                   (funcall orig)))))
 
-(let* ((char-bindings '(("b" akirak/helm-web-browser)
-                        ("f" exwm-layout-toggle-fullscreen)
-                        ("h" exwm-workspace-move-window)
-                        ("i" exwm-input-toggle-keyboard)
+(let* ((char-bindings '(("i" exwm-input-toggle-keyboard)
                         ("j" exwm-workspace-switch)
-                        ("m" window-go-master)
-                        ("n" window-go-split-sensibly)
-                        ;; You can't use s-l on Chrome OS since it locks the screen
-                        ;; It locks the screen anyway
-                        ("p" (lambda () (interactive) (select-frame (next-frame))))
-                        ("P" (lambda () (interactive) (select-frame (previous-frame))))
                         ("x" counsel-linux-app)
-                        ("w" akirak/raise-browser)
-                        ("z" akirak/select-minibuffer-window)
-                        ("[" exwm-window-go-previous-hidden-workspace)
-                        ("]" exwm-window-go-next-hidden-workspace)))
+                        ("z" akirak/select-minibuffer-window)))
        (keybindings (append (cl-loop for (char cmd) in char-bindings
                                      collect (cons (kbd (concat "s-" char))
                                                    cmd)))))
