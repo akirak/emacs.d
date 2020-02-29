@@ -3,11 +3,76 @@
   :custom
   (frog-jump-buffer-default-filter #'akirak/buffer-same-project-p))
 
+(defvar akirak/switch-buffer-helm-actions
+  '(("Switch to buffer" . switch-to-buffer)))
+
+(defvar akirak/find-file-helm-actions
+  '(("Find file" . find-file)))
+
+(defvar akirak/directory-contents-cache nil)
+
+(defun akirak/find-file-recursively (root)
+  (interactive (list (if current-prefix-arg
+                         (read-directory-name "Find files in dir: ")
+                       (-some-> (project-current)
+                         (project-roots)
+                         (car-safe)))))
+  (let* ((attrs (file-attributes root))
+         (mtime (nth 5 attrs))
+         (cache (assoc root akirak/directory-contents-cache))
+         (default-directory root)
+         (contents (if (or (not (cdr cache))
+                           (time-less-p (cadr cache) mtime))
+                       (let* ((items (process-lines "rg" "--files"
+                                                    "--color=never"
+                                                    "--sortr" "modified"))
+                              (cell (cons mtime items)))
+                         (if cache
+                             (setf (cdr cache) cell)
+                           (push (cons root cell) akirak/directory-contents-cache))
+                         items)
+                     (cddr cache)))
+         (open-files (->> (buffer-list)
+                          (-map (lambda (buffer)
+                                  (let* ((file (buffer-file-name buffer))
+                                         (file (and file (f-short file)))
+                                         (root (f-short root)))
+                                    (and file
+                                         (string-prefix-p root file)
+                                         (string-remove-prefix root file)))))
+                          (delq nil))))
+    (helm :prompt (format "Browse %s: " root)
+          :sources
+          (list (helm-build-sync-source "Files"
+                  :candidates (->> contents
+                                   (-map (lambda (file)
+                                           (if (cl-member file open-files :test #'string-equal)
+                                               (propertize file 'face 'link-visited)
+                                             file))))
+                  :action (lambda (relative)
+                            (find-file (f-join root relative))))
+                (when (file-equal-p (magit-toplevel root) root)
+                  (helm-build-sync-source "Git status"
+                    :candidates (process-lines "git" "status" "--short")
+                    ;; TODO: Add a persistent action to view git diff
+                    :action '(("Find file" . (lambda (status)
+                                               (let ((relative (substring status 3)))
+                                                 (find-file (f-join root relative)))))
+                              ;; TODO: Add an action to commit selected files
+                              )))))))
+
+(defvar akirak/helm-project-buffer-map
+  (let ((map (copy-keymap helm-map)))
+    (define-key map (kbd "M-/")
+      (lambda ()
+        (interactive)
+        (helm-run-after-quit (lambda () (akirak/find-file-recursively project)))))
+    map))
+
 (defun akirak/switch-to-project-file-buffer (project)
   (interactive (list (-some-> (project-current)
                        (project-roots)
                        (car-safe))))
-  (cl-check-type project file-directory)
   (cl-labels ((root-of (buffer)
                        (-some-> (project-current nil (buffer-dir buffer))
                          (project-roots)
@@ -29,28 +94,45 @@
                                      " "
                                      (format-mode buffer))))
               (same-project-p (buf)
-                              (file-equal-p project (root-of buf)))
+                              (-some->> (root-of buf)
+                                (file-equal-p project)))
               (project-bufp (buf)
                             (not (f-ancestor-of-p "~/lib/" (buffer-file-name buf))))
               (file-buffer-cell (buffer)
-                                (cons (format-fbuf buffer) buffer)))
+                                (cons (format-fbuf buffer) buffer))
+              (kill-project-bufs (project)
+                                 (let ((bufs (-filter (lambda (buf)
+                                                        (let ((dir (buffer-dir buf)))
+                                                          (or (f-equal-p dir project)
+                                                              (f-ancestor-of-p project dir))))
+                                                      (buffer-list))))
+                                   (when (yes-or-no-p (format "Kill all buffers in %s" project))
+                                     (mapc #'kill-buffer bufs)
+                                     (helm-run-after-quit (lambda () (akirak/switch-to-project-file-buffer project)))))))
     (-let* ((file-buffers (-filter #'buffer-file-name (buffer-list)))
             ((same-project-buffers other-file-buffers)
-             (-separate #'same-project-p file-buffers))
+             (if project (-separate #'same-project-p file-buffers) (list nil file-buffers)))
             (other-project-buffers (-filter #'project-bufp other-file-buffers))
-            (other-projects (-> (-map #'root-of other-project-buffers)
-                                (-uniq))))
+            (other-projects (->> (-map #'root-of other-project-buffers)
+                                 (delq nil)
+                                 (-uniq))))
       (helm :prompt "Project file buffers: "
             :sources
             (list (helm-build-sync-source (format "File buffers in project %s"
                                                   project)
-                    :candidates (mapcar #'file-buffer-cell same-project-buffers))
+                    :candidates (mapcar #'file-buffer-cell same-project-buffers)
+                    :keymap akirak/helm-project-buffer-map
+                    :action akirak/switch-buffer-helm-actions)
                   (helm-build-sync-source "File buffers in other projects"
-                    :candidates (mapcar #'file-buffer-cell other-project-buffers))
+                    :candidates (mapcar #'file-buffer-cell other-project-buffers)
+                    :action akirak/switch-buffer-helm-actions)
                   (helm-build-sync-source "Other projects with open file buffers"
-                    :candidates other-projects)
+                    :candidates other-projects
+                    :persistent-action #'kill-project-bufs
+                    :action '(("Visit buffer" . akirak/switch-to-project-file-buffer)))
                   (helm-build-sync-source "Recentf"
-                    :candidates (-map #'f-short recentf-list))
+                    :candidates (-map #'f-short recentf-list)
+                    :action akirak/find-file-helm-actions)
                   (helm-build-sync-source "Git repositories"
                     :candidates (->> (magit-repos-alist)
                                      (-map #'cdr)
