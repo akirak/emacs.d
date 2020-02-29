@@ -43,8 +43,7 @@
             (call-interactively 'org-store-link))
      "With custom ID"))
    "Mark/config"
-   (("mh" akirak/org-set-habit "Set habit")
-    ("mc" (unless (org-entry-get nil "CREATED_TIME")
+   (("mc" (unless (org-entry-get nil "CREATED_TIME")
             (org-entry-put nil "CREATED_TIME"
                            ;; TODO: Check for clock data in the entry
                            (format-time-string (org-time-stamp-format t t))))
