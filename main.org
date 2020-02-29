@@ -951,6 +951,10 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+end_src
 *** Buffer management
 #+begin_src emacs-lisp
+  (akirak/require 'setup-switch-buffer)
+#+end_src
+
+#+begin_src emacs-lisp
   ;; buffer management
   (general-def
     "<f5>" 'revert-buffer
@@ -1103,7 +1107,6 @@ Use emmet for producing HTML tags.
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
-    "C-x p" #'counsel-projectile
     "C-x /" #'counsel-rg
     "C-x F" #'counsel-recentf
     "C-x L" #'counsel-locate)
