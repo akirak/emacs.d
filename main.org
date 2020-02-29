@@ -76,7 +76,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#window-management][Window management]]
   -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
   -  [[#startup-buffer][Startup buffer]]
-  -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
+  -  [[#auto-saving][Auto saving]]
   -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
   -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
   -  [[#development-workflow][Development workflow]]
@@ -869,9 +869,6 @@ I'm not using olivetti-mode
 #+end_src
 
 *** Terminal and shells
-#+begin_src emacs-lisp
-  (akirak/require 'setup-terminal t)
-#+end_src
 **** Using vterm
 I will use vterm.
 
@@ -1501,17 +1498,12 @@ By default, =*Messages*= buffer is shown at startup.
   (akirak/require 'setup-initial-buffer)
 #+end_src
 
-*** Auto saving and auto git-commit
-
+*** Auto saving
 Files are automatically saved on certain events by =super-save-mode=:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-super-save)
 #+end_src
-
-Some files are automatically committed to their contained repositories.
-
-[[file:setup/setup-git-auto-commit.el]]
 *** org-web-tools and clipurl
 [[https://github.com/alphapapa/org-web-tools][org-web-tools]] is handy, but commands in the package often fail to retrieve a proper URL I want to operate on. Therefore I created =clipurl= package to pick a URL from the kill ring.
 
