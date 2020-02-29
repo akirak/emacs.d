@@ -1,0 +1,5 @@
+#+title: Notes on my Emacs config
+* Deprecate projectile
+* Deprecate counsel-ibuffer
+* Deprecate ibuffer
+* Deprecate yasnippet-snippets
