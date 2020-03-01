@@ -3,6 +3,24 @@
   :custom
   (frog-jump-buffer-default-filter #'akirak/buffer-same-project-p))
 
+(defsubst akirak/buffer-derived-mode-p (buffer &rest modes)
+  (declare (indent 1))
+  (apply #'provided-mode-derived-p (buffer-local-value 'major-mode buffer)
+         modes))
+
+(defcustom akirak/exwm-browser-class-names
+  '("Chromium" "Brave" "Chromium-browser")
+  "List of class names of browser windows.")
+
+(defun akirak/reference-buffer-p (buffer)
+  ;; Based on the implementation of `derived-mode-p'.
+  (or (akirak/buffer-derived-mode-p buffer
+        'Info-mode 'help-mode 'helpful-mode 'eww-mode)
+      (and (akirak/buffer-derived-mode-p buffer
+             'exwm-mode)
+           (member (buffer-local-value 'exwm-class-name buf)
+                   akirak/exwm-browser-class-names))))
+
 
 (defvar akirak/switch-buffer-helm-actions
   (quote (("Switch to buffer" .
