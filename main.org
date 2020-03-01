@@ -1213,8 +1213,6 @@ I often consult the Emacs Lisp manual:
   (use-package devdocs-lookup
     :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
     :commands (devdocs-lookup))
-
-  (akirak/bind-user "d" #'devdocs-lookup)
 #+end_src
 ***** Dash
 #+begin_src emacs-lisp

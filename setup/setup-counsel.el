@@ -74,9 +74,6 @@
                          (string-prefix-p "counsel-" (symbol-name command)))
                 (delq (assoc command  ivy-initial-inputs-alist)
                       ivy-initial-inputs-alist)))
-  :general
-  (:keymaps 'counsel-mode-map
-            "C-x b" #'counsel-ibuffer)
   :custom
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
