@@ -3,11 +3,21 @@
   :custom
   (frog-jump-buffer-default-filter #'akirak/buffer-same-project-p))
 
+
 (defvar akirak/switch-buffer-helm-actions
-  '(("Switch to buffer" . switch-to-buffer)))
+  (quote (("Switch to buffer" .
+           (lambda (buffer)
+             (when current-prefix-arg
+               (ace-window nil))
+             (switch-to-buffer buffer)))
+          ("Kill buffer" . kill-buffer))))
 
 (defvar akirak/find-file-helm-actions
-  '(("Find file" . find-file)))
+  (quote (("Find file" .
+           (lambda (file)
+             (when current-prefix-arg
+               (ace-window nil))
+             (find-file file))))))
 
 (defvar akirak/directory-contents-cache nil)
 
@@ -17,49 +27,62 @@
                        (-some-> (project-current)
                          (project-roots)
                          (car-safe)))))
-  (let* ((attrs (file-attributes root))
-         (mtime (nth 5 attrs))
-         (cache (assoc root akirak/directory-contents-cache))
-         (default-directory root)
-         (contents (if (or (not (cdr cache))
-                           (time-less-p (cadr cache) mtime))
-                       (let* ((items (process-lines "rg" "--files"
-                                                    "--color=never"
-                                                    "--sortr" "modified"))
-                              (cell (cons mtime items)))
-                         (if cache
-                             (setf (cdr cache) cell)
-                           (push (cons root cell) akirak/directory-contents-cache))
-                         items)
-                     (cddr cache)))
-         (open-files (->> (buffer-list)
-                          (-map (lambda (buffer)
-                                  (let* ((file (buffer-file-name buffer))
-                                         (file (and file (f-short file)))
-                                         (root (f-short root)))
-                                    (and file
-                                         (string-prefix-p root file)
-                                         (string-remove-prefix root file)))))
-                          (delq nil))))
-    (helm :prompt (format "Browse %s: " root)
-          :sources
-          (list (helm-build-sync-source "Files"
-                  :candidates (->> contents
-                                   (-map (lambda (file)
-                                           (if (cl-member file open-files :test #'string-equal)
-                                               (propertize file 'face 'link-visited)
-                                             file))))
-                  :action (lambda (relative)
-                            (find-file (f-join root relative))))
-                (when (file-equal-p (magit-toplevel root) root)
-                  (helm-build-sync-source "Git status"
-                    :candidates (process-lines "git" "status" "--short")
-                    ;; TODO: Add a persistent action to view git diff
-                    :action '(("Find file" . (lambda (status)
-                                               (let ((relative (substring status 3)))
-                                                 (find-file (f-join root relative)))))
-                              ;; TODO: Add an action to commit selected files
-                              )))))))
+  (cl-labels ((status-file (status) (substring status 3)))
+    (let* ((attrs (file-attributes root))
+           (mtime (nth 5 attrs))
+           (cache (assoc root akirak/directory-contents-cache))
+           (default-directory root)
+           (contents (if (or (not (cdr cache))
+                             (time-less-p (cadr cache) mtime))
+                         (let* ((items (process-lines "rg" "--files"
+                                                      "--color=never"
+                                                      "--sortr" "modified"))
+                                (cell (cons mtime items)))
+                           (if cache
+                               (setf (cdr cache) cell)
+                             (push (cons root cell) akirak/directory-contents-cache))
+                           items)
+                       (cddr cache)))
+           (open-files (->> (buffer-list)
+                            (-map (lambda (buffer)
+                                    (let* ((file (buffer-file-name buffer))
+                                           (file (and file (f-short file)))
+                                           (root (f-short root)))
+                                      (and file
+                                           (string-prefix-p root file)
+                                           (string-remove-prefix root file)))))
+                            (delq nil))))
+      (helm :prompt (format "Browse %s: " root)
+            :sources
+            (delq nil
+                  (list (helm-build-sync-source "Files"
+                          :candidates (->> contents
+                                           (-map (lambda (file)
+                                                   (if (cl-member file open-files :test #'string-equal)
+                                                       (propertize file 'face 'link-visited)
+                                                     file))))
+                          :action (lambda (relative)
+                                    (find-file (f-join root relative))))
+                        (when (file-equal-p (magit-toplevel root) root)
+                          (helm-build-sync-source "Git status"
+                            :candidates (process-lines "git" "status" "--short")
+                            :persistent-action
+                            (lambda (status)
+                              (let ((file (status-file status)))
+                                (with-current-buffer (or (find-buffer-visiting file)
+                                                         (find-file-noselect file))
+                                  (magit-diff-buffer-file))))
+                            :action '(("Find file" . (lambda (status)
+                                                       (let ((relative (status-file status)))
+                                                         (find-file (f-join root relative)))))
+                                      ;; TODO: Add an action to commit selected files
+                                      ;; ("Commit" . (lambda (_)
+                                      ;;               (let ((files (-map #'status-file (helm-marked-candidates))))
+                                      ;;                 ()
+                                      ;;                 )
+
+                                      ;;               ))
+                                      )))))))))
 
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))
@@ -129,7 +152,7 @@
                   (helm-build-sync-source "Other projects with open file buffers"
                     :candidates other-projects
                     :persistent-action #'kill-project-bufs
-                    :action '(("Visit buffer" . akirak/switch-to-project-file-buffer)))
+                    :action '(("Switch to project" . akirak/switch-to-project-file-buffer)))
                   (helm-build-sync-source "Recentf"
                     :candidates (-map #'f-short recentf-list)
                     :action akirak/find-file-helm-actions)
