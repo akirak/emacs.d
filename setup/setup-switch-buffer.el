@@ -79,9 +79,22 @@
   (interactive)
   (helm :prompt "Switch to a dired buffer: "
         :sources
-        (akirak/helm-filtered-buffer-source "Dired buffers"
-          (lambda (buf)
-            (akirak/buffer-derived-mode-p buf 'dired-mode)))))
+        (list (akirak/helm-filtered-buffer-source "Dired buffers"
+                (lambda (buf)
+                  (akirak/buffer-derived-mode-p buf 'dired-mode)))
+              ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
+              (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
+                :init (lambda ()
+                        (bookmark-maybe-load-default-file)
+                        (helm-init-candidates-in-buffer
+                            'global (helm-bookmark-filter-setup-alist
+                                     (lambda (bookmark)
+                                       (let* ((filename (bookmark-get-filename bookmark))
+                                              (isnonfile (equal filename helm-bookmark--non-file-filename)))
+                                         (and filename
+                                              (not isnonfile)
+                                              (string-suffix-p "/" filename)
+                                              (not (bookmark-get-handler bookmark))))))))))))
 
 (defvar akirak/switch-buffer-helm-actions
   (quote (("Switch to buffer" .
