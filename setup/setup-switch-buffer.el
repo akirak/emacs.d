@@ -20,9 +20,8 @@
   (and (akirak/buffer-derived-mode-p buffer 'org-mode)
        (buffer-base-buffer buffer)))
 
-(cl-defun akirak/helm-switch-buffer-in-filter (predicate &key prompt
-                                                         action
-                                                         extra-sources)
+(cl-defun akirak/helm-filtered-buffer-source (name predicate &key
+                                                   action)
   (declare (indent 1))
   (-let* (((visible-buffers windows)
            (->> (window-list)
@@ -56,40 +55,33 @@
                                  (message "Select a window %s" windows)
                                  (ace-window nil)
                                  (switch-to-buffer buf)))))))
-    (helm :prompt (or prompt "Switch buffer: ")
-          :sources
-          (cons (helm-build-sync-source "Filtered buffers"
-                  :candidates (-map (lambda (buf)
-                                      (cons (buffer-name buf) buf))
-                                    non-visible-buffers)
-                  :action (or action default-action))
-                extra-sources))))
+    (helm-build-sync-source name
+      :candidates (-map (lambda (buf)
+                          (cons (buffer-name buf) buf))
+                        non-visible-buffers)
+      :action (or action default-action))))
 
 (defun akirak/switch-to-reference-buffer ()
   (interactive)
-  (akirak/helm-switch-buffer-in-filter #'akirak/reference-buffer-p
-    :prompt "Switch to a reference buffer: "))
+  (helm :prompt "Switch to a reference buffer: "
+        :sources
+        (akirak/helm-filtered-buffer-source "Reference buffers"
+          #'akirak/reference-buffer-p)))
 
 (defun akirak/switch-to-indirect-org-buffer ()
   (interactive)
-  (akirak/helm-switch-buffer-in-filter #'akirak/indirect-org-buffer-p
-    :prompt "Switch to an indirect Org buffer: "))
+  (helm :prompt "Switch to an indirect Org buffer: "
+        :sources
+        (akirak/helm-filtered-buffer-source "Indirect Org buffers"
+          #'akirak/indirect-org-buffer-p)))
 
 (defun akirak/switch-to-dired-buffer ()
   (interactive)
-  (akirak/helm-switch-buffer-in-filter
-      (lambda (buf)
-        (akirak/buffer-derived-mode-p buf 'dired-mode))
-    :prompt "Switch to dired buffer: "))
-
-(defun akirak/switch-to-other-buffer ()
-  (interactive)
-  (akirak/helm-switch-buffer-in-filter
-      (lambda (buf)
-        (and (not (buffer-file-name buf))
-             (not (buffer-base-buffer buf))
-             (not (akirak/reference-buffer-p buf))))
-    :prompt "Switch to other buffer"))
+  (helm :prompt "Switch to a dired buffer: "
+        :sources
+        (akirak/helm-filtered-buffer-source "Dired buffers"
+          (lambda (buf)
+            (akirak/buffer-derived-mode-p buf 'dired-mode)))))
 
 (defvar akirak/switch-buffer-helm-actions
   (quote (("Switch to buffer" .
