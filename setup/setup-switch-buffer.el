@@ -170,27 +170,21 @@
                                                        (propertize file 'face 'link-visited)
                                                      file))))
                           :action (lambda (relative)
-                                    (find-file (f-join root relative))))
-                        (when (file-equal-p (magit-toplevel root) root)
-                          (helm-build-sync-source "Git status"
-                            :candidates (process-lines "git" "status" "--short")
-                            :persistent-action
-                            (lambda (status)
-                              (let ((file (status-file status)))
-                                (with-current-buffer (or (find-buffer-visiting file)
-                                                         (find-file-noselect file))
-                                  (magit-diff-buffer-file))))
-                            :action '(("Find file" . (lambda (status)
-                                                       (let ((relative (status-file status)))
-                                                         (find-file (f-join root relative)))))
-                                      ;; TODO: Add an action to commit selected files
-                                      ;; ("Commit" . (lambda (_)
-                                      ;;               (let ((files (-map #'status-file (helm-marked-candidates))))
-                                      ;;                 ()
-                                      ;;                 )
+                                    (find-file (f-join root relative))))))))))
 
-                                      ;;               ))
-                                      )))))))))
+(defvar akirak/git-status-source
+  (helm-build-sync-source "Git status"
+    :candidates (process-lines "git" "status" "--short")
+    :persistent-action
+    (lambda (status)
+      (let ((file (status-file status)))
+        (with-current-buffer (or (find-buffer-visiting file)
+                                 (find-file-noselect file))
+          (magit-diff-buffer-file))))
+    :action '(("Find file" . (lambda (status)
+                               (let ((relative (status-file status)))
+                                 (find-file (f-join root relative))))))))
+
 
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))
