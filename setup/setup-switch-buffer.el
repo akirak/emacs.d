@@ -39,6 +39,7 @@
        (buffer-base-buffer buffer)))
 
 (cl-defun akirak/helm-filtered-buffer-source (name predicate &key
+                                                   format-candidate
                                                    action)
   (declare (indent 1))
   (-let* (((visible-buffers windows)
@@ -75,7 +76,9 @@
                                  (switch-to-buffer buf)))))))
     (helm-build-sync-source name
       :candidates (-map (lambda (buf)
-                          (cons (buffer-name buf) buf))
+                          (cons (funcall (or format-candidate #'buffer-name)
+                                         buf)
+                                buf))
                         non-visible-buffers)
       :action (or action default-action))))
 
@@ -99,7 +102,14 @@
         :sources
         (list (akirak/helm-filtered-buffer-source "Dired buffers"
                 (lambda (buf)
-                  (akirak/buffer-derived-mode-p buf 'dired-mode)))
+                  (akirak/buffer-derived-mode-p buf 'dired-mode))
+                :format-candidate
+                (lambda (buf) (buffer-local-value 'default-directory buf))
+                :action
+                (lambda (buf)
+                  (when current-prefix-arg
+                    (ace-window nil))
+                  (switch-to-buffer buf)))
               ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
               (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
                 :init (lambda ()
