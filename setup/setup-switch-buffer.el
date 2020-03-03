@@ -38,6 +38,10 @@
   (and (akirak/buffer-derived-mode-p buffer 'org-mode)
        (buffer-base-buffer buffer)))
 
+;; TODO: Add a predicate for terminals and interactive shells
+
+;; TODO: Add a predicate for scratch bufers
+
 (cl-defun akirak/helm-filtered-buffer-source (name predicate &key
                                                    format-candidate
                                                    action)
