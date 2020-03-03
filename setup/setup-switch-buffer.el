@@ -1,3 +1,21 @@
+;;;; Project root cache
+;; Based on ibuffer-project.el.
+(defvar akirak/project-roots-cache (make-hash-table :test 'equal)
+  "Variable to store cache of project per directory.")
+
+(defun akirak/clear-project-cache ()
+  (interactive)
+  (clrhash akirak/project-roots-cache))
+
+(defun akirak/project-root (dir)
+  "Return the project root of DIR with cache enabled."
+  (pcase (gethash dir akirak/project-roots-cache 'no-cached)
+    ('no-cached (let* ((project (project-current nil dir))
+                       (root (and project (car (project-roots project)))))
+                  (puthash dir root akirak/project-roots-cache)
+                  root))
+    (root root)))
+
 (defsubst akirak/buffer-derived-mode-p (buffer &rest modes)
   (declare (indent 1))
   (apply #'provided-mode-derived-p (buffer-local-value 'major-mode buffer)
@@ -116,9 +134,7 @@
 (defun akirak/find-file-recursively (root)
   (interactive (list (if current-prefix-arg
                          (read-directory-name "Find files in dir: ")
-                       (-some-> (project-current)
-                         (project-roots)
-                         (car-safe)))))
+                       (akirak/project-root default-directory))))
   (cl-labels ((status-file (status) (substring status 3)))
     (let* ((attrs (file-attributes root))
            (mtime (nth 5 attrs))
@@ -189,9 +205,7 @@
                        (project-roots)
                        (car-safe))))
   (cl-labels ((root-of (buffer)
-                       (-some-> (project-current nil (buffer-dir buffer))
-                         (project-roots)
-                         (car-safe)))
+                       (akirak/project-root (buffer-dir buffer)))
               (buffer-dir (buffer)
                           (buffer-local-value 'default-directory buffer))
               (format-mode (buffer)
