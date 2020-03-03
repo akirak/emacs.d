@@ -1317,6 +1317,10 @@ There is another package named comment-tags for the same purpose, but I won't us
     (comment-tags-case-sensitive t)
     (comment-tags-comment-start-only t))
 #+end_src
+**** Enhancing undo
+#+begin_src emacs-lisp
+  (akirak/require 'setup-undo)
+#+end_src
 *** Editing specific types of formats
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:27]
