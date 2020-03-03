@@ -228,19 +228,19 @@
                           :action (lambda (relative)
                                     (find-file (f-join root relative))))))))))
 
-(defvar akirak/git-status-source
-  (helm-build-sync-source "Git status"
-    :candidates (process-lines "git" "status" "--short")
-    :persistent-action
-    (lambda (status)
-      (let ((file (status-file status)))
-        (with-current-buffer (or (find-buffer-visiting file)
-                                 (find-file-noselect file))
-          (magit-diff-buffer-file))))
-    :action '(("Find file" . (lambda (status)
-                               (let ((relative (status-file status)))
-                                 (find-file (f-join root relative))))))))
-
+(with-eval-after-load 'helm
+  (defvar akirak/git-status-source
+    (helm-build-sync-source "Git status"
+      :candidates (lambda () (process-lines "git" "status" "--short"))
+      :persistent-action
+      (lambda (status)
+        (let ((file (status-file status)))
+          (with-current-buffer (or (find-buffer-visiting file)
+                                   (find-file-noselect file))
+            (magit-diff-buffer-file))))
+      :action '(("Find file" . (lambda (status)
+                                 (let ((relative (status-file status)))
+                                   (find-file (f-join root relative)))))))))
 
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))
