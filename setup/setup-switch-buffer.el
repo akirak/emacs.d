@@ -102,31 +102,73 @@
 
 (defun akirak/switch-to-dired-buffer ()
   (interactive)
-  (helm :prompt "Switch to a dired buffer: "
-        :sources
-        (list (akirak/helm-filtered-buffer-source "Dired buffers"
-                (lambda (buf)
-                  (akirak/buffer-derived-mode-p buf 'dired-mode))
-                :format-candidate
-                (lambda (buf) (buffer-local-value 'default-directory buf))
-                :action
-                (lambda (buf)
-                  (when current-prefix-arg
-                    (ace-window nil))
-                  (switch-to-buffer buf)))
-              ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
-              (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
-                :init (lambda ()
-                        (bookmark-maybe-load-default-file)
-                        (helm-init-candidates-in-buffer
-                            'global (helm-bookmark-filter-setup-alist
-                                     (lambda (bookmark)
-                                       (let* ((filename (bookmark-get-filename bookmark))
-                                              (isnonfile (equal filename helm-bookmark--non-file-filename)))
-                                         (and filename
-                                              (not isnonfile)
-                                              (string-suffix-p "/" filename)
-                                              (not (bookmark-get-handler bookmark))))))))))))
+  (pcase current-prefix-arg
+    ('(16) (helm :prompt "Git repositories: "
+                 :sources
+                 (helm-build-sync-source "magit-list-repos"
+                   :candidates
+                   (mapcar #'f-short (magit-list-repos))
+                   :action
+                   '(("Dired" . dired)
+                     ("Find file" . counsel-find-file)
+                     ("Term" . (lambda (dir)
+                                 (let ((default-directory dir))
+                                   (vterm))))))))
+    ('(4) (helm :prompt "Switch to a directory in the project: "
+                :sources
+                (list (helm-build-sync-source "Directories in the project"
+                        :candidates
+                        (let ((default-directory (akirak/project-root default-directory)))
+                          (->> (process-lines "fd" "-t" "d" "--color=never")
+                               (-map (lambda (relative)
+                                       (cons relative (f-expand relative))))))
+                        :action
+                        '(("Dired" . dired)
+                          ("Find file" . counsel-find-file)
+                          ("Term" . (lambda (dir)
+                                      (let ((default-directory dir))
+                                        (vterm))))))
+                      (helm-build-sync-source "Ancestors of the project"
+                        :candidates
+                        (->> (akirak/project-root default-directory)
+                             (f-expand)
+                             (f-split)
+                             (-inits)
+                             (-butlast)
+                             (cdr)
+                             (-map (-partial #'apply #'f-join))
+                             (-map #'f-short))
+                        :action
+                        '(("Dired" . dired)
+                          ("Find file" . counsel-find-file)
+                          ("Term" . (lambda (dir)
+                                      (let ((default-directory dir))
+                                        (vterm)))))))))
+    ('nil (helm :prompt "Switch to a dired buffer: "
+                :sources
+                (list (akirak/helm-filtered-buffer-source "Dired buffers"
+                        (lambda (buf)
+                          (akirak/buffer-derived-mode-p buf 'dired-mode))
+                        :format-candidate
+                        (lambda (buf) (buffer-local-value 'default-directory buf))
+                        :action
+                        (lambda (buf)
+                          (when current-prefix-arg
+                            (ace-window nil))
+                          (switch-to-buffer buf)))
+                      ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
+                      (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
+                        :init (lambda ()
+                                (bookmark-maybe-load-default-file)
+                                (helm-init-candidates-in-buffer
+                                    'global (helm-bookmark-filter-setup-alist
+                                             (lambda (bookmark)
+                                               (let* ((filename (bookmark-get-filename bookmark))
+                                                      (isnonfile (equal filename helm-bookmark--non-file-filename)))
+                                                 (and filename
+                                                      (not isnonfile)
+                                                      (string-suffix-p "/" filename)
+                                                      (not (bookmark-get-handler bookmark))))))))))))))
 
 (defvar akirak/switch-buffer-helm-actions
   (quote (("Switch to buffer" .
@@ -280,7 +322,7 @@
 (general-def
   "C-x b" #'akirak/switch-to-project-file-buffer
   "C-x p" #'akirak/find-file-recursively
-  "C-c d" #'akirak/switch-to-dired-buffer
+  "C-x d" #'akirak/switch-to-dired-buffer
   "C-c j" #'akirak/switch-to-indirect-org-buffer
   "C-c r" #'akirak/switch-to-reference-buffer)
 
