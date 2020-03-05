@@ -67,7 +67,7 @@
     (ace-window nil))
   (cond
    ((akirak/local-url-p url)
-    (add-to-list 'akirak/localhost-url-list url)
+    (akirak/browse-url-bookmarks-add url)
     (browse-url-chromium url))
    (t (browse-url-generic url))))
 
