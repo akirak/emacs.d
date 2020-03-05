@@ -972,11 +972,13 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+end_src
 **** Magit-Todos
 #+begin_src emacs-lisp
-  (use-package magit-todos :after (magit hl-todo)
-    :straight (magit-todos :host github :repo "alphapapa/magit-todos")
+  (use-package magit-todos
+    :after magit
     :config
-    (magit-todos-mode 1)
+    (unless akirak/is-wsl
+      (magit-todos-mode 1))
     :custom
+    (magit-todos-depth 0)
     (magit-todos-exclude-globs '("**/*.map")))
 #+end_src
 **** GitHub/GitLab workflow
