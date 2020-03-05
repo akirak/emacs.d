@@ -1,3 +1,6 @@
+(defvar akirak/switch-buffer-project nil
+  "The root directory of the project of interest.")
+
 ;;;; Project root cache
 ;; Based on ibuffer-project.el.
 (defvar akirak/project-roots-cache (make-hash-table :test 'equal)
@@ -16,6 +19,7 @@
                   root))
     (root root)))
 
+;;;; Buffer predicates
 (defsubst akirak/buffer-derived-mode-p (buffer &rest modes)
   (declare (indent 1))
   (apply #'provided-mode-derived-p (buffer-local-value 'major-mode buffer)
@@ -40,7 +44,11 @@
 
 ;; TODO: Add a predicate for terminals and interactive shells
 
-;; TODO: Add a predicate for scratch bufers
+(defun akirak/scratch-buffer-p (buffer)
+  "A predicate for scratch buffers"
+  (or (equal "*scratch*" (buffer-file-name buffer))
+      ;; scratch.el
+      (buffer-local-value 'scratch-buffer buffer)))
 
 (cl-defun akirak/helm-filtered-buffer-source (name predicate &key
                                                    format-candidate
@@ -86,6 +94,43 @@
                         non-visible-buffers)
       :action (or action default-action))))
 
+;;;; Recency sources
+(use-package org-recent-headings
+  :after org
+  :config
+  (org-recent-headings-mode 1))
+
+;;;; Helm actions
+(defvar akirak/switch-buffer-helm-actions
+  (quote (("Switch to buffer" .
+           (lambda (buffer)
+             (when current-prefix-arg
+               (ace-window nil))
+             (switch-to-buffer buffer)))
+          ("Kill buffer" . kill-buffer)
+          ;; TODO: Add find-file-dired action (C-x C-j is better)
+          )))
+
+(defvar akirak/find-file-helm-actions
+  (quote (("Find file" .
+           (lambda (file)
+             (when current-prefix-arg
+               (ace-window nil))
+             (find-file file)))
+          ;; TODO: Add find-file-dired action (C-x C-j is better)
+          )))
+
+;;;;
+
+;; TODO: deadgrep
+(defvar akirak/project-search-source
+  (helm-build-dummy-source "Search in project"
+    :action
+    `(("noccur (regexp)" . (lambda (regexp)
+                             (noccur-project regexp nil akirak/switch-buffer-project))))))
+
+;;;; Commands
+
 (defun akirak/switch-to-reference-buffer ()
   (interactive)
   (helm :prompt "Switch to a reference buffer: "
@@ -97,8 +142,17 @@
   (interactive)
   (helm :prompt "Switch to an indirect Org buffer: "
         :sources
-        (akirak/helm-filtered-buffer-source "Indirect Org buffers"
-          #'akirak/indirect-org-buffer-p)))
+        (list (akirak/helm-filtered-buffer-source "Indirect Org buffers"
+                #'akirak/indirect-org-buffer-p)
+              ;; helm-source-org-recent-headings
+              )))
+
+(defun akirak/switch-to-scratch-buffer ()
+  (interactive)
+  (helm :prompt "Switch to a scratch/REPL buffer: "
+        :sources
+        (list (akirak/helm-filtered-buffer-source "Scratch buffers"
+                #'akirak/scratch-buffer-p))))
 
 (defun akirak/switch-to-dired-buffer ()
   (interactive)
@@ -170,27 +224,14 @@
                                                       (string-suffix-p "/" filename)
                                                       (not (bookmark-get-handler bookmark))))))))))))))
 
-(defvar akirak/switch-buffer-helm-actions
-  (quote (("Switch to buffer" .
-           (lambda (buffer)
-             (when current-prefix-arg
-               (ace-window nil))
-             (switch-to-buffer buffer)))
-          ("Kill buffer" . kill-buffer))))
-
-(defvar akirak/find-file-helm-actions
-  (quote (("Find file" .
-           (lambda (file)
-             (when current-prefix-arg
-               (ace-window nil))
-             (find-file file))))))
-
 (defvar akirak/directory-contents-cache nil)
 
-(defun akirak/find-file-recursively (root)
-  (interactive (list (if current-prefix-arg
-                         (read-directory-name "Find files in dir: ")
-                       (akirak/project-root default-directory))))
+(defun akirak/magit-log-file (file)
+  (with-current-buffer (or (find-buffer-visiting file)
+                           (find-file-noselect file))
+    (magit-log-buffer-file)))
+
+(defun akirak/helm-project-file-source (root)
   (cl-labels ((status-file (status) (substring status 3)))
     (let* ((attrs (file-attributes root))
            (mtime (nth 5 attrs))
@@ -216,17 +257,27 @@
                                            (string-prefix-p root file)
                                            (string-remove-prefix root file)))))
                             (delq nil))))
-      (helm :prompt (format "Browse %s: " root)
-            :sources
-            (delq nil
-                  (list (helm-build-sync-source "Files"
-                          :candidates (->> contents
-                                           (-map (lambda (file)
-                                                   (if (cl-member file open-files :test #'string-equal)
-                                                       (propertize file 'face 'link-visited)
-                                                     file))))
-                          :action (lambda (relative)
-                                    (find-file (f-join root relative))))))))))
+      (helm-build-sync-source "Files"
+        :candidates (->> contents
+                         (-map (lambda (file)
+                                 (if (cl-member file open-files :test #'string-equal)
+                                     (propertize file 'face 'link-visited)
+                                   file))))
+        :persistent-action
+        (lambda (relative)
+          (let ((file (f-join root relative)))
+            (akirak/magit-log-file file)))
+        :action (lambda (relative)
+                  (find-file (f-join root relative)))))))
+
+(defun akirak/find-file-recursively (root)
+  (interactive (list (if current-prefix-arg
+                         (read-directory-name "Find files in dir: ")
+                       (akirak/project-root default-directory))))
+  (setq akirak/switch-buffer-project root)
+  (helm :prompt (format "Browse %s: " root)
+        :sources (list (akirak/helm-project-file-source root)
+                       akirak/project-search-source)))
 
 (with-eval-after-load 'helm
   (defvar akirak/git-status-source
@@ -250,10 +301,11 @@
         (helm-run-after-quit (lambda () (akirak/find-file-recursively project)))))
     map))
 
-(defun akirak/switch-to-project-file-buffer (project)
+(cl-defun akirak/switch-to-project-file-buffer (project)
   (interactive (list (-some-> (project-current)
                        (project-roots)
                        (car-safe))))
+  (setq akirak/switch-buffer-project project)
   (cl-labels ((root-of (buffer)
                        (akirak/project-root (buffer-dir buffer)))
               (buffer-dir (buffer)
@@ -291,24 +343,32 @@
     (-let* ((file-buffers (-filter #'buffer-file-name (buffer-list)))
             ((same-project-buffers other-file-buffers)
              (if project (-separate #'same-project-p file-buffers) (list nil file-buffers)))
+            (same-project-other-buffers
+             (-remove-item (current-buffer) same-project-buffers))
             (other-project-buffers (-filter #'project-bufp other-file-buffers))
             (other-projects (->> (-map #'root-of other-project-buffers)
                                  (delq nil)
                                  (-uniq))))
-      (helm :prompt "Project file buffers: "
+      (helm :prompt (format "Project %s: " project)
             :sources
-            (list (helm-build-sync-source (format "File buffers in project %s"
-                                                  project)
-                    :candidates (mapcar #'file-buffer-cell same-project-buffers)
-                    :keymap akirak/helm-project-buffer-map
-                    :action akirak/switch-buffer-helm-actions)
+            (list (cond
+                   (same-project-buffers
+                    (helm-build-sync-source (format "File buffers in project %s"
+                                                    project)
+                      :candidates (mapcar #'file-buffer-cell
+                                          (or same-project-other-buffers
+                                              same-project-buffers))
+                      :keymap akirak/helm-project-buffer-map
+                      :action akirak/switch-buffer-helm-actions))
+                   (project (akirak/helm-project-file-source project)))
                   (helm-build-sync-source "File buffers in other projects"
                     :candidates (mapcar #'file-buffer-cell other-project-buffers)
                     :action akirak/switch-buffer-helm-actions)
                   (helm-build-sync-source "Other projects with open file buffers"
                     :candidates other-projects
                     :persistent-action #'kill-project-bufs
-                    :action '(("Switch to project" . akirak/switch-to-project-file-buffer)))
+                    :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
+                              ("Magit status" . magit-status)))
                   (helm-build-sync-source "Recentf"
                     :candidates (-map #'f-short recentf-list)
                     :action akirak/find-file-helm-actions)
@@ -317,7 +377,8 @@
                                      (-map #'cdr)
                                      (-map #'f-short))
                     :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
-                              ("Magit status" . magit-status))))))))
+                              ("Magit status" . magit-status)))
+                  akirak/project-search-source)))))
 
 (general-def
   "C-x b" #'akirak/switch-to-project-file-buffer
