@@ -144,8 +144,7 @@
         :sources
         (list (akirak/helm-filtered-buffer-source "Indirect Org buffers"
                 #'akirak/indirect-org-buffer-p)
-              ;; helm-source-org-recent-headings
-              )))
+              helm-source-org-recent-headings)))
 
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
@@ -384,7 +383,7 @@
   "C-x b" #'akirak/switch-to-project-file-buffer
   "C-x p" #'akirak/find-file-recursively
   "C-x d" #'akirak/switch-to-dired-buffer
-  "C-c j" #'akirak/switch-to-indirect-org-buffer
-  "C-c r" #'akirak/switch-to-reference-buffer)
+  "C-x j" #'akirak/switch-to-indirect-org-buffer
+  "C-x '" #'akirak/switch-to-reference-buffer)
 
 (provide 'setup-switch-buffer)
