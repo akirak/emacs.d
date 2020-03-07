@@ -62,6 +62,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#buffer-management][Buffer management]]
   -  [[#git][Git]]
   -  [[#project-management][Project management]]
+  -  [[#experimenting-with-remote-apis][Experimenting with remote APIs]]
   -  [[#web-browser-integration][Web browser integration]]
   -  [[#templates][Templates]]
   -  [[#frequent-counsel-commands][Frequent counsel commands]]
@@ -1044,6 +1045,10 @@ Use =magit-annex= for working with =git-annex= repositories:
 #+begin_src emacs-lisp
   (akirak/require 'setup-direnv)
   #+end_src
+*** Experimenting with remote APIs
+#+begin_src emacs-lisp
+  (akirak/require 'setup-verb)
+#+end_src
 *** Web browser integration
 #+begin_src emacs-lisp
   (akirak/require 'setup-browse-url)
