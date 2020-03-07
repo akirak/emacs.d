@@ -1,20 +1,22 @@
+;; Don't use abbrev-mode.
 (use-package abbrev
+  :disabled t
   :straight (:type built-in)
-  :config
-  (akirak/bind-register
-    "g" #'add-global-abbrev
-    "l" #'edit-abbrevs)
   :hook
   ((text-mode prog-mode) . abbrev-mode)
   :custom
   ;; abbrev-file-name is set externally
   (save-abbrev 'silently))
 
+;; Use hippie-expand as an alternative to aya-open-line.
 (use-package hippie-exp
   :straight (:type built-in)
-  :general
-  ("C-S-f" #'hippie-expand)
   :config
+
+  (general-def "C-o"
+    (general-predicate-dispatch #'hippie-expand
+      (looking-back (rx space)) #'akirak/org-open-line-expand))
+
   ;; Expand emmet templates
   ;; https://emacs.stackexchange.com/a/22527/18360
   (defun try-expand-emmet (args)
@@ -22,47 +24,26 @@
     (interactive "P")
     (when (bound-and-true-p emmet-mode)
       (emmet-exand-line args)))
+
+  (defun akirak/org-open-line-expand (&optional n)
+    (interactive "*p")
+    (ignore-errors
+      (if (derived-mode-p 'org-mode)
+          (org-open-line (or n 1))
+        (open-line (or n 1))))
+    t)
+
   (setq-default hippie-expand-try-functions-list
-                '(yas-hippie-try-expand
+                '(yankpad-expand
                   try-expand-emmet
                   try-complete-file-name-partially
-                  try-complete-file-name)))
+                  try-complete-file-name
+                  akirak/org-open-line-expand)))
 
+;; Load yasnippet as an infrastructure for auto-yasnippet and yankpad.
 (use-package yasnippet
-  ;; :diminish 'yas-minor-mode
-  :config
-  (defun akirak/visit-yas-snippet-dir ()
-    (interactive)
-    (find-file (car yas-snippet-dirs)))
-  (yas-global-mode 1))
-
-(use-package yasnippet-snippets
-  :after yasnippet
-  :load-path "contrib/yasnippet-snippets"
-  :straight (yasnippet-snippets :type built-in)
-  :init
-  ;; By default, the snippets in this package are loaded at package
-  ;; initialization.
-  ;;
-  ;; This is annoying since the snippets override my own snippets
-  ;; when they conflict.
-  ;;
-  ;; To prevent this issue, I replace `yasnippet-snippets-initialize'
-  ;; with an alternative version that doesn't load the snippets.
-  ;;
-  ;; Instead, I call `yas-reload-all' after this package is loaded.
-  ;; This works as expected since this package is loaded after
-  ;; `yasnippet' package.
-  (defun akirak/yasnippet-snippets-initialize-no-reload ()
-    "Add the directory but don't reload the snippets."
-    (add-to-list 'yas-snippet-dirs 'yasnippet-snippets-dir t))
-  (advice-add 'yasnippet-snippets-initialize
-              :override
-              'akirak/yasnippet-snippets-initialize-no-reload)
-  :config
-  ;; Load all snippets. You need to make sure that all snippet
-  ;; directories are added beforehand.
-  (yas-reload-all))
+  :hook
+  ((text-mode prog-mode) . yas-minor-mode))
 
 (use-package auto-yasnippet
   :commands (aya-create aya-expand))
@@ -79,32 +60,30 @@
                                                        (cadr snippets)))
                                          snippets))))))
       (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
+  :custom
+  (yankpad-category-heading-level 2))
 
-  (pretty-hydra-define akirak/yankpad-hydra
-    (:title (format "Yankpad (category %s)" yankpad-category))
-    ("Category"
-     (("s" yankpad-set-category "Set")
-      ("a" yankpad-append-category "Append")
-      ("l" yankpad-set-category "Set locally"))
-     "Dispatch"
-     (("i" yankpad-insert "Select")
-      ("r" yankpad-repeat "Repeat last"))
-     "Create/edit snippet"
-     (("c" yankpad-capture-snippet "Capture")
-      ("e" yankpad-edit "Edit file")
-      ("p" yankpad-aya-persist "Persist aya"))))
-
-  (defun akirak/yankpad-insert ()
-    (interactive)
-    (pcase current-prefix-arg
-      ('(4) (akirak/yankpad-hydra/body))
-      (_ (yankpad-insert)))))
-
+;; Use ivy-yasnippet as an alternative for insert-file-contents.
 (use-package ivy-yasnippet
   :commands (ivy-yasnippet))
 
 (use-package emmet-mode
   :hook
   ((html-mode css-mode) . emmet-mode))
+
+;; Remove all keybindings for abbrev-mode in C-x a
+(define-key global-map (kbd "C-x a") (make-sparse-keymap))
+(general-def :prefix "C-x a"
+  "c" #'yankpad-set-category
+  "p" #'yankpad-aya-persist
+  "C-c" #'yankpad-capture-snippet)
+
+(general-def
+  "C-x y" #'yankpad-insert
+  "C-x i" #'ivy-yasnippet)
+
+(akirak/bind-register-map
+  "a" 'aya-create
+  "e" 'aya-expand)
 
 (provide 'setup-expansion)

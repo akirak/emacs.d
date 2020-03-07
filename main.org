@@ -1072,44 +1072,10 @@ Emacs also provides eww:
 #+begin_src emacs-lisp
   (akirak/require 'setup-expansion)
 #+end_src
-
-**** Yasnippet and auto-yasnippet
-:PROPERTIES:
-:CREATED_TIME: [2019-09-24 Tue 00:45]
-:END:
-I prefer using =ivy-yasnippet= for choosing a snippet:
-
-#+begin_src emacs-lisp
-  (akirak/bind-user "y" 'ivy-yasnippet)
-  (akirak/bind-register "M-n" 'yas-new-snippet)
-#+end_src
-
-=auto-yasnippet= is convenient for temporary snippets:
-
-#+begin_src emacs-lisp
-  (akirak/bind-register-map
-    "a" 'aya-create
-    "e" 'aya-expand)
-#+end_src
-
-=aya-open-line= is the fastest way to expand a snippet if you know its name. It behaves like =open-line= if the word before the point is not registered as a snippet:
-
-#+begin_src emacs-lisp
-  (general-def "C-o" 'aya-open-line)
-#+end_src
-**** Yankpad
-#+begin_src emacs-lisp
-  (akirak/bind-user "p" #'akirak/yankpad-insert)
-#+end_src
 **** File templates
 #+begin_src emacs-lisp
   (akirak/require 'setup-autoinsert)
   #+end_src
-**** Emmet
-:PROPERTIES:
-:CREATED_TIME: [2019-11-24 Sun 02:23]
-:END:
-Use emmet for producing HTML tags.
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
