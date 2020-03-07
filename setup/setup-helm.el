@@ -29,4 +29,7 @@
   (helm-autoresize-max-height 40)
   (helm-display-function (quote pop-to-buffer)))
 
+(use-package helm-org
+  :after (helm org))
+
 (provide 'setup-helm)
