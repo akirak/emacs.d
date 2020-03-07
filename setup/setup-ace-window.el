@@ -1,5 +1,18 @@
 (use-package ace-window
   :config
+  (defun akirak/aw-quit-window (window)
+    "Delete window WINDOW."
+    (let ((frame (window-frame window)))
+      (when (and (frame-live-p frame)
+                 (not (eq frame (selected-frame))))
+        (select-frame-set-input-focus (window-frame window)))
+      (if (= 1 (length (window-list)))
+          (progn
+            (bury-buffer (window-buffer window))
+            (delete-frame frame))
+        (if (window-live-p window)
+            (quit-window window)
+          (error "Got a dead window %S" window)))))
   (custom-theme-set-faces 'user
                           '(aw-leading-char-face
                             ((default
@@ -20,8 +33,12 @@
   ;; Ergonomic bindings
   (aw-dispatch-alist
    '((?o aw-swap-window "Swap Windows")
+     (?c aw-copy-window "Duplicate the current window")
+     (?v aw-split-window-horz "Split horizontally")
+     (?s aw-split-window-vert "Split vertically")
      (?p aw-delete-window "Delete Window")
      (?m delete-other-windows "Delete Other Windows")
+     (?k akirak/aw-quit-window "Quit window")
      (32 toggle-window-split)
      (?T tear-off-window)
      (?d delete-frame)
