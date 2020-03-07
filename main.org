@@ -383,11 +383,13 @@ Generic prefix key for editing commands:
   (akirak/bind-generic
     "f" '(nil :wk "format")
     "k" '(nil :wk "kill")
+    "l" '(nil :wk "natural language")
     "m" '(nil :wk "mark")
     "r" '(nil :wk "rename/refactor"))
 
   (general-create-definer akirak/bind-kill :prefix "C-. k"
     :prefix-map 'akirak/kill-prefix-map)
+  (general-create-definer akirak/bind-language :prefix "C-. l")
   (general-create-definer akirak/bind-mark :prefix "C-. m"
     :prefix-map 'akirak/mark-prefix-map)
   (general-create-definer akirak/bind-replace :prefix "C-. r"
@@ -1650,9 +1652,9 @@ You can customize a list of modules for supported languages through the followin
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
-**** Google Translate
+
 #+begin_src emacs-lisp
-  (akirak/require 'setup-google-translate)
+  (akirak/require 'setup-language-tools)
 #+end_src
 *** Utilities
 #+begin_src emacs-lisp
