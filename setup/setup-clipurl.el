@@ -34,16 +34,20 @@
                      ("cn" ,(akirak/def-org-capture-url-to-toplevel "nixrepos.org")
                       "Bookmark to nixrepos")
                      ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark")
-                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy"))))
+                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy")
+                     ("ch" akirak/org-capture-url-to-here "Bookmark to here"))))
 
-(defun akirak/org-capture-url-bookmark-template (url)
+(cl-defun akirak/org-capture-url-bookmark-template (url &key
+                                                        default-title)
   (let* ((html (with-timeout (3)
                  (org-web-tools--get-url url)))
-         (title (read-string "Title: "
-                             (when html
-                               (org-web-tools--html-title html))
-                             nil nil t)))
-    (concat "* " (org-make-link-string url title) " %^g"
+         (title (if default-title
+                    (org-web-tools--html-title html)
+                  (read-string "Title: "
+                               (when html
+                                 (org-web-tools--html-title html))
+                               nil nil t))))
+    (concat "* " (org-make-link-string url title)
             "\n:PROPERTIES:
 :CREATED_TIME: %U
 :END:
@@ -83,6 +87,17 @@
             ;; finishes immediately, because the entry is already
             ;; visible.
             :immediate-finish t)))
+    (org-capture)))
+
+(defun akirak/org-capture-url-to-here (url)
+  (interactive)
+  (cl-assert (derived-mode-p 'org-mode))
+  (cl-assert (not (org-before-first-heading-p)))
+  (let ((org-capture-entry
+         `("b" "Bookmark" entry
+           (function (lambda () (org-back-to-heading)))
+           ,(akirak/org-capture-url-bookmark-template url
+                                                      :default-title t))))
     (org-capture)))
 
 (provide 'setup-clipurl)
