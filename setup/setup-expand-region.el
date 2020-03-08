@@ -10,6 +10,13 @@
                 (looking-at (rx (any alnum "-_"))))
            #'er/mark-symbol-with-prefix)))
 
+(use-package the-org-mode-expansions
+  :straight expand-region
+  :after org
+  :general
+  (:keymaps 'org-mode-map
+            "M-m" #'er/expand-region))
+
 ;; embrace.el is based on expand-region
 (use-package embrace
   :init
