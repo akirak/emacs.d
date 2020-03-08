@@ -124,7 +124,7 @@ This is intended to be set inside `akirak/set-header-line' function.")
                   (akirak/make-header-line-format))
                  (t
                   (setq groups '("Org"))
-                  nil)))
+                  (akirak/make-header-line-format))))
                ((and (buffer-file-name)
                      project)
                 (setq groups `(,project))
