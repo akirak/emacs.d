@@ -83,6 +83,21 @@
 (with-eval-after-load 'org-clock
   (org-clock-persistence-insinuate))
 
+(defun akirak/org-add-empty-checkbox ()
+  (interactive)
+  (save-excursion
+    (-let (((beg end)
+            (if (region-active-p)
+                (list (region-beginning)
+                      (region-end))
+              (list (line-beginning-position)
+                    (line-end-position)))))
+      (goto-char beg)
+      (while (and (< (point) end)
+                  (re-search-forward (rx bol (* space) "- ") end t))
+        (unless (looking-at (rx "[" (or "X" (optional space)) "] "))
+          (insert "[ ] "))))))
+
 (general-def :keymaps 'org-mode-map :package 'org
   ;; I don't use any of these bindings and want to use them for other purposes
   "C-c [" nil
@@ -99,7 +114,8 @@
   "C-1" 'counsel-org-tag)
 
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
-  "t" 'akirak/org-table-create-or-edit)
+  "t" 'akirak/org-table-create-or-edit
+  "B" #'akirak/org-add-empty-checkbox)
 
 (defun akirak/org-table-create-or-edit ()
   (interactive)
