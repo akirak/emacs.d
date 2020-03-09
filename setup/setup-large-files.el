@@ -18,7 +18,8 @@
     (when (> (buffer-size) (* 512 1024))
       (setq buffer-read-only t)
       (buffer-disable-undo)
-      (unless (derived-mode-p 'pdf-view-mode 'nov-mode)
+      (unless (derived-mode-p 'pdf-view-mode 'nov-mode
+                              'emacs-lisp-mode)
         (fundamental-mode))))
   :hook
   (find-file . my-find-file-check-make-large-file-read-only-hook)
