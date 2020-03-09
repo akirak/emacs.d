@@ -36,8 +36,6 @@
   (setq-default hippie-expand-try-functions-list
                 '(yankpad-expand
                   try-expand-emmet
-                  try-complete-file-name-partially
-                  try-complete-file-name
                   akirak/org-open-line-expand)))
 
 ;; Load yasnippet as an infrastructure for auto-yasnippet and yankpad.
