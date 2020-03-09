@@ -85,18 +85,30 @@
 
 (defun akirak/org-add-empty-checkbox ()
   (interactive)
-  (save-excursion
-    (-let (((beg end)
-            (if (region-active-p)
-                (list (region-beginning)
-                      (region-end))
-              (list (line-beginning-position)
-                    (line-end-position)))))
-      (goto-char beg)
-      (while (and (< (point) end)
-                  (re-search-forward (rx bol (* space) "- ") end t))
-        (unless (looking-at (rx "[" (or "X" (optional space)) "] "))
-          (insert "[ ] "))))))
+  (let ((checkbox-regexp (rx "[" (or "X" (optional space)) "] "))
+        (item-regexp (rx bol (* space) "- ")))
+    (cl-labels ((maybe-insert-checkbox
+                 ()
+                 (unless (looking-at checkbox-regexp)
+                   (insert "[ ] "))))
+      (if (region-active-p)
+          (let* ((pos (point))
+                 (beg (region-beginning))
+                 (end (region-end))
+                 (src (buffer-substring-no-properties beg end)))
+            (delete-region beg end)
+            (insert
+             (with-temp-buffer
+               (insert src)
+               (goto-char (point-min))
+               (while (re-search-forward item-regexp (point-max) t)
+                 (maybe-insert-checkbox))
+               (buffer-string)))
+            (goto-char pos))
+        (save-excursion
+          (beginning-of-line)
+          (when (re-search-forward item-regexp (line-end-position) t)
+            (maybe-insert-checkbox)))))))
 
 (general-def :keymaps 'org-mode-map :package 'org
   ;; I don't use any of these bindings and want to use them for other purposes
