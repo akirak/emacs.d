@@ -50,6 +50,7 @@
 
 (use-package nameless
   :commands (nameless-mode)
+  :disabled t
   :general
   (:keymaps 'nameless-mode-map
             "-" 'nameless-insert-name-or-self-insert))
