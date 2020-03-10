@@ -15,7 +15,8 @@
 
   (general-def "C-o"
     (general-predicate-dispatch #'hippie-expand
-      (looking-back (rx space)) #'akirak/org-open-line-expand))
+      (looking-back (rx (or bol space)))
+      #'akirak/org-open-line-expand))
 
   ;; Expand emmet templates
   ;; https://emacs.stackexchange.com/a/22527/18360
