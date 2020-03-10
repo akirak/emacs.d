@@ -172,25 +172,4 @@
       (view-mode 1))
     (pop-to-buffer buffer)))
 
-(use-package counsel-projectile
-  :after (projectile counsel)
-  :init
-  (counsel-projectile-mode 1)
-  :config
-  (defun counsel-projectile-other-frame-action (name)
-    "Switch to buffer or find file named NAME."
-    (if (member name counsel-projectile--buffers)
-        (switch-to-buffer-other-frame name)
-      (find-file-other-frame (projectile-expand-root name))
-      (run-hooks 'projectile-find-file-hook)))
-  (ivy-add-actions 'counsel-projectile
-                   '(("f" counsel-projectile-other-frame-action "frame")))
-  (ivy-add-actions 'counsel-projectile-switch-project
-                   '(("gs" magit-status "magit-status"))))
-
-(use-package counsel-tramp
-  :commands (counsel-tramp))
-
-(use-package counsel-world-clock)
-
 (provide 'setup-counsel)
