@@ -1,8 +1,11 @@
 (akirak/bind-file-extra
-  "M" '(nil :wk "chmod")
-  "Mx" #'executable-set-magic
-  "MM" #'set-file-modes
-  "R" #'revert-buffer-with-coding-system)
+  "c" #'revert-buffer-with-coding-system
+  "S" #'sudo-find-file
+  "D" #'crux-delete-file-and-buffer
+  "R" #'crux-rename-file-and-buffer
+  "M" #'set-file-modes
+  "X" #'executable-set-magic
+  "!" #'crux-open-with)
 
 (use-package executable
   :straight nil

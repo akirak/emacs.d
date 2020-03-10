@@ -57,7 +57,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#frame-workflow][frame-workflow]]
   -  [[#terminal-and-shells][Terminal and shells]]
   -  [[#dired][Dired]]
-  -  [[#crux-and-file-operations][Crux and file operations]]
+  -  [[#file-operations][File operations]]
   -  [[#full-text-search-and-replace][Full-text search (and replace)]]
   -  [[#buffer-management][Buffer management]]
   -  [[#git][Git]]
@@ -914,15 +914,7 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
        (ibuffer-sidebar-show-sidebar)))
 #+end_src
 
-*** Crux and file operations
-#+begin_src emacs-lisp
-  (general-def
-    "C-x D" #'crux-delete-file-and-buffer
-    "C-x R" #'crux-rename-file-and-buffer
-    "C-x S" #'sudo-find-file
-    "C-x x" #'crux-open-with)
-#+end_src
-
+*** File operations
 #+begin_src emacs-lisp
   (akirak/require 'setup-files)
 #+end_src

@@ -67,8 +67,8 @@
                    '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
-  (akirak/bind-file-extra :keymaps 'counsel-mode-map
-    "c" #'counsel-compile)
+  (general-def
+    "C-x c" #'counsel-compile)
   (cl-loop for (command . str) in ivy-initial-inputs-alist
            do (when (and (symbolp command)
                          (string-prefix-p "counsel-" (symbol-name command)))
