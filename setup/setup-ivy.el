@@ -150,7 +150,7 @@
   (ivy-posframe-display-functions-alist
    `(,@(--map (cons it nil)
               '(swiper swiper-all swiper-multi org-starter-swiper-config-files
-                       counsel-locate))
+                       counsel-locate counsel-rg))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
      (all-the-icons-ivy . ivy-posframe-display-at-point)
