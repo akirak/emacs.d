@@ -18,4 +18,7 @@
 (use-package deadgrep
   :commands (deadgrep))
 
+(use-package comb
+  :commands (comb))
+
 (provide 'setup-occur)
