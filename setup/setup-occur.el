@@ -5,14 +5,16 @@
             (ivy-exit-with-action
              (lambda (_) (occur ivy-text)))))
 
-(use-package noccur
-  :general
+(general-def :keymaps 'counsel-ag-map :package 'counsel
   ;; Allow dispatching noccur from a counsel-rg session.
-  (:keymaps 'counsel-ag-map :package 'counsel
-            "C-M-o" (defun akirak/counsel-ag-noccur ()
-                      (interactive)
-                      (ivy-exit-with-action
-                       (lambda (_)
-                         (noccur-project ivy-text nil default-directory))))))
+  "C-M-o" (defun akirak/counsel-ag-noccur ()
+            (interactive)
+            (ivy-exit-with-action
+             (lambda (_) (deadgrep ivy-text)))))
+
+(use-package noccur
+  :disabled t)
+
+(use-package deadgrep)
 
 (provide 'setup-occur)
