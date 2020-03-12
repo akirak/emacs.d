@@ -956,7 +956,7 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
   (use-package magit-todos
     :after magit
     :config
-    (unless akirak/is-wsl
+    (unless (akirak/windows-subsystem-for-linux-p)
       (magit-todos-mode 1))
     :custom
     (magit-todos-depth 0)

@@ -15,6 +15,7 @@
 (use-package noccur
   :disabled t)
 
-(use-package deadgrep)
+(use-package deadgrep
+  :commands (deadgrep))
 
 (provide 'setup-occur)
