@@ -179,16 +179,17 @@
      (if-let (root (akirak/project-root default-directory))
          (helm :prompt "Project: "
                :sources
-               (list (helm-build-sync-source "Ancestors of the project"
+               (list (helm-build-sync-source "Project root and its ancestors"
                        :candidates
                        (->> root
                             (f-expand)
                             (f-split)
                             (-inits)
-                            (-butlast)
+                            ;; (-butlast)
                             (cdr)
                             (-map (-partial #'apply #'f-join))
-                            (-map #'f-short))
+                            (-map #'f-short)
+                            (nreverse))
                        :action
                        '(("Dired" . dired)
                          ("Find file" . counsel-find-file)
