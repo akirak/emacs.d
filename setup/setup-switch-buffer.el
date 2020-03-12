@@ -203,6 +203,18 @@
                        (when current-prefix-arg
                          (ace-window nil))
                        (switch-to-buffer buf)))
+                   (helm-build-sync-source "Directories of open buffers"
+                     :candidates
+                     (->> (buffer-list)
+                          (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
+                          (delq nil)
+                          (-map #'file-name-as-directory)
+                          (-map #'f-short)
+                          (-sort #'string<)
+                          (-uniq))
+                     :action
+                     '(("Dired" . dired)
+                       ("Find file in the dir" . counsel-find-file)))
                    ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
                    (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
                      :init (lambda ()
