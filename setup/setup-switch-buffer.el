@@ -138,13 +138,21 @@
         (akirak/helm-filtered-buffer-source "Reference buffers"
           #'akirak/reference-buffer-p)))
 
-(defun akirak/switch-to-indirect-org-buffer ()
+(defun akirak/switch-to-org-buffer ()
   (interactive)
-  (helm :prompt "Switch to an indirect Org buffer: "
+  (require 'helm-org-ql)
+  (require 'org-recent-headings)
+  (require 'org-starter)
+  (helm :prompt "Switch to Org: "
         :sources
         (list (akirak/helm-filtered-buffer-source "Indirect Org buffers"
                 #'akirak/indirect-org-buffer-p)
-              helm-source-org-recent-headings)))
+              helm-source-org-recent-headings
+              (helm-build-sync-source "org-starter-known-files"
+                :candidates
+                (mapcar #'f-short org-starter-known-files)
+                :action akirak/find-file-helm-actions)
+              helm-source-org-ql-views)))
 
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
@@ -388,7 +396,7 @@
   "C-x b" #'akirak/switch-to-project-file-buffer
   "C-x p" #'akirak/find-file-recursively
   "C-x d" #'akirak/switch-to-dired-buffer
-  "C-x j" #'akirak/switch-to-indirect-org-buffer
+  "C-x j" #'akirak/switch-to-org-buffer
   "C-x '" #'akirak/switch-to-reference-buffer)
 
 (provide 'setup-switch-buffer)
