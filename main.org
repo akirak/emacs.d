@@ -1399,10 +1399,12 @@ This lets you know which parts of the buffers are modified since the last commit
     :init
     (global-git-gutter-mode))
 
-  ;; NOTE: There is no git-gutter-mode-map
   (akirak/bind-jump
     "j" 'git-gutter:next-hunk
     "k" 'git-gutter:previous-hunk)
+
+  (akirak/bind-user
+    "g" 'git-gutter:mark-hunk)
 #+end_src
 **** Highlight-indent-guides
 This is helpful in programming languages that depend on indentation levels.

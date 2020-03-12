@@ -72,9 +72,6 @@ Only one letter is shown, the first that applies."
     "<f9>" #'magit-dispatch
     ;; <f8> <f10>
     "<f10>" #'magit-file-dispatch)
-  (general-def "<S-f8>" #'magit-diff-staged)
-  (akirak/bind-user
-    "g" (lambda () (interactive) (magit-show-commit "HEAD")))
   (akirak/bind-file-extra
     "g" #'magit-blob-visit-file
     "l" #'magit-log-buffer-file
