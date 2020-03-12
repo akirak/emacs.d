@@ -370,8 +370,7 @@
                                      (-map #'cdr)
                                      (-map #'f-short))
                     :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
-                              ("Magit status" . magit-status)))
-                  akirak/project-search-source)))))
+                              ("Magit status" . magit-status))))))))
 
 (general-def
   "C-x b" #'akirak/switch-to-project-file-buffer
