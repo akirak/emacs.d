@@ -1,0 +1,20 @@
+(defsubst akirak/directory-self-and-ancestors (start)
+  (->> start
+       (f-expand)
+       (f-split)
+       (-inits)
+       (cdr)
+       (-map (-partial #'apply #'f-join))
+       (-map #'f-short)
+       (nreverse)))
+
+(defsubst akirak/open-buffer-directories ()
+  (->> (buffer-list)
+       (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
+       (delq nil)
+       (-map #'file-name-as-directory)
+       (-map #'f-short)
+       (-sort #'string<)
+       (-uniq)))
+
+(provide 'akirak/dir/enum)

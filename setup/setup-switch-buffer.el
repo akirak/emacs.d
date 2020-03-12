@@ -1,135 +1,28 @@
-(defvar akirak/switch-buffer-project nil
-  "The root directory of the project of interest.")
-
-;;;; Project root cache
-;; Based on ibuffer-project.el.
-(defvar akirak/project-roots-cache (make-hash-table :test 'equal)
-  "Variable to store cache of project per directory.")
-
-(defun akirak/clear-project-cache ()
-  (interactive)
-  (clrhash akirak/project-roots-cache))
-
-(defun akirak/project-root (dir)
-  "Return the project root of DIR with cache enabled."
-  (pcase (gethash dir akirak/project-roots-cache 'no-cached)
-    ('no-cached (let* ((project (project-current nil dir))
-                       (root (and project (car (project-roots project)))))
-                  (puthash dir root akirak/project-roots-cache)
-                  root))
-    (root root)))
-
-;;;; Buffer predicates
-(defsubst akirak/buffer-derived-mode-p (buffer &rest modes)
-  (declare (indent 1))
-  (apply #'provided-mode-derived-p (buffer-local-value 'major-mode buffer)
-         modes))
-
-(defcustom akirak/exwm-browser-class-names
-  '("Chromium" "Brave-browser" "Chromium-browser")
-  "List of class names of browser windows.")
-
-(defun akirak/reference-buffer-p (buffer)
-  ;; Based on the implementation of `derived-mode-p'.
-  (or (akirak/buffer-derived-mode-p buffer
-        'Info-mode 'help-mode 'helpful-mode 'eww-mode)
-      (and (akirak/buffer-derived-mode-p buffer
-             'exwm-mode)
-           (member (buffer-local-value 'exwm-class-name buffer)
-                   akirak/exwm-browser-class-names))))
-
-(defun akirak/indirect-org-buffer-p (buffer)
-  (and (akirak/buffer-derived-mode-p buffer 'org-mode)
-       (buffer-base-buffer buffer)))
-
-;; TODO: Add a predicate for terminals and interactive shells
-
-(defun akirak/scratch-buffer-p (buffer)
-  "A predicate for scratch buffers"
-  (or (equal "*scratch*" (buffer-file-name buffer))
-      ;; scratch.el
-      (buffer-local-value 'scratch-buffer buffer)))
-
-(cl-defun akirak/helm-filtered-buffer-source (name predicate &key
-                                                   format-candidate
-                                                   action)
-  (declare (indent 1))
-  (-let* (((visible-buffers windows)
-           (->> (window-list)
-                (-map (lambda (wnd)
-                        (let ((buffer (window-buffer wnd)))
-                          (when (funcall predicate buffer)
-                            (list buffer wnd)))))
-                (delq nil)
-                (-unzip)
-                (-map (lambda (list)
-                        (pcase list
-                          (`(,x) (list x))
-                          (`(,x . ,y) (list x y))
-                          (_ list))))))
-          (non-visible-buffers (-difference (->> (buffer-list)
-                                                 (-filter predicate))
-                                            visible-buffers))
-          (default-action (lambda (buf)
-                            (if current-prefix-arg
-                                (progn
-                                  (message "Select a window")
-                                  (ace-window nil)
-                                  (switch-to-buffer buf))
-                              (pcase windows
-                                (`(,window)
-                                 (select-window window)
-                                 (switch-to-buffer buf))
-                                ('()
-                                 (pop-to-buffer buf))
-                                (_
-                                 (message "Select a window %s" windows)
-                                 (ace-window nil)
-                                 (switch-to-buffer buf)))))))
-    (helm-build-sync-source name
-      :candidates (-map (lambda (buf)
-                          (cons (funcall (or format-candidate #'buffer-name)
-                                         buf)
-                                buf))
-                        non-visible-buffers)
-      :action (or action default-action))))
-
-;;;; Recency sources
 (use-package org-recent-headings
   :after org
   :config
   (org-recent-headings-mode 1))
 
-;;;; Helm actions
-(defvar akirak/switch-buffer-helm-actions
-  (quote (("Switch to buffer" .
-           (lambda (buffer)
-             (when current-prefix-arg
-               (ace-window nil))
-             (switch-to-buffer buffer)))
-          ("Kill buffer" . kill-buffer)
-          ;; TODO: Add find-file-dired action (C-x C-j is better)
-          )))
+(use-package akirak/project
+  :straight (:type built-in))
 
-(defvar akirak/find-file-helm-actions
-  (quote (("Find file" .
-           (lambda (file)
-             (when current-prefix-arg
-               (ace-window nil))
-             (find-file file)))
-          ;; TODO: Add find-file-dired action (C-x C-j is better)
-          )))
+(use-package akirak/buffer/predicate
+  :straight (:type built-in))
 
-;;;;
+(use-package akirak/dir/enum
+  :straight (:type built-in))
 
-;; TODO: deadgrep
-(defvar akirak/project-search-source
-  (helm-build-dummy-source "Search in project"
-    :action
-    `(("noccur (regexp)" . (lambda (regexp)
-                             (noccur-project regexp nil akirak/switch-buffer-project))))))
+(use-package akirak/helm/source/buffer
+  :straight (:type built-in))
 
-;;;; Commands
+(use-package akirak/helm/source/file
+  :straight (:type built-in))
+
+(use-package akirak/helm/action
+  :straight (:type built-in))
+
+(defvar akirak/switch-buffer-project nil
+  "The root directory of the project of interest.")
 
 (defun akirak/switch-to-reference-buffer ()
   (interactive)
@@ -181,15 +74,7 @@
                :sources
                (list (helm-build-sync-source "Project root and its ancestors"
                        :candidates
-                       (->> root
-                            (f-expand)
-                            (f-split)
-                            (-inits)
-                            ;; (-butlast)
-                            (cdr)
-                            (-map (-partial #'apply #'f-join))
-                            (-map #'f-short)
-                            (nreverse))
+                       (akirak/directory-self-and-ancestors root)
                        :action
                        '(("Dired" . dired)
                          ("Find file" . counsel-find-file)
@@ -214,13 +99,7 @@
                        (switch-to-buffer buf)))
                    (helm-build-sync-source "Directories of open buffers"
                      :candidates
-                     (->> (buffer-list)
-                          (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
-                          (delq nil)
-                          (-map #'file-name-as-directory)
-                          (-map #'f-short)
-                          (-sort #'string<)
-                          (-uniq))
+                     (akirak/open-buffer-directories)
                      :action
                      '(("Dired" . dired)
                        ("Find file in the dir" . counsel-find-file)))
@@ -245,67 +124,13 @@
                            (find-file-noselect file))
     (magit-log-buffer-file)))
 
-(defun akirak/helm-project-file-source (root)
-  (cl-labels ((status-file (status) (substring status 3)))
-    (let* ((attrs (file-attributes root))
-           (mtime (nth 5 attrs))
-           (cache (assoc root akirak/directory-contents-cache))
-           (default-directory root)
-           (contents (if (or (not (cdr cache))
-                             (time-less-p (cadr cache) mtime))
-                         (let* ((items (process-lines "rg" "--files"
-                                                      "--color=never"
-                                                      "--sortr" "modified"))
-                                (cell (cons mtime items)))
-                           (if cache
-                               (setf (cdr cache) cell)
-                             (push (cons root cell) akirak/directory-contents-cache))
-                           items)
-                       (cddr cache)))
-           (open-files (->> (buffer-list)
-                            (-map (lambda (buffer)
-                                    (let* ((file (buffer-file-name buffer))
-                                           (file (and file (f-short file)))
-                                           (root (f-short root)))
-                                      (and file
-                                           (string-prefix-p root file)
-                                           (string-remove-prefix root file)))))
-                            (delq nil))))
-      (helm-build-sync-source "Files"
-        :candidates (->> contents
-                         (-map (lambda (file)
-                                 (if (cl-member file open-files :test #'string-equal)
-                                     (propertize file 'face 'link-visited)
-                                   file))))
-        :persistent-action
-        (lambda (relative)
-          (let ((file (f-join root relative)))
-            (akirak/magit-log-file file)))
-        :action (lambda (relative)
-                  (find-file (f-join root relative)))))))
-
 (defun akirak/find-file-recursively (root)
   (interactive (list (if current-prefix-arg
                          (read-directory-name "Find files in dir: ")
                        (akirak/project-root default-directory))))
   (setq akirak/switch-buffer-project root)
   (helm :prompt (format "Browse %s: " root)
-        :sources (list (akirak/helm-project-file-source root)
-                       akirak/project-search-source)))
-
-(with-eval-after-load 'helm
-  (defvar akirak/git-status-source
-    (helm-build-sync-source "Git status"
-      :candidates (lambda () (process-lines "git" "status" "--short"))
-      :persistent-action
-      (lambda (status)
-        (let ((file (status-file status)))
-          (with-current-buffer (or (find-buffer-visiting file)
-                                   (find-file-noselect file))
-            (magit-diff-buffer-file))))
-      :action '(("Find file" . (lambda (status)
-                                 (let ((relative (status-file status)))
-                                   (find-file (f-join root relative)))))))))
+        :sources (list (akirak/helm-project-file-source root))))
 
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))

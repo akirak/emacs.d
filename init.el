@@ -48,6 +48,8 @@
 
 (load-file (expand-file-name "straight-recipes.el" user-emacs-directory))
 
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+;; TODO: Move to lisp/
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 
 ;; Prevent a confirmation dialog when the org file is loaded.
