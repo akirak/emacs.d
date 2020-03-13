@@ -1014,7 +1014,28 @@ Use =magit-annex= for working with =git-annex= repositories:
   (akirak/require 'setup-git-annex)
 #+end_src
 *** Project management
-**** Projectile
+**** project.el
+#+begin_src emacs-lisp
+  (use-package project
+    :straight (:type built-in)
+    :config
+    (defmacro akirak/define-project-type (symbol dominating-file)
+      (let ((func (intern (format "akirak/project-%s-root" (symbol-name symbol)))))
+        `(progn
+           (defun ,func (dir)
+             (when-let ((dir (locate-dominating-file dir ,dominating-file)))
+               (cons (quote ,symbol) dir)))
+           (add-hook 'project-find-functions ',func t)
+           (cl-defmethod project-roots ((project (head (quote ,symbol))))
+             (list (cdr project)))
+           ;; Return the current list of functions
+           project-find-functions)))
+
+    (akirak/define-project-type syncthing ".stfolder")
+    (akirak/define-project-type projectile ".projectile"))
+
+
+#+end_src
 **** EditorConfig
 #+begin_src emacs-lisp
 (use-package editorconfig
