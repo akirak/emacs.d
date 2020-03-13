@@ -31,8 +31,6 @@
                       "Bookmark to library")
                      ("cc" ,(akirak/def-org-capture-url-to-reverse-datetree "cpb.org")
                       "Bookmark to cpb")
-                     ("cn" ,(akirak/def-org-capture-url-to-toplevel "nixrepos.org")
-                      "Bookmark to nixrepos")
                      ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark")
                      ("ca" akirak/org-capture-url-to-avy "Bookmark to avy")
                      ("ch" akirak/org-capture-url-to-here "Bookmark to here"))))
