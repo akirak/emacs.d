@@ -28,6 +28,8 @@ for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
                 sed -i "1iAdd ${FILENAME}\n" "$1"
                 ;;
         esac
+    elif [[ "$s" =~ lisp/my/([^.]+)\.el ]]; then
+        sed -i "1i${BASH_REMATCH[1]}: " "$1"
     elif [[ "$s" =~ meta/ ]] || [[ "$s" =~ .githooks/ ]]; then
         sed -i "1iMeta: " "$1"
     elif [[ "$s" =~ README ]]; then
