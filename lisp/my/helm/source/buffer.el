@@ -44,4 +44,4 @@
                         non-visible-buffers)
       :action (or action default-action))))
 
-(provide 'akirak/helm/source/buffer)
+(provide 'my/helm/source/buffer)

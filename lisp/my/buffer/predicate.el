@@ -30,4 +30,4 @@
       ;; scratch.el
       (buffer-local-value 'scratch-buffer buffer)))
 
-(provide 'akirak/buffer/predicate)
+(provide 'my/buffer/predicate)

@@ -3,22 +3,22 @@
   :config
   (org-recent-headings-mode 1))
 
-(use-package akirak/project
+(use-package my/project
   :straight (:type built-in))
 
-(use-package akirak/buffer/predicate
+(use-package my/buffer/predicate
   :straight (:type built-in))
 
-(use-package akirak/dir/enum
+(use-package my/dir/enum
   :straight (:type built-in))
 
-(use-package akirak/helm/source/buffer
+(use-package my/helm/source/buffer
   :straight (:type built-in))
 
-(use-package akirak/helm/source/file
+(use-package my/helm/source/file
   :straight (:type built-in))
 
-(use-package akirak/helm/action
+(use-package my/helm/action
   :straight (:type built-in))
 
 (defvar akirak/switch-buffer-project nil

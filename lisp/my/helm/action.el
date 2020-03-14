@@ -17,4 +17,4 @@
           ;; TODO: Add find-file-dired action (C-x C-j is better)
           )))
 
-(provide 'akirak/helm/action)
+(provide 'my/helm/action)

@@ -17,4 +17,4 @@
        (-sort #'string<)
        (-uniq)))
 
-(provide 'akirak/dir/enum)
+(provide 'my/dir/enum)

@@ -19,4 +19,4 @@
                   root))
     (root root)))
 
-(provide 'akirak/project)
+(provide 'my/project)

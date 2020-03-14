@@ -50,4 +50,4 @@
 ;;                                (let ((relative (status-file status)))
 ;;                                  (find-file (f-join root relative))))))))
 
-(provide 'akirak/helm/source/file)
+(provide 'my/helm/source/file)
