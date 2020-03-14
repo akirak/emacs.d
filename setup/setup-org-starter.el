@@ -78,7 +78,7 @@
   :init
   (defvar akirak/org-multi-wiki-initialized nil)
   (unless akirak/org-multi-wiki-initialized
-    (setq org-multi-wiki-directories nil
+    (setq org-multi-wiki-namespace-list nil
           akirak/org-multi-wiki-initialized t))
   :config
   (defun akirak/org-multi-wiki-entry-template-fn (heading)
