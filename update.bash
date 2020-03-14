@@ -55,19 +55,22 @@ section "Updating the submodules in the Emacs configuration..."
 git submodule update --recursive
 
 pull_all_packages_ff() {
-    cd straight/repos
+    local initial="$PWD"
+    local parent="$PWD/straight/repos"
+    cd "$parent" || return 1
     for d in *; do
-        cd $d
-        git pull --ff-only origin HEAD
-        cd ..
+        cd "$parent/$d" || continue
+        git pull --ff-only --recurse-submodules origin
     done
-    cd ../..
+    cd "$initial" || exit 1
 }
 
 pull_package() {
-    cd straight/repos/$1
-    git pull --ff-only origin HEAD
-    cd ../../..
+    local initial="$PWD"
+    local package="$1"
+    cd "straight/repos/$package" || return 1
+    git pull --ff-only --recurse-submodules origin
+    cd "$initial" || exit 1
 }
 
 echo -n "Rebuild the updated packages? (y/n): "
