@@ -82,6 +82,7 @@ if [[ ${update} = [Yy]* ]]; then
         pull_all_packages_ff
     else
         pull_package melpa
+        ./update-packages.bash
     fi
 
     section "Rebuilding org autoloads..."
