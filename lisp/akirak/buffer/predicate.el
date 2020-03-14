@@ -11,7 +11,8 @@
 (defun akirak/reference-buffer-p (buffer)
   ;; Based on the implementation of `derived-mode-p'.
   (or (akirak/buffer-derived-mode-p buffer
-        'Info-mode 'help-mode 'helpful-mode 'eww-mode)
+        'Info-mode 'help-mode 'helpful-mode 'eww-mode
+        'woman-mode)
       (and (akirak/buffer-derived-mode-p buffer
              'exwm-mode)
            (member (buffer-local-value 'exwm-class-name buffer)
