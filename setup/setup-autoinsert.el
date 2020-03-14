@@ -2,18 +2,18 @@
 (setq auto-insert 'other
       auto-insert-query nil
       auto-insert-alist `((
-                           ;; ~/.emacs.d/extras/**/*.el
+                           ;; ~/.emacs.d/lisp/my/**/*.el
                            ;; Add
                            ;; (provide 'DIRECTORY/BASENAME)
                            ;; e.g. (provide 'akirak/org-refile)
-                           (,(rx "/.emacs.d/extras/" (+ anything) ".el" eos)
+                           (,(rx "/lisp/my/" (+ anything) ".el" eos)
                             . "Extra elisp file")
                            . (> _ "\n\n"
                                 "(provide '"
                                 (file-relative-name
                                  (file-name-sans-extension
                                   (expand-file-name (buffer-file-name)))
-                                 (expand-file-name "extras" user-emacs-directory))
+                                 (expand-file-name "lisp" user-emacs-directory))
                                 ")"))
                           ;; setup-*.el
                           ;; Add
