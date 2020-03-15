@@ -184,6 +184,22 @@
 
 ;;;;; Editing source code comments in org-mode using outorg
 ;; Bind ~C-c '~ to outorg, which is the same keybinding as =org-edit-special=.
+(use-package outorg
+  :commands (outorg-edit-as-org)
+  :config/el-patch
+  (el-patch-defun outorg-convert-oldschool-elisp-buffer-to-outshine ()
+    "Transform oldschool elisp buffer to outshine.
+In `emacs-lisp-mode', transform an oldschool buffer (only
+semicolons as outline-regexp) into an outshine buffer (with
+outcommented org-mode headers)."
+    (save-excursion
+      (goto-char (point-min))
+      (when (outline-on-heading-p)
+        (outorg-convert-oldschool-elisp-headline-to-outshine))
+      (while (not (eobp))
+        (outline-next-heading)
+        (outorg-convert-oldschool-elisp-headline-to-outshine)))
+    (el-patch-remove (funcall 'outshine-hook-function))))
 (general-def "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
