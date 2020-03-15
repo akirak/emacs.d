@@ -143,12 +143,11 @@
                  (akirak/helm-project-root-and-ancestors-source root))
          (error "Not implemented for outside of a project")))
       ('()
-       (progn
-         (helm :prompt "Switch to a dired buffer: "
-               :sources
-               (list (akirak/helm-dired-buffer-source)
-                     akirak/helm-open-buffer-directories-source
-                     akirak/helm-directory-bookmark-source))))))
+       (helm :prompt "Switch to a dired buffer: "
+             :sources
+             (list (akirak/helm-dired-buffer-source)
+                   akirak/helm-open-buffer-directories-source
+                   akirak/helm-directory-bookmark-source)))))
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
     (interactive)
