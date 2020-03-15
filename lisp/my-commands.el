@@ -174,4 +174,12 @@
         :sources
         (akirak/helm-scratch-buffer-source)))
 
+;;;; Editing
+;;;;; Undo and redo
+;; You still can use the built-in undo command with C-x u
+(use-package undo-fu
+  :general
+  ("C-/" #'undo-fu-only-undo
+   "C-?" #'undo-fu-only-redo))
+
 (provide 'my-commands)
