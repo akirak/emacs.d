@@ -16,8 +16,10 @@
        (src-buf (find-file-noselect "init.el"))
        (out-buf (create-file-buffer outfile))
        (standard-output out-buf))
-  (princ "#+title: Emacs Configuration
-* Table of contents
+  (princ "* Emacs Configuration
+This is my Emacs configuration.
+
+** Table of contents
 :PROPERTIES:
 :TOC: siblings
 :END:\n")
@@ -33,7 +35,7 @@
                (h (string-match (rx ";;" (group (+ ";")) (group (+ anything))) line))
                (level (length (match-string 1 line)))
                (heading (match-string 2 line)))
-          (mapc #'princ (list (make-string level ?\*) " " heading))
+          (mapc #'princ (list (make-string (1+ level) ?\*) " " heading))
           (forward-line 1)))
        ((looking-at (rx ";;"))
         (let* ((start (point))
@@ -64,7 +66,7 @@
         (error "Unexpected input: " (thing-at-point 'line))))))
   (setq standard-output t)
   (with-current-buffer out-buf
-    (delay-mode-hooks (org-mode))
+    (org-mode)
     (org-make-toc)
     (write-file outfile))
   (kill-buffer src-buf)

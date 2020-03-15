@@ -1,20 +1,19 @@
-;;; About this configuration
-;; This is my Emacs configuration.
-;;;; Prerequisites
+;;; Prerequisites
 ;; - Linux or Window Subsystem for Linux
 ;; - Nix package manager for installing dependencies
 
-;;;; Installation
+;;; Installation
 ;; This configuration depends on some external programs as well as Emacs
 ;; Lisp packages built by Nix.
 
 ;; At present, a suggested installation procedure is to first install my [[https://github.com/akirak/home.nix][home.nix]] and then run =mr checkout= at your home directory.
 ;; In the future, it may support an alternative for trying out.
 
-;;;; LICENSE
+;;; License
 ;; GPL v3.
 
-;; Some libraries were originally written by other people, and they follow their respective licenses.
+;; Some libraries were originally written by other people, and they
+;; follow their respective licenses.
 
 ;;; Initialization
 
