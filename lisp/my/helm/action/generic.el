@@ -8,7 +8,7 @@
   "Switch to OBJ in the same window or in a selected window."
   (when current-prefix-arg
     (ace-window nil))
-  (akirak/helm-action-switch-same-window))
+  (akirak/helm-action-switch-same-window obj))
 
 (cl-defgeneric akirak/helm-action-switch-other-window (obj)
   "Switch to OBJ in another window.")
