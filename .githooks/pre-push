@@ -62,6 +62,10 @@ do
     if ! git diff-tree --quiet ${remote_sha}..${local_sha} -- init.el; then
         echo "init.el has been modified. Regenerating README..."
         nix-shell builder.nix --run "emacs --batch --load generate-readme.el"
+        if ! git diff-index --quiet ${local_sha} README.org; then
+            echo "README has been updated. Commit it before pushing."
+            exit 1
+        fi
     fi
  fi
 done
