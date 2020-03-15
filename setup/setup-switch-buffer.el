@@ -21,65 +21,12 @@
 (use-package my/helm/source/dir
   :straight (:type built-in))
 
-(defvar akirak/switch-buffer-project nil
-  "The root directory of the project of interest.")
-
-(defun akirak/switch-to-reference-buffer ()
-  (interactive)
-  (helm :prompt "Switch to a reference buffer: "
-        :sources (akirak/helm-reference-buffer-source)))
-
-(defun akirak/switch-to-org-buffer ()
-  (interactive)
-  (require 'helm-org-ql)
-  (require 'org-recent-headings)
-  (require 'org-starter)
-  (helm :prompt "Switch to Org: "
-        :sources
-        (list (akirak/helm-indirect-org-buffer-source)
-              helm-source-org-recent-headings
-              akirak/helm-source-org-starter-known-files
-              helm-source-org-ql-views)))
-
-(defun akirak/switch-to-scratch-buffer ()
-  (interactive)
-  (helm :prompt "Switch to a scratch/REPL buffer: "
-        :sources
-        (akirak/helm-scratch-buffer-source)))
-
-(defun akirak/switch-to-dired-buffer ()
-  (interactive)
-  (pcase current-prefix-arg
-    ('(16) (helm :prompt "Git repositories: "
-                 :sources akirak/helm-magic-list-repos-source))
-    ('(4)
-     (if-let (root (akirak/project-root default-directory))
-         (helm :prompt "Project: "
-               :sources
-               (akirak/helm-project-root-and-ancestors-source root))
-       (error "Not implemented for outside of a project")))
-    ('()
-     (progn
-       (helm :prompt "Switch to a dired buffer: "
-             :sources
-             (list (akirak/helm-dired-buffer-source)
-                   akirak/helm-open-buffer-directories-source
-                   akirak/helm-directory-bookmark-source))))))
-
 (defvar akirak/directory-contents-cache nil)
 
 (defun akirak/magit-log-file (file)
   (with-current-buffer (or (find-buffer-visiting file)
                            (find-file-noselect file))
     (magit-log-buffer-file)))
-
-(defun akirak/find-file-recursively (root)
-  (interactive (list (if current-prefix-arg
-                         (read-directory-name "Find files in dir: ")
-                       (akirak/project-root default-directory))))
-  (setq akirak/switch-buffer-project root)
-  (helm :prompt (format "Browse %s: " root)
-        :sources (list (akirak/helm-project-file-source root))))
 
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))
@@ -167,11 +114,64 @@
                     :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
                               ("Magit status" . magit-status))))))))
 
+(defvar akirak/switch-buffer-project nil
+  "The root directory of the project of interest.")
+
 (general-def
   "C-x b" #'akirak/switch-to-project-file-buffer
-  "C-x p" #'akirak/find-file-recursively
-  "C-x d" #'akirak/switch-to-dired-buffer
-  "C-x j" #'akirak/switch-to-org-buffer
-  "C-x '" #'akirak/switch-to-reference-buffer)
+  "C-x p"
+  (defun akirak/find-file-recursively (root)
+    (interactive (list (if current-prefix-arg
+                           (read-directory-name "Find files in dir: ")
+                         (akirak/project-root default-directory))))
+    (setq akirak/switch-buffer-project root)
+    (helm :prompt (format "Browse %s: " root)
+          :sources (list (akirak/helm-project-file-source root))))
+  "C-x d"
+  (defun akirak/switch-to-dired-buffer ()
+    (interactive)
+    (require 'my/helm/source/buffer)
+    (require 'my/helm/source/file)
+    (pcase current-prefix-arg
+      ('(16) (helm :prompt "Git repositories: "
+                   :sources akirak/helm-magic-list-repos-source))
+      ('(4)
+       (if-let (root (akirak/project-root default-directory))
+           (helm :prompt "Project: "
+                 :sources
+                 (akirak/helm-project-root-and-ancestors-source root))
+         (error "Not implemented for outside of a project")))
+      ('()
+       (progn
+         (helm :prompt "Switch to a dired buffer: "
+               :sources
+               (list (akirak/helm-dired-buffer-source)
+                     akirak/helm-open-buffer-directories-source
+                     akirak/helm-directory-bookmark-source))))))
+  "C-x j"
+  (defun akirak/switch-to-org-buffer ()
+    (interactive)
+    (require 'helm-org-ql)
+    (require 'org-recent-headings)
+    (require 'my/helm/source/buffer)
+    (helm :prompt "Switch to Org: "
+          :sources
+          (list (akirak/helm-indirect-org-buffer-source)
+                helm-source-org-recent-headings
+                akirak/helm-source-org-starter-known-files
+                helm-source-org-ql-views)))
+  "C-x '"
+  (defun akirak/switch-to-reference-buffer ()
+    (interactive)
+    (require 'my/helm/source/buffer)
+    (helm :prompt "Switch to a reference buffer: "
+          :sources (akirak/helm-reference-buffer-source))))
+
+(defun akirak/switch-to-scratch-buffer ()
+  (interactive)
+  (require 'my/helm/source/buffer)
+  (helm :prompt "Switch to a scratch/REPL buffer: "
+        :sources
+        (akirak/helm-scratch-buffer-source)))
 
 (provide 'setup-switch-buffer)
