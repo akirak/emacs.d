@@ -274,6 +274,7 @@ outcommented org-mode headers)."
         (outline-next-heading)
         (outorg-convert-oldschool-elisp-headline-to-outshine)))
     (el-patch-remove (funcall 'outshine-hook-function))))
-(general-def "C-c '" #'outorg-edit-as-org)
+(general-def :keymaps 'emacs-lisp-mode-map
+  "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
