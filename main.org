@@ -726,8 +726,6 @@ I'm not using olivetti-mode
   (akirak/require 'setup-desktop)
   (akirak/require 'setup-meta)
   (akirak/require 'setup-misc)
-
-  (akirak/require 'my-commands)
 #+end_src
 
 *** Customizing Emacs
