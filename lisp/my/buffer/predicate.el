@@ -30,4 +30,8 @@
       ;; scratch.el
       (buffer-local-value 'scratch-buffer buffer)))
 
+(defsubst akirak/dired-buffer-p (buffer)
+  "A predicate for scratch buffers"
+  (akirak/buffer-derived-mode-p buf 'dired-mode))
+
 (provide 'my/buffer/predicate)

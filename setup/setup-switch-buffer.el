@@ -15,6 +15,9 @@
 (use-package my/helm/source/buffer
   :straight (:type built-in))
 
+(use-package my/helm/source/buffer
+  :straight (:type built-in))
+
 (use-package my/helm/source/file
   :straight (:type built-in))
 
@@ -27,9 +30,7 @@
 (defun akirak/switch-to-reference-buffer ()
   (interactive)
   (helm :prompt "Switch to a reference buffer: "
-        :sources
-        (akirak/helm-filtered-buffer-source "Reference buffers"
-          #'akirak/reference-buffer-p)))
+        :sources (akirak/helm-reference-buffer-source)))
 
 (defun akirak/switch-to-org-buffer ()
   (interactive)
@@ -38,8 +39,7 @@
   (require 'org-starter)
   (helm :prompt "Switch to Org: "
         :sources
-        (list (akirak/helm-filtered-buffer-source "Indirect Org buffers"
-                #'akirak/indirect-org-buffer-p)
+        (list (akirak/helm-indirect-org-buffer-source)
               helm-source-org-recent-headings
               (helm-build-sync-source "org-starter-known-files"
                 :candidates
@@ -51,8 +51,7 @@
   (interactive)
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
-        (list (akirak/helm-filtered-buffer-source "Scratch buffers"
-                #'akirak/scratch-buffer-p))))
+        (akirak/helm-scratch-buffer-source)))
 
 (defun akirak/switch-to-dired-buffer ()
   (interactive)
@@ -87,16 +86,7 @@
        (require 'helm-bookmark)
        (helm :prompt "Switch to a dired buffer: "
              :sources
-             (list (akirak/helm-filtered-buffer-source "Dired buffers"
-                     (lambda (buf)
-                       (akirak/buffer-derived-mode-p buf 'dired-mode))
-                     :format-candidate
-                     (lambda (buf) (buffer-local-value 'default-directory buf))
-                     :action
-                     (lambda (buf)
-                       (when current-prefix-arg
-                         (ace-window nil))
-                       (switch-to-buffer buf)))
+             (list (akirak/helm-dired-buffer-source)
                    (helm-build-sync-source "Directories of open buffers"
                      :candidates
                      (akirak/open-buffer-directories)

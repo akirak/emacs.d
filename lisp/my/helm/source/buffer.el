@@ -1,5 +1,10 @@
 ;; -*- lexical-binding: t -*-
 
+(defclass akirak/helm-source-buffer (helm-source-sync)
+  ((action :initform 'akirak/helm-buffer-actions-1)))
+
+;;;; Function for defining sources
+
 (cl-defun akirak/helm-filtered-buffer-source (name predicate &key
                                                    format-candidate
                                                    action)
@@ -36,12 +41,37 @@
                                  (message "Select a window %s" windows)
                                  (ace-window nil)
                                  (switch-to-buffer buf)))))))
-    (helm-build-sync-source name
+    (helm-make-source name (akirak/helm-source-buffer)
       :candidates (-map (lambda (buf)
                           (cons (funcall (or format-candidate #'buffer-name)
                                          buf)
                                 buf))
                         non-visible-buffers)
       :action (or action default-action))))
+
+;;;; Concrete sources
+
+(defun akirak/helm-reference-buffer-source ()
+  (akirak/helm-filtered-buffer-source "Reference buffers"
+    #'akirak/reference-buffer-p))
+
+(defun akirak/helm-scratch-buffer-source ()
+  (akirak/helm-filtered-buffer-source "Scratch buffers"
+    #'akirak/scratch-buffer-p))
+
+(defun akirak/helm-indirect-org-buffer-source ()
+  (akirak/helm-filtered-buffer-source "Indirect Org buffers"
+    #'akirak/indirect-org-buffer-p))
+
+(defun akirak/helm-dired-buffer-source ()
+  (akirak/helm-filtered-buffer-source "Dired buffers"
+    #'akirak/dired-buffer-p
+    :format-candidate
+    (lambda (buf) (buffer-local-value 'default-directory buf))
+    :action
+    (lambda (buf)
+      (when current-prefix-arg
+        (ace-window nil))
+      (switch-to-buffer buf))))
 
 (provide 'my/helm/source/buffer)
