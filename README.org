@@ -1,17 +1,32 @@
-#+title: Emacs Configuration
-* Table of contents
+* Emacs Configuration
+This is my Emacs configuration.
+
+** Table of contents
 :PROPERTIES:
 :TOC: siblings
 :END:
-*  About this configuration
-This is my Emacs configuration.
+-  [[#about][About]]
+  -  [[#prerequisites][Prerequisites]]
+  -  [[#installation][Installation]]
+  -  [[#license][License]]
+-  [[#initialization][Initialization]]
+  -  [[#configure-straightel][Configure straight.el]]
+  -  [[#benchmarking-the-startup-process][Benchmarking the startup process]]
+  -  [[#use-the-latest-git-version-of-org-mode][Use the latest Git version of Org mode]]
+  -  [[#load-configuration-files][Load configuration files]]
+-  [[#commands][Commands]]
+  -  [[#switching-buffers][Switching buffers]]
+  -  [[#editing][Editing]]
+    -  [[#undo-and-redo][Undo and redo]]
+    -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
 
-**  Prerequisites
+**  About
+***  Prerequisites
 - Linux or Window Subsystem for Linux
 - Nix package manager for installing dependencies
 
 
-**  Installation
+***  Installation
 This configuration depends on some external programs as well as Emacs
 Lisp packages built by Nix.
 
@@ -19,13 +34,14 @@ At present, a suggested installation procedure is to first install my [[https://
 In the future, it may support an alternative for trying out.
 
 
-**  LICENSE
+***  License
 GPL v3.
 
-Some libraries were originally written by other people, and they follow their respective licenses.
+Some libraries were originally written by other people, and they
+follow their respective licenses.
 
 
-*  Initialization
+**  Initialization
 #+begin_src emacs-lisp
 (when (version< emacs-version "25.1")
   (error "Use GNU Emacs version 25.1 or later")
@@ -51,7 +67,7 @@ The value is stolen from http://akrl.sdf.org/
   akirak/to-be-run-as-exwm
 #+end_src
 
-**  Configure straight.el
+***  Configure straight.el
 #+begin_src emacs-lisp
 (load-file (expand-file-name "core/straight.el" user-emacs-directory)
 #+end_src
@@ -68,14 +84,14 @@ Use straight.el by default in use-package directives
 (setq straight-use-package-by-default t
 #+end_src
 
-**  Benchmarking the startup process
+***  Benchmarking the startup process
 #+begin_src emacs-lisp
 (use-package benchmark-init
   :hook
   (after-init . benchmark-init/deactivate)
 #+end_src
 
-**  Use the latest Git version of Org mode
+***  Use the latest Git version of Org mode
 #+begin_src emacs-lisp
 (require 'cl-lib)
 (require 'subr-x
@@ -93,7 +109,7 @@ Install org-mode from the Git repository
 (load-file (expand-file-name "core/org-from-git.el" user-emacs-directory)
 #+end_src
 
-**  Load configuration files
+***  Load configuration files
 #+begin_src emacs-lisp
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
 
@@ -117,8 +133,8 @@ Don't forget to revert this variable at the beginning of the Org file.
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory)
 #+end_src
 
-*  Commands
-**  Switching buffers
+**  Commands
+***  Switching buffers
 Most of these commands are bound on C-x
 
 
@@ -297,8 +313,8 @@ Most of these commands are bound on C-x
         (akirak/helm-scratch-buffer-source))
 #+end_src
 
-**  Editing
-***  Undo and redo
+***  Editing
+****  Undo and redo
 You still can use the built-in undo command with C-x u
 
 #+begin_src emacs-lisp
@@ -308,7 +324,7 @@ You still can use the built-in undo command with C-x u
    "C-?" #'undo-fu-only-redo)
 #+end_src
 
-***  Editing source code comments in org-mode using outorg
+****  Editing source code comments in org-mode using outorg
 Bind ~C-c '~ to outorg, which is the same keybinding as =org-edit-special=.
 
 #+begin_src emacs-lisp
