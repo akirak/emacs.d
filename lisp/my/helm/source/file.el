@@ -1,3 +1,7 @@
+(defclass akirak/helm-source-file (helm-source-sync)
+  ((action :initform 'akirak/helm-switch-actions-default-same-window)
+   (coerce :initform (lambda (path) `(file . ,path)))))
+
 (defun akirak/helm-project-file-source (root)
   (cl-labels ((status-file (status) (substring status 3)))
     (let* ((attrs (file-attributes root))
@@ -36,6 +40,10 @@
             (akirak/magit-log-file file)))
         :action (lambda (relative)
                   (find-file (f-join root relative)))))))
+
+(defconst akirak/helm-source-org-starter-known-files
+  (helm-make-source "org-starter-known-files" 'akirak/helm-source-file
+    :candidates (lambda () (mapcar #'f-short org-starter-known-files))))
 
 ;; (defvar akirak/git-status-source
 ;;   (helm-build-sync-source "Git status"

@@ -15,13 +15,10 @@
 (use-package my/helm/source/buffer
   :straight (:type built-in))
 
-(use-package my/helm/source/buffer
-  :straight (:type built-in))
-
 (use-package my/helm/source/file
   :straight (:type built-in))
 
-(use-package my/helm/action
+(use-package my/helm/source/dir
   :straight (:type built-in))
 
 (defvar akirak/switch-buffer-project nil
@@ -41,10 +38,7 @@
         :sources
         (list (akirak/helm-indirect-org-buffer-source)
               helm-source-org-recent-headings
-              (helm-build-sync-source "org-starter-known-files"
-                :candidates
-                (mapcar #'f-short org-starter-known-files)
-                :action akirak/find-file-helm-actions)
+              akirak/helm-source-org-starter-known-files
               helm-source-org-ql-views)))
 
 (defun akirak/switch-to-scratch-buffer ()
@@ -57,55 +51,20 @@
   (interactive)
   (pcase current-prefix-arg
     ('(16) (helm :prompt "Git repositories: "
-                 :sources
-                 (helm-build-sync-source "magit-list-repos"
-                   :candidates
-                   (mapcar #'f-short (magit-list-repos))
-                   :action
-                   '(("Dired" . dired)
-                     ("Find file" . counsel-find-file)
-                     ("Term" . (lambda (dir)
-                                 (let ((default-directory dir))
-                                   (vterm))))))))
+                 :sources akirak/helm-magic-list-repos-source))
     ('(4)
      (if-let (root (akirak/project-root default-directory))
          (helm :prompt "Project: "
                :sources
-               (list (helm-build-sync-source "Project root and its ancestors"
-                       :candidates
-                       (akirak/directory-self-and-ancestors root)
-                       :action
-                       '(("Dired" . dired)
-                         ("Find file" . counsel-find-file)
-                         ("Term" . (lambda (dir)
-                                     (let ((default-directory dir))
-                                       (vterm))))))))
+               (akirak/helm-project-root-and-ancestors-source root))
        (error "Not implemented for outside of a project")))
-    ('nil
+    ('()
      (progn
-       (require 'helm-bookmark)
        (helm :prompt "Switch to a dired buffer: "
              :sources
              (list (akirak/helm-dired-buffer-source)
-                   (helm-build-sync-source "Directories of open buffers"
-                     :candidates
-                     (akirak/open-buffer-directories)
-                     :action
-                     '(("Dired" . dired)
-                       ("Find file in the dir" . counsel-find-file)))
-                   ;; Based on `helm-source-bookmark-files&dirs' in helm-bookmark.el
-                   (helm-make-source "Directory bookmarks" 'helm-source-filtered-bookmarks
-                     :init (lambda ()
-                             (bookmark-maybe-load-default-file)
-                             (helm-init-candidates-in-buffer
-                                 'global (helm-bookmark-filter-setup-alist
-                                          (lambda (bookmark)
-                                            (let* ((filename (bookmark-get-filename bookmark))
-                                                   (isnonfile (equal filename helm-bookmark--non-file-filename)))
-                                              (and filename
-                                                   (not isnonfile)
-                                                   (string-suffix-p "/" filename)
-                                                   (not (bookmark-get-handler bookmark)))))))))))))))
+                   akirak/helm-open-buffer-directories-source
+                   akirak/helm-directory-bookmark-source))))))
 
 (defvar akirak/directory-contents-cache nil)
 

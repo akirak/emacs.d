@@ -41,7 +41,7 @@
                                  (message "Select a window %s" windows)
                                  (ace-window nil)
                                  (switch-to-buffer buf)))))))
-    (helm-make-source name (akirak/helm-source-buffer)
+    (helm-make-source name 'helm-source-sync
       :candidates (-map (lambda (buf)
                           (cons (funcall (or format-candidate #'buffer-name)
                                          buf)
@@ -68,10 +68,6 @@
     #'akirak/dired-buffer-p
     :format-candidate
     (lambda (buf) (buffer-local-value 'default-directory buf))
-    :action
-    (lambda (buf)
-      (when current-prefix-arg
-        (ace-window nil))
-      (switch-to-buffer buf))))
+    :action akirak/helm-buffer-actions-1))
 
 (provide 'my/helm/source/buffer)
