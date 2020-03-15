@@ -727,6 +727,8 @@ I'm not using olivetti-mode
   (akirak/require 'setup-desktop)
   (akirak/require 'setup-meta)
   (akirak/require 'setup-misc)
+
+  (akirak/require 'my-commands)
 #+end_src
 
 *** Customizing Emacs
@@ -928,10 +930,6 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
   (akirak/require 'setup-recoll)
 #+end_src
 *** Buffer management
-#+begin_src emacs-lisp
-  (akirak/require 'setup-switch-buffer)
-#+end_src
-
 #+begin_src emacs-lisp
   ;; buffer management
   (general-def

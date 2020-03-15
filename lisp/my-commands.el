@@ -1,3 +1,6 @@
+;;;; Switching buffers
+;; Most of these commands are bound on C-x
+
 (use-package org-recent-headings
   :after org
   :config
@@ -174,4 +177,4 @@
         :sources
         (akirak/helm-scratch-buffer-source)))
 
-(provide 'setup-switch-buffer)
+(provide 'my-commands)
