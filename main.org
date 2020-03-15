@@ -73,7 +73,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#general-tools-for-editing-source-code][General tools for editing source code]]
   -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
   -  [[#miscellaneous-commands][Miscellaneous commands]]
-  -  [[#poporg][Poporg]]
   -  [[#window-management][Window management]]
   -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
   -  [[#startup-buffer][Startup buffer]]
@@ -1330,20 +1329,6 @@ There is another package named comment-tags for the same purpose, but I won't us
     :load-path "contrib/modi")
   (akirak/bind-key :package 'org :keymaps 'org-mode-map
     [remap org-meta-return] 'modi/org-meta-return)
-#+end_src
-*** Poporg
-:PROPERTIES:
-:CREATED_TIME: [2018-12-29 Sat 19:51]
-:ID:       e76069bd-d9b2-488a-a5c8-9f2410240396
-:END:
-
-Use poporg rather than outorg.
-
-- [X] Add poporg package
-- [X] Remap keys
-
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-poporg)
 #+end_src
 *** Window management
 :PROPERTIES:

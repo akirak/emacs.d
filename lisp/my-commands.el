@@ -182,4 +182,10 @@
   ("C-/" #'undo-fu-only-undo
    "C-?" #'undo-fu-only-redo))
 
+;;;;; Editing source code comments in org-mode using outorg
+;; Bind ~C-c '~ to outorg, which is the same keybinding as =org-edit-special=.
+(general-def "C-c '" #'outorg-edit-as-org)
+(general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
+  "C-c '" #'outorg-copy-edits-and-exit)
+
 (provide 'my-commands)
