@@ -5,10 +5,9 @@ This is my Emacs configuration.
 :PROPERTIES:
 :TOC: siblings
 :END:
--  [[#about][About]]
-  -  [[#prerequisites][Prerequisites]]
-  -  [[#installation][Installation]]
-  -  [[#license][License]]
+-  [[#prerequisites][Prerequisites]]
+-  [[#installation][Installation]]
+-  [[#license][License]]
 -  [[#initialization][Initialization]]
   -  [[#configure-straightel][Configure straight.el]]
   -  [[#benchmarking-the-startup-process][Benchmarking the startup process]]
@@ -20,13 +19,12 @@ This is my Emacs configuration.
     -  [[#undo-and-redo][Undo and redo]]
     -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
 
-**  About
-***  Prerequisites
+**  Prerequisites
 - Linux or Window Subsystem for Linux
 - Nix package manager for installing dependencies
 
 
-***  Installation
+**  Installation
 This configuration depends on some external programs as well as Emacs
 Lisp packages built by Nix.
 
@@ -34,7 +32,7 @@ At present, a suggested installation procedure is to first install my [[https://
 In the future, it may support an alternative for trying out.
 
 
-***  License
+**  License
 GPL v3.
 
 Some libraries were originally written by other people, and they
