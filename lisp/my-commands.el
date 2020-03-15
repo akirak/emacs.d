@@ -26,11 +26,6 @@
 
 (defvar akirak/directory-contents-cache nil)
 
-(defun akirak/magit-log-file (file)
-  (with-current-buffer (or (find-buffer-visiting file)
-                           (find-file-noselect file))
-    (magit-log-buffer-file)))
-
 (defvar akirak/helm-project-buffer-map
   (let ((map (copy-keymap helm-map)))
     (define-key map (kbd "M-/")
@@ -43,6 +38,8 @@
   (interactive (list (-some-> (project-current)
                        (project-roots)
                        (car-safe))))
+  (require 'my/helm/action/buffer)
+  (require 'my/helm/action/file)
   (setq akirak/switch-buffer-project project)
   (cl-labels ((root-of (buffer)
                        (akirak/project-root (buffer-dir buffer)))
@@ -97,11 +94,11 @@
                                           (or same-project-other-buffers
                                               same-project-buffers))
                       :keymap akirak/helm-project-buffer-map
-                      :action akirak/switch-buffer-helm-actions))
+                      :action akirak/helm-buffer-actions-1))
                    (project (akirak/helm-project-file-source project)))
                   (helm-build-sync-source "File buffers in other projects"
                     :candidates (mapcar #'file-buffer-cell other-project-buffers)
-                    :action akirak/switch-buffer-helm-actions)
+                    :action akirak/helm-buffer-actions-1)
                   (helm-build-sync-source "Other projects with open file buffers"
                     :candidates other-projects
                     :persistent-action #'kill-project-bufs
@@ -109,7 +106,7 @@
                               ("Magit status" . magit-status)))
                   (helm-build-sync-source "Recentf"
                     :candidates (-map #'f-short recentf-list)
-                    :action akirak/find-file-helm-actions)
+                    :action akirak/helm-file-actions)
                   (helm-build-sync-source "Git repositories"
                     :candidates (->> (magit-repos-alist)
                                      (-map #'cdr)
@@ -134,7 +131,8 @@
   (defun akirak/switch-to-dired-buffer ()
     (interactive)
     (require 'my/helm/source/buffer)
-    (require 'my/helm/source/file)
+    (require 'my/helm/source/dir)
+    (require 'my/helm/source/bookmark)
     (pcase current-prefix-arg
       ('(16) (helm :prompt "Git repositories: "
                    :sources akirak/helm-magic-list-repos-source))

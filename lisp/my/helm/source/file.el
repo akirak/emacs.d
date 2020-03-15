@@ -3,6 +3,7 @@
    (coerce :initform (lambda (path) `(file . ,path)))))
 
 (defun akirak/helm-project-file-source (root)
+  (require 'my/file/browse/magit)
   (cl-labels ((status-file (status) (substring status 3)))
     (let* ((attrs (file-attributes root))
            (mtime (nth 5 attrs))
