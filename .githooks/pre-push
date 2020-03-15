@@ -58,5 +58,10 @@ do
       printf "\nPush rejected: autosquash commit detected\n\n"
       exit 1
     fi
-  fi
+
+    if ! git-diff-files --quiet ${remote_sha}..${local_sha} -- init.el; then
+        echo "init.el has been modified. Regenerating README..."
+        nix-shell builder.nix --run "emacs --batch --load generate-readme.el"
+   fi
+ fi
 done
