@@ -204,4 +204,5 @@ outcommented org-mode headers)."
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
 
+;;; my-commands.el ends here
 (provide 'my-commands)
