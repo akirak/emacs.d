@@ -26,6 +26,8 @@ This is my Emacs configuration.
   (with-current-buffer src-buf
     (widen)
     (goto-char (point-min))
+    (when (string-match-p (rx "-*-") (thing-at-point 'line))
+      (forward-line 1))
     (while (< (point) (point-max))
       (cond
        ((looking-at (rx eol))
