@@ -77,33 +77,23 @@
 
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
-;;; Commands and keybindings
-;;;; Switching buffers
-;; Most of these commands are bound on C-x
-
+;;; Packages
 (use-package org-recent-headings
   :after org
   :config
   (org-recent-headings-mode 1))
 
+;;; Autoloads
 (use-package my/project
   :straight (:type built-in))
 
 (use-package my/buffer/predicate
   :straight (:type built-in))
 
-(use-package my/dir/enum
-  :straight (:type built-in))
-
-(use-package my/helm/source/buffer
-  :straight (:type built-in))
-
-(use-package my/helm/source/file
-  :straight (:type built-in))
-
-(use-package my/helm/source/dir
-  :straight (:type built-in))
-
+;;; Commands and keybindings
+;;;; Switching buffers
+;; Switching buffers is the most essential operation in Emacs.
+;; Most of these commands are bound on C-x.
 (general-def
   "C-x b"
   (defun akirak/switch-to-project-file-buffer (project)
@@ -170,6 +160,8 @@
     (helm :prompt "Switch to a reference buffer: "
           :sources (akirak/helm-reference-buffer-source))))
 
+;; In the list of project buffers, you can switch to a file list with
+;; ~M-/~.
 (general-def
   :keymaps 'akirak/helm-project-buffer-map
   :package 'my/helm/source/complex
@@ -179,6 +171,7 @@
            (lambda ()
              (akirak/find-file-recursively default-directory)))))
 
+;; I haven't bound any key to this command yet.
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
   (require 'my/helm/source/buffer)
