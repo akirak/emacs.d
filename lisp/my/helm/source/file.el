@@ -1,3 +1,5 @@
+(require 'my/helm/action/file)
+
 (defclass akirak/helm-source-file (helm-source-sync)
   ((action :initform 'akirak/helm-switch-actions-default-same-window)
    (coerce :initform (lambda (path) `(file . ,path)))))
