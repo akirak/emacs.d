@@ -10,7 +10,4 @@
   (append akirak/helm-switch-actions-default-switch-select
           '(("Kill buffer" . kill-buffer))))
 
-(defclass akirak/helm-source-buffer-action (helm-source)
-  ((action :initform 'akirak/helm-buffer-actions-1)))
-
 (provide 'my/helm/action/buffer)

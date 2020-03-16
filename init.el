@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 ;;; Prerequisites
 ;; - Linux or Window Subsystem for Linux
 ;; - Nix package manager for installing dependencies
@@ -76,7 +77,7 @@
 
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
-;;; Commands
+;;; Commands and keybindings
 ;;;; Switching buffers
 ;; Most of these commands are bound on C-x
 
@@ -103,104 +104,32 @@
 (use-package my/helm/source/dir
   :straight (:type built-in))
 
-(defvar akirak/directory-contents-cache nil)
-
-(defvar akirak/helm-project-buffer-map
-  (let ((map (copy-keymap helm-map)))
-    (define-key map (kbd "M-/")
-      (lambda ()
-        (interactive)
-        (helm-run-after-quit (lambda () (akirak/find-file-recursively project)))))
-    map))
-
-(cl-defun akirak/switch-to-project-file-buffer (project)
-  (interactive (list (-some-> (project-current)
-                       (project-roots)
-                       (car-safe))))
-  (require 'my/helm/action/buffer)
-  (require 'my/helm/action/file)
-  (setq akirak/switch-buffer-project project)
-  (cl-labels ((root-of (buffer)
-                       (akirak/project-root (buffer-dir buffer)))
-              (buffer-dir (buffer)
-                          (buffer-local-value 'default-directory buffer))
-              (format-mode (buffer)
-                           (format "[%s]" (buffer-local-value 'major-mode buffer)))
-              (format-fbuf (buffer)
-                           (let ((root (root-of buffer))
-                                 (file (buffer-file-name buffer))
-                                 (modified (buffer-modified-p buffer)))
-                             (concat (if modified "* " "")
-                                     (if root
-                                         (format "%s > %s "
-                                                 (f-short root)
-                                                 (and root (f-relative file root)))
-                                       (f-short file))
-                                     " "
-                                     (format-mode buffer))))
-              (same-project-p (buf)
-                              (-some->> (root-of buf)
-                                (file-equal-p project)))
-              (project-bufp (buf)
-                            (not (f-ancestor-of-p "~/lib/" (buffer-file-name buf))))
-              (file-buffer-cell (buffer)
-                                (cons (format-fbuf buffer) buffer))
-              (kill-project-bufs (project)
-                                 (let ((bufs (-filter (lambda (buf)
-                                                        (let ((dir (buffer-dir buf)))
-                                                          (or (f-equal-p dir project)
-                                                              (f-ancestor-of-p project dir))))
-                                                      (buffer-list))))
-                                   (when (yes-or-no-p (format "Kill all buffers in %s" project))
-                                     (mapc #'kill-buffer bufs)
-                                     (helm-run-after-quit (lambda () (akirak/switch-to-project-file-buffer project)))))))
-    (-let* ((file-buffers (-filter #'buffer-file-name (buffer-list)))
-            ((same-project-buffers other-file-buffers)
-             (if project (-separate #'same-project-p file-buffers) (list nil file-buffers)))
-            (same-project-other-buffers
-             (-remove-item (current-buffer) same-project-buffers))
-            (other-project-buffers (-filter #'project-bufp other-file-buffers))
-            (other-projects (->> (-map #'root-of other-project-buffers)
-                                 (delq nil)
-                                 (-uniq))))
+(general-def
+  "C-x b"
+  (defun akirak/switch-to-project-file-buffer (project)
+    (interactive (list (-some-> (project-current)
+                         (project-roots)
+                         (car-safe))))
+    (require 'my/helm/source/complex)
+    (require 'my/helm/source/file)
+    (require 'my/helm/source/dir)
+    (let ((default-directory (or project default-directory)))
       (helm :prompt (format "Project %s: " project)
             :sources
-            (list (cond
-                   (same-project-buffers
-                    (helm-build-sync-source (format "File buffers in project %s"
-                                                    project)
-                      :candidates (mapcar #'file-buffer-cell
-                                          (or same-project-other-buffers
-                                              same-project-buffers))
-                      :keymap akirak/helm-project-buffer-map
-                      :action akirak/helm-buffer-actions-1))
-                   (project (akirak/helm-project-file-source project)))
-                  (helm-build-sync-source "File buffers in other projects"
-                    :candidates (mapcar #'file-buffer-cell other-project-buffers)
-                    :action akirak/helm-buffer-actions-1)
-                  (helm-build-sync-source "Other projects with open file buffers"
-                    :candidates other-projects
-                    :persistent-action #'kill-project-bufs
-                    :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
-                              ("Magit status" . magit-status)))
-                  akirak/helm-source-recent-files
-                  (helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
-                    :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
-                              ("Magit status" . magit-status))))))))
-
-(defvar akirak/switch-buffer-project nil
-  "The root directory of the project of interest.")
-
-(general-def
-  "C-x b" #'akirak/switch-to-project-file-buffer
+            `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
+              ,akirak/helm-source-recent-files
+              ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
+                 :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
+                           ("Magit status" . magit-status)))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (if current-prefix-arg
                            (read-directory-name "Find files in dir: ")
                          (akirak/project-root default-directory))))
-    (setq akirak/switch-buffer-project root)
-    (helm :prompt (format "Browse %s: " root)
-          :sources (list (akirak/helm-project-file-source root))))
+    (require 'my/helm/source/file)
+    (let ((default-directory root))
+      (helm :prompt (format "Browse %s: " root)
+            :sources akirak/helm-source-project-files)))
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
     (interactive)
@@ -240,6 +169,15 @@
     (require 'my/helm/source/buffer)
     (helm :prompt "Switch to a reference buffer: "
           :sources (akirak/helm-reference-buffer-source))))
+
+(general-def
+  :keymaps 'akirak/helm-project-buffer-map
+  :package 'my/helm/source/complex
+  "M-/" (lambda ()
+          (interactive)
+          (helm-run-after-quit
+           (lambda ()
+             (akirak/find-file-recursively default-directory)))))
 
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
