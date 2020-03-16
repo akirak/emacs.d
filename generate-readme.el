@@ -56,7 +56,7 @@ This is my Emacs configuration.
                (end (progn
                       (while (looking-at (rx (* (or space "\n")) "("))
                         (forward-sexp 1))
-                      (1- (point))))
+                      (point)))
                (str (buffer-substring-no-properties start end)))
           (mapc #'princ
                 (list "#+begin_src emacs-lisp\n"
