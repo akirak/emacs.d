@@ -183,13 +183,8 @@
                     :persistent-action #'kill-project-bufs
                     :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
                               ("Magit status" . magit-status)))
-                  (helm-build-sync-source "Recentf"
-                    :candidates (-map #'f-short recentf-list)
-                    :action akirak/helm-file-actions)
-                  (helm-build-sync-source "Git repositories"
-                    :candidates (->> (magit-repos-alist)
-                                     (-map #'cdr)
-                                     (-map #'f-short))
+                  akirak/helm-source-recent-files
+                  (helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
                     :action '(("Switch to project" . akirak/switch-to-project-file-buffer)
                               ("Magit status" . magit-status))))))))
 

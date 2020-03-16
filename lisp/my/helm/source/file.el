@@ -46,6 +46,10 @@
   (helm-make-source "org-starter-known-files" 'akirak/helm-source-file
     :candidates (lambda () (mapcar #'f-short org-starter-known-files))))
 
+(defconst akirak/helm-source-recent-files
+  (helm-make-source "Recent files" 'akirak/helm-source-file
+    :candidates (lambda () (-map #'f-short recentf-list))))
+
 ;; (defvar akirak/git-status-source
 ;;   (helm-build-sync-source "Git status"
 ;;     :candidates (lambda () (process-lines "git" "status" "--short"))

@@ -1,5 +1,7 @@
 ;; -*- lexical-binding: t -*-
 
+(require 'my/helm/action/buffer)
+
 (defclass akirak/helm-source-buffer (helm-source-sync)
   ((action :initform 'akirak/helm-buffer-actions-1)))
 
