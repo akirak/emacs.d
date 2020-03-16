@@ -1021,13 +1021,20 @@ Use =magit-annex= for working with =git-annex= repositories:
              (when-let ((dir (locate-dominating-file dir ,dominating-file)))
                (cons (quote ,symbol) dir)))
            (add-hook 'project-find-functions ',func t)
-           (cl-defmethod project-roots ((project (head (quote ,symbol))))
+           (cl-defmethod project-roots ((project (head ,symbol)))
              (list (cdr project)))
            ;; Return the current list of functions
            project-find-functions)))
 
     (akirak/define-project-type syncthing ".stfolder")
-    (akirak/define-project-type projectile ".projectile"))
+    (akirak/define-project-type projectile ".projectile")
+
+    (add-hook 'project-find-functions
+              (defun akirak/project-tramp-root (dir)
+                (when-let ((conn (file-remote-p dir)))
+                  (cons 'remote conn))))
+    (cl-defmethod project-roots ((project (head remote)))
+      (list (cdr project))))
 
 
 #+end_src
