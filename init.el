@@ -217,7 +217,8 @@ outcommented org-mode headers)."
   (defun akirak/helm-my-library ()
     "Browse the library for this configuration."
     (interactive)
-    (let ((default-directory (f-join user-emacs-directory "lisp" "my")))
+    (require 'my/helm/source/file)
+    (let ((default-directory (f-join user-emacs-directory "lisp")))
       (helm :prompt (format "Files in %s: " default-directory)
             :sources (helm-make-source "Files in project"
                          'akirak/helm-source-project-file)))))
