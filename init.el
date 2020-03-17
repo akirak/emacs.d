@@ -209,3 +209,15 @@ outcommented org-mode headers)."
   "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
+
+;;;; Maintenance and development of the config
+;; These commands are used to maintain this Emacs configuration.
+(general-def
+  "C-x M-m"
+  (defun akirak/helm-my-library ()
+    "Browse the library for this configuration."
+    (interactive)
+    (let ((default-directory (f-join user-emacs-directory "lisp" "my")))
+      (helm :prompt (format "Files in %s: " default-directory)
+            :sources (helm-make-source "Files in project"
+                         'akirak/helm-source-project-file)))))
