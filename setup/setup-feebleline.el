@@ -21,9 +21,13 @@
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
           (akirak/feebleline-process-status)
           (akirak/feebleline-gcmh-status :face font-lock-warning-face)
-          ((lambda () (or (bound-and-true-p org-multi-wiki-current-namespace) "")))
+          (akirak/org-multi-wiki-workspace-status)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
+
+(defun akirak/org-multi-wiki-workspace-status ()
+  (or (bound-and-true-p org-multi-wiki-current-namespace)
+      ""))
 
 (defun akirak/feebleline-gcmh-status ()
   (if (bound-and-true-p akirak/gcmh-status)
