@@ -20,6 +20,7 @@ This is my Emacs configuration.
   -  [[#editing][Editing]]
     -  [[#undo-and-redo][Undo and redo]]
     -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
+  -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
 
 **  Prerequisites
 - Linux or Window Subsystem for Linux
@@ -44,7 +45,7 @@ follow their respective licenses.
 **  Initialization
 #+begin_src emacs-lisp
 (when (version< emacs-version "25.1")
-  (error "Use GNU Emacs version 25.1 or later")
+  (error "Use GNU Emacs version 25.1 or later"))
 #+end_src
 
 Expand the GC threshold until gcmh-mode is activated.
@@ -64,49 +65,49 @@ The value is stolen from http://akrl.sdf.org/
 (defconst akirak/to-be-run-as-exwm (member "--exwm" command-line-args))
 
 (defun akirak/exwm-session-p ()
-  akirak/to-be-run-as-exwm
+  akirak/to-be-run-as-exwm)
 #+end_src
 
 ***  Configure straight.el
 #+begin_src emacs-lisp
-(load-file (expand-file-name "core/straight.el" user-emacs-directory)
+(load-file (expand-file-name "core/straight.el" user-emacs-directory))
 #+end_src
 
 Install use-package using straight.el
 
 #+begin_src emacs-lisp
-(straight-use-package 'use-package
+(straight-use-package 'use-package)
 #+end_src
 
 Use straight.el by default in use-package directives
 
 #+begin_src emacs-lisp
-(setq straight-use-package-by-default t
+(setq straight-use-package-by-default t)
 #+end_src
 
 ***  Benchmarking the startup process
 #+begin_src emacs-lisp
 (use-package benchmark-init
   :hook
-  (after-init . benchmark-init/deactivate)
+  (after-init . benchmark-init/deactivate))
 #+end_src
 
 ***  Use the latest Git version of Org mode
 #+begin_src emacs-lisp
 (require 'cl-lib)
-(require 'subr-x
+(require 'subr-x)
 #+end_src
 
 Remove org-mode shipped with Emacs from load-path
 
 #+begin_src emacs-lisp
-(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path
+(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
 #+end_src
 
 Install org-mode from the Git repository
 
 #+begin_src emacs-lisp
-(load-file (expand-file-name "core/org-from-git.el" user-emacs-directory)
+(load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
 #+end_src
 
 ***  Load configuration files
@@ -115,13 +116,13 @@ Install org-mode from the Git repository
 
 (load-file (expand-file-name "straight-recipes.el" user-emacs-directory))
 
-(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory)
+(add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 #+end_src
 
 TODO: Move to lisp/
 
 #+begin_src emacs-lisp
-(add-to-list 'load-path (expand-file-name "extras" user-emacs-directory)
+(add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 #+end_src
 
 Prevent a confirmation dialog when the org file is loaded.
@@ -130,7 +131,7 @@ Don't forget to revert this variable at the beginning of the Org file.
 #+begin_src emacs-lisp
 (setq-default enable-local-variables :all)
 
-(org-babel-load-file (expand-file-name "main.org" user-emacs-directory)
+(org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 #+end_src
 
 **  Packages
@@ -138,7 +139,7 @@ Don't forget to revert this variable at the beginning of the Org file.
 (use-package org-recent-headings
   :after org
   :config
-  (org-recent-headings-mode 1)
+  (org-recent-headings-mode 1))
 #+end_src
 
 **  Autoloads
@@ -147,7 +148,7 @@ Don't forget to revert this variable at the beginning of the Org file.
   :straight (:type built-in))
 
 (use-package my/buffer/predicate
-  :straight (:type built-in)
+  :straight (:type built-in))
 #+end_src
 
 **  Commands and keybindings
@@ -220,7 +221,7 @@ Most of these commands are bound on C-x.
     (interactive)
     (require 'my/helm/source/buffer)
     (helm :prompt "Switch to a reference buffer: "
-          :sources (akirak/helm-reference-buffer-source)))
+          :sources (akirak/helm-reference-buffer-source))))
 #+end_src
 
 In the list of project buffers, you can switch to a file list with
@@ -234,7 +235,7 @@ In the list of project buffers, you can switch to a file list with
           (interactive)
           (helm-run-after-quit
            (lambda ()
-             (akirak/find-file-recursively default-directory))))
+             (akirak/find-file-recursively default-directory)))))
 #+end_src
 
 I haven't bound any key to this command yet.
@@ -245,7 +246,7 @@ I haven't bound any key to this command yet.
   (require 'my/helm/source/buffer)
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
-        (akirak/helm-scratch-buffer-source))
+        (akirak/helm-scratch-buffer-source)))
 #+end_src
 
 ***  Editing
@@ -256,7 +257,7 @@ You still can use the built-in undo command with C-x u
 (use-package undo-fu
   :general
   ("C-/" #'undo-fu-only-undo
-   "C-?" #'undo-fu-only-redo)
+   "C-?" #'undo-fu-only-redo))
 #+end_src
 
 ****  Editing source code comments in org-mode using outorg
@@ -282,6 +283,21 @@ outcommented org-mode headers)."
 (general-def :keymaps 'emacs-lisp-mode-map
   "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
-  "C-c '" #'outorg-copy-edits-and-exit
+  "C-c '" #'outorg-copy-edits-and-exit)
+#+end_src
+
+***  Maintenance and development of the config
+These commands are used to maintain this Emacs configuration.
+
+#+begin_src emacs-lisp
+(general-def
+  "C-x M-m"
+  (defun akirak/helm-my-library ()
+    "Browse the library for this configuration."
+    (interactive)
+    (let ((default-directory (f-join user-emacs-directory "lisp" "my")))
+      (helm :prompt (format "Files in %s: " default-directory)
+            :sources (helm-make-source "Files in project"
+                         'akirak/helm-source-project-file)))))
 #+end_src
 
