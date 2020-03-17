@@ -148,6 +148,7 @@
   "M-a" #'helm-org-ql-agenda-files
   "M-k" #'akirak/helm-org-ql-known-files
   "M-o" #'org-starter-alternative-find-file-by-key
+  "M-m" #'helm-org-multi-wiki
   "M-w" #'helm-org-multi-wiki-all)
 (akirak/bind-jump
   "M-o" #'org-starter-find-file-by-key)
