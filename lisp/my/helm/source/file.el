@@ -1,3 +1,4 @@
+(require 'my/file/enum)
 (require 'my/helm/action/file)
 
 (defclass akirak/helm-source-file (helm-source-sync)
