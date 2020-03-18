@@ -201,6 +201,10 @@ outcommented org-mode headers)."
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
 
+;;;; Running external commands
+(general-def
+  "C-x c" #'counsel-compile)
+
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.
 (general-def
