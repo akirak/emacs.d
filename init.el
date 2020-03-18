@@ -221,5 +221,7 @@ outcommented org-mode headers)."
     (require 'my/helm/source/file)
     (let ((default-directory (f-join user-emacs-directory "lisp")))
       (helm :prompt (format "Files in %s: " default-directory)
-            :sources (helm-make-source "Files in project"
-                         'akirak/helm-source-project-file)))))
+            :sources (list (helm-make-source "Files in project"
+                               'akirak/helm-source-project-file)
+                           (helm-build-dummy-source "New file in lisp directory"
+                             :action #'find-file))))))
