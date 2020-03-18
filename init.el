@@ -147,6 +147,7 @@
     (require 'helm-org-ql)
     (require 'org-recent-headings)
     (require 'my/helm/source/buffer)
+    (require 'my/helm/source/file)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
