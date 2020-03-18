@@ -100,9 +100,6 @@
     (interactive (list (-some-> (project-current)
                          (project-roots)
                          (car-safe))))
-    (require 'my/helm/source/complex)
-    (require 'my/helm/source/file)
-    (require 'my/helm/source/dir)
     (let ((default-directory (or project default-directory)))
       (helm :prompt (format "Project %s: " project)
             :sources
@@ -123,17 +120,14 @@
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
     (interactive)
-    (require 'my/helm/source/buffer)
-    (require 'my/helm/source/dir)
-    (require 'my/helm/source/bookmark)
     (pcase current-prefix-arg
       ('(16) (helm :prompt "Git repositories: "
                    :sources akirak/helm-magic-list-repos-source))
       ('(4)
        (if-let (root (akirak/project-root default-directory))
-           (helm :prompt "Project: "
-                 :sources
-                 (akirak/helm-project-root-and-ancestors-source root))
+           (let ((default-directory root))
+             (helm :prompt "Project: "
+                   :sources akirak/helm-project-root-and-ancestors-source))
          (error "Not implemented for outside of a project")))
       ('()
        (helm :prompt "Switch to a dired buffer: "
@@ -146,8 +140,6 @@
     (interactive)
     (require 'helm-org-ql)
     (require 'org-recent-headings)
-    (require 'my/helm/source/buffer)
-    (require 'my/helm/source/file)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
@@ -157,7 +149,6 @@
   "C-x '"
   (defun akirak/switch-to-reference-buffer ()
     (interactive)
-    (require 'my/helm/source/buffer)
     (helm :prompt "Switch to a reference buffer: "
           :sources (akirak/helm-reference-buffer-source))))
 
@@ -175,7 +166,6 @@
 ;; I haven't bound any key to this command yet.
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
-  (require 'my/helm/source/buffer)
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
         (akirak/helm-scratch-buffer-source)))

@@ -12,12 +12,16 @@
                                          (-map #'cdr)
                                          (-map #'f-short))))))
 
-(defun akirak/helm-project-root-and-ancestors-source (root)
+(defconst akirak/helm-project-root-and-ancestors-source
   (helm-make-source "Project root and its ancestors" 'akirak/helm-source-directory
-    :candidates (lambda () (akirak/directory-self-and-ancestors root))))
+    :candidates (lambda ()
+                  (require 'my/dir/enum)
+                  (akirak/directory-self-and-ancestors default-directory))))
 
 (defconst akirak/helm-open-buffer-directories-source
   (helm-make-source "Directories of open buffers" 'akirak/helm-source-directory
-    :candidates (lambda () (akirak/open-buffer-directories))))
+    :candidates (lambda ()
+                  (require 'my/dir/enum)
+                  (akirak/open-buffer-directories))))
 
 (provide 'my/helm/source/dir)

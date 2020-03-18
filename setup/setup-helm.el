@@ -25,6 +25,11 @@
   ;; (require 'helm-source)
   :config
   (helm-autoresize-mode 1)
+  (require 'my/helm/source/buffer)
+  (require 'my/helm/source/file)
+  (require 'my/helm/source/dir)
+  (require 'my/helm/source/bookmark)
+  (require 'my/helm/source/complex)
   :custom
   (helm-autoresize-max-height 40)
   (helm-display-function (quote pop-to-buffer)))
