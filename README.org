@@ -20,6 +20,7 @@ This is my Emacs configuration.
   -  [[#editing][Editing]]
     -  [[#undo-and-redo][Undo and redo]]
     -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
+  -  [[#running-external-commands][Running external commands]]
   -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
 
 **  Prerequisites
@@ -163,9 +164,6 @@ Most of these commands are bound on C-x.
     (interactive (list (-some-> (project-current)
                          (project-roots)
                          (car-safe))))
-    (require 'my/helm/source/complex)
-    (require 'my/helm/source/file)
-    (require 'my/helm/source/dir)
     (let ((default-directory (or project default-directory)))
       (helm :prompt (format "Project %s: " project)
             :sources
@@ -186,17 +184,14 @@ Most of these commands are bound on C-x.
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
     (interactive)
-    (require 'my/helm/source/buffer)
-    (require 'my/helm/source/dir)
-    (require 'my/helm/source/bookmark)
     (pcase current-prefix-arg
       ('(16) (helm :prompt "Git repositories: "
                    :sources akirak/helm-magic-list-repos-source))
       ('(4)
        (if-let (root (akirak/project-root default-directory))
-           (helm :prompt "Project: "
-                 :sources
-                 (akirak/helm-project-root-and-ancestors-source root))
+           (let ((default-directory root))
+             (helm :prompt "Project: "
+                   :sources akirak/helm-project-root-and-ancestors-source))
          (error "Not implemented for outside of a project")))
       ('()
        (helm :prompt "Switch to a dired buffer: "
@@ -209,7 +204,6 @@ Most of these commands are bound on C-x.
     (interactive)
     (require 'helm-org-ql)
     (require 'org-recent-headings)
-    (require 'my/helm/source/buffer)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
@@ -219,7 +213,6 @@ Most of these commands are bound on C-x.
   "C-x '"
   (defun akirak/switch-to-reference-buffer ()
     (interactive)
-    (require 'my/helm/source/buffer)
     (helm :prompt "Switch to a reference buffer: "
           :sources (akirak/helm-reference-buffer-source))))
 #+end_src
@@ -243,7 +236,6 @@ I haven't bound any key to this command yet.
 #+begin_src emacs-lisp
 (defun akirak/switch-to-scratch-buffer ()
   (interactive)
-  (require 'my/helm/source/buffer)
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
         (akirak/helm-scratch-buffer-source)))
@@ -286,6 +278,12 @@ outcommented org-mode headers)."
   "C-c '" #'outorg-copy-edits-and-exit)
 #+end_src
 
+***  Running external commands
+#+begin_src emacs-lisp
+(general-def
+  "C-x c" #'counsel-compile)
+#+end_src
+
 ***  Maintenance and development of the config
 These commands are used to maintain this Emacs configuration.
 
@@ -295,9 +293,12 @@ These commands are used to maintain this Emacs configuration.
   (defun akirak/helm-my-library ()
     "Browse the library for this configuration."
     (interactive)
-    (let ((default-directory (f-join user-emacs-directory "lisp" "my")))
+    (require 'my/helm/source/file)
+    (let ((default-directory (f-join user-emacs-directory "lisp")))
       (helm :prompt (format "Files in %s: " default-directory)
-            :sources (helm-make-source "Files in project"
-                         'akirak/helm-source-project-file)))))
+            :sources (list (helm-make-source "Files in project"
+                               'akirak/helm-source-project-file)
+                           (helm-build-dummy-source "New file in lisp directory"
+                             :action #'find-file))))))
 #+end_src
 
