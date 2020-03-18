@@ -86,6 +86,7 @@
             ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
             "\n:END:\n"))
   :custom
+  (org-multi-wiki-want-custom-id t)
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
 
 (use-package helm-org-multi-wiki
