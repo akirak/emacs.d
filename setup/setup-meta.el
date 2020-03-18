@@ -20,7 +20,6 @@
     setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
     setup-helm-descbinds  ; Better keybinding search
-    setup-helm-make       ; Choose a make command via Helm
     setup-anzu            ; Provide info in search & replace
     setup-smartparens     ; Parenthesis editing
     setup-org-make-toc    ; Generating TOCs
