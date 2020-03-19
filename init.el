@@ -78,6 +78,7 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
+(use-package docker)
 (use-package org-recent-headings
   :after org
   :config
@@ -219,3 +220,12 @@ outcommented org-mode headers)."
                                'akirak/helm-source-project-file)
                            (helm-build-dummy-source "New file in lisp directory"
                              :action #'find-file))))))
+
+;;;; Administration
+;;;;; Docker
+(akirak/bind-admin
+  "k" '(nil :wk "docker")
+  "ki" #'docker-images
+  "kk" #'docker-containers
+  "kn" #'docker-networks
+  "kv" #'docker-volumes)
