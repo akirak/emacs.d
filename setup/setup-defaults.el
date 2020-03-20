@@ -50,8 +50,31 @@
       use-dialog-box nil
       ediff-window-setup-function #'ediff-setup-windows-plain)
 
+(defun akirak/scroll-half-height (&optional window)
+  (/ (1- (window-height (or window (selected-window)))) 2))
+
+(general-def
+  [remap scroll-up-command]
+  (defun akirak/scroll-half-page-forward (&optional arg)
+    (interactive "P")
+    (if (numberp arg)
+        (scroll-up arg)
+      (scroll-up (akirak/scroll-half-height))))
+  [remap scroll-down-command]
+  (defun akirak/scroll-half-page-backward (&optional arg)
+    (interactive "P")
+    (if (numberp arg)
+        (scroll-down arg)
+      (scroll-down (akirak/scroll-half-height))))
+  ;; TODO: scroll-other-window and scroll-other-window-down
+  )
+
 (use-package view
   :straight (:type built-in)
+  :general
+  (:keymaps 'View-mode-map
+            [remap scroll-up-command] #'View-scroll-half-page-forward
+            [remap scroll-down-command] #'View-scroll-half-page-backward)
   :custom
   (view-inhibit-help-message t))
 
