@@ -220,6 +220,10 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
     :straight (use-package-company :host github :repo "akirak/use-package-company"))
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package general)
+#+end_src
+
 ** Overriding defaults
 These settings don't depend on external dependencies, so they should be applied earlier.
 
@@ -233,10 +237,6 @@ These settings don't depend on external dependencies, so they should be applied 
 :END:
 Use general.el to define keybindings. It has made several improvements over
 bind-key, including a built-in support for which-key.
-
-#+begin_src emacs-lisp
-  (use-package general)
-#+end_src
 
 This also adds support for =:general= keyword in use-package directives
 
