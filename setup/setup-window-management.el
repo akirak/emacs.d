@@ -490,8 +490,6 @@ may have been stored before."
        (message "No window was created")))))
 
 (general-def
-  "C-3" #'other-window
-  "C-4" #'akirak/split-window-and-select
-  "C-=" #'window-configuration-to-register)
+  "C-4" #'akirak/split-window-and-select)
 
 (provide 'setup-window-management)
