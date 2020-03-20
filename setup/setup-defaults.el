@@ -78,8 +78,10 @@
   :custom
   (view-inhibit-help-message t))
 
-(add-hook 'prog-mode-hook (lambda () (hl-line-mode 1)))
-(add-hook 'text-mode-hook (lambda () (hl-line-mode 1)))
+(general-add-hook '(prog-mode-hook
+                    text-mode-hook)
+                  (defun akirak/turn-off-hl-line-mode ()
+                    (hl-line-mode 1)))
 
 (cond
  ((eq system-type 'windows-nt)
