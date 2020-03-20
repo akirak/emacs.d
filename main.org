@@ -1377,8 +1377,11 @@ Additional visual cues can increase productivity, but they can be noisy at the s
 **** Beacon
 I often lose sight of the cursor when I switch to another window, so this is necessary.
 #+begin_src emacs-lisp
-  (use-package beacon                     ; Highlight the cursor on certain events
+  (use-package beacon           ; Highlight the cursor on certain events
     :config
+    (general-add-hook 'beacon-dont-blink-commands
+                      '(akirak/scroll-half-page-forward
+                        akirak/scroll-half-page-backward))
     (beacon-mode 1))
 #+end_src
 **** Rainbow-delimiters
