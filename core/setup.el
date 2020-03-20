@@ -90,11 +90,3 @@ output file without the directory."
     (when verbose
       (message "%s package is unavailable" name))
     nil))
-
-;; Somehow X popup widgets freezes the GTK version of Emacs on
-;; Crostini on Chrome OS, so I will disable those functions.
-(when (and (eq system-type 'gnu/linux)
-           (window-system)
-           (akirak/running-on-crostini-p))
-  (fset #'x-popup-menu nil)
-  (fset #'x-popup-dialog nil))

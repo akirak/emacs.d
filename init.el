@@ -71,14 +71,66 @@
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
 (require 'my/const/system)
 
-;;;; Migrating
 ;; TODO: Move to lisp/
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 
+;;; Configuration
 ;; Prevent a confirmation dialog when the org file is loaded.
 ;; Don't forget to revert this variable at the beginning of the Org file.
 (setq-default enable-local-variables :all)
 (load-file (expand-file-name "core/setup.el" user-emacs-directory))
+
+;;;; Things to set up before using =use-package=
+(akirak/require 'setup-gc)
+
+(setq-default enable-local-variables :safe)
+
+;; These packages are required in other use-package directives declared in this
+;; configuration.
+
+(use-package el-patch
+  :custom
+  (el-patch-enable-use-package-integration t))
+
+;; Activate =package.el= for loading built-in packages from nixpkgs:
+
+(require 'package)
+(package-initialize 'noactivate)
+
+;; Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository.
+
+(use-package no-littering)
+
+;; Use the executable path from the shell
+
+(use-package exec-path-from-shell
+  :disabled t
+  :if (memq window-system '(mac ns x))
+  :init
+  (exec-path-from-shell-initialize))
+
+;; Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
+
+(use-package diminish
+  :disabled t
+  :init
+  (diminish 'auto-revert-mode)
+  (diminish 'outline-minor-mode)
+  (diminish 'flyspell-mode))
+
+(use-package use-package-company
+  ;; Originally written by Foltik, but I use my fork
+  :straight (use-package-company :host github :repo "akirak/use-package-company"))
+
+(use-package general)
+
+;;;; Default settings
+(require 'setup-defaults)
+
+(when (akirak/running-on-crostini-p)
+  (require 'my/system/platform/crostini))
+
+;;;; Migrating
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages

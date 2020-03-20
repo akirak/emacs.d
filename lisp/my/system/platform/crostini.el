@@ -1,6 +1,3 @@
-(unless (akirak/running-on-crostini-p)
-  (user-error "Not running on Chrome OS / Crostini"))
-
 ;; NOTE: This bug seems to have been fixed.
 ;; Somehow Emacs seems to receive an infinite sequence of right keys
 ;; after receiving focus on Chrome OS, even without my config.
@@ -26,4 +23,10 @@
   [C-down-mouse-2]
   [C-down-mouse-3])
 
-(provide 'setup-chromeos)
+;; Somehow X popup widgets freezes the GTK version of Emacs on
+;; Crostini on Chrome OS, so I will disable those functions.
+(when (window-system)
+  (fset #'x-popup-menu nil)
+  (fset #'x-popup-dialog nil))
+
+(provide 'my/system/platform/crostini)

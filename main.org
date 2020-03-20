@@ -7,13 +7,6 @@ for a better understanding of my previous work and organizing it in a more sensi
 :PROPERTIES:
 :TOC:      siblings
 :END:
--  [[#why][Why?]]
-  -  [[#literate-configuration-in-org-mode][Literate configuration in Org mode]]
-    -  [[#pros][Pros]]
-    -  [[#cons][Cons]]
-  -  [[#organizational-policies][Organizational policies]]
--  [[#things-to-set-up-before-using-use-package][Things to set up before using use-package]]
--  [[#overriding-defaults][Overriding defaults]]
 -  [[#keybindings-infrastructure][Keybindings infrastructure]]
   -  [[#repeatable-keys][Repeatable keys]]
   -  [[#per-mode-hydra][Per-mode hydra]]
@@ -38,8 +31,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#desktop-integration][desktop integration]]
   -  [[#language-detection][language-detection]]
   -  [[#elexandria][elexandria]]
--  [[#platform-workarounds][Platform workarounds]]
-  -  [[#chrome-os-support][Chrome OS support]]
 -  [[#appearances][Appearances]]
   -  [[#theme][Theme]]
   -  [[#frame-elements][Frame elements]]
@@ -129,93 +120,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
   -  [[#rebuild-packages][Rebuild packages]]
   -  [[#sort-entries-in-this-file][Sort entries in this file]]
-
-** Why?
-*** Literate configuration in Org mode
-Quite a few people maintain their Emacs configuration in a single literate Org file. I didn't like the idea, but I have to admit that it offers several benefits.
-**** Pros
-- You can quickly add a piece of configuration by refiling a subtree to the file from another location, e.g. your inbox Org file.
-- You'll be exposed to a constant pressure to maintain a consistent structure, so the configuration will be more consistent.
-- Each piece of configuration gets an explicit context.
-**** Cons
-- It is slightly more tedious to edit the literate config in Org mode. Rather than edit a file directly, you have to pop up an edit buffer for each piece of configuration you want to change.
-- Revision history is lost when entries are reordered. This can be prevented by automatically sorting all headings before saving.
-*** Organizational policies
-I will combine both a literate configuration file and separate configuration files:
-
-- The main configuration file is a single Org file containing babel source blocks. Simple package configurations can be put directly in the file.
-- Complex package configurations are put in separate files, because they are likely to entail bugfixes and updates.
-- However, certain kinds of configuration code to integrate those packages can be put in the Org configuration file. Keybindings and frame (frame-workflow) configurations are examples of such ones. They are inherently personal and often interrelated, so it doesn't make sense to treat them as independent ideas.
-
-In principle, the main configuration file should be a thin layer of the Emacs configuration, even though they can contain some complex pieces.
-** Things to set up before using =use-package=
-#+begin_src emacs-lisp
-(akirak/require 'setup-gc)
-#+end_src
-
-#+begin_src emacs-lisp
-  (setq-default enable-local-variables :safe)
-#+end_src
-
-These packages are required in other use-package directives declared in this
-configuration.
-
-#+begin_src emacs-lisp
-  (use-package el-patch
-    :custom
-    (el-patch-enable-use-package-integration t))
-#+end_src
-
-Activate =package.el= for loading built-in packages from nixpkgs:
-
-#+begin_src emacs-lisp
-  (require 'package)
-  (package-initialize 'noactivate)
-#+end_src
-
-Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository. 
-
-#+begin_src emacs-lisp
-  (use-package no-littering)
-#+end_src
-
-Use the executable path from the shell
-
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :disabled t
-  :if (memq window-system '(mac ns x))
-  :init
-  (exec-path-from-shell-initialize))
-#+end_src
-
-Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
-
-#+begin_src emacs-lisp
-  (use-package diminish
-    :disabled t
-    :init
-    (diminish 'auto-revert-mode)
-    (diminish 'outline-minor-mode)
-    (diminish 'flyspell-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package use-package-company
-    ;; Originally written by Foltik, but I use my fork
-    :straight (use-package-company :host github :repo "akirak/use-package-company"))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package general)
-#+end_src
-
-** Overriding defaults
-These settings don't depend on external dependencies, so they should be applied earlier.
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-defaults t)
-#+end_src
 
 ** Keybindings infrastructure
 :PROPERTIES:
@@ -572,16 +476,6 @@ language-detection is used by eww.
 #+begin_src emacs-lisp
   (use-package elexandria
     :straight (:host github :repo "alphapapa/elexandria"))
-#+end_src
-** Platform workarounds
-I use Emacs on the following platforms:
-
-- Debian on Crostini on Chrome OS
-- Ubuntu/Debian on WSL on Windows 10
-*** Chrome OS support
-I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it runs on Chrome OS:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-chromeos t :when (akirak/running-on-crostini-p))
 #+end_src
 ** Appearances
 *** Theme
