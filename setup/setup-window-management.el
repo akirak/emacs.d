@@ -1,5 +1,5 @@
-(setq split-height-threshold nil
-      split-width-threshold 160)
+(setq split-height-threshold 50
+      split-width-threshold nil)
 
 ;;;; display-buffer configuration
 
@@ -446,19 +446,34 @@ may have been stored before."
       (apply 'pop-to-buffer-same-window buffer args)
     (apply 'pop-to-buffer buffer args)))
 
-(defun akirak/split-window-aggressively (&optional window)
-  (let ((orig-window (or window (selected-window))))
-    (or (split-window-sensibly orig-window)
-        ;; Give slightly more opportunities to split the window.
-        (and
-         ;; (let ((frame (window-frame window)))
-         ;;   (eq window (frame-root-window frame)))
-         (not (window-dedicated-p window))
-         (not (window-minibuffer-p window))
-         (let ((split-height-threshold 40))
-           (when (window-splittable-p orig-window)
-             (with-selected-window orig-window
-               (split-window-below))))))))
+(defun akirak/split-window-aggressively ()
+  (cond
+   ((> (akirak/available-width-for-new-window) 80)
+    (split-window-horizontally))
+   ((and (not (window-dedicated-p))
+         (not (window-minibuffer-p))
+         (window-splittable-p (selected-window)))
+    (split-window-below))))
+
+(defun akirak/available-width-for-new-window (&optional window)
+  (let ((window (or (selected-window)))
+        (windows (list window))
+        (leftw window)
+        (rightw window))
+    (while (setq leftw (window-in-direction 'left leftw))
+      (push leftw windows))
+    (while (setq rightw (window-in-direction 'right rightw))
+      (push rightw windows))
+    (-sum (-map (lambda (wnd)
+                  (if (window-dedicated-p wnd)
+                      0
+                    (- (+ (window-width wnd)
+                          ;; perfect-margin.el sets window margins
+                          (pcase (window-margins wnd)
+                            (`(,_) 0)
+                            (`(,left . ,right) (+ left right))))
+                       80)))
+                windows))))
 
 (defun akirak/split-window-and-select ()
   (interactive)
@@ -467,8 +482,6 @@ may have been stored before."
      (progn
        (delete-window)
        (balance-windows)))
-    ('(16)
-     (call-interactively #'jump-to-register))
     (_
      (if-let ((window (akirak/split-window-aggressively)))
          (progn
