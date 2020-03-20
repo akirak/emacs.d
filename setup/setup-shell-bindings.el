@@ -13,7 +13,8 @@
   "C-e" #'org-end-of-line)
 
 (general-def minibuffer-local-map
-  "C-u" 'backward-kill-sentence)
+  "C-u" #'backward-kill-sentence
+  "C-w" #'backward-kill-word)
 
 (general-def ivy-minibuffer-map :package 'ivy
   "C-r" 'counsel-minibuffer-history
