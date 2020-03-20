@@ -12,7 +12,6 @@ for a better understanding of my previous work and organizing it in a more sensi
     -  [[#pros][Pros]]
     -  [[#cons][Cons]]
   -  [[#organizational-policies][Organizational policies]]
--  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
 -  [[#things-to-set-up-before-using-use-package][Things to set up before using use-package]]
 -  [[#overriding-defaults][Overriding defaults]]
 -  [[#keybindings-infrastructure][Keybindings infrastructure]]
@@ -149,19 +148,6 @@ I will combine both a literate configuration file and separate configuration fil
 - However, certain kinds of configuration code to integrate those packages can be put in the Org configuration file. Keybindings and frame (frame-workflow) configurations are examples of such ones. They are inherently personal and often interrelated, so it doesn't make sense to treat them as independent ideas.
 
 In principle, the main configuration file should be a thin layer of the Emacs configuration, even though they can contain some complex pieces.
-** Support older versions of Emacs
-=when-let= and =if-let= are available in Emacs 25.1, but they have been renamed to =when-let*= and =if-let*= in 26.1, which are correct names to describe their behaviours.
-
-#+begin_src emacs-lisp
-  (eval-and-compile
-    (when (version< emacs-version "26")
-      (with-no-warnings
-        (defalias 'when-let* #'when-let)
-        (function-put #'when-let* 'lisp-indent-function 1)
-        (defalias 'if-let* #'if-let)
-        (function-put #'if-let* 'lisp-indent-function 2))))
-#+end_src
-
 ** Things to set up before using =use-package=
 #+begin_src emacs-lisp
 (akirak/require 'setup-gc)

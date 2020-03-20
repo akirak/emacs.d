@@ -18,8 +18,8 @@
 
 ;;; Initialization
 
-(when (version< emacs-version "25.1")
-  (error "Use GNU Emacs version 25.1 or later"))
+(when (version< emacs-version "26.1")
+  (error "Use GNU Emacs version 26.1 or later"))
 
 ;; Expand the GC threshold until gcmh-mode is activated.
 ;; gcmh-mode updates this value later, so you don't have to reset it.
