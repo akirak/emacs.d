@@ -22,6 +22,12 @@
               :after
               (defun akirak/ad-after-aw-delete-window (&rest _args)
                 (balance-windows)))
+  (advice-add 'aw-delete-window
+              :after
+              (defun akirak/ad-around-aw-delete-window (origfun &rest args)
+                (let ((initial-window (selected-window)))
+                  (prog1 (apply origfun args)
+                    (select-window initial-window)))))
   (setq aw-scope (cond
                   (akirak/to-be-run-as-exwm 'visible)
                   (t 'frame)))
