@@ -61,20 +61,24 @@
 
 ;; Install org-mode from the Git repository
 (load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
+;;;; Recipe overrides
+(mapc #'straight-use-package
+      '((org-web-tools :host github :repo "akirak/org-web-tools"
+                       :branch "encoding")))
 
 ;;;; Load configuration files
-(load-file (expand-file-name "core/setup.el" user-emacs-directory))
-
-(load-file (expand-file-name "straight-recipes.el" user-emacs-directory))
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'my/const/system)
+
+;;;; Migrating
 ;; TODO: Move to lisp/
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 
 ;; Prevent a confirmation dialog when the org file is loaded.
 ;; Don't forget to revert this variable at the beginning of the Org file.
 (setq-default enable-local-variables :all)
-
+(load-file (expand-file-name "core/setup.el" user-emacs-directory))
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages

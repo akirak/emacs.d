@@ -91,44 +91,6 @@ output file without the directory."
       (message "%s package is unavailable" name))
     nil))
 
-(defun akirak/running-on-crostini-p ()
-  "Return non-nil if Emacs is running on Crostini of Chrome OS."
-  (stringp (getenv-internal "SOMMELIER_VERSION")))
-
-(defvar akirak/is-wsl)
-
-(defun akirak/windows-subsystem-for-linux-p ()
-  "Return non-nil if Emacs is running inside WSL."
-  (if (boundp 'akirak/is-wsl)
-      akirak/is-wsl
-    (setq akirak/is-wsl (and (eq system-type 'gnu/linux)
-                             (with-temp-buffer
-                               (insert-file-contents "/proc/sys/kernel/osrelease")
-                               (insert-file-contents "/proc/version")
-                               (string-match-p (rx (or "Microsoft" "WSL"))
-                                               (buffer-string)))))))
-
-(defun akirak/os-like-debian-p ()
-  (when (file-exists-p "/etc/os-release")
-    (with-temp-buffer
-      (insert-file-contents "/etc/os-release")
-      (goto-char (point-min))
-      (or (re-search-forward (rx bol "ID=" (?  "\"") "debian" (?  "\"") eol)
-                             nil t)
-          (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
-                             nil t)))))
-
-(defconst akirak/window-system
-  (cond
-   ((and (getenv "WAYLAND_DISPLAY")
-         ;; I use :2 for Xephyr sessions
-         (not (equal x-display-name ":2")))
-    'wayland)
-   ((eq window-system 'x)
-    'x)
-   (t
-    window-system)))
-
 ;; Somehow X popup widgets freezes the GTK version of Emacs on
 ;; Crostini on Chrome OS, so I will disable those functions.
 (when (and (eq system-type 'gnu/linux)
