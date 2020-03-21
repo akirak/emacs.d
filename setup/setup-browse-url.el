@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t -*-
+
 ;;;; URL bookmarks
 
 (defvar akirak/browse-url-bookmarks
@@ -68,7 +70,9 @@
   (cond
    ((akirak/local-url-p url)
     (akirak/browse-url-bookmarks-add url)
-    (browse-url-chromium url))
+    (akirak/browse-url-incognito url))
+   ((akirak/incognito-url-p url)
+    (akirak/browse-url-incognito url))
    (t (browse-url-generic url))))
 
 (akirak/bind-search "M-g" #'akirak/browse-url)
@@ -103,7 +107,9 @@
                 (mapconcat #'url-hexify-string words "+")))))))
 
 (defconst akirak/local-url-pattern
-  (rx bol "http://" (or "penguin.linux.test" "localhost")
+  (rx bol "http://" (or "penguin.linux.test" "localhost"
+                        (or "127.0.0.1"
+                            (and "192" (repeat 3 (and "." (+ digit))))))
       (?  ":" (+ digit))
       (?  "/" (* anything)) eol))
 
@@ -126,5 +132,19 @@
 (setq-default browse-url-browser-function 'akirak/browse-url)
 
 (defalias 'akirak/browse-localhost 'akirak/browse-url)
+
+(defun akirak/browse-url-incognito (url)
+  (let ((browse-url-chromium-arguments '("--incognito" "--new-window")))
+    (browse-url-chromium url)))
+
+(defcustom akirak/incognito-domain-list nil
+  "List of domains that should be browsed in incognito."
+  :type '(repeat string))
+
+(defun akirak/incognito-url-p (url)
+  (and akirak/incognito-domain-list
+       (string-match-p (rx bol "https://" (?* "www.")
+                           (eval `(or ,@akirak/incognito-domain-list)))
+                       url)))
 
 (provide 'setup-browse-url)
