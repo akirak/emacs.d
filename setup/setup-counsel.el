@@ -41,6 +41,7 @@
                                             " "))
                                   counsel-rg-base-command))
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
+  (general-unbind :keymaps 'counsel-mode-map "<menu>")
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
                      ("g" akirak/magit-status-of-library "git repo")
@@ -70,12 +71,11 @@
   (cl-loop for (command . str) in ivy-initial-inputs-alist
            do (when (and (symbolp command)
                          (string-prefix-p "counsel-" (symbol-name command)))
-                (delq (assoc command  ivy-initial-inputs-alist)
+                (delq (assoc command ivy-initial-inputs-alist)
                       ivy-initial-inputs-alist)))
-  :custom
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
-  (counsel-find-file-at-point t))
+  (setq counsel-find-file-at-point (not (akirak/windows-subsystem-for-linux-p))))
 
 ;; TODO: Add todo occur command based on counsel-rg
 
