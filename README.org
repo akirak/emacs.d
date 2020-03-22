@@ -12,7 +12,12 @@ This is my Emacs configuration.
   -  [[#configure-straightel][Configure straight.el]]
   -  [[#benchmarking-the-startup-process][Benchmarking the startup process]]
   -  [[#use-the-latest-git-version-of-org-mode][Use the latest Git version of Org mode]]
+  -  [[#recipe-overrides][Recipe overrides]]
   -  [[#load-configuration-files][Load configuration files]]
+-  [[#configuration][Configuration]]
+  -  [[#things-to-set-up-before-using-use-package][Things to set up before using use-package]]
+  -  [[#default-settings][Default settings]]
+  -  [[#migrating][Migrating]]
 -  [[#packages][Packages]]
 -  [[#autoloads][Autoloads]]
 -  [[#commands-and-keybindings][Commands and keybindings]]
@@ -22,6 +27,8 @@ This is my Emacs configuration.
     -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
   -  [[#running-external-commands][Running external commands]]
   -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
+  -  [[#administration][Administration]]
+    -  [[#docker][Docker]]
 
 **  Prerequisites
 - Linux or Window Subsystem for Linux
@@ -45,8 +52,8 @@ follow their respective licenses.
 
 **  Initialization
 #+begin_src emacs-lisp
-(when (version< emacs-version "25.1")
-  (error "Use GNU Emacs version 25.1 or later"))
+(when (version< emacs-version "26.1")
+  (error "Use GNU Emacs version 26.1 or later"))
 #+end_src
 
 Expand the GC threshold until gcmh-mode is activated.
@@ -111,13 +118,17 @@ Install org-mode from the Git repository
 (load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
 #+end_src
 
+***  Recipe overrides
+#+begin_src emacs-lisp
+(mapc #'straight-use-package
+      '((org-web-tools :host github :repo "akirak/org-web-tools"
+                       :branch "encoding")))
+#+end_src
+
 ***  Load configuration files
 #+begin_src emacs-lisp
-(load-file (expand-file-name "core/setup.el" user-emacs-directory))
-
-(load-file (expand-file-name "straight-recipes.el" user-emacs-directory))
-
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
+(require 'my/const/system)
 #+end_src
 
 TODO: Move to lisp/
@@ -126,17 +137,92 @@ TODO: Move to lisp/
 (add-to-list 'load-path (expand-file-name "extras" user-emacs-directory))
 #+end_src
 
+**  Configuration
 Prevent a confirmation dialog when the org file is loaded.
 Don't forget to revert this variable at the beginning of the Org file.
 
 #+begin_src emacs-lisp
 (setq-default enable-local-variables :all)
+(load-file (expand-file-name "core/setup.el" user-emacs-directory))
+#+end_src
 
+***  Things to set up before using =use-package=
+#+begin_src emacs-lisp
+(akirak/require 'setup-gc)
+
+(setq-default enable-local-variables :safe)
+#+end_src
+
+These packages are required in other use-package directives declared in this
+configuration.
+
+
+#+begin_src emacs-lisp
+(use-package el-patch
+  :custom
+  (el-patch-enable-use-package-integration t))
+#+end_src
+
+Activate =package.el= for loading built-in packages from nixpkgs:
+
+
+#+begin_src emacs-lisp
+(require 'package)
+(package-initialize 'noactivate)
+#+end_src
+
+Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository.
+
+
+#+begin_src emacs-lisp
+(use-package no-littering)
+#+end_src
+
+Use the executable path from the shell
+
+
+#+begin_src emacs-lisp
+(use-package exec-path-from-shell
+  :disabled t
+  :if (memq window-system '(mac ns x))
+  :init
+  (exec-path-from-shell-initialize))
+#+end_src
+
+Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
+
+
+#+begin_src emacs-lisp
+(use-package diminish
+  :disabled t
+  :init
+  (diminish 'auto-revert-mode)
+  (diminish 'outline-minor-mode)
+  (diminish 'flyspell-mode))
+
+(use-package use-package-company
+  ;; Originally written by Foltik, but I use my fork
+  :straight (use-package-company :host github :repo "akirak/use-package-company"))
+
+(use-package general)
+#+end_src
+
+***  Default settings
+#+begin_src emacs-lisp
+(require 'setup-defaults)
+
+(when (akirak/running-on-crostini-p)
+  (require 'my/system/platform/crostini))
+#+end_src
+
+***  Migrating
+#+begin_src emacs-lisp
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 #+end_src
 
 **  Packages
 #+begin_src emacs-lisp
+(use-package docker)
 (use-package org-recent-headings
   :after org
   :config
@@ -300,5 +386,16 @@ These commands are used to maintain this Emacs configuration.
                                'akirak/helm-source-project-file)
                            (helm-build-dummy-source "New file in lisp directory"
                              :action #'find-file))))))
+#+end_src
+
+***  Administration
+****  Docker
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "k" '(nil :wk "docker")
+  "ki" #'docker-images
+  "kk" #'docker-containers
+  "kn" #'docker-networks
+  "kv" #'docker-volumes)
 #+end_src
 
