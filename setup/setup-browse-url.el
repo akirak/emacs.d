@@ -143,7 +143,7 @@
 
 (defun akirak/incognito-url-p (url)
   (and akirak/incognito-domain-list
-       (string-match-p (rx bol "https://" (?* "www.")
+       (string-match-p (rx bol "https://" (? "www.")
                            (eval `(or ,@akirak/incognito-domain-list)))
                        url)))
 
