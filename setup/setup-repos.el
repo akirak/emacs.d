@@ -30,7 +30,8 @@
         (with-current-buffer (or (find-buffer-visiting mrconfig)
                                  (find-file-noselect mrconfig))
           (goto-char (point-min))
-          (if (re-search-forward (rx bol "[" (eval name) "]") nil t)
+          (if (re-search-forward (concat "^\\[" (regexp-quote name) "\\]")
+                                 nil t)
               (user-error "Already registered %s in %s" name mrconfig)
             (goto-char (point-max))
             (insert (format "\n[%s]\ncheckout = git clone %s%s\n"
