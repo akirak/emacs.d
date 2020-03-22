@@ -26,6 +26,8 @@
   :general
   (:keymaps 'akirak/align-prefix-map
             "a" 'align))
-(use-package git-link)
+(use-package git-link
+  :custom
+  (git-link-use-commit t))
 
 (provide 'setup-misc)
