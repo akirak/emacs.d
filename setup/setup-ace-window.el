@@ -27,7 +27,8 @@
               (defun akirak/ad-around-aw-delete-window (origfun &rest args)
                 (let ((initial-window (selected-window)))
                   (prog1 (apply origfun args)
-                    (select-window initial-window)))))
+                    (when (window-live-p initial-window)
+                      (select-window initial-window))))))
   (setq aw-scope (cond
                   (akirak/to-be-run-as-exwm 'visible)
                   (t 'frame)))
