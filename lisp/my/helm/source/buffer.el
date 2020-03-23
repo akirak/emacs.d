@@ -57,6 +57,10 @@
   (akirak/helm-filtered-buffer-source "Reference buffers"
     #'akirak/reference-buffer-p))
 
+(defun akirak/helm-exwm-buffer-source ()
+  (akirak/helm-filtered-buffer-source "EXWM buffers"
+    #'akirak/exwm-buffer-p))
+
 (defun akirak/helm-scratch-buffer-source ()
   (akirak/helm-filtered-buffer-source "Scratch buffers"
     #'akirak/scratch-buffer-p))

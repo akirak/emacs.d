@@ -18,6 +18,9 @@
            (member (buffer-local-value 'exwm-class-name buffer)
                    akirak/exwm-browser-class-names))))
 
+(defun akirak/exwm-buffer-p (buffer)
+  (akirak/buffer-derived-mode-p buffer 'exwm-mode))
+
 (defun akirak/indirect-org-buffer-p (buffer)
   (and (akirak/buffer-derived-mode-p buffer 'org-mode)
        (buffer-base-buffer buffer)))
