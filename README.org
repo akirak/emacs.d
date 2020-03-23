@@ -296,6 +296,26 @@ Most of these commands are bound on C-x.
                 helm-source-org-recent-headings
                 akirak/helm-source-org-starter-known-files
                 helm-source-org-ql-views)))
+  "C-x x"
+  (defun akirak/switch-to-x-buffer (&optional arg)
+    (interactive "P")
+    (cond
+     ((akirak/exwm-session-p)
+      (helm :prompt "Switch to EXWM buffer: "
+            :sources (akirak/helm-exwm-buffer-source)))
+     ((akirak/windows-subsystem-for-linux-p)
+      (user-error "Not supported on WSL"))
+     ((eq system-type 'linux)
+      ;; TODO: Implement it
+      (cl-assert (executable-find "wmctrl"))
+      (helm :prompt "X window: "
+            :source
+            (helm-build-sync-source "X windows"
+              :candidates (-map (lambda (s) (cons s (car (s-split-words s))))
+                                (process-lines "wmctrl" "-l"))
+              :action (lambda (wid)
+                        (async-start-process "wmctrl" "wmctrl" nil
+                                             "-a" wid)))))))
   "C-x '"
   (defun akirak/switch-to-reference-buffer ()
     (interactive)
