@@ -38,14 +38,18 @@
   :type 'file)
 
 (defun akirak/browse-url-history-get ()
-  (ignore-errors
-    (with-temp-buffer
-      (insert-file-contents akirak/browse-url-history-file)
-      (nreverse (split-string (buffer-substring-no-properties
-                               (point-min) (point-max))
-                              "\n")))))
+  (when (file-exists-p akirak/browse-url-history-file)
+    (ignore-errors
+      (with-temp-buffer
+        (insert-file-contents akirak/browse-url-history-file)
+        (nreverse (split-string (buffer-substring-no-properties
+                                 (point-min) (point-max))
+                                "\n"))))))
 
 (defun akirak/browse-url-history-add (url)
+  (let ((dir (file-name-directory akirak/browse-url-history-file)))
+    (unless (file-directory-p dir)
+      (make-directory dir)))
   (with-temp-buffer
     (insert url "\n")
     (append-to-file (point-min) (point-max)
