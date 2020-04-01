@@ -23,7 +23,7 @@
 ;;;; Dimmer
 
 (with-eval-after-load 'dimmer
-  (defun optimize-minibuf/dimmer-process-all--fake ())
+  (defun optimize-minibuf/dimmer-process-all--fake (&rest _args))
 
   (defun akirak/dimmer-disable ()
     (advice-add 'dimmer-process-all :override
