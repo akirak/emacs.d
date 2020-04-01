@@ -29,7 +29,9 @@
                    ;; ("^CAPTURE-\\(journal\\)" :regexp t :other t)
                    ;; ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
                    ;; ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
-                   ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
+                   ;; This rule does not work since org 9.3.6.
+                   ;; I will disable them for now.
+                   ;; ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
                    ("^CAPTURE-" :inhbit-window-quit t :custom akirak/display-org-capture-buffer)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
