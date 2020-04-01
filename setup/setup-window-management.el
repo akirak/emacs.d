@@ -15,20 +15,12 @@
                    ;; Shackle rules for org-mode
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
-                   ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
-                   ;; (" *Org todo*" :custom akirak/display-org-todo-buffer)
                    ("*org clocking*" :other t)
                    ("*Org Edna Edit Blocker/Trigger*" :align below :ratio 0.3)
                    ("*Org Note*" :align below :ratio 0.3)
                    ("*compilation*" :align below :ratio 0.4)
                    ("*Occur*" :align below :ratio 0.25)
                    ("*lispy-message*" :align below :ratio 0.4)
-                   ;; org-capture to org-journal needs a big window
-                   ;; ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(code\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(journal\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
                    ;; This rule does not work since org 9.3.6.
                    ;; I will disable them for now.
                    ;; ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
@@ -44,7 +36,6 @@
                    ("*Calendar*" :align below :ratio 0.3)
                    ("*Google Translate*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
-                   ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
                    ("\\*Org Agenda" :regexp t :other t))))
 
