@@ -139,10 +139,13 @@
   (org-starter-enable-local-variables :all))
 
 (use-package org-starter-swiper
+  :commands (org-starter-swiper-config-files)
   :straight org-starter)
 
 (use-package org-starter-extras
-  :straight org-starter)
+  :straight (:host github :repo "akirak/org-starter"
+                   :branch "devel" :files ("org-starter-extras.el"))
+  :functions (org-starter-extras-def-reverse-datetree-refile))
 
 ;;;; Extra keybindings
 (akirak/bind-search
