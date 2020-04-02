@@ -280,7 +280,46 @@ outcommented org-mode headers)."
 
 ;;;; Running external commands
 (general-def
-  "C-x c" #'counsel-compile)
+  "C-x c"
+  (defun akirak/compile (&optional arg)
+    (interactive "P")
+    (pcase arg
+      ('(4)
+       (akirak/helm-shell-command))
+      (0
+       (let ((root (akirak/project-root default-directory)))
+         (if (and root (f-exists (f-join root ".github"))
+                  (executable-find "act"))
+             (let ((default-directory root))
+               (compile "act"))
+           (user-error "N/A"))))
+      (_
+       (counsel-compile)))))
+
+(defun akirak/helm-shell-command ()
+  (interactive)
+  (require 'my/helm/source/org)
+  (require 'my/helm/action/org-marker)
+  (let ((root (or (akirak/project-root default-directory)
+                  default-directory)))
+    (setq akirak/programming-recipe-mode-name "sh"
+          akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
+    (helm :prompt (format "Execute command (project root: %s): " root)
+          :sources
+          (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
+            :action
+            `(("compile at project root"
+               . (lambda (marker)
+                   (akirak/helm-execute-sh-src-block-action marker #'compile :project t)))
+              ("compile at working directory"
+               . (lambda (marker)
+                   (akirak/helm-execute-sh-src-block-action marker #'compile)))
+              ("eshell command at project root"
+               . (lambda (marker)
+                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command :project t)))
+              ("eshell command at working directory"
+               . (lambda (marker)
+                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command))))))))
 
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.
