@@ -38,6 +38,36 @@
 (use-package helm-org-ql
   :straight org-ql
   :config
+  ;; The default implementation of this function does not correctly
+  ;; display the indirect buffer in another window: It displays the
+  ;; entry both in the original window and another window.
+  ;;
+  ;; As a workaround, I override the function with my own
+  ;; implementation that re-implements the indirect buffer creation
+  ;; function.
+  ;;
+  ;; It also displays the outline path in the header line.
+  (advice-add #'helm-org-ql-show-marker-indirect
+              :override
+              (defun akirak/helm-org-ql-show-marker-indirect (marker)
+                (let* ((orig-buffer (marker-buffer marker))
+                       (buffer (with-current-buffer (or (org-base-buffer orig-buffer)
+                                                        orig-buffer)
+                                 (org-with-wide-buffer
+                                  (goto-char marker)
+                                  (let ((pos (point))
+                                        (buffer (org-get-indirect-buffer)))
+                                    (with-current-buffer buffer
+                                      (goto-char pos)
+                                      (org-narrow-to-subtree)
+                                      (org-show-entry)
+                                      (rename-buffer (org-get-heading t t t t) 'unique)
+                                      (setq-local header-line-format
+                                                  (list (buffer-name orig-buffer)
+                                                        ":"
+                                                        (org-format-outline-path (org-get-outline-path)))))
+                                    buffer)))))
+                  (pop-to-buffer buffer))))
   (defun akirak/helm-org-ql-refile-action (marker)
     (unless (derived-mode-p 'org-mode)
       (user-error "Not in org-mode"))
