@@ -1,5 +1,7 @@
 (defvar akirak/helm-org-ql-buffers-files nil)
 
+(defconst akirak/helm-org-posframe-temporary-buffer "org posframe")
+
 (defclass akirak/helm-source-org-ql-src-block (helm-source-sync)
   ((candidates
     :initform (lambda ()
@@ -37,13 +39,10 @@
    (multimatch :initform nil)
    (nohighlight :initform t)
    (volatile :initform t)
+   (cleanup :initform (lambda ()
+                        (when (get-buffer akirak/helm-org-posframe-temporary-buffer)
+                          (posframe-delete akirak/helm-org-posframe-temporary-buffer))))
    (persistent-action :initform #'akirak/helm-org-narrow-to-subtree-action
                       :initarg :persistent-action)))
-
-(cl-defun akirak/helm-org-src-block-source (&key lang action persistent-action)
-  (helm-make-source "Recipes" 'helm-source-sync
-    :candidates
-    :persistent-action (or persistent-action #'akirak/helm-org-narrow-to-subtree-action)
-    :action (or action #'akirak/helm-yankpad-expand-src-action)))
 
 (provide 'my/helm/source/org)

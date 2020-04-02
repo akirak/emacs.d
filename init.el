@@ -319,7 +319,8 @@ outcommented org-mode headers)."
                    (akirak/helm-execute-sh-src-block-action marker #'eshell-command :project t)))
               ("eshell command at working directory"
                . (lambda (marker)
-                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command))))))))
+                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command)))
+              ("Show the whole entry" . helm-org-ql-show-marker-indirect))))))
 
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.

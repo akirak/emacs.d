@@ -13,25 +13,34 @@
     (when (= 1 (length snippets))
       (yankpad--run-snippet (car snippets)))))
 
-(defun akirak/helm-org-narrow-to-subtree-action (marker)
-  (let ((buffer (marker-buffer marker)))
-    (display-buffer buffer)
-    (with-current-buffer buffer
-      (widen)
-      (goto-char marker)
-      (org-narrow-to-subtree))))
+(cl-defun akirak/helm-org-narrow-to-subtree-action (marker &key full-width)
+  (let ((buffer (akirak/org-subtree-temporary-posframe
+                 marker
+                 akirak/helm-org-posframe-temporary-buffer)))
+    (posframe-show buffer
+                   :poshandler
+                   (if full-width
+                       #'posframe-poshandler-frame-bottom-left-corner
+                     #'posframe-poshandler-frame-bottom-right-corner)
+                   :respect-header-line t
+                   :internal-border-color "white"
+                   :internal-border-width 2
+                   :width (/ (frame-width) (if full-width 1 2))
+                   :height 30)))
 
 (cl-defun akirak/helm-execute-sh-src-block-action (marker func
                                                           &key project)
   (require 'my/org/block)
-  ;; TODO: Display the entry before running the command
-  (let* ((default-directory (or (and project
-                                     (akirak/project-root default-directory))
-                                default-directory))
-         (command (read-string (format "Execute command in %s using %s: "
-                                       (abbreviate-file-name default-directory)
-                                       func)
-                               (akirak/helm-org-first-src-block-body marker))))
-    (funcall func command)))
+  (akirak/helm-org-narrow-to-subtree-action marker :full-width t)
+  (unwind-protect
+      (let* ((default-directory (or (and project
+                                         (akirak/project-root default-directory))
+                                    default-directory))
+             (command (read-string (format "Execute command in %s using %s: "
+                                           (abbreviate-file-name default-directory)
+                                           func)
+                                   (akirak/helm-org-first-src-block-body marker))))
+        (funcall func command))
+    (posframe-delete akirak/helm-org-posframe-temporary-buffer)))
 
 (provide 'my/helm/action/org-marker)
