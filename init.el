@@ -62,9 +62,8 @@
 ;; Install org-mode from the Git repository
 (load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
 ;;;; Recipe overrides
-(mapc #'straight-use-package
-      '((org-web-tools :host github :repo "akirak/org-web-tools"
-                       :branch "encoding")))
+(akirak/straight-use-recipes-from-file
+ akirak/straight-default-recipes-file)
 
 ;;;; Load configuration files
 
