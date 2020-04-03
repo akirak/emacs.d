@@ -2,10 +2,6 @@
 ;; much configuration
 (use-package savehist)
 
-(use-package helm-tail :after helm
-  :straight (helm-tail :host github :repo "akirak/helm-tail")
-  :commands (helm-tail))
-
 (use-package scratch
   :commands (scratch)
   :config

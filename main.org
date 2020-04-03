@@ -1405,9 +1405,6 @@ To visit a URL, use =browse-url-at-point=:
 #+begin_src emacs-lisp
   (general-def
     "<f9>" 'recompile)
-
-  (general-def
-    "C-x t" #'helm-tail)
 #+end_src
 *** Scratch buffers
 #+begin_src emacs-lisp

@@ -134,6 +134,8 @@
 
 ;;; Packages
 (use-package docker)
+(use-package helm-tail
+  :commands (helm-tail))
 (use-package org-recent-headings
   :after org
   :config
@@ -150,6 +152,7 @@
 ;;;; Switching buffers
 ;; Switching buffers is the most essential operation in Emacs.
 ;; Most of these commands are bound on C-x.
+;;;;; Helm commands
 (general-def
   "C-x b"
   (defun akirak/switch-to-project-file-buffer (project)
@@ -245,6 +248,11 @@
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
         (akirak/helm-scratch-buffer-source)))
+
+;;;;; Browsing contents in specific buffers without leaving the context
+(general-def
+  ;; This command lets you browse lines in error buffers.
+  "C-x t" #'helm-tail)
 
 ;;;; Editing
 ;;;;; Undo and redo
