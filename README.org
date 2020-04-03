@@ -22,6 +22,8 @@ This is my Emacs configuration.
 -  [[#autoloads][Autoloads]]
 -  [[#commands-and-keybindings][Commands and keybindings]]
   -  [[#switching-buffers][Switching buffers]]
+    -  [[#helm-commands][Helm commands]]
+    -  [[#browsing-contents-in-specific-buffers-without-leaving-the-context][Browsing contents in specific buffers without leaving the context]]
   -  [[#editing][Editing]]
     -  [[#undo-and-redo][Undo and redo]]
     -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
@@ -120,9 +122,8 @@ Install org-mode from the Git repository
 
 ***  Recipe overrides
 #+begin_src emacs-lisp
-(mapc #'straight-use-package
-      '((org-web-tools :host github :repo "akirak/org-web-tools"
-                       :branch "encoding")))
+(akirak/straight-use-recipes-from-file
+ akirak/straight-default-recipes-file)
 #+end_src
 
 ***  Load configuration files
@@ -223,6 +224,8 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 **  Packages
 #+begin_src emacs-lisp
 (use-package docker)
+(use-package helm-tail
+  :commands (helm-tail))
 (use-package org-recent-headings
   :after org
   :config
@@ -243,6 +246,7 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 Switching buffers is the most essential operation in Emacs.
 Most of these commands are bound on C-x.
 
+****  Helm commands
 #+begin_src emacs-lisp
 (general-def
   "C-x b"
@@ -345,6 +349,13 @@ I haven't bound any key to this command yet.
   (helm :prompt "Switch to a scratch/REPL buffer: "
         :sources
         (akirak/helm-scratch-buffer-source)))
+#+end_src
+
+****  Browsing contents in specific buffers without leaving the context
+#+begin_src emacs-lisp
+(general-def
+  ;; This command lets you browse lines in error buffers.
+  "C-x t" #'helm-tail)
 #+end_src
 
 ***  Editing
