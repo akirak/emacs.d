@@ -16,6 +16,18 @@
                                 (string-to-list "de"))
       (?d (org-recur-finish))
       (?e (akirak/org-recur-set))))
+  (advice-add 'org-recur-finish
+              :after
+              (defun akirak/org-recur-revert-done-subtasks (&rest _args)
+                (save-excursion
+                  (let ((pos (point))
+                        (end (save-excursion (org-end-of-subtree))))
+                    (org-map-entries
+                     (lambda ()
+                       (when (and (org-entry-is-done-p)
+                                  (member "@recur" (org-get-tags)))
+                         (org-todo 'none)))
+                     nil 'tree)))))
   (defun akirak/org-recur-set ()
     (interactive)
     (let* ((date-desc (completing-read "Schedule: "
