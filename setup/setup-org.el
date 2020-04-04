@@ -24,6 +24,7 @@
      (user-error "Neither in org-mode nor org-agenda-mode"))))
 
 (setq-default org-agenda-start-with-clockreport-mode t
+              org-agenda-remove-tags t
               org-agenda-sticky t
               org-clock-history-length 20
               org-clock-mode-line-total (quote today)
