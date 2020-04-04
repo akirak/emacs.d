@@ -5,17 +5,34 @@
             [remap org-todo]
             (general-predicate-dispatch #'org-todo
               (akirak/org-recur-heading-p) #'akirak/org-recur-state))
+  (:keymaps 'org-agenda-mode-map :package 'org-agenda
+            [remap org-agenda-todo]
+            (general-predicate-dispatch #'org-agenda-todo
+              (akirak/org-recur-heading-p) #'akirak/org-agenda-recur-state))
   :config
+  (defmacro akirak/org-agenda-with-entry (&rest progn)
+    `(when-let ((marker (or (org-get-at-bol 'org-marker)
+                            (org-get-at-bol 'org-hd-marker))))
+       (with-current-buffer (marker-buffer marker)
+         (goto-char marker)
+         ,@progn)))
   (defun akirak/org-recur-heading-p ()
     (cond
      ((derived-mode-p 'org-mode)
-      (org-recur--get-next-date (org-get-heading t t t t)))))
+      (org-recur--get-next-date (org-get-heading t t t t)))
+     ((derived-mode-p 'org-agenda-mode)
+      (akirak/org-agenda-with-entry
+       (akirak/org-recur-heading-p)))))
   (defun akirak/org-recur-state ()
     (interactive)
     (cl-ecase (read-char-choice "Choose an action [d: done, e: edit schedule]: "
                                 (string-to-list "de"))
       (?d (org-recur-finish))
       (?e (akirak/org-recur-set))))
+  (defun akirak/org-agenda-recur-state ()
+    (interactive)
+    (akirak/org-agenda-with-entry
+     (akirak/org-recur-state)))
   (advice-add 'org-recur-finish
               :after
               (defun akirak/org-recur-revert-done-subtasks (&rest _args)
