@@ -76,4 +76,8 @@
     (lambda (buf) (buffer-local-value 'default-directory buf))
     :action akirak/helm-buffer-actions-1))
 
+(defun akirak/helm-dashboard-buffer-source ()
+  (akirak/helm-filtered-buffer-source "Dashboard buffers"
+    #'akirak/dashboard-buffer-p))
+
 (provide 'my/helm/source/buffer)

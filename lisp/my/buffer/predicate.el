@@ -37,4 +37,10 @@
   "A predicate for scratch buffers"
   (akirak/buffer-derived-mode-p buffer 'dired-mode))
 
+(defun akirak/dashboard-buffer-p (buffer)
+  "A predicate for scratch buffers"
+  (akirak/buffer-derived-mode-p buffer
+    'org-agenda-mode
+    'magit-repolist-mode))
+
 (provide 'my/buffer/predicate)
