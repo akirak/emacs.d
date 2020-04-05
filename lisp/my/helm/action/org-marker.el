@@ -14,6 +14,7 @@
       (yankpad--run-snippet (car snippets)))))
 
 (cl-defun akirak/helm-org-narrow-to-subtree-action (marker &key full-width)
+  (require 'my/org/posframe)
   (let ((buffer (akirak/org-subtree-temporary-posframe
                  marker
                  akirak/helm-org-posframe-temporary-buffer)))

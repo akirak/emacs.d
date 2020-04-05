@@ -1,3 +1,5 @@
+(require 'my/helm/action/org-marker)
+
 (defvar akirak/helm-org-ql-buffers-files nil)
 
 (defconst akirak/helm-org-posframe-temporary-buffer "org posframe")
