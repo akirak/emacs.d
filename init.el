@@ -253,6 +253,44 @@
 (general-def
   ;; This command lets you browse lines in error buffers.
   "C-x t" #'helm-tail)
+;;;; Navigation in buffer
+;;;;; Page navigation
+;; I will use ~C-x [~ and ~C-x ]~ for "page" navigation. These keys
+;; are bound to =backward-page= and =forward-page= by default, but
+;; they should be rebound depending on the major mode, since the
+;; notion of page/chunk varies.
+
+(general-def
+  ;; Default
+  "C-x [" #'backward-page
+  "C-x ]" #'forward-page)
+
+(general-def :keymaps 'org-mode-map :package 'org
+  ;; [remap backward-page]
+  [remap forward-page]
+  (defun akirak/org-narrow-to-next-sibling-subtree ()
+    (interactive)
+    (if (buffer-narrowed-p)
+        (let ((old-level (save-excursion
+                           (goto-char (point-min))
+                           (org-outline-level)))
+              (end (point-max)))
+          (goto-char (point-max))
+          (widen)
+          (if (re-search-forward org-heading-regexp nil t)
+              (let ((new-level (org-outline-level)))
+                (org-narrow-to-subtree)
+                (org-back-to-heading)
+                (org-show-subtree)
+                (cond
+                 ((= new-level old-level)
+                  (message "Narrowing to the next sibling"))
+                 ((> new-level old-level)
+                  (message "Narrowing to a child"))
+                 ((< new-level old-level)
+                  (message "Narrowing to an upper level"))))
+            (message "No more heading")))
+      (message "Buffer is not narrowed"))))
 
 ;;;; Editing
 ;;;;; Undo and redo
