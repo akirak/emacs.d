@@ -25,15 +25,20 @@
 (with-eval-after-load 'dimmer
   (defun optimize-minibuf/dimmer-process-all--fake (&rest _args))
 
-  (defun akirak/dimmer-disable ()
+  (defun akirak/dimmer-disable (&rest _args)
     (advice-add 'dimmer-process-all :override
                 'optimize-minibuf/dimmer-process-all--fake))
 
-  (defun akirak/dimmer-enable ()
+  (defun akirak/dimmer-enable (&rest _args)
     (advice-remove 'dimmer-process-all 'optimize-minibuf/dimmer-process-all--fake))
 
   (add-hook 'minibuffer-setup-hook 'akirak/dimmer-disable)
-  (add-hook 'minibuffer-exit-hook 'akirak/dimmer-enable))
+  (add-hook 'minibuffer-exit-hook 'akirak/dimmer-enable)
+
+  (advice-add 'org-starter--display-options
+              :before #'akirak/dimmer-disable)
+  (advice-add 'org-starter--delete-message-frame
+              :after #'akirak/dimmer-enable))
 
 (provide 'optimize-minibuf)
 ;;; optimize-minibuf.el ends here
