@@ -59,7 +59,8 @@
 
 (defun akirak/helm-exwm-buffer-source ()
   (akirak/helm-filtered-buffer-source "EXWM buffers"
-    #'akirak/exwm-buffer-p))
+    #'akirak/exwm-buffer-p
+    :action akirak/helm-buffer-actions-1))
 
 (defun akirak/helm-scratch-buffer-source ()
   (akirak/helm-filtered-buffer-source "Scratch buffers"
