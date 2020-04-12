@@ -175,7 +175,9 @@
     (require 'my/helm/source/file)
     (let ((default-directory root))
       (helm :prompt (format "Browse %s: " root)
-            :sources akirak/helm-source-project-files)))
+            :sources
+            (list akirak/helm-source-project-files
+                  akirak/helm-source-dummy-find-file))))
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
     (interactive)

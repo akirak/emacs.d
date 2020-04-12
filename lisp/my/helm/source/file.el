@@ -38,6 +38,10 @@
   (helm-make-source "Recent files" 'akirak/helm-source-file
     :candidates (lambda () (-map #'f-short recentf-list))))
 
+(defconst akirak/helm-source-dummy-find-file
+  (helm-build-dummy-source "File from the default directory"
+    :action #'find-file))
+
 ;; (defvar akirak/git-status-source
 ;;   (helm-build-sync-source "Git status"
 ;;     :candidates (lambda () (process-lines "git" "status" "--short"))
