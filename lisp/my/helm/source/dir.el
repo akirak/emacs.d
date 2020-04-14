@@ -1,4 +1,5 @@
 (require 'my/helm/action/dir)
+(require 'my/helm/action/git)
 
 (defclass akirak/helm-source-directory (helm-source-sync)
   ((action :initform 'akirak/helm-directory-actions-1)))
@@ -10,7 +11,8 @@
 (defclass akirak/helm-source-magit-repos (akirak/helm-source-directory)
   ((candidates :initform (lambda () (->> (magit-repos-alist)
                                          (-map #'cdr)
-                                         (-map #'f-short))))))
+                                         (-map #'f-short))))
+   (action :initform 'akirak/helm-git-project-actions)))
 
 (defconst akirak/helm-project-root-and-ancestors-source
   (helm-make-source "Project root and its ancestors" 'akirak/helm-source-directory
