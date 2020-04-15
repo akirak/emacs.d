@@ -115,6 +115,7 @@
     (concat "* " heading "\n:PROPERTIES:\n"
             ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
             "\n:END:\n"))
+  (org-multi-wiki-global-mode 1)
   :custom
   (org-multi-wiki-want-custom-id t)
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
