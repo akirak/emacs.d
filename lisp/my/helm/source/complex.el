@@ -55,13 +55,11 @@
                   'akirak/helm-source-buffer
                 :candidates (mapcar #'file-buffer-cell
                                     (or same-project-other-buffers
-                                        same-project-buffers))
-                :keymap akirak/helm-file-like-source-keymap))
+                                        same-project-buffers))))
              (project akirak/helm-source-project-files))
             (helm-make-source "File buffers in other projects"
                 'akirak/helm-source-buffer
-              :candidates (mapcar #'file-buffer-cell other-project-buffers)
-              :keymap akirak/helm-file-like-source-keymap)
+              :candidates (mapcar #'file-buffer-cell other-project-buffers))
             (helm-make-source "Other projects with open file buffers"
                 'akirak/helm-source-directory
               :candidates other-projects

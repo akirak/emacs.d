@@ -2,8 +2,19 @@
 
 (require 'my/helm/action/buffer)
 
+(defvar akirak/helm-buffer-keymap
+  (make-composed-keymap nil akirak/helm-file-like-source-keymap))
+
+(define-key akirak/helm-buffer-keymap
+  (kbd "C-c C-k") (lambda ()
+                    (interactive)
+                    (let ((buffers (or (helm-marked-candidates)
+                                       (helm-get-selection))))
+                      (mapc #'kill-buffer buffers))))
+
 (defclass akirak/helm-source-buffer (helm-source-sync)
-  ((action :initform 'akirak/helm-buffer-actions-1)))
+  ((action :initform 'akirak/helm-buffer-actions-1)
+   (keymap :initform 'akirak/helm-buffer-keymap)))
 
 ;;;; Function for defining sources
 
@@ -43,7 +54,7 @@
                                  (message "Select a window %s" windows)
                                  (ace-window nil)
                                  (switch-to-buffer buf)))))))
-    (helm-make-source name 'helm-source-buffer
+    (helm-make-source name 'akirak/helm-source-buffer
       :candidates (-map (lambda (buf)
                           (cons (funcall (or format-candidate #'buffer-name)
                                          buf)
