@@ -43,7 +43,7 @@
                                  (message "Select a window %s" windows)
                                  (ace-window nil)
                                  (switch-to-buffer buf)))))))
-    (helm-make-source name 'helm-source-sync
+    (helm-make-source name 'helm-source-buffer
       :candidates (-map (lambda (buf)
                           (cons (funcall (or format-candidate #'buffer-name)
                                          buf)

@@ -2,9 +2,6 @@
 (require 'my/helm/source/file)
 (require 'my/helm/source/dir)
 
-(defvar akirak/helm-project-buffer-map
-  (make-composed-keymap nil helm-map))
-
 (defun akirak/helm-project-buffer-sources (project switch-to-project-fn)
   (cl-labels ((root-of (buffer)
                        (akirak/project-root (buffer-dir buffer)))
@@ -59,11 +56,12 @@
                 :candidates (mapcar #'file-buffer-cell
                                     (or same-project-other-buffers
                                         same-project-buffers))
-                :keymap akirak/helm-project-buffer-map))
+                :keymap akirak/helm-file-like-source-keymap))
              (project akirak/helm-source-project-files))
             (helm-make-source "File buffers in other projects"
                 'akirak/helm-source-buffer
-              :candidates (mapcar #'file-buffer-cell other-project-buffers))
+              :candidates (mapcar #'file-buffer-cell other-project-buffers)
+              :keymap akirak/helm-file-like-source-keymap)
             (helm-make-source "Other projects with open file buffers"
                 'akirak/helm-source-directory
               :candidates other-projects

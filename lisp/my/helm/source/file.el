@@ -3,7 +3,8 @@
 
 (defclass akirak/helm-source-file (helm-source-sync)
   ((action :initform 'akirak/helm-switch-actions-default-same-window)
-   (coerce :initform (lambda (path) `(file . ,path)))))
+   (coerce :initform (lambda (path) `(file . ,path)))
+   (keymap :initform 'akirak/helm-file-like-source-keymap)))
 
 ;; The project root is default-directory
 (defclass akirak/helm-source-project-file (akirak/helm-source-file)
