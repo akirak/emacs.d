@@ -14,39 +14,42 @@ section() {
 
 section "Updating the Emacs configuration..."
 
-echo "Checking if $PWD has changes..."
-if ! git diff-index --name-status --exit-code HEAD; then
-    echo "The working tree has changes. Please stash or commit them."
-    echo "Entering a subshell."
-    $SHELL -i
-    if ! git diff-index --name-status --exit-code HEAD; then
-        echo "There are still changes. Aborting." >&2
-        echo "Press enter to exit"
-        read -r
-        exit 1
-    fi
-else
-    echo "No changes in the working tree."
-fi
+# echo "Checking if $PWD has changes..."
+# if ! git diff-index --name-status --exit-code HEAD; then
+#     echo "The working tree has changes. Please stash or commit them."
+#     echo "Entering a subshell."
+#     $SHELL -i
+#     if ! git diff-index --name-status --exit-code HEAD; then
+#         echo "There are still changes. Aborting." >&2
+#         echo "Press enter to exit"
+#         read -r
+#         exit 1
+#     fi
+# else
+#     echo "No changes in the working tree."
+# fi
 
 # Rebase HEAD onto its corresponding remote branch
 
 remote=origin
 branch=$(git symbolic-ref --short HEAD)
 git fetch $remote
-if git --no-pager log --exit-code --oneline --summary HEAD..$remote/$branch; then
+if git --no-pager log --exit-code --oneline --summary "HEAD..$remote/$branch"; then
     echo "The branch is up-to-date."
 else
-    echo -n "Rebase onto $remote/$branch? (y/n): "
-    read -r need_rebase
-    if [[ ${need_rebase} = [Yy]* ]]; then
-        if ! git rebase "$remote/$branch"; then
-            echo "There was an error during the rebase."
-            echo "Press enter."
-            read -r
-            exit 1
-        fi
+    if ! git rebase --autostash --preserve-merges "$remote/$branch"; then
+        $SHELL -i
     fi
+    # echo -n "Rebase onto $remote/$branch? (y/n): "
+    # read -r need_rebase
+    # if [[ ${need_rebase} = [Yy]* ]]; then
+    #     if ! git rebase "$remote/$branch"; then
+    #         echo "There was an error during the rebase."
+    #         echo "Press enter."
+    #         read -r
+    #         exit 1
+    #     fi
+    # fi
 fi
 
 section "Updating the submodules in the Emacs configuration..."
