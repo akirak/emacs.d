@@ -35,6 +35,8 @@
   (cond
    ((and (integerp current-prefix-arg)
          (>= current-prefix-arg 0))
+    ;; With an argument of non-negative integer, set the number of
+    ;; whitespaces around the cursor to the argument.
     (if (looking-at (rx (* space) eol))
         (progn
           (end-of-line)
@@ -46,6 +48,8 @@
    ((and (not current-prefix-arg)
          (or (looking-at (rx (* space) eol))
              (looking-back (rx bol (+ space)))))
+    ;; Without a prefix, if the cursor is either at the beginning or
+    ;; the end of the line, delete all the whites0aces.
     (delete-horizontal-space))
    (t (call-interactively 'cycle-spacing))))
 (general-def [remap delete-horizontal-space] 'akirak/shrink-whitespace)
