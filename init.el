@@ -149,6 +149,116 @@
   :straight (:type built-in))
 
 ;;; Commands and keybindings
+;;;; Basic keybindings
+;; These keybindings basically emulate UNIX shells (i.e. sh, bash,
+;; etc.).
+;;
+;; I also like to define "dwim" commands, if applicable, to save the
+;; keybinding space and key strokes.
+;;;;; C-a
+;; By default, ~C-a~ is bound to =beginning-of-line=.
+;;
+;; This command first jump to the indentation and then visits the
+;; beginning of line.
+(general-def prog-mode-map
+  "C-a"
+  (defun akirak/back-to-indentation-or-beginning-of-line ()
+    (interactive)
+    (if (or (looking-at "^")
+            (string-match-p (rx (not (any space)))
+                            (buffer-substring-no-properties
+                             (line-beginning-position)
+                             (point))))
+        (back-to-indentation)
+      (beginning-of-line))))
+
+;; In =org-mode=, I prefer =org-beginning-of-line=.
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-a" #'org-beginning-of-line)
+
+;;;;; C-e
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-e" #'org-end-of-line)
+
+;;;;; C-h
+(general-def
+  "C-h" 'backward-delete-char)
+
+;;;;; C-w
+(general-def
+  "C-w"
+  (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+    "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+    (interactive "p")
+    (if (region-active-p)
+        (kill-region (region-beginning) (region-end))
+      (backward-kill-word arg))))
+
+(general-def minibuffer-local-map
+  "C-w" #'backward-kill-word)
+
+;;;;; C-u
+(general-def minibuffer-local-map
+  "C-u" #'backward-kill-sentence)
+
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-u"
+  (defun ivy-backward-kill-sentence ()
+    (interactive)
+    (if ivy--directory
+        (progn (ivy--cd "/")
+               (ivy--exhibit))
+      (if (bolp)
+          (kill-region (point-min) (point))
+        (backward-kill-sentence)))))
+
+;;;;; C-r
+;; In minibuffers, ~C-r~ should call history.
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-r" 'counsel-minibuffer-history)
+
+;;;; Key translation
+;; Since I have bound C-h to =backward-delete-char= but still use the
+;; help system frequently, I bind ~M-`~ to ~<f1>~ in
+;; =key-translation-map=.
+(general-def key-translation-map
+  ;; * Obsolete
+  ;; As <menu> (application on Windows keyboards) is hard to reach on some
+  ;; keyboards, I will use <C-tab> instead. This key combination is occupied on
+  ;; web browsers but vacant on most Emacs major modes, so it is safe to use it
+  ;; on non-EXWM buffers.
+  ;; "<C-tab>" (kbd "<menu>")
+
+  ;; Chromebook don't have physical function keys. They substitute
+  ;; Search + num for function keys, but Search + 1 is hard to press,
+  ;; especially when Search and Ctrl are swapped.
+  ;; This is quite annoying, so I will use M-` as <f1>.
+  "M-`" (kbd "<f1>"))
+
+;; Emulate function keys of Chrome OS, i.e. use ~s-NUM~ as function
+;; keys.
+(define-globalized-minor-mode akirak/emulate-chromeos-fnkey-mode
+  nil
+  (lambda ()
+    (cond
+     (akirak/emulate-chromeos-fnkey-mode
+      (dolist (n (number-sequence 1 9))
+        (define-key key-translation-map
+          (kbd (format "s-%d" n)) (kbd (format "<f%d>" n))))
+      (define-key key-translation-map
+        (kbd "s-0") (kbd "<f10>"))
+      (define-key key-translation-map
+        (kbd "s--") (kbd "<f11>"))
+      (define-key key-translation-map
+        (kbd "s-=") (kbd "<f12>")))
+     (t
+      (dolist (n (number-sequence 1 12))
+        (define-key key-translation-map
+          (kbd (format "s-%d" n)) nil))))))
+
+(unless (akirak/running-on-crostini-p)
+  (akirak/emulate-chromeos-fnkey-mode 1))
+
 ;;;; Switching buffers
 ;; Switching buffers is the most essential operation in Emacs.
 ;; Most of these commands are bound on C-x.

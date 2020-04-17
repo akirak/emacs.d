@@ -1,7 +1,5 @@
 (defvar akirak/feature-list
-  '(setup-shell-bindings ; Make ~C-a~, ~C-w~,  ~C-h~, etc. behave like in shells
-    setup-key-translation ; Translate certain key combinations for ergonomics
-    setup-exec-path
+  '(setup-exec-path
     setup-wrap
     setup-counsel    ; Basic Counsel commands
     setup-projectile ; Manage projects
@@ -27,9 +25,9 @@
     setup-locate          ; Configure locate and updatedb
     setup-org-custom-commands
     setup-ace-window      ; An alternative way for window manipulation
-    setup-outshine                 ; Extra support for outline editing
-    setup-org-refile                    ; Enhance org-refile
-    setup-org-download                  ; Screenshots
+    setup-outshine        ; Extra support for outline editing
+    setup-org-refile      ; Enhance org-refile
+    setup-org-download    ; Screenshots
     setup-counsel-org-clock
     setup-link-hint                     ; Jumping to a URL
     setup-ibuffer
