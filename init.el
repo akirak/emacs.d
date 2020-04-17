@@ -234,7 +234,7 @@
   ;; especially when Search and Ctrl are swapped.
   ;; This is quite annoying, so I will use M-` as <f1>.
   "M-`" (kbd "<f1>"))
-
+;;;;; Emulate virtual function keys of Chrome OS
 ;; Emulate function keys of Chrome OS, i.e. use ~s-NUM~ as function
 ;; keys.
 (define-globalized-minor-mode akirak/emulate-chromeos-fnkey-mode
@@ -252,9 +252,13 @@
       (define-key key-translation-map
         (kbd "s-=") (kbd "<f12>")))
      (t
-      (dolist (n (number-sequence 1 12))
+      (dolist (n (number-sequence 0 9))
         (define-key key-translation-map
-          (kbd (format "s-%d" n)) nil))))))
+          (kbd (format "s-%d" n)) nil))
+      (define-key key-translation-map
+        (kbd "s--") nil)
+      (define-key key-translation-map
+        (kbd "s-=") nil)))))
 
 (unless (akirak/running-on-crostini-p)
   (akirak/emulate-chromeos-fnkey-mode 1))
