@@ -21,6 +21,14 @@ This is my Emacs configuration.
 -  [[#packages][Packages]]
 -  [[#autoloads][Autoloads]]
 -  [[#commands-and-keybindings][Commands and keybindings]]
+  -  [[#basic-keybindings][Basic keybindings]]
+    -  [[#c-a][C-a]]
+    -  [[#c-e][C-e]]
+    -  [[#c-h][C-h]]
+    -  [[#c-w][C-w]]
+    -  [[#c-u][C-u]]
+    -  [[#c-r][C-r]]
+  -  [[#key-translation][Key translation]]
   -  [[#switching-buffers][Switching buffers]]
     -  [[#helm-commands][Helm commands]]
     -  [[#browsing-contents-in-specific-buffers-without-leaving-the-context][Browsing contents in specific buffers without leaving the context]]
@@ -244,6 +252,140 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 #+end_src
 
 **  Commands and keybindings
+***  Basic keybindings
+These keybindings basically emulate UNIX shells (i.e. sh, bash,
+etc.).
+
+I also like to define "dwim" commands, if applicable, to save the
+keybinding space and key strokes.
+
+****  C-a
+By default, ~C-a~ is bound to =beginning-of-line=.
+
+This command first jump to the indentation and then visits the
+beginning of line.
+
+#+begin_src emacs-lisp
+(general-def prog-mode-map
+  "C-a"
+  (defun akirak/back-to-indentation-or-beginning-of-line ()
+    (interactive)
+    (if (or (looking-at "^")
+            (string-match-p (rx (not (any space)))
+                            (buffer-substring-no-properties
+                             (line-beginning-position)
+                             (point))))
+        (back-to-indentation)
+      (beginning-of-line))))
+#+end_src
+
+In =org-mode=, I prefer =org-beginning-of-line=.
+
+#+begin_src emacs-lisp
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-a" #'org-beginning-of-line)
+#+end_src
+
+****  C-e
+#+begin_src emacs-lisp
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-e" #'org-end-of-line)
+#+end_src
+
+****  C-h
+#+begin_src emacs-lisp
+(general-def
+  "C-h" 'backward-delete-char)
+#+end_src
+
+****  C-w
+#+begin_src emacs-lisp
+(general-def
+  "C-w"
+  (defun akirak/kill-region-or-backward-kill-word (&optional arg)
+    "If a region is active, run `kill-region'. Otherwise, run `backward-kill-word'."
+    (interactive "p")
+    (if (region-active-p)
+        (kill-region (region-beginning) (region-end))
+      (backward-kill-word arg))))
+
+(general-def minibuffer-local-map
+  "C-w" #'backward-kill-word)
+#+end_src
+
+****  C-u
+#+begin_src emacs-lisp
+(general-def minibuffer-local-map
+  "C-u" #'backward-kill-sentence)
+
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-u"
+  (defun ivy-backward-kill-sentence ()
+    (interactive)
+    (if ivy--directory
+        (progn (ivy--cd "/")
+               (ivy--exhibit))
+      (if (bolp)
+          (kill-region (point-min) (point))
+        (backward-kill-sentence)))))
+#+end_src
+
+****  C-r
+In minibuffers, ~C-r~ should call history.
+
+#+begin_src emacs-lisp
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-r" 'counsel-minibuffer-history)
+#+end_src
+
+***  Key translation
+Since I have bound C-h to =backward-delete-char= but still use the
+help system frequently, I bind ~M-`~ to ~<f1>~ in
+=key-translation-map=.
+
+#+begin_src emacs-lisp
+(general-def key-translation-map
+  ;; * Obsolete
+  ;; As <menu> (application on Windows keyboards) is hard to reach on some
+  ;; keyboards, I will use <C-tab> instead. This key combination is occupied on
+  ;; web browsers but vacant on most Emacs major modes, so it is safe to use it
+  ;; on non-EXWM buffers.
+  ;; "<C-tab>" (kbd "<menu>")
+
+  ;; Chromebook don't have physical function keys. They substitute
+  ;; Search + num for function keys, but Search + 1 is hard to press,
+  ;; especially when Search and Ctrl are swapped.
+  ;; This is quite annoying, so I will use M-` as <f1>.
+  "M-`" (kbd "<f1>"))
+#+end_src
+
+Emulate function keys of Chrome OS, i.e. use ~s-NUM~ as function
+keys.
+
+#+begin_src emacs-lisp
+(define-globalized-minor-mode akirak/emulate-chromeos-fnkey-mode
+  nil
+  (lambda ()
+    (cond
+     (akirak/emulate-chromeos-fnkey-mode
+      (dolist (n (number-sequence 1 9))
+        (define-key key-translation-map
+          (kbd (format "s-%d" n)) (kbd (format "<f%d>" n))))
+      (define-key key-translation-map
+        (kbd "s-0") (kbd "<f10>"))
+      (define-key key-translation-map
+        (kbd "s--") (kbd "<f11>"))
+      (define-key key-translation-map
+        (kbd "s-=") (kbd "<f12>")))
+     (t
+      (dolist (n (number-sequence 1 12))
+        (define-key key-translation-map
+          (kbd (format "s-%d" n)) nil))))))
+
+(unless (akirak/running-on-crostini-p)
+  (akirak/emulate-chromeos-fnkey-mode 1))
+#+end_src
+
 ***  Switching buffers
 Switching buffers is the most essential operation in Emacs.
 Most of these commands are bound on C-x.
