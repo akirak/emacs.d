@@ -1,4 +1,5 @@
 (use-package treemacs
+  :disabled t
   :preface
   (setq treemacs-python-executable (executable-find "python3"))
   (pcase (cons (not (null (executable-find "git")))
@@ -32,6 +33,7 @@
   (dired-mode . treemacs-icons-dired-mode))
 
 (use-package treemacs-magit
+  :disabled t
   :after (treemacs magit))
 
 (use-package treemacs-projectile
