@@ -1,6 +1,3 @@
-;; (diminish 'outline-minor-mode)
-(add-hook 'prog-mode-hook 'outline-minor-mode)
-
 (use-package outshine
   :config
   (defun akirak/set-outshine-level-faces (theme)
@@ -15,6 +12,7 @@
   (:keymaps 'outline-minor-mode-map
             "C-M-i" nil)
   :hook
+  (prog-mode . outline-minor-mode)
   (outline-minor-mode . outshine-mode)
   :custom
   (outshine-use-speed-commands t))
