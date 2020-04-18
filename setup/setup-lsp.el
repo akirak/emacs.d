@@ -5,7 +5,8 @@
   (defun akirak/setup-lsp ()
     (company-mode t)
     (eldoc-mode t)
-    (flycheck-mode t))
+    (flycheck-mode t)
+    (lsp-enable-which-key-integration))
   ;; Update direnv to detect locally installed lsp servers
   (advice-add 'lsp :before
               (lambda (&rest _args) (direnv-update-environment)))
@@ -14,14 +15,15 @@
   ((web-mode
     vue-html-mode
     css-mode
+    purescript-mode
     go-mode)
    . lsp-deferred)
   :custom
+  (lsp-keymap-prefix "C-,")
+  (lsp-enable-xref t)
+  (lsp-enable-semantic-highlighting t)
+  (lsp-prefer-capf t)
   (lsp-eldoc-render-all t))
-
-(use-package lsp-server
-  :straight (:host github :repo "akirak/lsp-server.el")
-  :commands (lsp-server-install))
 
 (use-package lsp-ui
   :disabled t
@@ -38,11 +40,10 @@
   (lsp-ui-doc-position (quote at-point)))
 
 (use-package lsp-ivy
-  :straight (:host github :repo "emacs-lsp/lsp-ivy")
   :config
   (akirak/bind-search :keymaps 'lsp-mode-map
-    "s" #'lsp-ivy-workspace-symbol
-    "M-s" #'lsp-ivy-global-workspace-symbol))
+    "M-i" #'lsp-ivy-workspace-symbol
+    "S-M-i" #'lsp-ivy-global-workspace-symbol))
 
 (use-package lsp-treemacs
   :disabled t

@@ -91,6 +91,7 @@
 ;;;;; Mode-specific backends
 
 (use-package company-lsp
+  :disabled t
   ;; For company completion and snippets
   ;;
   ;; If the language server for the language doesn't support returning
