@@ -1270,6 +1270,7 @@ This is especially useful in editing Lisp code.
     ((lisp-mode
       elixir-mode
       haskell-mode
+      purescript-mode
       ) . rainbow-delimiters-mode))
 #+end_src
 **** Dimmer
