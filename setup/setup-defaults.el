@@ -8,7 +8,7 @@
              (expand-file-name "~/\.emacs\.d/\.cache\/") t)
 (setq recentf-max-saved-items 200)
 (show-paren-mode 1)                     ; Highlight matching parentheses
-(electric-pair-mode 1)                  ; Insert parentheses in pair
+
 (tool-bar-mode -1)                      ; Disable UI features
 (scroll-bar-mode -1)
 (tooltip-mode -1)

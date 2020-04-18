@@ -134,6 +134,11 @@
 
 ;;; Packages
 (use-package docker)
+(use-package electric
+  :straight (:type built-in)
+  :hook
+  (text-mode . electric-pair-local-mode))
+
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
