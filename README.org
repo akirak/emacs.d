@@ -29,6 +29,7 @@ This is my Emacs configuration.
     -  [[#c-u][C-u]]
     -  [[#c-r][C-r]]
   -  [[#key-translation][Key translation]]
+    -  [[#emulate-virtual-function-keys-of-chrome-os][Emulate virtual function keys of Chrome OS]]
   -  [[#switching-buffers][Switching buffers]]
     -  [[#helm-commands][Helm commands]]
     -  [[#browsing-contents-in-specific-buffers-without-leaving-the-context][Browsing contents in specific buffers without leaving the context]]
@@ -234,6 +235,11 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 **  Packages
 #+begin_src emacs-lisp
 (use-package docker)
+(use-package electric
+  :straight (:type built-in)
+  :hook
+  (text-mode . electric-pair-local-mode))
+
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
@@ -359,6 +365,7 @@ help system frequently, I bind ~M-`~ to ~<f1>~ in
   "M-`" (kbd "<f1>"))
 #+end_src
 
+****  Emulate virtual function keys of Chrome OS
 Emulate function keys of Chrome OS, i.e. use ~s-NUM~ as function
 keys.
 
@@ -378,9 +385,13 @@ keys.
       (define-key key-translation-map
         (kbd "s-=") (kbd "<f12>")))
      (t
-      (dolist (n (number-sequence 1 12))
+      (dolist (n (number-sequence 0 9))
         (define-key key-translation-map
-          (kbd (format "s-%d" n)) nil))))))
+          (kbd (format "s-%d" n)) nil))
+      (define-key key-translation-map
+        (kbd "s--") nil)
+      (define-key key-translation-map
+        (kbd "s-=") nil)))))
 
 (unless (akirak/running-on-crostini-p)
   (akirak/emulate-chromeos-fnkey-mode 1))
