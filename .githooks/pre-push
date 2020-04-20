@@ -63,8 +63,7 @@ do
         echo "init.el has been modified. Regenerating README..."
         nix-shell builder.nix --run "emacs --batch --load generate-readme.el"
         if ! git diff-index --quiet ${local_sha} README.org; then
-            echo "README has been updated. Commit it before pushing."
-            exit 1
+            echo "README has been updated."
         fi
     fi
  fi
