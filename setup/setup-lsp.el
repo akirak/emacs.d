@@ -15,7 +15,8 @@
   ((web-mode
     vue-html-mode
     css-mode
-    purescript-mode
+    ;; Use psc-ide in purescript
+    ;; purescript-mode
     go-mode)
    . lsp-deferred)
   :custom
