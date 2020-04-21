@@ -448,20 +448,35 @@ outcommented org-mode headers)."
 ;;;; Running external commands
 (general-def
   "C-x c"
-  (defun akirak/compile (&optional arg)
-    (interactive "P")
-    (pcase arg
-      ('(4)
-       (akirak/helm-shell-command))
-      (0
-       (let ((root (akirak/project-root default-directory)))
-         (if (and root (f-exists (f-join root ".github"))
-                  (executable-find "act"))
-             (let ((default-directory root))
-               (compile "act"))
-           (user-error "N/A"))))
-      (_
-       (counsel-compile)))))
+  (general-predicate-dispatch
+      (defun akirak/compile (&optional arg)
+        (interactive "P")
+        (pcase arg
+          ('(4)
+           (akirak/helm-shell-command))
+          (0
+           (let ((root (akirak/project-root default-directory)))
+             (if (and root (f-exists (f-join root ".github"))
+                      (executable-find "act"))
+                 (let ((default-directory root))
+                   (compile "act"))
+               (user-error "N/A"))))
+          (_
+           (counsel-compile))))
+    (derived-mode-p 'purescript-mode)
+    (defun akirak/spago-build ()
+      (interactive)
+      (if-let (default-directory (locate-dominating-file default-directory "spago.dhall"))
+          (compile (completing-read "PureScript spago command: "
+                                    '("spago build"
+                                      "spago test"
+                                      "spago install"
+                                      "spago run"
+                                      "spago bundle-app"
+                                      "spago bundle-module"
+                                      "spago docs")))
+        (compile (read-string (format "Compile command [%s]: "
+                                      default-directory)))))))
 
 (defun akirak/helm-shell-command ()
   (interactive)
