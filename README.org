@@ -246,6 +246,7 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package whole-line-or-region)
 #+end_src
 
 **  Autoloads
@@ -317,6 +318,9 @@ In =org-mode=, I prefer =org-beginning-of-line=.
 
 (general-def minibuffer-local-map
   "C-w" #'backward-kill-word)
+
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-w" #'ivy-backward-kill-word)
 #+end_src
 
 ****  C-u
@@ -599,20 +603,35 @@ outcommented org-mode headers)."
 #+begin_src emacs-lisp
 (general-def
   "C-x c"
-  (defun akirak/compile (&optional arg)
-    (interactive "P")
-    (pcase arg
-      ('(4)
-       (akirak/helm-shell-command))
-      (0
-       (let ((root (akirak/project-root default-directory)))
-         (if (and root (f-exists (f-join root ".github"))
-                  (executable-find "act"))
-             (let ((default-directory root))
-               (compile "act"))
-           (user-error "N/A"))))
-      (_
-       (counsel-compile)))))
+  (general-predicate-dispatch
+      (defun akirak/compile (&optional arg)
+        (interactive "P")
+        (pcase arg
+          ('(4)
+           (akirak/helm-shell-command))
+          (0
+           (let ((root (akirak/project-root default-directory)))
+             (if (and root (f-exists (f-join root ".github"))
+                      (executable-find "act"))
+                 (let ((default-directory root))
+                   (compile "act"))
+               (user-error "N/A"))))
+          (_
+           (counsel-compile))))
+    (derived-mode-p 'purescript-mode)
+    (defun akirak/spago-build ()
+      (interactive)
+      (if-let (default-directory (locate-dominating-file default-directory "spago.dhall"))
+          (compile (completing-read "PureScript spago command: "
+                                    '("spago build"
+                                      "spago test"
+                                      "spago install"
+                                      "spago run"
+                                      "spago bundle-app"
+                                      "spago bundle-module"
+                                      "spago docs")))
+        (compile (read-string (format "Compile command [%s]: "
+                                      default-directory)))))))
 
 (defun akirak/helm-shell-command ()
   (interactive)
