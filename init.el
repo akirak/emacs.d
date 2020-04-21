@@ -145,6 +145,7 @@
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package whole-line-or-region)
 
 ;;; Autoloads
 (use-package my/project
