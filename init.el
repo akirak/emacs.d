@@ -203,6 +203,9 @@
 (general-def minibuffer-local-map
   "C-w" #'backward-kill-word)
 
+(general-def ivy-minibuffer-map :package 'ivy
+  "C-w" #'ivy-backward-kill-word)
+
 ;;;;; C-u
 (general-def minibuffer-local-map
   "C-u" #'backward-kill-sentence)
