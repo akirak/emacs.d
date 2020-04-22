@@ -1,4 +1,7 @@
-(use-package reformatter)
+(use-package reformatter
+  :config
+  (reformatter-define nixfmt
+    :program "nixfmt"))
 
 (use-package purty
   :after purescript-mode
