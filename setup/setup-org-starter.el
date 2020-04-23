@@ -104,7 +104,6 @@
                     t))
 
 (use-package org-multi-wiki
-  :straight (org-multi-wiki :host github :repo "akirak/org-multi-wiki")
   :init
   (defvar akirak/org-multi-wiki-initialized nil)
   (unless akirak/org-multi-wiki-initialized
@@ -121,7 +120,6 @@
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
 
 (use-package helm-org-multi-wiki
-  :straight org-multi-wiki
   :config
   (general-create-definer akirak/bind-helm-org-multi-wiki-dummy
     :keymaps 'helm-org-multi-wiki-dummy-source-map
