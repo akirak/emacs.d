@@ -1,5 +1,14 @@
 ;; Largely based on https://github.com/purcell/emacs.d/blob/master/lisp/init-purescript.el
 
+(defconst akirak/spago-compile-command-list
+  '("spago build"
+    "spago test"
+    "spago install"
+    "spago run"
+    "spago bundle-app"
+    "spago bundle-module"
+    "spago docs"))
+
 (use-package purescript-mode
   :mode "\\.purs\\'")
 

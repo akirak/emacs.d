@@ -44,4 +44,19 @@
         (funcall func command))
     (posframe-delete akirak/helm-org-posframe-temporary-buffer)))
 
+(defconst akirak/helm-org-marker-sh-block-action-list
+  '(("compile at project root"
+     . (lambda (marker)
+         (akirak/helm-execute-sh-src-block-action marker #'compile :project t)))
+    ("compile at working directory"
+     . (lambda (marker)
+         (akirak/helm-execute-sh-src-block-action marker #'compile)))
+    ("eshell command at project root"
+     . (lambda (marker)
+         (akirak/helm-execute-sh-src-block-action marker #'eshell-command :project t)))
+    ("eshell command at working directory"
+     . (lambda (marker)
+         (akirak/helm-execute-sh-src-block-action marker #'eshell-command)))
+    ("Show the whole entry" . helm-org-ql-show-marker-indirect)))
+
 (provide 'my/helm/action/org-marker)
