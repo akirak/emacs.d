@@ -531,3 +531,10 @@ outcommented org-mode headers)."
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
+
+;;;;; Nix
+(akirak/bind-admin
+  "n" '(nil :wk "nix")
+  "nC" #'nix-env-install-cachix-use
+  "nn" #'nix-env-install-npm
+  "nu" #'nix-env-install-uninstall)
