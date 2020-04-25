@@ -279,18 +279,24 @@
 (general-def
   "C-x b"
   (defun akirak/switch-to-project-file-buffer (project)
-    (interactive (list (-some-> (project-current)
-                         (project-roots)
-                         (car-safe))))
+    (interactive (list (if current-prefix-arg
+                           'all
+                         (-some-> (project-current)
+                           (project-roots)
+                           (car-safe)))))
     (require 'my/helm/action/git)
-    (let ((default-directory (or project default-directory)))
-      (helm :prompt (format "Project %s: " project)
-            :sources
-            `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-              ,akirak/helm-source-recent-files
-              ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
-                 :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
-                               akirak/helm-git-project-actions))))))
+    (cond
+     ((eq project 'all)
+      (helm-buffers-list))
+     (t
+      (let ((default-directory (or project default-directory)))
+        (helm :prompt (format "Project %s: " project)
+              :sources
+              `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
+                ,akirak/helm-source-recent-files
+                ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
+                   :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
+                                 akirak/helm-git-project-actions))))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (if current-prefix-arg
