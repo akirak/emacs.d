@@ -256,12 +256,15 @@ Generic prefix key for editing commands:
 
 #+begin_src emacs-lisp
   (akirak/bind-generic
-    "f" '(nil :wk "format")
+    "f" '(nil :wk "fix/format")
     "k" '(nil :wk "kill")
     "l" '(nil :wk "natural language")
     "m" '(nil :wk "mark")
     "r" '(nil :wk "rename/refactor"))
 
+  (general-create-definer akirak/bind-kill :prefix "C-. k"
+    :prefix-map 'akirak/kill-prefix-map)
+  (general-create-definer akirak/bind-fix :prefix "C-. f")
   (general-create-definer akirak/bind-kill :prefix "C-. k"
     :prefix-map 'akirak/kill-prefix-map)
   (general-create-definer akirak/bind-language :prefix "C-. l")
