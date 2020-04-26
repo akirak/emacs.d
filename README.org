@@ -42,6 +42,7 @@ This is my Emacs configuration.
   -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
   -  [[#administration][Administration]]
     -  [[#docker][Docker]]
+    -  [[#nix][Nix]]
 
 **  Prerequisites
 - Linux or Window Subsystem for Linux
@@ -410,18 +411,24 @@ Most of these commands are bound on C-x.
 (general-def
   "C-x b"
   (defun akirak/switch-to-project-file-buffer (project)
-    (interactive (list (-some-> (project-current)
-                         (project-roots)
-                         (car-safe))))
+    (interactive (list (if current-prefix-arg
+                           'all
+                         (-some-> (project-current)
+                           (project-roots)
+                           (car-safe)))))
     (require 'my/helm/action/git)
-    (let ((default-directory (or project default-directory)))
-      (helm :prompt (format "Project %s: " project)
-            :sources
-            `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-              ,akirak/helm-source-recent-files
-              ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
-                 :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
-                               akirak/helm-git-project-actions))))))
+    (cond
+     ((eq project 'all)
+      (helm-buffers-list))
+     (t
+      (let ((default-directory (or project default-directory)))
+        (helm :prompt (format "Project %s: " project)
+              :sources
+              `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
+                ,akirak/helm-source-recent-files
+                ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
+                   :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
+                                 akirak/helm-git-project-actions))))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (if current-prefix-arg
@@ -603,61 +610,82 @@ outcommented org-mode headers)."
 #+begin_src emacs-lisp
 (general-def
   "C-x c"
-  (general-predicate-dispatch
-      (defun akirak/compile (&optional arg)
-        (interactive "P")
-        (pcase arg
-          ('(4)
-           (akirak/helm-shell-command))
-          (0
-           (let ((root (akirak/project-root default-directory)))
-             (if (and root (f-exists (f-join root ".github"))
-                      (executable-find "act"))
-                 (let ((default-directory root))
-                   (compile "act"))
-               (user-error "N/A"))))
-          (_
-           (counsel-compile))))
-    (derived-mode-p 'purescript-mode)
-    (defun akirak/spago-build ()
-      (interactive)
-      (if-let (default-directory (locate-dominating-file default-directory "spago.dhall"))
-          (compile (completing-read "PureScript spago command: "
-                                    '("spago build"
-                                      "spago test"
-                                      "spago install"
-                                      "spago run"
-                                      "spago bundle-app"
-                                      "spago bundle-module"
-                                      "spago docs")))
-        (compile (read-string (format "Compile command [%s]: "
-                                      default-directory)))))))
-
-(defun akirak/helm-shell-command ()
-  (interactive)
-  (require 'my/helm/source/org)
-  (require 'my/helm/action/org-marker)
-  (let ((root (or (akirak/project-root default-directory)
-                  default-directory)))
-    (setq akirak/programming-recipe-mode-name "sh"
-          akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
-    (helm :prompt (format "Execute command (project root: %s): " root)
-          :sources
-          (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
-            :action
-            `(("compile at project root"
-               . (lambda (marker)
-                   (akirak/helm-execute-sh-src-block-action marker #'compile :project t)))
-              ("compile at working directory"
-               . (lambda (marker)
-                   (akirak/helm-execute-sh-src-block-action marker #'compile)))
-              ("eshell command at project root"
-               . (lambda (marker)
-                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command :project t)))
-              ("eshell command at working directory"
-               . (lambda (marker)
-                   (akirak/helm-execute-sh-src-block-action marker #'eshell-command)))
-              ("Show the whole entry" . helm-org-ql-show-marker-indirect))))))
+  (defun akirak/compile-command (&optional arg)
+    (interactive "P")
+    (require 'my/compile)
+    (cl-labels
+        ((spago-root
+          ()
+          (locate-dominating-file default-directory "spago.dhall"))
+         (spago-build
+          (root)
+          (let ((command (completing-read "PureScript spago command: "
+                                          akirak/spago-compile-command-list)))
+            (akirak/compile command :directory root)))
+         (make-root
+          ()
+          (locate-dominating-file default-directory "Makefile"))
+         (npm-root
+          ()
+          (locate-dominating-file default-directory "package.json"))
+         (npm-run-something
+          (root)
+          (progn
+            (require 'my/compile/npm)
+            (let ((script-alist (akirak/npm-package-json-commands (f-join root "package.json")))
+                  (default-directory root)
+                  (action (lambda (command)
+                            (akirak/compile (concat "npm " command)
+                                            :nix-shell-args (unless (executable-find "npm")
+                                                              '("-p" "nodejs"))))))
+              (helm :prompt (format "npm command [%s]: " root)
+                    :sources
+                    (list (helm-build-sync-source "Script"
+                            :candidates
+                            (-map (lambda (cell)
+                                    (cons (format "%s: %s" (car cell) (cdr cell))
+                                          (cdr cell)))
+                                  script-alist)
+                            :coerce (-partial #'s-append "run ")
+                            :action action)
+                          (helm-build-sync-source "Basic commands"
+                            :candidates
+                            '("install")
+                            :coerce (-partial #'s-append "run ")
+                            :action action)))))))
+      (let (root)
+        (cond
+         ((and (derived-mode-p 'purescript-mode)
+               (setq root (spago-root)))
+          (spago-build root))
+         ((equal arg '(4))
+          (helm :prompt "Compile history: "
+                :sources akirak/helm-compile-history-source)
+          (akirak/helm-shell-command))
+         ((equal arg 0)
+          (let ((root (akirak/project-root default-directory)))
+            (if (and root (f-exists (f-join root ".github"))
+                     (executable-find "act"))
+                (let ((default-directory root))
+                  (compile "act"))
+              (user-error "N/A"))))
+         ((make-root)
+          (counsel-compile))
+         ((setq root (npm-root))
+          (npm-run-something root))))))
+  "C-x C"
+  (defun akirak/helm-shell-command ()
+    (interactive)
+    (require 'my/helm/source/org)
+    (require 'my/helm/action/org-marker)
+    (let ((root (or (akirak/project-root default-directory)
+                    default-directory)))
+      (setq akirak/programming-recipe-mode-name "sh"
+            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
+      (helm :prompt (format "Execute command (project root: %s): " root)
+            :sources
+            (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
+              :action akirak/helm-org-marker-sh-block-action-list)))))
 #+end_src
 
 ***  Maintenance and development of the config
@@ -687,5 +715,14 @@ These commands are used to maintain this Emacs configuration.
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
+#+end_src
+
+****  Nix
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "n" '(nil :wk "nix")
+  "nC" #'nix-env-install-cachix-use
+  "nn" #'nix-env-install-npm
+  "nu" #'nix-env-install-uninstall)
 #+end_src
 
