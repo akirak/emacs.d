@@ -72,6 +72,8 @@
     (message "Opening %s. Choose a target window" url)
     (ace-window nil))
   (cond
+   ((akirak/file-url-p url)
+    (akirak/browse-url-for-referencing url))
    ((akirak/local-url-p url)
     (akirak/browse-url-bookmarks-add url)
     (akirak/browse-url-incognito url))
@@ -135,6 +137,9 @@
 
 (setq-default browse-url-browser-function 'akirak/browse-url)
 
+;;;; Variations of browse-url functions
+
+;;;;; Incognito
 (defalias 'akirak/browse-localhost 'akirak/browse-url)
 
 (defun akirak/browse-url-incognito (url)
@@ -150,5 +155,33 @@
        (string-match-p (rx bol "https://" (? "www.")
                            (eval `(or ,@akirak/incognito-domain-list)))
                        url)))
+
+;;;;; Keyboard-oriented browser for reading documentation
+
+(defcustom akirak/browse-url-generic-program-for-referencing
+  (or (executable-find "next")
+      (executable-find "qutebrowser")
+      browse-url-generic-program)
+  "Web browser program for reading referential documentation."
+  :type 'string)
+
+(defcustom akirak/browse-url-generic-args-for-referencing
+  (let ((program akirak/browse-url-generic-program-for-referencing))
+    (cond
+     ((string-match-p (rx (or (and bol "next" eol)
+                              (and "/next" eol)))
+                      program)
+      '("--no-session"))))
+  "Command line arguments for `akirak/browse-url-generic-program-for-referencing'."
+  :type '(repeat string))
+
+(defun akirak/browse-url-for-referencing (url)
+  (let ((browse-url-generic-program akirak/browse-url-generic-program-for-referencing)
+        (browse-url-generic-args
+         akirak/browse-url-generic-args-for-referencing))
+    (browse-url-generic url)))
+
+(defun akirak/file-url-p (url)
+  (string-match-p (rx bol "file://") url))
 
 (provide 'setup-browse-url)
