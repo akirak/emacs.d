@@ -4,7 +4,27 @@
                `(?K . akirak/avy-action-kill-line)
                t)
   (akirak/bind-jump
-    "'" #'avy-org-goto-heading-timer)
+    "h"
+    (defun akirak/avy-org-heading (arg)
+      (interactive "P")
+      (let ((avy-all-windows (when arg t))
+            ;; TODO: Make avy-action work
+            (avy-action (lambda (pt)
+                          (avy-action-goto pt)
+                          (org-back-to-heading)
+                          (let ((element (org-element-headline-parser
+                                          (save-excursion (org-end-of-subtree)))))
+                            (goto-char (plist-get (cadr element) :contents-begin))
+                            (when (org-at-property-block-p)
+                              (goto-char (cdr (org-get-property-block)))
+                              (end-of-line)
+                              (re-search-forward (rx bol bow) nil t))))))
+        (avy-with avy-goto-line
+          (avy-jump (rx bol (+ "*") space)))))
+    "M-h"
+    (defun akirak/avy-org-heading-all-windows ()
+      (interactive)
+      (akirak/avy-org-heading '(4))))
   :config/el-patch
   (el-patch-defun avy-forward-item ()
     (el-patch-swap (if (eq avy-command 'avy-goto-line)
