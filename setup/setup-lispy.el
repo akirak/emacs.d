@@ -1,6 +1,7 @@
 (use-package lispy
   :hook
-  ((emacs-lisp-mode
+  ((lisp-mode
+    emacs-lisp-mode
     lisp-interaction-mode
     ielm-mode
     eval-expression-minibuffer-setup)
