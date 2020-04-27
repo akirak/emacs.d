@@ -5,7 +5,7 @@
   ("M-m" (general-predicate-dispatch #'er/expand-region
            (region-active-p)
            #'er/expand-region
-           (looking-at (rx (eval comment-start)))
+           (looking-at (rx-to-string comment-start))
            #'er/mark-comment
            (looking-at (rx (any "\"'`")))
            #'er/mark-outside-quotes
