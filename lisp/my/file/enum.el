@@ -19,4 +19,9 @@
           items)
       (cddr cache))))
 
+(cl-defun akirak/clear-project-file-cache (root &key sort)
+  (when-let ((cache (assoc (cons root sort) akirak/directory-contents-cache)))
+    (message "Clearing cache for %s..." root)
+    (setcdr cache nil)))
+
 (provide 'my/file/enum)

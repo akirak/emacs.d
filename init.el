@@ -302,10 +302,10 @@
                                  akirak/helm-git-project-actions))))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
-    (interactive (list (if current-prefix-arg
-                           (read-directory-name "Find files in dir: ")
-                         (akirak/project-root default-directory))))
+    (interactive (list (akirak/project-root default-directory)))
     (require 'my/helm/source/file)
+    (when current-prefix-arg
+      (akirak/clear-project-file-cache root :sort 'modified))
     (let ((default-directory root))
       (helm :prompt (format "Browse %s: " root)
             :sources
