@@ -65,6 +65,9 @@
 (akirak/straight-use-recipes-from-file
  akirak/straight-default-recipes-file)
 
+(setq straight-x-pinned-packages
+      '(("dracula-theme" . "11391ea531d40fb08c64313bbb86e4d29d7fe1c5")))
+
 ;;;; Load configuration files
 
 (add-to-list 'load-path (expand-file-name "lisp" user-emacs-directory))
