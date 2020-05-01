@@ -1590,15 +1590,7 @@ Ideally, this section should be a portfolio of my skills.
 #+end_src
 
 *** Java
-#+begin_src emacs-lisp
-  (defcustom akirak/java-support-module 'setup-java-lsp
-    "Module for supporting Java."
-    :type '(choice (const setup-java-lsp)
-                   (const setup-java-meghanada)))
-
-  (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
-
-#+end_src
+Use lsp-mode.
 *** JavaScript
 #+begin_src emacs-lisp
   (akirak/require 'setup-javascript)

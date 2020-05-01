@@ -17,6 +17,7 @@
     css-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
+    java-mode
     go-mode)
    . lsp-deferred)
   :custom
@@ -91,5 +92,9 @@
   :custom
   (lsp-haskell-process-path-hie "ghcide")
   (lsp-haskell-process-args-hie nil))
+
+(use-package lsp-java
+  :config
+  (require 'dap-java))
 
 (provide 'setup-lsp)
