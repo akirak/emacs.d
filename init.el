@@ -512,7 +512,6 @@ outcommented org-mode headers)."
                           (helm-build-sync-source "Basic commands"
                             :candidates
                             '("install")
-                            :coerce (-partial #'s-append "run ")
                             :action action)))))))
       (let (root)
         (cond
