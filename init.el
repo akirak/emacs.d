@@ -313,17 +313,30 @@
                   akirak/helm-source-dummy-find-file))))
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
+    "Switch to a directory buffer interactively.
+
+Without a prefix, it displays a list of dired buffers, a list of
+directories of live file buffers, and a list of directory
+bookmarks.
+
+With a single universal prefix, it displays a list of known Git
+repositories.
+
+With two universal prefixes, it displays a list of remote
+connection identities of recent files."
     (interactive)
     (pcase current-prefix-arg
-      ('(16) (helm :prompt "Git repositories: "
-                   :sources akirak/helm-magic-list-repos-source))
+      ('(16)
+       (require 'my/helm/source/remote)
+       (helm :prompt "Remotes: "
+             :sources
+             '(akirak/helm-source-recent-remotes)))
       ('(4)
-       (if-let (root (akirak/project-root default-directory))
-           (let ((default-directory root))
-             (helm :prompt "Project: "
-                   :sources akirak/helm-project-root-and-ancestors-source))
-         (error "Not implemented for outside of a project")))
+       (require 'my/helm/source/dir)
+       (helm :prompt "Git repositories: "
+             :sources akirak/helm-magic-list-repos-source))
       ('()
+       (require 'my/helm/source/dir)
        (helm :prompt "Switch to a dired buffer: "
              :sources
              (list (akirak/helm-dired-buffer-source)
