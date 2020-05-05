@@ -81,113 +81,118 @@ This is intended to be set inside `akirak/set-header-line' function.")
 (defvar-local akirak/orig-header-line-format nil)
 
 (defun akirak/set-header-line ()
-  (let* ((modes (let ((mode major-mode)
-                      modes)
-                  (catch 'ok
-                    (while mode
-                      (push mode modes)
-                      (setq mode (get mode 'derived-mode-parent))))
-                  modes))
-         (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
-         (groups nil)
-         (fmt (cond
-               ((memq 'lisp-interaction-mode modes)
-                (setq groups '("Scratch"))
-                nil)
-               ((bound-and-true-p git-commit-mode)
-                (setq groups '("Git"))
-                nil)
-               ((or (memq 'prog-mode modes)
-                    (memq 'sgml-mode modes)
-                    (memq 'json-mode modes))
-                (setq groups (list (if project
-                                       (format "@%s:%s" project mode-name)
-                                     mode-name)))
-                (akirak/make-header-line-format))
-               ((memq 'org-mode modes)
-                (cond
-                 ;; An Org buffer has a header line if it is either an indirect buffer
-                 ;; or a file buffer which does not reside inside ~/lib
-                 ((and (buffer-base-buffer)
-                       (not (string-prefix-p "CAPTURE-" (buffer-name))))
-                  (akirak/make-header-line-format))
-                 ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
-                    (and (stringp file)
-                         (string-prefix-p (abbreviate-file-name org-journal-dir)
-                                          (abbreviate-file-name file))))
-                  (setq groups '("OrgJournal"))
+  (catch 'abort
+    (let* ((modes (let ((mode major-mode)
+                        modes)
+                    (catch 'ok
+                      (while mode
+                        (push mode modes)
+                        (setq mode (get mode 'derived-mode-parent))))
+                    ;; TODO: Abort in helm
+                    (when (or (window-minibuffer-p))
+                      (throw 'abort nil))
+                    modes))
+           (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
+           (groups nil)
+           (fmt (cond
+                 ((memq 'lisp-interaction-mode modes)
+                  (setq groups '("Scratch"))
                   nil)
-                 ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
-                    (and (stringp file)
-                         (or (not (string-prefix-p "~/lib/" (abbreviate-file-name file)))
-                             (string-prefix-p "~/lib/notes/writing/" (abbreviate-file-name file)))))
+                 ((bound-and-true-p git-commit-mode)
+                  (setq groups '("Git"))
+                  nil)
+                 ((or (memq 'prog-mode modes)
+                      (memq 'sgml-mode modes)
+                      (memq 'json-mode modes))
+                  (setq groups (list (if project
+                                         (format "@%s:%s" project mode-name)
+                                       mode-name)))
                   (akirak/make-header-line-format))
-                 (t
-                  (setq groups '("Org"))
-                  (akirak/make-header-line-format))))
-               ((and (buffer-file-name)
-                     project)
-                (setq groups `(,project))
-                nil)
-               ((memq 'org-agenda-mode modes)
-                ;; '((:eval (and (featurep 'all-the-icons)
-                ;;               (all-the-icons-icon-for-buffer)))
-                ;;   " "
-                ;;   (:eval (pcase org-agenda-redo-command
-                ;;            (`(org-agenda-run-series ,desc . ,_)
-                ;;             (when-let ((key (caar (cl-remove-if-not
-                ;;                                    (lambda (list) (equal (nth 1 list) desc))
-                ;;                                    org-agenda-custom-commands))))
-                ;;               (format "[%s]%s" key (car (split-string desc ":")))))
-                ;;            (x (prin1-to-string x)))))
-                (setq groups '("Org Agenda"))
-                nil)
-               ((or (memq 'helpful-mode modes)
-                    (memq 'help-mode modes)
-                    (memq 'Info-mode modes)
-                    (memq 'eww-mode modes))
-                (setq groups '("Emacs Help"))
-                nil)
-               ((memq 'comint-mode modes)
-                (setq groups '("REPL"))
-                nil)
-               ((memq 'exwm-mode modes)
-                nil)
-               ((memq 'dired-mode modes)
-                (progn
-                  (setq dired-filter-header-line-format
-                        `("  "
-                          ,(if (featurep 'all-the-icons)
-                               (all-the-icons-icon-for-buffer)
-                             'mode-name)
-                          " "
-                          dired-directory
-                          " "
-                          (:eval (dired-filter--describe-filters))))
-                  nil))
-               ((memq 'vterm-mode modes)
-                (setq groups (list (if project
-                                       (format "@%s:Terminal" project)
-                                     "Terminal")))
-                nil)
-               ((string-prefix-p "magit-" (format "%s" major-mode))
-                (setq groups (list (if project
-                                       (format "%s:Magit" project)
-                                     "Git")))
-                nil))))
-    (cond
-     (fmt
-      (setq header-line-format fmt)
-      (unless groups
-        (setq groups (ignore-errors
-                       (list (cl-etypecase mode-name
-                               (string mode-name)
-                               (list (car mode-name))))))))
-     (groups
-      (setq akirak/centaur-tabs-buffer-groups groups))
-     (t
-      (centaur-tabs-local-mode 1)
-      (setq header-line-format nil)))))
+                 ((memq 'org-mode modes)
+                  (cond
+                   ;; An Org buffer has a header line if it is either an indirect buffer
+                   ;; or a file buffer which does not reside inside ~/lib
+                   ((and (buffer-base-buffer)
+                         (not (string-prefix-p "CAPTURE-" (buffer-name))))
+                    (akirak/make-header-line-format))
+                   ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                      (and (stringp file)
+                           (string-prefix-p (abbreviate-file-name org-journal-dir)
+                                            (abbreviate-file-name file))))
+                    (setq groups '("OrgJournal"))
+                    nil)
+                   ((let ((file (buffer-file-name (org-base-buffer (current-buffer)))))
+                      (and (stringp file)
+                           (or (not (string-prefix-p "~/lib/" (abbreviate-file-name file)))
+                               (string-prefix-p "~/lib/notes/writing/" (abbreviate-file-name file)))))
+                    (akirak/make-header-line-format))
+                   (t
+                    (setq groups '("Org"))
+                    (akirak/make-header-line-format))))
+                 ((and (buffer-file-name)
+                       project)
+                  (setq groups `(,project))
+                  nil)
+                 ((memq 'org-agenda-mode modes)
+                  ;; '((:eval (and (featurep 'all-the-icons)
+                  ;;               (all-the-icons-icon-for-buffer)))
+                  ;;   " "
+                  ;;   (:eval (pcase org-agenda-redo-command
+                  ;;            (`(org-agenda-run-series ,desc . ,_)
+                  ;;             (when-let ((key (caar (cl-remove-if-not
+                  ;;                                    (lambda (list) (equal (nth 1 list) desc))
+                  ;;                                    org-agenda-custom-commands))))
+                  ;;               (format "[%s]%s" key (car (split-string desc ":")))))
+                  ;;            (x (prin1-to-string x)))))
+                  (setq groups '("Org Agenda"))
+                  nil)
+                 ((or (memq 'helpful-mode modes)
+                      (memq 'help-mode modes)
+                      (memq 'Info-mode modes)
+                      (memq 'eww-mode modes))
+                  (setq groups '("Emacs Help"))
+                  nil)
+                 ((memq 'comint-mode modes)
+                  (setq groups '("REPL"))
+                  nil)
+                 ((memq 'exwm-mode modes)
+                  nil)
+                 ((memq 'dired-mode modes)
+                  (progn
+                    (setq dired-filter-header-line-format
+                          `("  "
+                            ,(if (featurep 'all-the-icons)
+                                 (all-the-icons-icon-for-buffer)
+                               'mode-name)
+                            " "
+                            dired-directory
+                            " "
+                            (:eval (dired-filter--describe-filters))))
+                    nil))
+                 ((memq 'vterm-mode modes)
+                  (setq groups (list (if project
+                                         (format "@%s:Terminal" project)
+                                       "Terminal")))
+                  nil)
+                 ((string-prefix-p "magit-" (format "%s" major-mode))
+                  (setq groups (list (if project
+                                         (format "%s:Magit" project)
+                                       "Git")))
+                  nil))))
+      (cond
+       (fmt
+        (setq header-line-format fmt)
+        (unless groups
+          (setq groups (ignore-errors
+                         (list (cl-etypecase mode-name
+                                 (string mode-name)
+                                 (list (car mode-name))))))))
+       (groups
+        (setq akirak/centaur-tabs-buffer-groups groups))
+       (t
+        (centaur-tabs-local-mode 1)
+        (setq header-line-format nil)))
+      header-line-format)))
 
 (add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
