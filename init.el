@@ -478,7 +478,14 @@ outcommented org-mode headers)."
       (`(reformatter ,name)
        (if (region-active-p)
            (funcall (intern (concat name "-region")))
-         (funcall (intern (concat name "-buffer")))))
+         (funcall (intern (concat name "-buffer"))))
+       (let ((error-buf (get-buffer "*nixfmt errors*")))
+         (if (and error-buf
+                  (> (buffer-size error-buf) 0))
+             (display-buffer error-buf)
+           (when-let (w (and error-buf
+                             (get-buffer-window error-buf)))
+             (quit-window nil w)))))
       (_ (user-error "%s formatter" formatter)))))
 
 (akirak/bind-mode :keymaps 'magit-status-mode-map :package 'magit-status
@@ -507,11 +514,24 @@ outcommented org-mode headers)."
                 (`(reformatter ,name)
                  (funcall (intern (concat name "-buffer"))))
                 (_ (user-error "%s formatter" formatter)))
-              (save-buffer)))
+              (save-buffer))
+            (let ((error-buf (get-buffer "*nixfmt errors*")))
+              (if (and error-buf
+                       (> (buffer-size error-buf) 0))
+                  (progn
+                    (switch-to-buffer (current-buffer))
+                    (display-buffer error-buf)
+                    (user-error "Error while applying the formatter"))
+                (when-let (w (and error-buf
+                                  (get-buffer-window error-buf)))
+                  (quit-window nil w)))))
           (when new-buffer
             (kill-buffer new-buffer)))))
-    (when (derived-mode-p 'magit-status-mode)
-      (magit-refresh))))
+    (if (derived-mode-p 'magit-status-mode)
+        (progn
+          (message "Finished formatting. Refreshing the magit buffer...")
+          (magit-refresh))
+      (message "Finished formatting"))))
 
 ;;;; Running external commands
 (general-def
