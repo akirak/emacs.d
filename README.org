@@ -5,45 +5,6 @@ This is my Emacs configuration.
 :PROPERTIES:
 :TOC: siblings
 :END:
--  [[#prerequisites][Prerequisites]]
--  [[#installation][Installation]]
--  [[#license][License]]
--  [[#initialization][Initialization]]
-  -  [[#configure-straightel][Configure straight.el]]
-  -  [[#benchmarking-the-startup-process][Benchmarking the startup process]]
-  -  [[#use-the-latest-git-version-of-org-mode][Use the latest Git version of Org mode]]
-  -  [[#recipe-overrides][Recipe overrides]]
-  -  [[#load-configuration-files][Load configuration files]]
--  [[#configuration][Configuration]]
-  -  [[#things-to-set-up-before-using-use-package][Things to set up before using use-package]]
-  -  [[#default-settings][Default settings]]
-  -  [[#migrating][Migrating]]
--  [[#packages][Packages]]
--  [[#autoloads][Autoloads]]
--  [[#commands-and-keybindings][Commands and keybindings]]
-  -  [[#basic-keybindings][Basic keybindings]]
-    -  [[#c-a][C-a]]
-    -  [[#c-e][C-e]]
-    -  [[#c-h][C-h]]
-    -  [[#c-w][C-w]]
-    -  [[#c-u][C-u]]
-    -  [[#c-r][C-r]]
-  -  [[#key-translation][Key translation]]
-    -  [[#emulate-virtual-function-keys-of-chrome-os][Emulate virtual function keys of Chrome OS]]
-  -  [[#switching-buffers][Switching buffers]]
-    -  [[#helm-commands][Helm commands]]
-    -  [[#browsing-contents-in-specific-buffers-without-leaving-the-context][Browsing contents in specific buffers without leaving the context]]
-  -  [[#navigation-in-buffer][Navigation in buffer]]
-    -  [[#page-navigation][Page navigation]]
-  -  [[#editing][Editing]]
-    -  [[#undo-and-redo][Undo and redo]]
-    -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
-  -  [[#running-external-commands][Running external commands]]
-  -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
-  -  [[#administration][Administration]]
-    -  [[#docker][Docker]]
-    -  [[#nix][Nix]]
-
 **  Prerequisites
 - Linux or Window Subsystem for Linux
 - Nix package manager for installing dependencies
@@ -136,6 +97,9 @@ Install org-mode from the Git repository
 #+begin_src emacs-lisp
 (akirak/straight-use-recipes-from-file
  akirak/straight-default-recipes-file)
+
+(setq straight-x-pinned-packages
+      '(("dracula-theme" . "11391ea531d40fb08c64313bbb86e4d29d7fe1c5")))
 #+end_src
 
 ***  Load configuration files
@@ -425,16 +389,13 @@ Most of these commands are bound on C-x.
         (helm :prompt (format "Project %s: " project)
               :sources
               `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-                ,akirak/helm-source-recent-files
-                ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
-                   :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
-                                 akirak/helm-git-project-actions))))))))
+                ,akirak/helm-source-recent-files))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
-    (interactive (list (if current-prefix-arg
-                           (read-directory-name "Find files in dir: ")
-                         (akirak/project-root default-directory))))
+    (interactive (list (akirak/project-root default-directory)))
     (require 'my/helm/source/file)
+    (when current-prefix-arg
+      (akirak/clear-project-file-cache root :sort 'modified))
     (let ((default-directory root))
       (helm :prompt (format "Browse %s: " root)
             :sources
@@ -442,17 +403,30 @@ Most of these commands are bound on C-x.
                   akirak/helm-source-dummy-find-file))))
   "C-x d"
   (defun akirak/switch-to-dired-buffer ()
+    "Switch to a directory buffer interactively.
+
+Without a prefix, it displays a list of dired buffers, a list of
+directories of live file buffers, and a list of directory
+bookmarks.
+
+With a single universal prefix, it displays a list of known Git
+repositories.
+
+With two universal prefixes, it displays a list of remote
+connection identities of recent files."
     (interactive)
     (pcase current-prefix-arg
-      ('(16) (helm :prompt "Git repositories: "
-                   :sources akirak/helm-magic-list-repos-source))
+      ('(16)
+       (require 'my/helm/source/remote)
+       (helm :prompt "Remotes: "
+             :sources
+             '(akirak/helm-source-recent-remotes)))
       ('(4)
-       (if-let (root (akirak/project-root default-directory))
-           (let ((default-directory root))
-             (helm :prompt "Project: "
-                   :sources akirak/helm-project-root-and-ancestors-source))
-         (error "Not implemented for outside of a project")))
+       (require 'my/helm/source/dir)
+       (helm :prompt "Git repositories: "
+             :sources akirak/helm-magic-list-repos-source))
       ('()
+       (require 'my/helm/source/dir)
        (helm :prompt "Switch to a dired buffer: "
              :sources
              (list (akirak/helm-dired-buffer-source)
@@ -724,5 +698,12 @@ These commands are used to maintain this Emacs configuration.
   "nC" #'nix-env-install-cachix-use
   "nn" #'nix-env-install-npm
   "nu" #'nix-env-install-uninstall)
+#+end_src
+
+****  Remote connections (TRAMP)
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "r" '(nil :wk "remote")
+  "rk" #'helm-delete-tramp-connection)
 #+end_src
 
