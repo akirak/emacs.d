@@ -296,10 +296,7 @@
         (helm :prompt (format "Project %s: " project)
               :sources
               `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-                ,akirak/helm-source-recent-files
-                ,(helm-make-source "Git repositories" 'akirak/helm-source-magit-repos
-                   :action (cons '("Switch to project" . akirak/switch-to-project-file-buffer)
-                                 akirak/helm-git-project-actions))))))))
+                ,akirak/helm-source-recent-files))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (akirak/project-root default-directory)))
