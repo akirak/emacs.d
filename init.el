@@ -578,3 +578,8 @@ outcommented org-mode headers)."
   "nC" #'nix-env-install-cachix-use
   "nn" #'nix-env-install-npm
   "nu" #'nix-env-install-uninstall)
+
+;;;;; Remote connections (TRAMP)
+(akirak/bind-admin
+  "r" '(nil :wk "remote")
+  "rk" #'helm-delete-tramp-connection)
