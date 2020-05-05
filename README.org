@@ -580,6 +580,53 @@ outcommented org-mode headers)."
   "C-c '" #'outorg-copy-edits-and-exit)
 #+end_src
 
+****  Formatting code
+#+begin_src emacs-lisp
+(akirak/bind-generic
+  "lf"
+  (defun akirak/run-formatter ()
+    (interactive)
+    (require 'my/formatter)
+    (pcase (akirak/get-project-formatter)
+      (`(reformatter ,name)
+       (if (region-active-p)
+           (funcall (intern (concat name "-region")))
+         (funcall (intern (concat name "-buffer")))))
+      (_ (user-error "%s formatter" formatter)))))
+
+(akirak/bind-mode :keymaps 'magit-status-mode-map :package 'magit-status
+  "lf"
+  (defun akirak/run-formatter-on-project ()
+    (interactive)
+    (require 'my/formatter)
+    (let* ((project default-directory)
+           (files (akirak/project-files project))
+           (alist (->> (-group-by #'f-ext files)
+                       (-sort (lambda (a b)
+                                (> (length (cdr a))
+                                   (length (cdr b)))))
+                       (-filter #'car)))
+           (ext (completing-read "File extension: "
+                                 (-map #'car alist)
+                                 nil t)))
+      (dolist (file (cdr (assoc ext alist)))
+        (let (new-buffer)
+          (with-current-buffer (or (find-buffer-visiting file)
+                                   (setq new-buffer
+                                         (find-file-noselect file)))
+            (save-restriction
+              (widen)
+              (pcase (akirak/get-project-formatter project :mode major-mode)
+                (`(reformatter ,name)
+                 (funcall (intern (concat name "-buffer"))))
+                (_ (user-error "%s formatter" formatter)))
+              (save-buffer)))
+          (when new-buffer
+            (kill-buffer new-buffer)))))
+    (when (derived-mode-p 'magit-status-mode)
+      (magit-refresh))))
+#+end_src
+
 ***  Running external commands
 #+begin_src emacs-lisp
 (general-def
@@ -625,7 +672,6 @@ outcommented org-mode headers)."
                           (helm-build-sync-source "Basic commands"
                             :candidates
                             '("install")
-                            :coerce (-partial #'s-append "run ")
                             :action action)))))))
       (let (root)
         (cond
