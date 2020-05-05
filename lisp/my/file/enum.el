@@ -10,6 +10,10 @@
         (let* ((items (apply #'process-lines
                              "rg" "--files"
                              "--color=never"
+                             "--iglob=!.git"
+                             "--iglob=!.svn"
+                             "--hidden"
+                             "--one-file-system"
                              (cl-ecase sort
                                (modified '("--sortr" "modified")))))
                (cell (cons mtime items)))
