@@ -468,6 +468,51 @@ outcommented org-mode headers)."
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
 
+;;;;; Formatting code
+(akirak/bind-generic
+  "lf"
+  (defun akirak/run-formatter ()
+    (interactive)
+    (require 'my/formatter)
+    (pcase (akirak/get-project-formatter)
+      (`(reformatter ,name)
+       (if (region-active-p)
+           (funcall (intern (concat name "-region")))
+         (funcall (intern (concat name "-buffer")))))
+      (_ (user-error "%s formatter" formatter)))))
+
+(akirak/bind-mode :keymaps 'magit-status-mode-map :package 'magit-status
+  "lf"
+  (defun akirak/run-formatter-on-project ()
+    (interactive)
+    (require 'my/formatter)
+    (let* ((project default-directory)
+           (files (akirak/project-files project))
+           (alist (->> (-group-by #'f-ext files)
+                       (-sort (lambda (a b)
+                                (> (length (cdr a))
+                                   (length (cdr b)))))
+                       (-filter #'car)))
+           (ext (completing-read "File extension: "
+                                 (-map #'car alist)
+                                 nil t)))
+      (dolist (file (cdr (assoc ext alist)))
+        (let (new-buffer)
+          (with-current-buffer (or (find-buffer-visiting file)
+                                   (setq new-buffer
+                                         (find-file-noselect file)))
+            (save-restriction
+              (widen)
+              (pcase (akirak/get-project-formatter project :mode major-mode)
+                (`(reformatter ,name)
+                 (funcall (intern (concat name "-buffer"))))
+                (_ (user-error "%s formatter" formatter)))
+              (save-buffer)))
+          (when new-buffer
+            (kill-buffer new-buffer)))))
+    (when (derived-mode-p 'magit-status-mode)
+      (magit-refresh))))
+
 ;;;; Running external commands
 (general-def
   "C-x c"

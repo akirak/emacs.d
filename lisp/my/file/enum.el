@@ -1,6 +1,6 @@
 (defvar akirak/directory-contents-cache nil)
 
-(cl-defun akirak/project-files (root &key sort)
+(cl-defun akirak/project-files (root &key (sort 'modified))
   (let* ((attrs (file-attributes default-directory))
          (mtime (nth 5 attrs))
          (cache (assoc (cons root sort) akirak/directory-contents-cache))
