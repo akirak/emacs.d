@@ -331,7 +331,7 @@ connection identities of recent files."
       ('(4)
        (require 'my/helm/source/dir)
        (helm :prompt "Git repositories: "
-             :sources akirak/helm-magic-list-repos-source))
+             :sources akirak/helm-magit-list-repos-source))
       ('()
        (require 'my/helm/source/dir)
        (helm :prompt "Switch to a dired buffer: "

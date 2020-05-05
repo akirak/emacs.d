@@ -7,9 +7,24 @@
 (defclass akirak/helm-source-git-repository (helm-source-sync)
   ((action :initform 'akirak/helm-git-project-actions)))
 
-(defconst akirak/helm-magic-list-repos-source
+(defconst akirak/helm-magit-list-repos-source
   (helm-make-source "magit-list-repos" 'akirak/helm-source-git-repository
-    :candidates (lambda () (mapcar #'f-short (magit-list-repos)))))
+    :candidates
+    (lambda ()
+      (-let* ((repos (-map #'f-short (magit-list-repos)))
+              (buffer-repos (->> (buffer-list)
+                                 (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
+                                 (delq nil)
+                                 (-map #'akirak/project-root)
+                                 (cl-delete-duplicates)))
+              ((open-repos closed-repos)
+               (-separate (lambda (repo)
+                            (member repo buffer-repos))
+                          repos)))
+        (append (-map (lambda (repo)
+                        (propertize repo 'face 'font-lock-builtin-face))
+                      open-repos)
+                closed-repos)))))
 
 (defclass akirak/helm-source-magit-repos (akirak/helm-source-directory)
   ((candidates :initform (lambda () (->> (magit-repos-alist)
