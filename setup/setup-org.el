@@ -9,6 +9,12 @@
   (general-translate-key nil 'org-agenda-mode-map
     :package 'org-agenda akirak/mode-prefix-key "C-c C-x"))
 
+(general-create-definer akirak/bind-org-export
+  :prefix (concat akirak/mode-prefix-key " X")
+  :keymaps 'org-mode-map :package 'org)
+
+(akirak/bind-org-export "" '(nil :wk "export shortcuts"))
+
 (defmacro akirak/org-with-maybe-agenda-origin (&rest progn)
   `(cond
     ((derived-mode-p 'org-mode)
