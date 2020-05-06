@@ -479,7 +479,7 @@ outcommented org-mode headers)."
        (if (region-active-p)
            (funcall (intern (concat name "-region")))
          (funcall (intern (concat name "-buffer"))))
-       (let ((error-buf (get-buffer "*nixfmt errors*")))
+       (let ((error-buf (get-buffer (format "*%s errors*" name))))
          (if (and error-buf
                   (> (buffer-size error-buf) 0))
              (display-buffer error-buf)
@@ -493,6 +493,7 @@ outcommented org-mode headers)."
   (defun akirak/run-formatter-on-project ()
     (interactive)
     (require 'my/formatter)
+    (require 'my/file/enum)
     (let* ((project default-directory)
            (files (akirak/project-files project))
            (alist (->> (-group-by #'f-ext files)
@@ -515,7 +516,7 @@ outcommented org-mode headers)."
                  (funcall (intern (concat name "-buffer"))))
                 (_ (user-error "%s formatter" formatter)))
               (save-buffer))
-            (let ((error-buf (get-buffer "*nixfmt errors*")))
+            (let ((error-buf (get-buffer (format "*%s errors*" name))))
               (if (and error-buf
                        (> (buffer-size error-buf) 0))
                   (progn
