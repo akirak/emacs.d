@@ -14,7 +14,18 @@
        (delq nil)
        (-map #'file-name-as-directory)
        (-map #'f-short)
-       (-sort #'string<)
+       (-sort #'string>)
+       (-uniq)))
+
+(defsubst akirak/open-file-buffer-directories ()
+  (->> (buffer-list)
+       (-filter #'buffer-file-name)
+       (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
+       (delq nil)
+       (-map #'file-name-as-directory)
+       (-map #'f-short)
+       ;; Prefer descendant order for quickly visiting nested directories
+       (-sort #'string>)
        (-uniq)))
 
 (provide 'my/dir/enum)

@@ -323,22 +323,28 @@ With two universal prefixes, it displays a list of remote
 connection identities of recent files."
     (interactive)
     (pcase current-prefix-arg
-      ('(16)
-       (require 'my/helm/source/remote)
-       (helm :prompt "Remotes: "
-             :sources
-             '(akirak/helm-source-recent-remotes)))
       ('(4)
-       (require 'my/helm/source/dir)
-       (helm :prompt "Git repositories: "
-             :sources akirak/helm-magit-list-repos-source))
+       (require 'my/helm/source/remote)
+       (helm :prompt "Remote: "
+             :sources
+             '(akirak/helm-source-remote-bookmark
+               akirak/helm-source-recent-remotes)))
       ('()
        (require 'my/helm/source/dir)
-       (helm :prompt "Switch to a dired buffer: "
+       (helm :prompt "Directory/repository: "
              :sources
              (list (akirak/helm-dired-buffer-source)
-                   akirak/helm-open-buffer-directories-source
-                   akirak/helm-directory-bookmark-source)))))
+                   akirak/helm-directory-bookmark-source
+                   akirak/helm-open-file-buffer-directories-source)))
+      (_ (user-error "Not matching %s" current-prefix-arg)))))
+  "C-x g"
+  (defun akirak/browse-git-repository ()
+    (interactive)
+    (require 'my/helm/source/dir)
+    (helm :prompt "Directory/repository: "
+          :sources
+          (list akirak/helm-directory-bookmark-as-git-source
+                akirak/helm-magit-list-repos-source)))
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
     (interactive)

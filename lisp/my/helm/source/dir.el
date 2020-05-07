@@ -44,4 +44,10 @@
                   (require 'my/dir/enum)
                   (akirak/open-buffer-directories))))
 
+(defconst akirak/helm-open-file-buffer-directories-source
+  (helm-make-source "Directories of open file buffers" 'akirak/helm-source-directory
+    :candidates (lambda ()
+                  (require 'my/dir/enum)
+                  (akirak/open-file-buffer-directories))))
+
 (provide 'my/helm/source/dir)

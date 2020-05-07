@@ -106,6 +106,8 @@ Only one letter is shown, the first that applies."
    (if akirak/to-be-run-as-exwm
        'magit-display-buffer-same-window-except-diff-v1
      'magit-display-buffer-fullframe-status-v1))
+  ;; Don't use `magit-file-mode-map'
+  (global-magit-file-mode nil)
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
