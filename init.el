@@ -336,7 +336,7 @@ connection identities of recent files."
              (list (akirak/helm-dired-buffer-source)
                    akirak/helm-directory-bookmark-source
                    akirak/helm-open-file-buffer-directories-source)))
-      (_ (user-error "Not matching %s" current-prefix-arg)))))
+      (_ (user-error "Not matching %s" current-prefix-arg))))
   "C-x g"
   (defun akirak/browse-git-repository ()
     (interactive)
