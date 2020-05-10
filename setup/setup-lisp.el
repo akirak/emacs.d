@@ -33,9 +33,6 @@
 
 (use-package buttercup)
 
-(use-package package-requires
-  :straight (package-requires :host github
-                              :repo "akirak/package-requires.el"))
 
 (use-package flycheck-package
   :commands (flycheck-package-setup))
@@ -81,6 +78,87 @@
         (nameless-mode 1)))))
 
 (add-hook 'emacs-lisp-mode-hook #'akirak/emacs-lisp-setup-package)
+
+(defun akirak/emacs-lisp-update-keywords ()
+  (interactive)
+  (goto-char (point-min))
+  (when (re-search-forward (lm-get-header-re "Keywords") nil t)
+    (helm :prompt "Keywords: "
+          :sources
+          (helm-build-sync-source "finder-known-keywords"
+            :candidates (-map (lambda (cell)
+                                (cons (format "%s: %s"
+                                              (car cell)
+                                              (cdr cell))
+                                      (car cell)))
+                              finder-known-keywords)
+            :action
+            (lambda (_)
+              (save-excursion
+                (delete-region (point) (line-end-position))
+                (insert " " (mapconcat #'symbol-name
+                                    (helm-marked-candidates)
+                                    " "))))))))
+
+(defun akirak/emacs-lisp-package-dependencies ()
+  (let* ((src (buffer-substring-no-properties (point-min) (point-max)))
+         (requires (->> (s-match-strings-all (rx bol "(require '"
+                                                 (group (+ (any "-" alnum)))
+                                                 ")")
+                                             src)
+                        (--map (nth 1 it))))
+         (exts (->> (s-match-strings-all (rx bol "(declare-function"
+                                             (+ space)
+                                             (?  "#") "'" (+ (any "-" alnum))
+                                             (+ space)
+                                             "\""
+                                             (group (+ (any "-:" alnum)))
+                                             "\"")
+                                         src)
+                    (--map (nth 1 it))
+                    (--map (string-remove-prefix "ext:" it))))
+         packages)
+    (cl-labels
+        ((add-version
+          (name)
+          (let* ((file (file-truename (find-library-name (symbol-name name))))
+                 (existing (find-buffer-visiting file))
+                 (buffer (or existing
+                             (find-file-noselect file))))
+            (prog1 (cons name (s-match (rx bol
+                                           (+ (any digit))
+                                           (optional (and "."
+                                                          (+ (any digit)))))
+                                       (or (with-current-buffer buffer
+                                             (lm-header "Version"))
+                                           "0")))
+              (unless existing
+                (kill-buffer buffer))))))
+      ;; Retrieve a list of packages using straight.el.
+      ;;
+      ;; The result is stored in packages
+      (maphash (lambda (package _recipe)
+                 (let ((sym (intern package)))
+                   (unless (gethash sym straight--cached-built-in-packages)
+                     (push sym packages))))
+               straight--recipe-cache)
+      (->> (-uniq (append requires exts))
+           (-map #'intern)
+           (cl-intersection packages)
+           (-map #'add-version)))))
+
+(defun akirak/emacs-lisp-update-package-requires ()
+  (interactive)
+  (goto-char (point-min))
+  (when (re-search-forward (lm-get-header-re "Package-Requires") nil t)
+    (let* ((initial (point))
+           (orig (read (current-buffer)))
+           (new (cons (assoc 'emacs orig)
+                      (akirak/emacs-lisp-package-dependencies))))
+      (delete-region initial (line-end-position))
+      (insert "(" (mapconcat #'prin1-to-string
+                             new " ")
+              ")"))))
 
 ;;;; Commands
 (defun akirak/straight-pull-package-projectile (name)
