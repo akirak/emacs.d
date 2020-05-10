@@ -67,4 +67,15 @@
           )
       (pop-to-buffer buffer))))
 
+(defun akirak/github-repo-path-with-default ()
+  (or (ignore-errors
+        (cadr (s-match (rx "github.com" (or ":" "/")
+                           (group (+? anything))
+                           (optional ".git") eol)
+                       (magit-git-string "config" "remote.origin.url"))))
+      (ignore-errors
+        (concat (magit-git-string "config" "github.user")
+                "/"
+                (f-filename (car-safe (project-roots (project-current))))))))
+
 (provide 'setup-github)
