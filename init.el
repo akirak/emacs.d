@@ -592,8 +592,7 @@ outcommented org-mode headers)."
           (spago-build root))
          ((equal arg '(4))
           (helm :prompt "Compile history: "
-                :sources akirak/helm-compile-history-source)
-          (akirak/helm-shell-command))
+                :sources akirak/helm-compile-history-source))
          ((equal arg 0)
           (let ((root (akirak/project-root default-directory)))
             (if (and root (f-exists (f-join root ".github"))
@@ -601,23 +600,37 @@ outcommented org-mode headers)."
                 (let ((default-directory root))
                   (compile "act"))
               (user-error "N/A"))))
-         ((make-root)
-          (counsel-compile))
-         ((setq root (npm-root))
-          (npm-run-something root))))))
+         ((and (setq root (akirak/project-root default-directory))
+               (f-exists-p (f-join root "package.json")))
+          (npm-run-something root))
+         ((and root
+               (f-exists-p (f-join root "Makefile")))
+          (let ((default-directory root)) (counsel-compile)))
+         (t
+          (akirak/helm-shell-command root))))))
   "C-x C"
-  (defun akirak/helm-shell-command ()
+  (defun akirak/helm-shell-command (&optional root)
     (interactive)
     (require 'my/helm/source/org)
     (require 'my/helm/action/org-marker)
-    (let ((root (or (akirak/project-root default-directory)
+    (let ((root (or root
+                    (akirak/project-root default-directory)
                     default-directory)))
       (setq akirak/programming-recipe-mode-name "sh"
             akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
       (helm :prompt (format "Execute command (project root: %s): " root)
             :sources
-            (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
-              :action akirak/helm-org-marker-sh-block-action-list)))))
+            (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
+                    :action akirak/helm-org-marker-sh-block-action-list)
+                  (helm-build-dummy-source "Command"
+                    :action
+                    '(("compile"
+                       . (lambda (command)
+                           (akirak/compile command :directory root)))
+                      ("eshell"
+                       . (lambda (command)
+                           (let ((default-directory root))
+                             (eshell-command command)))))))))))
 
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.
