@@ -416,22 +416,28 @@ With two universal prefixes, it displays a list of remote
 connection identities of recent files."
     (interactive)
     (pcase current-prefix-arg
-      ('(16)
-       (require 'my/helm/source/remote)
-       (helm :prompt "Remotes: "
-             :sources
-             '(akirak/helm-source-recent-remotes)))
       ('(4)
-       (require 'my/helm/source/dir)
-       (helm :prompt "Git repositories: "
-             :sources akirak/helm-magit-list-repos-source))
+       (require 'my/helm/source/remote)
+       (helm :prompt "Remote: "
+             :sources
+             '(akirak/helm-source-remote-bookmark
+               akirak/helm-source-recent-remotes)))
       ('()
        (require 'my/helm/source/dir)
-       (helm :prompt "Switch to a dired buffer: "
+       (helm :prompt "Directory/repository: "
              :sources
              (list (akirak/helm-dired-buffer-source)
-                   akirak/helm-open-buffer-directories-source
-                   akirak/helm-directory-bookmark-source)))))
+                   akirak/helm-directory-bookmark-source
+                   akirak/helm-open-file-buffer-directories-source)))
+      (_ (user-error "Not matching %s" current-prefix-arg))))
+  "C-x g"
+  (defun akirak/browse-git-repository ()
+    (interactive)
+    (require 'my/helm/source/dir)
+    (helm :prompt "Directory/repository: "
+          :sources
+          (list akirak/helm-directory-bookmark-as-git-source
+                akirak/helm-magit-list-repos-source)))
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
     (interactive)
@@ -701,8 +707,7 @@ outcommented org-mode headers)."
           (spago-build root))
          ((equal arg '(4))
           (helm :prompt "Compile history: "
-                :sources akirak/helm-compile-history-source)
-          (akirak/helm-shell-command))
+                :sources akirak/helm-compile-history-source))
          ((equal arg 0)
           (let ((root (akirak/project-root default-directory)))
             (if (and root (f-exists (f-join root ".github"))
@@ -710,23 +715,37 @@ outcommented org-mode headers)."
                 (let ((default-directory root))
                   (compile "act"))
               (user-error "N/A"))))
-         ((make-root)
-          (counsel-compile))
-         ((setq root (npm-root))
-          (npm-run-something root))))))
+         ((and (setq root (akirak/project-root default-directory))
+               (f-exists-p (f-join root "package.json")))
+          (npm-run-something root))
+         ((and root
+               (f-exists-p (f-join root "Makefile")))
+          (let ((default-directory root)) (counsel-compile)))
+         (t
+          (akirak/helm-shell-command root))))))
   "C-x C"
-  (defun akirak/helm-shell-command ()
+  (defun akirak/helm-shell-command (&optional root)
     (interactive)
     (require 'my/helm/source/org)
     (require 'my/helm/action/org-marker)
-    (let ((root (or (akirak/project-root default-directory)
+    (let ((root (or root
+                    (akirak/project-root default-directory)
                     default-directory)))
       (setq akirak/programming-recipe-mode-name "sh"
             akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
       (helm :prompt (format "Execute command (project root: %s): " root)
             :sources
-            (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
-              :action akirak/helm-org-marker-sh-block-action-list)))))
+            (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
+                    :action akirak/helm-org-marker-sh-block-action-list)
+                  (helm-build-dummy-source "Command"
+                    :action
+                    '(("compile"
+                       . (lambda (command)
+                           (akirak/compile command :directory root)))
+                      ("eshell"
+                       . (lambda (command)
+                           (let ((default-directory root))
+                             (eshell-command command)))))))))))
 #+end_src
 
 ***  Maintenance and development of the config
