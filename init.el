@@ -624,12 +624,12 @@ outcommented org-mode headers)."
                     :action akirak/helm-org-marker-sh-block-action-list)
                   (helm-build-dummy-source "Command"
                     :action
-                    '(("compile"
+                    `(("compile"
                        . (lambda (command)
-                           (akirak/compile command :directory root)))
+                           (akirak/compile command :directory ,root)))
                       ("eshell"
                        . (lambda (command)
-                           (let ((default-directory root))
+                           (let ((default-directory ,root))
                              (eshell-command command)))))))))))
 
 ;;;; Maintenance and development of the config
