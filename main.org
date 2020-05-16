@@ -44,7 +44,6 @@ for a better understanding of my previous work and organizing it in a more sensi
 -  [[#a-bunch-of-useful-features][A bunch of useful features]]
   -  [[#customizing-emacs][Customizing Emacs]]
   -  [[#pretty-hydras][Pretty hydras]]
-  -  [[#frame-workflow][frame-workflow]]
   -  [[#terminal-and-shells][Terminal and shells]]
   -  [[#dired][Dired]]
   -  [[#file-operations][File operations]]
@@ -113,7 +112,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
   -  [[#recurring-tasks][Recurring tasks]]
   -  [[#org-journal][Org Journal]]
-  -  [[#frame][Frame]]
   -  [[#org-agenda-keybindings][Org-agenda keybindings]]
 -  [[#exwm][EXWM]]
 -  [[#meta][Meta]]
@@ -728,15 +726,6 @@ I'm not using olivetti-mode
         (quit-window nil window)
       (flycheck-list-errors)))
 #+end_src
-*** frame-workflow
-[[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-frame-workflow t) ; Ensure loading frame-workflow
-
-  (general-def "C-M-g" #'frame-workflow-prefix-map)
-#+end_src
-
 *** Terminal and shells
 **** Using vterm
 I will use vterm.
@@ -750,50 +739,10 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
 #+begin_src emacs-lisp
   (akirak/bind-user "t" #'akirak/vterm-toggle-cd)
 #+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (defun akirak/vterm-buffer-live-p ()
-    (and (derived-mode-p 'vterm-mode)
-         (let ((process (get-buffer-process (current-buffer))))
-           (and process
-                (process-live-p process)))))
-
-  (defun akirak/get-live-vterm-buffer ()
-    (car (-filter (lambda (buf)
-                    (with-current-buffer buf
-                      (akirak/vterm-buffer-live-p)))
-                  (buffer-list))))
-
-  (defun akirak/get-or-create-vterm-buffer ()
-    (or (akirak/vterm-buffer-live-p)
-        (akirak/get-live-vterm-buffer)
-        (progn
-          (vterm)
-          (current-buffer))))
-
-  (frame-workflow-define-subject "terminal"
-    :key "t"
-    :layout
-    '(switch-to-buffer (akirak/get-or-create-vterm-buffer))
-    :refocus
-    '(switch-to-buffer (akirak/get-or-create-vterm-buffer)))
-#+end_src
-
 *** Dired
 #+begin_src emacs-lisp
   (general-def "C-x C-j" #'dired-jump)
 #+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "dired"
-    :key "d"
-    ;; :make-frame
-    ;; '(frame-purpose-make-mode-frame 'dired-mode)
-    :layout
-    '(when (fboundp 'ibuffer-sidebar-show-sidebar)
-       (ibuffer-sidebar-show-sidebar)))
-#+end_src
-
 *** File operations
 #+begin_src emacs-lisp
   (akirak/require 'setup-files)
@@ -1625,26 +1574,6 @@ Use lsp-mode.
      (("s" suggest)
       ("i" counsel-info-lookup-symbol "info symbol"))))
 #+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "emacs-lisp"
-    :key "e"
-    ;; :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode)
-    )
-#+end_src
-**** Frame for the Emacs config
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "emacs-config"
-    :key "C"
-    :layout
-    '(progn
-       (delete-other-windows)
-       (let ((default-directory user-emacs-directory))
-         (frame-workflow-magit-same-window)))
-    ;; :make-frame
-    ;; '(frame-purpose-make-directory-frame user-emacs-directory)
-    )
-#+end_src
 **** Makel
 I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
 *** Nim
@@ -1778,23 +1707,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-journal)
 #+end_src
-*** Frame
-:PROPERTIES:
-:ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
-:END:
-
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "org"
-    :key "o"
-    :layout '(progn
-               (org-starter-load-all-known-files)
-               (when (fboundp #'ibuffer-sidebar-show-sidebar)
-                 (ibuffer-sidebar-show-sidebar)
-                 (with-current-buffer (ibuffer-sidebar-buffer (selected-frame))
-                   (ibuffer-projectile-set-filter-groups)
-                   (ibuffer-update nil)))))
-#+end_src
-
 *** Org-agenda keybindings                                :Emacs:Org__Mode:
 :PROPERTIES:
 :CREATED_TIME: [2019-01-19 Sat 12:22]
