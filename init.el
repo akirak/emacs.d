@@ -136,6 +136,7 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
+(use-package calibredb)
 (use-package docker)
 (use-package electric
   :straight (:type built-in)
@@ -655,6 +656,11 @@ outcommented org-mode headers)."
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
+
+;;;;; Local libraries
+(akirak/bind-admin
+  "l" '(nil :wk "library")
+  "lc" #'calibredb-find-counsel)
 
 ;;;;; Nix
 (akirak/bind-admin
