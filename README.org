@@ -199,6 +199,7 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 
 **  Packages
 #+begin_src emacs-lisp
+(use-package calibredb)
 (use-package docker)
 (use-package electric
   :straight (:type built-in)
@@ -739,12 +740,12 @@ outcommented org-mode headers)."
                     :action akirak/helm-org-marker-sh-block-action-list)
                   (helm-build-dummy-source "Command"
                     :action
-                    '(("compile"
+                    `(("compile"
                        . (lambda (command)
-                           (akirak/compile command :directory root)))
+                           (akirak/compile command :directory ,root)))
                       ("eshell"
                        . (lambda (command)
-                           (let ((default-directory root))
+                           (let ((default-directory ,root))
                              (eshell-command command)))))))))))
 #+end_src
 
@@ -775,6 +776,13 @@ These commands are used to maintain this Emacs configuration.
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
+#+end_src
+
+****  Local libraries
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "l" '(nil :wk "library")
+  "lc" #'calibredb-find-counsel)
 #+end_src
 
 ****  Nix
