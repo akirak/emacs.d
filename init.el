@@ -145,6 +145,7 @@
 
 (use-package helm-tail
   :commands (helm-tail))
+(use-package melpa-check)
 (use-package org-recent-headings
   :after org
   :config
