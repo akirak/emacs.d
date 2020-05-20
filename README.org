@@ -205,9 +205,11 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
   :straight (:type built-in)
   :hook
   (text-mode . electric-pair-local-mode))
+(use-package explain-pause-mode)
 
 (use-package helm-tail
   :commands (helm-tail))
+(use-package melpa-check)
 (use-package org-recent-headings
   :after org
   :config
@@ -768,6 +770,13 @@ These commands are used to maintain this Emacs configuration.
 #+end_src
 
 ***  Administration
+****  Emacs
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "e" '(nil :wk "emacs")
+  "ex" #'explain-pause-mode)
+#+end_src
+
 ****  Docker
 #+begin_src emacs-lisp
 (akirak/bind-admin
