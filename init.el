@@ -142,6 +142,7 @@
   :straight (:type built-in)
   :hook
   (text-mode . electric-pair-local-mode))
+(use-package explain-pause-mode)
 
 (use-package helm-tail
   :commands (helm-tail))
@@ -650,6 +651,11 @@ outcommented org-mode headers)."
                              :action #'find-file))))))
 
 ;;;; Administration
+;;;;; Emacs
+(akirak/bind-admin
+  "e" '(nil :wk "emacs")
+  "ex" #'explain-pause-mode)
+
 ;;;;; Docker
 (akirak/bind-admin
   "k" '(nil :wk "docker")
