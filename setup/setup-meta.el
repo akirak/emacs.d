@@ -2,7 +2,7 @@
   '(setup-exec-path
     setup-wrap
     setup-counsel    ; Basic Counsel commands
-    setup-projectile ; Manage projects
+    ;; setup-projectile ; Manage projects
     setup-swiper     ; Incremental search through the buffer using Ivy
     setup-aggressive-indent
     setup-lispy                         ; Efficient lisp editing
@@ -22,7 +22,6 @@
     setup-smartparens     ; Parenthesis editing
     setup-org-make-toc    ; Generating TOCs
     setup-unpackaged      ; A bunch of useful commands
-    setup-locate          ; Configure locate and updatedb
     setup-org-custom-commands
     setup-ace-window      ; An alternative way for window manipulation
     setup-outshine        ; Extra support for outline editing

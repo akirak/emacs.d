@@ -161,8 +161,8 @@
               ")"))))
 
 ;;;; Commands
-(defun akirak/straight-pull-package-projectile (name)
-  "Pull the package recipe for the current projectile project."
+(defun akirak/straight-pull-package-project (name)
+  "Pull the package recipe for the current project."
   (interactive
    (list (completing-read "Package: "
                           (--map (f-filename it)
@@ -170,7 +170,8 @@
                                   (expand-file-name "straight/repos"
                                                     user-emacs-directory)))
                           nil t
-                          (projectile-project-name))))
+                          (when-let (root (project-roots (project-current)))
+                            (f-filename root)))))
   (straight-pull-package (intern name))
   (when (yes-or-no-p "Rebuild the package? ")
     (straight-rebuild-package name))

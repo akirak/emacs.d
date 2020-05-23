@@ -49,7 +49,7 @@
   (if (file-exists-p local-path)
       (let ((default-directory local-path))
         (message "%s already exists" local-path)
-        (funcall projectile-switch-project-action))
+        (magit-status))
     (message "Cloning %s to %s..." url local-path)
     (magit-clone-regular url local-path args)))
 
@@ -83,14 +83,15 @@
   :type '(repeat string))
 
 (defun akirak/git-clone-parent-directories ()
-  (append (thread-last projectile-known-projects
-            (-map (-partial (-flip #'string-trim-right) "/"))
-            (-group-by #'f-parent)
-            (-sort (-on #'> #'seq-length))
-            (-map #'car)
-            (-map #'f-short)
-            (-filter (-partial #'string-prefix-p "~")))
-          akirak/git-clone-parent-directories))
+  ;; (append (thread-last projectile-known-projects
+  ;;           (-map (-partial (-flip #'string-trim-right) "/"))
+  ;;           (-group-by #'f-parent)
+  ;;           (-sort (-on #'> #'seq-length))
+  ;;           (-map #'car)
+  ;;           (-map #'f-short)
+  ;;           (-filter (-partial #'string-prefix-p "~")))
+  ;;         akirak/git-clone-parent-directories)
+  akirak/git-clone-parent-directories)
 
 (defun akirak/get-repository-name (url)
   (nth 1 (s-match (rx (or (and (group-n 1 (+ (not (any "/")))) ".git")

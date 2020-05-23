@@ -92,7 +92,8 @@ This is intended to be set inside `akirak/set-header-line' function.")
                     (when (or (window-minibuffer-p))
                       (throw 'abort nil))
                     modes))
-           (project (and (bound-and-true-p projectile-mode) (projectile-project-name)))
+           (project-root (car-safe (project-roots (project-current))))
+           (project (and project-root (f-filename project-root)))
            (groups nil)
            (fmt (cond
                  ((memq 'lisp-interaction-mode modes)
@@ -229,11 +230,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
          (file-name (cond
                      (filep buffer-file-name)
                      (base-buffer (buffer-file-name base-buffer))))
-         (project-root (when (and (not omit-project)
-                                  (bound-and-true-p projectile-mode))
-                         (projectile-project-root)))
+         (project-root (car-safe (project-roots (project-current))))
          (project-name (when project-root
-                         (projectile-project-name)))
+                         (f-filename project-root)))
          (relative-name (when (and file-name project-root)
                           (file-relative-name file-name project-root)))
          (file-segment (when file-name

@@ -19,7 +19,7 @@
   (enable-recursive-minibuffers t)
   (ivy-height 10)
   (ivy-initial-inputs-alist nil "Don't prepend `^' to any of the ivy prompts")
-  (projectile-completion-system 'ivy)
+  ;; (projectile-completion-system 'ivy)
   (ivy-ignore-buffers (quote ("\\` " "\\\\*lemonbar\\\\*" "\\\\*i3status\\\\*"))))
 
 ;; https://github.com/abo-abo/swiper/wiki/Sort-files-by-mtime#a-simple-version

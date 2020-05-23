@@ -30,7 +30,7 @@
     (format "#%s# " (frame-workflow--frame-subject-name)))
    ((frame-parameter nil 'buffer-predicate)
     (format ":%s: " (frame-parameter nil 'purpose-name)))
-   (t (format "%s: " (projectile-project-name)))))
+   (t (format "%s: " (car-safe (project-roots (project-current)))))))
 
 (defun akirak/frame-title-body ()
   (let ((path (or buffer-file-name dired-directory)))

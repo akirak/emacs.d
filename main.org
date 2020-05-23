@@ -309,16 +309,9 @@ Also create a prefix for specific help commands, e.g. =info= and =man=:
 #+end_src
 **** <f7>
 
-**** <f8> to projectile commands
+**** <f8> to project commands
 #+begin_src emacs-lisp
-  (general-def
-    :keymaps 'projectile-mode-map
-    :package 'projectile
-    "<f8>" #'projectile-command-map)
-
-  (general-create-definer akirak/bind-f8
-    :package 'projectile
-    :keymaps 'projectile-command-map)
+  (general-create-definer akirak/bind-f8)
 #+end_src
 
 I bind ~<f8>~ followed by another function key press to magit commands.
