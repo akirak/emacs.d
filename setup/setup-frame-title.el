@@ -24,13 +24,14 @@
 ;;;; Title components
 
 (defun akirak/frame-title-subject ()
+  (require 'project)
   (cond
    ((and (bound-and-true-p frame-workflow-mode)
          (frame-parameter nil 'workflow))
     (format "#%s# " (frame-workflow--frame-subject-name)))
    ((frame-parameter nil 'buffer-predicate)
     (format ":%s: " (frame-parameter nil 'purpose-name)))
-   (t (format "%s: " (car-safe (project-roots (project-current)))))))
+   (t (format "%s: " (akirak/project-name)))))
 
 (defun akirak/frame-title-body ()
   (let ((path (or buffer-file-name dired-directory)))

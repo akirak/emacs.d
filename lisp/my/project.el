@@ -19,4 +19,8 @@
                   root))
     (root root)))
 
+(defun akirak/project-name ()
+  (when-let (root (akirak/project-root default-directory))
+    (f-filename root)))
+
 (provide 'my/project)

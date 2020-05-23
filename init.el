@@ -133,6 +133,10 @@
   (require 'my/system/platform/crostini))
 
 ;;;; Migrating
+;; In case there are functions that depends on these modules,
+;; load them first.
+(require 'my/project)
+(require 'my/buffer/predicate)
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
@@ -152,13 +156,6 @@
   :config
   (org-recent-headings-mode 1))
 (use-package whole-line-or-region)
-
-;;; Autoloads
-(use-package my/project
-  :straight (:type built-in))
-
-(use-package my/buffer/predicate
-  :straight (:type built-in))
 
 ;;; Commands and keybindings
 ;;;; Basic keybindings
