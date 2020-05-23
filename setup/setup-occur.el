@@ -63,7 +63,4 @@
   (:keymaps 'deadgrep-mode-map
             "R" #'deadgrep-replace))
 
-(use-package comb
-  :commands (comb))
-
 (provide 'setup-occur)
