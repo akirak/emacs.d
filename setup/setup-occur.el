@@ -16,7 +16,52 @@
   :disabled t)
 
 (use-package deadgrep
-  :commands (deadgrep))
+  :commands (deadgrep)
+  :config
+  (defvar deadgrep-replace-history nil)
+  (defun deadgrep-replace ()
+    (interactive)
+    (cl-assert (derived-mode-p 'deadgrep-mode))
+    (let ((search-term deadgrep--search-term)
+          (search-type deadgrep--search-type)
+          (search-case deadgrep--search-case)
+          (case-fold-search (cl-ecase deadgrep--search-case
+                              ;; smart is not properly supported on Emacs.
+                              (smart t)
+                              (sensitive nil)
+                              (ignore t)))
+          files
+          (initial-directory default-directory)
+          (to-string (read-string "Replace with string: " nil deadgrep-replace-history)))
+      (ignore-errors
+        (save-excursion
+          (goto-char (point-min))
+          (while t
+            (deadgrep-forward-filename)
+            (push (deadgrep--filename) files))))
+      (dolist (file (mapcar (lambda (file)
+                              (expand-file-name file initial-directory))
+                            files))
+        (find-file file)
+        (save-restriction
+          (widen)
+          (save-excursion
+            (goto-char (point-min))
+            (cl-ecase search-type
+              (string
+               (query-replace search-term to-string))
+              (words
+               (query-replace-regexp (rx bow (eval search-term) eow)
+                                     to-string))
+              (regexp
+               (query-replace-regexp search-term to-string)))))
+        (save-buffer))))
+  :config
+  (akirak/bind-mode :package 'magit :keymaps 'magit-status-mode-map
+    "g" #'deadgrep)
+  :general
+  (:keymaps 'deadgrep-mode-map
+            "R" #'deadgrep-replace))
 
 (use-package comb
   :commands (comb))
