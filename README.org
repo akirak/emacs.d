@@ -193,7 +193,12 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 #+end_src
 
 ***  Migrating
+In case there are functions that depends on these modules,
+load them first.
+
 #+begin_src emacs-lisp
+(require 'my/project)
+(require 'my/buffer/predicate)
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 #+end_src
 
@@ -215,15 +220,6 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
   :config
   (org-recent-headings-mode 1))
 (use-package whole-line-or-region)
-#+end_src
-
-**  Autoloads
-#+begin_src emacs-lisp
-(use-package my/project
-  :straight (:type built-in))
-
-(use-package my/buffer/predicate
-  :straight (:type built-in))
 #+end_src
 
 **  Commands and keybindings
