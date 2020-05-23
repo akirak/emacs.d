@@ -158,6 +158,8 @@ the contents of the current buffer as the root document."
   (html-mode . skewer-html-mode))
 
 (use-package jest
+  ;; Disabled temporarily since it depends on projectile
+  :disabled t
   :config
   (akirak/bind-mode :keymaps 'js-mode-map :package 'js
     "t" #'jest-file-dwim)
