@@ -650,7 +650,6 @@ outcommented org-mode headers)."
 ;;;; Administration
 ;;;;; Emacs
 (akirak/bind-admin
-  "e" '(nil :wk "emacs")
   "ex" #'explain-pause-mode)
 
 ;;;;; Docker
