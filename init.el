@@ -155,6 +155,9 @@
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package valign
+  :hook
+  (org-mode . valign-mode))
 (use-package whole-line-or-region)
 
 ;;; Commands and keybindings
@@ -648,6 +651,10 @@ outcommented org-mode headers)."
                              :action #'find-file))))))
 
 ;;;; Administration
+;;;;; Directory
+(akirak/bind-admin
+  "de" '(nil :wk "direnv"))
+
 ;;;;; Emacs
 (akirak/bind-admin
   "ex" #'explain-pause-mode)

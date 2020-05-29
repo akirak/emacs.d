@@ -6,4 +6,5 @@
  (melpa-check :host github :repo "akirak/melpa-check"
               :branch "v3")
  (org-web-tools :host github :repo "akirak/org-web-tools"
-                :branch "encoding"))
+                :branch "encoding")
+ (valign :host github :repo "casouri/valign"))
