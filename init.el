@@ -142,6 +142,7 @@
 ;;; Packages
 (use-package calibredb)
 (use-package docker)
+(use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
   :hook
