@@ -206,6 +206,7 @@ load them first.
 #+begin_src emacs-lisp
 (use-package calibredb)
 (use-package docker)
+(use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
   :hook
@@ -219,6 +220,9 @@ load them first.
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package valign
+  :hook
+  (org-mode . valign-mode))
 (use-package whole-line-or-region)
 #+end_src
 
@@ -765,11 +769,39 @@ These commands are used to maintain this Emacs configuration.
                              :action #'find-file))))))
 #+end_src
 
+***  Per-project
+#+begin_src emacs-lisp
+(cl-defmacro akirak/run-at-project-root (command &key other-window)
+  `(defun ,(intern (concat "akirak/project-" (symbol-name command))) ()
+     (interactive)
+     (let ((default-directory (akirak/project-root default-directory)))
+       (when ,other-window
+         (or (other-window 1)
+             (split-window-sensibly)))
+       (call-interactively (quote ,command)))))
+
+(akirak/bind-f8
+  "c" (akirak/run-at-project-root compile)
+  "d" (defun akirak/project-dired ()
+        (interactive)
+        (dired (akirak/project-root default-directory)))
+  "D" (akirak/run-at-project-root add-dir-local-variable)
+  "e" (akirak/run-at-project-root ielm :other-window t)
+  "g" #'deadgrep
+  "n" (akirak/run-at-project-root nix-repl :other-window t)
+  "t" (akirak/run-at-project-root vterm :other-window t))
+#+end_src
+
 ***  Administration
+****  Directory
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "de" '(nil :wk "direnv"))
+#+end_src
+
 ****  Emacs
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "e" '(nil :wk "emacs")
   "ex" #'explain-pause-mode)
 #+end_src
 
