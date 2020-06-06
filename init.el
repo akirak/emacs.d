@@ -651,6 +651,27 @@ outcommented org-mode headers)."
                            (helm-build-dummy-source "New file in lisp directory"
                              :action #'find-file))))))
 
+;;;; Per-project
+(cl-defmacro akirak/run-at-project-root (command &key other-window)
+  `(defun ,(intern (concat "akirak/project-" (symbol-name command))) ()
+     (interactive)
+     (let ((default-directory (akirak/project-root default-directory)))
+       (when ,other-window
+         (or (other-window 1)
+             (split-window-sensibly)))
+       (call-interactively (quote ,command)))))
+
+(akirak/bind-f8
+  "c" (akirak/run-at-project-root compile)
+  "d" (defun akirak/project-dired ()
+        (interactive)
+        (dired (akirak/project-root default-directory)))
+  "D" (akirak/run-at-project-root add-dir-local-variable)
+  "e" (akirak/run-at-project-root ielm :other-window t)
+  "g" #'deadgrep
+  "n" (akirak/run-at-project-root nix-repl :other-window t)
+  "t" (akirak/run-at-project-root vterm :other-window t))
+
 ;;;; Administration
 ;;;;; Directory
 (akirak/bind-admin
