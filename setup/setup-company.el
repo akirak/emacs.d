@@ -135,4 +135,7 @@
   :company
   ((html-mode mhtml-mode) . company-web-html))
 
+(use-package company-elixir
+  :company elixir-mode)
+
 (provide 'setup-company)

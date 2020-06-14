@@ -1,8 +1,26 @@
+;; Elixir configuration for Emacs.
+;;
+;; I've installed some of the packages listed in
+;;
+;; https://www.badykov.com/emacs/2020/05/30/emacs-setup-for-elixir/
+
 (use-package elixir-mode)
+
+(use-package mix
+  :hook
+  (elixir-mode . mix-minor-mode))
+
+(use-package flycheck-credo
+  :after elixir-mode
+  :config
+  (add-hook 'elixir-mode-hook
+            (defun akirak/setup-flycheck-credo ()
+              (flycheck-mode 1)
+              (flycheck-credo-setup))))
 
 ;; Alchemist package for Elixir support on Emacs
 ;; See https://alchemist.readthedocs.io/en/latest/configuration/ for setup
-(defconst akirak/alchemist-key-command-prefix "C-,")
+;; (defconst akirak/alchemist-key-command-prefix "C-,")
 
 (use-package alchemist
   :disabled t
