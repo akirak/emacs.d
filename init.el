@@ -147,6 +147,7 @@
   :straight (:type built-in)
   :hook
   (text-mode . electric-pair-local-mode))
+(use-package epkg)
 (use-package explain-pause-mode)
 
 (use-package helm-tail
