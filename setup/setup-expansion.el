@@ -60,7 +60,7 @@
                                          snippets))))))
       (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
   (advice-add #'yankpad-local-category-to-projectile
-              :override nil)
+              :override (lambda ()))
   :custom
   (yankpad-category-heading-level 2))
 
