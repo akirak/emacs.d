@@ -4,7 +4,8 @@
 (defun akirak/build-helm-package (&optional force)
   "Build Helm package."
   (interactive "P")
-  (let* ((dir "~/.emacs.d/straight/build/helm-core")
+  (let* ((dir (expand-file-name "straight/build/helm-core"
+                                user-emacs-directory))
          (build-flag (expand-file-name ".built" dir)))
     (if (and (file-exists-p build-flag)
              (not force))
@@ -21,7 +22,8 @@
   ;; To prevent an error saying "Invalid function: helm-build-sync-source"
   ;; build the package.
   (akirak/build-helm-package)
-  (load "~/.emacs.d/straight/build/helm-core/helm-core-autoloads.el")
+  (load (expand-file-name "straight/build/helm-core/helm-core-autoloads.el"
+                          user-emacs-directory))
   ;; (require 'helm-source)
   :config
   (helm-autoresize-mode 1)
