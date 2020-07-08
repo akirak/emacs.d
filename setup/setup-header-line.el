@@ -229,7 +229,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
          (file-name (cond
                      (filep buffer-file-name)
                      (base-buffer (buffer-file-name base-buffer))))
-         (project-root (car-safe (project-roots (project-current))))
+         (project (project-current))
+         (project-root (when project
+                         (car-safe (project-roots project))))
          (project-name (when project-root
                          (f-filename project-root)))
          (relative-name (when (and file-name project-root)
