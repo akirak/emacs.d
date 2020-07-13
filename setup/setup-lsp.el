@@ -17,7 +17,7 @@
     css-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
-    java-mode
+    ;; java-mode
     go-mode)
    . lsp-deferred)
   :custom
