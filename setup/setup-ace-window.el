@@ -23,7 +23,7 @@
               (defun akirak/ad-after-aw-delete-window (&rest _args)
                 (balance-windows)))
   (advice-add 'aw-delete-window
-              :after
+              :around
               (defun akirak/ad-around-aw-delete-window (origfun &rest args)
                 (let ((initial-window (selected-window)))
                   (prog1 (apply origfun args)
