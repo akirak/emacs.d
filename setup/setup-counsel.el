@@ -35,11 +35,15 @@
   ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
   ;; so I included the absolute path of rg in the command line.
   (setq counsel-rg-base-command
-        (replace-regexp-in-string (rx bol "rg ")
-                                  (let ((exec-path (default-value 'exec-path)))
-                                    (concat (executable-find "rg")
-                                            " "))
-                                  counsel-rg-base-command))
+        (cl-typecase counsel-rg-base-command
+          (string (replace-regexp-in-string (rx bol "rg ")
+                                            (let ((exec-path (default-value 'exec-path)))
+                                              (concat (executable-find "rg")
+                                                      " "))
+                                            counsel-rg-base-command))
+          (list (cons (executable-find "rg")
+                      (cdr counsel-rg-base-command)))
+          (otherwise counsel-rg-base-command)))
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
   (general-unbind :keymaps 'counsel-mode-map "<menu>")
   (ivy-add-actions #'counsel-find-library
