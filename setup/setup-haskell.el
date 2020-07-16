@@ -16,7 +16,11 @@
   (haskell-mode . akirak/setup-haskell-mode))
 
 (use-package dante
-  :commands (dante-mode))
+  :commands (dante-mode)
+  (defun akirak/setup-dante ()
+    (flycheck-mode t))
+  :hook
+  (dante-mode . akirak/setup-dante))
 
 (use-package haskell-interactive-mode
   ;; I was unable to set up interactive-haskell-mode for snack.
