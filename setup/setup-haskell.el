@@ -27,6 +27,7 @@
     "fis" #'haskell-sort-imports
     "fia" #'haskell-align-imports
     "fs" #'haskell-mode-stylish-buffer
+    "h" #'akirak/haskell-hoogle-local
     "j" '(:wk "jump")
     "ji" #'haskell-navigate-imports)
   :hook
@@ -68,5 +69,73 @@
   (haskell-process-suggest-remove-import-lines t)
   (haskell-process-auto-import-loaded-modules t)
   (haskell-process-log t))
+
+(defun akirak/hoogle-generate ()
+  (interactive)
+  (compilation-start "hoogle generate -i"))
+
+(major-mode-hydra-define haskell-mode
+  (:title (concat "Haskell\n"
+                  (if-let (buf (dante-buffer-p))
+                      (with-current-buffer buf
+                        (format "Dante command line: %s\n      state: %s"
+                                dante-command-line
+                                dante-state))
+                    "Dante: Not loaded")
+                  (format "Hoogle server: %s"
+                          (if (haskell-hoogle-server-live-p)
+                              "Started"
+                            "Not started")))
+          :exit nil)
+  ("Dante"
+   (("dd" dante-diagnose)
+    ("dr" dante-restart))
+   "Hoogle"
+   (("hs" haskell-hoogle-start-server)
+    ("hk" haskell-hoogle-kill-server)
+    ("hg" akirak/hoogle-generate))))
+
+(defun akirak/haskell-hoogle-local (query)
+  (interactive "sHoogle: ")
+  (cl-labels
+      ((format-item
+        (x)
+        (let ((module (-some->> x (alist-get 'module)
+                                (alist-get 'name)))
+              (package (-some->> x (alist-get 'package)
+                                 (alist-get 'name)))
+              (item (alist-get 'item x))
+              (docs (car (split-string (alist-get 'docs x) "\n"))))
+          (cl-labels
+              ((face (f s) (propertize s 'face f))
+               (comment (s) (face 'font-lock-comment-face s)))
+            (concat item
+                    (if package
+                        (face 'font-lock-keyword-face (format " <<%s>>" package))
+                      "")
+                    " "
+                    (if docs (comment docs)
+                      "")
+                    "  "
+                    (if module (face 'font-lock-constant-face module)
+                      ""))))))
+    (let* ((tmp-buffer (generate-new-buffer "*hoogle output*"))
+           (json-object-type 'alist)
+           (json-array-type 'list)
+           (r (call-process "hoogle" nil (list tmp-buffer nil) nil
+                            "--json" query))
+           (items (when (= r 0)
+                    (with-current-buffer tmp-buffer
+                      (goto-char (point-min))
+                      (->> (json-read)
+                           (-map (lambda (x)
+                                   (propertize (format-item x)
+                                               'url
+                                               (alist-get 'url x)))))))))
+      (ivy-read "Hoogle: " items
+                :history akirak/haskell-hoogle-history
+                :action
+                (lambda (inp)
+                  (browse-url (get-char-property 0 'url inp)))))))
 
 (provide 'setup-haskell)
