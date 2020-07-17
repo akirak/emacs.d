@@ -30,6 +30,11 @@
     "h" #'akirak/haskell-hoogle-local
     "j" '(:wk "jump")
     "ji" #'haskell-navigate-imports)
+
+  ;; nix-env -if https://github.com/tweag/ormolu/archive/master.tar.gz -A ormolu
+  (reformatter-define ormolu
+    :program "ormolu")
+
   :hook
   (haskell-mode . akirak/setup-haskell-mode))
 
