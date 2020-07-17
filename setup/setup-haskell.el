@@ -75,6 +75,11 @@
   (haskell-process-auto-import-loaded-modules t)
   (haskell-process-log t))
 
+(use-package haskell-hoogle
+  :straight haskell-mode
+  :after haskell-mode
+  :functions (haskell-hoogle-server-live-p))
+
 (defun akirak/hoogle-generate ()
   (interactive)
   (compilation-start "hoogle generate -i"))
