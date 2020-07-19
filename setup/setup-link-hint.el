@@ -1,7 +1,10 @@
 ;; link-hint seems to be more convenient than ace-link, as it allows you to
 ;; visit a link in any visible windows.
 
-(use-package link-hint)
+(use-package link-hint
+  :general
+  (:keymaps 'Info-mode-map :package 'info
+            "f" #'link-hint-open-link))
 
 (defun akirak/link-hint-open-link (&optional arg)
   "A variant of `link-hint-open-link' that supports a prefix argument.

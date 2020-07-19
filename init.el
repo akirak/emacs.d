@@ -448,6 +448,11 @@ connection identities of recent files."
             (message "No more heading")))
       (message "Buffer is not narrowed"))))
 
+(general-def :keymaps 'Info-mode-map :package 'info
+  "h" #'Info-up
+  [remap forward-page] #'Info-next-preorder
+  [remap backward-page] #'Info-prev)
+
 ;;;; Editing
 ;;;;; Undo and redo
 ;; You still can use the built-in undo command with C-x u
