@@ -59,6 +59,7 @@
   (dante-mode . akirak/setup-dante))
 
 (use-package shm
+  :disabled t
   :after haskell-mode
   :hook
   (haskell-mode . structured-haskell-mode))
