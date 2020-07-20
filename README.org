@@ -551,6 +551,11 @@ notion of page/chunk varies.
                   (message "Narrowing to an upper level"))))
             (message "No more heading")))
       (message "Buffer is not narrowed"))))
+
+(general-def :keymaps 'Info-mode-map :package 'info
+  "h" #'Info-up
+  [remap forward-page] #'Info-next-preorder
+  [remap backward-page] #'Info-prev)
 #+end_src
 
 ***  Editing
