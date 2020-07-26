@@ -1,6 +1,10 @@
 (use-package nix-mode
   :mode "\\.nix\\'"
   :config
+  (reformatter-define nixpkgs-fmt
+    :program "nixpkgs-fmt")
+  (reformatter-define nix-linter
+    :program "nix-linter")
   (akirak/bind-mode :keymaps 'nix-mode-map
     "u" #'nix-update-fetch))
 
