@@ -33,6 +33,7 @@
 
 (use-package buttercup)
 
+(use-package package-build)
 
 (use-package flycheck-package
   :commands (flycheck-package-setup))
