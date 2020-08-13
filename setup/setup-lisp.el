@@ -60,6 +60,9 @@
 (use-package elx
   :straight (elx :host github :repo "emacscollective/elx"))
 
+(use-package decask
+  :straight (:host github :repo "akirak/decask.el"))
+
 (use-package lisp-extra-font-lock)
 
 ;;;; Package editing
