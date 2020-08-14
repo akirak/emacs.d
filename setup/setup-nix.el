@@ -8,6 +8,9 @@
   (akirak/bind-mode :keymaps 'nix-mode-map
     "u" #'nix-update-fetch))
 
+(use-package nix
+  :straight nix-mode)
+
 (use-package nix-buffer
   :commands (nix-buffer))
 
