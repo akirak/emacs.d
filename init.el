@@ -152,11 +152,11 @@
 
 (use-package helm-tail
   :commands (helm-tail))
-(use-package melpa-check)
 (use-package org-recent-headings
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package su)
 (use-package valign
   :hook
   (org-mode . valign-mode))
