@@ -3,6 +3,9 @@
   :custom
   (js-indent-level 2 "Fallback set in use-package"))
 
+(akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
+  "" #'js-comint-repl)
+
 ;; Prefer js-mode for LSP support
 (use-package js2-mode
   :after (js json-mode)

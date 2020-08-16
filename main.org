@@ -7,13 +7,6 @@ for a better understanding of my previous work and organizing it in a more sensi
 :PROPERTIES:
 :TOC:      siblings
 :END:
--  [[#keybindings-infrastructure][Keybindings infrastructure]]
-  -  [[#repeatable-keys][Repeatable keys]]
-  -  [[#per-mode-hydra][Per-mode hydra]]
-  -  [[#generic-definer][Generic definer]]
-  -  [[#definers-for-emacs-standard-prefix-keys][Definers for Emacs standard prefix keys]]
-  -  [[#definers-for-non-standard-prefix-keys][Definers for non-standard prefix keys]]
-  -  [[#other-custom-key-definitions][Other custom key definitions]]
 -  [[#dependencies-for-other-packages][Dependencies for other packages]]
   -  [[#built-in][Built-in]]
   -  [[#dashel][dash.el]]
@@ -119,227 +112,6 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#rebuild-packages][Rebuild packages]]
   -  [[#sort-entries-in-this-file][Sort entries in this file]]
 
-** Keybindings infrastructure
-:PROPERTIES:
-:TOC:      1
-:END:
-Use general.el to define keybindings. It has made several improvements over
-bind-key, including a built-in support for which-key.
-
-This also adds support for =:general= keyword in use-package directives
-
-Allow use of =:wk= keyword in general.el keybinding definitions
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-which-key t)
-#+end_src
-
-*** Repeatable keys
-
-Hopefully, defrepeater is soon going to be integrated with general
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-defrepeater t)
-#+end_src
-
-*** Per-mode hydra
-As it is hard to remember workflow for every programming language, I've decided to set up a hydra for each programming language I use. Frequently-used commands specific to a major mode should be added to the hydra for its language. All mode hydras should share the same keybinding, which is currently ~C-d~.
-
-I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on the key. It takes the name of the major mode and binds the key to =akirak/MODE-hydra/body=. This is not a precisely keybinding definer but plays a somewhat similar role.
-
-#+begin_src emacs-lisp
-  (defcustom akirak/mode-hydra-key (kbd "C-c d")
-    "Key sequence to access the hydra for the current mode.")
-
-  (defun akirak/bind-mode-hydra (mode &optional hydra-function)
-    (let ((map (intern (concat (symbol-name mode) "-map"))))
-      (define-key (symbol-value map) akirak/mode-hydra-key
-        (or hydra-function
-            (intern (format "akirak/%s-hydra/body" mode))))))
-#+end_src
-*** Generic definer
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-key)
-#+end_src
-*** Definers for Emacs standard prefix keys
-**** M-s: Search
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-search :prefix "M-s")
-  (define-obsolete-function-alias 'akirak/bind-search-map
-    'akirak/bind-search)
-#+end_src
-**** M-g: Jump
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-jump :prefix "M-g")
-#+end_src
-**** M-r: Registers
-#+begin_src emacs-lisp
-  (general-def
-    "M-r" (general-simulate-key "C-x r"))
-#+end_src
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-register :prefix "C-x r")
-  (define-obsolete-function-alias 'akirak/bind-register-map
-    'akirak/bind-register)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-register "M-r" #'ivy-resume)
-#+end_src
-**** F1: Help
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-help :prefix "<f1>")
-#+end_src
-*** Definers for non-standard prefix keys
-**** bind-customization (C-x ESC) for customization
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:39]
-:END:
-I often need to tweak Emacs while I am using it.
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-customization :prefix "C-x ESC")
-
-  (define-obsolete-function-alias 'akirak/bind-customize-map
-    'akirak/bind-customization)
-#+end_src
-
-There are not so many commands that need to be add to the map:
-
-#+begin_src emacs-lisp
-  (akirak/bind-customization
-    "" '(nil :wk "customize")
-    "f" #'customize-face-other-window
-    "o" #'customize-group-other-window
-    "l" #'counsel-find-library
-    "p" '((lambda () (interactive)
-            (if (featurep 'straight)
-                (call-interactively 'straight-use-package)
-              (package-list-packages)))
-          :wk "packages")
-    "s" #'customize-set-value
-    "v" #'customize-variable-other-window)
-#+end_src
-**** bind-user (C-c) for miscellaneous commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:40]
-:END:
-
-~C-c~ is reserved for the user:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-user :prefix "C-c")
-#+end_src
-***** eval
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:41]
-:END:
-Add a prefix for keybindings to eval commands:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-eval :prefix "C-c e")
-  (define-obsolete-function-alias 'akirak/bind-eval-map 'akirak/bind-eval)
-#+end_src
-**** bind-generic (C-.) for editing
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:41]
-:END:
-Generic prefix key for editing commands:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-generic :prefix "C-."
-    :prefix-map 'akirak/generic-prefix-map)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-generic
-    "f" '(nil :wk "fix/format")
-    "k" '(nil :wk "kill")
-    "l" '(nil :wk "natural language")
-    "m" '(nil :wk "mark")
-    "r" '(nil :wk "rename/refactor"))
-
-  (general-create-definer akirak/bind-kill :prefix "C-. k"
-    :prefix-map 'akirak/kill-prefix-map)
-  (general-create-definer akirak/bind-fix :prefix "C-. f")
-  (general-create-definer akirak/bind-kill :prefix "C-. k"
-    :prefix-map 'akirak/kill-prefix-map)
-  (general-create-definer akirak/bind-language :prefix "C-. l")
-  (general-create-definer akirak/bind-mark :prefix "C-. m"
-    :prefix-map 'akirak/mark-prefix-map)
-  (general-create-definer akirak/bind-replace :prefix "C-. r"
-    :prefix-map 'akirak/replace-prefix-map)
-#+end_src
-**** bind-mode (C-,) for major-mode-specific commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:42]
-:END:
-Prefix for mode-specific keys:
-
-#+begin_src emacs-lisp
-(defconst akirak/mode-prefix-key "C-,")
-(general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
-#+end_src
-**** bind-extra-help (<f1> x) for extra help commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:42]
-:END:
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-extra-help :prefix "<f1>x")
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-extra-help
-    "c" #'describe-char
-    "f" #'counsel-faces)
-#+end_src
-**** bind-specific-help (<f1> ESC) for specific help commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:43]
-:END:
-Also create a prefix for specific help commands, e.g. =info= and =man=:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-specific-help :prefix "<f1> ESC")
-#+end_src
-**** <f6> to global file commands
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-file-extra :prefix "<f6>")
-#+end_src
-**** <f7>
-
-**** <f8> to project commands
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-f8
-    :prefix "<f8>")
-#+end_src
-
-I bind ~<f8>~ followed by another function key press to magit commands.
-**** bind-admin (<f12>) for administration commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:43]
-:END:
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-admin :prefix "<f12>"
-    :prefix-map 'akirak/admin-map)
-
-  (define-obsolete-function-alias 'akirak/bind-system 'akirak/bind-admin)
-#+end_src
-*** Other custom key definitions
-Use ~<C-return>~ for starting a REPL session:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-mode-repl
-    :prefix "<C-return>")
-#+end_src
-
-Example usage:
-
-#+begin_src emacs-lisp :tangle no
-  (akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
-    "" #'js-comint-repl)
-#+end_src
 ** Dependencies for other packages
 :PROPERTIES:
 :TOC:      1
@@ -997,17 +769,6 @@ I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
     "A" #'org-noter)
 #+end_src
 **** Finding documentation
-***** Built-in help system
-#+begin_src emacs-lisp
-  (akirak/bind-specific-help
-    "m" #'woman)
-#+end_src
-
-I often consult the Emacs Lisp manual:
-
-#+begin_src emacs-lisp
-  (akirak/bind-specific-help "i" #'helm-info)
-#+end_src
 ***** DevDocs
 #+begin_src emacs-lisp
   (use-package devdocs-lookup
@@ -1021,9 +782,6 @@ I often consult the Emacs Lisp manual:
   (use-package helm-dash
     :custom
     (helm-dash-browser-func #'akirak/read-local-html-as-org))
-
-  (akirak/bind-specific-help
-    "d" #'helm-dash)
 
   ;; "a" #'helm-dash-activate-docset
   ;; "d" #'helm-dash-at-point
@@ -1156,7 +914,7 @@ There is another package named comment-tags for the same purpose, but I won't us
   (use-package modi-org-split-block
     :straight nil
     :load-path "contrib/modi")
-  (akirak/bind-key :package 'org :keymaps 'org-mode-map
+  (general-def :package 'org :keymaps 'org-mode-map
     [remap org-meta-return] 'modi/org-meta-return)
 #+end_src
 *** Window management
@@ -1180,7 +938,7 @@ There is another package named comment-tags for the same purpose, but I won't us
 I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
-  (akirak/bind-key "M-o" #'ace-window)
+  (general-def "M-o" #'ace-window)
   ;; You can also display the help from the start
   ;; (akirak/bind-key "M-o" #'aw-show-dispatch-help)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")

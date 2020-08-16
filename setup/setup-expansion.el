@@ -83,7 +83,7 @@
   "C-x y" #'yankpad-insert
   "C-x i" #'ivy-yasnippet)
 
-(akirak/bind-register-map
+(akirak/bind-register
   "a" 'aya-create
   "e" 'aya-expand)
 

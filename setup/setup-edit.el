@@ -1,12 +1,12 @@
 ;; Mode-agnostic editing commands
 
-(akirak/bind-kill
-  "f" 'flush-lines
-  "l" 'delete-blank-lines)
+(akirak/bind-generic
+  "k f" 'flush-lines
+  "k l" 'delete-blank-lines)
 
-(akirak/bind-replace
-  "p" #'projectile-replace
-  "M-p" #'projectile-replace-regexp)
+(akirak/bind-generic
+  "r p" #'projectile-replace
+  "r M-p" #'projectile-replace-regexp)
 
 (use-package adapted
   :straight (adapted :host github :repo "akirak/adapted")

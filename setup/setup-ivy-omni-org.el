@@ -15,7 +15,7 @@
              (file-directory-p org-directory))
     (directory-files org-directory t "\\.sync-conflict-[-[:digit:]]+\\.org\\'")))
 
-(akirak/bind-register-map
+(akirak/bind-register
   "M-b" #'ivy-omni-org-bookmarks
   "M-o" #'ivy-omni-org)
 

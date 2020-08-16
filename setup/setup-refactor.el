@@ -1,6 +1,6 @@
 (use-package emr
   :config
-  (akirak/bind-replace :keymaps 'prog-mode-map
-    "SPC" #'emr-show-refactor-menu))
+  (akirak/bind-generic :keymaps 'prog-mode-map
+    "r SPC" #'emr-show-refactor-menu))
 
 (provide 'setup-refactor)

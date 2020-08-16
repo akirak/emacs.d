@@ -76,13 +76,6 @@ Only one letter is shown, the first that applies."
     "g" #'magit-blob-visit-file
     "l" #'magit-log-buffer-file
     "s" #'magit-stage-file)
-  (akirak/bind-admin
-    "g" '(nil :wk "git")
-    "gc" #'akirak/git-clone-remote-repo
-    "gl" #'magit-list-repositories
-    "gs" #'akirak/github-starred-repos
-    "gr" #'akirak/github-recent-repos
-    "gu" #'akirak/github-user-repos)
 
   :custom
   (magit-repository-directories

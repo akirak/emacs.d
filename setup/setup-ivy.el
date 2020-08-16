@@ -10,6 +10,7 @@
     (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
       (define-key map (kbd "C-c C-p") 'ivy-switch-buffer-2-toggle-mode)
       map))
+  (akirak/bind-register "M-r" #'ivy-resume)
   :general
   (:keymaps 'ivy-occur-mode-map
             "n" #'ivy-occur-next-line

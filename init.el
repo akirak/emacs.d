@@ -124,7 +124,75 @@
   ;; Originally written by Foltik, but I use my fork
   :straight (use-package-company :host github :repo "akirak/use-package-company"))
 
-(use-package general)
+;;;; Keybindings
+
+(use-package which-key
+
+  :init
+  (which-key-mode t)
+  :config
+  (which-key-setup-side-window-bottom)
+
+  (defmacro akirak/which-key-add-stripped-prefix (prefix)
+    "Add PREFIX as a stripped prefix to `which-key-replacement-alist'."
+    `(add-to-list 'which-key-replacement-alist
+                  (quote ((nil . ,prefix) .
+                          (lambda (kb)
+                            (cons (car kb)
+                                  (string-remove-prefix ,prefix (cdr kb))))))))
+
+  (akirak/which-key-add-stripped-prefix "akirak/")
+  (akirak/which-key-add-stripped-prefix "helm-org-multi-wiki-create/"))
+
+;; Use general.el to define keybindings. It has made several
+;; improvements over bind-key, including a built-in integration with
+;; which-key.
+
+;; This also adds support for =:general= keyword in use-package
+;; directives.
+(use-package general
+  :config
+
+  (general-create-definer akirak/bind-search :prefix "M-s")
+  (general-create-definer akirak/bind-jump :prefix "M-g")
+  (general-create-definer akirak/bind-register :prefix "C-x r")
+
+  (general-create-definer akirak/bind-help :prefix "<f1>")
+  (general-create-definer akirak/bind-file-extra :prefix "<f6>")
+  ;; <f7> is currently free
+  (general-create-definer akirak/bind-f8 :prefix "<f8>")
+  ;; <f9> is reserved for recompile
+  (general-create-definer akirak/bind-admin :prefix "<f12>"
+    :prefix-map 'akirak/admin-map)
+
+  ;; ~C-c~ is reserved for the user.
+  ;; Package developers should not use them for their packages.
+  (general-create-definer akirak/bind-user :prefix "C-c")
+
+  ;; bind-generic (C-.) for editing
+  ;; Generic prefix key for editing commands.
+  (general-create-definer akirak/bind-generic :prefix "C-."
+    :prefix-map 'akirak/generic-prefix-map)
+
+  ;; bind-mode (C-,) for major-mode-specific commands
+  (defconst akirak/mode-prefix-key "C-,"
+    "Prefix for mode-specific keys.")
+  (general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
+
+  ;; Use ~<C-return>~ for starting a REPL session
+  (general-create-definer akirak/bind-mode-repl
+    :prefix "<C-return>")
+
+  ;; TODO: I want to change this key to something else
+  (general-create-definer akirak/bind-customization :prefix "C-x ESC"))
+
+(use-package defrepeater
+  :general
+  ([remap other-window] (defrepeater #'other-window)
+   [remap winner-undo] (defrepeater #'winner-undo)
+   [remap winner-redo] (defrepeater #'winner-redo)
+   [remap text-scale-increase] (defrepeater #'text-scale-increase)
+   [remap text-scale-decrease] (defrepeater #'text-scale-decrease)))
 
 ;;;; Default settings
 (require 'setup-defaults)
@@ -234,7 +302,7 @@
 (general-def ivy-minibuffer-map :package 'ivy
   "C-r" 'counsel-minibuffer-history)
 
-;;;; Key translation
+;;;; Key translation and simulation
 ;; Since I have bound C-h to =backward-delete-char= but still use the
 ;; help system frequently, I bind ~M-`~ to ~<f1>~ in
 ;; =key-translation-map=.
@@ -251,6 +319,9 @@
   ;; especially when Search and Ctrl are swapped.
   ;; This is quite annoying, so I will use M-` as <f1>.
   "M-`" (kbd "<f1>"))
+
+(general-def "M-r" (general-simulate-key "C-x r"))
+
 ;;;;; Emulate virtual function keys of Chrome OS
 ;; Emulate function keys of Chrome OS, i.e. use ~s-NUM~ as function
 ;; keys.
@@ -452,6 +523,17 @@ connection identities of recent files."
   "h" #'Info-up
   [remap forward-page] #'Info-next-preorder
   [remap backward-page] #'Info-prev)
+;;;; Help and documentation
+;;;;; Additional keybindings on <f1>
+(akirak/bind-help
+  "xc" #'describe-char
+  "xf" #'counsel-faces)
+
+;; e.g. M-` M-m -> <f1> ESC m
+(akirak/bind-help
+  "ESC m" #'woman
+  "ESC i" #'helm-info
+  "ESC d" #'helm-dash)
 
 ;;;; Editing
 ;;;;; Undo and redo
@@ -644,6 +726,19 @@ outcommented org-mode headers)."
 
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.
+(akirak/bind-customization
+  "" '(nil :wk "customize")
+  "f" #'customize-face-other-window
+  "o" #'customize-group-other-window
+  "l" #'counsel-find-library
+  "p" '((lambda () (interactive)
+          (if (featurep 'straight)
+              (call-interactively 'straight-use-package)
+            (package-list-packages)))
+        :wk "packages")
+  "s" #'customize-set-value
+  "v" #'customize-variable-other-window)
+
 (general-def
   "C-x M-m"
   (defun akirak/helm-my-library ()
@@ -686,6 +781,15 @@ outcommented org-mode headers)."
 ;;;;; Emacs
 (akirak/bind-admin
   "ex" #'explain-pause-mode)
+
+;;;;; Git
+(akirak/bind-admin
+  "g" '(nil :wk "git")
+  "gc" #'akirak/git-clone-remote-repo
+  "gl" #'magit-list-repositories
+  "gs" #'akirak/github-starred-repos
+  "gr" #'akirak/github-recent-repos
+  "gu" #'akirak/github-user-repos)
 
 ;;;;; Docker
 (akirak/bind-admin
