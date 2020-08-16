@@ -78,4 +78,162 @@
                 "/"
                 (f-filename (car-safe (project-roots (project-current))))))))
 
+;;;; Browsing repositories
+
+(cl-defun akirak/browse-github-repos (prompt items
+                                             &key omit-user)
+  (cl-labels
+      ((format-item
+        (x)
+        (let-alist x
+          (list
+           (format "%s%s%s %s %s %s %s"
+                   (propertize (if omit-user
+                                   \.name
+                                 \.full_name)
+                               'face 'font-lock-string-face)
+                   (if .fork
+                       (propertize " (fork)"
+                                   'face 'font-lock-constant-face)
+                     "")
+                   (if .private
+                       (propertize " (private)"
+                                   'face 'font-lock-constant-face)
+                     "")
+                   (propertize (format "(%d stars)"
+                                       \.stargazers_count)
+                               'face 'font-lock-comment-face)
+                   (or \.description
+                       "(no description)")
+                   (propertize (or \.language "")
+                               'face 'font-lock-type-face)
+                   (propertize (ts-human-format-duration
+                                (ts-difference
+                                 (ts-now)
+                                 (make-ts
+                                  :unix (float-time (parse-iso8601-time-string
+                                                     \.updated_at))))
+                                t)
+                               'face 'font-lock-comment-face))
+           (cons 'clone_url .clone_url)))))
+    (helm :sources
+          (helm-build-sync-source prompt
+            :candidates (-map #'format-item items)
+            :action
+            (lambda (x)
+              (akirak/git-clone-remote-repo (alist-get 'clone_url x)))))))
+
+(defun akirak/github-recent-repos ()
+  (interactive)
+  (akirak/browse-github-repos "Recent repos: "
+                              (ghub-get "/user/repos"
+                                        '((sort . "updated")
+                                          (per_page . 5)))
+                              :omit-user t))
+
+(defvar akirak/github-api-v3-cache nil)
+
+(cl-defmacro akirak/github-v3-get-cached (path &optional params
+                                               &key unpaginate force)
+  (declare (indent 1))
+  `(let* ((cached (assoc ,path akirak/github-api-v3-cache))
+          (result (or (and (not ,force) (cdr cached))
+                      (let ((start (ts-now)))
+                        (message "Requesting to github '%s' %s..."
+                                 ,path (or ,params ""))
+                        (prog1 (ghub-get ,path ,params
+                                         :unpaginate ,unpaginate)
+                          (message "Received response on %s in %.1fsec"
+                                   ,path
+                                   (ts-difference (ts-now) start)))))))
+     (cond
+      ((and ,force cached)
+       (setcdr cached result))
+      ((not cached)
+       (push (cons ,path result) akirak/github-api-v3-cache)))
+     result))
+
+(defun akirak/github-user-repos (&optional user force)
+  (interactive (list (when current-prefix-arg
+                       (read-string "User: "))
+                     (equal current-prefix-arg '(16))))
+  (akirak/browse-github-repos (if user
+                                  (format "%s's repos: " user)
+                                "User repos: ")
+                              (akirak/github-v3-get-cached
+                                  (if user
+                                      (format "/users/%s/repos" user)
+                                    "/user/repos")
+                                '((sort . "updated"))
+                                :unpaginate t
+                                :force force)
+                              :omit-user t))
+
+(defun akirak/github-starred-repos (&optional arg)
+  (interactive "P")
+  (akirak/browse-github-repos "Starred repos: "
+                              (akirak/github-v3-get-cached "/user/starred"
+                                nil
+                                :force arg)))
+
+(defun akirak/github-users ()
+  (interactive)
+  (let* ((following (akirak/github-v3-get-cached "/user/following"
+                      nil
+                      :unpaginate t))
+         (user (completing-read "GitHub users: "
+                                (-map (lambda (x) (alist-get 'login x))
+                                      following))))
+    (akirak/github-user-repos user)))
+
+(defvar akirak/github-stars-getting nil)
+
+(defun akirak/github-download-all-stars ()
+  (interactive)
+  (if akirak/github-stars-getting
+      (message "Already started")
+    (setq akirak/github-stars-getting t)
+    (make-thread
+     (lambda ()
+       (message "Started getting stars in the background...")
+       (akirak/github-v3-get-cached "/user/starred"
+         nil
+         :unpaginate t
+         :force t)
+       (setq akirak/github-stars-getting nil)))))
+
+(defun akirak/github--following ()
+  (or akirak/github-following-list
+      (let ((user (car (magit-config-get-from-cached-list "github.user"))))
+        (setq akirak/github-following-list
+              (ghub-graphql (format "query {
+  user(login: \"%s\") {
+    following(first: 5) {
+      edges {
+        node {
+          login
+          websiteUrl
+          bioHTML
+          company
+          twitterUsername
+          companyHTML
+          location
+          name
+        }
+        cursor
+      }
+    }
+  }
+}" user))))))
+
+(defcustom akirak/github-auto-get-stars nil
+  "Whether to start getting GitHub stars at startup."
+  :type 'boolean)
+
+(when akirak/github-auto-get-stars
+  (add-hook 'emacs-startup-hook
+            (lambda ()
+              (sleep-for 5)
+              (akirak/github-download-all-stars))))
+
 (provide 'setup-github)

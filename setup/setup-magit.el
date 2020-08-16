@@ -79,7 +79,10 @@ Only one letter is shown, the first that applies."
   (akirak/bind-admin
     "g" '(nil :wk "git")
     "gc" #'akirak/git-clone-remote-repo
-    "gl" #'magit-list-repositories)
+    "gl" #'magit-list-repositories
+    "gs" #'akirak/github-starred-repos
+    "gr" #'akirak/github-recent-repos
+    "gu" #'akirak/github-user-repos)
 
   :custom
   (magit-repository-directories
