@@ -1,63 +1,118 @@
-;; URL patterns are stolen from my playground package:
-;; https://github.com/akirak/emacs-playground/blob/master/playground.el
-(defconst akirak/github-repo-path-pattern
-  "\\(?:[0-9a-z][-0-9a-z]+/[-a-z0-9_.]+?[0-9a-z]\\)"
-  "A regular expression for a repository path (user/repo) on GitHub.")
+(defcustom akirak/git-clone-directory "~/projects/"
+  "FIXME")
 
-(defconst akirak/github-https-url-regexp
-  (concat "^https://github\.com/\\("
-          akirak/github-repo-path-pattern
-          "\\)\\(\.git\\)?/?$"))
+(defcustom akirak/git-clone-parent-alist
+  `(("github.com" . ,(expand-file-name "github" akirak/git-clone-directory)))
+  "FIXME"
+  :type '(alist :key-type string :value-type file))
 
-(defcustom akirak/git-clone-default-directory "~/tmp"
-  "Default directory in which Git repositories are created.")
-
-(defcustom akirak/git-clone-user-directory "~/projects/github"
-  "Default directory in which your own Git repositories are created.")
+(defun akirak/git-clone-parent-for-host (host)
+  (or (cdr (assoc host akirak/git-clone-parent-alist))
+      (expand-file-name host akirak/git-clone-directory)))
 
 (defcustom akirak/github-login "akirak"
   "The user name on GitHub.")
 
-(defun akirak/git-clone-github-repo (path args)
-  (interactive (list (akirak/select-github-repo "Clone a GitHub repo: ")))
-  (-let (((user repo) (s-split-up-to "/" path 1)))
-    (cond
-     ((string-equal user akirak/github-login)
-      (akirak/git-clone-internal (concat "git@github.com:" path ".git")
-                                 (expand-file-name repo
-                                                   akirak/git-clone-user-directory)
-                                 args))
-     (t
-      (akirak/git-clone-some-repo (format "https://github.com/%s.git" path) repo args)))))
+(cl-defgeneric akirak/remote-git-repo-clone-default (repo)
+  (let ((url (akirak/remote-git-repo-url repo))
+        (dest (f-join (akirak/remote-git-repo-clone-parent repo)
+                      (akirak/remote-git-repo-name repo)))
+        (args (transient-args 'magit-clone)))
+    (if (file-directory-p dest)
+        (progn
+          (message "Already exists: %s" dest)
+          (magit-status dest))
+      (magit-clone-regular url dest args))))
 
-(defun akirak/git-clone-some-repo (url name &optional args)
-  (let ((parent (read-directory-name "Parent directory: " "~/")))
-    (akirak/git-clone-internal url (expand-file-name name parent) args)))
+(cl-defgeneric akirak/remote-git-repo-url (repo))
+(cl-defgeneric akirak/remote-git-repo-name (repo))
+(cl-defgeneric akirak/remote-git-repo-clone-parent (repo))
 
-(defun akirak/git-clone (url &optional args)
-  (interactive (list (read-string "Repository URL: ")))
-  (cond
-   ((string-match akirak/github-https-url-regexp url)
-    (akirak/git-clone-github-repo (match-string 1 url) args))
-   ((string-match (concat "^" akirak/github-repo-path-pattern "$") url)
-    (akirak/git-clone-github-repo (match-string 1 url) args))
-   ((string-match (rx "/" (group (1+ (any "-" alnum))) ".git" bol) url)
-    (akirak/git-clone-some-repo url (match-string 1 url) args))))
+;;;; GitHub repositories (https)
 
-(defun akirak/git-clone-internal (url local-path &optional args)
-  "Call `magit-clone' on URL if LOCAL-PATH does not exist or otherwise open it."
-  (if (file-exists-p local-path)
-      (let ((default-directory local-path))
-        (message "%s already exists" local-path)
-        (magit-status))
-    (message "Cloning %s to %s..." url local-path)
-    (magit-clone-regular url local-path args)))
+(cl-defstruct akirak/github-https-repo owner name)
+(cl-defmethod akirak/remote-git-repo-url ((repo akirak/github-https-repo))
+  (concat "https://github.com/"
+          (akirak/github-https-repo-owner repo)
+          "/"
+          (akirak/github-https-repo-name repo)
+          ".git"))
+(cl-defmethod akirak/remote-git-repo-name ((repo akirak/github-https-repo))
+  (akirak/github-https-repo-name repo))
+(cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/github-https-repo))
+  (akirak/git-clone-parent-for-host "github.com"))
 
-(defun akirak//git-clone-default-directory (url name)
-  (let ((local-repo-path (expand-file-name name akirak/default-git-clone-directory)))
-    (when (file-exists-p local-repo-path)
-      (user-error "%s already exists" local-repo-path))
-    (magit-clone url local-repo-path)))
+;;;; GitHub repositories (ssh)
+
+(cl-defstruct akirak/github-ssh-repo owner name)
+(cl-defmethod akirak/remote-git-repo-url ((repo akirak/github-ssh-repo))
+  (concat "git@github.com:"
+          (akirak/github-ssh-repo-owner repo)
+          "/"
+          (akirak/github-ssh-repo-name repo)
+          ".git"))
+(cl-defmethod akirak/remote-git-repo-name ((repo akirak/github-ssh-repo))
+  (akirak/github-ssh-repo-name repo))
+(cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/github-ssh-repo))
+  (akirak/git-clone-parent-for-host "github.com"))
+
+;;;; Generic Git repositories
+
+(cl-defstruct akirak/generic-git-repo url protocol host owner name)
+(cl-defmethod akirak/remote-git-repo-url ((repo akirak/generic-git-repo))
+  (akirak/generic-git-repo-url repo))
+(cl-defmethod akirak/remote-git-repo-name ((repo akirak/generic-git-repo))
+  (akirak/generic-git-repo-name repo))
+(cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/generic-git-repo))
+  ;; TODO: Look up
+  "~/tmp/")
+
+;;;; Parsing
+
+(defun akirak/parse-git-url (string)
+  (let* ((name-pattern (rx bol (group (+? (any alnum "-_."))) eol))
+         (path-pattern (rx (group (+ (any alnum "-")))
+                           "/"
+                           (group (+ (any alnum "-_.")))))
+         (host-pattern (rx (group (+ (not (any "./")))
+                                  (+ (and "." (+ (not (any "./"))))))))
+         (suffix (rx ".git"))
+         (optional-suffix (rx (?  ".git")))
+         (github-path-pattern (concat "^" path-pattern "$"))
+         (https-pattern (concat "^https://" host-pattern "/" path-pattern
+                                optional-suffix))
+         (ssh-pattern (concat "^git@" host-pattern "/" path-pattern suffix "$")))
+    (pcase-let ((`(,protocol _ ,host ,owner ,name)
+                 (or (-some->> (s-match name-pattern string)
+                       (append (list nil nil "github.com" akirak/github-login)))
+                     (-some->> (s-match github-path-pattern string)
+                       (cdr)
+                       (append (list nil nil "github.com")))
+                     (-some->> (s-match https-pattern string)
+                       (cons 'https))
+                     (-some->> (s-match ssh-pattern string)
+                       (cons 'ssh)))))
+      (cond
+       ((and (equal host "github.com") (equal owner akirak/github-login))
+        (make-akirak/github-ssh-repo :owner owner
+                                     :name (string-remove-suffix ".git" name)))
+       ((equal host "github.com")
+        (make-akirak/github-https-repo :owner owner
+                                       :name (string-remove-suffix ".git" name)))
+       ((and url owner name)
+        (make-akirak/generic-git-repo :url string
+                                      :protocol protocol
+                                      :host host
+                                      :owner owner
+                                      :name (string-remove-suffix ".git" name)))
+       (t
+        (make-akirak/generic-git-repo :url string))))))
+
+;;;; Commands
+
+(defun akirak/git-clone-remote-repo (path-or-url)
+  (interactive "sGit repository (path or url): ")
+  (akirak/remote-git-repo-clone-default (akirak/parse-git-url path-or-url)))
 
 (defun akirak/straight-use-package-git-url (url)
   (when-let ((recipe
@@ -77,48 +132,5 @@
                       :url ,url))
                   (user-error "Doesn't seem to be a Git repository URL: %s" url))))
     (straight-use-package recipe)))
-
-(defcustom akirak/git-clone-parent-directories nil
-  "List of parent directories."
-  :type '(repeat string))
-
-(defun akirak/git-clone-parent-directories ()
-  ;; (append (thread-last projectile-known-projects
-  ;;           (-map (-partial (-flip #'string-trim-right) "/"))
-  ;;           (-group-by #'f-parent)
-  ;;           (-sort (-on #'> #'seq-length))
-  ;;           (-map #'car)
-  ;;           (-map #'f-short)
-  ;;           (-filter (-partial #'string-prefix-p "~")))
-  ;;         akirak/git-clone-parent-directories)
-  akirak/git-clone-parent-directories)
-
-(defun akirak/get-repository-name (url)
-  (nth 1 (s-match (rx (or (and (group-n 1 (+ (not (any "/")))) ".git")
-                          (group-n 1 (+ (not (any "/")))))
-                      eos)
-                  url)))
-
-(defun akirak/git-clone-read-destination (url)
-  (let ((parent (completing-read (format-message "Choose a parent directory for %s: " url)
-                                 (akirak/git-clone-parent-directories)
-                                 nil nil)))
-    (if (and parent (not (string-empty-p parent)))
-        (progn
-          (unless (file-directory-p parent)
-            (if (yes-or-no-p (format-message "Directory %s does not exist. Create a directory?" parent))
-                (make-directory parent t)
-              (user-error "Directory %s does not exist" parent)))
-          (let ((name (read-string "Name: " (akirak/get-repository-name url))))
-            (f-join parent name)))
-      (read-directory-name (format-message "Clone the destination directory for %s: "
-                                           url)
-                           (car (akirak/git-clone-parent-directories))))))
-
-(defun akirak/git-clone-url (url)
-  (require 'magit-clone)
-  (let ((directory (akirak/git-clone-read-destination url))
-        (args (transient-args 'magit-clone)))
-    (magit-clone-internal url directory args)))
 
 (provide 'setup-git-clone)
