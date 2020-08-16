@@ -78,6 +78,7 @@ Only one letter is shown, the first that applies."
     "s" #'magit-stage-file)
   (akirak/bind-admin
     "g" '(nil :wk "git")
+    "gc" #'akirak/git-clone-remote-repo
     "gl" #'magit-list-repositories)
 
   :custom
