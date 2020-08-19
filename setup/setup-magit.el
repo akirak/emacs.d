@@ -80,7 +80,7 @@ Only one letter is shown, the first that applies."
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
-     ("~/.emacs.d/straight/repos/" . 1)
+     ;; ("~/.emacs.d/straight/repos/" . 1)
      ("~/archive" . 1)
      ("~/projects" . 2)
      ("~/home.nix" . 0)
