@@ -169,6 +169,12 @@
                                 :force force)
                               :omit-user t))
 
+(defun akirak/github-owned-repos (&optional arg)
+  (interactive "P")
+  (if arg
+      (akirak/github-user-repos)
+    (akirak/github-recent-repos)))
+
 (defun akirak/github-starred-repos (&optional arg)
   (interactive "P")
   (akirak/browse-github-repos "Starred repos: "

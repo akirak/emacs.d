@@ -787,9 +787,9 @@ outcommented org-mode headers)."
   "g" '(nil :wk "git")
   "gc" #'akirak/git-clone-remote-repo
   "gl" #'magit-list-repositories
+  "go" #'akirak/github-owned-repos
   "gs" #'akirak/github-starred-repos
-  "gr" #'akirak/github-recent-repos
-  "gu" #'akirak/github-user-repos)
+  "gu" #'akirak/github-users)
 
 ;;;;; Docker
 (akirak/bind-admin
