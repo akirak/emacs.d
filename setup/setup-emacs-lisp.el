@@ -1,4 +1,4 @@
-;;; setup-lisp.el --- Configuration for lisp-mode  -*- lexical-binding: t; -*-
+;;; setup-emacs-lisp.el --- Configuration for emacs-lisp-mode  -*- lexical-binding: t; -*-
 
 (general-add-hook '(lisp-mode-hook
                     emacs-lisp-mode-hook)
@@ -61,7 +61,10 @@
   :straight (elx :host github :repo "emacscollective/elx"))
 
 (use-package elinter
-  :straight (:host github :repo "akirak/elinter" :branch "v4"))
+  :straight (:host github :repo "akirak/elinter" :branch "v4")
+  :config
+  (akirak/bind-mode :keymaps 'emacs-lisp-mode-map
+    "l" #'elinter))
 
 (use-package lisp-extra-font-lock)
 
