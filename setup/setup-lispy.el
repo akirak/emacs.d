@@ -9,6 +9,7 @@
   :general
   ;; Disable keybindings I don't like
   (:keymaps 'lispy-mode-map-lispy
+            "C-," nil
             "M-<left>" nil
             "M-<right>" nil
             "M-m" nil
