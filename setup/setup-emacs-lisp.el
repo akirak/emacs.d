@@ -192,4 +192,4 @@
         (load-file buffer-file-name)
       (eval-buffer))))
 
-(provide 'setup-lisp)
+(provide 'setup-emacs-lisp)
