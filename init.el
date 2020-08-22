@@ -209,7 +209,8 @@
 
 ;;; Packages
 (use-package calibredb)
-(use-package docker)
+(use-package docker
+  :disabled t)
 (use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
