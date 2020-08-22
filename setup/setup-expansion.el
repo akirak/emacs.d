@@ -42,7 +42,9 @@
 ;; Load yasnippet as an infrastructure for auto-yasnippet and yankpad.
 (use-package yasnippet
   :hook
-  ((text-mode prog-mode) . yas-minor-mode))
+  ((text-mode prog-mode) . yas-minor-mode)
+  :custom
+  (yas-indent-line 'fixed))
 
 (use-package auto-yasnippet
   :commands (aya-create aya-expand))
