@@ -242,4 +242,41 @@
               (sleep-for 5)
               (akirak/github-download-all-stars))))
 
+(defun akirak/insert-github-action-html-badge ()
+  (interactive)
+  (let* ((origin (car (magit-config-get-from-cached-list "remote.origin.url")))
+         (repo (akirak/parse-git-url origin))
+         (url (concat "https://github.com/"
+                      (akirak/remote-git-repo-owner repo)
+                      "/"
+                      (akirak/remote-git-repo-name repo)))
+         (root (vc-git-root default-directory))
+         (workflows (-map (lambda (file)
+                            (with-temp-buffer
+                              (insert-file-contents file)
+                              (goto-char (point-min))
+                              (and (re-search-forward (rx bol "name: ") nil t)
+                                   (let ((s (buffer-substring-no-properties
+                                             (point)
+                                             (line-end-position))))
+                                     (save-match-data
+                                       (and (string-match (rx bol (?  (any "\"'"))
+                                                              (group (+? anything))
+                                                              (?  (any "\"'")) eol)
+                                                          s)
+                                            (match-string 1 s)))))))
+                          (directory-files (f-join root ".github" "workflows")
+                                           t (rx ".yml" eol))))
+         (name (completing-read "Workflow name: " workflows))
+         (branch (magit-read-local-branch "Branch: ")))
+    (insert (concat (format "<a href=\"%s/actions?query=workflow%%3A%%22%s%%22+branch%%3A%s\">\n"
+                            url
+                            (shr-encode-url (s-replace " " "+" name))
+                            (shr-encode-url branch))
+                    (format "<img alt=\"Build Status\" src=\"%s/workflows/%s/badge.svg?branch=%s\" />\n"
+                            url
+                            (shr-encode-url name)
+                            (shr-encode-url branch))
+                    "</a>"))))
+
 (provide 'setup-github)
