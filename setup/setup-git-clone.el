@@ -25,6 +25,7 @@
       (magit-clone-regular url dest args))))
 
 (cl-defgeneric akirak/remote-git-repo-url (repo))
+(cl-defgeneric akirak/remote-git-repo-owner (repo))
 (cl-defgeneric akirak/remote-git-repo-name (repo))
 (cl-defgeneric akirak/remote-git-repo-clone-parent (repo))
 
@@ -37,6 +38,8 @@
           "/"
           (akirak/github-https-repo-name repo)
           ".git"))
+(cl-defmethod akirak/remote-git-repo-owner ((repo akirak/github-https-repo))
+  (akirak/github-https-repo-owner repo))
 (cl-defmethod akirak/remote-git-repo-name ((repo akirak/github-https-repo))
   (akirak/github-https-repo-name repo))
 (cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/github-https-repo))
@@ -51,6 +54,8 @@
           "/"
           (akirak/github-ssh-repo-name repo)
           ".git"))
+(cl-defmethod akirak/remote-git-repo-owner ((repo akirak/github-ssh-repo))
+  (akirak/github-ssh-repo-owner repo))
 (cl-defmethod akirak/remote-git-repo-name ((repo akirak/github-ssh-repo))
   (akirak/github-ssh-repo-name repo))
 (cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/github-ssh-repo))
