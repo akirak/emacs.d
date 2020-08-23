@@ -114,4 +114,30 @@
   (interactive "sGit repository (path or url): ")
   (akirak/remote-git-repo-clone-default (akirak/parse-git-url path-or-url)))
 
+;;;; Configuration for Magit
+
+(advice-add #'magit-worktree-checkout
+            :before
+            (defun akirak/maybe-fork-github-repo (&rest _args)
+              (let* ((origin (car (magit-config-get-from-cached-list "remote.origin.url")))
+                     (repo (if origin
+                               (akirak/parse-git-url origin)
+                             (user-error "No origin is set"))))
+                (when (and (akirak/github-https-repo-p repo)
+                           (not (equal (akirak/github-https-repo-owner repo)
+                                       akirak/github-login)))
+                  (forge-fork akirak/github-login akirak/github-login)))))
+
+
+(setq magit-worktree-read-directory-name-function
+      (defun akirak/read-git-worktree-name (prompt)
+        (if-let* ((origin (car (magit-config-get-from-cached-list "remote.origin.url")))
+                  (repo (and origin
+                             (akirak/parse-git-url origin)))
+                  (parent (akirak/remote-git-repo-clone-parent repo)))
+            (read-directory-name prompt
+                                 parent
+                                 (akirak/remote-git-repo-name repo))
+          (read-directory-name prompt))))
+
 (provide 'setup-git-clone)
