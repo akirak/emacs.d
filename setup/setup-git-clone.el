@@ -81,8 +81,8 @@
          (github-path-pattern (concat "^" path-pattern "$"))
          (https-pattern (concat "^https://" host-pattern "/" path-pattern
                                 optional-suffix))
-         (ssh-pattern (concat "^git@" host-pattern "/" path-pattern suffix "$")))
-    (pcase-let ((`(,protocol _ ,host ,owner ,name)
+         (ssh-pattern (concat "^git@" host-pattern ":" path-pattern suffix "$")))
+    (pcase-let ((`(,protocol ,url ,host ,owner ,name)
                  (or (-some->> (s-match name-pattern string)
                        (append (list nil nil "github.com" akirak/github-login)))
                      (-some->> (s-match github-path-pattern string)
@@ -99,7 +99,7 @@
        ((equal host "github.com")
         (make-akirak/github-https-repo :owner owner
                                        :name (string-remove-suffix ".git" name)))
-       ((and url owner name)
+       ((and host owner name)
         (make-akirak/generic-git-repo :url string
                                       :protocol protocol
                                       :host host
