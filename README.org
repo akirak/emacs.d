@@ -5,6 +5,54 @@ This is my Emacs configuration.
 :PROPERTIES:
 :TOC: siblings
 :END:
+-  [[#prerequisites][Prerequisites]]
+-  [[#installation][Installation]]
+-  [[#license][License]]
+-  [[#initialization][Initialization]]
+  -  [[#configure-straightel][Configure straight.el]]
+  -  [[#benchmarking-the-startup-process][Benchmarking the startup process]]
+  -  [[#use-the-latest-git-version-of-org-mode][Use the latest Git version of Org mode]]
+  -  [[#recipe-overrides][Recipe overrides]]
+  -  [[#load-configuration-files][Load configuration files]]
+-  [[#configuration][Configuration]]
+  -  [[#things-to-set-up-before-using-use-package][Things to set up before using use-package]]
+  -  [[#keybindings][Keybindings]]
+  -  [[#default-settings][Default settings]]
+  -  [[#migrating][Migrating]]
+-  [[#packages][Packages]]
+-  [[#commands-and-keybindings][Commands and keybindings]]
+  -  [[#basic-keybindings][Basic keybindings]]
+    -  [[#c-a][C-a]]
+    -  [[#c-e][C-e]]
+    -  [[#c-h][C-h]]
+    -  [[#c-w][C-w]]
+    -  [[#c-u][C-u]]
+    -  [[#c-r][C-r]]
+  -  [[#key-translation-and-simulation][Key translation and simulation]]
+    -  [[#emulate-virtual-function-keys-of-chrome-os][Emulate virtual function keys of Chrome OS]]
+  -  [[#switching-buffers][Switching buffers]]
+    -  [[#helm-commands][Helm commands]]
+    -  [[#browsing-contents-in-specific-buffers-without-leaving-the-context][Browsing contents in specific buffers without leaving the context]]
+  -  [[#navigation-in-buffer][Navigation in buffer]]
+    -  [[#page-navigation][Page navigation]]
+  -  [[#help-and-documentation][Help and documentation]]
+    -  [[#additional-keybindings-on-f1][Additional keybindings on <f1>]]
+  -  [[#editing][Editing]]
+    -  [[#undo-and-redo][Undo and redo]]
+    -  [[#editing-source-code-comments-in-org-mode-using-outorg][Editing source code comments in org-mode using outorg]]
+    -  [[#formatting-code][Formatting code]]
+  -  [[#running-external-commands][Running external commands]]
+  -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
+  -  [[#per-project][Per-project]]
+  -  [[#administration][Administration]]
+    -  [[#directory][Directory]]
+    -  [[#emacs][Emacs]]
+    -  [[#git][Git]]
+    -  [[#docker][Docker]]
+    -  [[#local-libraries][Local libraries]]
+    -  [[#nix][Nix]]
+    -  [[#remote-connections-tramp][Remote connections (TRAMP)]]
+
 **  Prerequisites
 - Linux or Window Subsystem for Linux
 - Nix package manager for installing dependencies
@@ -180,8 +228,80 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 (use-package use-package-company
   ;; Originally written by Foltik, but I use my fork
   :straight (use-package-company :host github :repo "akirak/use-package-company"))
+#+end_src
 
-(use-package general)
+***  Keybindings
+#+begin_src emacs-lisp
+(use-package which-key
+
+  :init
+  (which-key-mode t)
+  :config
+  (which-key-setup-side-window-bottom)
+
+  (defmacro akirak/which-key-add-stripped-prefix (prefix)
+    "Add PREFIX as a stripped prefix to `which-key-replacement-alist'."
+    `(add-to-list 'which-key-replacement-alist
+                  (quote ((nil . ,prefix) .
+                          (lambda (kb)
+                            (cons (car kb)
+                                  (string-remove-prefix ,prefix (cdr kb))))))))
+
+  (akirak/which-key-add-stripped-prefix "akirak/")
+  (akirak/which-key-add-stripped-prefix "helm-org-multi-wiki-create/"))
+#+end_src
+
+Use general.el to define keybindings. It has made several
+improvements over bind-key, including a built-in integration with
+which-key.
+
+This also adds support for =:general= keyword in use-package
+directives.
+
+#+begin_src emacs-lisp
+(use-package general
+  :config
+
+  (general-create-definer akirak/bind-search :prefix "M-s")
+  (general-create-definer akirak/bind-jump :prefix "M-g")
+  (general-create-definer akirak/bind-register :prefix "C-x r")
+
+  (general-create-definer akirak/bind-help :prefix "<f1>")
+  (general-create-definer akirak/bind-file-extra :prefix "<f6>")
+  ;; <f7> is currently free
+  (general-create-definer akirak/bind-f8 :prefix "<f8>")
+  ;; <f9> is reserved for recompile
+  (general-create-definer akirak/bind-admin :prefix "<f12>"
+    :prefix-map 'akirak/admin-map)
+
+  ;; ~C-c~ is reserved for the user.
+  ;; Package developers should not use them for their packages.
+  (general-create-definer akirak/bind-user :prefix "C-c")
+
+  ;; bind-generic (C-.) for editing
+  ;; Generic prefix key for editing commands.
+  (general-create-definer akirak/bind-generic :prefix "C-."
+    :prefix-map 'akirak/generic-prefix-map)
+
+  ;; bind-mode (C-,) for major-mode-specific commands
+  (defconst akirak/mode-prefix-key "C-,"
+    "Prefix for mode-specific keys.")
+  (general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
+
+  ;; Use ~<C-return>~ for starting a REPL session
+  (general-create-definer akirak/bind-mode-repl
+    :prefix "<C-return>")
+
+  ;; TODO: I want to change this key to something else
+  (general-create-definer akirak/bind-customization :prefix "C-x ESC"))
+
+(use-package defrepeater
+  :general
+  ([remap other-window] (defrepeater #'other-window)
+   [remap winner-undo] (defrepeater #'winner-undo)
+   [remap winner-redo] (defrepeater #'winner-redo)
+   [remap text-scale-increase] (defrepeater #'text-scale-increase)
+   [remap text-scale-decrease] (defrepeater #'text-scale-decrease)))
 #+end_src
 
 ***  Default settings
@@ -205,7 +325,8 @@ load them first.
 **  Packages
 #+begin_src emacs-lisp
 (use-package calibredb)
-(use-package docker)
+(use-package docker
+  :disabled t)
 (use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
@@ -216,11 +337,11 @@ load them first.
 
 (use-package helm-tail
   :commands (helm-tail))
-(use-package melpa-check)
 (use-package org-recent-headings
   :after org
   :config
   (org-recent-headings-mode 1))
+(use-package su)
 (use-package valign
   :hook
   (org-mode . valign-mode))
@@ -317,7 +438,7 @@ In minibuffers, ~C-r~ should call history.
   "C-r" 'counsel-minibuffer-history)
 #+end_src
 
-***  Key translation
+***  Key translation and simulation
 Since I have bound C-h to =backward-delete-char= but still use the
 help system frequently, I bind ~M-`~ to ~<f1>~ in
 =key-translation-map=.
@@ -336,6 +457,8 @@ help system frequently, I bind ~M-`~ to ~<f1>~ in
   ;; especially when Search and Ctrl are swapped.
   ;; This is quite annoying, so I will use M-` as <f1>.
   "M-`" (kbd "<f1>"))
+
+(general-def "M-r" (general-simulate-key "C-x r"))
 #+end_src
 
 ****  Emulate virtual function keys of Chrome OS
@@ -558,6 +681,23 @@ notion of page/chunk varies.
   [remap backward-page] #'Info-prev)
 #+end_src
 
+***  Help and documentation
+****  Additional keybindings on <f1>
+#+begin_src emacs-lisp
+(akirak/bind-help
+  "xc" #'describe-char
+  "xf" #'counsel-faces)
+#+end_src
+
+e.g. M-` M-m -> <f1> ESC m
+
+#+begin_src emacs-lisp
+(akirak/bind-help
+  "ESC m" #'woman
+  "ESC i" #'helm-info
+  "ESC d" #'helm-dash)
+#+end_src
+
 ***  Editing
 ****  Undo and redo
 You still can use the built-in undo command with C-x u
@@ -761,6 +901,19 @@ outcommented org-mode headers)."
 These commands are used to maintain this Emacs configuration.
 
 #+begin_src emacs-lisp
+(akirak/bind-customization
+  "" '(nil :wk "customize")
+  "f" #'customize-face-other-window
+  "o" #'customize-group-other-window
+  "l" #'counsel-find-library
+  "p" '((lambda () (interactive)
+          (if (featurep 'straight)
+              (call-interactively 'straight-use-package)
+            (package-list-packages)))
+        :wk "packages")
+  "s" #'customize-set-value
+  "v" #'customize-variable-other-window)
+
 (general-def
   "C-x M-m"
   (defun akirak/helm-my-library ()
@@ -809,6 +962,17 @@ These commands are used to maintain this Emacs configuration.
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "ex" #'explain-pause-mode)
+#+end_src
+
+****  Git
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "g" '(nil :wk "git")
+  "gc" #'akirak/git-clone-remote-repo
+  "gl" #'magit-list-repositories
+  "go" #'akirak/github-owned-repos
+  "gs" #'akirak/github-starred-repos
+  "gu" #'akirak/github-users)
 #+end_src
 
 ****  Docker
