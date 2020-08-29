@@ -93,13 +93,16 @@
                                             (buffer-substring-no-properties
                                              (region-beginning) (region-end)))
                                        akirak/read-url-history))
-         (port (ignore-errors (string-to-number port-or-url))))
+         (port (ignore-errors (string-to-number port-or-url)))
+         (github-repo-path-pattern (rx (group (+ (any alnum "-")))
+                                       "/"
+                                       (group (+ (any alnum "-_."))))))
     (cond
      ((and (numberp port) (/= 0 port))
       (format "http://localhost:%d%s" port (read-string "Path: ")))
      ((ffap-url-p port-or-url)
       port-or-url)
-     ((string-match-p akirak/github-repo-path-pattern port-or-url)
+     ((string-match-p github-repo-path-pattern port-or-url)
       (concat "https://github.com/" port-or-url))
      ((string-match-p akirak/https-url-shorthand-pattern port-or-url)
       (concat "https://" port-or-url))
