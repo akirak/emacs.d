@@ -32,4 +32,6 @@
 
 (use-package nix-env-install)
 
+(use-package nix-boilerplate)
+
 (provide 'setup-nix)
