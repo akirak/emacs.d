@@ -92,11 +92,11 @@
                                    \.name
                                  \.full_name)
                                'face 'font-lock-string-face)
-                   (if .fork
+                   (if \.fork
                        (propertize " (fork)"
                                    'face 'font-lock-constant-face)
                      "")
-                   (if .private
+                   (if \.private
                        (propertize " (private)"
                                    'face 'font-lock-constant-face)
                      "")
@@ -115,13 +115,26 @@
                                                      \.updated_at))))
                                 t)
                                'face 'font-lock-comment-face))
-           (cons 'clone_url .clone_url)))))
+           (cons 'clone_url \.clone_url)
+           (cons 'html_url \.html_url)
+           (cons 'issues_url \.issues_url)
+           (cons 'pull_url \.pull_url)))))
     (helm :sources
           (helm-build-sync-source prompt
             :candidates (-map #'format-item items)
             :action
-            (lambda (x)
-              (akirak/git-clone-remote-repo (alist-get 'clone_url x)))))))
+            (quote (("Clone" .
+                     (lambda (x)
+                       (akirak/git-clone-remote-repo (alist-get (quote clone_url) x))))
+                    ("Browse" .
+                     (lambda (x)
+                       (akirak/browse-url (alist-get 'html_url x))))
+                    ("Browse issues on browser" .
+                     (lambda (x)
+                       (akirak/browse-url (alist-get 'issues_url x))))
+                    ("Browse PRs on browser" .
+                     (lambda (x)
+                       (akirak/browse-url (alist-get 'pulls_url x))))))))))
 
 (defun akirak/github-recent-repos ()
   (interactive)
