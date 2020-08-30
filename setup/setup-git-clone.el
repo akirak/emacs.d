@@ -130,7 +130,10 @@
                              (user-error "No origin is set"))))
                 (when (and (akirak/github-https-repo-p repo)
                            (not (equal (akirak/github-https-repo-owner repo)
-                                       akirak/github-login)))
+                                       akirak/github-login))
+                           (when (member akirak/github-login (magit-list-remotes))
+                             (message "Remote %s already exists" akirak/github-login)
+                             nil))
                   (forge-fork akirak/github-login akirak/github-login)))))
 
 
