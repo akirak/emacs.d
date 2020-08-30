@@ -122,7 +122,7 @@
 ;;;; Configuration for Magit
 
 (advice-add #'magit-worktree-checkout
-            :before
+            :after
             (defun akirak/maybe-fork-github-repo (&rest _args)
               (let* ((origin (car (magit-config-get-from-cached-list "remote.origin.url")))
                      (repo (if origin
