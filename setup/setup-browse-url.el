@@ -93,7 +93,10 @@
                             url)))))
   (akirak/browse-url (akirak/parse-web-query url-or-query)))
 
+(defvar akirak/web-query-history nil)
+
 (defun akirak/parse-web-query (query)
+  (add-to-list 'akirak/web-query-history query)
   (let* ((port (ignore-errors (string-to-number query)))
          (github-repo-path-pattern (rx (group (+ (any alnum "-")))
                                        "/"

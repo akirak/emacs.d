@@ -458,10 +458,13 @@ connection identities of recent files."
     (interactive)
     (require 'my/helm/source/web)
     (helm :prompt "Switch to a reference buffer: "
-          :sources
-          (list (akirak/helm-reference-buffer-source)
-                (helm-make-source "URL or query (open in browser)"
-                    'akirak/helm-source-web-dummy)))))
+          :default (list (thing-at-point 'symbol)
+                         (buffer-name helm-current-buffer))
+          :sources (append (list (akirak/helm-reference-buffer-source))
+                           (list helm-source-bookmark-info
+                                 helm-source-bookmark-man)
+                           (list (helm-def-source--info-files))
+                           (akirak/helm-web-sources)))))
 
 ;; In the list of project buffers, you can switch to a file list with
 ;; ~M-/~.
