@@ -454,10 +454,14 @@ connection identities of recent files."
                         (async-start-process "wmctrl" "wmctrl" nil
                                              "-a" wid)))))))
   "C-x '"
-  (defun akirak/switch-to-reference-buffer ()
+  (defun akirak/switch-to-reference-buffer-or-browser ()
     (interactive)
+    (require 'my/helm/source/web)
     (helm :prompt "Switch to a reference buffer: "
-          :sources (akirak/helm-reference-buffer-source))))
+          :sources
+          (list (akirak/helm-reference-buffer-source)
+                (helm-make-source "URL or query (open in browser)"
+                    'akirak/helm-source-web-dummy)))))
 
 ;; In the list of project buffers, you can switch to a file list with
 ;; ~M-/~.

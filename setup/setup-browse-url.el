@@ -58,15 +58,6 @@
 ;;;; browse-url function
 
 (defun akirak/browse-url (url &optional _new-window)
-  (interactive (list (pcase current-prefix-arg
-                       ('(16) (completing-read "URL from history and bookmarks: "
-                                               (append (akirak/browse-url-history-get)
-                                                       akirak/browse-url-bookmarks)))
-                       (_ (let ((url (akirak/read-url)))
-                            (when (or (akirak/local-url-p url)
-                                      current-prefix-arg)
-                              (akirak/browse-url-bookmarks-add url))
-                            url)))))
   (akirak/browse-url-history-add url)
   (when akirak/to-be-run-as-exwm
     (message "Opening %s. Choose a target window" url)
@@ -81,37 +72,47 @@
     (akirak/browse-url-incognito url))
    (t (browse-url-generic url))))
 
-(akirak/bind-search "M-g" #'akirak/browse-url)
-
 (defvar akirak/read-url-history nil)
 
-(defun akirak/read-url ()
-  (let* ((port-or-url (completing-read "Port or URL: "
-                                       (akirak/browse-url-bookmarks)
-                                       nil nil
-                                       (and (region-active-p)
-                                            (buffer-substring-no-properties
-                                             (region-beginning) (region-end)))
-                                       akirak/read-url-history))
-         (port (ignore-errors (string-to-number port-or-url)))
+(defun akirak/browse-url-or-query (url-or-query)
+  (interactive (list (pcase current-prefix-arg
+                       ('(16) (completing-read "URL from history and bookmarks: "
+                                               (append (akirak/browse-url-history-get)
+                                                       akirak/browse-url-bookmarks)))
+                       (_ (let ((url (akirak/parse-web-query
+                                      (completing-read "Port or URL: "
+                                                       (akirak/browse-url-bookmarks)
+                                                       nil nil
+                                                       (and (region-active-p)
+                                                            (buffer-substring-no-properties
+                                                             (region-beginning) (region-end)))
+                                                       akirak/read-url-history))))
+                            (when (or (akirak/local-url-p url)
+                                      current-prefix-arg)
+                              (akirak/browse-url-bookmarks-add url))
+                            url)))))
+  (akirak/browse-url (akirak/parse-web-query url-or-query)))
+
+(defun akirak/parse-web-query (query)
+  (let* ((port (ignore-errors (string-to-number query)))
          (github-repo-path-pattern (rx (group (+ (any alnum "-")))
                                        "/"
                                        (group (+ (any alnum "-_."))))))
     (cond
      ((and (numberp port) (/= 0 port))
       (format "http://localhost:%d%s" port (read-string "Path: ")))
-     ((ffap-url-p port-or-url)
-      port-or-url)
-     ((string-match-p github-repo-path-pattern port-or-url)
-      (concat "https://github.com/" port-or-url))
-     ((string-match-p akirak/https-url-shorthand-pattern port-or-url)
-      (concat "https://" port-or-url))
-     ((string-match (rx bol "@" (group (+ (any alnum "-_"))) eol) port-or-url)
-      (concat "https://github.com/" (match-string 1 port-or-url)))
-     ((string-match (rx bol "/r/") port-or-url)
-      (concat "https://reddit.com" port-or-url))
+     ((ffap-url-p query)
+      query)
+     ((string-match-p github-repo-path-pattern query)
+      (concat "https://github.com/" query))
+     ((string-match-p akirak/https-url-shorthand-pattern query)
+      (concat "https://" query))
+     ((string-match (rx bol "@" (group (+ (any alnum "-_"))) eol) query)
+      (concat "https://github.com/" (match-string 1 query)))
+     ((string-match (rx bol "/r/") query)
+      (concat "https://reddit.com" query))
      (t
-      (let ((words (split-string port-or-url)))
+      (let ((words (split-string query)))
         (format "https://duckduckgo.com/?q=%s"
                 (mapconcat #'url-hexify-string words "+")))))))
 
