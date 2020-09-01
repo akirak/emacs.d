@@ -6,10 +6,13 @@
 (defclass akirak/helm-source-sync-web-query (helm-source-sync)
   ((action :initform 'akirak/helm-web-dummy-source-actions)))
 
+(defclass akirak/helm-source-browser-bookmarks (helm-source-sync)
+  ((candidates :initform 'akirak/browse-url-bookmarks)
+   (action :initform '(("Browse" . akirak/browse-url-or-query)))))
+
 (defun akirak/helm-web-sources ()
-  (list (helm-make-source "URL bookmarks"
-            'akirak/helm-source-sync-web-query
-          :candidates 'akirak/browse-url-bookmarks)
+  (list (helm-make-source "Browser bookmarks"
+            'akirak/helm-source-browser-bookmarks)
         (helm-make-source "Query history"
             'akirak/helm-source-sync-web-query
           :candidates 'akirak/web-query-history)

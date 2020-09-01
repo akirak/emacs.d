@@ -1,9 +1,8 @@
 ;; -*- lexical-binding: t -*-
 
 ;;;; URL bookmarks
-
 (defvar akirak/browse-url-bookmarks
-  '("http://localhost:8384"))
+  '(("Syncthing" . "http://localhost:8384")))
 
 (defvar akirak/browse-url-bookmarks-read nil)
 
@@ -23,9 +22,12 @@
           (setq akirak/browse-url-bookmarks-read t)))))
 
 (defun akirak/browse-url-bookmarks-add (url)
-  (let ((orig-length (length akirak/browse-url-bookmarks)))
-    (add-to-list 'akirak/browse-url-bookmarks url)
-    (unless (eql orig-length (length akirak/browse-url-bookmarks))
+  (unless (and (akirak/browse-url-bookmarks)
+               (rassoc url akirak/browse-url-bookmarks))
+    (let* ((html (org-web-tools--get-url url))
+           (title (read-string "Title of the bookmark: "
+                               (org-web-tools--html-title html))))
+      (add-to-list 'akirak/browse-url-bookmarks (cons title url))
       (with-temp-buffer
         (princ akirak/browse-url-bookmarks (current-buffer))
         (write-file akirak/browse-url-bookmarks-file)))))
