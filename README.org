@@ -597,10 +597,17 @@ connection identities of recent files."
                         (async-start-process "wmctrl" "wmctrl" nil
                                              "-a" wid)))))))
   "C-x '"
-  (defun akirak/switch-to-reference-buffer ()
+  (defun akirak/switch-to-reference-buffer-or-browser ()
     (interactive)
+    (require 'my/helm/source/web)
     (helm :prompt "Switch to a reference buffer: "
-          :sources (akirak/helm-reference-buffer-source))))
+          :default (list (thing-at-point 'symbol)
+                         (buffer-name helm-current-buffer))
+          :sources (append (list (akirak/helm-reference-buffer-source))
+                           (list helm-source-bookmark-info
+                                 helm-source-bookmark-man)
+                           (list (helm-def-source--info-files))
+                           (akirak/helm-web-sources)))))
 #+end_src
 
 In the list of project buffers, you can switch to a file list with
@@ -997,6 +1004,7 @@ These commands are used to maintain this Emacs configuration.
 (akirak/bind-admin
   "n" '(nil :wk "nix")
   "nC" #'nix-env-install-cachix-use
+  "ni" #'nix-boilerplate-init
   "nn" #'nix-env-install-npm
   "nu" #'nix-env-install-uninstall)
 #+end_src
