@@ -34,7 +34,8 @@
               backup-by-copying t
               delete-by-moving-to-trash t
               delete-old-versions t
-              view-read-only t)
+              view-read-only t
+              sentence-end-double-space nil)
 
 (set-language-environment "UTF-8")
 
