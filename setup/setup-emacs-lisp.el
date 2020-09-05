@@ -63,6 +63,9 @@
 (use-package elinter
   :straight (:host github :repo "akirak/elinter" :branch "v4")
   :config
+  (add-to-list 'auto-mode-alist
+               (cons (rx "/.recipes/" (+ (not (any "/"))) eol)
+                     'emacs-lisp-mode))
   (akirak/bind-mode :keymaps 'emacs-lisp-mode-map
     "l" #'elinter))
 
