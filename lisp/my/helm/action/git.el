@@ -3,6 +3,7 @@
 (defconst akirak/helm-git-project-actions
   '(("Magit status" . magit-status)
     ("Rename directory and run magit status" . akirak/rename-git-repository-and-status)
+    ("Find files recursively" . akirak/find-file-recursively)
     ("Dired" . dired)
     ("Term" . (lambda (dir)
                 (let ((default-directory dir))
