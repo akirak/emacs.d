@@ -87,7 +87,7 @@ Only one letter is shown, the first that applies."
      ("~/lib" . 1)
      ("/etc/nixos" . 0)))
   (magit-repolist-columns
-   '(("Path" 20 akirak/magit-repolist-column-path nil)
+   '(("Path" 30 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
      ("Drty" 4 akirak/magit-repolist-column-dirty nil)
      ("Unmg" 5 akirak/magit-repolist-column-unmerged nil)
