@@ -15,8 +15,10 @@
 (defvar akirak/eldoc-lv-window nil)
 
 (defun akirak/eldoc-message (format &rest args)
-  (let ((window (setq akirak/eldoc-lv-window (lv-window)))
+  (let ((window (let ((window-configuration-change-hook nil))
+                  (lv-window)))
         (buffer (get-buffer " *LV*")))
+    (setq akirak/eldoc-lv-window window)
     (unless (eql buffer (get-buffer-window buffer))
       (set-window-buffer window buffer))
     (apply #'lv-message format args)))
