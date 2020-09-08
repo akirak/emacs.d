@@ -209,6 +209,8 @@
 
 ;;; Packages
 (use-package calibredb)
+(use-package discover-my-major
+  :commands (discover-my-major))
 (use-package docker
   :disabled t)
 (use-package ediprolog)
@@ -534,6 +536,7 @@ connection identities of recent files."
 ;;;; Help and documentation
 ;;;;; Additional keybindings on <f1>
 (akirak/bind-help
+  "M" #'discover-my-major
   "xc" #'describe-char
   "xf" #'counsel-faces)
 
