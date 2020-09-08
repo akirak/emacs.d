@@ -1,7 +1,7 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
-  (require 'lsp-clients)
+  ;; (require 'lsp-clients)
   (defun akirak/setup-lsp ()
     (company-mode t)
     (eldoc-mode t)
