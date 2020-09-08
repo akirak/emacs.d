@@ -82,6 +82,7 @@
   "Alist of height.")
 
 (use-package ivy-posframe
+  :unless (akirak/windows-subsystem-for-linux-p)
   :after ivy
   ;; Use posframe to display candidates in ivy commands.
   ;;
