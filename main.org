@@ -960,6 +960,7 @@ Additional visual cues can increase productivity, but they can be noisy at the s
 I often lose sight of the cursor when I switch to another window, so this is necessary.
 #+begin_src emacs-lisp
   (use-package beacon           ; Highlight the cursor on certain events
+    :unless (akirak/windows-subsystem-for-linux-p)
     :config
     (general-add-hook 'beacon-dont-blink-commands
                       '(akirak/scroll-half-page-forward
@@ -1026,6 +1027,7 @@ This is helpful in programming languages that depend on indentation levels.
 Visualise (usually) 80 columns.
 #+begin_src emacs-lisp
   (use-package fill-column-indicator
+    :unless (akirak/windows-subsystem-for-linux-p)
     :init
     (add-hook 'prog-mode-hook 'fci-mode))
 #+end_src
