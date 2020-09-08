@@ -15,9 +15,9 @@
   :straight (katawa :host github :repo "akirak/katawa.el")
   :commands (katawa-ivy katawa-ivy-at-point)
   :config
-  (akirak/bind-language
-    "j" #'katawa-ivy-at-point
-    "J" #'katawa-ivy)
+  ;; (akirak/bind-language
+  ;;   "j" #'katawa-ivy-at-point
+  ;;   "J" #'katawa-ivy)
   (ivy-add-actions 'katawa-ivy
                    '(("t" akirak/org-capture-japanese-to-translate "org-capture"))))
 
