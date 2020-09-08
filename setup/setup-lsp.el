@@ -59,7 +59,7 @@
 
 ;;;; Additional LSP client packages which are not part of lsp-mode
 (use-package lsp-dockerfile
-  :straight (lsp-dockerfile :host github :repo "emacs-lsp/lsp-dockerfile")
+  :disabled t
   :after dockerfile-mode
   :hook
   (dockerfile-mode . lsp-dockerfile-enable)
