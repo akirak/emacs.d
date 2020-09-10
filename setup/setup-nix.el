@@ -6,7 +6,9 @@
   (reformatter-define nix-linter
     :program "nix-linter")
   (akirak/bind-mode :keymaps 'nix-mode-map
-    "u" #'nix-update-fetch))
+    "u" #'nix-update-fetch)
+  (akirak/bind-mode-repl :mode 'nix-mode
+    "" #'nix-repl))
 
 (use-package nix
   :straight nix-mode)
