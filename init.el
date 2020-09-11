@@ -491,6 +491,12 @@ connection identities of recent files."
   ;; This command lets you browse lines in error buffers.
   "C-x t" #'helm-tail)
 ;;;; Navigation in buffer
+;;;;; Avy
+;; Use avy-goto-word-1.
+;; https://irreal.org/blog/?p=9130
+(general-def
+  "C-'" #'avy-goto-word-1)
+
 ;;;;; Page navigation
 ;; I will use ~C-x [~ and ~C-x ]~ for "page" navigation. These keys
 ;; are bound to =backward-page= and =forward-page= by default, but

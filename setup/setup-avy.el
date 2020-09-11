@@ -40,7 +40,7 @@
     (point))
   :general
   ("M-z" #'avy-goto-char-in-line
-   "C-'" #'avy-goto-char-timer)
+   "C-\"" #'avy-goto-char-timer)
   :custom
   (avy-style 'at)
   (avy-styles-alist '((ivy-avy . pre)
