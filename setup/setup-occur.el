@@ -18,6 +18,12 @@
 (use-package deadgrep
   :commands (deadgrep)
   :config
+  (advice-add #'deadgrep-visit-result
+              :override
+              (defun akirak/deadgrep-visit-result ()
+                "Goto the search result at point."
+                (interactive)
+                (deadgrep--visit-result #'find-file-other-window)))
   (defvar deadgrep-replace-history nil)
   (defun deadgrep-replace ()
     (interactive)
