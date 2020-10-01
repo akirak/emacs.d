@@ -1,5 +1,4 @@
 (use-package treemacs
-  :disabled t
   :preface
   (setq treemacs-python-executable (executable-find "python3"))
   (pcase (cons (not (null (executable-find "git")))
