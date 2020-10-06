@@ -110,6 +110,10 @@
   :after (company shell)
   :company shell-script-mode)
 
+(use-package company-terraform
+  :after (company hcl-mode)
+  :company terraform-mode)
+
 (use-package company-restclient
   :after (company restclient)
   :company restclient-mode)

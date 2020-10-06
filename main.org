@@ -101,6 +101,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#pug][Pug]]
   -  [[#systemd][Systemd]]
   -  [[#svelte][Svelte]]
+  -  [[#terraform][Terraform]]
   -  [[#yaml][YAML]]
 -  [[#org-mode][Org mode]]
   -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
@@ -1440,6 +1441,10 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Svelte
 #+begin_src emacs-lisp
   (akirak/require 'setup-svelte)
+#+end_src
+*** Terraform
+#+begin_src emacs-lisp
+  (akirak/require 'setup-terraform)
 #+end_src
 *** YAML                                          :configuration__language:
 #+begin_src emacs-lisp
