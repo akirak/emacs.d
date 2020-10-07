@@ -1,4 +1,5 @@
 (use-package avy
+  :disabled t
   :config
   (add-to-list 'avy-dispatch-alist
                `(?K . akirak/avy-action-kill-line)
