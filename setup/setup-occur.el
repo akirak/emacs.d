@@ -57,7 +57,8 @@
               (string
                (query-replace search-term to-string))
               (words
-               (query-replace-regexp (rx bow (eval search-term) eow)
+               (query-replace-regexp (rx-to-string
+                                      `(bow ,search-term eow))
                                      to-string))
               (regexp
                (query-replace-regexp search-term to-string)))))
