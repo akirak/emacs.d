@@ -149,7 +149,7 @@
 ;; Set the default font
 (defcustom akirak/default-font-family
   ;; Available from my agave package
-  "agave"
+  "Agave"
   "Font family used as the default font."
   :type 'string
   :set (lambda (sym default)
