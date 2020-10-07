@@ -1,6 +1,7 @@
 (straight-use-package '(pdf-tools :type built-in))
 
 (use-package pdf-tools
+  :disabled t
   :preface
   (autoload 'pdf-annot-minor-mode "pdf-annot")
   (autoload 'pdf-cache-minor-mode "pdf-cache")
@@ -17,6 +18,7 @@
   (pdf-tools-install))
 
 (use-package org-pdftools
+  :disabled t
   :straight (org-pdftools :host github :repo "fuxialexander/org-pdftools"))
 
 (use-package org-noter
