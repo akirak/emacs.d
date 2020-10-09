@@ -1,6 +1,14 @@
 (setq split-height-threshold 50
       split-width-threshold nil)
 
+(use-package windmove
+  :config
+  (windmove-default-keybindings 'control))
+
+(use-package windswap
+  :config
+  (windswap-default-keybindings 'control 'shift))
+
 ;;;; display-buffer configuration
 
 (use-package shackle
