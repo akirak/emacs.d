@@ -20,6 +20,8 @@
                         while (re-search-forward "|" end t))))
     (delete-region (line-beginning-position) (line-end-position))))
 
-(advice-add 'org-return :before #'akirak/ad-before-org-return)
+;; This seems to block org-return from working properly
+;; as of org 9.3. I will disable it for now.
+;; (advice-add 'org-return :before #'akirak/ad-before-org-return)
 
 (provide 'setup-unpackaged)
