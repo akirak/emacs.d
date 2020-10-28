@@ -43,6 +43,10 @@
 (use-package yasnippet
   :hook
   ((text-mode prog-mode) . yas-minor-mode)
+  :config
+  (let ((dir "~/god/emacs/yasnippet/snippets/"))
+    (when (file-directory-p dir)
+      (add-to-list 'yas-snippet-dirs dir)))
   :custom
   (yas-indent-line 'fixed))
 
