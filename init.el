@@ -693,7 +693,27 @@ outcommented org-mode headers)."
                           (helm-build-sync-source "Basic commands"
                             :candidates
                             '("install")
-                            :action action)))))))
+                            :action action))))))
+         (mix-run-command
+          ()
+          (progn
+            (require 'my/compile/mix)
+            (helm :prompt (format "mix command [%s]: " default-directory)
+                  :sources
+                  (list (helm-build-sync-source "Mix commands"
+                          :candidates
+                          (-map (lambda (cell)
+                                  (cons (format "%s %s"
+                                                (car cell)
+                                                (propertize (cdr cell)
+                                                            'face 'font-lock-comment-face))
+                                        (car cell)))
+                                (akirak/mix-command-alist))
+                          :action
+                          `(("compile" . akirak/compile)
+                            ("compile (with args)" .
+                             (lambda (command)
+                               (akirak/compile (read-string "Command: " command)))))))))))
       (let (root)
         (cond
          ((and (derived-mode-p 'purescript-mode)
@@ -715,6 +735,10 @@ outcommented org-mode headers)."
          ((and root
                (f-exists-p (f-join root "Makefile")))
           (let ((default-directory root)) (counsel-compile)))
+         ((and root
+               (f-exists-p (f-join root "mix.exs")))
+          (let ((default-directory root))
+            (mix-run-command)))
          (t
           (akirak/helm-shell-command root))))))
   "C-x C"
@@ -726,7 +750,7 @@ outcommented org-mode headers)."
                     (akirak/project-root default-directory)
                     default-directory)))
       (setq akirak/programming-recipe-mode-name "sh"
-            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'organiser :as-buffers t))
+            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'default :as-buffers t))
       (helm :prompt (format "Execute command (project root: %s): " root)
             :sources
             (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
