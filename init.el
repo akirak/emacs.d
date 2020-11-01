@@ -826,9 +826,11 @@ outcommented org-mode headers)."
 ;;;;; Git
 (akirak/bind-admin
   "g" '(nil :wk "git")
+  "gb" #'commonplace-find-repo-module
   "gc" #'akirak/git-clone-remote-repo
   "gl" #'magit-list-repositories
   "go" #'akirak/github-owned-repos
+  "gr" #'commonplace-repos-counsel-rg
   "gs" #'akirak/github-starred-repos
   "gu" #'akirak/github-users)
 
