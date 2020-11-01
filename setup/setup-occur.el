@@ -76,9 +76,10 @@
               (regexp
                (query-replace-regexp search-term to-string)))))
         (save-buffer))))
-  :config
+
   (akirak/bind-mode :package 'magit :keymaps 'magit-status-mode-map
     "g" #'deadgrep)
+
   :general
   (:keymaps 'deadgrep-mode-map
             "R" #'deadgrep-replace))
