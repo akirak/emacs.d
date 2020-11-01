@@ -10,7 +10,10 @@
   "C-M-o" (defun akirak/counsel-ag-noccur ()
             (interactive)
             (ivy-exit-with-action
-             (lambda (_) (deadgrep ivy-text)))))
+             (lambda (_)
+               (message (ivy-state-directory ivy-last))
+               (let ((akirak/deadgrep-root-directory (ivy-state-directory ivy-last)))
+                 (deadgrep ivy-text))))))
 
 (use-package noccur
   :disabled t)
@@ -24,6 +27,16 @@
                 "Goto the search result at point."
                 (interactive)
                 (deadgrep--visit-result #'find-file-other-window)))
+
+  ;; Allow explicitly setting the root directory of a deadgrep session.
+  (defvar akirak/deadgrep-root-directory nil
+    "Variable used to explicitly set the root directory.")
+  (setq deadgrep-project-root-function
+        (lambda ()
+          (or akirak/deadgrep-root-directory
+              (deadgrep--project-root))))
+
+  ;; Add a command to replace matches in a deadgrep buffer.
   (defvar deadgrep-replace-history nil)
   (defun deadgrep-replace ()
     (interactive)
