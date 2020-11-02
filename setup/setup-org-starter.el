@@ -128,12 +128,6 @@
   (akirak/bind-helm-org-multi-wiki-dummy
     "" '(:wk "Create wiki entry")))
 
-(unless (bound-and-true-p org-starter-path)
-  (setq org-starter-path `(,(abbreviate-file-name
-                             (expand-file-name
-                              "org-starter"
-                              no-littering-etc-directory)))))
-
 (use-package org-starter
   :straight (org-starter :host github :repo "akirak/org-starter"
                          :branch "devel")
