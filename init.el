@@ -21,6 +21,11 @@
 (when (version< emacs-version "26.1")
   (error "Use GNU Emacs version 26.1 or later"))
 
+(let ((local-custom-file "~/local/emacs/custom.el"))
+  (when (file-exists-p local-custom-file)
+    (setq custom-file local-custom-file)
+    (load-file custom-file)))
+
 ;; Expand the GC threshold until gcmh-mode is activated.
 ;; gcmh-mode updates this value later, so you don't have to reset it.
 ;; The value is stolen from http://akrl.sdf.org/
