@@ -18,8 +18,8 @@
 
 ;;; Initialization
 
-(when (version< emacs-version "26.1")
-  (error "Use GNU Emacs version 26.1 or later"))
+(when (version< emacs-version "27.1")
+  (error "Use GNU Emacs version 27.1 or later"))
 
 (let ((local-custom-file "~/local/emacs/custom.el"))
   (when (file-exists-p local-custom-file)
