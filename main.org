@@ -626,6 +626,8 @@ Use =magit-annex= for working with =git-annex= repositories:
 
     (akirak/define-project-type syncthing ".stfolder")
     (akirak/define-project-type projectile ".projectile")
+    ;; Git repository or submodule
+    (akirak/define-project-type git ".git")
 
     (add-hook 'project-find-functions
               (defun akirak/project-tramp-root (dir)
