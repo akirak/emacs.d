@@ -99,11 +99,6 @@
   :custom
   (el-patch-enable-use-package-integration t))
 
-;; Activate =package.el= for loading built-in packages from nixpkgs:
-
-(require 'package)
-(package-initialize 'noactivate)
-
 ;; Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository.
 
 (use-package no-littering)
