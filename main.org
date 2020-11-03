@@ -612,13 +612,13 @@ Use =magit-annex= for working with =git-annex= repositories:
   (use-package project
     :straight (:type built-in)
     :config
-    (defmacro akirak/define-project-type (symbol dominating-file)
+    (defmacro akirak/define-project-type (symbol dominating-file &optional append)
       (let ((func (intern (format "akirak/project-%s-root" (symbol-name symbol)))))
         `(progn
            (defun ,func (dir)
              (when-let ((dir (locate-dominating-file dir ,dominating-file)))
                (cons (quote ,symbol) dir)))
-           (add-hook 'project-find-functions ',func t)
+           (add-hook 'project-find-functions ',func ,append)
            (cl-defmethod project-roots ((project (head ,symbol)))
              (list (cdr project)))
            ;; Return the current list of functions
