@@ -490,7 +490,14 @@ may have been stored before."
            (balance-windows))
        (message "No window was created")))))
 
+(defun akirak/split-window-vertically ()
+  (interactive)
+  (split-window-vertically)
+  (balance-windows))
+
 (general-def
+  "C-2" #'delete-window
+  "C-3" #'akirak/split-window-vertically
   "C-4" #'akirak/split-window-and-select)
 
 (provide 'setup-window-management)
