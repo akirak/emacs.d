@@ -829,7 +829,8 @@ outcommented org-mode headers)."
 
 ;;;;; Emacs
 (akirak/bind-admin
-  "ex" #'explain-pause-mode)
+  "ex" #'explain-pause-mode
+  "et" #'ert)
 
 ;;;;; Git
 (akirak/bind-admin
