@@ -859,10 +859,8 @@ outcommented org-mode headers)."
 ;;;;; Nix
 (akirak/bind-admin
   "n" '(nil :wk "nix")
-  "nC" #'nix-env-install-cachix-use
   "ni" #'nix-boilerplate-init
-  "nn" #'nix-env-install-npm
-  "nu" #'nix-env-install-uninstall)
+  "nn" #'nix-env-install-npm)
 
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
