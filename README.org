@@ -46,7 +46,7 @@ This is my Emacs configuration.
   -  [[#maintenance-and-development-of-the-config][Maintenance and development of the config]]
   -  [[#per-project][Per-project]]
   -  [[#administration][Administration]]
-    -  [[#directory][Directory]]
+    -  [[#directorydisk][Directory/disk]]
     -  [[#emacs][Emacs]]
     -  [[#git][Git]]
     -  [[#docker][Docker]]
@@ -76,8 +76,13 @@ follow their respective licenses.
 
 **  Initialization
 #+begin_src emacs-lisp
-(when (version< emacs-version "26.1")
-  (error "Use GNU Emacs version 26.1 or later"))
+(when (version< emacs-version "27.1")
+  (error "Use GNU Emacs version 27.1 or later"))
+
+(let ((local-custom-file "~/local/emacs/custom.el"))
+  (when (file-exists-p local-custom-file)
+    (setq custom-file local-custom-file)
+    (load-file custom-file)))
 #+end_src
 
 Expand the GC threshold until gcmh-mode is activated.
@@ -996,25 +1001,31 @@ These commands are used to maintain this Emacs configuration.
 #+end_src
 
 ***  Administration
-****  Directory
+****  Directory/disk
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "de" '(nil :wk "direnv"))
+  "d" '(nil :wk "dir")
+  "de" #'direnv-allow
+  "du" #'disk-usage
+  "dh" #'helm-linux-disks)
 #+end_src
 
 ****  Emacs
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "ex" #'explain-pause-mode)
+  "ex" #'explain-pause-mode
+  "et" #'ert)
 #+end_src
 
 ****  Git
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "g" '(nil :wk "git")
+  "gb" #'commonplace-find-repo-module
   "gc" #'akirak/git-clone-remote-repo
   "gl" #'magit-list-repositories
   "go" #'akirak/github-owned-repos
+  "gr" #'commonplace-repos-counsel-rg
   "gs" #'akirak/github-starred-repos
   "gu" #'akirak/github-users)
 #+end_src
@@ -1040,10 +1051,8 @@ These commands are used to maintain this Emacs configuration.
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "n" '(nil :wk "nix")
-  "nC" #'nix-env-install-cachix-use
   "ni" #'nix-boilerplate-init
-  "nn" #'nix-env-install-npm
-  "nu" #'nix-env-install-uninstall)
+  "nn" #'nix-env-install-npm)
 #+end_src
 
 ****  Remote connections (TRAMP)
