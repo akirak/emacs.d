@@ -820,9 +820,12 @@ outcommented org-mode headers)."
   "t" (akirak/run-at-project-root vterm :other-window t))
 
 ;;;; Administration
-;;;;; Directory
+;;;;; Directory/disk
 (akirak/bind-admin
-  "de" '(nil :wk "direnv"))
+  "d" '(nil :wk "dir")
+  "de" #'direnv-allow
+  "du" #'disk-usage
+  "dh" #'helm-linux-disks)
 
 ;;;;; Emacs
 (akirak/bind-admin
