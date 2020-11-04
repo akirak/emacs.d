@@ -194,14 +194,6 @@ configuration.
   (el-patch-enable-use-package-integration t))
 #+end_src
 
-Activate =package.el= for loading built-in packages from nixpkgs:
-
-
-#+begin_src emacs-lisp
-(require 'package)
-(package-initialize 'noactivate)
-#+end_src
-
 Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository.
 
 
