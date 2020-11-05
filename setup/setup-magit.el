@@ -86,9 +86,9 @@ Only one letter is shown, the first that applies."
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
      ;; ("~/.emacs.d/straight/repos/" . 1)
-     ("~/archive" . 1)
+     ("~" . 1)
+     ("~/.config" . 1)
      ("~/projects" . 2)
-     ("~/home.nix" . 0)
      ("~/lib" . 1)
      ("/etc/nixos" . 0)))
   (magit-repolist-columns
