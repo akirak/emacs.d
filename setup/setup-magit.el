@@ -63,6 +63,11 @@ Only one letter is shown, the first that applies."
           ((magit-unstaged-files)  "*")
           ((magit-staged-files)    "+")))
 
+  (defun akirak/magit-modulelist-column-path (path)
+    (let* ((segs (f-split path)))
+      (apply #'f-join `(,@(--map (seq-take it 1) (-butlast segs))
+                        ,(-last-item segs)))))
+
   (akirak/bind-f8
     ;; <f8> <f8>
     "<f8>" #'magit-status
@@ -100,6 +105,24 @@ Only one letter is shown, the first that applies."
        (:help-echo "Local changes not in upstream")))
      ("Date" 12 akirak/magit-repolist-column-commit-date nil)
      ("origin" 30 akirak/magit-repolist-column-origin nil)))
+  (magit-submodule-list-columns
+   '(("Path" 25 akirak/magit-modulelist-column-path nil)
+     ("Version" 13 magit-repolist-column-version nil)
+     ("Branch" 9 magit-repolist-column-branch nil)
+     ("Drty" 4 akirak/magit-repolist-column-dirty nil)
+     ("B<U" 3 magit-repolist-column-unpulled-from-upstream
+      ((:right-align t)))
+     ("B>U" 3 magit-repolist-column-unpushed-to-upstream
+      ((:right-align t)))
+     ("B<P" 3 magit-repolist-column-unpulled-from-pushremote
+      ((:right-align t)))
+     ("B>P" 3 magit-repolist-column-unpushed-to-pushremote
+      ((:right-align t)))
+     ("B" 3 magit-repolist-column-branches
+      ((:right-align t)))
+     ("S" 3 magit-repolist-column-stashes
+      ((:right-align t)))
+     ("origin" 35 akirak/magit-repolist-column-origin nil)))
   (magit-display-buffer-function
    (if akirak/to-be-run-as-exwm
        'magit-display-buffer-same-window-except-diff-v1
