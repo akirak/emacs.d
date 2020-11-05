@@ -147,4 +147,13 @@ emacsPackages.emacsWithPackages (epkgs: with epkgs; [
   exwm
   # beancount
   liberime-config
+  #
+  # These package have large Git repositories, so I will install them
+  # using Nix to prevent cloning the entire history.
+  ansible
+  language-detection
+  org
+  # org-roam
+  dimmer
+  tide
 ])

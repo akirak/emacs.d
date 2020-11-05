@@ -6,6 +6,7 @@
 ;;   (mode . ansible)))
 ;; #+end_src
 (use-package ansible
+  :straight (:type built-in)
   :after yaml
   :commands (ansible)
   :init

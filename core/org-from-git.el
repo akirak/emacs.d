@@ -34,5 +34,6 @@
 (provide 'org-version)
 
 (use-package org
+  :straight (:type built-in)
   :config
   (require 'org-loaddefs))

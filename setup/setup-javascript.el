@@ -173,6 +173,7 @@ the contents of the current buffer as the root document."
   :mode "\\.ts\\'")
 
 (use-package tide
+  :straight (:type built-in)
   :init
   (defun akirak/maybe-tide-setup ()
     (when (and (buffer-file-name)

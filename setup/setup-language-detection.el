@@ -1,4 +1,5 @@
 (use-package language-detection
+  :straight (:type built-in)
   :preface
   ;; From https://github.com/andreasjansson/language-detection.el#eww-syntax-highlighting
   (defcustom akirak/language-detection-modes-alist

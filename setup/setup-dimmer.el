@@ -1,4 +1,5 @@
 (use-package dimmer
+  :straight (:type built-in)
   ;; :unless (akirak/windows-subsystem-for-linux-p)
   :config
   (general-add-hook 'dimmer-buffer-exclusion-regexps
