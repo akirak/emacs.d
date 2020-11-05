@@ -10,6 +10,8 @@
                                  nov-mode
                                  vterm-mode
                                  html-mode
+                                 magit-repolist-mode
+                                 magit-submodule-list-mode
                                  ;; For log files
                                  fundamental-mode))
   (perfect-margin-ignore-regexps `("^minibuf" "^[*]"
