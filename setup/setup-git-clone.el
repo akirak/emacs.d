@@ -211,6 +211,32 @@
   "Root directory in which Emacs actually visits for files."
   :type 'directory)
 
+(defun commonplace-repos--all-submodule-alist ()
+  (let ((file (f-join commonplace-root ".gitmodules")))
+    (when (f-exists-p file)
+      (with-temp-buffer
+        (insert-file-contents file)
+        (let (positions result start)
+          (goto-char (point-max))
+          (while (re-search-backward (rx bol "[submodule" (+ space)) nil t)
+            (push (point) positions))
+          (while (setq start (pop positions))
+            (goto-char start)
+            (let* ((bound (car positions))
+                   (url (save-excursion
+                          (re-search-forward (rx bol (+ space) "url" (* space) "="
+                                                 (* space))
+                                             bound)
+                          (buffer-substring-no-properties (point) (line-end-position))))
+                   (path (progn
+                           (re-search-forward (rx bol (+ space) "path" (* space) "="
+                                                  (* space))
+                                              bound)
+                           (buffer-substring-no-properties (point) (line-end-position)))))
+              (push (cons path url)
+                    result)))
+          (nreverse result))))))
+
 (defun commonplace-repos--all-submodule-urls ()
   (let ((file (f-join commonplace-root ".gitmodules")))
     (when (f-exists-p file)
@@ -241,16 +267,19 @@
                                         &key no-visit)
   (interactive (list
                 (let* ((active-submodules (commonplace-repos--active-submodule-urls))
-                       (all-submodules (-map (lambda (path)
-                                               (if (member path active-submodules)
-                                                   (propertize path
-                                                               'face 'font-lock-string-face)
-                                                 path))
-                                             (commonplace-repos--all-submodule-urls))))
+                       (all-src-submodules (->> (commonplace-repos--all-submodule-alist)
+                                                (-filter (lambda (cell)
+                                                           (string-prefix-p "repos-src/" (car cell))))
+                                                (-map #'cdr)
+                                                (-map (lambda (path)
+                                                        (if (member path active-submodules)
+                                                            (propertize path
+                                                                        'face 'font-lock-string-face)
+                                                          path))))))
                   ;; TODO: Set the next history element to
                   ;; (magit-config-get-from-cached-list "remote.origin.url")
                   (completing-read "Add or visit submodule: "
-                                   all-submodules
+                                   all-src-submodules
                                    nil nil nil nil))))
   (let* ((obj (akirak/parse-git-url path-or-url))
          (host (cond
