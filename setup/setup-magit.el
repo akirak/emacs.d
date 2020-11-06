@@ -130,4 +130,7 @@ Only one letter is shown, the first that applies."
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
+(use-package magit-annex
+  :after magit)
+
 (provide 'setup-magit)

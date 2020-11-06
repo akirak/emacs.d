@@ -600,12 +600,6 @@ Differences between =browse-at-remote= and equivalent commands from =forge= pack
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
 To use it, you first have to customize =magit-repository-directories=.
-**** Git-Annex
-Use =magit-annex= for working with =git-annex= repositories:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-git-annex)
-#+end_src
 *** Project management
 **** project.el
 #+begin_src emacs-lisp
