@@ -143,6 +143,7 @@ emacsPackages.emacsWithPackages (epkgs: with epkgs; [
   vterm
   # mozc
   pdf-tools
+  org-pdftools
   elisp-ffi
   exwm
   # beancount

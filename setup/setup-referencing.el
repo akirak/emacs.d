@@ -1,7 +1,12 @@
+;; Install packages from nixpkgs.
 (straight-use-package '(pdf-tools :type built-in))
+(straight-use-package '(org-pdftools :type built-in))
 
-(use-package pdf-tools
-  :disabled t
+;; pdf-tools blocks startup, so load pdf-loader instead.
+;;
+;; For details, see https://github.com/politza/pdf-tools#installing
+(use-package pdf-loader
+  :straight pdf-tools
   :preface
   (autoload 'pdf-annot-minor-mode "pdf-annot")
   (autoload 'pdf-cache-minor-mode "pdf-cache")
@@ -15,11 +20,14 @@
   (autoload 'pdf-outline-minor-mode "pdf-outline")
   (autoload 'pdf-sync-minor-mode "pdf-sync")
   :config
-  (pdf-tools-install))
+  (pdf-loader-install)
+  ;; This is necessary to add a corresponding entry to auto-mode-list.
+  (load "pdf-tools-autoloads"))
 
 (use-package org-pdftools
-  :disabled t
-  :straight (org-pdftools :host github :repo "fuxialexander/org-pdftools"))
+  :after org
+  :hook
+  (org-mode . org-pdftools-setup-link))
 
 (use-package org-noter
   :after org-starter
