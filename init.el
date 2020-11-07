@@ -208,7 +208,6 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
-(use-package calibredb)
 (use-package discover-my-major
   :commands (discover-my-major))
 (use-package docker
@@ -845,11 +844,6 @@ outcommented org-mode headers)."
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
-
-;;;;; Local libraries
-(akirak/bind-admin
-  "l" '(nil :wk "library")
-  "lc" #'calibredb-find-counsel)
 
 ;;;;; Nix
 (akirak/bind-admin
