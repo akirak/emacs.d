@@ -228,6 +228,7 @@
   (org-recent-headings-mode 1))
 (use-package su)
 (use-package valign
+  :disabled t
   :hook
   (org-mode . valign-mode))
 (use-package whole-line-or-region)
