@@ -50,7 +50,6 @@ This is my Emacs configuration.
     -  [[#emacs][Emacs]]
     -  [[#git][Git]]
     -  [[#docker][Docker]]
-    -  [[#local-libraries][Local libraries]]
     -  [[#nix][Nix]]
     -  [[#remote-connections-tramp][Remote connections (TRAMP)]]
 
@@ -322,7 +321,6 @@ load them first.
 
 **  Packages
 #+begin_src emacs-lisp
-(use-package calibredb)
 (use-package discover-my-major
   :commands (discover-my-major))
 (use-package docker
@@ -343,6 +341,7 @@ load them first.
   (org-recent-headings-mode 1))
 (use-package su)
 (use-package valign
+  :disabled t
   :hook
   (org-mode . valign-mode))
 (use-package whole-line-or-region)
@@ -1030,13 +1029,6 @@ These commands are used to maintain this Emacs configuration.
   "kk" #'docker-containers
   "kn" #'docker-networks
   "kv" #'docker-volumes)
-#+end_src
-
-****  Local libraries
-#+begin_src emacs-lisp
-(akirak/bind-admin
-  "l" '(nil :wk "library")
-  "lc" #'calibredb-find-counsel)
 #+end_src
 
 ****  Nix
