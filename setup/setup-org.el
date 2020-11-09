@@ -54,11 +54,12 @@
               org-startup-truncated nil
               org-use-speed-commands t
               org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
+              org-track-ordered-property-with-tag t
               org-group-tags t
               ;; org-use-fast-tag-selection t
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
-              org-tags-exclude-from-inheritance '()
+              org-tags-exclude-from-inheritance '("ORDERED")
               org-blank-before-new-entry '((heading . nil)
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
