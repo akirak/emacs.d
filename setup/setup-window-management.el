@@ -7,7 +7,13 @@
 
 (use-package windswap
   :config
-  (windswap-default-keybindings 'control 'shift))
+  (windswap-default-keybindings 'control 'shift)
+  ;; These keys are bound by default in org-mode, so unbind them.
+  (general-unbind :package 'org :keymaps 'org-mode-map
+    "<C-S-left>"
+    "<C-S-right>"
+    "<C-S-up>"
+    "<C-S-down>"))
 
 ;;;; display-buffer configuration
 
