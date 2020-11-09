@@ -69,6 +69,13 @@ Only one letter is shown, the first that applies."
                         ,(-last-item segs)))))
 
   (general-def :package 'magit-repolist :keymaps 'magit-repolist-mode-map
+    "k" (defun akirak/magit-repolist-kill-origin-url-at-point ()
+          (interactive)
+          (let* ((default-directory (tabulated-list-get-id))
+                 (url (magit-git-string "remote" "get-url" "origin")))
+            (kill-new url)
+            (message "Saved to kill ring: %s" url)))
+
     "D" (defun akirak/magit-repolist-trash-repository-at-point ()
           (interactive)
           (let* ((dir (tabulated-list-get-id))
