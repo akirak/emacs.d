@@ -13,6 +13,11 @@
     "<C-S-left>"
     "<C-S-right>"
     "<C-S-up>"
+    "<C-S-down>")
+  (general-unbind :package 'org-agenda :keymaps 'org-agenda-mode-map
+    "<C-S-left>"
+    "<C-S-right>"
+    "<C-S-up>"
     "<C-S-down>"))
 
 ;;;; display-buffer configuration
