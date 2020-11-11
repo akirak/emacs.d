@@ -76,8 +76,8 @@ Only one letter is shown, the first that applies."
             (kill-new url)
             (message "Saved to kill ring: %s" url)))
 
-    "D" (defun akirak/magit-repolist-trash-repository-at-point ()
-          (interactive)
+    "D" (defun akirak/magit-repolist-trash-repository-at-point (&optional arg)
+          (interactive "P")
           (let* ((dir (tabulated-list-get-id))
                  (worktrees (let ((default-directory dir))
                               (mapcar #'car (magit-list-worktrees)))))
@@ -87,25 +87,26 @@ Only one letter is shown, the first that applies."
                   (delete-directory dir 'recursive 'trash)
                   (tabulated-list-delete-entry)
                   (message "Deleted %s" dir))
-              (let ((default-directory dir))
-                ;; Only allow removal of worktrees in ~/projects/
-                (assert (string-prefix-p "~/projects/"
-                                         (abbreviate-file-name default-directory)))
-                (assert (not (magit-untracked-files)))
-                (assert (not (magit-unstaged-files)))
-                (assert (not (magit-staged-files)))
-                (assert (not (magit-list-stashes)))
-                (assert (not (string-empty-p
-                              (magit-git-string "remote" "get-url" "origin"))))
-                (dolist (branch (magit-list-local-branch-names))
-                  (let* ((upstream (magit-get-upstream-branch branch))
-                         (ahead1 (and upstream (car (magit-rev-diff-count branch upstream))))
-                         (ahead2 (ignore-errors
-                                   (car (magit-rev-diff-count branch (concat "origin/" branch))))))
-                    (assert (or (and upstream ahead1 (= 0 ahead1))
-                                (and ahead2 (= 0 ahead2)))
-                            nil "Branch %s is ahead of %s by %d"
-                            branch upstream ahead1))))
+              (unless arg
+                (let ((default-directory dir))
+                  ;; Only allow removal of worktrees in ~/projects/
+                  (assert (string-prefix-p "~/projects/"
+                                           (abbreviate-file-name default-directory)))
+                  (assert (not (magit-untracked-files)))
+                  (assert (not (magit-unstaged-files)))
+                  (assert (not (magit-staged-files)))
+                  (assert (not (magit-list-stashes)))
+                  (assert (not (string-empty-p
+                                (magit-git-string "remote" "get-url" "origin"))))
+                  (dolist (branch (magit-list-local-branch-names))
+                    (let* ((upstream (magit-get-upstream-branch branch))
+                           (ahead1 (and upstream (car (magit-rev-diff-count branch upstream))))
+                           (ahead2 (ignore-errors
+                                     (car (magit-rev-diff-count branch (concat "origin/" branch))))))
+                      (assert (or (and upstream ahead1 (= 0 ahead1))
+                                  (and ahead2 (= 0 ahead2)))
+                              nil "Branch %s is ahead of %s by %d"
+                              branch upstream ahead1)))))
               (when (and (yes-or-no-p (format-message "Trash Git repository %s?"
                                                       dir))
                          (or (= 1 (length worktrees))
