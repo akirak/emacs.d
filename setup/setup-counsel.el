@@ -156,7 +156,8 @@
 (defun akirak/open-library-readme (x)
   (let* ((path (find-library-name x))
          (dir (file-name-directory (file-truename path)))
-         (files (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))))
+         (files (or (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))
+                    (directory-files dir t (rx (or ".org" ".md") eol)))))
     (unless path
       (user-error "Cannot find library %s" x))
     (if files
