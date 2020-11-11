@@ -25,6 +25,9 @@
   (load "pdf-tools-autoloads"))
 
 (use-package org-pdftools
+  ;; According to profiling, org-pdftools terribly slows down
+  ;; loading of Org files.
+  :disabled t
   :after org
   :hook
   (org-mode . org-pdftools-setup-link))
