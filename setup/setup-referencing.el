@@ -35,6 +35,8 @@
 (use-package org-noter
   :after org
   :init
-  (setq org-noter-notes-search-path nil))
+  (setq org-noter-notes-search-path nil)
+  :custom
+  (org-noter-always-create-frame nil))
 
 (provide 'setup-referencing)
