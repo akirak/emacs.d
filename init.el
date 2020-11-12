@@ -62,10 +62,11 @@
 (require 'subr-x)
 
 ;; Remove org-mode shipped with Emacs from load-path
-(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
+(use-package org
+  :straight (:type built-in)
+  :config
+  (require 'org-loaddefs))
 
-;; Install org-mode from the Git repository
-(load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
 ;;;; Recipe overrides
 (akirak/straight-use-recipes-from-file
  akirak/straight-default-recipes-file)
