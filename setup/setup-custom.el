@@ -7,27 +7,6 @@
   "Variables that should be specific to machines."
   :group 'akirak)
 
-(defun akirak/setup-custom-file ()
-  (interactive)
-  (setq custom-file (read-file-name "Custom file: "
-                                    (when custom-file (file-name-directory custom-file))
-                                    custom-file))
-  (load-file custom-file)
-  (find-file "~/.emacs-profiles.el")
-  (customize-group-other-window 'akirak/local))
-
-(defun akirak/check-custom-file ()
-  (cond
-   ((and (bound-and-true-p custom-file)
-         (file-equal-p custom-file "~/.custom.el"))
-    (when (yes-or-no-p "The current value is custom-file is the default, \
-which is likely to be wrong. Do you want to change the value and start machine-specific customization?")
-      (akirak/setup-custom-file)))
-   ((null custom-file)
-    (message "Custom-file is not set."))))
-
-(add-hook 'emacs-startup-hook 'akirak/check-custom-file)
-
 ;;;; Utilities for customizations
 (defun akirak/symbols-with-property (property)
   (let (faces)

@@ -22,10 +22,13 @@
   (error "Use GNU Emacs version 27.1 or later"))
 
 (let ((local-custom-file "~/local/emacs/custom.el"))
-  (when (file-exists-p local-custom-file)
-    (setq custom-file local-custom-file)
-    (load-file custom-file)))
+  (if (file-exists-p local-custom-file)
+      (setq custom-file local-custom-file)
+    (message "%s does not exist, so custom-file is not set"
+             local-custom-file)))
 
+(when custom-file
+  (load custom-file nil :nomessage))
 
 (unless (fboundp 'whitespace-cleanup-mode)
   (defun whitespace-cleanup-mode (&rest args)
