@@ -346,6 +346,7 @@ from running."
 
 (use-package company-org-block
   :after (company org)
+  :disabled t
   :straight (:host github :repo "xenodium/dotsies"
                    :files ("emacs/ar/company-org-block.el"))
   :functions (company-org-block)
