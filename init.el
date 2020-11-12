@@ -26,10 +26,6 @@
     (setq custom-file local-custom-file)
     (load-file custom-file)))
 
-;; Expand the GC threshold until gcmh-mode is activated.
-;; gcmh-mode updates this value later, so you don't have to reset it.
-;; The value is stolen from http://akrl.sdf.org/
-(setq gc-cons-threshold #x40000000)
 
 (unless (fboundp 'whitespace-cleanup-mode)
   (defun whitespace-cleanup-mode (&rest args)

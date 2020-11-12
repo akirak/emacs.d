@@ -1,5 +1,4 @@
-(setq inhibit-startup-screen nil
-      initial-buffer-choice
+(setq initial-buffer-choice
       (when (and (not initial-buffer-choice)
                  init-file-debug)
         (lambda () (get-buffer "*Messages*"))))

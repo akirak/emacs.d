@@ -9,10 +9,7 @@
 (setq recentf-max-saved-items 200)
 (show-paren-mode 1)                     ; Highlight matching parentheses
 
-(tool-bar-mode -1)                      ; Disable UI features
-(scroll-bar-mode -1)
 (tooltip-mode -1)
-(menu-bar-mode -1)
 (winner-mode 1)                         ; Enable winner-mode for undoing/redoing the window configuration
 (blink-cursor-mode 0)
 
