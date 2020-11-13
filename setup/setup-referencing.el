@@ -37,6 +37,7 @@
   :init
   (setq org-noter-notes-search-path nil)
   :custom
+  (org-noter-default-notes-file-names nil)
   (org-noter-always-create-frame nil))
 
 (provide 'setup-referencing)
