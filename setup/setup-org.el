@@ -331,7 +331,14 @@ from running."
                    ""))
        (akirak/org-bookmark-heading-filename path)))))
 
+(use-package org-superstar
+  :custom
+  (org-superstar-headline-bullets-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
+  :hook
+  (org-mode . org-superstar-mode))
+
 (use-package org-bullets :after org
+  :disabled t
   :custom
   (org-bullets-bullet-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
   :hook
