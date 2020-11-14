@@ -60,9 +60,8 @@
    (("is" org-download-screenshot "Ins screenshot")
     ("yi" org-download-yank "Yank image")
     ("ril" org-download-rename-last-file "Rename last"))
-   "Deps"
-   (("de" org-edna-edit "Edit deps")
-    ("da" org-edna-avy-add-id-blocker "Avy (ID)"))))
+   "Relationship"
+   (("e" org-linker-edna))))
 
 (major-mode-hydra-define org-agenda-mode
   (:title (akirak/org-agenda-hydra-title)
@@ -77,9 +76,7 @@
             (call-interactively 'org-store-link))
      "With custom ID"))
    "Set"
-   (("sc" akirak/org-set-category "Category"))
-   "Edit"
-   (("ed" org-edna-edit "Edit deps"))))
+   (("sc" akirak/org-set-category "Category"))))
 
 ;;;; org-habit support
 
