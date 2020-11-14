@@ -31,16 +31,27 @@ This can be used for an org-capture template to create an entry in the journal."
                '("J" akirak/org-journal-open-today "org-journal"))
   (add-to-list 'org-starter-extra-alternative-find-file-map
                '("J" akirak/helm-org-ql-journal "org-journal"))
-  ;; Don't bind C-c C-j to org-journal-new-entry
   (general-unbind "C-c C-j")
-  (defun akirak/org-journal-weekly-header ()
-    (format-time-string "#+TITLE: Week %-W, %Y"))
+
+  ;; To configure org-journal, you should call one of the following
+  ;; functions and set `org-journal-dir'.
+  ;;
+  ;; I'll use daily journal for personal use, and weekly for
+  ;; workplace.
+
+  (defun akirak/setup-daily-org-journal ()
+    (setq org-journal-file-type 'daily))
+
+  (defun akirak/setup-weekly-org-journal ()
+    ;; (setq org-extend-today-until 4
+    ;;       org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
+    (setq org-journal-file-type 'weekly
+          org-journal-file-header
+          (defun akirak/org-journal-weekly-header ()
+            (format-time-string "#+TITLE: Week %-W, %Y"))))
+
   :custom
-  (org-extend-today-until 4)
-  (org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
-  (org-journal-file-type 'weekly)
   (org-journal-date-format "%F (%a)")
-  (org-journal-file-format "%Y%m%d.org")
-  (org-journal-file-header #'akirak/org-journal-weekly-header))
+  (org-journal-file-format "%Y%m%d.org"))
 
 (provide 'setup-org-journal)
