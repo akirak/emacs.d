@@ -33,6 +33,14 @@
                                 "(require '" (s-replace-regexp "-tests?\\'" "" (file-name-base (buffer-file-name))) ")\n\n"
                                 _ "\n\n"
                                 "(provide '" (file-name-base (buffer-file-name)) ")\n"))
+                          (("/shell\\.nix\\'" . "nix-shell")
+                           . (> "{ pkgs ? import <nixpkgs> {} }:\n"
+                                "pkgs.mkShell {\n"
+                                "  buildInputs = [\n"
+                                "    " _ "\n"
+                                "  ];\n"
+                                "}"
+                                ))
                           ;; Melpa recipes
                           ;; Insert a minimal recipe definition
                           (("melpa/recipes/.+\\'" . "Melpa recipe")
