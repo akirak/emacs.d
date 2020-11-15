@@ -32,31 +32,40 @@
   (setq aw-scope (cond
                   (akirak/to-be-run-as-exwm 'visible)
                   (t 'frame)))
+  (setq aw-dispatch-alist
+        `((?o aw-swap-window "Swap Windows")
+          (?c aw-copy-window "Duplicate the current window")
+          (?v aw-split-window-horz "Split horizontally")
+          (?s aw-split-window-vert "Split vertically")
+          (?p aw-delete-window "Delete Window")
+          (?m delete-other-windows "Delete Other Windows")
+          ;; Unused.
+          ;; (?k akirak/aw-quit-window "Quit window")
+          (32 toggle-window-split)
+          ;; tab-bar-mode.
+          (?Q tab-bar-close-tab)
+          (?R tab-bar-rename-tab)
+          (?T tab-bar-new-tab)
+          ;; Select a tab by number.
+          (?9 (lambda ()
+                "Go to the last tab."
+                (interactive)
+                (when-let (tabs (tab-bar-tabs))
+                  (tab-bar-select-tab (length tabs)))))
+          ,@(mapcar (lambda (i)
+                      (list (string-to-char (int-to-string i))
+                            (-partial #'tab-bar-select-tab i)))
+                    (number-sequence 1 8))
+          ;; Deprecated in favour of tab-bar-mode.
+          ;; (?T tear-off-window)
+          ;; (?d delete-frame)
+          ;; (?f make-frame-command)
+          (?? aw-show-dispatch-help)))
   :custom
   (aw-keys (string-to-list "qwertyui"))
   (aw-background nil)
   ;; Prevent an error from aw-set-make-frame-char
   (aw-make-frame-char nil)
-  ;; Ergonomic bindings
-  (aw-dispatch-alist
-   '((?o aw-swap-window "Swap Windows")
-     (?c aw-copy-window "Duplicate the current window")
-     (?v aw-split-window-horz "Split horizontally")
-     (?s aw-split-window-vert "Split vertically")
-     (?p aw-delete-window "Delete Window")
-     (?m delete-other-windows "Delete Other Windows")
-     ;; Unused.
-     ;; (?k akirak/aw-quit-window "Quit window")
-     (32 toggle-window-split)
-     ;; tab-bar-mode.
-     (?Q tab-bar-close-tab)
-     (?R tab-bar-rename-tab)
-     (?T tab-bar-new-tab)
-     ;; Deprecated in favour of tab-bar-mode.
-     ;; (?T tear-off-window)
-     ;; (?d delete-frame)
-     ;; (?f make-frame-command)
-     (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
                         minibuffer-mode
