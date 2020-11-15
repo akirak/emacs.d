@@ -45,11 +45,17 @@
      (?s aw-split-window-vert "Split vertically")
      (?p aw-delete-window "Delete Window")
      (?m delete-other-windows "Delete Other Windows")
-     (?k akirak/aw-quit-window "Quit window")
+     ;; Unused.
+     ;; (?k akirak/aw-quit-window "Quit window")
      (32 toggle-window-split)
-     (?T tear-off-window)
-     (?d delete-frame)
-     (?f make-frame-command)
+     ;; tab-bar-mode.
+     (?Q tab-bar-close-tab)
+     (?R tab-bar-rename-tab)
+     (?T tab-bar-new-tab)
+     ;; Deprecated in favour of tab-bar-mode.
+     ;; (?T tear-off-window)
+     ;; (?d delete-frame)
+     ;; (?f make-frame-command)
      (?? aw-show-dispatch-help)))
   (aw-ignored-buffers '("\\*helm"
                         " *LV*"
