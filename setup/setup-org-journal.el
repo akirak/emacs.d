@@ -28,9 +28,9 @@ This can be used for an org-capture template to create an entry in the journal."
     (interactive)
     (helm-org-ql (nreverse (akirak/org-journal-files))))
   (add-to-list 'org-starter-extra-find-file-map
-               '("J" akirak/org-journal-open-today "org-journal"))
+               '("j" akirak/org-journal-open-today "org-journal"))
   (add-to-list 'org-starter-extra-alternative-find-file-map
-               '("J" akirak/helm-org-ql-journal "org-journal"))
+               '("j" akirak/helm-org-ql-journal "org-journal"))
   (general-unbind "C-c C-j")
 
   ;; To configure org-journal, you should call one of the following
