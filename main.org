@@ -132,6 +132,10 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
   (use-package dash)
   (use-package dash-functional)
 #+end_src
+*** f
+#+begin_src emacs-lisp
+  (use-package f)
+#+end_src
 *** Ivy
 #+begin_src emacs-lisp
   (akirak/require 'setup-ivy t)
