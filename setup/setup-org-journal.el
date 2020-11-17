@@ -50,6 +50,15 @@ This can be used for an org-capture template to create an entry in the journal."
           (defun akirak/org-journal-weekly-header ()
             (format-time-string "#+TITLE: Week %-W, %Y"))))
 
+  (org-starter-def-capture "j" "Journal")
+  (org-starter-def-capture "jj" "Journal - Plain entry"
+    entry (function org-journal-find-location)
+    "** %?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+" :clock-in t :clock-resume t :unnarrowed t)
+
   :custom
   (org-journal-date-format "%F (%a)")
   (org-journal-file-format "%Y%m%d.org"))
