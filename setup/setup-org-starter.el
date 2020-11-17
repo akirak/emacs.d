@@ -1,8 +1,5 @@
 (use-package org-reverse-datetree)
 
-(use-package microbe
-  :straight (microbe :host github :repo "akirak/microbe"))
-
 (use-package org-super-agenda
   :after org-agenda
   :config
@@ -133,22 +130,17 @@
                          :branch "devel")
   :config
   (org-starter-mode 1)
-  (org-starter-def "~/.emacs.d/main.org"
-    :key "m"
-    :refile (:maxlevel . 5))
-  (org-starter-def "~/home.nix/README.org"
-    :key "n"
-    :refile (:maxlevel . 3))
   (general-add-hook 'org-starter-extra-find-file-map
                     '((";" org-starter-find-config-file "config"))
                     t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
                     t)
-  (general-add-hook 'org-starter-extra-refile-map
-                    '(("'" avy-org-refile-as-child "avy")
-                      ("?" akirak/org-refile-same-buffer "same buffer"))
-                    t)
+  ;; Questionable
+  ;; (general-add-hook 'org-starter-extra-refile-map
+  ;;                   '(("'" avy-org-refile-as-child "avy")
+  ;;                     ("?" akirak/org-refile-same-buffer "same buffer"))
+  ;;                   t)
   (defun akirak/helm-org-ql-known-files ()
     (interactive)
     (helm-org-ql org-starter-known-files))
