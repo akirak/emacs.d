@@ -492,10 +492,10 @@ connection identities of recent files."
   "C-x t" #'helm-tail)
 ;;;; Navigation in buffer
 ;;;;; Avy
-;; Use avy-goto-word-1.
-;; https://irreal.org/blog/?p=9130
+;; avy-goto-word-1 was recommended in https://irreal.org/blog/?p=9130,
+;; but avy-goto-char-2 looks better on cognitive load.
 (general-def
-  "C-'" #'avy-goto-word-1)
+  "C-'" #'avy-goto-char-2)
 
 ;;;;; Page navigation
 ;; I will use ~C-x [~ and ~C-x ]~ for "page" navigation. These keys
