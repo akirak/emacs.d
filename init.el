@@ -497,6 +497,43 @@ connection identities of recent files."
 (general-def
   "C-'" #'avy-goto-char-2)
 
+(defun akirak/avy-pre-action-function (operand operation res)
+  (let ((start (caar res))
+        (window (cdr res)))
+    (with-current-buffer (window-buffer window)
+      (save-excursion
+        (goto-char start)
+        (cl-ecase operand
+          (symbol (let ((begin (if (looking-at (rx symbol-start))
+                                   (point)
+                                 (re-search-backward (rx symbol-start) nil t)))
+                        (end (save-excursion
+                               (re-search-forward
+                                (rx (group (+? anything)) symbol-end)
+                                nil t))))
+                    (funcall operation begin end))))))))
+
+(cl-defmacro akirak/def-avy-edit-command (name
+                                          operand operation
+                                          &rest post-action)
+  (declare (indent 1))
+  `(defun ,(intern (concat "akirak/avy-" name)) ()
+     (interactive)
+     (let ((avy-all-windows t)
+           (avy-pre-action (-partial #'akirak/avy-pre-action-function
+                                     ,operand
+                                     ,operation)))
+       (save-excursion
+         (save-window-excursion
+           (call-interactively #'avy-goto-char-timer)))
+       ,@post-action)))
+
+;; Jump straight to the destination and do a thing
+(general-def :prefix "C-;"
+  "s" `(,(akirak/def-avy-edit-command "mirror-symbol"
+           'symbol #'copy-region-as-kill)
+        :wk "mirror symbol"))
+
 ;;;;; Page navigation
 ;; I will use ~C-x [~ and ~C-x ]~ for "page" navigation. These keys
 ;; are bound to =backward-page= and =forward-page= by default, but
