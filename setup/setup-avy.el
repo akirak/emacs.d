@@ -1,9 +1,8 @@
 (use-package avy
-  :disabled t
   :config
-  (add-to-list 'avy-dispatch-alist
-               `(?K . akirak/avy-action-kill-line)
-               t)
+  ;; (add-to-list 'avy-dispatch-alist
+  ;;              `(?K . akirak/avy-action-kill-line)
+  ;;              t)
   (akirak/bind-jump
     "h"
     (defun akirak/avy-org-heading (arg)
