@@ -750,7 +750,7 @@ outcommented org-mode headers)."
                     (akirak/project-root default-directory)
                     default-directory)))
       (setq akirak/programming-recipe-mode-name "sh"
-            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'default :as-buffers t))
+            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'refs :as-buffers t))
       (helm :prompt (format "Execute command (project root: %s): " root)
             :sources
             (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
