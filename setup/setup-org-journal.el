@@ -16,7 +16,7 @@ This can be used for an org-capture template to create an entry in the journal."
     ;; Position point on the journal's top-level heading so that org-capture
     ;; will add the new entry as a child entry.
     (widen)
-    (goto-char (point-min))
+    (re-search-backward (rx bol "* "))
     (org-show-entry))
   (defun akirak/org-journal-open-today ()
     (interactive)
@@ -47,8 +47,8 @@ This can be used for an org-capture template to create an entry in the journal."
     ;;       org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
     (setq org-journal-file-type 'weekly
           org-journal-file-header
-          (defun akirak/org-journal-weekly-header ()
-            (format-time-string "#+TITLE: Week %-W, %Y"))))
+          (defun akirak/org-journal-weekly-header (time)
+            (format-time-string "#+TITLE: Week %-W, %Y" time))))
 
   (org-starter-def-capture "j" "Journal")
   (org-starter-def-capture "jj" "Journal - Plain entry"
