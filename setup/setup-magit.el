@@ -134,6 +134,12 @@ Only one letter is shown, the first that applies."
     "l" #'magit-log-buffer-file
     "s" #'magit-stage-file)
 
+  ;; Sort the repo list by date in descending order
+  (add-hook 'magit-repolist-mode-hook
+            (defun akirak/magit-repolist-sort-by-date ()
+              (cl-dotimes (i 2)
+                (tabulated-list-sort 7))))
+
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
