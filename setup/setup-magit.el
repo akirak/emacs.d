@@ -140,6 +140,8 @@ Only one letter is shown, the first that applies."
               (cl-dotimes (i 2)
                 (tabulated-list-sort 7))))
 
+  (add-hook 'magit-credential-hook 'akirak/ensure-gpg-ssh-auth-sock)
+
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)

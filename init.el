@@ -200,6 +200,8 @@
 (when (akirak/running-on-crostini-p)
   (require 'my/system/platform/crostini))
 
+(require 'setup-gpg)
+
 ;;;; Migrating
 ;; In case there are functions that depends on these modules,
 ;; load them first.
