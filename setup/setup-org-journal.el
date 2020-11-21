@@ -39,6 +39,14 @@ This can be used for an org-capture template to create an entry in the journal."
   ;; I'll use daily journal for personal use, and weekly for
   ;; workplace.
 
+  (defmacro akirak/org-journal-todo-match-expr (&rest todos)
+    "Used to set `org-journal-carryover-items' variable."
+    (concat "TODO="
+            (cl-etypecase todos
+              (string (format "\"%s\"" todos))
+              (list (format "\{%s\}"
+                            (string-join todos "\\|"))))))
+
   (defun akirak/setup-daily-org-journal ()
     (setq org-journal-file-type 'daily))
 
