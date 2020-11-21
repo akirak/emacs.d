@@ -27,11 +27,14 @@
   ;; (require 'helm-source)
   :config
   (helm-autoresize-mode 1)
-  (require 'my/helm/source/buffer)
-  (require 'my/helm/source/file)
-  (require 'my/helm/source/dir)
-  (require 'my/helm/source/bookmark)
-  (require 'my/helm/source/complex)
+  ;; Load all configuration files in lisp/my/helm/{source,action}
+  (dolist (type '("source" "action"))
+    (let ((dir (f-join user-emacs-directory "lisp/my/helm" type)))
+      (dolist (filename (directory-files dir nil "\\.el\\'" 'nosort))
+        (unless (ignore-errors (featurep (intern-sort (file-name-base filename))))
+          (load (f-join dir filename) nil 'nomessage))))
+    (f-files (f-join user-emacs-directory "lisp/my/helm" type)
+             (lambda (filename) (string-match-p "\\.el\\'" filename))))
   :custom
   (helm-autoresize-max-height 40)
   (helm-display-function (quote pop-to-buffer)))

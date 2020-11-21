@@ -425,7 +425,9 @@ connection identities of recent files."
     (helm :prompt "Directory/repository: "
           :sources
           (list akirak/helm-directory-bookmark-as-git-source
-                akirak/helm-magit-list-repos-source)))
+                akirak/helm-magit-list-repos-source
+                akirak/helm-toplevel-repos-submodules-source
+                akirak/helm-remote-repo-dummy-source)))
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
     (interactive)
