@@ -221,13 +221,10 @@
          :force t)
        (setq akirak/github-stars-getting nil)))))
 
-(defun akirak/github--following ()
-  (or akirak/github-following-list
-      (let ((user (car (magit-config-get-from-cached-list "github.user"))))
-        (setq akirak/github-following-list
-              (ghub-graphql (format "query {
+(defconst akirak/github-user-query
+  "query {
   user(login: \"%s\") {
-    following(first: 5) {
+    following(first: 30%s) {
       edges {
         node {
           login
@@ -235,7 +232,6 @@
           bioHTML
           company
           twitterUsername
-          companyHTML
           location
           name
         }
@@ -243,7 +239,33 @@
       }
     }
   }
-}" user))))))
+}")
+
+(defun akirak/github--following ()
+  (or (bound-and-true-p akirak/github-following-list)
+      (let ((user (car (magit-config-get-from-cached-list "github.user")))
+            result
+            chunk
+            cursor)
+        (catch 'finish
+          (while (setq chunk
+                       (->> (ghub-graphql (format akirak/github-user-query
+                                                  user
+                                                  (if cursor
+                                                      (format ", after: \"%s\"" cursor)
+                                                    "")))
+                            (alist-get 'data)
+                            (alist-get 'user)
+                            (alist-get 'following)
+                            (alist-get 'edges)))
+            (message "%d users fetched" (length result))
+            (setq result (append result
+                                 (-map (lambda (x)
+                                         (alist-get 'node x))
+                                       chunk)))
+            (setq cursor (alist-get 'cursor (-last-item chunk)))))
+        (message "Finished retrieving all users you follow")
+        (setq akirak/github-following-list result))))
 
 (defcustom akirak/github-auto-get-stars nil
   "Whether to start getting GitHub stars at startup."
