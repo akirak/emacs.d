@@ -8,7 +8,8 @@
                            ;; e.g. (provide 'akirak/org-refile)
                            (,(rx "/lisp/my/" (+ anything) ".el" eos)
                             . "Extra elisp file")
-                           . (> _ "\n\n"
+                           . (> ";; -*- lexical-binding: t; -*-\n"
+                                _ "\n\n"
                                 "(provide '"
                                 (file-relative-name
                                  (file-name-sans-extension
