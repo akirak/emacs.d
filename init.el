@@ -368,7 +368,6 @@
                          (-some-> (project-current)
                            (project-roots)
                            (car-safe)))))
-    (require 'my/helm/action/git)
     (cond
      ((eq project 'all)
       (helm-buffers-list))

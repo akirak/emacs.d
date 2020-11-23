@@ -1,5 +1,4 @@
 (require 'my/helm/action/dir)
-(require 'my/helm/action/git)
 
 (defclass akirak/helm-source-directory (helm-source-sync)
   ((action :initform 'akirak/helm-directory-actions-1)))
