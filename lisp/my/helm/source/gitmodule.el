@@ -1,5 +1,6 @@
-(require 'my/helm/action/gitmodule)
 (require 'my/helm/source/dir)
+(require 'my/helm/action/dir)
+(require 'my/gitmodule/enum)
 
 (defclass akirak/helm-source-gitmodule (helm-source-sync)
   ((action :initform 'akirak/helm-gitmodule-actions-1)))
