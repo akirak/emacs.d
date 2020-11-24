@@ -79,17 +79,13 @@ follow their respective licenses.
   (error "Use GNU Emacs version 27.1 or later"))
 
 (let ((local-custom-file "~/local/emacs/custom.el"))
-  (when (file-exists-p local-custom-file)
-    (setq custom-file local-custom-file)
-    (load-file custom-file)))
-#+end_src
+  (if (file-exists-p local-custom-file)
+      (setq custom-file local-custom-file)
+    (message "%s does not exist, so custom-file is not set"
+             local-custom-file)))
 
-Expand the GC threshold until gcmh-mode is activated.
-gcmh-mode updates this value later, so you don't have to reset it.
-The value is stolen from http://akrl.sdf.org/
-
-#+begin_src emacs-lisp
-(setq gc-cons-threshold #x40000000)
+(when custom-file
+  (load custom-file nil :nomessage))
 
 (unless (fboundp 'whitespace-cleanup-mode)
   (defun whitespace-cleanup-mode (&rest args)
@@ -137,13 +133,10 @@ Use straight.el by default in use-package directives
 Remove org-mode shipped with Emacs from load-path
 
 #+begin_src emacs-lisp
-(cl-delete-if (lambda (dpath) (string-match-p "/org/?$" dpath)) load-path)
-#+end_src
-
-Install org-mode from the Git repository
-
-#+begin_src emacs-lisp
-(load-file (expand-file-name "core/org-from-git.el" user-emacs-directory))
+(use-package org
+  :straight (:type built-in)
+  :config
+  (require 'org-loaddefs))
 #+end_src
 
 ***  Recipe overrides
@@ -307,6 +300,8 @@ directives.
 
 (when (akirak/running-on-crostini-p)
   (require 'my/system/platform/crostini))
+
+(require 'setup-gpg)
 #+end_src
 
 ***  Migrating
@@ -345,6 +340,11 @@ load them first.
   :hook
   (org-mode . valign-mode))
 (use-package whole-line-or-region)
+#+end_src
+
+***  Modules
+#+begin_src emacs-lisp
+(require 'setup-git-bookmark)
 #+end_src
 
 **  Commands and keybindings
@@ -506,7 +506,6 @@ Most of these commands are bound on C-x.
                          (-some-> (project-current)
                            (project-roots)
                            (car-safe)))))
-    (require 'my/helm/action/git)
     (cond
      ((eq project 'all)
       (helm-buffers-list))
@@ -563,7 +562,10 @@ connection identities of recent files."
     (helm :prompt "Directory/repository: "
           :sources
           (list akirak/helm-directory-bookmark-as-git-source
-                akirak/helm-magit-list-repos-source)))
+                akirak/helm-magit-list-repos-source
+                akirak/helm-toplevel-repos-submodules-source
+                akirak/helm-remote-repo-dummy-source
+                akirak/helm-github-following-source)))
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
     (interactive)
@@ -642,12 +644,52 @@ I haven't bound any key to this command yet.
 
 ***  Navigation in buffer
 ****  Avy
-Use avy-goto-word-1.
-https://irreal.org/blog/?p=9130
+avy-goto-word-1 was recommended in https://irreal.org/blog/?p=9130,
+but avy-goto-char-2 looks better on cognitive load.
 
 #+begin_src emacs-lisp
 (general-def
-  "C-'" #'avy-goto-word-1)
+  "C-'" #'avy-goto-char-2)
+
+(defun akirak/avy-pre-action-function (operand operation res)
+  (let ((start (caar res))
+        (window (cdr res)))
+    (with-current-buffer (window-buffer window)
+      (save-excursion
+        (goto-char start)
+        (cl-ecase operand
+          (symbol (let ((begin (if (looking-at (rx symbol-start))
+                                   (point)
+                                 (re-search-backward (rx symbol-start) nil t)))
+                        (end (save-excursion
+                               (re-search-forward
+                                (rx (group (+? anything)) symbol-end)
+                                nil t))))
+                    (funcall operation begin end))))))))
+
+(cl-defmacro akirak/def-avy-edit-command (name
+                                          operand operation
+                                          &rest post-action)
+  (declare (indent 1))
+  `(defun ,(intern (concat "akirak/avy-" name)) ()
+     (interactive)
+     (let ((avy-all-windows t)
+           (avy-pre-action (-partial #'akirak/avy-pre-action-function
+                                     ,operand
+                                     ,operation)))
+       (save-excursion
+         (save-window-excursion
+           (call-interactively #'avy-goto-char-timer)))
+       ,@post-action)))
+#+end_src
+
+Jump straight to the destination and do a thing
+
+#+begin_src emacs-lisp
+(general-def :prefix "C-;"
+  "s" `(,(akirak/def-avy-edit-command "mirror-symbol"
+           'symbol #'copy-region-as-kill)
+        :wk "mirror symbol"))
 #+end_src
 
 ****  Page navigation
@@ -921,7 +963,7 @@ outcommented org-mode headers)."
                     (akirak/project-root default-directory)
                     default-directory)))
       (setq akirak/programming-recipe-mode-name "sh"
-            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'default :as-buffers t))
+            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'refs :as-buffers t))
       (helm :prompt (format "Execute command (project root: %s): " root)
             :sources
             (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
@@ -1012,7 +1054,7 @@ These commands are used to maintain this Emacs configuration.
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "g" '(nil :wk "git")
-  "gb" #'commonplace-find-repo-module
+  "gb" #'akirak/git-bookmark-repository
   "gc" #'akirak/git-clone-remote-repo
   "gl" #'magit-list-repositories
   "go" #'akirak/github-owned-repos
