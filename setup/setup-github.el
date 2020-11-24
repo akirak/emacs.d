@@ -325,17 +325,43 @@
             (:repositories "&s=stars")
             (otherwise ""))))
 
+(defvar akirak/github-search-query-history nil)
+
 (defun akirak/github-search-repository (query)
-  (interactive "sSearch repository: ")
+  (interactive (list (read-string "Search repository: "
+                                  nil
+                                  'akirak/github-search-query-history)))
+  (add-to-list 'akirak/github-search-query-history query)
   (akirak/browse-url (akirak/github-build-search-url query :repositories)))
 
 (defun akirak/github-search-code (query)
-  (interactive "sSearch code: ")
+  (interactive (list (read-string "Search code: "
+                                  nil
+                                  'akirak/github-search-query-history)))
+  (add-to-list 'akirak/github-search-query-history query)
   (akirak/browse-url (akirak/github-build-search-url query :code)))
 
 (defun akirak/github-search-starred-repos (query)
-  (interactive "sSearch starred repositories: ")
+  (interactive (list (read-string "Search starred repository: "
+                                  nil
+                                  'akirak/github-search-query-history)))
+  (add-to-list 'akirak/github-search-query-history query)
   (akirak/browse-url (format "https://github.com/akirak?tab=stars&q=%s"
                              (shr-encode-url query))))
+
+(defun akirak/github-search-ivy ()
+  (interactive)
+  (ivy-read "Search on GitHub: "
+            akirak/github-search-query-history
+            :caller 'akirak/github-search-ivy
+            :history 'akirak/github-search-query-history
+            :action #'akirak/github-search-repository))
+
+(ivy-add-actions 'akirak/github-search-ivy
+                 '(("r" akirak/github-search-repository "Search repository")
+                   ("c" akirak/github-search-code "Search code")
+                   ("s" akirak/github-search-starred-repos "Search stars")))
+
+(akirak/bind-search "M-g" #'akirak/github-search-ivy)
 
 (provide 'setup-github)
