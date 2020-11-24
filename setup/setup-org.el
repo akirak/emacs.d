@@ -337,13 +337,6 @@ from running."
   :hook
   (org-mode . org-superstar-mode))
 
-(use-package org-bullets :after org
-  :disabled t
-  :custom
-  (org-bullets-bullet-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
-  :hook
-  (org-mode . org-bullets-mode))
-
 (use-package company-org-block
   :after (company org)
   :disabled t

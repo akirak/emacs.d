@@ -74,13 +74,6 @@
   :hook
   (company-mode . company-posframe-mode))
 
-(use-package company-quickhelp
-  ;; company-posframe-quickhelp.el has been merged into company-posframe
-  :disabled t
-  :after company
-  :hook
-  (company-mode . company-quickhelp-local-mode))
-
 ;;;; Specific backends
 
 ;;;;; General

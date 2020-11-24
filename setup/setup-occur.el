@@ -15,9 +15,6 @@
                (let ((akirak/deadgrep-root-directory (ivy-state-directory ivy-last)))
                  (deadgrep ivy-text))))))
 
-(use-package noccur
-  :disabled t)
-
 (use-package deadgrep
   :commands (deadgrep)
   :config
