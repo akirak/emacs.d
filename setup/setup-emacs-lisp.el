@@ -82,11 +82,12 @@
 (defun akirak/emacs-lisp-setup-package ()
   (let* ((filename (buffer-file-name))
          (filename-nondir (and filename (file-name-nondirectory filename)))
-         (dir (and filename (abbreviate-file-name (file-name-directory filename)))))
+         (dir (expand-file-name
+               (and filename (abbreviate-file-name (file-name-directory filename))))))
     (when (and filename
-               (or (string-prefix-p (concat user-emacs-directory "straight/") dir)
-                   (not (or (string-prefix-p user-emacs-directory dir)
-                            (equal "~/" dir)
+               (or (string-prefix-p (expand-file-name "straight/" user-emacs-directory) dir)
+                   (not (or (string-prefix-p (expand-file-name user-emacs-directory) dir)
+                            (equal (expand-file-name "~/") dir)
                             (member filename-nondir '(".dir-locals.el"))
                             (string-match-p "-tests?\\.el\\'" filename)))))
       (flycheck-package-setup)
