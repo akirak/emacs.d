@@ -159,11 +159,19 @@
                                       :host host
                                       :owner owner
                                       :name (string-remove-suffix ".git" name)))
+       ((string-match-p (rx (or (and bol (or "git:"
+                                             "git+ssh:"
+                                             "https://"
+                                             "git@"))
+                                (and ".git" eol)))
+                        string)
+        (make-akirak/generic-git-repo :url string))
        (t
-        (make-akirak/generic-git-repo :url string))))))
+        (error "Looks like an invalid URL: %s" string))))))
 
 ;;;; Commands
 
+;; Deprecated. Use `akirak/helm-giturl-dummy-action'.
 (defun akirak/git-clone-remote-repo (path-or-url)
   (interactive "sGit repository (path or url): ")
   (akirak/remote-git-repo-clone-default (akirak/parse-git-url path-or-url)))

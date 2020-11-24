@@ -314,4 +314,28 @@
                             (shr-encode-url branch))
                     "</a>"))))
 
+(defun akirak/github-build-search-url (query type)
+  (format "https://github.com/search?q=%s&type=%s%s"
+          (shr-encode-url query)
+          (cl-ecase type
+            (:repositories "repositories")
+            (:code "code"))
+          ;; Add optional parameters depending on the type
+          (cl-case type
+            (:repositories "&s=stars")
+            (otherwise ""))))
+
+(defun akirak/github-search-repository (query)
+  (interactive "sSearch repository: ")
+  (akirak/browse-url (akirak/github-build-search-url query :repositories)))
+
+(defun akirak/github-search-code (query)
+  (interactive "sSearch code: ")
+  (akirak/browse-url (akirak/github-build-search-url query :code)))
+
+(defun akirak/github-search-starred-repos (query)
+  (interactive "sSearch starred repositories: ")
+  (akirak/browse-url (format "https://github.com/akirak?tab=stars&q=%s"
+                             (shr-encode-url query))))
+
 (provide 'setup-github)
