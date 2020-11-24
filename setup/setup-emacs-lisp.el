@@ -25,6 +25,13 @@
                                        (group (+ (not (syntax string-quote)))))
                     1)))
 
+(add-to-list 'counsel-outline-settings
+             `(emacs-lisp-mode
+               :outline-regexp ,(rx bol ";;" (or (+ ";")
+                                                 (and (? " ") (+ "*")))
+                                    (+ (any "\s\t")))
+               :outline-level counsel-outline-level-emacs-lisp))
+
 ;;;; Packages
 (setq-default flycheck-emacs-lisp-load-path (quote inherit))
 
