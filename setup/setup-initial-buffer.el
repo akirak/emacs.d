@@ -3,6 +3,10 @@
                  init-file-debug)
         (lambda () (get-buffer "*Messages*"))))
 
+;; Prevent from initializing lisp-interaction-mode
+(setq initial-major-mode 'text-mode
+      initial-scratch-message "")
+
 (use-package org-status
   :disabled t
   :straight (org-status :host github :repo "akirak/org-status")
