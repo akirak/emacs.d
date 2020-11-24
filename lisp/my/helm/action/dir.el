@@ -51,8 +51,10 @@
              (enabled-when project "Find files recursively") #'akirak/find-file-recursively
              (enabled-when (not project) "Find file") #'counsel-find-file
              "Term" (with-dir vterm)
-             (enabled-when (and git (not gitmodule))
-                           "Rename directory and run magit status") #'akirak/rename-git-repository-and-status))))
+             (enabled-when
+              (and git (not gitmodule))
+              "Rename directory and run magit status") #'akirak/rename-git-repository-and-status
+              (enabled-when project "README") #'akirak/find-readme))))
 
 (defconst akirak/helm-directory-actions-1
   (akirak/helm-make-directory-actions))
