@@ -6,13 +6,13 @@
 (use-package org-journal
   :after org-starter
   :config
-  (defun org-journal-find-location ()
+  (defun org-journal-find-location (&optional time)
     "Go to the beginning of the today's journal file.
 
 This can be used for an org-capture template to create an entry in the journal."
     ;; Open today's journal, but specify a non-nil prefix argument in order to
     ;; inhibit inserting the heading; org-capture will insert the heading.
-    (org-journal-new-entry t)
+    (org-journal-new-entry t time)
     ;; Position point on the journal's top-level heading so that org-capture
     ;; will add the new entry as a child entry.
     (widen)
@@ -32,6 +32,21 @@ This can be used for an org-capture template to create an entry in the journal."
   (add-to-list 'org-starter-extra-alternative-find-file-map
                '("j" akirak/helm-org-ql-journal "org-journal"))
   (general-unbind "C-c C-j")
+
+  (defun akirak/org-journal-refile-to-date (time)
+    (interactive (list (org-read-date nil 'to-time)))
+    (cond
+     ((derived-mode-p 'org-mode)
+      (let* ((orig-marker (prog1 (point-marker)
+                            (org-journal-find-location time)))
+             (filename (buffer-file-name))
+             (rfloc (list (nth 4 (org-heading-components))
+                          filename
+                          nil
+                          (point))))
+        (with-current-buffer (marker-buffer orig-marker)
+          (goto-char (marker-position orig-marker))
+          (org-refile nil nil rfloc))))))
 
   ;; To configure org-journal, you should call one of the following
   ;; functions and set `org-journal-dir'.
