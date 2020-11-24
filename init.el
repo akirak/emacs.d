@@ -235,6 +235,9 @@
   (org-mode . valign-mode))
 (use-package whole-line-or-region)
 
+;;;; Modules
+(require 'setup-git-bookmark)
+
 ;;; Commands and keybindings
 ;;;; Basic keybindings
 ;; These keybindings basically emulate UNIX shells (i.e. sh, bash,
@@ -871,7 +874,7 @@ outcommented org-mode headers)."
 ;;;;; Git
 (akirak/bind-admin
   "g" '(nil :wk "git")
-  "gb" #'commonplace-find-repo-module
+  "gb" #'akirak/git-bookmark-repository
   "gc" #'akirak/git-clone-remote-repo
   "gl" #'magit-list-repositories
   "go" #'akirak/github-owned-repos
