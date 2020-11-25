@@ -136,11 +136,11 @@
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config"))
                     t)
-  ;; Questionable
-  ;; (general-add-hook 'org-starter-extra-refile-map
-  ;;                   '(("'" avy-org-refile-as-child "avy")
-  ;;                     ("?" akirak/org-refile-same-buffer "same buffer"))
-  ;;                   t)
+  (general-add-hook 'org-starter-extra-refile-map
+                    '(("'" avy-org-refile-as-child "avy"))
+                    ;; Questionable
+                    ;; ("?" akirak/org-refile-same-buffer "same buffer"))
+                    t)
   (defun akirak/helm-org-ql-known-files ()
     (interactive)
     (helm-org-ql org-starter-known-files))
