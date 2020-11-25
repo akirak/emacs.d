@@ -21,9 +21,7 @@ This can be used for an org-capture template to create an entry in the journal."
   (defun akirak/org-journal-open-today ()
     (interactive)
     (org-journal-new-entry t))
-  (defun akirak/org-journal-files ()
-    (directory-files org-journal-dir t
-                     (file-name-nondirectory org-journal-file-pattern)))
+  (defalias 'akirak/org-journal-files 'org-journal--list-files)
   (defun akirak/helm-org-ql-journal ()
     (interactive)
     (helm-org-ql (nreverse (akirak/org-journal-files))))
@@ -51,6 +49,29 @@ This can be used for an org-capture template to create an entry in the journal."
   (add-to-list 'org-starter-extra-refile-map
                '("j" akirak/org-journal-refile-to-date "journal")
                'append)
+
+  (defun akirak/org-journal-cleanup-empty-files ()
+    (interactive)
+    (cl-labels ((is-empty-journal-file-p
+                 (file)
+                 (and (not (find-buffer-visiting file))
+                      (with-temp-buffer
+                        (insert-file-contents file)
+                        (goto-char (point-min))
+                        (let ((case-fold-search t))
+                          (catch 'nonempty
+                            (while (< (point) (point-max))
+                              (unless (looking-at (rx bol (or eol "* " "#+title:")))
+                                (throw 'nonempty nil))
+                              (forward-line))
+                            t))))))
+      (let ((files (->> (akirak/org-journal-files)
+                        (-filter #'is-empty-journal-file-p))))
+        (mapc #'move-file-to-trash files)
+        (when files
+          (message "Moved %d files to the trash: %s"
+                   (length files)
+                   (mapconcat #'file-name-nondirectory files " "))))))
 
   ;; To configure org-journal, you should call one of the following
   ;; functions and set `org-journal-dir'.
