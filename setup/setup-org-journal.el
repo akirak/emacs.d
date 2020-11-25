@@ -48,6 +48,10 @@ This can be used for an org-capture template to create an entry in the journal."
           (goto-char (marker-position orig-marker))
           (org-refile nil nil rfloc))))))
 
+  (add-to-list 'org-starter-extra-refile-map
+               '("j" akirak/org-journal-refile-to-date "journal")
+               'append)
+
   ;; To configure org-journal, you should call one of the following
   ;; functions and set `org-journal-dir'.
   ;;
