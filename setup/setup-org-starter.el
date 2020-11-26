@@ -141,6 +141,17 @@
                     ;; Questionable
                     ;; ("?" akirak/org-refile-same-buffer "same buffer"))
                     t)
+
+  (general-add-hook 'org-starter-capture-meta-templates
+                    '((reverse-datetree
+                       entry (file+function org-reverse-datetree-goto-date-in-file)
+                       "* TODO %i%?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+" :clock-in t :clock-resume t :empty-lines 1))
+                    t)
+
   (defun akirak/helm-org-ql-known-files ()
     (interactive)
     (helm-org-ql org-starter-known-files))
