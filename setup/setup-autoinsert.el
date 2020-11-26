@@ -40,8 +40,15 @@
                                 "  buildInputs = [\n"
                                 "    " _ "\n"
                                 "  ];\n"
-                                "}"
-                                ))
+                                "}"))
+                          (("/dir-locals\\.nix\\'" . "nix-buffer")
+                           . (>
+                              "# This is a configuration for nix-buffer.el for Emacs.\n"
+                              "# See <https://github.com/shlevy/nix-buffer>\n"
+                              "let pkgs = import <nixpkgs> {}; in\n"
+                              "pkgs.nixBufferBuilders.withPackages [\n"
+                              "  " _
+                              "\n]"))
                           ;; Melpa recipes
                           ;; Insert a minimal recipe definition
                           (("melpa/recipes/.+\\'" . "Melpa recipe")
