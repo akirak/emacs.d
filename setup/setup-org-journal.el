@@ -106,6 +106,13 @@ This can be used for an org-capture template to create an entry in the journal."
 :CREATED_TIME: %U
 :END:
 " :clock-in t :clock-resume t :unnarrowed t)
+  (org-starter-def-capture "jt" "Journal - Todo entry"
+    entry (function org-journal-find-location)
+    "** TODO %?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+" :clock-in t :clock-resume t :unnarrowed t)
 
   :custom
   (org-journal-date-format "%F (%a)")
