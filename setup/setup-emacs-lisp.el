@@ -82,8 +82,9 @@
 (defun akirak/emacs-lisp-setup-package ()
   (let* ((filename (buffer-file-name))
          (filename-nondir (and filename (file-name-nondirectory filename)))
-         (dir (expand-file-name
-               (and filename (abbreviate-file-name (file-name-directory filename))))))
+         (dir (and filename
+                   (expand-file-name
+                    (abbreviate-file-name (file-name-directory filename))))))
     (when (and filename
                (or (string-prefix-p (expand-file-name "straight/" user-emacs-directory) dir)
                    (not (or (string-prefix-p (expand-file-name user-emacs-directory) dir)
