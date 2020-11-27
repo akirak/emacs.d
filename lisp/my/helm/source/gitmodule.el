@@ -9,9 +9,27 @@
   (helm-make-source "Git submodules of top-level repositories in ~"
       akirak/helm-source-gitmodule
     :candidates (lambda ()
-                  (-map (lambda (alist)
-                          (cons (f-short (alist-get 'location alist))
-                                alist))
+                  (-map (lambda (pairs)
+                          (cons (akirak/helm-format-gitmodule pairs)
+                                pairs))
                         (akirak/toplevel-repos-submodules)))))
+
+(defun akirak/helm-format-gitmodule (pairs)
+  (let ((description (alist-get 'description pairs))
+        (active (alist-get 'active pairs))
+        (root (alist-get 'root pairs))
+        (path (alist-get 'path pairs))
+        (tags (akirak/git-module-tags pairs)))
+    (concat (f-slash (f-short root))
+            (propertize (f-short path)
+                        'font-lock-face (if active
+                                            'font-lock-builtin-face
+                                          'font-lock-comment-face))
+            "  "
+            (if tags
+                (propertize (format "[%s]  " (string-join tags " "))
+                            'font-lock-face 'font-lock-keyword-face)
+              "")
+            (or description ""))))
 
 (provide 'my/helm/source/gitmodule)

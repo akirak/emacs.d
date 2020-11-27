@@ -880,6 +880,7 @@ outcommented org-mode headers)."
   "go" #'akirak/github-owned-repos
   "gr" #'commonplace-repos-counsel-rg
   "gs" #'akirak/github-starred-repos
+  "gt" #'akirak/git-module-add-tags
   "gu" #'akirak/github-users)
 
 ;;;;; Docker
