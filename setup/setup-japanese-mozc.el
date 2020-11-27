@@ -1,11 +1,11 @@
 ;; Install mozc_emacs_helper as well as mozc.el using Nix
 (straight-use-package '(mozc :type built-in))
 
-(use-package mozc
-  :disabled t)
+(use-package mozc)
+
+;; (find-library "mozc")
 
 (use-package mozc-cand-posframe
-  :disabled t
   :after mozc
   :if (posframe-workable-p)
   :config

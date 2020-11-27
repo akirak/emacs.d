@@ -3,84 +3,6 @@ let
   package = emacsUnstable;
 
   epkgOverrides = eself: esuper: {
-    # Mozc has been actively developed recently.
-    #
-    # Unfortunately, this Nix build seem to be broken. I will wait for
-    # other mozc packages to be updated:
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/inputmethods/ibus-engines/ibus-mozc/default.nix
-    mozc =
-      let
-        japanese_usage_dictionary = fetchFromGitHub {
-          owner  = "hiroyuki-komatsu";
-          repo   = "japanese-usage-dictionary";
-          rev    = "e5b3425575734c323e1d947009dd74709437b684";
-          sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
-        };
-        python = python3.withPackages (pp: [pp.six ]);
-        gyp = python3Packages.gyp;
-      in
-        clangStdenv.mkDerivation rec {
-          inherit (esuper.mozc) name version meta src;
-
-          nativeBuildInputs = [
-            which
-            ninja
-            python
-            gyp
-            pkgconfig
-          ];
-          buildInputs = [
-            (protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; }))
-            xorg.libxcb
-            gtk2
-            zinnia
-          ];
-
-          patches = [
-            # https://github.com/google/mozc/pull/444 - fix for gcc8 STL
-            # (fetchpatch {
-            #   url = "https://github.com/google/mozc/commit/82d38f929882a9c62289b179c6fe41efed249987.patch";
-            #   sha256 = "07cja1b7qfsd3i76nscf1zwiav74h7d6h2g9g2w4bs3h1mc9jwla";
-            # })
-            # Support dates after 2019
-            # (fetchpatch {
-            #   url = "https://salsa.debian.org/debian/mozc/-/raw/master/debian/patches/add_support_new_japanese_era.patch";
-            #   sha256 = "1dsiiglrmm8i8shn2hv0j2b8pv6miysjrimj4569h606j4lwmcw2";
-            # })
-          ];
-
-          postUnpack = ''
-              rmdir $sourceRoot/src/third_party/japanese_usage_dictionary/
-              ln -s ${japanese_usage_dictionary} $sourceRoot/src/third_party/japanese_usage_dictionary
-            '';
-
-          configurePhase = ''
-              export GYP_DEFINES="document_dir=$out/share/doc/mozc use_libzinnia=1 use_libprotobuf=1"
-              cd src && python build_mozc.py gyp --gypdir=${gyp}/bin --server_dir=$out/lib/mozc --noqt
-            '';
-
-          buildPhase = ''
-              PYTHONPATH="$PWD:$PYTHONPATH" python build_mozc.py build -c Release \
-                server/server.gyp:mozc_server \
-                unix/emacs/emacs.gyp:mozc_emacs_helper
-              '';
-
-          installPhase = ''
-              install -d        $out/share/licenses/mozc
-              head -n 29 server/mozc_server.cc > $out/share/licenses/mozc/LICENSE
-              install -m 644    data/installer/*.html     $out/share/licenses/mozc/
-              install -d $out/lib/mozc
-              install -D -m 755 out_linux/Release/mozc_server $out/lib/mozc/mozc_server
-              install -d $out/bin
-              install    -m 755 out_linux/Release/mozc_emacs_helper $out/bin/mozc_emacs_helper
-              install -d        $out/share/doc/mozc
-              install -m 644    data/installer/*.html         $out/share/doc/mozc/
-              install -d        $out/share/emacs/site-lisp/elpa/mozc
-              elisp=$out/share/emacs/site-lisp/elpa/mozc/mozc.el
-              install -m 644    unix/emacs/mozc.el            $elisp
-              sed --in-place s/\"mozc_emacs_helper\"/\"$(echo $out/bin/ | sed s/\\//\\\\\\//g)mozc_emacs_helper\"/ $elisp
-            '';
-        };
 
     beancount = eself.melpaBuild {
       pname = "beancount";
@@ -141,7 +63,7 @@ in
 emacsPackages.emacsWithPackages (epkgs: with epkgs; [
   melpaStablePackages.emacsql-sqlite
   vterm
-  # mozc
+  mozc
   pdf-tools
   org-pdftools
   elisp-ffi
