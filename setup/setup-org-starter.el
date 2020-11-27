@@ -128,8 +128,25 @@
 (use-package org-starter
   :straight (org-starter :host github :repo "akirak/org-starter"
                          :branch "devel")
+  :preface
+  (defcustom org-starter-capture-meta-templates nil
+    "An alist of org-capture meta-templates.
+
+This lets you define patterns of `org-capture' templates that are
+common in multiple files.
+
+Each entry consists of a symbol which identifies the meta
+template and the content of a :capture entry in
+`org-starter-define-file' after the file name.
+
+By defining a meta-template in this variable, you can define the
+same template for multiple files by specifying the symbol at the
+third argument, i.e. right after the description, in the entry."
+    :type '(alist :key-type symbol
+                  :value-type sexp))
+
   :config
-  (org-starter-mode 1)
+  (org-starter-mode t)
   (general-add-hook 'org-starter-extra-find-file-map
                     '((";" org-starter-find-config-file "config"))
                     t)
@@ -142,20 +159,32 @@
                     ;; ("?" akirak/org-refile-same-buffer "same buffer"))
                     t)
 
-  (general-add-hook 'org-starter-capture-meta-templates
-                    '((reverse-datetree
-                       entry (file+function org-reverse-datetree-goto-date-in-file)
-                       "* TODO %i%?
+  (let ((todo-body "* TODO %i%?
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
-" :clock-in t :clock-resume t :empty-lines 1))
-                    t)
+"))
+    (general-add-hook 'org-starter-capture-meta-templates
+                      `((todo
+                         entry file ,todo-body
+                         :clock-in t :clock-resume t)
+                        (reverse-datetree
+                         entry (file+function org-reverse-datetree-goto-date-in-file)
+                         ,todo-body
+                         :clock-in t :clock-resume t :empty-lines 1))
+                      t))
 
   (defun akirak/helm-org-ql-known-files ()
     (interactive)
     (helm-org-ql org-starter-known-files))
   :custom
+  (org-starter-capture-template-map-function
+   (defun akirak/org-starter-meta-capture-templates (spec)
+     (when-let (rest (and (= 3 (length spec))
+                          (alist-get (nth 2 spec)
+                                     org-starter-capture-meta-templates)))
+       (setf (cddr spec) rest))
+     spec))
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
