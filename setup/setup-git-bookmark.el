@@ -34,7 +34,7 @@
 (defcustom akirak/git-bookmark-update-function
   (lambda ()
     (call-process-with-args "systemctl"
-      "--user" "restart" "commonplace-repos.service"))
+      "--wait" "--user" "restart" "commonplace-repos.service"))
   "Function called "
   :type 'function)
 
@@ -87,5 +87,42 @@
                                                  ,submodule-rel-path))))
                              (error "Error while cloning a submodule: %s"
                                     event)))))))))
+
+(defun akirak/git-bookmark-ensure-file-funcall (file func &rest args)
+  "Ensure the submodule containing FILE if any and then call FUNC with ARGS."
+  (declare (indent 1))
+  (if (and (not (file-exists-p file))
+           (f-ancestor-of-p (f-join akirak/git-bookmark-repository "repos")
+                            file))
+      (let* ((relative (s-replace "repos/" "repos-src/"
+                                  (f-relative file akirak/git-bookmark-repository)))
+             (submodules (akirak/git-submodules-full-alist
+                          akirak/git-bookmark-repository))
+             (submodule (cl-find-if
+                         `(lambda (submodule)
+                            (string-prefix-p
+                             (alist-get 'path submodule)
+                             ,relative))
+                         submodules)))
+        (apply #'akirak/with-ensure-git-submodule
+               submodule
+               '("--depth" "1")
+               #'akirak/git-bookmark-update-function
+               func args))
+    (apply func args)))
+
+(advice-add #'bookmark-default-handler
+            :around
+            (defun akirak/bookmark-default-handler (orig record)
+              (akirak/git-bookmark-ensure-file-funcall file
+                orig record)))
+
+(advice-add #'org-link-open-as-file
+            :around
+            (cl-defun akirak/git-bookmark-ad-around-org-link-open-as-file
+                (orig path &rest rest)
+              (apply #'akirak/git-bookmark-ensure-file-funcall
+                     path
+                     orig path rest)))
 
 (provide 'setup-git-bookmark)
