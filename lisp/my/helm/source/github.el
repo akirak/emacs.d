@@ -2,7 +2,9 @@
 
 (defconst akirak/helm-github-following-source
   (helm-make-source "People I follow on GitHub" 'helm-source-sync
-    :candidates #'akirak/github--following
+    :candidates (lambda ()
+                  (ignore-errors
+                    (akirak/github--following)))
     :candidate-transformer
     (-partial #'mapcar (lambda (pairs)
                          (cons (let ((login (alist-get 'login pairs))
