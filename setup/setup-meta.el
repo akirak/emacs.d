@@ -8,6 +8,7 @@
     setup-lispy                         ; Efficient lisp editing
     setup-large-files
     setup-repos
+    setup-tramp
     setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
     setup-magit                    ; The Git porcelain for Emacs
     setup-vdiff
