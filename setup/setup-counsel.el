@@ -165,10 +165,12 @@
     (message "No readme found for %s" x)))
 
 (defun akirak/open-library-readme (x)
-  (let ((path (find-library-name x))
-        (dir (file-name-directory (file-truename path))))
-    (unless path
-      (user-error "Cannot find library %s" x))
+  (let* ((path (find-library-name (cl-etypecase x
+                                    (string x)
+                                    (symbol (symbol-name x)))))
+         (dir (if path
+                  (file-name-directory (file-truename path))
+                (user-error "Cannot find library %s" x))))
     (akirak/find-readme dir)))
 
 (defun akirak/view-file (filename)
