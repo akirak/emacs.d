@@ -35,9 +35,12 @@
   (cl-macrolet ((enabled-when (condition str) `(if ,condition
                                                    ,str
                                                  (lambda () nil)))
-                (with-dir (f) `(lambda (dir)
-                                 (let ((default-directory dir))
-                                   (,f))))
+                (with-dir (f &optional interactive)
+                          `(lambda (dir)
+                             (let ((default-directory dir))
+                               ,(if interactive
+                                    `(call-interactively ',f)
+                                  `(,f)))))
                 (second (f) `(lambda (cell)
                                (cons (car cell)
                                      (,f (cdr cell))))))
@@ -54,7 +57,13 @@
              (enabled-when
               (and git (not gitmodule))
               "Rename directory and run magit status") #'akirak/rename-git-repository-and-status
-              (enabled-when project "README") #'akirak/find-readme))))
+             (enabled-when project "README") #'akirak/find-readme
+             (enabled-when git "Browse remote")
+             (with-dir forge-browse-remote 'interactive)
+             (enabled-when git "Browse issues")
+             (with-dir forge-browse-issues 'interactive)
+             (enabled-when git "Browse PRs")
+             (with-dir forge-browse-pullreqs 'interactive)))))
 
 (defconst akirak/helm-directory-actions-1
   (akirak/helm-make-directory-actions))
@@ -65,6 +74,7 @@
 
 (defconst akirak/helm-gitmodule-actions-1
   (akirak/helm-make-directory-actions :project t
+                                      :git t
                                       :gitmodule t))
 
 (provide 'my/helm/action/dir)
