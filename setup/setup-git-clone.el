@@ -111,14 +111,28 @@
                  (akirak/generic-git-repo-owner repo) "/"
                  (akirak/generic-git-repo-name repo)
                  ".git")))))
+(cl-defmethod akirak/remote-git-repo-protocol ((repo akirak/generic-git-repo))
+  (or (akirak/generic-git-repo-protocol repo)
+      (when-let (url (akirak/generic-git-repo-url repo))
+        (save-match-data
+          (cond
+           ((string-match (rx bol "https://") url)
+            "https")
+           ((string-match (rx bol (or "git@" "ssh:")) url)
+            "ssh")
+           ((string-match (rx bol "hg::") url)
+            "hg")
+           (t
+            (error "Failed to parse a protocol from %s" url)))))
+      (error "Failed to extract a protocol from %s" repo)))
 (cl-defmethod akirak/remote-git-repo-host ((repo akirak/generic-git-repo))
   (or (akirak/generic-git-repo-host repo)
       (when-let (url (akirak/generic-git-repo-url repo))
         (save-match-data
           (cond
-           ((string-match (rx bol "https://" (group (+ (not (any "/"))))) url)
+           ((string-match (rx bol (? "hg::") "https://" (group (+ (not (any "/"))))) url)
             (match-string 1 url))
-           ((string-match (rx bol "git@" (group (+ (not (any ":"))))) url)
+           ((string-match (rx bol (? "hg::") "git@" (group (+ (not (any ":"))))) url)
             (match-string 1 url))
            (t
             (error "Failed to parse a host from %s" url)))))
@@ -145,23 +159,23 @@
          (suffix (rx ".git"))
          (optional-suffix (rx (?  ".git")))
          (github-path-pattern (concat "^" path-pattern "$"))
-         (https-pattern (concat "^https://" host-pattern "/" path-pattern
+         (https-pattern (concat "https://" host-pattern "/" path-pattern
                                 (rx (? (or (and "/blob/" (group (+ (any alnum "-")))
                                                 "/" (group (and (any alnum ".")
                                                                 (+ anything))))
                                            ".git"
                                            "/"))
                                     eol)))
-         (ssh-pattern (concat "^git@" host-pattern ":" path-pattern (rx ".git" eol))))
+         (ssh-pattern (concat "git@" host-pattern ":" path-pattern (rx ".git" eol))))
     (pcase-let* ((`(,protocol ,url ,host ,owner ,name . ,rest)
                   (or (-some->> (s-match name-pattern string)
                         (append (list nil nil "github.com" akirak/github-login)))
                       (-some->> (s-match github-path-pattern string)
                         (cdr)
                         (append (list nil nil "github.com")))
-                      (-some->> (s-match https-pattern string)
+                      (-some->> (s-match (concat "^" https-pattern) string)
                         (cons 'https))
-                      (-some->> (s-match ssh-pattern string)
+                      (-some->> (s-match (concat "^" ssh-pattern) string)
                         (cons 'ssh))))
                  (`(,branch ,file) rest))
       (cond
@@ -179,10 +193,12 @@
                                       :host host
                                       :owner owner
                                       :name (string-remove-suffix ".git" name)))
-       ((string-match-p (rx (or (and bol (or "git:"
-                                             "git+ssh:"
-                                             "https://"
-                                             "git@"))
+       ;; This supports Mercurial repository URLs prefixed with hg::
+       ;; You'll need git-remote-hg: <https://github.com/felipec/git-remote-hg>
+       ((string-match-p (rx (or (and bol (? "hg::") (or "git:"
+                                                        "git+ssh:"
+                                                        "https://"
+                                                        "git@"))
                                 (and ".git" eol)))
                         string)
         (make-akirak/generic-git-repo :url string))
