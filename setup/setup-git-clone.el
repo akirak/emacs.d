@@ -21,22 +21,31 @@
          (branch (if (member branch '("master" "main"))
                      nil
                    branch))
+         (dest (akirak/git-default-clone-destination repo :create-parent t))
+         (args (transient-args 'magit-clone)))
+    (if (file-directory-p dest)
+        (progn
+          (message "Already exists: %s" dest)
+          (magit-status dest))
+      (magit-clone-regular url dest `(,(and branch `("-b" ,branch))
+                                      ,@args)))))
+
+(cl-defun akirak/git-default-clone-destination (repo &key create-parent)
+  (let* ((branch (akirak/remote-git-repo-branch repo))
+         (branch (if (member branch '("master" "main"))
+                     nil
+                   branch))
          (parent (or (akirak/remote-git-repo-clone-parent repo)
                      (f-join akirak/git-clone-directory
                              (akirak/remote-git-repo-host repo))))
          (name (concat (akirak/remote-git-repo-name repo)
                        (if branch
                            (concat "@" branch)
-                         "")))
-         (dest (f-join parent name))
-         (args (transient-args 'magit-clone)))
-    (if (file-directory-p dest)
-        (progn
-          (message "Already exists: %s" dest)
-          (magit-status dest))
-      (make-directory parent t)
-      (magit-clone-regular url dest `(,(and branch `("-b" ,branch))
-                                      ,@args)))))
+                         ""))))
+    (when (and create-parent
+               (not (file-directory-p parent)))
+      (make-directory parent t))
+    (f-join parent name)))
 
 (cl-defgeneric akirak/remote-git-repo-clone-default (repo)
   (akirak/remote-git-repo-clone-1 repo))
