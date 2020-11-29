@@ -214,13 +214,11 @@
   :commands (discover-my-major))
 (use-package docker
   :disabled t)
-(use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
   :hook
   (text-mode . electric-pair-local-mode))
 (use-package epkg)
-(use-package explain-pause-mode)
 
 (use-package helm-tail
   :commands (helm-tail))
@@ -868,7 +866,6 @@ outcommented org-mode headers)."
 
 ;;;;; Emacs
 (akirak/bind-admin
-  "ex" #'explain-pause-mode
   "et" #'ert)
 
 ;;;;; Git

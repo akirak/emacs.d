@@ -41,12 +41,12 @@
     setup-navigation-bindings
     setup-git-clone
     setup-clipurl
-    setup-org-offtime
+    ;; setup-org-offtime
     setup-multiple-cursors
     setup-treemacs
     setup-screencast
-    setup-pass
-    setup-alert))
+    ;; setup-alert
+    setup-pass))
 
 (mapc #'akirak/require akirak/feature-list)
 
