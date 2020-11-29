@@ -21,16 +21,20 @@
          (branch (if (member branch '("master" "main"))
                      nil
                    branch))
-         (dest (f-join (akirak/remote-git-repo-clone-parent repo)
-                       (concat (akirak/remote-git-repo-name repo)
-                               (if branch
-                                   (concat "@" branch)
-                                 ""))))
+         (parent (or (akirak/remote-git-repo-clone-parent repo)
+                     (f-join akirak/git-clone-directory
+                             (akirak/remote-git-repo-host repo))))
+         (name (concat (akirak/remote-git-repo-name repo)
+                       (if branch
+                           (concat "@" branch)
+                         "")))
+         (dest (f-join parent name))
          (args (transient-args 'magit-clone)))
     (if (file-directory-p dest)
         (progn
           (message "Already exists: %s" dest)
           (magit-status dest))
+      (make-directory parent t)
       (magit-clone-regular url dest `(,(and branch `("-b" ,branch))
                                       ,@args)))))
 
@@ -107,11 +111,27 @@
                  (akirak/generic-git-repo-owner repo) "/"
                  (akirak/generic-git-repo-name repo)
                  ".git")))))
+(cl-defmethod akirak/remote-git-repo-host ((repo akirak/generic-git-repo))
+  (or (akirak/generic-git-repo-host repo)
+      (when-let (url (akirak/generic-git-repo-url repo))
+        (save-match-data
+          (cond
+           ((string-match (rx bol "https://" (group (+ (not (any "/"))))) url)
+            (match-string 1 url))
+           ((string-match (rx bol "git@" (group (+ (not (any ":"))))) url)
+            (match-string 1 url))
+           (t
+            (error "Failed to parse a host from %s" url)))))
+      (error "Failed to extract a host from %s" repo)))
 (cl-defmethod akirak/remote-git-repo-name ((repo akirak/generic-git-repo))
-  (akirak/generic-git-repo-name repo))
+  (or (akirak/generic-git-repo-name repo)
+      (when-let (url (akirak/generic-git-repo-url repo))
+        (save-match-data
+          (when (string-match (rx (group (+ (not (any "/")))) (optional "/") eos)
+                              url)
+            (match-string 1 url))))))
 (cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/generic-git-repo))
-  ;; TODO: Look up
-  "~/tmp/")
+  nil)
 
 ;;;; Parsing
 
