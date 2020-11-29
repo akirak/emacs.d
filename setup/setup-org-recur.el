@@ -45,6 +45,8 @@
                                   (member "@recur" (org-get-tags)))
                          (org-todo 'none)))
                      nil 'tree)))))
+  (advice-add 'org-recur-finish
+              :after (lambda (&rest _args) (org-clock-out)))
   (defun akirak/org-recur-set ()
     (interactive)
     (let* ((date-desc (completing-read "Schedule: "
