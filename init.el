@@ -434,12 +434,13 @@ connection identities of recent files."
     (interactive)
     (require 'helm-org-ql)
     (require 'org-recent-headings)
+    (require 'helm-org-recent-headings)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                helm-source-org-recent-headings
+                helm-org-recent-headings-source
                 akirak/helm-source-org-starter-known-files
-                helm-source-org-ql-views)))
+                helm-org-ql-views-source)))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
