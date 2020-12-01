@@ -34,7 +34,7 @@
 (defcustom akirak/git-bookmark-update-function
   (lambda ()
     (call-process-with-args "systemctl"
-      "--wait" "--user" "restart" "commonplace-repos.service"))
+      "--user" "restart" "commonplace-repos.service"))
   "Function called "
   :type 'function)
 
