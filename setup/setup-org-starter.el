@@ -33,7 +33,6 @@
   :straight org-ql)
 
 (use-package helm-org-ql
-  :straight org-ql
   :config
   ;; The default implementation of this function does not correctly
   ;; display the indirect buffer in another window: It displays the
