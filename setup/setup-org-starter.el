@@ -144,6 +144,27 @@ third argument, i.e. right after the description, in the entry."
     :type '(alist :key-type symbol
                   :value-type sexp))
 
+  (cl-defmacro akirak/add-ql-view (title buffers-files query
+                                         &key sort super-groups)
+    (declare (indent 1))
+    (let ((value (list :buffers-files buffers-files
+                       :query query
+                       :super-groups super-groups
+                       :sort sort
+                       :title title)))
+      `(if-let ((entry (assoc ,title org-ql-views)))
+           (setcdr entry ,value)
+         (push (cons ,title ,value) org-ql-views))))
+
+  (defmacro akirak/org-multi-wiki-add-ql-view (name namespace query
+                                                    &key sort
+                                                    super-groups)
+    (declare (indent 2))
+    (akirak/add-ql-view name
+      `(lambda () (org-multi-wiki-entry-files ',namespace))
+      query
+      :sort sort :super-groups super-groups))
+
   :config
   (org-starter-mode t)
   (general-add-hook 'org-starter-extra-find-file-map
