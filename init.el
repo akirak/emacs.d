@@ -220,6 +220,8 @@
   (text-mode . electric-pair-local-mode))
 (use-package epkg)
 
+(use-package helm-org-recent-headings
+  :after (helm org-recent-headings))
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
