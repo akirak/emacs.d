@@ -48,7 +48,7 @@
                 (second akirak/ensure-git-module-as-argument)
               #'identity)
             (helm-make-actions
-             (enabled-when git "Magit-status") #'magit-status
+             (enabled-when git "Magit-status") (with-dir magit-status 'interactive)
              (enabled-when git "Magit log all") (with-dir magit-log-all)
              "Dired" #'dired
              (enabled-when project "Find files recursively") #'akirak/find-file-recursively
