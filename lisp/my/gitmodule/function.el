@@ -20,36 +20,27 @@ FUNC is called with ARGS."
     (if \.active
         (apply func args)
       (message "Updating submodule %s in %s..." \.name \.root)
-      (cl-labels ((make-sentinel (on-success on-error process event)
-                                 (when (eq (process-status process) 'exit)
-                                   (if (= (process-exit-status process) 0)
-                                       (progn
-                                         (message "Successfully run git submodule update")
-                                         (funcall on-success))
-                                     (funcall on-error)))))
-        (let ((default-directory \.root))
-          (magit-with-toplevel
-            (make-process :name "git-submodule-update"
-                          :command `("git"
-                                     "submodule" "update"
-                                     "--init"
-                                     ,@git-submodule-args
-                                     "--"
-                                     ,\.name)
-                          :sentinel
-                          (-partial #'make-sentinel
-                                    (-partial (lambda (root on-update func0)
-                                                (when (functionp on-update)
-                                                  (let ((default-directory root))
-                                                    (funcall on-update)))
-                                                (funcall func0))
-                                              \.root
-                                              on-update
-                                              (-partial (-applify func) args))
-                                    (-partial #'user-error
-                                              "Failed to check out %s in %s"
-                                              \.name
-                                              \.root)))))))))
+      (let ((default-directory \.root))
+        (magit-with-toplevel
+          (make-process :name "git-submodule-update"
+                        :command `("git"
+                                   "submodule" "update"
+                                   "--init"
+                                   ,@git-submodule-args
+                                   "--"
+                                   ,\.name)
+                        :sentinel
+                        `(lambda (process event)
+                           (when (eq (process-status process) 'exit)
+                             (if (= (process-exit-status process) 0)
+                                 (progn
+                                   (message "Successfully run git submodule update")
+                                   (when (functionp ,on-update)
+                                     (let ((default-directory ,\.root))
+                                       (funcall ,on-update))
+                                     (funcall ,func ,@args)))
+                               (user-error "Failed to check out %s in %s"
+                                           ,\.name ,\.root))))))))))
 
 (defun akirak/git-submodule-p ()
   "Return non-nil if the default directory is inside a submodule."
