@@ -114,7 +114,8 @@
 (advice-add #'bookmark-default-handler
             :around
             (defun akirak/bookmark-default-handler (orig record)
-              (akirak/git-bookmark-ensure-file-funcall file
+              (akirak/git-bookmark-ensure-file-funcall
+                  (bookmark-get-filename record)
                 orig record)))
 
 (advice-add #'org-link-open-as-file
