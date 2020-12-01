@@ -1,5 +1,9 @@
 (use-package magit-section)
 
+(defcustom akirak/magit-large-repositories nil
+  "List of large Git repositories where Magit should limit its features."
+  :type '(repeat directory))
+
 (use-package magit
   :config
   (when-let ((bin (executable-find "git")))
@@ -15,6 +19,26 @@
   ;; look for an alternative solution.
   (advice-add 'magit--process-coding-system :override
               (lambda () '(utf-8-unix . utf-8-unix)))
+
+  ;; Speed up Magit on large Git repositories by limiting the types of
+  ;; information displayed inside `magit-status' buffer.
+  ;;
+  ;; Based on ideas from this article:
+  ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
+  (general-advice-add '(
+                        ;; I don't want to remove these headers right now
+                        ;;
+                        ;; magit-insert-tags-header
+                        ;; magit-insert-status-headers
+                        magit-insert-unpushed-to-pushremote
+                        magit-insert-unpulled-from-pushremote
+                        magit-insert-unpulled-from-upstream
+                        magit-insert-unpushed-to-upstream-or-recent)
+                      :before-while
+                      (defun akirak/magit-not-inside-large-repository-p ()
+                        (not (cl-member (magit-toplevel)
+                                        akirak/magit-large-repositories
+                                        :test #'file-equal-p))))
 
   ;; Functions for magit-list-repositories.
   (defun akirak/magit-repolist-column-group (_id)
