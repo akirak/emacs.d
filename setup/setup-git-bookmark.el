@@ -41,9 +41,21 @@
 (defun akirak/git-bookmark-repository ()
   (interactive)
   ;; Check the license before bookmarking it
-  (if (not (and (buffer-file-name)
-                (equal "LICENSE" (file-name-base (buffer-file-name)))))
-      (akirak/visit-license)
+  (when (or (and (buffer-file-name)
+                 (equal "LICENSE" (file-name-base (buffer-file-name))))
+            (let* ((root (locate-dominating-file default-directory ".git"))
+                   (files (and root
+                               (directory-files root t
+                                                (rx bol "LICENSE" (optional "." (+ anything)) eol)))))
+              (cond
+               (files
+                (find-file (car files))
+                nil)
+               ((not root)
+                (user-error "Not inside a repository"))
+               (t
+                (yes-or-no-p (format "No license is found in %s. Are you sure you want to bookmark this repository?"
+                                     root))))))
     (cl-assert (file-directory-p akirak/git-bookmark-repository))
     (cl-assert commonplace-repos-clone-root)
     (let* ((origin (magit-git-string "remote" "get-url" "origin"))
