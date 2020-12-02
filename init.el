@@ -357,6 +357,18 @@
 (unless (akirak/running-on-crostini-p)
   (akirak/emulate-chromeos-fnkey-mode 1))
 
+;;;; Insert strings/characters
+(defmacro akirak/def-insert-date-time-command (name format)
+  `(defun ,(intern (format "akirak/insert-%s" name)) ()
+     (interactive)
+     (insert (format-time-string ,format))))
+
+;; This prefix map will be overridden in org-mode
+(general-def :prefix "C-c !"
+  "8" (akirak/def-insert-date-time-command "yyyymmdd-date" "%Y%m%d")
+  "f" (akirak/def-insert-date-time-command "iso8601-date" "%F")
+  "t" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X"))
+
 ;;;; Switching buffers
 ;; Switching buffers is the most essential operation in Emacs.
 ;; Most of these commands are bound on C-x.
