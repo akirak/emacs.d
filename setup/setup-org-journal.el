@@ -50,20 +50,44 @@ This can be used for an org-capture template to create an entry in the journal."
                '("j" akirak/org-journal-refile-to-date "journal")
                'append)
 
-  (defun akirak/org-journal-cleanup-empty-files ()
+  (defun akirak/org-journal-cleanup-empty-dates ()
     (interactive)
-    (cl-labels ((is-empty-journal-file-p
+    (cl-labels ((clean-empty-toplevel-heading
+                 ()
+                 (and (looking-at (rx "*" (+ space) (+ not-newline) "\n"
+                                      (* space) ":PROPERTIES:\n"
+                                      (* space) ":CREATED:"
+                                      (* space) (+ (any digit))
+                                      (* space) "\n"
+                                      (* space) ":END:"))
+                      (goto-char (nth 1 (match-data)))
+                      (let ((beg (point)))
+                        (org-end-of-subtree)
+                        (when (string-match-p (rx bos (* space) eos)
+                                              (buffer-substring-no-properties beg point))
+                          (delete-region beg (point))
+                          t))))
+                (is-empty-journal-file-p
                  (file)
                  (and (not (find-buffer-visiting file))
                       (with-temp-buffer
                         (insert-file-contents file)
+                        (delay-mode-hooks 'org-mode)
                         (goto-char (point-min))
                         (let ((case-fold-search t))
+                          ;; Skip the file header
+                          (when (looking-at (rx "#+title: " (+ nonl)))
+                            (goto-char (nth 1 (match-data))))
+                          ;; Skip empty lines and delete empty dates
+                          ;; (with possible buffer modifications)
                           (catch 'nonempty
                             (while (< (point) (point-max))
-                              (unless (looking-at (rx bol (or eol "* " "#+title:")))
+                              (unless (or (looking-at (rx bol eol))
+                                          (clean-empty-toplevel-heading))
                                 (throw 'nonempty nil))
                               (forward-line))
+                            (when (buffer-modified-p)
+                              (save-buffer))
                             t))))))
       (let ((files (->> (akirak/org-journal-files)
                         (-filter #'is-empty-journal-file-p))))
