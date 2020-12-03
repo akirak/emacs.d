@@ -218,6 +218,10 @@ third argument, i.e. right after the description, in the entry."
   :commands (org-starter-swiper-config-files)
   :straight org-starter)
 
+(use-package xmind-org
+  :straight (:host github :repo "akirak/xmind-org-el")
+  :commands (xmind-org-insert-file))
+
 ;;;; Extra keybindings
 (akirak/bind-search
   "M-a" #'helm-org-ql-agenda-files
