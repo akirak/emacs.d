@@ -320,14 +320,14 @@ load them first.
   :commands (discover-my-major))
 (use-package docker
   :disabled t)
-(use-package ediprolog)
 (use-package electric
   :straight (:type built-in)
   :hook
   (text-mode . electric-pair-local-mode))
 (use-package epkg)
-(use-package explain-pause-mode)
 
+(use-package helm-org-recent-headings
+  :after (helm org-recent-headings))
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
@@ -492,6 +492,23 @@ keys.
   (akirak/emulate-chromeos-fnkey-mode 1))
 #+end_src
 
+***  Insert strings/characters
+#+begin_src emacs-lisp
+(defmacro akirak/def-insert-date-time-command (name format)
+  `(defun ,(intern (format "akirak/insert-%s" name)) ()
+     (interactive)
+     (insert (format-time-string ,format))))
+#+end_src
+
+This prefix map will be overridden in org-mode
+
+#+begin_src emacs-lisp
+(general-def :prefix "C-c !"
+  "8" (akirak/def-insert-date-time-command "yyyymmdd-date" "%Y%m%d")
+  "f" (akirak/def-insert-date-time-command "iso8601-date" "%F")
+  "t" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X"))
+#+end_src
+
 ***  Switching buffers
 Switching buffers is the most essential operation in Emacs.
 Most of these commands are bound on C-x.
@@ -571,12 +588,13 @@ connection identities of recent files."
     (interactive)
     (require 'helm-org-ql)
     (require 'org-recent-headings)
+    (require 'helm-org-recent-headings)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                helm-source-org-recent-headings
+                helm-org-recent-headings-source
                 akirak/helm-source-org-starter-known-files
-                helm-source-org-ql-views)))
+                helm-org-ql-views-source)))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
@@ -1046,7 +1064,6 @@ These commands are used to maintain this Emacs configuration.
 ****  Emacs
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "ex" #'explain-pause-mode
   "et" #'ert)
 #+end_src
 
@@ -1060,6 +1077,7 @@ These commands are used to maintain this Emacs configuration.
   "go" #'akirak/github-owned-repos
   "gr" #'commonplace-repos-counsel-rg
   "gs" #'akirak/github-starred-repos
+  "gt" #'akirak/git-module-add-tags
   "gu" #'akirak/github-users)
 #+end_src
 
@@ -1079,6 +1097,13 @@ These commands are used to maintain this Emacs configuration.
   "n" '(nil :wk "nix")
   "ni" #'nix-boilerplate-init
   "nn" #'nix-env-install-npm)
+#+end_src
+
+***  Org
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  "o" '(nil :wk "org")
+  "ov" #'org-ql-view)
 #+end_src
 
 ****  Remote connections (TRAMP)
