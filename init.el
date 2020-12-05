@@ -228,6 +228,7 @@
   (org-recent-headings-mode 1))
 (use-package helm-org-recent-headings
   :after (helm org-recent-headings))
+(use-package license-templates)
 (use-package su)
 (use-package valign
   :disabled t
