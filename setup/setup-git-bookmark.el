@@ -12,7 +12,7 @@
   :type 'file)
 
 (defcustom akirak/git-bookmark-submodule-path-function
-  (lambda (repo)
+  (lambda (obj)
     (let ((host (cond
                  ((or (akirak/github-https-repo-p obj)
                       (akirak/github-ssh-repo-p obj))
@@ -72,9 +72,15 @@
            (submodule-rel-path (funcall akirak/git-bookmark-submodule-path-function obj))
            (submodule-abs-path (f-join akirak/git-bookmark-repository submodule-rel-path))
            (url (akirak/remote-git-repo-url obj))
-           (default-directory akirak/git-bookmark-repository))
+           (default-directory akirak/git-bookmark-repository)
+           (visited-directory (f-join akirak/git-bookmark-repository
+                                      (concat
+                                       "repos/"
+                                       (string-remove-prefix
+                                        "repos-src/"
+                                        submodule-rel-path)))))
       (when (file-directory-p submodule-abs-path)
-        (user-error "%s already exists. You've probably added it" submodule-abs-path))
+        (user-error "%s already exists" submodule-abs-path))
       (message "Cloning %s as a submodule" url)
       ;; I won't use `magit-submodule-add-1' because I want to
       ;; alternate the process sentinel.
@@ -92,11 +98,7 @@
                            (if (= (process-exit-status process) 0)
                                (progn
                                  (funcall akirak/git-bookmark-update-function)
-                                 (dired (f-join akirak/git-bookmark-repository
-                                                "repos"
-                                                (string-remove-prefix
-                                                 "repos-src"
-                                                 ,submodule-rel-path))))
+                                 (dired ,visited-directory))
                              (error "Error while cloning a submodule: %s"
                                     event)))))))))
 
