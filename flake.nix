@@ -6,8 +6,10 @@
   inputs.flake-compat.url = "github:edolstra/flake-compat";
   inputs.flake-compat.flake = false;
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  inputs.epub2json.url = "github:akirak/epub2json";
+  inputs.pdftotext.url = "github:akirak/haskell-pdftotext";
 
-  outputs = { emacs-overlay, nixpkgs, flake-utils, flake-compat, ... }:
+  outputs = { emacs-overlay, nixpkgs, flake-utils, flake-compat, ... }@inputs:
     (flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import nixpkgs {
@@ -70,9 +72,51 @@
           };
         };
 
+        # Executables required inside Emacs
+        tools = pkgs.symlinkJoin {
+          name = "tools-for-emacs";
+          paths = with pkgs; [
+            # defaultPackage provides an entire Haskell package, so
+            # you have to specify individual packages such as
+            # epub2json, pdftotext, etc.
+            inputs.epub2json.packages.${system}.epub2json
+            inputs.pdftotext.packages.${system}.pdftotext
+
+            ripgrep
+            fd
+
+            # find
+            mlocate
+
+            # Use dex to use counsel-linux-apps on NixOS
+            dex
+
+            # gif-screencast
+            scrot
+            imagemagick
+            gifsicle
+            # gif-progress
+
+            # file converters
+            pngquant
+            # for document conversion
+            unoconv
+            pandoc
+
+            # needed for helm-dash (really?)
+            sqlite
+
+            # ispell
+            ispell
+            hunspell
+            hunspellDicts.en-us
+            hunspellDicts.en-gb-ise
+          ];
+        };
+
       in
         rec {
-          defaultPackage = ((pkgs.emacsPackagesFor emacsPackage).overrideScope' (
+          packages.emacs = ((pkgs.emacsPackagesFor emacsPackage).overrideScope' (
             eself: esuper: (esuper // (epkgOverrides eself esuper))
           )).emacsWithPackages (epkgs: with epkgs; [
             melpaStablePackages.emacsql-sqlite
@@ -93,6 +137,24 @@
             # org-roam
             dimmer
           ]);
+          packages.emacsTools = tools;
+          packages.emacsWithTools = pkgs.runCommandNoCC "emacs-with-tools" {
+            preferLocalBuild = true;
+            buildInputs = [
+              pkgs.makeWrapper
+            ];
+            propagatedBuildInputs = [
+              tools
+            ];
+          }
+          ''
+            mkdir -p $out/bin
+            ln -s -t $out/bin ${packages.emacs}/bin/emacsclient
+            makeWrapper ${packages.emacs}/bin/emacs $out/bin/emacs \
+              --prefix PATH : ${tools}/bin
+          '';
+
+          defaultPackage = packages.emacsWithTools;
 
           defaultApp = flake-utils.lib.mkApp {
             name = "emacs";
