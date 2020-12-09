@@ -1,5 +1,5 @@
 let
-  pkgs = import ./pinned-pkgs.nix;
+  pkgs = import <nixpkgs> {};
   sources = import ./sources.nix;
 in
 (
