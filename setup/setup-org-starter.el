@@ -147,7 +147,13 @@ third argument, i.e. right after the description, in the entry."
   (cl-defmacro akirak/add-ql-view (title buffers-files query
                                          &key sort super-groups)
     (declare (indent 1))
-    (let ((value (list :buffers-files buffers-files
+    (let ((value (list :buffers-files
+                       (cl-etypecase buffers-files
+                         (string buffers-files)
+                         (buffer buffers-files)
+                         (list (if (symbolp (car buffers-files))
+                                   (eval buffers-files)
+                                 buffers-files)))
                        :query query
                        :super-groups super-groups
                        :sort sort
