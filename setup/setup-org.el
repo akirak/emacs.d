@@ -284,16 +284,6 @@ from running."
 (general-def :package 'org :keymaps 'org-mode-map :prefix "C-,"
   "y" #'akirak/org-yank-into-new-block)
 
-(use-package org-entry-links
-  :after org
-  :straight (:host github :repo "akirak/org-entry-links")
-  :config
-  (akirak/bind-jump :keymaps 'org-mode-map :package 'org
-    "L" #'org-entry-links-ivy)
-  :general
-  (:keymaps 'org-agenda-mode-map :package 'org-agenda
-            "L" #'org-entry-links-ivy))
-
 (use-package org-autolist
   :after org
   ;; :diminish 'org-autolist-mode
