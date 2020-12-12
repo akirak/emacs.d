@@ -105,6 +105,10 @@
   (unless akirak/org-multi-wiki-initialized
     (setq org-multi-wiki-namespace-list nil
           akirak/org-multi-wiki-initialized t))
+  (with-eval-after-load 'org-ql
+    (org-ql-defpred wiki (namespace)
+      "It is inside a particular namespace."
+      :body (org-multi-wiki-in-namespace-p (intern namespace))))
   :config
   (defun akirak/org-multi-wiki-entry-template-fn (heading)
     (concat "* " heading "\n:PROPERTIES:\n"
