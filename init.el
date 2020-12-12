@@ -475,6 +475,7 @@ connection identities of recent files."
                 'akirak/helm-org-recent-headings-source
                 ;; akirak/helm-source-org-starter-known-files
                 ;; helm-org-ql-views-source
+                'akirak/org-agenda-buffer-source
                 'akirak/helm-org-ql-dummy-source)))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
