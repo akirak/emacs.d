@@ -1030,6 +1030,7 @@ Visualise (usually) 80 columns.
 #+begin_src emacs-lisp
   (use-package fill-column-indicator
     :unless (akirak/windows-subsystem-for-linux-p)
+    :disabled t
     :init
     (add-hook 'prog-mode-hook 'fci-mode))
 #+end_src
