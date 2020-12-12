@@ -227,7 +227,25 @@
   :config
   (org-recent-headings-mode 1))
 (use-package helm-org-recent-headings
-  :after (helm org-recent-headings))
+  :after (helm org-recent-headings)
+  :config
+  ;; Modified from `helm-org-recent-headings-source'.
+  (defvar akirak/helm-org-recent-headings-source
+    (helm-build-sync-source " Recent Org headings"
+      :candidates (lambda ()
+                    org-recent-headings-list)
+      :candidate-number-limit 'org-recent-headings-candidate-number-limit
+      :candidate-transformer 'helm-org-recent-headings--truncate-candidates
+      :keymap helm-org-recent-headings-map
+      :action 'akirak/helm-org-recent-headings-actions)
+    "Helm source for `org-recent-headings'.")
+  (defvar akirak/helm-org-recent-headings-actions
+    (helm-make-actions
+     "Show entry (default function)" 'org-recent-headings--show-entry-default
+     "Show entry in real buffer" 'org-recent-headings--show-entry-direct
+     "Show entry in indirect buffer" 'org-recent-headings--show-entry-indirect
+     "Remove entry" 'helm-org-recent-headings-remove-entries
+     "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
 (use-package su)
 (use-package valign
@@ -454,7 +472,7 @@ connection identities of recent files."
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                helm-org-recent-headings-source
+                akirak/helm-org-recent-headings-source
                 akirak/helm-source-org-starter-known-files
                 helm-org-ql-views-source)))
   "C-x x"
