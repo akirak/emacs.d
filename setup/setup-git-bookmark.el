@@ -42,11 +42,16 @@
   (interactive)
   ;; Check the license before bookmarking it
   (when (or (and (buffer-file-name)
-                 (equal "LICENSE" (file-name-base (buffer-file-name))))
+                 (member (file-name-base (buffer-file-name))
+                         '("LICENSE"
+                           "COPYING")))
             (let* ((root (locate-dominating-file default-directory ".git"))
                    (files (and root
                                (directory-files root t
-                                                (rx bol "LICENSE" (optional "." (+ anything)) eol)))))
+                                                (rx bol
+                                                    (or "LICENSE"
+                                                        "COPYING")
+                                                    (optional "." (+ anything)) eol)))))
               (cond
                (files
                 (find-file (car files))
