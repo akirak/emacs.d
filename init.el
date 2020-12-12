@@ -238,6 +238,7 @@
 
 ;;;; Modules
 (require 'setup-git-bookmark)
+(require 'setup-info)
 
 ;;; Commands and keybindings
 ;;;; Basic keybindings
