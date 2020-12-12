@@ -225,6 +225,10 @@
 (use-package org-recent-headings
   :after org
   :config
+  (general-add-hook 'org-recent-headings-advise-functions
+                    '(org-multi-wiki-follow-link
+                      helm-org-ql-show-marker
+                      helm-org-ql-show-marker-indirect))
   (org-recent-headings-mode 1))
 (use-package helm-org-recent-headings
   :after (helm org-recent-headings)
