@@ -333,7 +333,25 @@ load them first.
   :config
   (org-recent-headings-mode 1))
 (use-package helm-org-recent-headings
-  :after (helm org-recent-headings))
+  :after (helm org-recent-headings)
+  :config
+  ;; Modified from `helm-org-recent-headings-source'.
+  (defvar akirak/helm-org-recent-headings-source
+    (helm-build-sync-source " Recent Org headings"
+      :candidates (lambda ()
+                    org-recent-headings-list)
+      :candidate-number-limit 'org-recent-headings-candidate-number-limit
+      :candidate-transformer 'helm-org-recent-headings--truncate-candidates
+      :keymap helm-org-recent-headings-map
+      :action 'akirak/helm-org-recent-headings-actions)
+    "Helm source for `org-recent-headings'.")
+  (defvar akirak/helm-org-recent-headings-actions
+    (helm-make-actions
+     "Show entry (default function)" 'org-recent-headings--show-entry-default
+     "Show entry in real buffer" 'org-recent-headings--show-entry-direct
+     "Show entry in indirect buffer" 'org-recent-headings--show-entry-indirect
+     "Remove entry" 'helm-org-recent-headings-remove-entries
+     "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
 (use-package su)
 (use-package valign
@@ -346,6 +364,7 @@ load them first.
 ***  Modules
 #+begin_src emacs-lisp
 (require 'setup-git-bookmark)
+(require 'setup-info)
 #+end_src
 
 **  Commands and keybindings
@@ -593,9 +612,11 @@ connection identities of recent files."
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                helm-org-recent-headings-source
-                akirak/helm-source-org-starter-known-files
-                helm-org-ql-views-source)))
+                'akirak/helm-org-recent-headings-source
+                ;; akirak/helm-source-org-starter-known-files
+                ;; helm-org-ql-views-source
+                'akirak/org-agenda-buffer-source
+                'akirak/helm-org-ql-dummy-source)))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
@@ -750,6 +771,10 @@ notion of page/chunk varies.
                   (message "Narrowing to an upper level"))))
             (message "No more heading")))
       (message "Buffer is not narrowed"))))
+
+(general-def :keymaps 'org-journal-mode-map :package 'org-journal
+  [remap forward-page] #'org-journal-next-entry
+  [remap backward-page] #'org-journal-previous-entry)
 
 (general-def :keymaps 'Info-mode-map :package 'info
   "h" #'Info-up
@@ -1098,13 +1123,6 @@ These commands are used to maintain this Emacs configuration.
   "n" '(nil :wk "nix")
   "ni" #'nix-boilerplate-init
   "nn" #'nix-env-install-npm)
-#+end_src
-
-***  Org
-#+begin_src emacs-lisp
-(akirak/bind-admin
-  "o" '(nil :wk "org")
-  "ov" #'org-ql-view)
 #+end_src
 
 ****  Remote connections (TRAMP)
