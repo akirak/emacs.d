@@ -594,6 +594,10 @@ connection identities of recent files."
             (message "No more heading")))
       (message "Buffer is not narrowed"))))
 
+(general-def :keymaps 'org-journal-mode-map :package 'org-journal
+  [remap forward-page] #'org-journal-next-entry
+  [remap backward-page] #'org-journal-previous-entry)
+
 (general-def :keymaps 'Info-mode-map :package 'info
   "h" #'Info-up
   [remap forward-page] #'Info-next-preorder
