@@ -23,7 +23,12 @@
       :key-sort-fn (lambda (a b)
                      ;; This part has been changed from `ts<' to `ts>'.
                      (ts> (get-text-property 0 'org-super-agenda-ts a)
-                          (get-text-property 0 'org-super-agenda-ts b)))))
+                          (get-text-property 0 'org-super-agenda-ts b))))
+
+    (org-super-agenda--def-auto-group buffer-name "buffer name"
+      :keyword :auto-buffer-name
+      :key-form (org-super-agenda--when-with-marker-buffer (org-super-agenda--get-marker item)
+                  (buffer-name))))
   (org-super-agenda-mode 1))
 
 (use-package org-ql-search
@@ -127,6 +132,24 @@
     :prefix "C-c C-c")
   (akirak/bind-helm-org-multi-wiki-dummy
     "" '(:wk "Create wiki entry")))
+
+(defvar akirak/helm-org-ql-dummy-source
+  (helm-build-dummy-source " Query"
+    :action
+    (helm-make-actions
+     "Search in org-multi-wiki"
+     (lambda (s)
+       (org-ql-search (->> org-multi-wiki-namespace-list
+                           (-map #'car)
+                           (--map (org-multi-wiki-entry-files it :as-buffers t))
+                           (apply #'append))
+         s
+         :super-groups '((:auto-buffer-name))))
+     "Search in org-starter-known-files"
+     (lambda (s)
+       (org-ql-search org-starter-known-files
+         s
+         :super-groups '((:auto-category)))))))
 
 (use-package org-starter
   :straight (org-starter :host github :repo "akirak/org-starter"
