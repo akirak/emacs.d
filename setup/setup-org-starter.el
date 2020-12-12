@@ -244,4 +244,6 @@ third argument, i.e. right after the description, in the entry."
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
 
+(general-def "<C-f10>" #'org-ql-view)
+
 (provide 'setup-org-starter)

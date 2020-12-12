@@ -933,11 +933,6 @@ outcommented org-mode headers)."
   "ni" #'nix-boilerplate-init
   "nn" #'nix-env-install-npm)
 
-;;;; Org
-(akirak/bind-admin
-  "o" '(nil :wk "org")
-  "ov" #'org-ql-view)
-
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
   "r" '(nil :wk "remote")
