@@ -779,7 +779,7 @@ outcommented org-mode headers)."
                             :action action)
                           (helm-build-sync-source "Basic commands"
                             :candidates
-                            '("install")
+                            (akirak/npm-toplevel-commands)
                             :action action)
                           (helm-build-dummy-source "Any npm command"
                             :action action))))))
