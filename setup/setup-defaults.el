@@ -32,7 +32,11 @@
               delete-by-moving-to-trash t
               delete-old-versions t
               view-read-only t
-              sentence-end-double-space nil)
+              sentence-end-double-space nil
+              ;; lock files will kill `npm start'
+              create-lockfiles nil
+              ;; For lsp-mode
+              read-process-output-max (* 1024 1024))
 
 (set-language-environment "UTF-8")
 

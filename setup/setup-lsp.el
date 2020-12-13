@@ -15,6 +15,8 @@
   ((web-mode
     vue-html-mode
     css-mode
+    js-mode
+    typescript-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
     ;; java-mode
@@ -25,7 +27,8 @@
   (lsp-enable-xref t)
   (lsp-enable-semantic-highlighting t)
   (lsp-prefer-capf t)
-  (lsp-eldoc-render-all t))
+  (lsp-eldoc-render-all nil)
+  (lsp-headerline-breadcrumb-enable t))
 
 (use-package lsp-ui
   :disabled t
@@ -42,13 +45,13 @@
   (lsp-ui-doc-position (quote at-point)))
 
 (use-package lsp-ivy
+  :disabled t
   :config
   (akirak/bind-search :keymaps 'lsp-mode-map
     "M-i" #'lsp-ivy-workspace-symbol
     "S-M-i" #'lsp-ivy-global-workspace-symbol))
 
 (use-package lsp-treemacs
-  :disabled t
   :after lsp-mode)
 
 (use-package dap-mode
@@ -76,6 +79,7 @@
   )
 
 (use-package lsp-haskell
+  :disabled t
   :after haskell-mode
   ;; To use lsp-haskell, you also need to install haskell-ide-server.
   ;; This can take a lot of time, so install it manually if you want
@@ -94,6 +98,7 @@
   (lsp-haskell-process-args-hie nil))
 
 (use-package lsp-java
+  :disabled t
   :config
   (require 'dap-java))
 

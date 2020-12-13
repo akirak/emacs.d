@@ -56,6 +56,7 @@
                    ("*Google Translate*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
                    ("*Help*" :other t)
+                   ("*Flycheck errors*" :align below :ratio 0.15)
                    ("\\*Org Agenda" :regexp t :other t))))
 
 (with-eval-after-load 'org

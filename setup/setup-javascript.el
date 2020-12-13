@@ -1,3 +1,5 @@
+;; js-mode now supports JSX as well.
+;; See https://www.reddit.com/r/emacs/comments/bwzpw0/improved_jsx_support_now_available_in_jsmode_on/
 (use-package js
   :straight (:type built-in)
   :custom
@@ -8,6 +10,7 @@
 
 ;; Prefer js-mode for LSP support
 (use-package js2-mode
+  :disabled t
   :after (js json-mode)
   :mode (("\\.js\\'" . js2-mode))
   :config/el-patch
@@ -170,7 +173,7 @@ the contents of the current buffer as the root document."
     "t" #'jest-file-dwim))
 
 (use-package typescript-mode
-  :mode "\\.ts\\'")
+  :mode "\\.tsx?\\'")
 
 (use-package tide
   :disabled t
