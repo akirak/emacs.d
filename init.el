@@ -773,13 +773,15 @@ outcommented org-mode headers)."
                             :candidates
                             (-map (lambda (cell)
                                     (cons (format "%s: %s" (car cell) (cdr cell))
-                                          (cdr cell)))
+                                          (symbol-name (car cell))))
                                   script-alist)
-                            :coerce (-partial #'s-append "run ")
+                            :coerce (-partial #'s-prepend "run ")
                             :action action)
                           (helm-build-sync-source "Basic commands"
                             :candidates
                             '("install")
+                            :action action)
+                          (helm-build-dummy-source "Any npm command"
                             :action action))))))
          (mix-run-command
           ()
