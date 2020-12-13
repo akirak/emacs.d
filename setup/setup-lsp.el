@@ -53,6 +53,12 @@
     "M-i" #'lsp-ivy-workspace-symbol
     "S-M-i" #'lsp-ivy-global-workspace-symbol))
 
+(use-package helm-lsp
+  :after lsp-mode
+  :general
+  (:keymaps 'lsp-mode-map :prefix lsp-keymap-prefix
+            "/" #'helm-lsp-workspace-symbol))
+
 (use-package lsp-treemacs
   :after lsp-mode)
 
