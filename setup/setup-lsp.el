@@ -28,6 +28,8 @@
   (lsp-enable-semantic-highlighting t)
   (lsp-prefer-capf t)
   (lsp-eldoc-render-all nil)
+  ;; Since I have my own header line, I need only the symbol path.
+  (lsp-headerline-breadcrumb-segments '(symbols))
   (lsp-headerline-breadcrumb-enable t))
 
 (use-package lsp-ui

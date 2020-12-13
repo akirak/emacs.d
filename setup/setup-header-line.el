@@ -10,7 +10,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
 
 (advice-add #'bury-buffer :after #'akirak/unset-buffer-group)
 
+(global-tab-line-mode t)
+
 (use-package centaur-tabs
+  :disabled t
   :config
   ;; Disable centaur-tabs in any buffers that are displayed using
   ;; fit-window-to-buffer.
@@ -190,12 +193,20 @@ This is intended to be set inside `akirak/set-header-line' function.")
        (groups
         (setq akirak/centaur-tabs-buffer-groups groups))
        (t
-        (centaur-tabs-local-mode 1)
-        (setq header-line-format nil)))
+        (when (fboundp 'centaur-tabs-local-mode)
+          (centaur-tabs-local-mode 1)
+          (setq header-line-format nil))))
       header-line-format)))
 
 (add-hook 'after-change-major-mode-hook 'akirak/set-header-line)
 (add-hook 'clone-indirect-buffer-hook 'akirak/set-header-line)
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-headerline-breadcrumb-mode-hook
+            (defun akirak/revert-lsp-breadcrumb-headerline ()
+              (when lsp-headerline-breadcrumb-mode
+                ;; Remove the first element pushed by lsp-headerline
+                (setq-local header-line-format (cdr header-line-format))))))
 
 ;; Make org-tree-to-indirect-buffer run clone-indirect-buffer-hook
 ;; after creating its indirect buffer.
@@ -271,6 +282,7 @@ This is intended to be set inside `akirak/set-header-line' function.")
       ,(if (derived-mode-p 'prog-mode)
            "(%l,%3c) "
          " ")
+      (lsp-headerline-breadcrumb-mode (:eval lsp-headerline--string))
       ;; Display the flycheck status in prog-mode
       ,(when (derived-mode-p 'prog-mode)
          (cond
