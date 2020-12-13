@@ -62,6 +62,10 @@
   (lsp-mode . dap-mode)
   (dap-mode . dap-ui-mode))
 
+(use-package dap-chrome
+  :straight dap-mode
+  :after (dap-mode))
+
 ;;;; Additional LSP client packages which are not part of lsp-mode
 (use-package lsp-dockerfile
   :disabled t
