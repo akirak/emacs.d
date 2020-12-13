@@ -284,6 +284,52 @@ from running."
 (general-def :package 'org :keymaps 'org-mode-map :prefix "C-,"
   "y" #'akirak/org-yank-into-new-block)
 
+(defun akirak/org-multi-wiki-archive-web-page (url)
+  (interactive "sUrl: ")
+  (when-let (matches (org-ql-select (->> '(refs voice)
+                                         (--map (org-multi-wiki-entry-files it :as-buffers t))
+                                         (apply #'append))
+                       `(link ,url)
+                       :action
+                       '(format "%s:%s" (buffer-name) (nth 4 (org-heading-components)))))
+    (user-error "There are %d matches for the URL: %s" (length matches) (car matches)))
+  (let* ((refs-root (org-multi-wiki-directory 'refs))
+         (dir-alist (append (->> (directory-files refs-root)
+                                 (--filter (and (not (string-match-p "^\\." it))
+                                                (f-directory-p (f-join refs-root it))))
+                                 (--map (cons it (f-join refs-root it))))
+                            (list (cons "voice" (org-multi-wiki-directory 'voice)))
+                            (->> (akirak/major-mode-list)
+                                 (--map (string-remove-suffix "-mode" (symbol-name it))))))
+         (dir-name (completing-read "Directory: " dir-alist))
+         (dir (or (alist-get dir-name dir-alist)
+                  (f-join refs-root dir-name)))
+         (entry (org-web-tools--url-as-readable-org url))
+         (buffer (create-file-buffer (f-join dir "new-article.org")))
+         (headings (with-current-buffer buffer
+                     (insert entry)
+                     (org-mode)
+                     (goto-char (point-min))
+                     (let ((case-fold-search nil)
+                           headings)
+                       (while (re-search-forward org-complex-heading-regexp nil t)
+                         (let ((components (org-heading-components)))
+                           (push (concat (make-string (1- (nth 0 components)) ?\s)
+                                         (org-link-display-format (nth 4 components)))
+                                 headings)))
+                       (nreverse headings))))
+         (title (completing-read "Title of the document: "
+                                 headings))
+         (filename (f-join dir (concat (funcall org-multi-wiki-escape-file-name-fn
+                                                (string-trim title))
+                                       ".org"))))
+    (with-current-buffer buffer
+      (setq buffer-file-name filename)
+      (save-buffer)
+      (goto-char (point-min))
+      (rename-buffer title)
+      (pop-to-buffer buffer))))
+
 (use-package org-autolist
   :after org
   ;; :diminish 'org-autolist-mode
