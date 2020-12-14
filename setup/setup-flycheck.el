@@ -32,8 +32,30 @@ Errors (flycheck): %s`flycheck-checker
   (hydra-flycheck/body))
 
 ;;;; UI
+(use-package quick-peek
+  :functions (quick-peek-update
+              quick-peek-hide
+              quick-peek-overlay-contents
+              quick-peek-overlay-ensure-at))
+
+(use-package flycheck-inline
+  :after flycheck
+  :config
+  (setq flycheck-inline-display-function
+        (lambda (msg pos err)
+          (let* ((ov (quick-peek-overlay-ensure-at pos))
+                 (contents (quick-peek-overlay-contents ov)))
+            (setf (quick-peek-overlay-contents ov)
+                  (concat contents (when contents "\n") msg))
+            (quick-peek-update ov)))
+        flycheck-inline-clear-function #'quick-peek-hide)
+  :general
+  (:keymaps 'flycheck-mode-map :prefix "C-c !"
+            "SPC" #'flycheck-inline-mode))
+
 (use-package flycheck-posframe
   :after flycheck
+  :disabled t
   :custom-face
   ;; https://www.reddit.com/r/emacs/comments/couaey/how_to_set_color_of_flycheckposframe/ewlbfbz/
   ;; TODO: Refine face settings
