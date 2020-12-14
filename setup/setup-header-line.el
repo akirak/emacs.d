@@ -222,7 +222,8 @@ This is intended to be set inside `akirak/set-header-line' function.")
     (setq akirak/orig-header-line-format header-line-format)
     (setq header-line-format nil
           mode-line-format akirak/orig-header-line-format))
-  (centaur-tabs-local-mode 0)
+  (when (fboundp 'centaur-tabs-local-mode)
+    (centaur-tabs-local-mode 0))
   (setq akirak/centaur-tabs-buffer-groups '("Org-Capture")))
 
 ;;;; Helper packages
