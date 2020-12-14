@@ -619,6 +619,8 @@ To use it, you first have to customize =magit-repository-directories=.
            (add-hook 'project-find-functions ',func ,append)
            (cl-defmethod project-roots ((project (head ,symbol)))
              (list (cdr project)))
+           (cl-defmethod project-root ((project (head ,symbol)))
+             (cdr project))
            ;; Return the current list of functions
            project-find-functions)))
 
