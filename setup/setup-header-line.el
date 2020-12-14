@@ -10,10 +10,10 @@ This is intended to be set inside `akirak/set-header-line' function.")
 
 (advice-add #'bury-buffer :after #'akirak/unset-buffer-group)
 
-(global-tab-line-mode t)
+;; Don't use tab-line-mode when you use centaur-tabs.
+;; (global-tab-line-mode t)
 
 (use-package centaur-tabs
-  :disabled t
   :config
   ;; Disable centaur-tabs in any buffers that are displayed using
   ;; fit-window-to-buffer.
