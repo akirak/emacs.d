@@ -121,7 +121,7 @@
           )).emacsWithPackages (epkgs: with epkgs; [
             melpaStablePackages.emacsql-sqlite
             vterm
-            mozc
+            # mozc
             pdf-tools
             org-pdftools
             elisp-ffi

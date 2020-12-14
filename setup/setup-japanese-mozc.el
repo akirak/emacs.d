@@ -1,9 +1,9 @@
 ;; Install mozc_emacs_helper as well as mozc.el using Nix
-(straight-use-package '(mozc :type built-in))
+(add-to-list 'load-path (expand-file-name "contrib/mozc" user-emacs-directory))
+
+(straight-use-package `(mozc :type built-in))
 
 (use-package mozc)
-
-;; (find-library "mozc")
 
 (use-package mozc-cand-posframe
   :after mozc
