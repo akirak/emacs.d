@@ -162,4 +162,10 @@
                      path
                      orig path rest)))
 
+(defun akirak/git-bookmark-search (query)
+  (let ((glob (read-string "Glob: ")))
+    (akirak/deadgrep query
+      :root (f-join akirak/git-bookmark-repository "repos/")
+      :type (cons 'glob glob))))
+
 (provide 'setup-git-bookmark)

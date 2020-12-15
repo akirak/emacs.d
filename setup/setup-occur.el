@@ -1,3 +1,5 @@
+;; -*- lexical-binding: t; -*-
+
 (general-def :keymaps 'swiper-map :package 'swiper
   ;; Allow dispatching occur from a swiper session.
   "C-M-o" (defun akirak/swiper-occur ()
@@ -80,5 +82,19 @@
   :general
   (:keymaps 'deadgrep-mode-map
             "R" #'deadgrep-replace))
+
+(cl-defun akirak/deadgrep (term &key root type)
+  "Alternative entry point to the deadgrep functionality."
+  (declare (indent 1))
+  (when type
+    (cl-assert (memq (car type) '(glob type))))
+  (let ((deadgrep-project-root-function
+         (if root
+             `(lambda () ,root)
+           deadgrep-project-root-function)))
+    (let ((current-prefix-arg t))
+      (deadgrep term))
+    (when type (setq deadgrep--file-type type))
+    (call-interactively #'deadgrep-restart)))
 
 (provide 'setup-occur)
