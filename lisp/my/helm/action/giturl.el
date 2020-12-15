@@ -10,6 +10,10 @@
    "Search repository on GitHub"
    #'akirak/github-search-repository
    "Search code on GitHub"
-   #'akirak/github-search-code))
+   #'akirak/github-search-code
+   "Bookmark repository"
+   #'akirak/git-bookmark-repository-url
+   "Search in repository bookmarks"
+   #'akirak/git-bookmark-search))
 
 (provide 'my/helm/action/giturl)
