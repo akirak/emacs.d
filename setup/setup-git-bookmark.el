@@ -61,51 +61,67 @@
                (t
                 (yes-or-no-p (format "No license is found in %s. Are you sure you want to bookmark this repository?"
                                      root))))))
-    (cl-assert (file-directory-p akirak/git-bookmark-repository))
-    (cl-assert commonplace-repos-clone-root)
-    (let* ((origin (magit-git-string "remote" "get-url" "origin"))
-           (obj (akirak/parse-git-url origin))
-           (obj (cond
-                 ((akirak/github-ssh-repo-p obj)
-                  (make-akirak/github-https-repo
-                   :owner (akirak/remote-git-repo-owner obj)
-                   :name (akirak/remote-git-repo-name obj)))
-                 (t obj)))
-           ;; (f-join (f-relative commonplace-repos-clone-root
-           ;;                     akirak/git-bookmark-repository)
-           ;;         path-with-host)
-           (submodule-rel-path (funcall akirak/git-bookmark-submodule-path-function obj))
-           (submodule-abs-path (f-join akirak/git-bookmark-repository submodule-rel-path))
-           (url (akirak/remote-git-repo-url obj))
-           (default-directory akirak/git-bookmark-repository)
-           (visited-directory (f-join akirak/git-bookmark-repository
-                                      (concat
-                                       "repos/"
-                                       (string-remove-prefix
-                                        "repos-src/"
-                                        submodule-rel-path)))))
-      (when (file-directory-p submodule-abs-path)
-        (user-error "%s already exists" submodule-abs-path))
-      (message "Cloning %s as a submodule" url)
-      ;; I won't use `magit-submodule-add-1' because I want to
-      ;; alternate the process sentinel.
-      (magit-with-toplevel
-        (make-process :name "git-submodule-add"
-                      :command (list "git"
-                                     "submodule" "add"
-                                     "--depth" "1"
-                                     "--"
-                                     url
-                                     submodule-rel-path)
-                      :sentinel
-                      `(lambda (process event)
-                         (when (eq (process-status process) 'exit)
-                           (if (= (process-exit-status process) 0)
-                               (progn
-                                 (funcall akirak/git-bookmark-update-function)
-                                 (dired ,visited-directory))
-                             (error "Error while cloning a submodule: %s"
-                                    event)))))))))
+    (akirak/git-bookmark-repository-url (magit-git-string "remote" "get-url" "origin")
+                                        :license t)))
+
+(cl-defun akirak/git-bookmark-repository-url (url &key branch license)
+  ;; Check the license before bookmarking it
+  (cl-assert (file-directory-p akirak/git-bookmark-repository))
+  (cl-assert commonplace-repos-clone-root)
+  (let* ((obj (akirak/parse-git-url url))
+         (obj (cond
+               ((akirak/github-ssh-repo-p obj)
+                (make-akirak/github-https-repo
+                 :owner (akirak/remote-git-repo-owner obj)
+                 :name (akirak/remote-git-repo-name obj)))
+               (t obj)))
+         (submodule-rel-path (funcall akirak/git-bookmark-submodule-path-function obj))
+         (submodule-abs-path (f-join akirak/git-bookmark-repository submodule-rel-path))
+         (url (akirak/remote-git-repo-url obj))
+         (default-directory akirak/git-bookmark-repository)
+         (visited-directory (f-join akirak/git-bookmark-repository
+                                    (concat
+                                     "repos/"
+                                     (string-remove-prefix
+                                      "repos-src/"
+                                      submodule-rel-path)))))
+    (unless license
+      (cond
+       ((akirak/remote-git-repo-github-p obj)
+        (--if-let (-some->> (ghub-get (format "/repos/%s/%s"
+                                              (akirak/remote-git-repo-owner obj)
+                                              (akirak/remote-git-repo-name obj)))
+                    (alist-get 'license)
+                    (alist-get 'name))
+            (unless (and it
+                         (yes-or-no-p "Bookmark a repository with %s?" it))
+              (error "License is invalid"))))
+       (t
+        (user-error "Cannot find license"))))
+    (when (file-directory-p submodule-abs-path)
+      (user-error "%s already exists" submodule-abs-path))
+    (message "Cloning %s as a submodule" url)
+    ;; I won't use `magit-submodule-add-1' because I want to
+    ;; alternate the process sentinel.
+    (magit-with-toplevel
+      (make-process :name "git-submodule-add"
+                    :command `("git"
+                               "submodule" "add"
+                               ,@(when branch
+                                   (list "-b" branch))
+                               "--depth" "1"
+                               "--"
+                               ,url
+                               ,submodule-rel-path)
+                    :sentinel
+                    `(lambda (process event)
+                       (when (eq (process-status process) 'exit)
+                         (if (= (process-exit-status process) 0)
+                             (progn
+                               (funcall akirak/git-bookmark-update-function)
+                               (dired ,visited-directory))
+                           (error "Error while cloning a submodule: %s"
+                                  event))))))))
 
 (defun akirak/git-bookmark-ensure-file-funcall (file func &rest args)
   "Ensure the submodule containing FILE if any and then call FUNC with ARGS."

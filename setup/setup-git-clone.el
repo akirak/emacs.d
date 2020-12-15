@@ -62,6 +62,13 @@
 (cl-defgeneric akirak/remote-git-repo-file (_)
   nil)
 
+(cl-defgeneric akirak/remote-git-repo-github-p (repo)
+  nil)
+(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-https-repo))
+  t)
+(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-ssh-repo))
+  t)
+
 ;;;; GitHub repositories (https)
 
 (cl-defstruct akirak/github-https-repo owner name branch file)
