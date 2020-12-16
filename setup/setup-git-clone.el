@@ -64,10 +64,6 @@
 
 (cl-defgeneric akirak/remote-git-repo-github-p (repo)
   nil)
-(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-https-repo))
-  t)
-(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-ssh-repo))
-  t)
 
 ;;;; GitHub repositories (https)
 
@@ -90,6 +86,8 @@
   (akirak/github-https-repo-branch repo))
 (cl-defmethod akirak/remote-git-repo-file ((repo akirak/github-https-repo))
   (akirak/github-https-repo-file repo))
+(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-https-repo))
+  t)
 
 ;;;; GitHub repositories (ssh)
 
@@ -107,6 +105,8 @@
 (cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/github-ssh-repo))
   (akirak/git-clone-parent-for-host "github.com"))
 (cl-defmethod akirak/remote-git-repo-url-github-p ((repo akirak/github-ssh-repo))
+  t)
+(cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-ssh-repo))
   t)
 
 ;;;; Generic Git repositories
