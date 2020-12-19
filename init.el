@@ -229,7 +229,23 @@
                     '(org-multi-wiki-follow-link
                       helm-org-ql-show-marker
                       helm-org-ql-show-marker-indirect))
-  (org-recent-headings-mode 1))
+  (org-recent-headings-mode 1)
+
+  (defun akirak/org-recent-headings-cleanup ()
+    (let ((m (length org-recent-headings-list))
+          (start-time (float-time))
+          (n (progn
+               (dolist (x org-recent-headings-list)
+                 (condition-case _
+                     (org-recent-headings--entry-marker x)
+                   (error (cl-delete x org-recent-headings-list
+                                     :test #'org-recent-headings--equal))))
+               (length org-recent-headings-list))))
+      (unless (= m n)
+        (message "Deleted %d non-existent items from org-recent-headings-list in %.1f s"
+                 (- m n)
+                 (- (float-time) start-time)))))
+  (run-with-idle-timer 50 nil #'akirak/org-recent-headings-cleanup))
 (use-package helm-org-recent-headings
   :after (helm org-recent-headings)
   :config
