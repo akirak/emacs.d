@@ -197,9 +197,9 @@ third argument, i.e. right after the description, in the entry."
     (declare (indent 2))
     (macroexpand
      `(akirak/add-ql-view ,name
-                          (lambda () (org-multi-wiki-entry-files ',namespace))
-                          ,query
-                          :sort ,sort :super-groups ,super-groups)))
+        (lambda () (org-multi-wiki-entry-files ',namespace))
+        ,query
+        :sort ,sort :super-groups ,super-groups)))
 
   :config
   (org-starter-mode t)
