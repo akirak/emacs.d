@@ -56,8 +56,8 @@
                    ("*Google Translate*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
                    ("*Help*" :other t)
-                   ("*Flycheck errors*" :align below :ratio 0.15)
-                   ("\\*Org Agenda" :regexp t :other t))))
+                   ;; ("\\*Org Agenda" :regexp t :other t)
+                   ("*Flycheck errors*" :align below :ratio 0.15))))
 
 (with-eval-after-load 'org
   (advice-add 'org-switch-to-buffer-other-window
