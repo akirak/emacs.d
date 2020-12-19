@@ -138,6 +138,36 @@ This can be used for an org-capture template to create an entry in the journal."
 :END:
 " :clock-in t :clock-resume t :unnarrowed t)
 
+  (cl-defun akirak/org-capture-template-to-clock (&key extra-tags)
+    (assert (org-clocking-p))
+    (let ((marker (or org-clock-hd-marker org-clock-marker)))
+      (with-current-buffer (marker-buffer marker)
+        (goto-char marker)
+        (let ((tags (let ((tags (append (org-get-tags-at)
+                                        extra-tags)))
+                      (if tags
+                          (concat ":" (string-join tags ":") ":")
+                        ""))))
+          (substring-no-properties (format "** %%K %s
+:PROPERTIES:
+:CREATED_TIME: %%U
+:CATEGORY: %s
+:END:
+
+%%?
+"
+                                           tags
+                                           (org-get-category)))))))
+
+  (org-starter-def-capture "l" "Logging")
+  (org-starter-def-capture "ld" "done"
+    entry (function org-journal-find-location)
+    (function (lambda () (akirak/org-capture-template-to-clock
+                          :extra-tags '("@done")))))
+  (add-to-list 'org-capture-templates-contexts
+               '("ld" (org-clocking-p))
+               t (-on #'equal #'car))
+
   :custom
   (org-journal-date-format "%F (%a)")
   (org-journal-file-format "%Y%m%d.org"))
