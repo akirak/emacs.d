@@ -152,8 +152,10 @@
          :super-groups '((:auto-category)))))))
 
 (use-package org-starter
-  :straight (org-starter :host github :repo "akirak/org-starter"
-                         :branch "devel")
+  :straight (:host github :repo "akirak/org-starter"
+                   :branch "devel"
+                   :files (:defaults (:exclude "org-starter-swiper.el"
+                                               "org-starter-extras.el")))
   :preface
   (defcustom org-starter-capture-meta-templates nil
     "An alist of org-capture meta-templates.
@@ -195,9 +197,9 @@ third argument, i.e. right after the description, in the entry."
     (declare (indent 2))
     (macroexpand
      `(akirak/add-ql-view ,name
-        (lambda () (org-multi-wiki-entry-files ',namespace))
-        ,query
-        :sort ,sort :super-groups ,super-groups)))
+                          (lambda () (org-multi-wiki-entry-files ',namespace))
+                          ,query
+                          :sort ,sort :super-groups ,super-groups)))
 
   :config
   (org-starter-mode t)
@@ -248,8 +250,10 @@ third argument, i.e. right after the description, in the entry."
   (org-starter-enable-local-variables :all))
 
 (use-package org-starter-swiper
-  :commands (org-starter-swiper-config-files)
-  :straight org-starter)
+  :straight (:host github :repo "akirak/org-starter"
+                   :branch "devel"
+                   :files ("org-starter-swiper.el"))
+  :commands (org-starter-swiper-config-files))
 
 (use-package xmind-org
   :straight (:host github :repo "akirak/xmind-org-el")
