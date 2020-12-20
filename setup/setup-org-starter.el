@@ -1,5 +1,49 @@
 (use-package org-reverse-datetree)
 
+(use-package org-workflow
+  :straight (:host github :repo "akirak/org-workflow"))
+
+(use-package helm-org
+  :after helm
+  :config
+  (setq helm-org-headings-actions
+        (org-workflow--build-helm-actions org-workflow-heading-unary-action-list))
+
+  (cl-defun akirak/helm-org-context-candidates (marker &key preceding descendants)
+    (with-current-buffer (marker-buffer marker)
+      (org-with-wide-buffer
+       (goto-char marker)
+       (let (result)
+         (cl-labels ((add () (push (cons (buffer-substring-no-properties
+                                          (point)
+                                          (line-end-position))
+                                         (point-marker))
+                                   result)))
+           (add)
+           (when descendants
+             (save-excursion
+               (let ((end (save-excursion
+                            (org-end-of-subtree))))
+                 (while (re-search-forward org-heading-regexp nil end)
+                   (add)))))
+           (while (looking-at (rx bol "*" (+ "*") space))
+             (if preceding
+                 (re-search-backward org-heading-regexp)
+               (org-up-heading-safe))
+             (add)))
+         (reverse result)))))
+
+  (defconst akirak/helm-org-clock-context-source
+    (helm-build-sync-source "Current clock context"
+      :candidates (lambda ()
+                    (when (and (org-clocking-p)
+                               org-clock-hd-marker)
+                      (akirak/helm-org-context-candidates
+                       org-clock-hd-marker
+                       :preceding t
+                       :descendants t)))
+      :action 'helm-org-headings-actions)))
+
 (use-package org-super-agenda
   :after org-agenda
   :config
