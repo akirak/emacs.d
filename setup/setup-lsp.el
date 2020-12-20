@@ -30,7 +30,13 @@
   (lsp-eldoc-render-all nil)
   ;; Since I have my own header line, I need only the symbol path.
   (lsp-headerline-breadcrumb-segments '(symbols))
-  (lsp-headerline-breadcrumb-enable t))
+  (lsp-headerline-breadcrumb-enable t)
+  ;; Based on the performance guide
+  ;; https://emacs-lsp.github.io/lsp-mode/page/performance/
+  (lsp-completion-provider :capf)
+  (lsp-idle-delay 0.5)
+  (lsp-enable-file-watchers nil)
+  (lsp-log-io nil))
 
 (use-package lsp-ui
   :disabled t
