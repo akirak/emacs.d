@@ -74,7 +74,6 @@
 
 (defconst akirak/helm-gitmodule-actions-1
   (akirak/helm-make-directory-actions :project t
-                                      :git t
                                       :gitmodule t))
 
 (provide 'my/helm/action/dir)
