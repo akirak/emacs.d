@@ -8,7 +8,7 @@
   ((candidates
     :initform (lambda ()
                 (let* ((query `(and (src :lang ,akirak/programming-recipe-mode-name)
-                                    ,(org-ql--plain-query helm-pattern)))
+                                    ,(org-ql--query-string-to-sexp helm-pattern)))
                        (window-width (window-width (helm-window))))
                   (ignore-errors
                     ;; Ignore errors that might be caused by partially typed queries.
