@@ -1283,16 +1283,6 @@ Ideally, this section should be a portfolio of my skills.
   (akirak/require 'setup-elixir)
 #+end_src
 
-*** Elm
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-elm)
-#+end_src
-
-*** Golang
-#+begin_src emacs-lisp
-  (akirak/require 'setup-go)
-#+end_src
 *** Haskell
 
 #+begin_src emacs-lisp
@@ -1306,12 +1296,6 @@ Use lsp-mode.
   (akirak/require 'setup-javascript)
   (akirak/require 'setup-json)
 #+end_src
-*** Kotlin
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-kotlin)
-#+end_src
-
 *** Lisp (Emacs Lisp and Common Lisp)
 #+begin_src emacs-lisp
   (akirak/require 'setup-emacs-lisp)
@@ -1335,14 +1319,6 @@ Use lsp-mode.
      (("s" suggest)
       ("i" counsel-info-lookup-symbol "info symbol"))))
 #+end_src
-**** Makel
-I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
-*** Nim
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-nim)
-#+end_src
-
 *** PureScript
 #+begin_src emacs-lisp
   (akirak/require 'setup-purescript)
@@ -1363,13 +1339,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 *** Shell scripts (bash)
 #+begin_src emacs-lisp
   (akirak/require 'setup-shell-scripts)
-#+end_src
-*** VBScript
-:PROPERTIES:
-:CREATED_TIME: [2019-05-16 Thu 01:10]
-:END:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-visual-basic)
 #+end_src
 *** Vue
 :PROPERTIES:
