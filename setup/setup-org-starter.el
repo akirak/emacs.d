@@ -280,11 +280,12 @@ third argument, i.e. right after the description, in the entry."
   :custom
   (org-starter-capture-template-map-function
    (defun akirak/org-starter-meta-capture-templates (spec)
-     (when-let (rest (and (= 3 (length spec))
-                          (alist-get (nth 2 spec)
-                                     org-starter-capture-meta-templates)))
-       (setf (cddr spec) rest))
-     spec))
+     (if-let (rest (and (= 3 (length spec))
+                        (alist-get (nth 2 spec)
+                                   org-starter-capture-meta-templates)))
+         (append (-take 2 spec)
+                 (copy-sequence rest))
+       spec)))
   (org-starter-load-config-files t)
   (org-starter-require-file-by-default nil)
   (org-starter-exclude-from-recentf '(known-files path))
