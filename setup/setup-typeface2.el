@@ -197,6 +197,8 @@
       ;; A fixed/variable pitch font for text body.
       (paragraph
        "Hack NF")
+      (symbol
+       "Noto Color Emoji")
       (kana "HannariMincho")
       (han "Adobe Fangsong Std"))
   (setq akirak/font-family-list (font-family-list))
@@ -261,7 +263,8 @@
             (akirak/set-local-text-fonts)))
 
         (akirak/set-fontset-font 'kana kana)
-        (akirak/set-fontset-font 'han han))
+        (akirak/set-fontset-font 'han han)
+        (akirak/set-fontset-font 'symbol symbol))
     (setq akirak/font-family-list nil)))
 
 ;;;; Packages for extra face settings

@@ -277,6 +277,7 @@
 ;;;; Modules
 (require 'setup-git-bookmark)
 (require 'setup-info)
+(require 'setup-unicode)
 
 ;;; Commands and keybindings
 ;;;; Basic keybindings
