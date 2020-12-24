@@ -36,7 +36,13 @@
   (lsp-completion-provider :capf)
   (lsp-idle-delay 0.5)
   (lsp-enable-file-watchers nil)
-  (lsp-log-io nil))
+  (lsp-log-io nil)
+  (lsp-enable-folding nil)
+  ;; (lsp-diagnostic-package :none)
+  (lsp-enable-snippet nil)
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-enable-links nil)
+  (lsp-restart 'auto-restart))
 
 (use-package lsp-ui
   :disabled t
