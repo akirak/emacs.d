@@ -46,20 +46,10 @@
           (?Q tab-bar-close-tab)
           (?R tab-bar-rename-tab)
           (?T tab-bar-new-tab)
-          ;; Select a tab by number.
-          (?9 (lambda ()
-                "Go to the last tab."
-                (interactive)
-                (when-let (tabs (tab-bar-tabs))
-                  (tab-bar-select-tab (length tabs)))))
-          ,@(mapcar (lambda (i)
-                      (list (string-to-char (int-to-string i))
-                            (-partial #'tab-bar-select-tab i)))
-                    (number-sequence 1 8))
           ;; Deprecated in favour of tab-bar-mode.
           ;; (?T tear-off-window)
-          ;; (?d delete-frame)
-          ;; (?f make-frame-command)
+          (?D delete-frame)
+          (?F make-frame-command)
           (?? aw-show-dispatch-help)))
   :custom
   (aw-keys (string-to-list "qwertyui"))
