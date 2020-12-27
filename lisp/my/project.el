@@ -15,7 +15,8 @@
   (pcase (gethash dir akirak/project-roots-cache 'no-cached)
     ('no-cached (let* ((project (project-current nil dir))
                        (root (and project (car (project-roots project)))))
-                  (puthash dir root akirak/project-roots-cache)
+                  (when root
+                    (puthash dir root akirak/project-roots-cache))
                   root))
     (root root)))
 
