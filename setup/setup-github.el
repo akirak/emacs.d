@@ -82,6 +82,38 @@
                 "/"
                 (f-filename (car-safe (project-roots (project-current))))))))
 
+(defun akirak/kill-new-as-org ()
+  (interactive)
+  (when (derived-mode-p 'org-mode)
+    (user-error "Already in org-mode"))
+  (let ((input-format (cond
+                       ((derived-mode-p 'gfm-mode)
+                        "gfm")
+                       ((derived-mode-p 'markdown-mode)
+                        "markdown")
+                       (t
+                        (let* ((name (symbol-name major-mode))
+                               (available-formats (process-lines "pandoc"
+                                                                 "--list-input-formats")))
+                          (if (member name available-formats)
+                              name
+                            (error "Format %s name is not supported by pandoc"))))))
+        (out-buffer (generate-new-buffer "*pandoc output*")))
+    (unwind-protect
+        (progn
+          (call-process-region (when (region-active-p)
+                                 (region-beginning))
+                               (region-end)
+                               "pandoc"
+                               nil
+                               out-buffer
+                               nil
+                               "-f" input-format
+                               "-t" "org")
+          (with-current-buffer out-buffer
+            (kill-new (buffer-string))))
+      (kill-buffer out-buffer))))
+
 ;;;; Browsing repositories
 
 (cl-defun akirak/browse-github-repos (prompt items
