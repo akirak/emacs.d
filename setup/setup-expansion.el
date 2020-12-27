@@ -67,6 +67,25 @@
       (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
   (advice-add #'yankpad-local-category-to-projectile
               :override (lambda ()))
+
+  (setq yankpad-auto-category-functions
+        (list #'yankpad-major-mode-category
+              (defun akirak/yankpad-org-category ()
+                (and (eq major-mode 'org-mode)
+                     (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
+                       (cond
+                        ((member (expand-file-name filename) org-starter-known-files)
+                         (file-name-base filename))
+                        ((when-let (plist (org-multi-wiki-entry-file-p))
+                           (symbol-name (plist-get plist :namespace))))))))
+              (defun akirak/yankpad-project-category ()
+                (and (featurep 'project)
+                     (when-let* ((name (-some-> (project-current)
+                                         (project-root)
+                                         (f-filename))))
+                       (if-let (pos (string-match "@" name))
+                           (substring name 0 pos)
+                         name))))))
   :custom
   (yankpad-category-heading-level 2))
 
