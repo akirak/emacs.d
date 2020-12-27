@@ -911,6 +911,7 @@ outcommented org-mode headers)."
        (call-interactively (quote ,command)))))
 
 (akirak/bind-f8
+  "A" #'treemacs-add-project-to-workspace
   "c" (akirak/run-at-project-root compile)
   "d" (defun akirak/project-dired ()
         (interactive)
