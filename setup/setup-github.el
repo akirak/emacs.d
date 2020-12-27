@@ -25,36 +25,40 @@
 (use-package github-review
   :commands (github-review-forge-pr-at-point))
 
+(defun akirak/github-readme-buffer (repo &optional ref new)
+  (thunk-let* ((endpoint (concat (format "/repos/%s/readme" repo)
+                                 (if ref
+                                     (concat "?ref=" ref)
+                                   "")))
+               (response (ghub-get endpoint nil :auth 'ghub))
+               (name (alist-get 'name response))
+               (encoding (alist-get 'encoding response))
+               (encoded-content (alist-get 'content response))
+               (url (alist-get 'download_url response))
+               (mode (cdr (cl-find-if
+                           (lambda (pattern)
+                             (string-match-p pattern name))
+                           auto-mode-alist :key #'car)))
+               (content (cond
+                         ((equal encoding "base64")
+                          (base64-decode-string encoded-content))
+                         (t
+                          (error "Failed to decode the content")))))
+    (or (unless new
+          (get-buffer url))
+        (with-current-buffer (generate-new-buffer url)
+          (insert content)
+          (when mode
+            (funcall mode)
+            (run-hooks 'after-change-major-mode-hook))
+          (goto-char (point-min))
+          (when (eq mode 'org-mode)
+            (org-global-cycle 2))
+          (current-buffer)))))
+
 (defun akirak/browse-github-readme (repo &optional ref)
   (interactive (list (akirak/select-github-repo "README of GitHub repo: ")))
-  (let* ((endpoint (concat (format "/repos/%s/readme" repo)
-                           (if ref
-                               (concat "?ref=" ref)
-                             "")))
-         (response (ghub-get endpoint nil :auth 'ghub))
-         (name (alist-get 'name response))
-         (encoding (alist-get 'encoding response))
-         (encoded-content (alist-get 'content response))
-         (url (alist-get 'download_url response))
-         (mode (cdr (cl-find-if
-                     (lambda (pattern)
-                       (string-match-p pattern name))
-                     auto-mode-alist :key #'car)))
-         (content (cond
-                   ((equal encoding "base64")
-                    (base64-decode-string encoded-content))
-                   (t
-                    (error "Failed to decode the content"))))
-         (buffer (or (get-buffer url)
-                     (with-current-buffer (generate-new-buffer url)
-                       (insert content)
-                       (when mode
-                         (funcall mode)
-                         (run-hooks 'after-change-major-mode-hook))
-                       (goto-char (point-min))
-                       (when (eq mode 'org-mode)
-                         (org-global-cycle 2))
-                       (current-buffer))))
+  (let* ((buffer (akirak/github-readme-buffer repo ref))
          (window (or (get-buffer-window buffer t)
                      (display-buffer-pop-up-frame
                       buffer nil))))
