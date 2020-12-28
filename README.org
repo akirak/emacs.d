@@ -337,6 +337,7 @@ load them first.
 #+begin_src emacs-lisp
 (require 'setup-git-bookmark)
 (require 'setup-info)
+(require 'setup-unicode)
 #+end_src
 
 **  Commands and keybindings
@@ -1041,6 +1042,7 @@ These commands are used to maintain this Emacs configuration.
        (call-interactively (quote ,command)))))
 
 (akirak/bind-f8
+  "A" #'treemacs-add-project-to-workspace
   "c" (akirak/run-at-project-root compile)
   "d" (defun akirak/project-dired ()
         (interactive)
