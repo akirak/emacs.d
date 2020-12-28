@@ -254,30 +254,58 @@ from running."
 (add-to-list 'org-open-at-point-functions 'akirak/org-open-at-point-with-xdg)
 
 ;;;; Misc
-(defun akirak/org-yank-into-new-block ()
-  (interactive)
+(defun akirak/org-yank-into-new-block (&optional arg)
+  "Create a new block with the yanked text as its content.
+
+With ARG, pick a text from the kill ring instead of the last one."
+  (interactive "P")
   (unless (derived-mode-p 'org-mode)
     (user-error "Not in org-mode"))
   ;; TODO: Check if already inside a block
   (unless (looking-back (rx bol))
     (beginning-of-line 1))
   (let ((begin (point))
+        (text (when arg
+                (completing-read "Text: " kill-ring)))
         done)
     (unwind-protect
         (progn
-          (yank)
+          (if arg
+              (insert text)
+            (yank))
+          ;; Select the pasted text.
           (push-mark begin)
           (setq mark-active t)
           (call-interactively #'org-insert-structure-template)
           (setq done t)
+          ;; Unselect the pasted text
           (deactivate-mark)
-          (let ((case-fold-search nil))
-            (re-search-forward (rx bol "#+end_")))
+          (let ((case-fold-search t))
+            (save-excursion
+              (goto-char begin)
+              (when (looking-at (rx (* space) "#+begin_src" space))
+                (let ((lang (completing-read "Language: "
+                                             (->> (akirak/major-mode-list)
+                                                  (-map (lambda (mode)
+                                                          (string-remove-suffix "-mode"
+                                                                                (symbol-name mode))))))))
+                  (end-of-line 1)
+                  (insert lang))))
+            (re-search-forward (rx bol (* space) "#+end_")))
+          ;; If there is whitespace at the beginning of the pasted text,
+          ;; the block will have preceding space as well.
+          ;;
+          ;; Thus you have to re-indent the entire block to ensure
+          ;; that it has no preceding space at the bol.
+          (indent-region begin (point))
           (forward-line 1)
+          ;; Insert an empty line.
           (unless (looking-at (rx eol))
             (insert "\n\n")
             (beginning-of-line 0)))
       (unless done
+        ;; If the user has cancelled `org-insert-structure-template',
+        ;; restore the previous state.
         (deactivate-mark)
         (delete-region begin (point))))))
 
