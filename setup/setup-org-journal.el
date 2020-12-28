@@ -130,9 +130,9 @@ This can be used for an org-capture template to create an entry in the journal."
 :CREATED_TIME: %U
 :END:
 " :clock-in t :clock-resume t :unnarrowed t)
-  (org-starter-def-capture "jt" "Journal - Todo entry"
+  (org-starter-def-capture "jn" "Journal - Next entry"
     entry (function org-journal-find-location)
-    "** TODO %?
+    "** NEXT %?
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
