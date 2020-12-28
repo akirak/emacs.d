@@ -70,6 +70,10 @@
 
   (setq yankpad-auto-category-functions
         (list #'yankpad-major-mode-category
+              (defun akirak/yankpad-file-category ()
+                (when-let (filename (buffer-file-name (or (buffer-base-buffer)
+                                                          (current-buffer))))
+                  (file-name-nondirectory filename)))
               (defun akirak/yankpad-org-category ()
                 (and (eq major-mode 'org-mode)
                      (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
