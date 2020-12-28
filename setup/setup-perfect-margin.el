@@ -28,6 +28,9 @@
 
   (perfect-margin-mode (or (akirak/perfect-margin-threshold-p) -1))
 
+  :general
+  ("<M-f11>" #'perfect-margin-mode)
+
   :custom
   (perfect-margin-visible-width 92)
   (perfect-margin-ignore-modes '(exwm-mode
