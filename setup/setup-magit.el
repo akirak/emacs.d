@@ -142,7 +142,19 @@ Only one letter is shown, the first that applies."
                 (dolist (worktree worktrees)
                   (delete-directory worktree 'recursive 'trash))
                 (tabulated-list-delete-entry)
-                (message "Deleted %s" (string-join worktrees " ")))))))
+                (message "Deleted %s" (string-join worktrees " "))))))
+
+    "R" (defun akirak/magit-repolist-rename-repository-at-point ()
+          (interactive)
+          (let* ((dir (tabulated-list-get-id))
+                 (worktrees (let ((default-directory dir))
+                              (mapcar #'car (magit-list-worktrees)))))
+            (if (> (length worktrees) 1)
+                (user-error "You can't rename the repository if it has other working trees.")
+              (let ((new-name (read-directory-name "New name: ")))
+                (when (file-exists-p new-name)
+                  (user-error "File/directory %s already exists" new-name))
+                (rename-file dir new-name))))))
 
   (akirak/bind-f8
     ;; <f8> <f8>
