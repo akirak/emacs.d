@@ -717,24 +717,28 @@ Emacs also provides eww:
   (akirak/bind-search "i" 'counsel-imenu)
 
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    "i"
-    (defun akirak/helm-org-current-context ()
-      (interactive)
-      (let* ((file (buffer-file-name))
-             (heading (unless (org-before-first-heading-p)
-                        (save-excursion
-                          (org-back-to-heading)
-                          (point-marker))))
-             (context-source (helm-build-sync-source "Current clock context"
-                               :candidates (lambda ()
-                                             (when heading
-                                               (akirak/helm-org-context-candidates
-                                                heading
-                                                :descendants t)))
-                               :action 'helm-org-headings-actions)))
-        (helm :prompt (format "%s: " file)
-              :sources (list context-source
-                             (helm-org-build-sources (list file)))))))
+    ;; Former definition of M-s i.
+    ;; "i"
+    ;; (defun akirak/helm-org-current-context ()
+    ;;   (interactive)
+    ;;   (let* ((file (buffer-file-name))
+    ;;          (heading (unless (org-before-first-heading-p)
+    ;;                     (save-excursion
+    ;;                       (org-back-to-heading)
+    ;;                       (point-marker))))
+    ;;          (context-source (helm-build-sync-source "Current clock context"
+    ;;                            :candidates (lambda ()
+    ;;                                          (when heading
+    ;;                                            (akirak/helm-org-context-candidates
+    ;;                                             heading
+    ;;                                             :descendants t)))
+    ;;                            :action 'helm-org-headings-actions)))
+    ;;     (helm :prompt (format "%s: " file)
+    ;;           :sources (list context-source
+    ;;                          (helm-org-build-sources (list file))))))
+
+    ;; Simply browse headings in the buffer.
+    "i" #'helm-org-in-buffer-headings)
 #+end_src
 
 =imenu-list= is a useful package which displays an overview of the current buffer.
