@@ -1,6 +1,6 @@
 (use-package markdown-mode
   :commands (markdown-mode gfm-mode)
-  :mode (("README\\.md\\'" . gfm-mode))
+  :mode (("README\\.md\\(own\\)\\'" . gfm-mode))
   :general
   (:keymaps 'markdown-mode-map
             "C-c '" #'markdown-edit-code-block)
