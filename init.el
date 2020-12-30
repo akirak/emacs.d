@@ -124,6 +124,14 @@
   ;; Originally written by Foltik, but I use my fork
   :straight (use-package-company :host github :repo "akirak/use-package-company"))
 
+(use-package info
+  :straight (:type built-in)
+  :config
+  (add-to-list 'Info-directory-list
+               (expand-file-name "share/info"
+                                 (file-name-directory
+                                  (string-remove-suffix "/" invocation-directory)))))
+
 ;;;; Keybindings
 
 (use-package which-key
