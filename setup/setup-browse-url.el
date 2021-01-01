@@ -25,12 +25,14 @@
   (unless (and (akirak/browse-url-bookmarks)
                (rassoc url akirak/browse-url-bookmarks))
     (let* ((html (org-web-tools--get-url url))
-           (title (read-string "Title of the bookmark: "
-                               (org-web-tools--html-title html))))
-      (add-to-list 'akirak/browse-url-bookmarks (cons title url))
-      (with-temp-buffer
-        (princ akirak/browse-url-bookmarks (current-buffer))
-        (write-file akirak/browse-url-bookmarks-file)))))
+           (title (string-trim
+                   (read-string "Title of the bookmark (empty to skip): "
+                                (org-web-tools--html-title html)))))
+      (unless (string-empty-p title)
+        (add-to-list 'akirak/browse-url-bookmarks (cons title url))
+        (with-temp-buffer
+          (princ akirak/browse-url-bookmarks (current-buffer))
+          (write-file akirak/browse-url-bookmarks-file))))))
 
 ;;;; URL history
 
