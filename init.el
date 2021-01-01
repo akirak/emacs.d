@@ -940,7 +940,7 @@ outcommented org-mode headers)."
 
 ;;;;; Emacs
 (akirak/bind-admin
-  "et" #'ert)
+  )
 
 ;;;;; Git
 (akirak/bind-admin
@@ -964,9 +964,7 @@ outcommented org-mode headers)."
 
 ;;;;; Nix
 (akirak/bind-admin
-  "n" '(nil :wk "nix")
-  "ni" #'nix-boilerplate-init
-  "nn" #'nix-env-install-npm)
+  "n" '(nil :wk "nix"))
 
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
