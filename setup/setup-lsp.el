@@ -10,18 +10,21 @@
   ;; Update direnv to detect locally installed lsp servers
   (advice-add 'lsp :before
               (lambda (&rest _args) (direnv-update-environment)))
+  (defun akirak/javascript-lsp-deferred ()
+    (unless (derived-mode-p 'json-mode)
+      (lsp-deferred)))
   :hook
   (lsp-mode . akirak/setup-lsp)
   ((web-mode
     vue-html-mode
     css-mode
-    js-mode
     typescript-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
     ;; java-mode
     go-mode)
    . lsp-deferred)
+  (javascript-mode . akirak/javascript-lsp-deferred)
   :custom
   (lsp-keymap-prefix "C-,")
   (lsp-enable-xref t)
