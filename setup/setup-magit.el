@@ -182,10 +182,13 @@ Only one letter is shown, the first that applies."
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
      ;; ("~/.emacs.d/straight/repos/" . 1)
-     ("~" . 1)
      ("~/.config" . 1)
+     ;; Deprecated
      ("~/projects" . 2)
+     ;; domain/org - group - worktree
+     ("~/work" . 3)
      ("~/lib" . 1)
+     ("~" . 1)
      ("/etc/nixos" . 0)))
   (magit-repolist-columns
    '(("Path" 30 akirak/magit-repolist-column-path nil)
