@@ -831,6 +831,12 @@ outcommented org-mode headers)."
                                (akirak/compile (read-string "Command: " command)))))))))))
       (let (root)
         (cond
+         ((equal arg '(16))
+          (if-let (buffer (get-buffer "*compilation*"))
+              (if-let (window (get-buffer-window buffer))
+                  (select-window window)
+                (pop-to-buffer buffer))
+            (user-error "No compilation buffer")))
          ((and (derived-mode-p 'purescript-mode)
                (setq root (spago-root)))
           (spago-build root))
