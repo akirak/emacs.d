@@ -24,4 +24,24 @@
   (when-let (root (and default-directory (akirak/project-root default-directory)))
     (f-filename root)))
 
+(defun akirak/try-init-project-root ()
+  "Create a project root and return the new root."
+  (-when-let ((base . level)
+              (cl-find (expand-file-name default-directory)
+                       (-map (lambda (entry)
+                               (cons (expand-file-name (car entry))
+                                     (cdr entry)))
+                             magit-repository-directories)
+                       :key #'car
+                       :test (lambda (a b)
+                               (string-prefix-p b a))))
+    (let* ((root (->> (f-relative default-directory base)
+                      (f-split)
+                      (-take level)
+                      (apply #'f-join)
+                      (f-join base)))
+           (root (read-directory-name "Initialize a Git repository in: " root nil t)))
+      (call-process "git" nil nil nil "init" root)
+      root)))
+
 (provide 'my/project)
