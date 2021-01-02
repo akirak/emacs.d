@@ -21,6 +21,8 @@
     (setq akirak/eldoc-lv-window window)
     (unless (eql buffer (get-buffer-window buffer))
       (set-window-buffer window buffer))
+    (with-current-buffer buffer
+      (page-break-lines-mode 1))
     (apply #'lv-message format args)))
 
 (defun akirak/eldoc-delete-window (&rest _args)

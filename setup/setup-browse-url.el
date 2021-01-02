@@ -124,11 +124,13 @@
                 (mapconcat #'url-hexify-string words "+")))))))
 
 (defconst akirak/local-url-pattern
-  (rx bol "http://" (or "penguin.linux.test" "localhost"
-                        (or "127.0.0.1"
-                            (and "192" (repeat 3 (and "." (+ digit))))))
-      (?  ":" (+ digit))
-      (?  "/" (* anything)) eol))
+  (rx bol
+      (or "file:"
+          (and "http://" (or "penguin.linux.test" "localhost"
+                             (or "127.0.0.1"
+                                 (and "192" (repeat 3 (and "." (+ digit))))))
+               (?  ":" (+ digit))
+               (?  "/" (* anything)) eol))))
 
 (defun akirak/local-url-p (url)
   (string-match-p akirak/local-url-pattern url))

@@ -13,6 +13,10 @@
   (defun akirak/javascript-lsp-deferred ()
     (unless (derived-mode-p 'json-mode)
       (lsp-deferred)))
+
+  (general-add-hook 'lsp-file-watch-ignored
+                    `(,(rx (any "/\\") ".direnv" eol))
+                    'append)
   :hook
   (lsp-mode . akirak/setup-lsp)
   ((web-mode
@@ -39,8 +43,12 @@
   (lsp-completion-provider :capf)
   (lsp-idle-delay 0.5)
   (lsp-enable-file-watchers nil)
+  (lsp-file-watch-threshold 100)
+  (lsp-prefer-flymake nil)
   (lsp-log-io nil)
   (lsp-enable-folding nil)
+  (lsp-enable-indentation t)
+  (lsp-enable-imenu t)
   ;; (lsp-diagnostic-package :none)
   (lsp-enable-snippet nil)
   (lsp-enable-symbol-highlighting nil)
@@ -78,15 +86,34 @@
 (use-package lsp-treemacs
   :after lsp-mode)
 
+;;;; Dap mode
+
 (use-package dap-mode
   :after lsp-mode
+  :config
+  ;; Based on https://tychoish.com/post/emacs-and-lsp-mode/
+  (add-hook 'dap-session-created
+            (defun akirak/dap-hydra-on-create (&_rest)
+              (dap-hydra)))
+  (add-hook 'dap-terminated
+            (defun akirak/dap-hydra-close (&_rest)
+              (dap-hydra/nil)))
+
+  (defun akirak/install-vscode-extension-if-missing (publisher name)
+    (unless (f-directory-p (f-join dap-utils-extension-path "vscode"
+                                   (concat publisher "." name)))
+      (dap-utils-get-vscode-extension publisher name)))
+  :general
+  ("<S-f9>" #'dap-debug)
+  (:keymaps 'lsp-command-map "d" #'dap-hydra)
   :hook
-  (lsp-mode . dap-mode)
-  (dap-mode . dap-ui-mode))
+  (lsp-mode . dap-mode))
 
 (use-package dap-chrome
   :straight dap-mode
-  :after (dap-mode))
+  :after (dap-mode typescript-mode)
+  :config
+  (akirak/install-vscode-extension-if-missing "msjsdiag" "debugger-for-chrome"))
 
 ;;;; Additional LSP client packages which are not part of lsp-mode
 (use-package lsp-dockerfile
