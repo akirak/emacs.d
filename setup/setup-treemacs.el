@@ -24,7 +24,7 @@
       (treemacs-select-window))))
   (treemacs-follow-mode 1)
   (treemacs-filewatch-mode 1)
-  (treemacs-fringe-indicator-mode 1))
+  (treemacs-fringe-indicator-mode 'always))
 
 (use-package treemacs-icons-dired
   :after (dired)
