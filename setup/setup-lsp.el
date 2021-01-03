@@ -1,12 +1,23 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
-  ;; (require 'lsp-clients)
+  ;; TODO: Add a minor mode for auto formatting
+  (defvar-local akirak/lsp-prevent-format-before-save nil
+    "Prevent auto-formatting on save by lsp-mode.")
+
+  (defun akirak/lsp-before-save ()
+    (when (and (bound-and-true-p lsp-mode)
+               ;; Allow blocking the function
+               (not akirak/lsp-prevent-format-before-save))
+      (lsp-organize-imports)
+      (lsp-format-buffer)))
+
   (defun akirak/setup-lsp ()
     (company-mode t)
     (eldoc-mode t)
     (flycheck-mode t)
-    (lsp-enable-which-key-integration))
+    (lsp-enable-which-key-integration)
+    (add-hook 'before-save-hook #'akirak/lsp-before-save nil 'local))
   ;; Update direnv to detect locally installed lsp servers
   (advice-add 'lsp :before
               (lambda (&rest _args) (direnv-update-environment)))
