@@ -5,9 +5,6 @@
   :custom
   (js-indent-level 2 "Fallback set in use-package"))
 
-(akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
-  "" #'js-comint-repl)
-
 ;; Prefer js-mode for LSP support
 (use-package js2-mode
   :disabled t
@@ -128,11 +125,14 @@ If HARDCODED-ARRAY-INDEX provided, array index in JSON path is replaced with it.
   :hook (js2-mode . js2-imenu-extras-mode))
 
 (use-package js-comint
+  :disabled t
+  :after js
   :config
   (akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
     "" #'js-comint-repl))
 
 (use-package add-node-modules-path
+  :disabled t
   :after js
   :hook
   ((js-mode js2-mode typescript-mode) . add-node-modules-path))
