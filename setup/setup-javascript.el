@@ -191,4 +191,8 @@ the contents of the current buffer as the root document."
   :company
   (tide-mode . company-tide))
 
+(use-package js-doc
+  ;; Use yankpad to trigger the functions for inserting comments.
+  :after (or js js2-mode))
+
 (provide 'setup-javascript)

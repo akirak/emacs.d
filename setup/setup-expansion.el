@@ -112,6 +112,9 @@
   "C-x y" #'yankpad-insert
   "C-x i" #'ivy-yasnippet)
 
+(akirak/bind-generic
+  "y" #'yankpad-map)
+
 (akirak/bind-register
   "a" 'aya-create
   "e" 'aya-expand)
