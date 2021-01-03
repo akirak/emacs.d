@@ -655,7 +655,13 @@ connection identities of recent files."
   [remap forward-page] #'Info-next-preorder
   [remap backward-page] #'Info-prev)
 ;;;; Help and documentation
-;;;;; Additional keybindings on <f1>
+;;;;; Use <f1> as the prefix for help commands
+(general-def
+  [help ?.] #'helpful-at-point)
+
+(general-def :package 'lsp-mode :keymaps 'lsp-mode-map
+  [help ?.] #'lsp-describe-thing-at-point)
+
 (akirak/bind-help
   "M" #'discover-my-major
   "xc" #'describe-char
@@ -697,6 +703,11 @@ outcommented org-mode headers)."
   "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
+
+;;;;; Source navigation
+;; Bind M-s M-s
+(akirak/bind-search
+  "M-s" #'xref-find-apropos)
 
 ;;;;; Formatting code
 (akirak/bind-generic
