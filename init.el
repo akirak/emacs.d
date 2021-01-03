@@ -290,6 +290,7 @@
 (require 'setup-git-bookmark)
 (require 'setup-info)
 (require 'setup-unicode)
+(require 'setup-mmm)
 
 ;;; Commands and keybindings
 ;;;; Basic keybindings

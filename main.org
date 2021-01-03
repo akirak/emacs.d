@@ -885,8 +885,10 @@ There is another package named comment-tags for the same purpose, but I won't us
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:27]
 :END:
+Deprecated. Use =web-mode=.
+
 #+begin_src emacs-lisp
-  (akirak/require 'setup-tagedit)
+  ;; (akirak/require 'setup-tagedit)
 #+end_src
 *** Miscellaneous commands
 **** Switching to an Org window

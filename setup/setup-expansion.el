@@ -98,6 +98,9 @@
   :commands (ivy-yasnippet))
 
 (use-package emmet-mode
+  :general
+  (:keymaps 'web-mode-map :package 'web-mode
+            "C-j" #'emmet-expand-line)
   :hook
   ((html-mode css-mode) . emmet-mode))
 

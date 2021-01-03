@@ -173,7 +173,9 @@ the contents of the current buffer as the root document."
     "t" #'jest-file-dwim))
 
 (use-package typescript-mode
-  :mode "\\.tsx?\\'")
+  :mode "\\.tsx?\\'"
+  :custom
+  (typescript-indent-level 2))
 
 (use-package tide
   :disabled t
