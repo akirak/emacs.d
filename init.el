@@ -218,6 +218,10 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
+(use-package dash-docs)
+(use-package helm-dash
+  :custom
+  (dash-docs-browser-func #'akirak/browse-url))
 (use-package discover-my-major
   :commands (discover-my-major))
 (use-package docker
@@ -672,6 +676,13 @@ connection identities of recent files."
   "ESC m" #'woman
   "ESC i" #'helm-info
   "ESC d" #'helm-dash)
+
+;;;;; Dash Docs
+(akirak/bind-user
+  "d" '(nil :wk "doc")
+  "da" #'dash-docs-activate-docset
+  "dh" #'helm-dash
+  "di" #'dash-docs-async-install-docset)
 
 ;;;; Editing
 ;;;;; Undo and redo

@@ -793,25 +793,6 @@ I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
   (general-def :keymaps 'pdf-view-mode-map :package 'pdf-view
     "A" #'org-noter)
 #+end_src
-**** Finding documentation
-***** DevDocs
-#+begin_src emacs-lisp
-  (use-package devdocs-lookup
-    :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
-    :commands (devdocs-lookup))
-#+end_src
-***** Dash
-#+begin_src emacs-lisp
-  (use-package dash-docs)
-
-  (use-package helm-dash
-    :custom
-    (dash-docs-browser-func #'akirak/read-local-html-as-org))
-
-  ;; "a" #'helm-dash-activate-docset
-  ;; "d" #'helm-dash-at-point
-  ;; "+" #'helm-dash-install-docset
-#+end_src
 *** General tools for editing source code
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
