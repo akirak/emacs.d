@@ -47,7 +47,7 @@ is an indirect buffer, this command doesn't do anything."
                (t (org-narrow-to-subtree))))
         ((derived-mode-p 'latex-mode)
          (LaTeX-narrow-to-environment))
-        (t (narrow-to-defun))))
+        (t (narrow-to-defun t))))
 
 (defun akirak/default-name-for-indirect-buffer ()
   (let ((local-name (when (bound-and-true-p which-function-mode)
