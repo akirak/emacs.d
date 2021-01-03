@@ -19,8 +19,8 @@
     (lsp-enable-which-key-integration)
     (add-hook 'before-save-hook #'akirak/lsp-before-save nil 'local))
   ;; Update direnv to detect locally installed lsp servers
-  (advice-add 'lsp :before
-              (lambda (&rest _args) (direnv-update-environment)))
+  ;; (advice-add 'lsp :before
+  ;;             (lambda (&rest _args) (direnv-update-environment)))
   (defun akirak/javascript-lsp-deferred ()
     (unless (derived-mode-p 'json-mode)
       (lsp-deferred)))
