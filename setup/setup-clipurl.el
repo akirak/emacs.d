@@ -26,31 +26,52 @@
   :commands (ivy-clipurl)
   :config
   (ivy-add-actions 'ivy-clipurl
-                   `(("p" pocket-lib-add-urls "Add to Pocket")
-                     ("cl" ,(akirak/def-org-capture-url-to-toplevel "library.org")
-                      "Bookmark to library")
-                     ("cc" ,(akirak/def-org-capture-url-to-reverse-datetree "cpb.org")
-                      "Bookmark to cpb")
-                     ("cb" akirak/org-capture-url-to-bookmark "Bookmark to Org bookmark")
-                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy")
-                     ("ch" akirak/org-capture-url-to-here "Bookmark to here"))))
+                   '(("cj" akirak/org-journal-capture-url-as-heading "Capture to journal as a heading")
+                     ("cp" akirak/org-journal-capture-url-as-body "Capture to journal as body")
+                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy"))))
 
 (cl-defun akirak/org-capture-url-bookmark-template (url &key
-                                                        default-title)
+                                                        default-title
+                                                        as-body)
+  (declare (indent 1))
   (let* ((html (with-timeout (3)
                  (org-web-tools--get-url url)))
          (title (if default-title
                     (org-web-tools--html-title html)
-                  (read-string "Title: "
+                  (read-string (format "Title of %s: " url)
                                (when html
                                  (org-web-tools--html-title html))
-                               nil nil t))))
-    (concat "* " (org-make-link-string url title)
-            "\n:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-%?")))
+                               nil nil t)))
+         (link (org-link-make-string url title))
+         (drawer "\n:PROPERTIES:\n:CREATED_TIME: %U\n:END:\n"))
+    (if as-body
+        (concat "* %^{Title of the entry}" drawer "%?\n\n" link)
+      (concat "* " link " :link:" drawer "%?"))))
 
+(cl-defun akirak/org-capture-url-as-heading (destination url &key immediate default-title)
+  (declare (indent 1))
+  (let* ((template (akirak/org-capture-url-bookmark-template url
+                     :default-title default-title))
+         (org-capture-entry `("u" "Url" entry ,destination
+                              ,template :immediate ,(not (null immediate)))))
+    (org-capture)))
+
+(defun akirak/org-capture-url-as-body (destination url)
+  (declare (indent 1))
+  (let* ((template (akirak/org-capture-url-bookmark-template url :as-body t))
+         (org-capture-entry `("u" "Url" entry
+                              ,destination
+                              ,template)))
+    (org-capture)))
+
+(defun akirak/org-journal-capture-url-as-heading (url)
+  (akirak/org-capture-url-as-heading '(function org-journal-find-location)
+    url :default-title t))
+
+(defalias 'akirak/org-journal-capture-url-as-body
+  (-partial #'akirak/org-capture-url-as-body '(function org-journal-find-location)))
+
+;; Deprecated.
 (defun akirak/org-capture-url-to-bookmark (url &optional marker)
   (declare (indent 1))
   (interactive "sUrl: ")
@@ -87,6 +108,7 @@
             :immediate-finish t)))
     (org-capture)))
 
+;; Deprecated.
 (defun akirak/org-capture-url-to-here (url)
   (interactive)
   (cl-assert (derived-mode-p 'org-mode))
