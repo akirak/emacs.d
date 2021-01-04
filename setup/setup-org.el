@@ -70,7 +70,7 @@
               org-pretty-entities t
               org-hide-emphasis-markers t
               org-fontify-whole-heading-line t
-              org-fontify-done-headline t
+              org-fontify-done-headline nil
               org-fontify-quote-and-verse-blocks t)
 
 ;; https://yiufung.net/post/org-mode-hidden-gems-pt1/
