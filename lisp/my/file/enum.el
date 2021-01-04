@@ -1,31 +1,47 @@
-(defvar akirak/directory-contents-cache nil)
+(defvar akirak/directory-contents-cache
+  (make-hash-table :test #'equal :size 200))
 
-(cl-defun akirak/project-files (root &key (sort 'modified))
+(defvar akirak/project-files-added nil)
+
+(defun akirak/project-files (root)
   (let* ((attrs (file-attributes default-directory))
          (mtime (nth 5 attrs))
-         (cache (assoc (cons root sort) akirak/directory-contents-cache))
+         (cell (gethash root akirak/directory-contents-cache 'missing))
          (default-directory root))
-    (if (or (not (cdr cache))
-            (time-less-p (cadr cache) mtime))
-        (let* ((items (apply #'process-lines
-                             "rg" "--files"
-                             "--color=never"
-                             "--iglob=!.git"
-                             "--iglob=!.svn"
-                             "--hidden"
-                             "--one-file-system"
-                             (cl-ecase sort
-                               (modified '("--sortr" "modified")))))
-               (cell (cons mtime items)))
-          (if cache
-              (setf (cdr cache) cell)
-            (push (cons (cons root sort) cell) akirak/directory-contents-cache))
+    (if (or (eq cell 'missing)
+            (time-less-p (car cell) mtime))
+        (let* ((items (process-lines
+                       "rg" "--files"
+                       "--color=never"
+                       "--iglob=!.git"
+                       "--iglob=!.svn"
+                       "--hidden"
+                       "--one-file-system"
+                       "--sortr" "modified")))
+          (puthash root (cons mtime items)
+                   akirak/directory-contents-cache)
           items)
-      (cddr cache))))
+      (cdr cell))))
 
-(cl-defun akirak/clear-project-file-cache (root &key sort)
-  (when-let ((cache (assoc (cons root sort) akirak/directory-contents-cache)))
-    (message "Clearing cache for %s..." root)
-    (setcdr cache nil)))
+(add-hook 'find-file-hook
+          (defun akirak/set-project-files-added ()
+            (set (make-variable-buffer-local 'akirak/project-files-added) t)))
+
+(add-hook 'after-save-hook
+          (defun akirak/add-project-files-cache ()
+            (unless akirak/project-files-added
+              (let* ((root (expand-file-name (project-root (project-current))))
+                     (cell (gethash root akirak/directory-contents-cache 'missing)))
+                (unless (eq 'missing cell)
+                  (let ((path (file-relative-name (buffer-file-name) root)))
+                    (puthash root (cons (current-time)
+                                        (cons path (cdr cell)))
+                             akirak/directory-contents-cache)
+                    (akirak/set-project-files-added)
+                    (message "Added %s to cache" path)))))))
+
+(cl-defun akirak/clear-project-file-cache (root &key _sort)
+  (message "Clearing cache for %s..." root)
+  (remhash root akirak/directory-contents-cache))
 
 (provide 'my/file/enum)

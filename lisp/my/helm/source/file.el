@@ -25,7 +25,7 @@
                 (if (cl-member file open-files :test #'string-equal)
                     (propertize file 'face 'link-visited)
                   file))
-              (akirak/project-files default-directory :sort 'modified)))))))
+              (akirak/project-files default-directory)))))))
 
 (defconst akirak/helm-source-project-files
   (helm-make-source "Files in project" 'akirak/helm-source-project-file
