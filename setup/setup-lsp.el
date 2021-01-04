@@ -138,6 +138,16 @@
   (akirak/install-vscode-extension-if-missing "msjsdiag" "debugger-for-chrome"))
 
 ;;;; Additional LSP client packages which are not part of lsp-mode
+(use-package lsp-eslint
+  ;; You will need an executable of eslint to use this server, since
+  ;; the server installation functionality of lsp-mode doesn't install
+  ;; eslint itself.
+  ;;
+  ;; If you don't want to install eslint globally, you can add
+  ;; nodePackages.eslint to shell.nix instead.
+  :straight lsp-mode
+  :after (lsp typescript-mode))
+
 (use-package lsp-dockerfile
   :disabled t
   :after dockerfile-mode
