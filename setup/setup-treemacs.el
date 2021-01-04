@@ -22,6 +22,11 @@
      (t
       (setq akirak/treemacs-origin-window (selected-window))
       (treemacs-select-window))))
+  (add-to-list 'treemacs-ignored-file-predicates
+               (defun akirak/treemacs-ignored-file-predicate (filename path)
+                 (member filename '(".direnv")))
+               t)
+  :custom
   (treemacs-follow-mode 1)
   (treemacs-filewatch-mode 1)
   (treemacs-fringe-indicator-mode 'always))
