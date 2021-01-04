@@ -119,7 +119,7 @@
     (call-interactively 'sp-beginning-of-sexp))))
 (advice-add 'akirak/jump-to-beginning-of-context
             :around 'akirak/ad-around-verbose-call-interactively)
-(akirak/bind-jump "b" (defrepeater 'akirak/jump-to-beginning-of-context))
+(akirak/bind-jump "a" (defrepeater 'akirak/jump-to-beginning-of-context))
 
 (defun akirak/ctrl-meta-u ()
   (interactive)
