@@ -868,23 +868,14 @@ outcommented org-mode headers)."
          ((equal arg '(4))
           (helm :prompt "Compile history: "
                 :sources akirak/helm-compile-history-source))
-         ((equal arg 0)
-          (let ((root (akirak/project-root default-directory)))
-            (if (and root (f-exists (f-join root ".github"))
-                     (executable-find "act"))
-                (let ((default-directory root))
-                  (compile "act"))
-              (user-error "N/A"))))
-         ((and (setq root (akirak/project-root default-directory))
-               (f-exists-p (f-join root "package.json")))
+         ((setq root (locate-dominating-file default-directory "package.json"))
           (npm-run-something root))
+         ((setq root (locate-dominating-file default-directory "mix.exs"))
+          (let ((default-directory root))
+            (mix-run-command)))
          ((and root
                (f-exists-p (f-join root "Makefile")))
           (let ((default-directory root)) (counsel-compile)))
-         ((and root
-               (f-exists-p (f-join root "mix.exs")))
-          (let ((default-directory root))
-            (mix-run-command)))
          (t
           (akirak/helm-shell-command root))))))
   "C-x C"
