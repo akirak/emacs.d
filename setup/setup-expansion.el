@@ -107,6 +107,7 @@
 ;; Remove all keybindings for abbrev-mode in C-x a
 (define-key global-map (kbd "C-x a") (make-sparse-keymap))
 (general-def :prefix "C-x a"
+  "a" #'yankpad-append-category
   "c" #'yankpad-set-category
   "p" #'yankpad-aya-persist
   "C-c" #'yankpad-capture-snippet)
