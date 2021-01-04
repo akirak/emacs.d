@@ -1,23 +1,36 @@
 (use-package lsp-mode
   :commands (lsp lsp-deferred)
   :config
-  ;; TODO: Add a minor mode for auto formatting
-  (defvar-local akirak/lsp-prevent-format-before-save nil
-    "Prevent auto-formatting on save by lsp-mode.")
 
-  (defun akirak/lsp-before-save ()
-    (when (and (bound-and-true-p lsp-mode)
-               ;; Allow blocking the function
-               (not akirak/lsp-prevent-format-before-save))
-      (lsp-organize-imports)
-      (lsp-format-buffer)))
+  (define-minor-mode lsp-format-on-save-mode
+    "Format the buffer on save."
+    nil " LSP format" nil
+    (if lsp-format-on-save-mode
+        (add-hook 'before-save-hook
+                  #'lsp-format-buffer)
+      (remove-hook 'before-save-hook
+                   #'lsp-format-buffer)))
+
+  (define-minor-mode lsp-organize-imports-on-save-mode
+    "Format the buffer on save."
+    nil " LSP imports" nil
+    (if lsp-organize-imports-on-save-mode
+        (add-hook 'before-save-hook
+                  #'lsp-organize-imports)
+      (remove-hook 'before-save-hook
+                   #'lsp-organize-imports)))
+
+  (add-hook 'lsp-mode-hook
+            (defun lsp-disable-on-dsave-modes ()
+              (unless lsp-mode
+                (lsp-format-on-save-mode -1)
+                (lsp-organize-imports-on-save-mode -1))))
 
   (defun akirak/setup-lsp ()
     (company-mode t)
     (eldoc-mode t)
     (flycheck-mode t)
-    (lsp-enable-which-key-integration)
-    (add-hook 'before-save-hook #'akirak/lsp-before-save nil 'local))
+    (lsp-enable-which-key-integration))
   ;; Update direnv to detect locally installed lsp servers
   ;; (advice-add 'lsp :before
   ;;             (lambda (&rest _args) (direnv-update-environment)))
