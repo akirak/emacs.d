@@ -170,6 +170,14 @@ Use diminish to reduce clutters from the modeline. This adds support for =:dimin
 (use-package use-package-company
   ;; Originally written by Foltik, but I use my fork
   :straight (use-package-company :host github :repo "akirak/use-package-company"))
+
+(use-package info
+  :straight (:type built-in)
+  :config
+  (add-to-list 'Info-directory-list
+               (expand-file-name "share/info"
+                                 (file-name-directory
+                                  (string-remove-suffix "/" invocation-directory)))))
 #+end_src
 
 ***  Keybindings
@@ -268,10 +276,12 @@ load them first.
 
 **  Packages
 #+begin_src emacs-lisp
+(use-package dash-docs)
+(use-package helm-dash
+  :custom
+  (dash-docs-browser-func #'akirak/browse-url))
 (use-package discover-my-major
   :commands (discover-my-major))
-(use-package docker
-  :disabled t)
 (use-package electric
   :straight (:type built-in)
   :hook
@@ -338,6 +348,7 @@ load them first.
 (require 'setup-git-bookmark)
 (require 'setup-info)
 (require 'setup-unicode)
+(require 'setup-mmm)
 #+end_src
 
 **  Commands and keybindings
@@ -527,7 +538,9 @@ Most of these commands are bound on C-x.
                 ,akirak/helm-source-recent-files))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
-    (interactive (list (akirak/project-root default-directory)))
+    (interactive (list (or (akirak/project-root default-directory)
+                           (akirak/try-init-project-root)
+                           (user-error "Cannot find the project root"))))
     (require 'my/helm/source/file)
     (when current-prefix-arg
       (akirak/clear-project-file-cache root :sort 'modified))
@@ -757,8 +770,14 @@ notion of page/chunk varies.
 #+end_src
 
 ***  Help and documentation
-****  Additional keybindings on <f1>
+****  Use <f1> as the prefix for help commands
 #+begin_src emacs-lisp
+(general-def
+  [help ?.] #'helpful-at-point)
+
+(general-def :package 'lsp-mode :keymaps 'lsp-mode-map
+  [help ?.] #'lsp-describe-thing-at-point)
+
 (akirak/bind-help
   "M" #'discover-my-major
   "xc" #'describe-char
@@ -772,6 +791,15 @@ e.g. M-` M-m -> <f1> ESC m
   "ESC m" #'woman
   "ESC i" #'helm-info
   "ESC d" #'helm-dash)
+#+end_src
+
+****  Dash Docs
+#+begin_src emacs-lisp
+(akirak/bind-user
+  "d" '(nil :wk "doc")
+  "da" #'dash-docs-activate-docset
+  "dh" #'helm-dash
+  "di" #'dash-docs-async-install-docset)
 #+end_src
 
 ***  Editing
@@ -809,6 +837,14 @@ outcommented org-mode headers)."
   "C-c '" #'outorg-edit-as-org)
 (general-def :keymaps 'outorg-edit-minor-mode-map :package 'outorg
   "C-c '" #'outorg-copy-edits-and-exit)
+#+end_src
+
+****  Source navigation
+Bind M-s M-s
+
+#+begin_src emacs-lisp
+(akirak/bind-search
+  "M-s" #'xref-find-apropos)
 #+end_src
 
 ****  Formatting code
@@ -949,29 +985,26 @@ outcommented org-mode headers)."
                                (akirak/compile (read-string "Command: " command)))))))))))
       (let (root)
         (cond
+         ((equal arg '(16))
+          (if-let (buffer (get-buffer "*compilation*"))
+              (if-let (window (get-buffer-window buffer))
+                  (select-window window)
+                (pop-to-buffer buffer))
+            (user-error "No compilation buffer")))
          ((and (derived-mode-p 'purescript-mode)
                (setq root (spago-root)))
           (spago-build root))
          ((equal arg '(4))
           (helm :prompt "Compile history: "
                 :sources akirak/helm-compile-history-source))
-         ((equal arg 0)
-          (let ((root (akirak/project-root default-directory)))
-            (if (and root (f-exists (f-join root ".github"))
-                     (executable-find "act"))
-                (let ((default-directory root))
-                  (compile "act"))
-              (user-error "N/A"))))
-         ((and (setq root (akirak/project-root default-directory))
-               (f-exists-p (f-join root "package.json")))
+         ((setq root (locate-dominating-file default-directory "package.json"))
           (npm-run-something root))
+         ((setq root (locate-dominating-file default-directory "mix.exs"))
+          (let ((default-directory root))
+            (mix-run-command)))
          ((and root
                (f-exists-p (f-join root "Makefile")))
           (let ((default-directory root)) (counsel-compile)))
-         ((and root
-               (f-exists-p (f-join root "mix.exs")))
-          (let ((default-directory root))
-            (mix-run-command)))
          (t
           (akirak/helm-shell-command root))))))
   "C-x C"
@@ -1067,7 +1100,7 @@ These commands are used to maintain this Emacs configuration.
 ****  Emacs
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "et" #'ert)
+  )
 #+end_src
 
 ****  Git
@@ -1097,9 +1130,7 @@ These commands are used to maintain this Emacs configuration.
 ****  Nix
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "n" '(nil :wk "nix")
-  "ni" #'nix-boilerplate-init
-  "nn" #'nix-env-install-npm)
+  "n" '(nil :wk "nix"))
 #+end_src
 
 ****  Remote connections (TRAMP)
