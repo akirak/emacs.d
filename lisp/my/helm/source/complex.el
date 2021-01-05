@@ -4,7 +4,12 @@
 
 (defconst akirak/project-directory-regexp
   ;; Precalculate the pattern to prevent extensive string manipulations.
-  (rx bol (eval (expand-file-name "~/")) (or "projects" "work") "/"))
+  (rx bol
+      (eval (expand-file-name "~/"))
+      (or "projects"
+          "work"
+          ".config")
+      "/"))
 
 (defun akirak/helm-project-buffer-sources (project switch-to-project-fn)
   (cl-labels ((root-of (buffer)
