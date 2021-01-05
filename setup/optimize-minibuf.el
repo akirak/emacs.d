@@ -46,8 +46,6 @@
     (eq major-mode 'helm-major-mode))
 
   (advice-add 'yankpad-local-category-to-major-mode
-              :before-while #'optimize-minibuf/not-helm-major-mode-p)
-  (advice-add 'akirak/set-header-line
               :before-while #'optimize-minibuf/not-helm-major-mode-p))
 
 (provide 'optimize-minibuf)
