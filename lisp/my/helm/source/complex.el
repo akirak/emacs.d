@@ -2,6 +2,10 @@
 (require 'my/helm/source/file)
 (require 'my/helm/source/dir)
 
+(defconst akirak/project-directory-regexp
+  ;; Precalculate the pattern to prevent extensive string manipulations.
+  (rx bol (eval (expand-file-name "~/")) (or "projects" "work") "/"))
+
 (defun akirak/helm-project-buffer-sources (project switch-to-project-fn)
   (cl-labels ((root-of (buffer)
                        (akirak/project-root (buffer-dir buffer)))
@@ -22,10 +26,11 @@
                                      " "
                                      (format-mode buffer))))
               (same-project-p (buf)
-                              (-some->> (root-of buf)
-                                (file-equal-p default-directory)))
+                              (when-let* ((root (root-of buf)))
+                                (equal default-directory root)))
               (project-bufp (buf)
-                            (not (f-ancestor-of-p "~/lib/" (buffer-file-name buf))))
+                            (string-match-p akirak/project-directory-regexp
+                                            (buffer-file-name buf)))
               (file-buffer-cell (buffer)
                                 (cons (format-fbuf buffer) buffer))
               (kill-project-bufs (default-directory)

@@ -8,7 +8,9 @@
   :hook
   (visual-line-mode . akirak/adaptive-wrap-prefix-mode))
 
-(global-visual-line-mode t)
+;; Don't run it in minibuffers and helm buffers
+(add-hook 'prog-mode #'visual-line-mode)
+(add-hook 'text-mode #'visual-line-mode)
 
 ;; Suppress a message by `toggle-word-wrap' unless the function is
 ;; called interactively. The message is annoying as the option is set

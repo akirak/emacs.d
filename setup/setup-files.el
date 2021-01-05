@@ -16,4 +16,8 @@
 (use-package trashed
   :straight (:host github :repo "shingo256/trashed"))
 
+;; Prevent from guessing a file
+;; See https://www.murilopereira.com/how-to-open-a-file-in-emacs/#opening-a-file
+(remove-hook 'file-name-at-point-functions #'ffap-guess-file-name-at-point)
+
 (provide 'setup-files)
