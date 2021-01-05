@@ -7,7 +7,6 @@
 
 ;; Manage docker services
 (use-package docker
-  :disabled t
   :config
   (akirak/bind-admin
     "k" '(nil :wk "docker")

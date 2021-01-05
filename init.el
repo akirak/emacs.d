@@ -224,8 +224,6 @@
   (dash-docs-browser-func #'akirak/browse-url))
 (use-package discover-my-major
   :commands (discover-my-major))
-(use-package docker
-  :disabled t)
 (use-package electric
   :straight (:type built-in)
   :hook
