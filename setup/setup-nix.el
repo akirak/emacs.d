@@ -36,4 +36,35 @@
 
 (use-package nix-boilerplate)
 
+(cl-defun akirak/nix-prefetch-url (url &key unpack)
+  (interactive (list (string-trim (read-string "Url: "))
+                     :unpack current-prefix-arg))
+  (let ((err-file (make-temp-file "nix-prefetch-stderr"))
+        (buffer (generate-new-buffer (format "*nix-prefetch-url %s*"
+                                             url))))
+    (message "Fetching %s..." url)
+    (unwind-protect
+        (make-process :name "nix-prefetch-url"
+                      :buffer buffer
+                      :stderr err-file
+                      :command
+                      `("nix-prefetch-url"
+                        ,@(when unpack
+                            '("--unpack"))
+                        "--type" "sha256"
+                        "--print-path"
+                        ,url)
+                      :sentinel
+                      (lambda (proc event)
+                        (when (string= event "finished\n")
+                          (with-current-buffer (process-buffer proc)
+                            (cl-destructuring-bind (sha256 store-path)
+                                (seq-take (split-string (buffer-string) "\n")
+                                          2)
+                              (kill-new sha256)
+                              (let ((message-log-max nil))
+                                (message "Saved the store path to kill ring"))
+                              (dired store-path))))))
+      (delete-file err-file))))
+
 (provide 'setup-nix)

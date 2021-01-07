@@ -984,7 +984,9 @@ outcommented org-mode headers)."
 
 ;;;;; Nix
 (akirak/bind-admin
-  "n" '(nil :wk "nix"))
+  "n" '(nil :wk "nix")
+  "nf" '(nil :wk "fetch")
+  "nff" #'akirak/nix-prefetch-url)
 
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
