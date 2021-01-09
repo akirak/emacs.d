@@ -237,9 +237,19 @@
   :config
   (general-add-hook 'org-recent-headings-advise-functions
                     '(org-multi-wiki-follow-link
+                      org-multi-wiki-visit-entry
                       helm-org-ql-show-marker
                       helm-org-ql-show-marker-indirect))
   (org-recent-headings-mode 1)
+
+  (setq org-recent-headings-reject-any-fns
+        (list (defun akirak/org-recent-headings-reject-journal-date (entry)
+                (when (featurep 'org-multi-wiki)
+                  (let ((file (org-recent-headings-entry-file entry))
+                        (olp (org-recent-headings-entry-outline-path entry)))
+                    (when-let (plist (org-multi-wiki-entry-file-p file))
+                      (and (eq 'journal (plist-get plist :namespace))
+                           (= 1 (length olp)))))))))
 
   (defun akirak/org-recent-headings-cleanup ()
     (let ((m (length org-recent-headings-list))
