@@ -802,20 +802,11 @@ outcommented org-mode headers)."
     (interactive "P")
     (require 'my/compile)
     (cl-labels
-        ((spago-root
-          ()
-          (locate-dominating-file default-directory "spago.dhall"))
-         (spago-build
+        ((spago-build
           (root)
           (let ((command (completing-read "PureScript spago command: "
                                           akirak/spago-compile-command-list)))
             (akirak/compile command :directory root)))
-         (make-root
-          ()
-          (locate-dominating-file default-directory "Makefile"))
-         (npm-root
-          ()
-          (locate-dominating-file default-directory "package.json"))
          (npm-run-something
           (root)
           (progn
@@ -868,7 +859,7 @@ outcommented org-mode headers)."
                 (pop-to-buffer buffer))
             (user-error "No compilation buffer")))
          ((and (derived-mode-p 'purescript-mode)
-               (setq root (spago-root)))
+               (setq root (locate-dominating-file default-directory "spago.dhall")))
           (spago-build root))
          ((equal arg '(4))
           (helm :prompt "Compile history: "
@@ -878,7 +869,7 @@ outcommented org-mode headers)."
          ((setq root (locate-dominating-file default-directory "mix.exs"))
           (let ((default-directory root))
             (mix-run-command)))
-         ((setq root (make-root))
+         ((setq root (locate-dominating-file default-directory "Makefile"))
           (counsel-compile))
          (t
           (akirak/helm-shell-command root))))))
