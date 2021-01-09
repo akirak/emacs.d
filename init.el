@@ -871,9 +871,8 @@ outcommented org-mode headers)."
          ((setq root (locate-dominating-file default-directory "mix.exs"))
           (let ((default-directory root))
             (mix-run-command)))
-         ((and root
-               (f-exists-p (f-join root "Makefile")))
-          (let ((default-directory root)) (counsel-compile)))
+         ((setq root (make-root))
+          (counsel-compile))
          (t
           (akirak/helm-shell-command root))))))
   "C-x C"
