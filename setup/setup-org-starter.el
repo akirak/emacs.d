@@ -164,6 +164,13 @@
             ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
             "\n:END:\n"))
   (org-multi-wiki-global-mode 1)
+
+  (setq org-multi-wiki-removal-block-functions
+        (list (defun akirak/org-multi-wiki-block-function ()
+                ;; Allow moving subtrees from journal
+                (when-let (plist (org-multi-wiki-entry-file-p))
+                  (not (eq (plist-get plist :namespace) 'journal))))))
+
   :custom
   (org-multi-wiki-want-custom-id t)
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
