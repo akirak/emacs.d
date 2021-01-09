@@ -35,9 +35,8 @@
          (branch (if (member branch '("master" "main"))
                      nil
                    branch))
-         (parent (or (akirak/remote-git-repo-clone-parent repo)
-                     (f-join akirak/git-clone-directory
-                             (akirak/remote-git-repo-host repo))))
+         (parent (akirak/git-clone-parent-select
+                  (akirak/remote-git-repo-url repo)))
          (name (concat (akirak/remote-git-repo-name repo)
                        (if branch
                            (concat "@" branch)
@@ -46,6 +45,44 @@
                (not (file-directory-p parent)))
       (make-directory parent t))
     (f-join parent name)))
+
+;; Choose a parent directory based on magit-repository-directories
+;; and git-identity-list.
+(defun akirak/git-clone-parent-select (url)
+  (or (pcase (git-identity--guess-identity-by-url url)
+        (`(domain ,domain ,ent)
+         (when-let*
+             ((roots (->> (plist-get (cdr ent) :dirs)
+                          (-map (lambda (root)
+                                  (->> magit-repository-directories
+                                       (-map (lambda (ent)
+                                               (let ((dir1 (expand-file-name (car ent)))
+                                                     (dir2 (expand-file-name root)))
+                                                 (when (string-prefix-p dir1 dir2)
+                                                   (let ((rest (- (cdr ent)
+                                                                  (length (f-split (string-remove-prefix dir1 dir2))))))
+                                                     (when (>= rest 0)
+                                                       (cons root rest)))))))
+                                       (-non-nil))))
+                          (-flatten-n 1)))
+              (candidates (->> roots
+                               (-map (pcase-lambda (`(,root . ,level))
+                                       (pcase level
+                                         (0 (list root))
+                                         (1 (-map (lambda (x)
+                                                    (f-slash (f-short x)))
+                                                  (f-directories root)))
+                                         (_ (error "Unsupported level: %d (root: %s)" level root)))))
+                               (-flatten-n 1)))
+              (choice (completing-read (format "Choose a parent directory for %s: " url)
+                                       candidates))
+              (y (or (when (member choice candidates)
+                       choice)
+                     (when-let (x (rassoc 1 roots))
+                       (f-slash (f-short (f-join (car x) choice)))))))
+           y)))
+      (read-directory-name (format "Choose a parent directory for %s: " url)
+                           "~/work/")))
 
 (cl-defgeneric akirak/remote-git-repo-clone-default (repo)
   (akirak/remote-git-repo-clone-1 repo))
