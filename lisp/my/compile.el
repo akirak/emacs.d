@@ -1,5 +1,7 @@
 (defvar akirak/compile-history-alist nil)
 
+(defvar akirak/compile-nix-shell-args nil)
+
 (cl-defun akirak/compile (command &rest args)
   "Wrap the command."
   (cl-check-type command string)
@@ -7,7 +9,8 @@
   (-let [(&plist :nix-shell-args :directory) args]
     (cl-check-type nix-shell-args (or null list))
     (cl-check-type directory (or null file-directory))
-    (let* ((command (if nix-shell-args
+    (let* ((nix-shell-args (or nix-shell-args akirak/compile-nix-shell-args))
+           (command (if nix-shell-args
                         (concat "nix-shell "
                                 (mapconcat #'shell-quote-argument
                                            nix-shell-args " ")

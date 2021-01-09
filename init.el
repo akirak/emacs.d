@@ -822,33 +822,35 @@ outcommented org-mode headers)."
             (require 'my/compile/npm)
             (let ((script-alist (akirak/npm-package-json-commands (f-join root "package.json")))
                   (default-directory root)
-                  (action (lambda (command)
-                            (akirak/compile (concat "npm " command)
-                                            :nix-shell-args (unless (executable-find "npm")
-                                                              '("-p" "nodejs"))))))
+                  (akirak/compile-nix-shell-args (unless (executable-find "npm")
+                                                   '("-p" "nodejs")))
+                  (action #'akirak/compile))
               (helm :prompt (format "npm command [%s]: " root)
                     :sources
-                    (list (helm-build-sync-source "Script"
+                    (list (helm-make-source "Npm script"
+                              'akirak/helm-sync-compile-command-source
                             :candidates
                             (-map (lambda (cell)
                                     (cons (format "%s: %s" (car cell) (cdr cell))
                                           (symbol-name (car cell))))
                                   script-alist)
-                            :coerce (-partial #'s-prepend "run ")
-                            :action action)
-                          (helm-build-sync-source "Basic commands"
+                            :coerce (-partial #'s-prepend "npm run "))
+                          (helm-make-source "Basic npm commands"
+                              'akirak/helm-sync-compile-command-source
                             :candidates
                             (akirak/npm-toplevel-commands)
+                            :coerce (-partial #'s-prepend "npm ")
                             :action action)
-                          (helm-build-dummy-source "Any npm command"
-                            :action action))))))
+                          (helm-make-source "Any command"
+                              'akirak/helm-dummy-compile-command-source))))))
          (mix-run-command
           ()
           (progn
             (require 'my/compile/mix)
             (helm :prompt (format "mix command [%s]: " default-directory)
                   :sources
-                  (list (helm-build-sync-source "Mix commands"
+                  (list (helm-make-source "Mix commands"
+                            'akirak/helm-sync-compile-command-source
                           :candidates
                           (-map (lambda (cell)
                                   (cons (format "%s %s"
@@ -856,12 +858,7 @@ outcommented org-mode headers)."
                                                 (propertize (cdr cell)
                                                             'face 'font-lock-comment-face))
                                         (car cell)))
-                                (akirak/mix-command-alist))
-                          :action
-                          `(("compile" . akirak/compile)
-                            ("compile (with args)" .
-                             (lambda (command)
-                               (akirak/compile (read-string "Command: " command)))))))))))
+                                (akirak/mix-command-alist))))))))
       (let (root)
         (cond
          ((equal arg '(16))

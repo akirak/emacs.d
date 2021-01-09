@@ -10,4 +10,19 @@
     `(("Compile"
        . ,(-applify #'akirak/compile)))))
 
+(defconst akirak/helm-compile-command-action
+  (helm-make-actions
+   "Compile" #'akirak/compile
+   "Compile (with args)"
+   (lambda (command)
+     (akirak/compile (read-string "Command: " command)))
+   "Run in eshell"
+   #'eshell-command))
+
+(defclass akirak/helm-sync-compile-command-source (helm-source-sync)
+  ((action :initform akirak/helm-compile-command-action)))
+
+(defclass akirak/helm-dummy-compile-command-source (helm-source-dummy)
+  ((action :initform akirak/helm-compile-command-action)))
+
 (provide 'my/helm/source/compile)
