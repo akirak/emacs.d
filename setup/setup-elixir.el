@@ -4,7 +4,8 @@
 ;;
 ;; https://www.badykov.com/emacs/2020/05/30/emacs-setup-for-elixir/
 
-(use-package elixir-mode)
+(use-package elixir-mode
+  :mode "\\.exs?\\'")
 
 (use-package mix
   :disabled t
