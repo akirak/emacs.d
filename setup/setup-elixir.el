@@ -144,4 +144,14 @@
  'akirak/counsel-outline-elixir
  'akirak/counsel-outline-elixir-display-transformer)
 
+(defun akirak/iex-mix (root)
+  (interactive (list (or (locate-dominating-file default-directory "mix.exs")
+                         (user-error "Cannot find mix.exs"))))
+  (akirak/run-interactive-shell-command "iex -S mix"
+    (format "*iex %s*" (f-filename root))
+    :root root))
+
+(akirak/bind-mode-repl :keymaps 'elixir-mode-map
+  "" #'akirak/iex-mix)
+
 (provide 'setup-elixir)

@@ -26,10 +26,13 @@
       (bury-buffer buf)))
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
 
-(defun akirak/run-interactive-shell-command (command &optional name)
+(cl-defun akirak/run-interactive-shell-command (command &optional name
+                                                        &key root)
   (declare (indent 1))
   (interactive "s")
-  (let ((buffer (generate-new-buffer (or name (format "*%s*" command)))))
+  (require 'vterm)
+  (let* ((default-directory (or root default-directory))
+         (buffer (generate-new-buffer (or name (format "*%s*" command)))))
     (with-current-buffer buffer
       (let ((vterm-shell command))
         (vterm-mode))
