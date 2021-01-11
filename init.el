@@ -238,6 +238,8 @@
   (general-add-hook 'org-recent-headings-advise-functions
                     '(org-multi-wiki-follow-link
                       org-multi-wiki-visit-entry
+                      akirak/avy-org-heading
+                      org-insert-heading
                       helm-org-ql-show-marker
                       helm-org-ql-show-marker-indirect))
   (org-recent-headings-mode 1)
