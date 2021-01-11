@@ -25,4 +25,43 @@
 (defclass akirak/helm-dummy-compile-command-source (helm-source-dummy)
   ((action :initform akirak/helm-compile-command-action)))
 
+;;;; Sources for specific languages
+
+(defun akirak/helm-compile-npm-sources ()
+  (require 'my/compile/npm)
+  (list (helm-make-source "Npm script"
+            'akirak/helm-sync-compile-command-source
+          :candidates
+          (-map (lambda (cell)
+                  (cons (format "%s: %s" (car cell) (cdr cell))
+                        (symbol-name (car cell))))
+                (akirak/npm-package-json-commands "package.json"))
+          :coerce (-partial #'s-prepend "npm run "))
+        (helm-make-source "Basic npm commands"
+            'akirak/helm-sync-compile-command-source
+          :candidates
+          (akirak/npm-toplevel-commands)
+          :coerce (-partial #'s-prepend "npm "))
+        (helm-make-source "Any command"
+            'akirak/helm-dummy-compile-command-source)))
+
+(defun akirak/helm-compile-mix-sources ()
+  (require 'my/compile/mix)
+  (list (helm-make-source "Mix commands"
+            'akirak/helm-sync-compile-command-source
+          :candidates
+          (-map (lambda (cell)
+                  (cons (format "%s %s"
+                                (car cell)
+                                (propertize (cdr cell)
+                                            'face 'font-lock-comment-face))
+                        (car cell)))
+                (akirak/mix-command-alist)))))
+
+(defun akirak/helm-compile-spago-sources ()
+  (list (helm-make-source "PureScript spago commands"
+            'akirak/helm-sync-compile-command-source
+          :candidates
+          akirak/spago-compile-command-list)))
+
 (provide 'my/helm/source/compile)

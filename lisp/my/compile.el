@@ -37,4 +37,33 @@
           ((&plist :nix-shell-args :directory) args))
     (format "%s [%s]" command directory)))
 
+;;;; Generic definition for specific languages.
+
+(defcustom akirak/compile-backend-alist
+  '(("mix.exs"
+     :helm-sources-fn akirak/helm-compile-mix-sources
+     :modes (elixir-mode))
+    ("package.json"
+     :helm-sources-fn akirak/helm-compile-npm-sources
+     :modes (javascript-mode typescript-mode web-mode))
+    ("spago.dhall"
+     :helm-sources-fn akirak/helm-compile-spago-sources
+     :modes (purescript-mode))
+    ("Makefile"
+     :command counsel-compile))
+  "Alist of compilation backend settings.")
+
+(defun akirak/compile-detect-project ()
+  (cl-some (lambda (cell)
+             (let* ((plist (cdr cell))
+                    (modes (plist-get plist :modes)))
+               (when (or (null modes)
+                         (apply #'derived-mode-p modes))
+                 (-some--> (locate-dominating-file default-directory
+                                                   (car cell))
+                   (append (list :root it
+                                 :filename (car cell))
+                           plist)))))
+           akirak/compile-backend-alist))
+
 (provide 'my/compile)

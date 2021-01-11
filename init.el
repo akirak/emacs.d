@@ -798,81 +798,34 @@ outcommented org-mode headers)."
 ;;;; Running external commands
 (general-def
   "C-x c"
-  (defun akirak/compile-command (&optional arg)
-    (interactive "P")
+  (defun akirak/compile-command ()
+    (interactive)
     (require 'my/compile)
-    (cl-labels
-        ((spago-build
-          (root)
-          (let ((command (completing-read "PureScript spago command: "
-                                          akirak/spago-compile-command-list)))
-            (akirak/compile command :directory root)))
-         (npm-run-something
-          (root)
-          (progn
-            (require 'my/compile/npm)
-            (let ((script-alist (akirak/npm-package-json-commands (f-join root "package.json")))
-                  (default-directory root)
-                  (akirak/compile-nix-shell-args (unless (executable-find "npm")
-                                                   '("-p" "nodejs")))
-                  (action #'akirak/compile))
-              (helm :prompt (format "npm command [%s]: " root)
-                    :sources
-                    (list (helm-make-source "Npm script"
-                              'akirak/helm-sync-compile-command-source
-                            :candidates
-                            (-map (lambda (cell)
-                                    (cons (format "%s: %s" (car cell) (cdr cell))
-                                          (symbol-name (car cell))))
-                                  script-alist)
-                            :coerce (-partial #'s-prepend "npm run "))
-                          (helm-make-source "Basic npm commands"
-                              'akirak/helm-sync-compile-command-source
-                            :candidates
-                            (akirak/npm-toplevel-commands)
-                            :coerce (-partial #'s-prepend "npm ")
-                            :action action)
-                          (helm-make-source "Any command"
-                              'akirak/helm-dummy-compile-command-source))))))
-         (mix-run-command
-          ()
-          (progn
-            (require 'my/compile/mix)
-            (helm :prompt (format "mix command [%s]: " default-directory)
-                  :sources
-                  (list (helm-make-source "Mix commands"
-                            'akirak/helm-sync-compile-command-source
-                          :candidates
-                          (-map (lambda (cell)
-                                  (cons (format "%s %s"
-                                                (car cell)
-                                                (propertize (cdr cell)
-                                                            'face 'font-lock-comment-face))
-                                        (car cell)))
-                                (akirak/mix-command-alist))))))))
-      (let (root)
-        (cond
-         ((equal arg '(16))
-          (if-let (buffer (get-buffer "*compilation*"))
-              (if-let (window (get-buffer-window buffer))
-                  (select-window window)
-                (pop-to-buffer buffer))
-            (user-error "No compilation buffer")))
-         ((and (derived-mode-p 'purescript-mode)
-               (setq root (locate-dominating-file default-directory "spago.dhall")))
-          (spago-build root))
-         ((equal arg '(4))
-          (helm :prompt "Compile history: "
-                :sources akirak/helm-compile-history-source))
-         ((setq root (locate-dominating-file default-directory "package.json"))
-          (npm-run-something root))
-         ((setq root (locate-dominating-file default-directory "mix.exs"))
-          (let ((default-directory root))
-            (mix-run-command)))
-         ((setq root (locate-dominating-file default-directory "Makefile"))
-          (counsel-compile))
-         (t
-          (akirak/helm-shell-command root))))))
+    (require 'my/helm/source/compile)
+    (if (equal current-prefix-arg '(16))
+        ;; If two prefixes are given, select the compilation buffer window.
+        (if-let (buffer (get-buffer "*compilation*"))
+            (if-let (window (get-buffer-window buffer))
+                (select-window window)
+              (pop-to-buffer buffer))
+          (user-error "No compilation buffer"))
+      (if-let ((plist (akirak/compile-detect-project)))
+          (-let [(&plist :root :filename :command :helm-sources-fn) plist]
+            (pcase current-prefix-arg
+              ('(4)
+               (find-file (expand-file-name filename root)))
+              (_
+               (let ((default-directory root))
+                 (cond
+                  (command
+                   (funcall-interactively command))
+                  (helm-sources-fn
+                   (helm :prompt (format "%s project at [%s]: "
+                                         filename
+                                         (f-short root))
+                         :sources (funcall helm-sources-fn))))))))
+        ;; No root is detected.
+        (akirak/helm-shell-command))))
   "C-x C"
   (defun akirak/helm-shell-command (&optional root)
     (interactive)
