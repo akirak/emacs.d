@@ -512,4 +512,22 @@ may have been stored before."
   "C-3" #'akirak/split-window-vertically
   "C-4" #'akirak/split-window-and-select)
 
+(general-def
+  [remap abort-recursive-edit]
+  (defun akirak/cleanup-windows ()
+    " Clean up windows or call `abort-recursive-edit'."
+    (interactive)
+    (let (killed)
+      (walk-window-tree (lambda (w)
+                          (cond
+                           ((member (buffer-name (window-buffer w))
+                                    '("*direnv*"))
+                            (quit-window nil w)
+                            (setq killed t))
+                           ((< (window-height w) 7)
+                            (delete-window w)
+                            (setq killed t)))))
+      (unless killed
+        (abort-recursive-edit)))))
+
 (provide 'setup-window-management)
