@@ -77,6 +77,9 @@
                                 "# Local Variables:\n"
                                 "# eval: (when (require (quote org-make-toc) nil t) (org-make-toc-mode t))\n"
                                 "# End:\n"))
+                          (("/config/config\.exs\\'" . "config/config.exs")
+                           . (> "use Mix.Config\n\n"
+                                _))
                           ;; Fallback to "auto-insert" yasnippet template
                           (("\\.[[:alpha:]]+\\'" . "yasnippet")
                            . akirak/yas-auto-insert)))
