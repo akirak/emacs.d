@@ -7,6 +7,7 @@
 (use-package elixir-mode)
 
 (use-package mix
+  :disabled t
   :hook
   (elixir-mode . mix-minor-mode))
 
