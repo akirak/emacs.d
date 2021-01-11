@@ -295,9 +295,21 @@ load them first.
   :config
   (general-add-hook 'org-recent-headings-advise-functions
                     '(org-multi-wiki-follow-link
+                      org-multi-wiki-visit-entry
+                      akirak/avy-org-heading
+                      org-insert-heading
                       helm-org-ql-show-marker
                       helm-org-ql-show-marker-indirect))
   (org-recent-headings-mode 1)
+
+  (setq org-recent-headings-reject-any-fns
+        (list (defun akirak/org-recent-headings-reject-journal-date (entry)
+                (when (featurep 'org-multi-wiki)
+                  (let ((file (org-recent-headings-entry-file entry))
+                        (olp (org-recent-headings-entry-outline-path entry)))
+                    (when-let (plist (org-multi-wiki-entry-file-p file))
+                      (and (eq 'journal (plist-get plist :namespace))
+                           (= 1 (length olp)))))))))
 
   (defun akirak/org-recent-headings-cleanup ()
     (let ((m (length org-recent-headings-list))
@@ -919,94 +931,34 @@ Bind M-s M-s
 #+begin_src emacs-lisp
 (general-def
   "C-x c"
-  (defun akirak/compile-command (&optional arg)
-    (interactive "P")
+  (defun akirak/compile-command ()
+    (interactive)
     (require 'my/compile)
-    (cl-labels
-        ((spago-root
-          ()
-          (locate-dominating-file default-directory "spago.dhall"))
-         (spago-build
-          (root)
-          (let ((command (completing-read "PureScript spago command: "
-                                          akirak/spago-compile-command-list)))
-            (akirak/compile command :directory root)))
-         (make-root
-          ()
-          (locate-dominating-file default-directory "Makefile"))
-         (npm-root
-          ()
-          (locate-dominating-file default-directory "package.json"))
-         (npm-run-something
-          (root)
-          (progn
-            (require 'my/compile/npm)
-            (let ((script-alist (akirak/npm-package-json-commands (f-join root "package.json")))
-                  (default-directory root)
-                  (action (lambda (command)
-                            (akirak/compile (concat "npm " command)
-                                            :nix-shell-args (unless (executable-find "npm")
-                                                              '("-p" "nodejs"))))))
-              (helm :prompt (format "npm command [%s]: " root)
-                    :sources
-                    (list (helm-build-sync-source "Script"
-                            :candidates
-                            (-map (lambda (cell)
-                                    (cons (format "%s: %s" (car cell) (cdr cell))
-                                          (symbol-name (car cell))))
-                                  script-alist)
-                            :coerce (-partial #'s-prepend "run ")
-                            :action action)
-                          (helm-build-sync-source "Basic commands"
-                            :candidates
-                            (akirak/npm-toplevel-commands)
-                            :action action)
-                          (helm-build-dummy-source "Any npm command"
-                            :action action))))))
-         (mix-run-command
-          ()
-          (progn
-            (require 'my/compile/mix)
-            (helm :prompt (format "mix command [%s]: " default-directory)
-                  :sources
-                  (list (helm-build-sync-source "Mix commands"
-                          :candidates
-                          (-map (lambda (cell)
-                                  (cons (format "%s %s"
-                                                (car cell)
-                                                (propertize (cdr cell)
-                                                            'face 'font-lock-comment-face))
-                                        (car cell)))
-                                (akirak/mix-command-alist))
-                          :action
-                          `(("compile" . akirak/compile)
-                            ("compile (with args)" .
-                             (lambda (command)
-                               (akirak/compile (read-string "Command: " command)))))))))))
-      (let (root)
-        (cond
-         ((equal arg '(16))
-          (if-let (buffer (get-buffer "*compilation*"))
-              (if-let (window (get-buffer-window buffer))
-                  (select-window window)
-                (pop-to-buffer buffer))
-            (user-error "No compilation buffer")))
-         ((and (derived-mode-p 'purescript-mode)
-               (setq root (spago-root)))
-          (spago-build root))
-         ((equal arg '(4))
-          (helm :prompt "Compile history: "
-                :sources akirak/helm-compile-history-source))
-         ((setq root (locate-dominating-file default-directory "package.json"))
-          (npm-run-something root))
-         ((setq root (locate-dominating-file default-directory "mix.exs"))
-          (let ((default-directory root))
-            (mix-run-command)))
-         ((and root
-               (f-exists-p (f-join root "Makefile")))
-          (let ((default-directory root)) (counsel-compile)))
-         (t
-          (akirak/helm-shell-command root))))))
+    (require 'my/helm/source/compile)
+    (if (equal current-prefix-arg '(16))
+        ;; If two prefixes are given, select the compilation buffer window.
+        (if-let (buffer (get-buffer "*compilation*"))
+            (if-let (window (get-buffer-window buffer))
+                (select-window window)
+              (pop-to-buffer buffer))
+          (user-error "No compilation buffer"))
+      (if-let ((plist (akirak/compile-detect-project)))
+          (-let [(&plist :root :filename :command :helm-sources-fn) plist]
+            (pcase current-prefix-arg
+              ('(4)
+               (find-file (expand-file-name filename root)))
+              (_
+               (let ((default-directory root))
+                 (cond
+                  (command
+                   (funcall-interactively command))
+                  (helm-sources-fn
+                   (helm :prompt (format "%s project at [%s]: "
+                                         filename
+                                         (f-short root))
+                         :sources (funcall helm-sources-fn))))))))
+        ;; No root is detected.
+        (akirak/helm-shell-command))))
   "C-x C"
   (defun akirak/helm-shell-command (&optional root)
     (interactive)
@@ -1130,7 +1082,9 @@ These commands are used to maintain this Emacs configuration.
 ****  Nix
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "n" '(nil :wk "nix"))
+  "n" '(nil :wk "nix")
+  "nf" '(nil :wk "fetch")
+  "nff" #'akirak/nix-prefetch-url)
 #+end_src
 
 ****  Remote connections (TRAMP)
