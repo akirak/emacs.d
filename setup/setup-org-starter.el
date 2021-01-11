@@ -142,11 +142,38 @@
       (org-with-wide-buffer
        (goto-char marker)
        (org-clock-in))))
-  (general-add-hook 'helm-org-ql-actions
-                    '(("Refile the current org entry" . akirak/helm-org-ql-refile-action)
-                      ("Create a new entry" . akirak/helm-org-ql-add-child-entry)
-                      ("Clock in" . akirak/org-clock-in))
-                    t))
+
+  (cl-defun akirak/helm-org-ql-show-marker (marker &key indirect)
+    (with-current-buffer (marker-buffer marker)
+      (akirak/pop-to-buffer-prefer-center-pane (current-buffer))
+      (goto-char marker)
+      (org-show-entry)
+      (org-tree-to-indirect-buffer)))
+
+  (defun akirak/helm-org-ql-show-marker-indirect (marker)
+    (akirak/helm-org-ql-show-marker marker :indirect t))
+
+  (defun akirak/org-store-link-to-marker (marker)
+    (with-current-buffer (marker-buffer marker)
+      (org-with-wide-buffer
+       (goto-char marker)
+       ;; TODO: Set the custom id
+       ;; (when (and (fboundp #'org-multi-wiki-entry-file-p)
+       ;;            (org-multi-wiki-entry-file-p)
+       ;;            (save-excursion
+       ;;              ;; Skip if the heading is the first heading
+       ;;              (re-search-backward org-heading-regexp nil t))
+       ;;            (not (org-entry-get nil "CUSTOM_ID")))
+       ;;   (org-set-property "CUSTOM_ID" nil))
+       (call-interactively #'org-store-link))))
+
+  (setq helm-org-ql-actions
+        '(("Show (prefer the center pane)" . akirak/helm-org-ql-show-marker)
+          ("Show indirect buffer (prefer the center pane)" . akirak/helm-org-ql-show-marker-indirect)
+          ("Store the link" . akirak/org-store-link-to-marker)
+          ("Refile the current org entry" . akirak/helm-org-ql-refile-action)
+          ("Create a new entry" . akirak/helm-org-ql-add-child-entry)
+          ("Clock in" . akirak/org-clock-in))))
 
 (use-package org-multi-wiki
   :init
@@ -171,12 +198,27 @@
                 (when-let (plist (org-multi-wiki-entry-file-p))
                   (not (eq (plist-get plist :namespace) 'journal))))))
 
+  (setq org-multi-wiki-display-buffer-fn
+        #'akirak/pop-to-buffer-prefer-center-pane)
+
   :custom
   (org-multi-wiki-want-custom-id t)
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
 
 (use-package helm-org-multi-wiki
   :config
+  (setq helm-org-multi-wiki-file-actions
+        '(("Switch to buffer (center pane)"
+           . akirak/pop-to-buffer-prefer-center-pane)
+          ("Switch to buffer (same window)"
+           . switch-to-buffer)
+          ("Switch to buffer (other window)"
+           . switch-to-buffer-other-window)
+          ("Switch to buffer (other tab)"
+           . switch-to-buffer-other-tab)
+          ("Switch to buffer (other frame)"
+           . switch-to-buffer-other-frame)))
+
   (general-create-definer akirak/bind-helm-org-multi-wiki-dummy
     :keymaps 'helm-org-multi-wiki-dummy-source-map
     :package 'helm-org-multi-wiki

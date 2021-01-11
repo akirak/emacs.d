@@ -63,6 +63,46 @@
   (advice-add 'org-switch-to-buffer-other-window
               :override #'switch-to-buffer-other-window))
 
+(defun akirak/display-buffer-prefer-center-pane (buffer &rest args)
+  "Display BUFFER in the center pane of the current frame."
+  (if-let (windows (or (akirak/find-center-pane-windows :exclude-self t)
+                       ;; If the selected window is the only window in
+                       ;; the center pane, then find another window in
+                       ;; the same frame.
+                       (cl-remove (selected-window) (window-list))))
+      (set-window-buffer (car windows) buffer)
+    (display-buffer buffer args)))
+
+(defun akirak/pop-to-buffer-prefer-center-pane (buffer &rest _args)
+  (pop-to-buffer buffer
+                 '(akirak/display-buffer-prefer-center-pane . nil)))
+
+(cl-defun akirak/find-center-pane-windows (&key exclude-self)
+  (when (> (frame-width) 240)
+    (let* ((panes (akirak/get-window-panes))
+           (range (list (/ (length panes) 2)))
+           (windows (->> range
+                         (-map (lambda (i) (cdr (nth i panes))))
+                         (-flatten-n 1))))
+      (if exclude-self
+          (cl-remove (selected-window) windows)
+        windows))))
+
+(defun akirak/get-window-panes ()
+  "Return an alist."
+  (->> (window-list)
+       (-map (lambda (w)
+               (unless (or (window-minibuffer-p w)
+                           (member (buffer-name (window-buffer w))
+                                   akirak/skipped-window-buffers))
+                 (cons (window-left-column w) w))))
+       (-non-nil)
+       (-group-by #'car)
+       (-sort (-on #'< #'car))
+       (-map (lambda (cell)
+               (cons (car cell)
+                     (-map #'cdr (cdr cell)))))))
+
 (defun akirak/display-buffer-split-below (buf alist)
   "Split the current window below and display the buffer in the new window.
 
