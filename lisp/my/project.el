@@ -42,6 +42,12 @@
                       (f-join base)))
            (root (read-directory-name "Initialize a Git repository in: " root nil t)))
       (call-process "git" nil nil nil "init" root)
+      ;; Add .direnv to .gitignre
+      (when (file-exists-p (expand-file-name ".envrc" root))
+        (with-temp-buffer
+          (insert "\n.direnv")
+          (append-to-file (point-min) (point-max)
+                          (expand-file-name ".gitignore" root))))
       root)))
 
 (provide 'my/project)
