@@ -100,10 +100,10 @@
 
 (use-package helm-lsp
   :after lsp-mode
-  :config
-  (akirak/bind-search :keymaps 'lsp-mode-map
-    ;; Should be M-s M-s.
-    [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
+  :general
+  (:keymaps 'lsp-mode-map
+            ;; Should be M-s M-s.
+            [remap xref-find-apropos] #'helm-lsp-workspace-symbol))
 
 (use-package lsp-treemacs
   :after lsp-mode)
