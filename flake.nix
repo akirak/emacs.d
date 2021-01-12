@@ -82,6 +82,8 @@
             inputs.epub2json.packages.${system}.epub2json
             inputs.pdftotext.packages.${system}.pdftotext
 
+            gitAndTools.delta
+
             ripgrep
             fd
 

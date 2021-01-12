@@ -229,6 +229,16 @@ Only one letter is shown, the first that applies."
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
+(use-package magit-delta
+  ;; I don't always need the features of magit-delta-mode, so I will
+  ;; turn it on only in certain repositories.
+  ;;
+  ;; Add it to .dir-locals.el in repositories where you need it.
+  ;;
+  ;; :config
+  ;; (add-hook 'magit-mode-hook #'magit-delta-mode)
+  :after magit)
+
 (use-package orgit
   :after org)
 
