@@ -119,7 +119,8 @@
                          (if (= (process-exit-status process) 0)
                              (progn
                                (funcall akirak/git-bookmark-update-function)
-                               (akirak/git-module-add-tags)
+                               (let ((default-directory ,visited-directory))
+                                 (akirak/git-module-add-tags))
                                (dired ,visited-directory))
                            (error "Error while cloning a submodule: %s"
                                   event))))))))
