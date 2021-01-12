@@ -739,6 +739,9 @@ Emacs also provides eww:
 
     ;; Simply browse headings in the buffer.
     "i" #'helm-org-in-buffer-headings)
+
+  (akirak/bind-search :package 'restclient-helm :keymaps 'restclient-mode-map
+    "i" #'helm-restclient)
 #+end_src
 
 =imenu-list= is a useful package which displays an overview of the current buffer.
@@ -1359,6 +1362,8 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-mode)
 #+end_src
+
+Restclient is useful for development in teams where it is used.
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-restclient)

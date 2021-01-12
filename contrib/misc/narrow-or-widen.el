@@ -47,6 +47,8 @@ is an indirect buffer, this command doesn't do anything."
                (t (org-narrow-to-subtree))))
         ((derived-mode-p 'latex-mode)
          (LaTeX-narrow-to-environment))
+        ((derived-mode-p 'restclient-mode)
+         (restclient-narrow-to-current))
         (t (narrow-to-defun t))))
 
 (defun akirak/default-name-for-indirect-buffer ()
