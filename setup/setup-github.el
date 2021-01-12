@@ -241,6 +241,11 @@
                                       following))))
     (akirak/github-user-repos user)))
 
+(defun akirak/github-repo-topics (owner name)
+  (->> (ghub-get (format "/repos/%s/%s/topics" owner name) nil
+                 :headers '(("Accept" . "application/vnd.github.mercy-preview+json")))
+       (alist-get 'names)))
+
 (defvar akirak/github-stars-getting nil)
 
 (defun akirak/github-download-all-stars ()

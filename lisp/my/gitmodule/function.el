@@ -81,6 +81,14 @@ FUNC is called with ARGS."
        (mapcar (lambda (s) (split-string s ",")))
        (-flatten-n 1)))
 
+(defun akirak/git-remote-topics (repo)
+  (cl-typecase repo
+    (string (akirak/git-remote-tags (akirak/parse-git-url repo)))
+    (akirak/remote-git-repo-github (akirak/github-repo-topics
+                                    (akirak/remote-git-repo-owner repo)
+                                    (akirak/remote-git-repo-name repo)))
+    (otherwise nil)))
+
 (defun akirak/git-module-add-tags ()
   (interactive)
   (if-let ((module (akirak/git-submodule-info :read-modules t)))
@@ -93,7 +101,10 @@ FUNC is called with ARGS."
                                                (if current-tags
                                                    (string-join current-tags
                                                                 ",")
-                                                 "nil"))))))
+                                                 "nil"))
+                                       (unless current-tags
+                                         (string-join (akirak/git-remote-topics \.url)
+                                                      ","))))))
           (cl-assert (string-match-p (rx bol (+ (any "-," alnum)) eol)
                                      new-tags))
           ;; Run git config -f .gitmodules --add module.name.tags new-tags
