@@ -12,20 +12,26 @@
     :initform
     (lambda ()
       (let* ((root (f-short default-directory))
-             (open-files (->> (buffer-list)
-                              (-map
-                               (lambda (buffer)
-                                 (let* ((file (buffer-file-name buffer))
-                                        (file (and file (f-short file))))
-                                   (and file
-                                        (string-prefix-p root file)
-                                        (string-remove-prefix root file)))))
-                              (delq nil))))
-        (-map (lambda (file)
-                (if (cl-member file open-files :test #'string-equal)
-                    (propertize file 'face 'link-visited)
-                  file))
-              (akirak/project-files default-directory)))))))
+             (open-files-with-times (->> (buffer-list)
+                                         (-map
+                                          (lambda (buffer)
+                                            (let* ((file (buffer-file-name buffer))
+                                                   (time (buffer-local-value 'buffer-display-time
+                                                                             buffer))
+                                                   (file (and file (f-short file))))
+                                              (and file
+                                                   (string-prefix-p root file)
+                                                   (cons (string-remove-prefix root file)
+                                                         time)))))
+                                         (delq nil)))
+             (project-files (akirak/project-files default-directory)))
+        (append (->> open-files-with-times
+                     ;; (-sort (-on #'cdr #'time-less-p))
+                     (-map #'car)
+                     (-map (lambda (file)
+                             (propertize file 'face 'link-visited))))
+                (set-difference project-files
+                                (-map #'car open-files-with-times))))))))
 
 (defconst akirak/helm-source-project-files
   (helm-make-source "Files in project" 'akirak/helm-source-project-file
