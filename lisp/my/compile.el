@@ -54,16 +54,23 @@
   "Alist of compilation backend settings.")
 
 (defun akirak/compile-detect-project ()
-  (cl-some (lambda (cell)
-             (let* ((plist (cdr cell))
-                    (modes (plist-get plist :modes)))
-               (when (or (null modes)
-                         (apply #'derived-mode-p modes))
-                 (-some--> (locate-dominating-file default-directory
-                                                   (car cell))
-                   (append (list :root it
-                                 :filename (car cell))
-                           plist)))))
-           akirak/compile-backend-alist))
+  (cl-labels
+      ((match-pattern (cell &optional ignore-modes)
+                      (let* ((plist (cdr cell))
+                             (modes (plist-get plist :modes)))
+                        (when (or ignore-modes
+                                  (null modes)
+                                  (apply #'derived-mode-p modes))
+                          (-some--> (locate-dominating-file default-directory
+                                                            (car cell))
+                            (append (list :root it
+                                          :filename (car cell))
+                                    plist)))))
+       (match-pattern-ignore-modes (cell) (match-pattern cell t)))
+    (or (cl-some #'match-pattern
+                 (-filter (lambda (cell) (plist-get (cdr cell) :modes))
+                          akirak/compile-backend-alist))
+        (cl-some #'match-pattern-ignore-modes
+                 akirak/compile-backend-alist))))
 
 (provide 'my/compile)
