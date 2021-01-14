@@ -555,7 +555,27 @@ connection identities of recent files."
                            (list helm-source-bookmark-info
                                  helm-source-bookmark-man)
                            (list (helm-def-source--info-files))
-                           (akirak/helm-web-sources)))))
+                           (akirak/helm-web-sources))))
+
+  "<f6> <f6>"
+  (defun akirak/switch-to-recent-file-buffer ()
+    (interactive)
+    (if-let (buf (->> (buffer-list)
+                      (-filter (lambda (buf)
+                                 (and (buffer-file-name buf)
+                                      (not (get-buffer-window buf)))))
+                      (-map (lambda (buf)
+                              (cons buf
+                                    (buffer-local-value 'buffer-display-time buf))))
+                      (-filter #'cdr)
+                      (-sort (-on (-compose #'not #'time-less-p) #'cdr))
+                      (car)
+                      (car)))
+        (if current-prefix-arg
+            (pop-to-buffer buf)
+          (switch-to-buffer buf))
+      (user-error "No recent buffer"))))
+
 
 ;; In the list of project buffers, you can switch to a file list with
 ;; ~M-/~.
