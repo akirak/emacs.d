@@ -295,12 +295,32 @@ third argument, i.e. right after the description, in the entry."
         :sort ,sort :super-groups ,super-groups)))
 
   :config
+  (defun akirak/find-user-init-file ()
+    (interactive)
+    (find-file (expand-file-name "init.el" user-emacs-directory)))
+
+  (defun akirak/find-file-in-user-emacs-dir ()
+    (interactive)
+    (akirak/find-file-recursively user-emacs-directory))
+
+  (defun akirak/find-file-in-commonplace ()
+    (interactive)
+    (akirak/find-file-recursively "~/commonplace/"))
+
+  (defun akirak/commonplace-repos-status ()
+    (interactive)
+    (magit-status "~/commonplace/"))
+
   (org-starter-mode t)
   (general-add-hook 'org-starter-extra-find-file-map
-                    '((";" org-starter-find-config-file "config"))
+                    '((";" org-starter-find-config-file "config")
+                      ("i" akirak/find-user-init-file "init.el")
+                      ("c" akirak/commonplace-repos-status "commonplace"))
                     t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
-                    '((";" org-starter-swiper-config-files "config"))
+                    '((";" org-starter-swiper-config-files "config")
+                      ("i" akirak/find-file-in-user-emacs-dir "emacs-dir")
+                      ("c" akirak/find-file-in-commonplace "commonplace"))
                     t)
   (general-add-hook 'org-starter-extra-refile-map
                     '(("'" avy-org-refile-as-child "avy"))
