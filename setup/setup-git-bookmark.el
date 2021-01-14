@@ -94,7 +94,7 @@
                     (alist-get 'license)
                     (alist-get 'name))
             (unless (and it
-                         (yes-or-no-p "Bookmark a repository with %s?" it))
+                         (yes-or-no-p (format "Bookmark a repository with %s?" it)))
               (error "License is invalid"))))
        (t
         (user-error "Cannot find license"))))

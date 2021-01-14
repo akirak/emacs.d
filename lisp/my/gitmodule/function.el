@@ -83,7 +83,8 @@ FUNC is called with ARGS."
 
 (defun akirak/git-remote-topics (repo)
   (cl-typecase repo
-    (string (akirak/git-remote-tags (akirak/parse-git-url repo)))
+    (string (akirak/git-remote-topics
+             (akirak/parse-git-url repo)))
     (akirak/remote-git-repo-github (akirak/github-repo-topics
                                     (akirak/remote-git-repo-owner repo)
                                     (akirak/remote-git-repo-name repo)))
