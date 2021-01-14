@@ -1,3 +1,5 @@
+(require 'my/file/test)
+
 (akirak/bind-file-extra
   "c" #'revert-buffer-with-coding-system
   ;; "S" #'sudo-find-file
@@ -6,7 +8,16 @@
   "R" #'crux-rename-file-and-buffer
   "M" #'set-file-modes
   "X" #'executable-set-magic
-  "!" #'crux-open-with)
+  "!" #'crux-open-with
+  "t"
+  (defun akirak/find-impl-or-test-file ()
+    "An alternative to `projectile-find-implementation-or-test-other-window'."
+    (interactive)
+    (when-let (file (akirak/select-test-or-impl-file))
+      (if current-prefix-arg
+          (display-buffer (or (find-buffer-visiting file)
+                              (find-file-noselect file)))
+        (find-file file)))))
 
 (use-package executable
   :straight nil
