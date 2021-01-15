@@ -9,7 +9,7 @@
    '((mmm-styled-mode
       :submode css-mode
       :front "\\(styled\\|css\\)[.()<>[:alnum:]]?+`"
-      :back "`;")))
+      :back "`;?")))
 
   (mmm-add-mode-ext-class 'typescript-mode nil 'mmm-styled-mode)
 
