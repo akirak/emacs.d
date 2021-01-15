@@ -904,11 +904,34 @@ outcommented org-mode headers)."
 (cl-defmacro akirak/run-at-project-root (command &key other-window)
   `(defun ,(intern (concat "akirak/project-" (symbol-name command))) ()
      (interactive)
-     (let ((default-directory (akirak/project-root default-directory)))
+     (let ((root (akirak/project-root default-directory)))
        (when ,other-window
          (or (other-window 1)
              (split-window-sensibly)))
-       (call-interactively (quote ,command)))))
+       (let ((default-directory root))
+         (call-interactively (quote ,command))))))
+
+(cl-defmacro akirak/run-shell-command-silently-at-project-root (name command)
+  `(defun ,name ()
+     (interactive)
+     (let ((default-directory (akirak/project-root default-directory)))
+       (shell-command ,command))))
+
+(cl-defmacro akirak/make-project-root-file-command (filename &key regexp name)
+  `(defun ,(intern (format "akirak/open-%s-at-root" (or name (s-replace "." "-" filename)))) ()
+     (interactive)
+     (let* ((default-directory (akirak/project-root default-directory))
+            (file (pcase (if ,regexp
+                             (directory-files default-directory nil ,filename t)
+                           (when (file-exists ,filename)
+                             (list filename)))
+                    (`(,file) file)
+                    ('() (if (and (not regexp)
+                                  (yes-or-no-p (format "%s does not exist. Create it?" ,filename)))
+                             filename
+                           (user-error "Aborted")))
+                    (files (completing-read "File: " files)))))
+       (find-file file))))
 
 (akirak/bind-f8
   "A" #'treemacs-add-project-to-workspace
@@ -919,7 +942,14 @@ outcommented org-mode headers)."
   "D" (akirak/run-at-project-root add-dir-local-variable)
   "e" (akirak/run-at-project-root ielm :other-window t)
   "g" #'deadgrep
-  "n" (akirak/run-at-project-root nix-repl :other-window t)
+  "n" '(:wk "nix")
+  "nd" (akirak/make-project-root-file-command "default.nix")
+  "ne" (akirak/run-shell-command-silently-at-project-root
+        akirak/project-nix-shell-exit "nix-shell --run exit")
+  "nf" (akirak/make-project-root-file-command "flake.nix")
+  "nr" (akirak/run-at-project-root nix-repl :other-window t)
+  "ns" (akirak/make-project-root-file-command "shell.nix")
+  "r" (akirak/make-project-root-file-command "^README\\..+\\'" :regexp t :name "readme")
   "t" (akirak/run-at-project-root vterm :other-window t))
 
 ;;;; Administration
