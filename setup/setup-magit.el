@@ -5,6 +5,9 @@
   :type '(repeat directory))
 
 (use-package magit
+  :init
+  (setq with-editor-emacsclient-executable
+        (executable-find "emacsclient"))
   :config
   (when-let ((bin (executable-find "git")))
     (setq magit-git-executable bin))
