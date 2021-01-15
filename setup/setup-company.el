@@ -17,6 +17,14 @@
     (set (make-local-variable 'company-backends)
          ;; TODO: Refine the default backend configuration
          (cond
+          ((derived-mode-p 'css-mode)
+           '(company-css
+             (company-dabbrev-code
+              company-gtags
+              company-etags
+              company-keywords)
+             company-files
+             company-dabbrev))
           ((derived-mode-p 'prog-mode)
            '(company-capf
              (company-dabbrev-code
