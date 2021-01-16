@@ -22,13 +22,29 @@
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
           (akirak/feebleline-process-status)
           (akirak/feebleline-gcmh-status :face font-lock-warning-face)
-          (akirak/org-multi-wiki-workspace-status)
+          (akirak/feebleline-org-journal-status :post " " :face font-lock-constant-face)
+          (akirak/org-multi-wiki-workspace-status :post " " :face font-lock-constant-face)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
 
-(defun akirak/org-multi-wiki-workspace-status ()
-  (or (bound-and-true-p org-multi-wiki-current-namespace)
+(defvar akirak/feebleline-org-journal-status nil)
+
+(defun akirak/feebleline-org-journal-status ()
+  (or (when-let (dir (bound-and-true-p org-journal-dir))
+        (if (and akirak/feebleline-org-journal-status
+                 (string-equal dir (car akirak/feebleline-org-journal-status)))
+            (cdr akirak/feebleline-org-journal-status)
+          (save-match-data
+            (string-match (rx "/" (group (+ (not (any "/")))) (?  "/") eol)
+                          dir)
+            (cdr (setq akirak/feebleline-org-journal-status
+                       (cons dir (match-string 1 dir)))))))
       ""))
+
+(defun akirak/org-multi-wiki-workspace-status ()
+  (if-let (workspace (bound-and-true-p org-multi-wiki-current-namespace))
+      (format "%s" workspace)
+    ""))
 
 (defun akirak/feebleline-gcmh-status ()
   (if (bound-and-true-p akirak/gcmh-status)
