@@ -103,7 +103,7 @@ This can be used for an org-capture template to create an entry in the journal."
   ;; I'll use daily journal for personal use, and weekly for
   ;; workplace.
 
-  (defmacro akirak/org-journal-todo-match-expr (&rest todos)
+  (defun akirak/org-journal-todo-match-expr (todos)
     "Used to set `org-journal-carryover-items' variable."
     (concat "TODO="
             (cl-etypecase todos
@@ -111,16 +111,47 @@ This can be used for an org-capture template to create an entry in the journal."
               (list (format "\{%s\}"
                             (string-join todos "\\|"))))))
 
-  (defun akirak/setup-daily-org-journal ()
-    (setq org-journal-file-type 'daily))
+  (cl-defun akirak/setup-org-journal (journal-dir daily-or-weekly
+                                                  &key
+                                                  carry-over)
+    "Configure org-journal for the context."
+    (declare (indent 1))
+    (cl-ecase daily-or-weekly
+      (weekly (setq org-journal-file-type 'weekly
+                    org-journal-file-header
+                    (defun akirak/org-journal-weekly-header (time)
+                      (format-time-string "#+TITLE: Week %-W, %Y" time))))
+      (daily (setq org-journal-file-type 'daily)))
+    (setq org-journal-dir journal-dir
+          org-journal-carryover-items (akirak/org-journal-todo-match-expr carry-over)
+          org-journal-enable-agenda-integration t)
+    ;; Update the current file for org-agenda.
+    (akirak/org-journal-current-file)
+    ;; Return the journal dir.
+    journal-dir)
 
-  (defun akirak/setup-weekly-org-journal ()
-    ;; (setq org-extend-today-until 4
-    ;;       org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
-    (setq org-journal-file-type 'weekly
-          org-journal-file-header
-          (defun akirak/org-journal-weekly-header (time)
-            (format-time-string "#+TITLE: Week %-W, %Y" time))))
+  (defun akirak/org-journal-current-file ()
+    (ignore-errors
+      (setq akirak/org-journal-current-file
+            (org-journal--get-entry-path (current-time)))))
+
+  (defvar akirak/org-journal-daily-timer nil)
+
+  (defun akirak/org-journal-track-current-file ()
+    "Update the current file every day."
+    (interactive)
+    (if akirak/org-journal-daily-timer
+        (user-error "Timer already started")
+      (setq akirak/org-journal-daily-timer
+            (run-with-timer (let* ((now (current-time))
+                                   (rollover (encode-time (append (list 0 0 4)
+                                                                  (-drop 3 (decode-time now)))))
+                                   (diff (- (float-time now) (float-time rollover))))
+                              (if (> diff 0)
+                                  (- 86400 diff)
+                                (- diff)))
+                            86400
+                            #'akirak/org-journal-current-file))))
 
   (org-starter-def-capture "j" "Journal")
   (org-starter-def-capture "jj" "Journal - Plain entry"
