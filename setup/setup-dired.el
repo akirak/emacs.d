@@ -263,7 +263,9 @@
    (("x" dired-open-xdg))
    "Transfer"
    (("r" dired-rsync))
-   "Toggle"
-   (("tc" dired-collapse-mode "Collapse" :toggle t))))
+   "Minor modes"
+   (("mc" dired-collapse-mode "collapse" :toggle t)
+    ("mf" dired-filter-mode "filter" :toggle t)
+    ("mg" dired-filter-group-mode "group" :toggle t))))
 
 (provide 'setup-dired)
