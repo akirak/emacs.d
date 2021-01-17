@@ -13,4 +13,19 @@
   ("t" nov-goto-toc "toc")
   ("q" nil "quit hydra" :exit t))
 
+(defun akirak/epub-metadata (file)
+  (message "Running...")
+  (json-parse-string
+   (call-process-with-args "nix" "run"
+     "github:akirak/epub2json"
+     "--" (expand-file-name file))
+   :object-type 'alist
+   :array-type 'list
+   :null-object nil))
+
+(defun akirak/epub-metadata-pp-display (file)
+  (interactive "fFile: ")
+  (pp-display-expression (akirak/epub-metadata file)
+                         (format "*epub metadata %s*" file)))
+
 (provide 'setup-epub)
