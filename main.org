@@ -867,8 +867,18 @@ Use hl-todo by tarsius
 #+begin_src emacs-lisp
   (use-package hl-todo
     :config
-    (akirak/bind-jump :keymaps 'hl-todo-mode-map "t" #'hl-todo-next)
-    :hook (prog-mode . hl-todo-mode))
+    (akirak/bind-search :keymaps 'hl-todo-mode-map
+      "t" #'hl-todo-occur)
+    (akirak/bind-jump :keymaps 'hl-todo-mode-map
+      "t" #'hl-todo-next
+      "r" #'hl-todo-previous)
+    (akirak/bind-generic
+      "t" #'hl-todo-insert)
+    (general-add-hook 'hl-todo-keyword-faces
+                      '(("REVIEW" . "DarkOrange3")
+                        ("OPTIMIZE" . "LightSeaGreen")))
+    :hook
+    (prog-mode . hl-todo-mode))
 #+end_src
 
 There is another package named comment-tags for the same purpose, but I won't use it since there is hl-todo
