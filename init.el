@@ -990,6 +990,13 @@ outcommented org-mode headers)."
   "nf" '(nil :wk "fetch")
   "nff" #'akirak/nix-prefetch-url)
 
+;;;;; Org
+(akirak/bind-admin
+  "o" '(nil :wk "org")
+  "oj" '(nil :wk "org-journal")
+  ;; Add keybindings for switching the journal context
+  "ojd" #'org-journal-new-date-entry)
+
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
   "r" '(nil :wk "remote")
