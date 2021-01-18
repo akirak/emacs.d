@@ -2,12 +2,15 @@
   :mode (("\\.bowerrc$" . json-mode)
          ("\\.jshintrc$" . json-mode)
          ("\\.json_schema$" . json-mode)
-         ("\\.json\\'" . json-mode))
-  :bind (:package json-mode-map
-                  :map json-mode-map
-                  ("C-c <tab>" . json-mode-beautify))
+         ("\\.json\\'" . akirak/maybe-json-mode))
   :config
-  (make-local-variable 'js-indent-level))
+  (defun akirak/maybe-json-mode ()
+    "Turn on `json-mode' unless the file is larger than 50 KB."
+    (interactive)
+    (if (< (buffer-size) (* 50 1024))
+        (json-mode)
+      (buffer-disable-undo)
+      (fundamental-mode))))
 
 (use-package counsel-jq
   :straight (counsel-jq :host github :repo "200ok-ch/counsel-jq")
