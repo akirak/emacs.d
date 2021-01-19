@@ -923,8 +923,8 @@ outcommented org-mode headers)."
      (let* ((default-directory (akirak/project-root default-directory))
             (file (pcase (if ,regexp
                              (directory-files default-directory nil ,filename t)
-                           (when (file-exists ,filename)
-                             (list filename)))
+                           (when (file-exists-p ,filename)
+                             (list ,filename)))
                     (`(,file) file)
                     ('() (if (and (not regexp)
                                   (yes-or-no-p (format "%s does not exist. Create it?" ,filename)))
