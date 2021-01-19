@@ -16,20 +16,6 @@
 ;;;;; Japanese
 (use-package katawa
   :straight (katawa :host github :repo "akirak/katawa.el")
-  :commands (katawa-ivy katawa-ivy-at-point)
-  :config
-  ;; (akirak/bind-language
-  ;;   "j" #'katawa-ivy-at-point
-  ;;   "J" #'katawa-ivy)
-  (ivy-add-actions 'katawa-ivy
-                   '(("t" akirak/org-capture-japanese-to-translate "org-capture"))))
-
-(defun akirak/org-capture-japanese-to-translate (inp)
-  (let* ((org-capture-entry `("x" "xxx" entry
-                              (file+function ,(org-starter-locate-file "japanese.org" nil t)
-                                             org-reverse-datetree-goto-date-in-file)
-                              ;; TODO: Automatically insert translations
-                              ,(concat "* " inp "\n"))))
-    (org-capture)))
+  :commands (katawa-ivy katawa-ivy-at-point))
 
 (provide 'setup-language-tools)
