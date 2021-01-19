@@ -12,6 +12,11 @@
                                    "(import <nixpkgs> {}).skk-dicts"))
                                 "share"
                                 "SKK-JISYO.L"))
+
+  :general
+  (:keymaps 'skk-j-mode-map :package 'skk
+            ";" #'akirak/insert-japanese-from-english)
+
   :custom
   (skk-jisyo-code 'utf-8-unix)
   (skk-jisx0213-prohibit t))
