@@ -5,6 +5,22 @@
 
 (use-package helm-org
   :after helm
+
+  :general
+  (:keymaps 'helm-org-headings-map :package 'helm-org
+            ;; Use the same keybinding as the other narrowing commands
+            "C-x n"
+            (defun akirak/helm-org-narrow-to-heading-at-marker ()
+              "Narrow to the selected heading in helm-org."
+              (interactive)
+              (with-helm-alive-p
+                (helm-exit-and-execute-action
+                 (lambda (marker)
+                   (when (buffer-narrowed-p)
+                     (widen))
+                   (helm-org-goto-marker marker)
+                   (org-narrow-to-subtree))))))
+
   :config
   (setq helm-org-headings-actions
         (org-workflow--build-helm-actions org-workflow-heading-unary-action-list))
