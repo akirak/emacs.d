@@ -74,4 +74,7 @@
 (use-package ob-graphql
   :after ob)
 
+(use-package ob-translate
+  :after ob)
+
 (provide 'setup-org-babel)

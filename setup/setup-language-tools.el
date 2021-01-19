@@ -5,8 +5,11 @@
              google-translate-query-translate)
   :functions (google-translate-translate)
   :config
-  (akirak/bind-language
-    "t" #'google-translate-at-point))
+  ;; Changes needed because of changes in the Translate API:
+  ;; https://github.com/atykhonov/google-translate/issues/52
+  (defun google-translate--search-tkk ()
+    "Search TKK." (list 430675 2721866130))
+  (setq google-translate-backend-method 'curl))
 
 ;;;; Tools for specific languages
 
