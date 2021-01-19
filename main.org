@@ -1207,7 +1207,8 @@ You can customize a list of modules for supported languages through the followin
   input method in the environment."
     :group 'akirak
     :type '(set (const :tag "Japanese/日本語 (mozc)" setup-japanese-mozc)
-                (const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim))
+                (const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim)
+                (const :tag "Japanese/日本語 (SKK)" setup-japanese-skk))
     :set (lambda (sym value)
            (set sym value)
            (dolist (module value)
