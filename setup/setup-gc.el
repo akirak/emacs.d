@@ -17,6 +17,21 @@
                                 (lambda ()
                                   (setq akirak/gcmh-status nil)))))
   (gcmh-mode 1)
+  (defun akirak/gcmh-save-log ()
+    "Save the gcmh log to a file."
+    (ignore-errors
+      (when (require 'xdg nil t)
+        (message "Saving gcmhg log...")
+        (let ((out-dir (expand-file-name "emacs" (xdg-data-home))))
+          (unless (file-directory-p out-dir)
+            (make-directory out-dir))
+          (with-current-buffer gcmh-log-buffer
+            (write-file (expand-file-name
+                         (format-time-string "emacs-gcmh-%s.log")
+                         out-dir)))))))
+  :hook
+  ;; Save the gcmhg log for benchmarking.
+  (kill-emacs-hook . akirak/gcmh-save-log)
   :custom
   (gcmh-verbose t)
   (gcmh-idle-delay 15))
