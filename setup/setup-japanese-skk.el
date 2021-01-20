@@ -18,6 +18,10 @@
             ";" #'akirak/insert-japanese-from-english)
 
   :custom
+  ;; It's better to set `skk-user-directory' in your `custom-file'.
+  ;; The directory will be used to the user dictionary and other files.
+  ;; I prefer ~/local/emacs/skk/ as the location.
+  ;; I back up ~/local/, so it will be restored.
   (skk-jisyo-code 'utf-8-unix)
   (skk-jisx0213-prohibit t))
 
