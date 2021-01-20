@@ -28,6 +28,7 @@
               sentence-end-double-space nil
               default-fill-column 80
               indent-tabs-mode nil
+              recenter-positions '(top middle bottom)
               indicate-empty-lines t
               truncate-lines t
               backup-by-copying t
