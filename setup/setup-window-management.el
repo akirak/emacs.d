@@ -561,7 +561,8 @@ may have been stored before."
       (walk-window-tree (lambda (w)
                           (cond
                            ((member (buffer-name (window-buffer w))
-                                    '("*direnv*"))
+                                    '("*direnv*"
+                                      " *LV*"))
                             (quit-window nil w)
                             (setq killed t))
                            ((< (window-height w) 7)
