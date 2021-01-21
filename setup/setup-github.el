@@ -13,6 +13,13 @@
 (use-package treepy)
 
 (use-package forge
+  :custom
+  ;; forge-bug-reference-setup consumes a lot of memory,
+  ;; which leads to an extensive amount of GC time.
+  ;;
+  ;; For now, I will prevent from running it entirely by setting this
+  ;; hook variable to nil.
+  (forge-bug-reference-hooks nil)
   :config
   (akirak/bind-browse-at-remote
     "w" #'forge-browse-dwim
