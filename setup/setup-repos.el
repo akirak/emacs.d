@@ -8,11 +8,11 @@
   :config
   (cl-defmacro akirak/git-identity-add (address &rest args)
     (declare (indent 1))
-    (let ((cell (assoc address git-identity-list)))
-      (if cell
-          (setcdr cell args)
-        (push (cons address args)
-              git-identity-list))))
+    `(let ((cell (assoc ,address git-identity-list)))
+       (if cell
+           (setcdr cell (quote ,args))
+         (push (cons ,address (quote ,args))
+               git-identity-list))))
 
   :custom
   (git-identity-magit-mode t))
