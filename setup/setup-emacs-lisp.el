@@ -38,7 +38,29 @@
 (use-package package-lint
   :commands (package-lint-current-buffer))
 
-(use-package buttercup)
+(use-package buttercup
+  :commands (buttercup-run-at-point
+             buttercup-minor-mode)
+  :config
+  ;; Work around the duplicate lines issue.
+  ;; See https://github.com/jorgenschaefer/emacs-buttercup/issues/181
+  (advice-add #'buttercup-reporter-interactive
+              :before-while
+              (defun akirak/ad-bf-reporter-interactive (event arg)
+                (not (eq event `spec-started))))
+
+  (advice-add #'buttercup-colorize :filter-return #'xterm-color-filter)
+
+  ;; There is no `buttercup-minor-mode-map'
+  (akirak/bind-mode :keymaps 'emacs-lisp-mode-map
+    "p" #'buttercup-run-at-point))
+
+(add-hook 'emacs-lisp-mode-hook
+          (defun akirak/turn-on-buttercup-minor-mode-conditionally ()
+            (when (and (buffer-file-name)
+                       (string-match-p (rx (any "-/") "test" (?  "s") ".el" eol)
+                                       (buffer-file-name)))
+              (buttercup-minor-mode t))))
 
 (use-package package-build)
 
