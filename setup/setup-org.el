@@ -178,7 +178,11 @@ Navigation: _n_ _p_ _f_ _b_
 (advice-add 'org-beginning-of-line :around
             'akirak/ad-around-org-beginning-of-line)
 
-(defmacro akirak/org-define-set-property-command (property)
+(cl-defmacro akirak/org-define-set-property-command (property &key
+                                                              default-value-fn
+                                                              prohibit-override)
+  "Define an interactive command which lets the user set a particular property."
+  (declare (indent 1))
   (let ((command (intern (format "akirak/org-set-%s-property"
                                  (downcase (s-replace "_" "-" property))))))
     `(defun ,command ()
@@ -186,7 +190,17 @@ Navigation: _n_ _p_ _f_ _b_
        (interactive)
        (cl-case current-prefix-arg
          ('(4) (princ (org-entry-get nil ,property t)))
-         (otherwise (org-set-property ,property nil))))))
+         (otherwise
+          (org-set-property ,property
+                            ,(when default-value-fn
+                               `(let ((existing (org-entry-get nil ,property)))
+                                  (when (and existing ,prohibit-override)
+                                    (user-error "This entry already has %s property, so don't override it"
+                                                ,property))
+                                  (read-string ,(format "Enter a value of %s property: "
+                                                        property)
+                                               (or existing
+                                                   (funcall ,default-value-fn)))))))))))
 
 (add-to-list 'which-key-replacement-alist
              '(("C-," . "akirak/org-set-") .
@@ -198,7 +212,14 @@ Navigation: _n_ _p_ _f_ _b_
                      (cons (car kb) (match-string 1 (cdr kb)))
                    kb))))
 
-(akirak/org-define-set-property-command "CUSTOM_ID")
+(defun akirak/org-default-custom-id ()
+  (->> (org-get-heading t t t t)
+       (org-link-display-format)
+       (org-multi-wiki-default-custom-id-escape-fn)))
+
+(akirak/org-define-set-property-command "CUSTOM_ID"
+  :default-value-fn #'akirak/org-default-custom-id
+  :prohibit-override t)
 
 (general-def :keymaps 'org-read-date-minibuffer-local-map
   "C-p" (lambda () (interactive)
