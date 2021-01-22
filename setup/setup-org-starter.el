@@ -219,7 +219,8 @@
 
   :custom
   (org-multi-wiki-want-custom-id t)
-  (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn))
+  (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn)
+  (org-multi-wiki-display-buffer-fn #'switch-to-buffer))
 
 (use-package helm-org-multi-wiki
   :config
