@@ -32,8 +32,9 @@ If it succeeds, it returns non-nil."
       (unless arg
         (let ((default-directory dir))
           ;; Only allow removal of worktrees in ~/projects/
-          (assert (string-prefix-p "~/projects/"
-                                   (abbreviate-file-name default-directory)))
+          (assert (cl-member (abbreviate-file-name default-directory)
+                             '("~/projects/" "~/work/")
+                             :test (-flip #'string-prefix-p)))
           (assert (not (magit-untracked-files)))
           (assert (not (magit-unstaged-files)))
           (assert (not (magit-staged-files)))
