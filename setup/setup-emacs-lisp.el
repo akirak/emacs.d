@@ -73,8 +73,9 @@
   (add-to-list 'auto-mode-alist
                (cons (rx "/.recipes/" (+ (not (any "/"))) eol)
                      'emacs-lisp-mode))
-  (akirak/bind-mode :keymaps 'emacs-lisp-mode-map
-    "l" #'elinter))
+  :general
+  (:keymaps 'emacs-lisp-mode-map
+            "C-c C-l" #'elinter))
 
 (use-package lisp-extra-font-lock)
 
