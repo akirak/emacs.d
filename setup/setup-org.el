@@ -416,6 +416,80 @@ With ARG, pick a text from the kill ring instead of the last one."
                    ""))
        (akirak/org-bookmark-heading-filename path)))))
 
+(defun akirak/org-eldoc-heading ()
+  (let ((outline (-> (org-get-outline-path t t)
+                     (org-format-outline-path)))
+        (category (org-get-category))
+        (tags (org-get-tags-at nil t)))
+    (--> (list (format "%s:" category)
+               outline
+               (when tags
+                 (propertize (format ":%s:" (string-join tags ":"))
+                             'face 'org-tag)))
+         (-non-nil it)
+         (string-join it " "))))
+
+(defun akirak/org-get-last-inactive-timestamp ()
+  (save-excursion
+    (let ((subtree-end (save-excursion
+                         (org-end-of-subtree)))
+          match)
+      (while (re-search-forward org-ts-regexp-inactive subtree-end t)
+        (backward-char)
+        (let ((elem (org-element-at-point)))
+          (cl-case (org-element-type elem)
+            (clock
+             (let ((value (org-element-property :value elem)))
+               (cl-case (org-element-property :type value)
+                 (inactive-range
+                  (push (list 0
+                              (org-element-property :minute-end value)
+                              (org-element-property :hour-end value)
+                              (org-element-property :day-end value)
+                              (org-element-property :month-end value)
+                              (org-element-property :year-end value)
+                              nil nil nil)
+                        match)))))
+            (node-property
+             (push (org-parse-time-string
+                    (org-element-property :value elem))
+                   match)))))
+      (car (sort (mapcar #'encode-time match) (-compose #'not #'time-less-p))))))
+
+(defun akirak/org-eldoc-heading-with-extra ()
+  (let* ((clock-sum (org-clock-sum-current-item))
+         (created (org-entry-get nil "CREATED_TIME"))
+         (last (akirak/org-get-last-inactive-timestamp))
+         (done (org-entry-is-done-p))
+         (scheduled (unless done (org-entry-get nil "SCHEDULED")))
+         (deadline (unless done (org-entry-get nil "DEADLINE"))))
+    (--> (list (when created
+                 (format "Created %s" created))
+               (when last
+                 (format-time-string (concat "Last " (org-time-stamp-format t t)) last))
+               (when (and clock-sum (> clock-sum 0))
+                 (format "Spent %d min" clock-sum))
+               (when scheduled
+                 (format "Scheduled %s" scheduled))
+               (when deadline
+                 (format "Deadline %s" deadline)))
+         (-non-nil it)
+         (string-join it ", ")
+         (concat (akirak/org-eldoc-heading) " " it))))
+
+(defun akirak/org-eldoc-function ()
+  (cond
+   ((org-at-heading-p)
+    (akirak/org-eldoc-heading-with-extra))
+   (t
+    (akirak/org-eldoc-heading))))
+
+(add-hook 'org-mode-hook
+          (defun akirak/setup-org-eldoc ()
+            (set (make-local-variable 'eldoc-documentation-function)
+                 #'akirak/org-eldoc-function)
+            (eldoc-mode t)))
+
 (use-package org-superstar
   :custom
   (org-superstar-headline-bullets-list '("Ⅰ" "Ⅱ" "Ⅲ" "Ⅳ" "Ⅴ" "Ⅵ"))
