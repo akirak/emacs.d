@@ -1,4 +1,5 @@
 (use-package dimmer
+  :disabled t
   :straight (:type built-in)
   ;; :unless (akirak/windows-subsystem-for-linux-p)
   :config

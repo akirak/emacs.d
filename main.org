@@ -981,6 +981,7 @@ Additional visual cues can increase productivity, but they can be noisy at the s
 I often lose sight of the cursor when I switch to another window, so this is necessary.
 #+begin_src emacs-lisp
   (use-package beacon           ; Highlight the cursor on certain events
+    :disabled t
     :unless (akirak/windows-subsystem-for-linux-p)
     :config
     (general-add-hook 'beacon-dont-blink-commands
