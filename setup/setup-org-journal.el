@@ -200,6 +200,7 @@ This can be used for an org-capture template to create an entry in the journal."
                t (-on #'equal #'car))
 
   :custom
+  (org-journal-find-file #'find-file)
   (org-journal-date-format "%F (%a)")
   (org-journal-file-format "%Y%m%d.org"))
 
