@@ -562,7 +562,8 @@ may have been stored before."
                           (cond
                            ((member (buffer-name (window-buffer w))
                                     '("*direnv*"
-                                      " *LV*"))
+                                      " *LV*"
+                                      "*Warnings*"))
                             (quit-window nil w)
                             (setq killed t))
                            ((< (window-height w) 7)
