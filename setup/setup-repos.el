@@ -63,4 +63,50 @@ If it succeeds, it returns non-nil."
         (message "Deleted %s" (string-join worktrees " "))
         t))))
 
+(cl-defun akirak/git-commit-date (&optional (rev "HEAD"))
+  (with-temp-buffer
+    (insert (call-process-with-args "git" "cat-file" "-p" rev))
+    (goto-char (point-min))
+    (re-search-forward (rx bol "committer "))
+    (let ((str (thing-at-point 'line t)))
+      (string-match (rx (group (+ digit)) (+ space)
+                        (group (any "-+"))
+                        (group (repeat 2 (any digit)))
+                        (group (repeat 2 (any digit)))
+                        eol)
+                    str)
+      (let ((secs (cl-parse-integer (match-string 1 str)))
+            (sign (match-string 2 str))
+            (hours (cl-parse-integer (match-string 3 str)))
+            (minutes (cl-parse-integer (match-string 4 str))))
+        (->> (+ (* 3600 hours) (* 60 minutes))
+             (funcall (if (string= sign "+") #'+ #'-))
+             (+ secs)
+             (decode-time)
+             (encode-time))))))
+
+(defun akirak/git-archive-repository ()
+  "Save the latest commit of this repository to my repository archive.
+
+This is used to keep protptype code for later use."
+  (interactive)
+  ;; TODO: Maybe verify the origin URL to prevent myself from
+  ;; accidentally importing code not written by me
+  (let* ((name (->> (or (magit-toplevel)
+                        (user-error "No top level"))
+                    (f-filename)))
+         (dest (f-join commonplace-root "archive"
+                       (format-time-string "%Y%m" (akirak/git-commit-date))
+                       name))
+         (tmpfile (make-temp-file "git-archive" nil ".tar")))
+    (unwind-protect
+        (progn
+          (when (file-directory-p dest)
+            (user-error "Directory %s already exists" dest))
+          (call-process-with-args "git" "archive" "-o" tmpfile "HEAD")
+          (make-directory dest t)
+          (call-process-with-args "tar" "-C" (expand-file-name dest) "-x" "-f" tmpfile)
+          (message "Finished adding to %s" dest))
+      (delete-file tmpfile))))
+
 (provide 'setup-repos)
