@@ -16,7 +16,7 @@
           ;; ((lambda () (when (and buffer-file-name (require 'magit nil t))
           ;;               (magit-get-current-branch))) :face font-lock-string-face :post " ")
           (akirak/feebleline-mode-name :post " " :face font-lock-comment-face)
-          (akirak/feebleline-lsp :face font-lock-type-face)
+          ;; (akirak/feebleline-lsp :face font-lock-type-face)
           ;; Disable this segment for now.
           ;; (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
