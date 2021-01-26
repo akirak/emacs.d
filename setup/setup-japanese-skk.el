@@ -21,7 +21,7 @@
     (setq skk-indicator-alist (skk-make-indicator-alist)))
 
   :general
-  (:keymaps 'skk-j-mode-map :package 'skk
+  (:keymaps 'skk-j-mode-map :package 'skk-vars
             ";" #'akirak/insert-japanese-from-english)
 
   :custom
