@@ -15,6 +15,10 @@
                 "share"
                 "SKK-JISYO.L"))
 
+  :config/el-patch
+  (el-patch-defun skk-setup-modeline ()
+    ;; ("" skk-modeline-input-mode)
+    (setq skk-indicator-alist (skk-make-indicator-alist)))
 
   :general
   (:keymaps 'skk-j-mode-map :package 'skk
