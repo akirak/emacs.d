@@ -30,8 +30,8 @@
                          (format-time-string "emacs-gcmh-%s.log")
                          out-dir)))))))
   :hook
-  ;; Save the gcmhg log for benchmarking.
-  (kill-emacs-hook . akirak/gcmh-save-log)
+  Save the gcmhg log for benchmarking.
+  (kill-emacs . akirak/gcmh-save-log)
   :custom
   (gcmh-verbose t)
   (gcmh-idle-delay 15))
