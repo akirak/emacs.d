@@ -286,6 +286,16 @@
      "Show entry (default function)" 'org-recent-headings--show-entry-default
      "Show entry in real buffer" 'org-recent-headings--show-entry-direct
      "Show entry in indirect buffer" 'org-recent-headings--show-entry-indirect
+     "Insert a link to the heading"
+     (defun akirak/org-recent-headings-insert-link (entry)
+       (unless (derived-mode-p 'org-mode)
+         (user-error "Not in org-mode"))
+       (let ((marker (org-recent-headings--entry-marker entry)))
+         (with-current-buffer (marker-buffer marker)
+           (org-with-wide-buffer
+            (goto-char marker)
+            (org-store-link nil 'interactive))))
+       (org-insert-last-stored-link 1))
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
