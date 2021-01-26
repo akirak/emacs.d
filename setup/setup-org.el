@@ -478,11 +478,11 @@ With ARG, pick a text from the kill ring instead of the last one."
          (concat (akirak/org-eldoc-heading) " " it))))
 
 (defun akirak/org-eldoc-function ()
-  (cond
-   ((org-at-heading-p)
-    (akirak/org-eldoc-heading-with-extra))
-   (t
-    (akirak/org-eldoc-heading))))
+  (if (org-at-heading-p)
+      (akirak/org-eldoc-heading-with-extra)
+    (or (-> (get-text-property (point) 'htmlize-link)
+            (plist-get :uri))
+        (akirak/org-eldoc-heading))))
 
 (add-hook 'org-mode-hook
           (defun akirak/setup-org-eldoc ()
