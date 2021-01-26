@@ -31,6 +31,7 @@
   (shackle-default-alignment 'below)
   (shackle-rules '(
                    ("\\*ivy-occur counsel-projectile " :regexp t :align left :ratio 0.15)
+                   ("*xref*" :align below :ratio 0.2)
                    ;; Shackle rules for org-mode
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
@@ -571,5 +572,11 @@ may have been stored before."
                             (setq killed t)))))
       (unless killed
         (abort-recursive-edit)))))
+
+(general-def :keymaps 'xref--xref-buffer-mode-map :package 'xref
+  [remap xref-goto-xref]
+  (defun akirak/xref-goto-xref (&optional arg)
+    (interactive "P")
+    (xref-goto-xref (not arg))))
 
 (provide 'setup-window-management)
