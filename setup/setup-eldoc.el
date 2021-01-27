@@ -50,4 +50,10 @@
 
 (advice-add #'display-buffer :before #'akirak/eldoc-delete-window)
 
+(use-package eldoc-eval
+  :config
+  (eldoc-in-minibuffer-mode 1)
+  :custom
+  (eldoc-in-minibuffer-show-fn #'akirak/eldoc-message-lv))
+
 (provide 'setup-eldoc)
