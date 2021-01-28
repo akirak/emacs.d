@@ -168,6 +168,37 @@ This can be used for an org-capture template to create an entry in the journal."
 :CREATED_TIME: %U
 :END:
 " :clock-in t :clock-resume t)
+  (org-starter-def-capture "jl" "Journal - With link")
+  (org-starter-def-capture "jlc" "(generic) Comment on the entry"
+    entry (function org-journal-find-location)
+    ;; You can use `org-edit-headline' to edit the headline quickly
+    "** Comment on %s
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+%a
+
+%?
+" :clock-in t :clock-resume t)
+  (org-starter-def-capture "jld" "Log done"
+    entry (function org-journal-find-location)
+    "** Finished %a :@done:
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+%?
+" :clock-in t :clock-resume t)
+  (org-starter-def-capture "jlp" "Log progress"
+    entry (function org-journal-find-location)
+    "** Progress on %a :@progress:
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+%?
+" :clock-in t :clock-resume t)
 
   (cl-defun akirak/org-capture-template-to-clock (&key extra-tags)
     (assert (org-clocking-p))
