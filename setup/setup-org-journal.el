@@ -160,14 +160,14 @@ This can be used for an org-capture template to create an entry in the journal."
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
-" :clock-in t :clock-resume t :unnarrowed t)
+" :clock-in t :clock-resume t)
   (org-starter-def-capture "jn" "Journal - Next entry"
     entry (function org-journal-find-location)
     "** NEXT %?
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
-" :clock-in t :clock-resume t :unnarrowed t)
+" :clock-in t :clock-resume t)
 
   (cl-defun akirak/org-capture-template-to-clock (&key extra-tags)
     (assert (org-clocking-p))
