@@ -40,4 +40,18 @@
   (org-noter-default-notes-file-names nil)
   (org-noter-always-create-frame nil))
 
+(defun akirak/org-noter-find-document ()
+  "Visit NOTER_DOCUMENT of the current buffer."
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (unless (org-at-heading-p)
+      (re-search-forward org-heading-regexp nil t))
+    (if-let (doc (org-entry-get nil "NOTER_DOCUMENT"))
+        (find-file doc)
+      (user-error "Cannot find NOTER_DOCUMENT property in the file"))))
+
+(general-def :keymaps 'org-mode-map :package 'org :prefix akirak/mode-prefix-key
+  "nf" #'akirak/org-noter-find-document)
+
 (provide 'setup-referencing)
