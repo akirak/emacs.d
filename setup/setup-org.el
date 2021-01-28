@@ -15,6 +15,12 @@
 
 (akirak/bind-org-export "" '(nil :wk "export shortcuts"))
 
+(general-def :package 'org :keymaps 'org-mode-map :prefix akirak/mode-prefix-key
+  "h" #'org-edit-headline
+  "l" '(nil :wk "insert link")
+  "s" '(nil :wk "set")
+  "sc" #'akirak/org-set-category)
+
 (defmacro akirak/org-with-maybe-agenda-origin (&rest progn)
   `(cond
     ((derived-mode-p 'org-mode)
