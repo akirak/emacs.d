@@ -40,7 +40,7 @@
       (interactive)
       (akirak/avy-org-heading '(4))))
 
-  (general-def :package 'org :keymaps 'org-mode-map  :prefix akirak/mode-prefix-key
+  (general-def :package 'org :keymaps 'org-mode-map  :prefix "C-c C-x"
     "lh"
     (defun akirak/org-insert-link-to-avy-org-heading ()
       (interactive)

@@ -51,7 +51,7 @@
         (find-file doc)
       (user-error "Cannot find NOTER_DOCUMENT property in the file"))))
 
-(general-def :keymaps 'org-mode-map :package 'org :prefix akirak/mode-prefix-key
+(general-def :keymaps 'org-mode-map :package 'org-noter :prefix "C-c C-x"
   "nf" #'akirak/org-noter-find-document)
 
 (provide 'setup-referencing)
