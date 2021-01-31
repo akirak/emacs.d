@@ -266,8 +266,10 @@
       (unless (= m n)
         (message "Deleted %d non-existent items from org-recent-headings-list in %.1f s"
                  (- m n)
-                 (- (float-time) start-time)))))
-  (run-with-idle-timer 50 nil #'akirak/org-recent-headings-cleanup))
+                 (- (float-time) start-time))))
+    ;; Prevent automatic GC toon soon after getting back to work
+    (garbage-collect))
+  (run-with-idle-timer 1200 t #'akirak/org-recent-headings-cleanup))
 (use-package helm-org-recent-headings
   :after (helm org-recent-headings)
   :config
