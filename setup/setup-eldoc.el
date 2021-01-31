@@ -54,6 +54,13 @@
   :config
   (eldoc-in-minibuffer-mode 1)
   :custom
-  (eldoc-in-minibuffer-show-fn #'akirak/eldoc-message-lv))
+  (eldoc-in-minibuffer-show-fn
+   (lambda (x)
+     (akirak/eldoc-message-lv
+      ;; Sometimes a number is given as argument, so convert it to a
+      ;; string.
+      (if (not (stringp x))
+          (format "%s" x)
+        x)))))
 
 (provide 'setup-eldoc)
