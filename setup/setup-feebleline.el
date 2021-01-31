@@ -6,7 +6,8 @@
     (setq akirak/orig-mode-line-format mode-line-format))
   (feebleline-mode 1)
   (setq feebleline-msg-functions
-        '(((lambda () (format-mode-line "%e")))
+        '(
+          ;; ((lambda () (format-mode-line "%e")))
           ;; ((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
           (akirak/feebleline-time-string :post " " :face font-lock-comment-face)
           (akirak/feebleline-input-method :post " " :face font-lock-constant-face)
@@ -20,7 +21,8 @@
           ;; Disable this segment for now.
           ;; (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
-          (akirak/feebleline-process-status)
+          ;; TODO: This is a memory hog. I will look for an alternative
+          ;; (akirak/feebleline-process-status)
           (akirak/feebleline-gcmh-status :face font-lock-warning-face)
           (akirak/feebleline-org-journal-status :post " " :face font-lock-constant-face)
           (akirak/org-multi-wiki-workspace-status :post " " :face font-lock-constant-face)
