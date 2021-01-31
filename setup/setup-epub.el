@@ -14,7 +14,7 @@
   ("q" nil "quit hydra" :exit t))
 
 (defun akirak/epub-metadata (file)
-  (message "Running...")
+  (message "Reading metadata from %s" file)
   (json-parse-string
    (call-process-with-args "nix" "run"
      "github:akirak/epub2json"
@@ -27,5 +27,15 @@
   (interactive "fFile: ")
   (pp-display-expression (akirak/epub-metadata file)
                          (format "*epub metadata %s*" file)))
+
+(defvar akirak/epub-file-list nil)
+
+(defun akirak/scan-epub-files-recursively (dir)
+  (interactive "DRoot: ")
+  (->> (directory-files-recursively dir (rx ".epub" eol) nil nil t)
+       (-filter #'f-exists-p)
+       (--map (ignore-errors (akirak/epub-metadata it)))
+       (-filter #'-non-nil)
+       (setq akirak/epub-file-list)))
 
 (provide 'setup-epub)
