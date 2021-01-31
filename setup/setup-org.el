@@ -65,7 +65,7 @@
               ;; org-use-fast-tag-selection t
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
-              org-tags-exclude-from-inheritance '("ORDERED")
+              org-tags-exclude-from-inheritance '("ORDERED" "crypt")
               org-blank-before-new-entry '((heading . nil)
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
@@ -557,5 +557,9 @@ With ARG, pick a text from the kill ring instead of the last one."
             ;; "ö" 'org-clock-convenience-fill-gap
             ;; "é" 'org-clock-convenience-fill-gap-both
             ))
+
+(use-package org-crypt
+  :after org
+  :straight (:type built-in))
 
 (provide 'setup-org)
