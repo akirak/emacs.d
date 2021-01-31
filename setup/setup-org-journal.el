@@ -168,11 +168,34 @@ This can be used for an org-capture template to create an entry in the journal."
 :CREATED_TIME: %U
 :END:
 " :clock-in t :clock-resume t)
+  (org-starter-def-capture "jt" "Journal - Todo entry"
+    entry (function org-journal-find-location)
+    "** TODO %?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+" :clock-in t :clock-resume t)
+  (org-starter-def-capture "js" "Journal - Start working on a task immediately")
+  (org-starter-def-capture "jss" "Start a task with a heading"
+    entry #'org-journal-find-location
+    "** STARTED %?
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+" :clock-in t :clock-resume t)
+  (org-starter-def-capture "jsh" "Start a task with the selected text as a heading"
+    entry (function org-journal-find-location)
+    "** STARTED %i
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+%?" :clock-in t :clock-resume t)
+  (push '("jsh" (region-active-p)) org-capture-templates-contexts)
   (org-starter-def-capture "jl" "Journal - With link")
   (org-starter-def-capture "jlc" "(generic) Comment on the entry"
     entry (function org-journal-find-location)
     ;; You can use `org-edit-headline' to edit the headline quickly
-    "** Comment on %s
+    "** %^{Heading prefix|Comment on } %a
 :PROPERTIES:
 :CREATED_TIME: %U
 :END:
