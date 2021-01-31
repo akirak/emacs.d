@@ -58,7 +58,6 @@
   :custom
   (company-idle-delay nil)
   (company-require-match nil)
-  (company-dabbrev-downcase nil)
   (company-auto-complete (lambda ()
                            (and (company-tooltip-visible-p)
                                 (company-explicit-action-p))))
@@ -69,8 +68,14 @@
                                    comint-previous-matching-input-from-input
                                    comint-next-matching-input-from-input
                                    completion-at-point))
-  (company-dabbrev-other-buffers t "Search all buffers for company-dabbrev")
-  (company-dabbrev-code-other-buffers 'code)
+  (company-dabbrev-other-buffers 'all)
+  ;; Ignore Org buffers, buffers of encrypted files, and special buffers.
+  ;; Based on https://www.reddit.com/r/emacs/comments/aqss7l/anyone_store_password_in_emacs/egjxi6e/
+  (company-dabbrev-ignore-buffers (rx (or (and bos (any " *"))
+                                          (and (or ".gpg" ".org") eos))))
+  (company-dabbrev-downcase 'case-replace)
+  (company-dabbrev-ignore-invisible nil)
+  (company-dabbrev-code-other-buffers 'all)
   (company-tooltip-align-annotations nil))
 
 (use-package company-posframe
