@@ -1,13 +1,40 @@
 (setq split-height-threshold 50
       split-width-threshold nil)
 
+(defun akirak/window-left-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'left window))))
+
+(defun akirak/window-right-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'right window))))
+
+(defun akirak/window-bottom-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'below window))))
+
 (use-package windmove
   :config
   (windmove-default-keybindings 'control))
 
 (use-package windswap
   :config
-  (windswap-default-keybindings 'control 'shift)
+  (general-def "<C-S-left>" (general-predicate-dispatch 'windswap-left
+                              (akirak/window-left-side-window-p)
+                              #'shrink-window-horizontally
+                              (akirak/window-right-side-window-p)
+                              #'enlarge-window-horizontally))
+  (general-def "<C-S-right>" (general-predicate-dispatch 'windswap-right
+                               (akirak/window-left-side-window-p)
+                               #'enlarge-window-horizontally
+                               (akirak/window-right-side-window-p)
+                               #'shrink-window-horizontally))
+  (general-def "<C-S-up>" (general-predicate-dispatch 'windswap-up
+                            (akirak/window-bottom-side-window-p)
+                            #'enlarge-window))
+  (general-def "<C-S-down>" (general-predicate-dispatch 'windswap-down
+                              (akirak/window-bottom-side-window-p)
+                              #'shrink-window))
   ;; These keys are bound by default in org-mode, so unbind them.
   (general-unbind :package 'org :keymaps 'org-mode-map
     "<C-S-left>"
