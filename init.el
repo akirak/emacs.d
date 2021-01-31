@@ -254,6 +254,7 @@
                            (= 1 (length olp)))))))))
 
   (defun akirak/org-recent-headings-cleanup ()
+    (interactive)
     (let ((m (length org-recent-headings-list))
           (start-time (float-time))
           (n (progn
