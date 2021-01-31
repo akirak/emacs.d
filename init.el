@@ -531,7 +531,9 @@ connection identities of recent files."
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                'akirak/helm-org-clock-context-source
+                (if (org-clocking-p)
+                    'akirak/helm-org-clock-context-source
+                  'akirak/helm-org-planning-items-source)
                 'akirak/helm-org-recent-headings-source
                 ;; akirak/helm-source-org-starter-known-files
                 ;; helm-org-ql-views-source

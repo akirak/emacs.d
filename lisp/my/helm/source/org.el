@@ -47,4 +47,21 @@
    (persistent-action :initform #'akirak/helm-org-narrow-to-subtree-action
                       :initarg :persistent-action)))
 
+(defvar akirak/helm-org-planning-items-source
+  (helm-make-source "Org planning" 'helm-source-sync
+    :candidates
+    (lambda ()
+      (->> (org-ql-select (org-agenda-files)
+             '(and (planning :to 0)
+                   (not (done)))
+             :sort 'date
+             :action 'element-with-markers)
+           (-map (lambda (x)
+                   (let ((marker (or (org-element-property :org-marker x)
+                                     (org-element-property :org-hd-marker x))))
+                     (cons (org-ql-view--format-element x)
+                           marker))))))
+    :action
+    'helm-org-headings-actions))
+
 (provide 'my/helm/source/org)
