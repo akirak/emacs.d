@@ -312,6 +312,7 @@ load them first.
                            (= 1 (length olp)))))))))
 
   (defun akirak/org-recent-headings-cleanup ()
+    (interactive)
     (let ((m (length org-recent-headings-list))
           (start-time (float-time))
           (n (progn
@@ -324,8 +325,10 @@ load them first.
       (unless (= m n)
         (message "Deleted %d non-existent items from org-recent-headings-list in %.1f s"
                  (- m n)
-                 (- (float-time) start-time)))))
-  (run-with-idle-timer 50 nil #'akirak/org-recent-headings-cleanup))
+                 (- (float-time) start-time))))
+    ;; Prevent automatic GC toon soon after getting back to work
+    (garbage-collect))
+  (run-with-idle-timer 1200 t #'akirak/org-recent-headings-cleanup))
 (use-package helm-org-recent-headings
   :after (helm org-recent-headings)
   :config
@@ -344,6 +347,16 @@ load them first.
      "Show entry (default function)" 'org-recent-headings--show-entry-default
      "Show entry in real buffer" 'org-recent-headings--show-entry-direct
      "Show entry in indirect buffer" 'org-recent-headings--show-entry-indirect
+     "Insert a link to the heading"
+     (defun akirak/org-recent-headings-insert-link (entry)
+       (unless (derived-mode-p 'org-mode)
+         (user-error "Not in org-mode"))
+       (let ((marker (org-recent-headings--entry-marker entry)))
+         (with-current-buffer (marker-buffer marker)
+           (org-with-wide-buffer
+            (goto-char marker)
+            (org-store-link nil 'interactive))))
+       (org-insert-last-stored-link 1))
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
@@ -610,7 +623,9 @@ connection identities of recent files."
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
-                'akirak/helm-org-clock-context-source
+                (if (org-clocking-p)
+                    'akirak/helm-org-clock-context-source
+                  'akirak/helm-org-planning-items-source)
                 'akirak/helm-org-recent-headings-source
                 ;; akirak/helm-source-org-starter-known-files
                 ;; helm-org-ql-views-source
@@ -1142,7 +1157,10 @@ These commands are used to maintain this Emacs configuration.
   "o" '(nil :wk "org")
   "oj" '(nil :wk "org-journal")
   ;; Add keybindings for switching the journal context
-  "ojd" #'org-journal-new-date-entry)
+  "ojd" #'org-journal-new-date-entry
+  "oq" '(nil :wk "org-ql")
+  "oqs" #'org-ql-search
+  "oqv" #'org-ql-view)
 #+end_src
 
 ****  Remote connections (TRAMP)
