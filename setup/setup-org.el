@@ -562,4 +562,63 @@ With ARG, pick a text from the kill ring instead of the last one."
   :after org
   :straight (:type built-in))
 
+(defun akirak/org-find-or-create-logbook ()
+  "Go to the end of the log book of the entry."
+  (org-back-to-heading)
+  (let ((bound (save-excursion
+                 (forward-line)
+                 (re-search-forward org-heading-regexp nil t))))
+    (if (re-search-forward org-logbook-drawer-re bound t)
+        (beginning-of-line 1)
+      (forward-line)
+      (if (re-search-forward org-property-drawer-re bound t)
+          (insert "\n")
+        (while (looking-at org-planning-line-re)
+          (forward-line)))
+      (insert ":LOGBOOK:\n:END:\n")
+      (beginning-of-line 0)))
+  (point-marker))
+
+(defun akirak/org-transfer-clock-entries (dest)
+  (assert (markerp dest))
+  (let ((dest-logbook (with-current-buffer (marker-buffer dest)
+                        (org-with-wide-buffer
+                         (goto-char dest)
+                         (akirak/org-find-or-create-logbook)
+                         (point-marker)))))
+    (let (entries)
+      (save-excursion
+        (save-restriction
+          (widen)
+          (org-back-to-heading)
+          (org-narrow-to-subtree)
+          (while (re-search-forward (rx-to-string `(and bol (* (any " \\t"))
+                                                        ,org-clock-string
+                                                        (+ (any " \\t"))))
+                                    nil t)
+            (beginning-of-line 1)
+            (let ((start (point))
+                  (end (line-beginning-position 2)))
+              (push (buffer-substring-no-properties (point) end) entries)
+              (delete-region (point) end)
+              (goto-char start)))
+          (goto-char (point-min))
+          (replace-regexp (rx bol (* (any " \\t")) ":LOGBOOK:\n"
+                              (* (any " \\t"))  ":END:\n")
+                          "")))
+      (with-current-buffer (marker-buffer dest-logbook)
+        (org-with-wide-buffer
+         (goto-char dest-logbook)
+         (while entries
+           (insert (pop entries)))))
+      (org-back-to-heading))))
+
+(defun akirak/avy-org-transfer-clock-entries ()
+  (interactive)
+  (let ((dest (save-selected-window
+                (save-excursion
+                  (akirak/avy-org-heading t)
+                  (point-marker)))))
+    (akirak/org-transfer-clock-entries dest)))
+
 (provide 'setup-org)
