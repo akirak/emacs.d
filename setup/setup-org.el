@@ -621,4 +621,11 @@ With ARG, pick a text from the kill ring instead of the last one."
                   (point-marker)))))
     (akirak/org-transfer-clock-entries dest)))
 
+(akirak/bind-jump :keymaps 'org-mode-map :package 'org
+  "SPC" #'org-babel-next-src-block
+  "S-SPC" #'org-babel-previous-src-block)
+
+(akirak/bind-search :keymaps 'org-mode-map :package 'org
+  "s" #'org-babel-goto-named-src-block)
+
 (provide 'setup-org)
