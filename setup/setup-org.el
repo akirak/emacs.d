@@ -21,6 +21,10 @@
   "s" '(nil :wk "set")
   "sc" #'akirak/org-set-category)
 
+(general-def :package 'org-agenda :keymaps 'org-agenda-mode-map :prefix akirak/mode-prefix-key
+  "s" '(nil :wk "set")
+  "sc" #'akirak/org-set-category)
+
 (defmacro akirak/org-with-maybe-agenda-origin (&rest progn)
   `(cond
     ((derived-mode-p 'org-mode)
