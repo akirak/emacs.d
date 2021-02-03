@@ -15,14 +15,19 @@
                 "share"
                 "SKK-JISYO.L"))
 
+  (defvar akirak/skk-setup-done nil)
+
+  (add-hook 'skk-mode-hook
+            (defun akirak/skk-setup ()
+              (unless akirak/skk-setup-done
+                (general-def :keymaps 'skk-j-mode-map :package 'skk-vars
+                  ";" #'akirak/insert-japanese-from-english)
+                (setq akirak/skk-setup-done t))))
+
   :config/el-patch
   (el-patch-defun skk-setup-modeline ()
     ;; ("" skk-modeline-input-mode)
     (setq skk-indicator-alist (skk-make-indicator-alist)))
-
-  :general
-  (:keymaps 'skk-j-mode-map :package 'skk-vars
-            ";" #'akirak/insert-japanese-from-english)
 
   :custom
   ;; It's better to set `skk-user-directory' in your `custom-file'.
