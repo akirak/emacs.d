@@ -80,11 +80,16 @@
             :around 'akirak/ad-around-verbose-call-interactively)
 (general-def "C-M-n" 'akirak/ctrl-meta-n)
 
+(defun akirak/org-goto-before-next-heading ()
+  (interactive)
+  (org-next-visible-heading 1)
+  (re-search-backward (rx (+ (any "\n"))) nil t))
+
 (defun akirak/jump-to-end-of-context ()
   (interactive)
   (cond
    ((derived-mode-p 'org-mode)
-    (akirak/funcall-verbosely 'org-end-of-subtree))
+    (akirak/org-goto-before-next-heading))
    ((bound-and-true-p smartparens-mode)
     (let ((thing (sp-get-thing)))
       (if (string-equal "(" (sp-get thing :op))
@@ -94,19 +99,13 @@
             :around 'akirak/ad-around-verbose-call-interactively)
 (akirak/bind-jump "e" (defrepeater 'akirak/jump-to-end-of-context))
 
-(defun akirak/org-beginning-of-body ()
+(defun akirak/org-goto-beginnning-of-content ()
   (interactive)
-  (unless (derived-mode-p 'org-mode)
-    (user-error "Not in org-mode"))
-  (goto-char (org-with-wide-buffer
-              (org-back-to-heading)
-              (org-element-property :contents-begin
-                                    (org-element-headline-parser
-                                     (save-excursion
-                                       (org-end-of-subtree))))))
-  (while (org-at-drawer-p)
-    (goto-char (org-element-property :end
-                                     (org-element-drawer-parser nil nil)))))
+  (assert (not (org-before-first-heading-p)))
+  (org-back-to-heading)
+  (org-end-of-meta-data t)
+  (when (org-at-heading-p)
+    (org-open-line 1)))
 
 (defun akirak/jump-to-beginning-of-context ()
   (interactive)
@@ -114,7 +113,7 @@
    ((derived-mode-p 'python-mode)
     (call-interactively 'python-nav-beginning-of-statement))
    ((derived-mode-p 'org-mode)
-    (call-interactively 'akirak/org-beginning-of-body))
+    (funcall 'akirak/org-goto-beginnning-of-content))
    ((bound-and-true-p smartparens-mode)
     (call-interactively 'sp-beginning-of-sexp))))
 (advice-add 'akirak/jump-to-beginning-of-context
