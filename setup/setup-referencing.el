@@ -22,7 +22,11 @@
   :config
   (pdf-loader-install)
   ;; This is necessary to add a corresponding entry to auto-mode-list.
-  (load "pdf-tools-autoloads"))
+  (load "pdf-tools-autoloads")
+  :general
+  (:keymaps 'pdf-view-mode-map
+            "C-s" #'isearch-forward
+            "C-r" #'isearch-backward))
 
 (use-package org-pdftools
   ;; According to profiling, org-pdftools terribly slows down
