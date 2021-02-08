@@ -401,6 +401,8 @@ third argument, i.e. right after the description, in the entry."
   "M-o" #'org-starter-find-file-by-key)
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
+(general-def :keymaps 'org-mode-map :package 'org
+  "C-x i" #'helm-org-multi-wiki-insert-link)
 
 (general-def "<C-f10>" #'org-ql-view)
 
