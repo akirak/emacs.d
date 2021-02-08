@@ -566,6 +566,12 @@ With ARG, pick a text from the kill ring instead of the last one."
   :after org
   :straight (:type built-in))
 
+(use-package org-chronos
+  :after org
+  :straight (:host github :repo "akirak/org-chronos")
+  :custom
+  (org-chronos-auto-export t))
+
 (defun akirak/org-find-or-create-logbook ()
   "Go to the end of the log book of the entry."
   (org-back-to-heading)
