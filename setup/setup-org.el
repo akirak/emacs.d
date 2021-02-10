@@ -631,6 +631,55 @@ With ARG, pick a text from the kill ring instead of the last one."
                   (point-marker)))))
     (akirak/org-transfer-clock-entries dest)))
 
+(defun akirak/org-from-tsv (text &optional dest
+                                 &key last-column-as-tags)
+  (interactive (list (if (region-active-p)
+                         (buffer-substring-no-properties
+                          (region-beginning)
+                          (region-end))
+                       (x-get-selection))
+                     'new-buffer
+                     :last-column-as-tags
+                     current-prefix-arg))
+  (check-type text string)
+  (let ((out (->> (split-string text "\n")
+                  (-map (lambda (line)
+                          (split-string line "\t")))
+                  (-map (lambda (row)
+                          (cond
+                           ((-all-p #'string-empty-p row)
+                            "")
+                           ((-all-p #'string-empty-p (cdr row))
+                            (concat "* " (car row) "\n"))
+                           (t
+                            (->> (-zip (number-sequence 1 (length row))
+                                       (if last-column-as-tags
+                                           (let* ((tags-cell (-last-item row))
+                                                  (tags (unless (string-empty-p tags-cell)
+                                                          (split-string tags-cell ",")))
+                                                  (cells (-butlast row)))
+                                             (append (-butlast cells)
+                                                     (list (concat (-last-item cells)
+                                                                   (if tags
+                                                                       (format " :%s:"
+                                                                               (mapconcat #'string-trim
+                                                                                          tags ":"))
+                                                                     "")))))
+                                         row))
+                                 (-map (pcase-lambda (`(,i . ,text))
+                                         (if (string-empty-p text)
+                                             ""
+                                           (concat (make-string (1+ i) ?\*)
+                                                   " " text "\n"))))
+                                 (string-join))))))
+                  (string-join))))
+    (pcase dest
+      ('new-buffer (with-current-buffer (generate-new-buffer "*org from tsv*")
+                     (insert (format "%s" out))
+                     (org-mode)
+                     (pop-to-buffer (current-buffer))))
+      (_ out))))
+
 (akirak/bind-jump :keymaps 'org-mode-map :package 'org
   "SPC" #'org-babel-next-src-block
   "S-SPC" #'org-babel-previous-src-block)
