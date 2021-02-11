@@ -466,13 +466,39 @@ With ARG, pick a text from the kill ring instead of the last one."
                    match)))))
       (car (sort (mapcar #'encode-time match) (-compose #'not #'time-less-p))))))
 
+(defun akirak/org-get-state-log ()
+  ;; This should start from the beginning of the heading
+  (save-excursion
+    (when-let* ((entry-end (save-excursion
+                             (end-of-line)
+                             (or (re-search-forward org-heading-regexp nil t)
+                                 (point-max))))
+                (logbook-end (save-excursion
+                               (re-search-forward org-logbook-drawer-re entry-end t))))
+      (when (re-search-forward (rx bol "- State ") logbook-end t)
+        (let ((end (save-excursion
+                     (when (re-search-forward
+                            (rx (or (regexp org-clock-line-re)
+                                    (and bol (or "- " ":END:")))))
+                       (end-of-line 0)
+                       (point)))))
+          (string-trim-left
+           (buffer-substring-no-properties
+            (line-beginning-position) end)))))))
+
 (defun akirak/org-eldoc-heading-with-extra ()
   (let* ((clock-sum (org-clock-sum-current-item))
          (created (org-entry-get nil "CREATED_TIME"))
          (last (akirak/org-get-last-inactive-timestamp))
          (done (org-entry-is-done-p))
          (scheduled (unless done (org-entry-get nil "SCHEDULED")))
-         (deadline (unless done (org-entry-get nil "DEADLINE"))))
+         (deadline (unless done (org-entry-get nil "DEADLINE")))
+         (state-log (-some->> (akirak/org-get-state-log)
+                      (replace-regexp-in-string "\n" "")
+                      (replace-regexp-in-string
+                       (rx (+ (any space))) " ")
+                      (replace-regexp-in-string
+                       (rx bol "- ") ""))))
     (--> (list (when created
                  (format "Created %s" created))
                (when last
@@ -482,7 +508,8 @@ With ARG, pick a text from the kill ring instead of the last one."
                (when scheduled
                  (format "Scheduled %s" scheduled))
                (when deadline
-                 (format "Deadline %s" deadline)))
+                 (format "Deadline %s" deadline))
+               state-log)
          (-non-nil it)
          (string-join it ", ")
          (concat (akirak/org-eldoc-heading) " " it))))
