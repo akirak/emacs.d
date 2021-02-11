@@ -65,6 +65,7 @@
                    ("*org clocking*" :other t)
                    ("*Org Edna Edit Blocker/Trigger*" :align below :ratio 0.3)
                    ("*Org Note*" :align below :ratio 0.3)
+                   ("\\*Org Ql View: " :regexp t :same t)
                    ("*compilation*" :align below :ratio 0.4)
                    ("*Occur*" :align below :ratio 0.25)
                    ("*lispy-message*" :align below :ratio 0.4)
