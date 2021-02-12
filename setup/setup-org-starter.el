@@ -108,27 +108,29 @@
   ;; function.
   ;;
   ;; It also displays the outline path in the header line.
-  (advice-add #'helm-org-ql-show-marker-indirect
-              :override
-              (defun akirak/helm-org-ql-show-marker-indirect (marker)
-                (let* ((orig-buffer (marker-buffer marker))
-                       (buffer (with-current-buffer (or (org-base-buffer orig-buffer)
-                                                        orig-buffer)
-                                 (org-with-wide-buffer
-                                  (goto-char marker)
-                                  (let ((pos (point))
-                                        (buffer (org-get-indirect-buffer)))
-                                    (with-current-buffer buffer
-                                      (goto-char pos)
-                                      (org-narrow-to-subtree)
-                                      (org-show-entry)
-                                      (rename-buffer (org-get-heading t t t t) 'unique)
-                                      (setq-local header-line-format
-                                                  (list (buffer-name orig-buffer)
-                                                        ":"
-                                                        (org-format-outline-path (org-get-outline-path)))))
-                                    buffer)))))
-                  (pop-to-buffer buffer))))
+
+  ;; Unused
+  (defun akirak/helm-org-ql-show-marker-indirect-2 (marker)
+    (let ((orig-buffer (marker-buffer marker)))
+      (switch-to-buffer
+       (with-current-buffer (or (org-base-buffer orig-buffer)
+                                orig-buffer)
+         (org-with-wide-buffer
+          (goto-char marker)
+          (let ((pos (point))
+                (buffer (org-get-indirect-buffer)))
+            (with-current-buffer buffer
+              (goto-char pos)
+              (org-narrow-to-subtree)
+              (org-show-entry)
+              (rename-buffer (org-get-heading t t t t) 'unique)
+              (setq-local header-line-format
+                          (list (buffer-name orig-buffer)
+                                ":"
+                                (org-format-outline-path (org-get-outline-path)))))
+            buffer))))))
+
+  ;; Unused
   (defun akirak/helm-org-ql-refile-action (marker)
     (unless (derived-mode-p 'org-mode)
       (user-error "Not in org-mode"))
@@ -141,6 +143,8 @@
                       (goto-char marker)
                       (org-get-heading t t t t)))))
       (org-refile nil nil (list heading filename nil marker))))
+
+  ;; Unused
   (defun akirak/helm-org-ql-add-child-entry (marker)
     (let* ((heading (read-string (format "Heading of the new entry in \"%s\": "
                                          (with-current-buffer (marker-buffer marker)
@@ -148,26 +152,38 @@
                                             (goto-char marker)
                                             (substring-no-properties (org-get-heading t t t t)))))))
            (org-capture-entry `("c" "Child entry" entry
-                                (function (lambda () (org-goto-marker-or-bmk ,marker)))
+                                #'(lambda () (org-goto-marker-or-bmk ,marker))
                                 ,(concat "* " heading "\n:PROPERTIES:\n"
                                          ":CREATED_TIME: " (org-format-time-string (org-time-stamp-format 'long 'inactive))
                                          "\n:END:\n"))))
       (org-capture)))
+
+  ;; Unused
   (defun akirak/org-clock-in (marker)
     (with-current-buffer (marker-buffer marker)
       (org-with-wide-buffer
        (goto-char marker)
        (org-clock-in))))
 
-  (cl-defun akirak/helm-org-ql-show-marker (marker &key indirect)
+  (cl-defun akirak/helm-org-ql-show-marker (marker &key indirect narrow)
     (with-current-buffer (marker-buffer marker)
-      (akirak/pop-to-buffer-prefer-center-pane (current-buffer))
+      ;; (akirak/pop-to-buffer-prefer-center-pane (current-buffer))
+      (switch-to-buffer (current-buffer))
       (goto-char marker)
       (org-show-entry)
-      (org-tree-to-indirect-buffer)))
+      (cond
+       (indirect
+        (org-tree-to-indirect-buffer))
+       (narrow
+        (org-narrow-to-subtree))
+       (t
+        (recenter-top-bottom 0)))))
 
   (defun akirak/helm-org-ql-show-marker-indirect (marker)
     (akirak/helm-org-ql-show-marker marker :indirect t))
+
+  (defun akirak/helm-org-ql-show-marker-narrow (marker)
+    (akirak/helm-org-ql-show-marker marker :narrow t))
 
   (defun akirak/org-store-link-to-marker (marker)
     (with-current-buffer (marker-buffer marker)
@@ -184,12 +200,18 @@
        (call-interactively #'org-store-link))))
 
   (setq helm-org-ql-actions
-        '(("Show (prefer the center pane)" . akirak/helm-org-ql-show-marker)
-          ("Show indirect buffer (prefer the center pane)" . akirak/helm-org-ql-show-marker-indirect)
-          ("Store the link" . akirak/org-store-link-to-marker)
-          ("Refile the current org entry" . akirak/helm-org-ql-refile-action)
-          ("Create a new entry" . akirak/helm-org-ql-add-child-entry)
-          ("Clock in" . akirak/org-clock-in))))
+        '(("Show" . akirak/helm-org-ql-show-marker)
+          ("Show indirect buffer" . akirak/helm-org-ql-show-marker-indirect)))
+
+  (general-def :keymaps 'helm-org-ql-map :package 'helm-org-ql
+    "C-x n"
+    (defun akirak/helm-org-ql-narrow-to-heading ()
+      "Narrow to the selected heading in helm-org."
+      (interactive)
+      (with-helm-alive-p
+        (helm-exit-and-execute-action
+         (lambda (marker)
+           (akirak/helm-org-ql-show-marker-narrow marker)))))))
 
 (use-package org-multi-wiki
   :init
@@ -215,7 +237,46 @@
                   (not (eq (plist-get plist :namespace) 'journal))))))
 
   (setq org-multi-wiki-display-buffer-fn
-        #'akirak/pop-to-buffer-prefer-center-pane)
+        ;; #'akirak/pop-to-buffer-prefer-center-pane
+        #'switch-to-buffer)
+
+  (defun akirak/helm-org-multi-wiki-show-indirect (marker &optional switch-buffer-fn)
+    (let* ((h (with-current-buffer (marker-buffer marker)
+                (org-with-point-at marker
+                  (org-heading-components))))
+           (indirect (> (car h) 1))
+           (buffer (if indirect
+                       (make-indirect-buffer
+                        (marker-buffer marker)
+                        (format "%s - %s"
+                                (buffer-name (marker-buffer marker))
+                                (nth 4 h))
+                        'clone)
+                     (marker-buffer marker))))
+      (with-current-buffer buffer
+        (widen)
+        (when indirect
+          (goto-char (point-min)))
+        (org-global-cycle 1)
+        (goto-char marker)
+        (org-show-set-visibility 'ancestors)
+        (org-show-subtree)
+        (org-cycle-hide-drawers 'all)
+        (org-multi-wiki-run-mode-hooks)
+        (when indirect
+          (run-hooks 'clone-indirect-buffer-hook))
+        (funcall (or switch-buffer-fn #'switch-to-buffer) (current-buffer)))))
+
+  (setq helm-org-multi-wiki-actions
+        '(("Show indirect buffer (same window)" . akirak/helm-org-multi-wiki-show-indirect)
+          ("Show indirect buffer (ace window)" .
+           (lambda (marker)
+             (ace-window nil)
+             (akirak/helm-org-multi-wiki-show-indirect marker)))
+          ("Show indirect buffer (new tab)" .
+           (lambda (marker)
+             (tab-bar-new-tab)
+             (akirak/helm-org-multi-wiki-show-indirect marker)))))
 
   :custom
   (org-multi-wiki-want-custom-id t)
