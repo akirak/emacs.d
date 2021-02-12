@@ -156,4 +156,17 @@
 (akirak/bind-mode-repl :keymaps 'elixir-mode-map
   "" #'akirak/iex-mix)
 
+(defun akirak/elixir-module-name-from-file ()
+  (let ((segments (f-split (buffer-file-name))))
+    (when-let (i (-find-last-index
+                  (lambda (x) (member x '("lib" "test")))
+                  segments))
+      (mapconcat (lambda (s)
+                   (->> (split-string s "_")
+                        (-map #'capitalize)
+                        (string-join)))
+                 (append (-slice segments (1+ i) -1)
+                         (list (f-base (-last-item segments))))
+                 "."))))
+
 (provide 'setup-elixir)
