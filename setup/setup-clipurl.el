@@ -27,11 +27,13 @@
   :config
   (ivy-add-actions 'ivy-clipurl
                    '(("cj" akirak/org-journal-capture-url-as-heading "Capture to journal as a heading")
-                     ("cp" akirak/org-journal-capture-url-as-body "Capture to journal as body")
-                     ("ca" akirak/org-capture-url-to-avy "Bookmark to avy"))))
+                     ("rb" akirak/org-capture-book-url "Enqueue book")
+                     ("ra" akirak/org-capture-news-article-url "Enqueue article")
+                     ("rv" akirak/org-capture-screencast-url "Enqueue video (screencast)"))))
 
 (cl-defun akirak/org-capture-url-bookmark-template (url &key
                                                         default-title
+                                                        manual-tags
                                                         as-body)
   (declare (indent 1))
   (let* ((html (with-timeout (3)
@@ -46,7 +48,8 @@
          (drawer "\n:PROPERTIES:\n:CREATED_TIME: %U\n:END:\n"))
     (if as-body
         (concat "* %^{Title of the entry}" drawer "%?\n\n" link)
-      (concat "* " link " :link:" drawer "%?"))))
+      (concat "* " link " :link:" (if manual-tags "%^g" "")
+              drawer "\n%?"))))
 
 (cl-defun akirak/org-capture-url-as-heading (destination url &key immediate default-title)
   (declare (indent 1))
@@ -63,6 +66,23 @@
                               ,destination
                               ,template)))
     (org-capture)))
+
+(defun akirak/org-capture-link-to-custom-id (custom-id url)
+  (let* ((file (org-starter-locate-file "practice.org" nil t))
+         (location-function `(lambda () (akirak/org-goto-custom-id ,custom-id)))
+         (template (akirak/org-capture-url-bookmark-template url
+                     :manual-tags t :default-title t))
+         (org-capture-entry `("u" "Url" entry
+                              (file+function ,file ,location-function)
+                              ,template :clock-in t :clock-resume t)))
+    (org-capture)))
+
+(defalias 'akirak/org-capture-screencast-url
+  (-partial #'akirak/org-capture-link-to-custom-id "screencast-inbox"))
+(defalias 'akirak/org-capture-book-url
+  (-partial #'akirak/org-capture-link-to-custom-id "book-inbox"))
+(defalias 'akirak/org-capture-news-article-url
+  (-partial #'akirak/org-capture-link-to-custom-id "news-inbox"))
 
 (defun akirak/org-journal-capture-url-as-heading (url)
   (akirak/org-capture-url-as-heading '(function org-journal-find-location)
