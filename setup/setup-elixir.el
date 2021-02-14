@@ -146,6 +146,14 @@
  'akirak/counsel-outline-elixir
  'akirak/counsel-outline-elixir-display-transformer)
 
+(use-package inf-elixir
+  :after elixir-mode
+  :general
+  (:keymaps 'elixir-mode-map :package 'elixir-mode
+            "C-c i" #'inf-elixir
+            "C-c p" #'inf-elixir-send-region))
+
+;; Deprecated. Use inf-elixir-project
 (defun akirak/iex-mix (root)
   (interactive (list (or (locate-dominating-file default-directory "mix.exs")
                          (user-error "Cannot find mix.exs"))))
@@ -154,7 +162,7 @@
     :root root))
 
 (akirak/bind-mode-repl :keymaps 'elixir-mode-map
-  "" #'akirak/iex-mix)
+  "" #'inf-elixir-project)
 
 (defun akirak/elixir-module-name-from-file ()
   (let ((segments (f-split (buffer-file-name))))
