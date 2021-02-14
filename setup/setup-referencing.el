@@ -58,4 +58,8 @@
 (general-def :keymaps 'org-mode-map :package 'org-noter :prefix "C-c C-x"
   "nf" #'akirak/org-noter-find-document)
 
+(use-package org-volume
+  :straight (:host github :repo "akirak/org-volume")
+  :after org)
+
 (provide 'setup-referencing)
