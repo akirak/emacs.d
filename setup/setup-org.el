@@ -138,7 +138,27 @@
   "M-p" 'org-metaup
   "M-H" 'org-shiftmetaleft
   "M-L" 'org-shiftmetaright
-  "C-1" 'counsel-org-tag)
+  "C-1" 'counsel-org-tag
+  [remap org-set-tags-command]
+  (defun akirak/org-set-group-tag (&optional arg)
+    "Set a tag from a group."
+    ;; This is an alternative to `org-use-fast-tag-selection', which I
+    ;; don't want to use because of its window configuration
+    ;; management.
+    (interactive "P")
+    (let* ((tag-groups (org-tag-alist-to-groups org-current-tag-alist))
+           (group (pcase arg
+                    ((pred numberp)
+                     (nth arg tag-groups))
+                    ('(4)
+                     (assoc (org-completing-read "Tag group: " tag-groups)
+                            tag-groups))
+                    (_
+                     (car tag-groups))))
+           (current-tags (org-get-tags))
+           (tag (org-completing-read (format "Tag in group %s: " (car group))
+                                     (cdr group))))
+      (org-set-tags (cons tag (-difference current-tags (cdr group)))))))
 
 (general-def :keymaps 'org-agenda-mode-map :package 'org
   "C-1" 'counsel-org-tag)
