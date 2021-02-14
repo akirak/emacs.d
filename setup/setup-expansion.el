@@ -55,16 +55,6 @@
 
 (use-package yankpad
   :config
-  (defun akirak/yankpad-ql (buffers query)
-    (let ((snippets (-flatten-n 1 (org-ql-select buffers query
-                                    :action
-                                    '(let ((heading (car (helm-org-ql--heading 80)))
-                                           (snippets (yankpad-snippets-at-point)))
-                                       (if (= 1 (length snippets))
-                                           (list (cons heading
-                                                       (cadr snippets)))
-                                         snippets))))))
-      (yankpad--run-snippet (assoc (completing-read "Snippet: " snippets) snippets))))
 
   ;; I do not want to use the projectile integration.
   (advice-add #'yankpad-local-category-to-projectile
@@ -106,27 +96,19 @@
     (add-hook 'org-clock-in-hook
               (defun akirak/yankpad-set-org-clock-category ()
                 "Set `akirak/yankpad-org-clock-category' based on the Org context."
-                (let* ((all-categories (yankpad--categories))
-                       (choice (or (org-entry-get nil "YANKPAD_CATEGORY" t)
-                                   (org-get-category))))
+                (when (require 'yankpad nil t)
                   (setq akirak/yankpad-org-clock-category
-                        (when (and choice
-                                   (member choice all-categories))
-                          choice)))))
+                        (or (cl-find (or (org-entry-get nil "YANKPAD_CATEGORY" t)
+                                         (org-get-category))
+                                     (yankpad--categories)
+                                     :test #'string-equal)
+                            yankpad-default-category)))))
     (add-hook 'org-clock-out-hook
               (defun akirak/yankpad-unset-org-clock-category ()
                 (setq akirak/yankpad-org-clock-category nil))))
 
-  (general-add-hook '(find-file-hook
-                      after-revert-hook
-                      scratch-create-buffer-hook)
-                    (defun akirak/yankpad-set-category-from-org-clock ()
-                      (yankpad-set-local-category (or akirak/yankpad-org-clock-category
-                                                      yankpad-default-category))))
-
-  (defun akirak/yankpad-set-category-explicitly (category)
-    (yankpad-set-local-category category)
-    (message "Set the yankpad category to %x" category)
+  (defun akirak/yankpad-set-clock-category (category)
+    (setq akirak/yankpad-org-clock-category category)
     (when (and (org-clocking-p)
                (yes-or-no-p "Record this category to the clocked Org file?"))
       (let (ancestors)
@@ -145,12 +127,21 @@
   (defvar akirak/yankpad-helm-category-source
     (helm-build-sync-source "Categories from yankpad-file"
       :candidates #'akirak/yankpad-helm-category-candidates
-      :action #'akirak/yankpad-set-category-explicitly))
+      :action #'akirak/yankpad-set-clock-category))
 
   (defun akirak/yankpad-helm-set-category ()
     (interactive)
     (helm :prompt (format "Yankpad category [%s]: " yankpad-category)
           :sources akirak/yankpad-helm-category-source))
+
+  (defun akirak/yankpad-insert (&optional arg)
+    (interactive "P")
+    (when (or arg (not akirak/yankpad-org-clock-category))
+      (akirak/yankpad-helm-set-category)
+      (yankpad-set-local-category akirak/yankpad-org-clock-category))
+    (unless yankpad-category
+      (yankpad-set-local-category akirak/yankpad-org-clock-category))
+    (yankpad-insert))
 
   (setq yankpad-auto-category-functions
         (list #'yankpad-major-mode-category
@@ -188,16 +179,8 @@
   :hook
   ((html-mode css-mode) . emmet-mode))
 
-;; Remove all keybindings for abbrev-mode in C-x a
-(define-key global-map (kbd "C-x a") (make-sparse-keymap))
-(general-def :prefix "C-x a"
-  "a" #'yankpad-append-category
-  "c" #'akirak/yankpad-helm-set-category
-  "p" #'yankpad-aya-persist
-  "C-c" #'yankpad-capture-snippet)
-
 (general-def
-  "C-x y" #'yankpad-insert
+  "C-x y" #'akirak/yankpad-insert
   "C-x i" #'ivy-yasnippet)
 
 (akirak/bind-generic
@@ -205,6 +188,7 @@
 
 (akirak/bind-register
   "a" 'aya-create
-  "e" 'aya-expand)
+  "e" 'aya-expand
+  "p" #'yankpad-aya-persist)
 
 (provide 'setup-expansion)
