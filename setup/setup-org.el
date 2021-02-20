@@ -617,6 +617,7 @@ With ARG, pick a text from the kill ring instead of the last one."
   :after org
   :straight (:host github :repo "akirak/org-chronos")
   :custom
+  (org-chronos-clock-threshold 5)
   (org-chronos-auto-export t))
 
 (defun akirak/org-find-or-create-logbook ()
