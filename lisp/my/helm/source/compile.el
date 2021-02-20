@@ -27,21 +27,34 @@
 
 ;;;; Sources for specific languages
 
-(defun akirak/helm-compile-npm-sources ()
+(cl-defun akirak/helm-npm-script-source (file &key prefix)
+  "Like `akirak/npm-package-json-commands', but returns candidates for a Helm source."
   (require 'my/compile/npm)
-  (list (helm-make-source "Npm script"
-            'akirak/helm-sync-compile-command-source
-          :candidates
-          (-map (lambda (cell)
-                  (cons (format "%s: %s" (car cell) (cdr cell))
-                        (symbol-name (car cell))))
-                (akirak/npm-package-json-commands "package.json"))
-          :coerce (-partial #'s-prepend "npm run "))
-        (helm-make-source "Basic npm commands"
-            'akirak/helm-sync-compile-command-source
-          :candidates
-          (akirak/npm-toplevel-commands)
+  (helm-make-source "Npm script" 'akirak/helm-sync-compile-command-source
+    :candidates
+    (-map (lambda (cell)
+            (cons (format "%s: %s" (car cell) (cdr cell))
+                  (symbol-name (car cell))))
+          (akirak/npm-package-json-commands file))
+    :coerce (-partial #'s-prepend (or prefix "npm run "))))
+
+(defun akirak/helm-compile-npm-sources (&optional backend)
+  (list (akirak/helm-npm-script-source)
+        (helm-make-source "Basic npm commands" 'akirak/helm-sync-compile-command-source
+          :candidates (akirak/npm-toplevel-commands)
           :coerce (-partial #'s-prepend "npm "))
+        (helm-make-source "Any command"
+            'akirak/helm-dummy-compile-command-source)))
+
+(defun akirak/helm-compile-pnpm-sources ()
+  (list (akirak/helm-npm-script-source :prefix "pnpm run ")
+        ;; TODO: Add pnpm commands
+        (helm-make-source "Any command"
+            'akirak/helm-dummy-compile-command-source)))
+
+(defun akirak/helm-compile-yarn-sources ()
+  (list (akirak/helm-npm-script-source :prefix "yarn run ")
+        ;; TODO: Add yarn commands
         (helm-make-source "Any command"
             'akirak/helm-dummy-compile-command-source)))
 

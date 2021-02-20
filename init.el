@@ -302,6 +302,16 @@
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package project
+  :config
+  (add-hook 'project-find-functions
+            (defun akirak/project-tramp-root (dir)
+              (-some->> (file-remote-p dir)
+                (cons 'remote))))
+  (add-hook 'project-find-functions
+            (defun akirak/project-syncthing-root (dir)
+              (-some->> (locate-dominating-file dir ".stfolder")
+                (cons 'syncthing)))))
 (use-package su)
 (use-package valign
   :disabled t
@@ -310,6 +320,7 @@
 (use-package whole-line-or-region)
 
 ;;;; Modules
+(require 'setup-project)
 (require 'setup-git-bookmark)
 (require 'setup-info)
 (require 'setup-unicode)
@@ -835,34 +846,20 @@ outcommented org-mode headers)."
 ;;;; Running external commands
 (general-def
   "C-x c"
-  (defun akirak/compile-command ()
+  (defun akirak/project-compile ()
     (interactive)
-    (require 'my/compile)
-    (require 'my/helm/source/compile)
-    (if (equal current-prefix-arg '(16))
-        ;; If two prefixes are given, select the compilation buffer window.
-        (if-let (buffer (get-buffer "*compilation*"))
-            (if-let (window (get-buffer-window buffer))
-                (select-window window)
-              (pop-to-buffer buffer))
-          (user-error "No compilation buffer"))
-      (if-let ((plist (akirak/compile-detect-project)))
-          (-let [(&plist :root :filename :command :helm-sources-fn) plist]
-            (pcase current-prefix-arg
-              ('(4)
-               (find-file (expand-file-name filename root)))
-              (_
-               (let ((default-directory root))
-                 (cond
-                  (command
-                   (funcall-interactively command))
-                  (helm-sources-fn
-                   (helm :prompt (format "%s project at [%s]: "
-                                         filename
-                                         (f-short root))
-                         :sources (funcall helm-sources-fn))))))))
-        ;; No root is detected.
-        (akirak/helm-shell-command))))
+    (pcase current-prefix-arg
+      ;; If two prefixes are given, select the compilation buffer window.
+      ('(16)
+       (if-let (buffer (get-buffer "*compilation*"))
+           (if-let (window (get-buffer-window buffer))
+               (select-window window)
+             (pop-to-buffer buffer))
+         (user-error "No compilation buffer")))
+      ('(4)
+       (akirak/project-find-build-file))
+      (_
+       (akirak/project-call-build-command))))
   "C-x C"
   (defun akirak/helm-shell-command (&optional root)
     (interactive)
