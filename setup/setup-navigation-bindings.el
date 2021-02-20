@@ -50,6 +50,7 @@
 ;;             :around 'akirak/ad-around-verbose-call-interactively)
 (general-def "C-M-b" 'akirak/ctrl-meta-b)
 
+;; Unused
 (defun akirak/ctrl-meta-p ()
   (interactive)
   (cond
@@ -63,8 +64,10 @@
     (sp-backward-sexp))))
 (advice-add 'akirak/ctrl-meta-p
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-p" 'akirak/ctrl-meta-p)
+;; Save this key for move-dup.
+;; (general-def "C-M-p" 'akirak/ctrl-meta-p)
 
+;; Unused
 (defun akirak/ctrl-meta-n ()
   (interactive)
   (cond
@@ -78,7 +81,8 @@
     (call-interactively 'sp-next-sexp))))
 (advice-add 'akirak/ctrl-meta-n
             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-n" 'akirak/ctrl-meta-n)
+;; Save this key for move-dup.
+;; (general-def "C-M-n" 'akirak/ctrl-meta-n)
 
 (defun akirak/org-goto-before-next-heading ()
   (interactive)
