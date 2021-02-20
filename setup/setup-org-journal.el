@@ -253,6 +253,10 @@ This can be used for an org-capture template to create an entry in the journal."
                '("ld" (org-clocking-p))
                t (-on #'equal #'car))
 
+  (add-hook 'org-journal-mode-hook
+            (defun akirak/org-journal-entry-init ()
+              (setq-local org-multi-wiki-want-custom-id nil)))
+
   :custom
   (org-journal-find-file #'find-file)
   (org-journal-date-format "%F (%a)")
