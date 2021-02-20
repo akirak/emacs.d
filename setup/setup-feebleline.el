@@ -202,10 +202,9 @@
                            (t (org-minutes-to-clocksum-string
                                (floor seconds 60))))
                           (if (string-empty-p org-clock-current-task)
-                              (with-current-buffer (marker-buffer org-clock-marker)
-                                (org-with-wide-buffer
-                                 (goto-char org-clock-marker)
-                                 (nth 4 (org-heading-components))))
+                              (org-with-point-at org-clock-marker
+                                (org-link-display-format
+                                 (org-get-heading t t t t)))
                             org-clock-current-task))))
           (setq akirak/org-clock-summary-for-feebleline (cons seconds v))
           v)))))
