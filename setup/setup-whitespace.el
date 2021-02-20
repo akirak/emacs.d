@@ -45,6 +45,8 @@
                                32)))
       (delete-horizontal-space)
       (insert (make-string current-prefix-arg 32))))
+   ((eql current-prefix-arg '(4))
+    (delete-blank-lines))
    ((and (not current-prefix-arg)
          (or (looking-at (rx (* space) eol))
              (looking-back (rx bol (+ space)))))
