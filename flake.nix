@@ -130,6 +130,7 @@
             exwm
             # beancount
             liberime-config
+            elpaPackages.project
             #
             # These package have large Git repositories, so I will install them
             # using Nix to prevent cloning the entire history.
