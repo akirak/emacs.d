@@ -581,25 +581,38 @@ may have been stored before."
   "C-3" #'akirak/split-window-vertically
   "C-4" #'akirak/split-window-and-select)
 
+(defun akirak/delete-below-windows ()
+  (interactive)
+  (let ((initial-window (selected-window))
+        w)
+    (while (setq w (window-in-direction 'below))
+      (when (and (window-valid-p w)
+                 (window-live-p w)
+                 (not (window-minibuffer-p w)))
+        (delete-window w))
+      (select-window initial-window))))
+
 (general-def
   [remap abort-recursive-edit]
-  (defun akirak/cleanup-windows ()
+  (defun akirak/cleanup-windows (&optional arg)
     " Clean up windows or call `abort-recursive-edit'."
-    (interactive)
-    (let (killed)
-      (walk-window-tree (lambda (w)
-                          (cond
-                           ((member (buffer-name (window-buffer w))
-                                    '("*direnv*"
-                                      " *LV*"
-                                      "*Warnings*"))
-                            (quit-window nil w)
-                            (setq killed t))
-                           ((< (window-height w) 7)
-                            (delete-window w)
-                            (setq killed t)))))
-      (unless killed
-        (abort-recursive-edit)))))
+    (interactive "P")
+    (if arg
+        (akirak/delete-below-windows)
+      (let (killed)
+        (walk-window-tree (lambda (w)
+                            (cond
+                             ((member (buffer-name (window-buffer w))
+                                      '("*direnv*"
+                                        " *LV*"
+                                        "*Warnings*"))
+                              (quit-window nil w)
+                              (setq killed t))
+                             ((< (window-height w) 7)
+                              (delete-window w)
+                              (setq killed t)))))
+        (unless killed
+          (abort-recursive-edit))))))
 
 (general-def :keymaps 'xref--xref-buffer-mode-map :package 'xref
   [remap xref-goto-xref]
