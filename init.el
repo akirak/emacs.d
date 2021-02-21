@@ -923,16 +923,25 @@ outcommented org-mode headers)."
        (let ((default-directory root))
          (call-interactively (quote ,command))))))
 
-(cl-defmacro akirak/run-shell-command-silently-at-project-root (name command)
+(cl-defmacro akirak/run-at-vc-root (command &key other-window)
+  `(defun ,(intern (concat "akirak/vc-root-" (symbol-name command))) ()
+     (interactive)
+     (when ,other-window
+       (or (other-window 1)
+           (split-window-sensibly)))
+     (let ((default-directory (vc-root-dir)))
+       (call-interactively (quote ,command)))))
+
+(cl-defmacro akirak/run-shell-command-silently-at-vc-root (name command)
   `(defun ,name ()
      (interactive)
-     (let ((default-directory (akirak/project-root default-directory)))
+     (let ((default-directory (vc-root-dir)))
        (shell-command ,command))))
 
-(cl-defmacro akirak/make-project-root-file-command (filename &key regexp name)
+(cl-defmacro akirak/make-vc-root-file-command (filename &key regexp name)
   `(defun ,(intern (format "akirak/open-%s-at-root" (or name (s-replace "." "-" filename)))) ()
      (interactive)
-     (let* ((default-directory (akirak/project-root default-directory))
+     (let* ((default-directory (vc-root-dir))
             (file (pcase (if ,regexp
                              (directory-files default-directory nil ,filename t)
                            (when (file-exists-p ,filename)
@@ -946,23 +955,47 @@ outcommented org-mode headers)."
        (find-file file))))
 
 (akirak/bind-f8
-  "A" #'treemacs-add-project-to-workspace
-  "c" (akirak/run-at-project-root compile)
-  "d" (defun akirak/project-dired ()
-        (interactive)
-        (dired (akirak/project-root default-directory)))
-  "D" (akirak/run-at-project-root add-dir-local-variable)
-  "e" (akirak/run-at-project-root ielm :other-window t)
+  ;; Project.el commands
+  ;; Based on `project-prefix-map' in project.el 0.5.3
+  "!" #'project-shell-command
+  "&" #'project-async-shell-command
+  "f" #'project-find-file
+  ;; "F" #'project-or-external-find-file
+  "b" #'project-switch-to-buffer
+  "s" #'project-shell
+  "d" #'project-dired
+  ;; "v" #'project-vc-dir
+  "c" #'project-compile
+  ;; "e" #'project-eshell
+  ;; "k" #'project-kill-buffers
+  ;; "p" #'project-switch-project
+  ;; "g" #'project-find-regexp
+  ;; "G" #'project-or-external-find-regexp
+  ;; "r" #'project-query-replace-regexp
+
+  ;; Custom project commands
   "g" #'deadgrep
+  "t" (akirak/run-at-project-root vterm :other-window t)
+
+  ;; Commands run at a vc root
+  "A" (defun akirak/treemacs-add-vc-root-to-workspace ()
+        (interactive)
+        (treemacs-add-project-to-workspace (vc-root-dir)))
+  "D" (akirak/run-at-vc-root add-dir-local-variable)
   "n" '(:wk "nix")
-  "nd" (akirak/make-project-root-file-command "default.nix")
-  "ne" (akirak/run-shell-command-silently-at-project-root
+  "nd" (akirak/make-vc-root-file-command "default.nix")
+  "ne" (akirak/run-shell-command-silently-at-vc-root
         akirak/project-nix-shell-exit "nix-shell --run exit")
-  "nf" (akirak/make-project-root-file-command "flake.nix")
-  "nr" (akirak/run-at-project-root nix-repl :other-window t)
-  "ns" (akirak/make-project-root-file-command "shell.nix")
-  "r" (akirak/make-project-root-file-command "^README\\..+\\'" :regexp t :name "readme")
-  "t" (akirak/run-at-project-root vterm :other-window t))
+  "nf" (akirak/make-vc-root-file-command "flake.nix")
+  "nr" (akirak/run-at-vc-root nix-repl :other-window t)
+  "ns" (akirak/make-vc-root-file-command "shell.nix")
+  "r" (akirak/make-vc-root-file-command "^README\\..+\\'" :regexp t :name "readme")
+
+  ;; Unused commands
+  ;; "c" (akirak/run-at-project-root compile)
+  ;; "d" #'project-dired
+  ;; "e" (akirak/run-at-project-root ielm :other-window t)
+  )
 
 ;;;; Administration
 ;;;;; Directory/disk

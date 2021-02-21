@@ -31,9 +31,9 @@
   (defvar akirak/deadgrep-root-directory nil
     "Variable used to explicitly set the root directory.")
   (setq deadgrep-project-root-function
-        (lambda ()
+        (defun akirak/deadgrep-project-root ()
           (or akirak/deadgrep-root-directory
-              (deadgrep--project-root))))
+              (project-root (project-current t)))))
 
   ;; Add a command to replace matches in a deadgrep buffer.
   (defvar deadgrep-replace-history nil)
