@@ -121,4 +121,8 @@
                     :sources (funcall helm-sources-fn))))))
       (akirak/helm-shell-command))))
 
+;;;; TODO: Org integration
+
+;;;; TODO: Add support for initial setup workflow
+
 (provide 'setup-project)
