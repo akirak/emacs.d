@@ -102,6 +102,14 @@
 (cl-defgeneric akirak/remote-git-repo-github-p (repo)
   nil)
 
+(cl-defgeneric akirak/remote-git-repo-host-short-name (repo))
+(cl-defgeneric akirak/remote-git-repo-abbreviate-url (repo)
+  (ignore-errors
+    (format "%s:%s/%s"
+            (akirak/remote-git-repo-host-short-name repo)
+            (akirak/remote-git-repo-owner repo)
+            (akirak/remote-git-repo-name repo))))
+
 ;;;; GitHub repositories (https)
 
 (cl-defstruct akirak/github-https-repo owner name branch file)
@@ -125,6 +133,9 @@
   (akirak/github-https-repo-file repo))
 (cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-https-repo))
   t)
+(cl-defmethod akirak/remote-git-repo-host-short-name ((repo akirak/github-https-repo))
+  "FIXME"
+  "github")
 
 ;;;; GitHub repositories (ssh)
 
@@ -145,6 +156,9 @@
   t)
 (cl-defgeneric akirak/remote-git-repo-github-p ((repo akirak/github-ssh-repo))
   t)
+(cl-defmethod akirak/remote-git-repo-host-short-name ((repo akirak/github-ssh-repo))
+  "FIXME"
+  "github")
 
 ;;;; Generic Git repositories
 
@@ -199,6 +213,8 @@
             (match-string 1 url))))))
 (cl-defmethod akirak/remote-git-repo-clone-parent ((repo akirak/generic-git-repo))
   nil)
+(cl-defmethod akirak/remote-git-repo-host-short-name ((repo akirak/generic-git-repo))
+  (akirak/generic-git-repo-host repo))
 
 ;;;; Parsing
 
