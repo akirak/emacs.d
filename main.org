@@ -982,8 +982,20 @@ This lets you know which parts of the buffers are modified since the last commit
     (global-git-gutter-mode))
 
   (akirak/bind-jump
-    "j" 'git-gutter:next-hunk
-    "k" 'git-gutter:previous-hunk)
+    "j" #'git-gutter:next-hunk
+    "k" #'git-gutter:previous-hunk)
+
+  (general-advice-add '(git-gutter:next-hunk
+                        git-gutter:previous-hunk)
+                      :around
+                      (defun akirak/git-gutter-follow-up-navigation (orig &rest args)
+                        (when (buffer-narrowed-p)
+                          (widen))
+                        (let ((pos (point)))
+                          (prog1 (apply orig args)
+                            (unless (eq pos (point))
+                              (when (derived-mode-p 'org-mode)
+                                (org-show-context)))))))
 
   (akirak/bind-user
     "g" 'git-gutter:mark-hunk)
