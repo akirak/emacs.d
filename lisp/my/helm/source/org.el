@@ -52,7 +52,7 @@
     :candidates
     (lambda ()
       (->> (org-ql-select (org-agenda-files)
-             '(and (planning :to 0)
+             '(and (ts-active :to today)
                    (not (done)))
              :sort 'date
              :action 'element-with-markers)
