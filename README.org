@@ -360,6 +360,16 @@ load them first.
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package project
+  :config
+  (add-hook 'project-find-functions
+            (defun akirak/project-tramp-root (dir)
+              (-some->> (file-remote-p dir)
+                (cons 'remote))))
+  (add-hook 'project-find-functions
+            (defun akirak/project-syncthing-root (dir)
+              (-some->> (locate-dominating-file dir ".stfolder")
+                (cons 'syncthing)))))
 (use-package su)
 (use-package valign
   :disabled t
@@ -370,6 +380,7 @@ load them first.
 
 ***  Modules
 #+begin_src emacs-lisp
+(require 'setup-project)
 (require 'setup-git-bookmark)
 (require 'setup-info)
 (require 'setup-unicode)
@@ -965,34 +976,20 @@ Bind M-s M-s
 #+begin_src emacs-lisp
 (general-def
   "C-x c"
-  (defun akirak/compile-command ()
+  (defun akirak/project-compile ()
     (interactive)
-    (require 'my/compile)
-    (require 'my/helm/source/compile)
-    (if (equal current-prefix-arg '(16))
-        ;; If two prefixes are given, select the compilation buffer window.
-        (if-let (buffer (get-buffer "*compilation*"))
-            (if-let (window (get-buffer-window buffer))
-                (select-window window)
-              (pop-to-buffer buffer))
-          (user-error "No compilation buffer"))
-      (if-let ((plist (akirak/compile-detect-project)))
-          (-let [(&plist :root :filename :command :helm-sources-fn) plist]
-            (pcase current-prefix-arg
-              ('(4)
-               (find-file (expand-file-name filename root)))
-              (_
-               (let ((default-directory root))
-                 (cond
-                  (command
-                   (funcall-interactively command))
-                  (helm-sources-fn
-                   (helm :prompt (format "%s project at [%s]: "
-                                         filename
-                                         (f-short root))
-                         :sources (funcall helm-sources-fn))))))))
-        ;; No root is detected.
-        (akirak/helm-shell-command))))
+    (pcase current-prefix-arg
+      ;; If two prefixes are given, select the compilation buffer window.
+      ('(16)
+       (if-let (buffer (get-buffer "*compilation*"))
+           (if-let (window (get-buffer-window buffer))
+               (select-window window)
+             (pop-to-buffer buffer))
+         (user-error "No compilation buffer")))
+      ('(4)
+       (akirak/project-find-build-file))
+      (_
+       (akirak/project-call-build-command))))
   "C-x C"
   (defun akirak/helm-shell-command (&optional root)
     (interactive)
@@ -1061,16 +1058,25 @@ These commands are used to maintain this Emacs configuration.
        (let ((default-directory root))
          (call-interactively (quote ,command))))))
 
-(cl-defmacro akirak/run-shell-command-silently-at-project-root (name command)
+(cl-defmacro akirak/run-at-vc-root (command &key other-window)
+  `(defun ,(intern (concat "akirak/vc-root-" (symbol-name command))) ()
+     (interactive)
+     (when ,other-window
+       (or (other-window 1)
+           (split-window-sensibly)))
+     (let ((default-directory (vc-root-dir)))
+       (call-interactively (quote ,command)))))
+
+(cl-defmacro akirak/run-shell-command-silently-at-vc-root (name command)
   `(defun ,name ()
      (interactive)
-     (let ((default-directory (akirak/project-root default-directory)))
+     (let ((default-directory (vc-root-dir)))
        (shell-command ,command))))
 
-(cl-defmacro akirak/make-project-root-file-command (filename &key regexp name)
+(cl-defmacro akirak/make-vc-root-file-command (filename &key regexp name)
   `(defun ,(intern (format "akirak/open-%s-at-root" (or name (s-replace "." "-" filename)))) ()
      (interactive)
-     (let* ((default-directory (akirak/project-root default-directory))
+     (let* ((default-directory (vc-root-dir))
             (file (pcase (if ,regexp
                              (directory-files default-directory nil ,filename t)
                            (when (file-exists-p ,filename)
@@ -1084,23 +1090,47 @@ These commands are used to maintain this Emacs configuration.
        (find-file file))))
 
 (akirak/bind-f8
-  "A" #'treemacs-add-project-to-workspace
-  "c" (akirak/run-at-project-root compile)
-  "d" (defun akirak/project-dired ()
-        (interactive)
-        (dired (akirak/project-root default-directory)))
-  "D" (akirak/run-at-project-root add-dir-local-variable)
-  "e" (akirak/run-at-project-root ielm :other-window t)
+  ;; Project.el commands
+  ;; Based on `project-prefix-map' in project.el 0.5.3
+  "!" #'project-shell-command
+  "&" #'project-async-shell-command
+  "f" #'project-find-file
+  ;; "F" #'project-or-external-find-file
+  "b" #'project-switch-to-buffer
+  "s" #'project-shell
+  "d" #'project-dired
+  ;; "v" #'project-vc-dir
+  "c" #'project-compile
+  ;; "e" #'project-eshell
+  ;; "k" #'project-kill-buffers
+  ;; "p" #'project-switch-project
+  ;; "g" #'project-find-regexp
+  ;; "G" #'project-or-external-find-regexp
+  ;; "r" #'project-query-replace-regexp
+
+  ;; Custom project commands
   "g" #'deadgrep
+  "t" (akirak/run-at-project-root vterm :other-window t)
+
+  ;; Commands run at a vc root
+  "A" (defun akirak/treemacs-add-vc-root-to-workspace ()
+        (interactive)
+        (treemacs-add-project-to-workspace (vc-root-dir)))
+  "D" (akirak/run-at-vc-root add-dir-local-variable)
   "n" '(:wk "nix")
-  "nd" (akirak/make-project-root-file-command "default.nix")
-  "ne" (akirak/run-shell-command-silently-at-project-root
+  "nd" (akirak/make-vc-root-file-command "default.nix")
+  "ne" (akirak/run-shell-command-silently-at-vc-root
         akirak/project-nix-shell-exit "nix-shell --run exit")
-  "nf" (akirak/make-project-root-file-command "flake.nix")
-  "nr" (akirak/run-at-project-root nix-repl :other-window t)
-  "ns" (akirak/make-project-root-file-command "shell.nix")
-  "r" (akirak/make-project-root-file-command "^README\\..+\\'" :regexp t :name "readme")
-  "t" (akirak/run-at-project-root vterm :other-window t))
+  "nf" (akirak/make-vc-root-file-command "flake.nix")
+  "nr" (akirak/run-at-vc-root nix-repl :other-window t)
+  "ns" (akirak/make-vc-root-file-command "shell.nix")
+  "r" (akirak/make-vc-root-file-command "^README\\..+\\'" :regexp t :name "readme")
+
+  ;; Unused commands
+  ;; "c" (akirak/run-at-project-root compile)
+  ;; "d" #'project-dired
+  ;; "e" (akirak/run-at-project-root ielm :other-window t)
+  )
 #+end_src
 
 ***  Administration
@@ -1157,10 +1187,7 @@ These commands are used to maintain this Emacs configuration.
   "o" '(nil :wk "org")
   "oj" '(nil :wk "org-journal")
   ;; Add keybindings for switching the journal context
-  "ojd" #'org-journal-new-date-entry
-  "oq" '(nil :wk "org-ql")
-  "oqs" #'org-ql-search
-  "oqv" #'org-ql-view)
+  "ojd" #'org-journal-new-date-entry)
 #+end_src
 
 ****  Remote connections (TRAMP)
