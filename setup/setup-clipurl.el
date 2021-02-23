@@ -29,9 +29,12 @@
                    '(("cj" akirak/org-journal-capture-url-as-heading "Capture to journal as a heading")
                      ("rb" akirak/org-capture-book-url "Enqueue book")
                      ("ra" akirak/org-capture-news-article-url "Enqueue article")
-                     ("rv" akirak/org-capture-screencast-url "Enqueue video (screencast)"))))
+                     ("rv" akirak/org-capture-screencast-url "Enqueue video (screencast)")
+                     ("rr" akirak/org-capture-url-refile "Refile target")
+                     ("rt" akirak/org-capture-url-as-todo-refile "Refile target (as a todo)"))))
 
 (cl-defun akirak/org-capture-url-bookmark-template (url &key
+                                                        todo
                                                         default-title
                                                         manual-tags
                                                         as-body)
@@ -47,8 +50,10 @@
          (link (org-link-make-string url title))
          (drawer "\n:PROPERTIES:\n:CREATED_TIME: %U\n:END:\n"))
     (if as-body
-        (concat "* %^{Title of the entry}" drawer "%?\n\n" link)
-      (concat "* " link " :link:" (if manual-tags "%^g" "")
+        (concat "* "
+                (if todo "TODO " "")
+                "%^{Title of the entry}" drawer "%?\n\n" link)
+      (concat "* " (if todo "TODO " "") link " :link:" (if manual-tags "%^g" "")
               drawer "\n%?"))))
 
 (cl-defun akirak/org-capture-url-as-heading (destination url &key immediate default-title)
@@ -83,6 +88,29 @@
   (-partial #'akirak/org-capture-link-to-custom-id "book-inbox"))
 (defalias 'akirak/org-capture-news-article-url
   (-partial #'akirak/org-capture-link-to-custom-id "news-inbox"))
+
+(cl-defun akirak/org-capture-url-refile (url &key as-todo)
+  (let* ((location (helm :prompt "Capture location: "
+                         :sources
+                         (helm-build-sync-source "Refile targets"
+                           :candidates
+                           (->> (org-refile-get-targets)
+                                (-map (pcase-lambda (`(,caption ,file . ,_))
+                                        (let ((path (if (string-prefix-p file caption)
+                                                        (string-remove-prefix file caption)
+                                                      "")))
+                                          (cons (concat (file-name-nondirectory file) path)
+                                                (cons file
+                                                      (cdr (split-string path "/")))))))))))
+         (template (akirak/org-capture-url-bookmark-template url
+                     :todo as-todo :default-title t))
+         (org-capture-entry `("u" "Url" entry
+                              (file+olp ,(car location) ,@(cdr location))
+                              ,template)))
+    (org-capture)))
+
+(defun akirak/org-capture-url-as-todo-refile (url)
+  (akirak/org-capture-url-refile url :as-todo t))
 
 (defun akirak/org-journal-capture-url-as-heading (url)
   (akirak/org-capture-url-as-heading '(function org-journal-find-location)
