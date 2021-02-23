@@ -1,4 +1,7 @@
+(use-package pcache)
+
 (use-package persistent-soft
+  :requires pcache
   :straight (:host github :repo "rolandwalker/persistent-soft"))
 
 (use-package unicode-fonts
