@@ -465,6 +465,14 @@ third argument, i.e. right after the description, in the entry."
 (general-def :keymaps 'org-mode-map :package 'org
   "C-x i" #'helm-org-multi-wiki-insert-link)
 
-(general-def "<C-f10>" #'org-ql-view)
+;; Unbind `buffer-menu-open'
+(general-unbind "<C-f10>")
+
+(general-def :prefix "<C-f10>"
+  ;; These commands are not included in this repository for now.
+  "c" '(akirak/org-ql-search-category-todos :wk "category todos")
+  "t" '(akirak/org-ql-search-tag-todos :wk "tag todos")
+  ;; Others
+  "v" #'org-ql-view)
 
 (provide 'setup-org-starter)
