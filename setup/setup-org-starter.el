@@ -62,6 +62,10 @@
 
 (use-package org-super-agenda
   :after org-agenda
+
+  :custom
+  (org-super-agenda-date-format "%Y-%m-%d")
+
   :config
   ;; Basically stolen from org-super-agenda.el
   (eval-when-compile
