@@ -489,10 +489,7 @@ With ARG, pick a text from the kill ring instead of the last one."
 (defun akirak/org-get-state-log ()
   ;; This should start from the beginning of the heading
   (save-excursion
-    (when-let* ((entry-end (save-excursion
-                             (end-of-line)
-                             (or (re-search-forward org-heading-regexp nil t)
-                                 (point-max))))
+    (when-let* ((entry-end (org-entry-end-position))
                 (logbook-end (save-excursion
                                (re-search-forward org-logbook-drawer-re entry-end t))))
       (when (re-search-forward (rx bol "- State ") logbook-end t)
@@ -623,9 +620,7 @@ With ARG, pick a text from the kill ring instead of the last one."
 (defun akirak/org-find-or-create-logbook ()
   "Go to the end of the log book of the entry."
   (org-back-to-heading)
-  (let ((bound (save-excursion
-                 (forward-line)
-                 (re-search-forward org-heading-regexp nil t))))
+  (let ((bound (org-entry-end-position)))
     (if (re-search-forward org-logbook-drawer-re bound t)
         (beginning-of-line 1)
       (forward-line)
