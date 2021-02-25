@@ -614,6 +614,11 @@ With ARG, pick a text from the kill ring instead of the last one."
   :after org
   :straight (:host github :repo "akirak/org-chronos")
   :custom
+  (org-chronos-logged-properties
+   '(("LANGUAGE" :inherit t)
+     ("PROJECT_REMOTE_REPO" :inherit t)))
+  (org-chronos-show-property-summary t)
+  (org-chronos-week-start-day 1)
   (org-chronos-clock-threshold 5)
   (org-chronos-auto-export t))
 
