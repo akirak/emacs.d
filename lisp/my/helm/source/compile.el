@@ -27,7 +27,7 @@
 
 ;;;; Sources for specific languages
 
-(cl-defun akirak/helm-npm-script-source (file &key prefix)
+(cl-defun akirak/helm-npm-script-source (&key prefix)
   "Like `akirak/npm-package-json-commands', but returns candidates for a Helm source."
   (require 'my/compile/npm)
   (helm-make-source "Npm script" 'akirak/helm-sync-compile-command-source
@@ -35,7 +35,7 @@
     (-map (lambda (cell)
             (cons (format "%s: %s" (car cell) (cdr cell))
                   (symbol-name (car cell))))
-          (akirak/npm-package-json-commands file))
+          (akirak/npm-package-json-commands "package.json"))
     :coerce (-partial #'s-prepend (or prefix "npm run "))))
 
 (defun akirak/helm-compile-npm-sources (&optional backend)

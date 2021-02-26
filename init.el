@@ -857,7 +857,7 @@ outcommented org-mode headers)."
              (pop-to-buffer buffer))
          (user-error "No compilation buffer")))
       ('(4)
-       (akirak/project-find-build-file))
+       (akirak/project-find-package-file))
       (_
        (akirak/project-call-build-command))))
   "C-x C"
