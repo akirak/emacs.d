@@ -2,12 +2,13 @@
 (save-place-mode 1)                     ; Save per-file cursor positions
 (recentf-mode 1)                        ; Keep a list of recent files
 ;; Exclude machine-generated files in user-emacs-directory
-(general-add-hook 'recentf-exclude
-                  (mapcar (lambda (path)
-                            (concat user-emacs-directory path))
-                          `(,(rx "straight/build/" (+ (not (any "/"))) "-autoloads.el")
-                            "var/"
-                            ".cache/")))
+(require 'rx)
+(add-to-list 'recentf-exclude
+             (rx-to-string `(and bol ,(expand-file-name user-emacs-directory)
+                                 (or "straight/build/"
+                                     "var/"
+                                     ".cache/")))
+             t)
 (setq recentf-max-saved-items 200)
 (show-paren-mode 1)                     ; Highlight matching parentheses
 
