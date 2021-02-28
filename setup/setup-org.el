@@ -70,6 +70,7 @@
               ;; org-fast-tag-selection-single-key nil
               org-agenda-use-tag-inheritance t
               org-tags-exclude-from-inheritance '("ORDERED" "crypt")
+              org-extend-today-until 5
               org-blank-before-new-entry '((heading . nil)
                                            (plain-list-item . auto))
               org-special-ctrl-a/e t
