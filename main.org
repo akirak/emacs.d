@@ -181,7 +181,6 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 *** org-ql
 #+begin_src emacs-lisp
   (use-package org-ql
-    :straight (org-ql :host github :repo "alphapapa/org-ql")
     :custom
     (org-ql-views nil))
 #+end_src

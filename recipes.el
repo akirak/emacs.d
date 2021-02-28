@@ -7,6 +7,8 @@
                            :files ("helm-org-recent-headings.el"))
  (helm-tail :host github :repo "akirak/helm-tail"
             :branch "feature/source-alist")
+ ;; Use my development branch until alphapapa is back
+ (org-ql :host github :repo "akirak/org-ql" :branch "devel")
  (org-web-tools :host github :repo "akirak/org-web-tools"
                 :branch "encoding")
  (su :host github :repo "PythonNut/su.el")
