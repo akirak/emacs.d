@@ -283,6 +283,7 @@
              (akirak/helm-org-multi-wiki-show-indirect marker)))))
 
   :custom
+  (org-multi-wiki-recentf-exclude t)
   (org-multi-wiki-want-custom-id t)
   (org-multi-wiki-entry-template-fn #'akirak/org-multi-wiki-entry-template-fn)
   (org-multi-wiki-display-buffer-fn #'switch-to-buffer))
