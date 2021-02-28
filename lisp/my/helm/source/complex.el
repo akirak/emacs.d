@@ -49,7 +49,10 @@
                                      (helm-run-after-quit
                                       (lambda ()
                                         (funcall switch-to-project-fn default-directory)))))))
-    (-let* ((file-buffers (-filter #'buffer-file-name (buffer-list)))
+    (-let* ((file-buffers (->> (buffer-list)
+                               (-filter (lambda (buf)
+                                          (when-let (filename (buffer-file-name buf))
+                                            (not (recentf-include-p filename)))))))
             ((same-project-buffers other-file-buffers)
              (if project (-separate #'same-project-p file-buffers) (list nil file-buffers)))
             (same-project-other-buffers
