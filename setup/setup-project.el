@@ -122,6 +122,12 @@
       (akirak/helm-shell-command))))
 
 ;;;; TODO: Org integration
+(use-package octopus
+  :straight (octopus :host github :repo "akirak/octopus.el"))
+
+(use-package helm-octopus
+  :straight octopus
+  :after helm-octopus)
 
 ;;;; TODO: Add support for initial setup workflow
 
