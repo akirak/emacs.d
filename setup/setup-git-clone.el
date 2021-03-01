@@ -49,6 +49,7 @@
 ;; Choose a parent directory based on magit-repository-directories
 ;; and git-identity-list.
 (defun akirak/git-clone-parent-select (url)
+  (require 'git-identity)
   (or (pcase (git-identity--guess-identity-by-url url)
         (`(domain ,domain ,ent)
          (when-let*
