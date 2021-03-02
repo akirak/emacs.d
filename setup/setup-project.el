@@ -121,10 +121,11 @@
                     :sources (funcall helm-sources-fn))))))
       (akirak/helm-shell-command))))
 
-;;;; TODO: Org integration
+;;;; Org integration
 (use-package octopus
   :straight (octopus :host github :repo "akirak/octopus.el")
   :config
+  (require 'octopus-capture)
   (setq octopus-capture-template-alist
         `((todo
            ,(octopus-entry-capture-template
