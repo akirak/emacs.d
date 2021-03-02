@@ -1,6 +1,6 @@
 (use-package hydra
   :custom
-  (hydra-hint-display-type 'posframe)
+  (hydra-hint-display-type 'lv)
   (hydra-posframe-show-params
    (list
     ;; :internal-border-width 1
