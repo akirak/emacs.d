@@ -123,11 +123,32 @@
 
 ;;;; TODO: Org integration
 (use-package octopus
-  :straight (octopus :host github :repo "akirak/octopus.el"))
+  :straight (octopus :host github :repo "akirak/octopus.el")
+  :config
+  (setq octopus-capture-template-alist
+        `((todo
+           ,(octopus-entry-capture-template
+             :todo "TODO"
+             :heading "%?"))
+          (project
+           ,(octopus-entry-capture-template
+             :heading "%?"))
+          (current-with-input
+           ,(octopus-entry-capture-template
+             :todo "STARTED"
+             :heading "%i"
+             :body "%a\n\n%?")
+           :immediate-finish t))))
 
 (use-package helm-octopus
   :straight octopus
   :after helm-octopus)
+
+(use-package octopus-hydra
+  :straight octopus
+  :commands (octopus-hydra))
+
+(akirak/bind-user "p" #'octopus-hydra)
 
 ;;;; TODO: Add support for initial setup workflow
 
