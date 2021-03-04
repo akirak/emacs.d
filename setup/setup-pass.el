@@ -7,9 +7,7 @@
   :config
   (auth-source-pass-enable))
 
-(use-package pass)
-
-(use-package helm-pass
-  :commands (helm-pass))
+(use-package pass
+  :commands (pass))
 
 (provide 'setup-pass)
