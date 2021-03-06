@@ -48,7 +48,7 @@
                            ;; TODO: Check for clock data in the entry
                            (format-time-string (org-time-stamp-format t t))))
      "Set created time")
-    ("%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
+    ("%" (akirak/org-add-statistics-cookie "%") "Add [%%%%]")
     ("/" (akirak/org-add-statistics-cookie "/") "Add [/]")
     ("ms" org-sidebar-tree)
     ;; TODO: Show history
