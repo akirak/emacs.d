@@ -27,6 +27,24 @@
                t)
 
   (akirak/bind-jump
+    "s"
+    (defun akirak/avy-symbol-overlay ()
+      (interactive)
+      (let ((keywords (-map #'car symbol-overlay-keywords-alist)))
+        (when keywords
+          (avy-with akirak/avy-symbol-overlay
+            (avy-jump (rx-to-string `(and symbol-start
+                                          (or ,@keywords)))
+                      :action
+                      (lambda (point)
+                        (goto-char point)
+                        (re-search-backward (rx symbol-start)))
+                      :window-flip avy-all-windows
+                      :pred
+                      (lambda ()
+                        (member (thing-at-point 'symbol t)
+                                keywords)))))))
+
     "h"
     (defun akirak/avy-org-heading (arg &optional action)
       (declare (indent 1))

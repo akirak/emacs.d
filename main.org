@@ -1041,8 +1041,29 @@ Visualise unnecessary, extra whitespace characters in source code.
 **** Manual highlighting
 ***** Symbol overlays
 #+begin_src emacs-lisp
-(use-package symbol-overlay
-  :commands (symbol-overlay-put symbol-overlay-mode))
+  (use-package symbol-overlay
+    :commands (symbol-overlay-put symbol-overlay-mode)
+    :config
+
+    (akirak/bind-search
+      "s"
+      (defun akirak/symbol-overlay-jump ()
+        (interactive)
+        (let* ((name (completing-read "Highlighted symbol: "
+                                      (-map #'car symbol-overlay-keywords-alist)))
+               (x (assoc name symbol-overlay-keywords-alist))
+               (face (cddr x))
+               (initial (point))
+               pos)
+          (goto-char (point-min))
+          (unless (catch 'finish
+                    (while (setq pos (next-single-char-property-change (point) 'face))
+                      (goto-char pos)
+                      (when (eq face (get-char-property pos 'face))
+                        (throw 'finish t))))
+            (goto-char initial))))))
+
+
 #+end_src
 ***** Visual bookmarks
 #+begin_src emacs-lisp
