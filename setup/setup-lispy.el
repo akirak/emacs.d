@@ -1,4 +1,8 @@
 (use-package lispy
+  :config
+  (advice-add 'hydra-lispy-x/body
+              :override
+              'akirak/lispy-x-hydra/body)
   :hook
   ((lisp-mode
     emacs-lisp-mode
@@ -55,5 +59,38 @@
 
 (advice-add 'lispy-goto-symbol-elisp
             :override #'akirak/lispy-goto-symbol-elisp-other-window)
+
+(pretty-hydra-define akirak/lispy-x-hydra
+  (:title "Lispy code transformation"
+          :exit t)
+  ("Conditionals"
+   (("c" lispy-to-cond "if to cond")
+    ("i" lispy-to-ifs "cond to if"))
+   "Functions"
+   (("l" lispy-to-lambda "defun to lambda")
+    ("d" lispy-to-defun "lambda to defun"))
+   "Extract/bind"
+   (("b" akirak/lispy-bind-variable "Bind in a new let")
+    ("D" lispy-extract-defun "Extract defun"))
+   "Development"
+   (("e" lispy-edebug "edebug"))))
+
+(defun akirak/lispy-bind-variable (name)
+  ;; An alternative to `lispy-bind-variable', which seems to mangle undo-fu.
+  (interactive "sName: ")
+  (-let* (((start . end) (if (region-active-p)
+                             (cons (region-beginning) (region-end))
+                           (bounds-of-thing-at-point 'sexp)))
+          (sexp (buffer-substring start end))
+          (keyword (if current-prefix-arg
+                       "let*"
+                     "let")))
+    (delete-region start end)
+    (insert "(" keyword " ((" name " " sexp ")\n")
+    (let ((pos (point)))
+      (insert "\n)\n")
+      (push-mark)
+      (insert name ")")
+      (goto-char pos))))
 
 (provide 'setup-lispy)
