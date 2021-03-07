@@ -113,6 +113,12 @@
             hunspell
             hunspellDicts.en-us
             hunspellDicts.en-gb-ise
+
+            # emacs-everywhere
+            xdotool
+            xorg.xwininfo
+            xorg.xprop
+            xclip
           ];
         };
 
@@ -159,10 +165,18 @@
 
           defaultPackage = packages.emacsWithTools;
 
-          defaultApp = flake-utils.lib.mkApp {
+          apps.emacs = flake-utils.lib.mkApp {
             name = "emacs";
             drv = defaultPackage;
           };
-        }
+
+          apps.emacsclient = flake-utils.lib.mkApp {
+            name = "emacsclient";
+            drv = defaultPackage;
+          };
+
+          defaultApp = apps.emacs;
+
+       }
     )) // { inherit flake-compat; };
 }

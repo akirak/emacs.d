@@ -219,6 +219,16 @@
 
 ;;; Packages
 (use-package dash-docs)
+(use-package emacs-everywhere
+  ;; Use my fork until the path issue is fixed
+  :straight (:host github :repo "akirak/emacs-everywhere" :branch "with-editor-1")
+  :functions (emacs-everywhere)
+  :general
+  (:keymaps 'emacs-everywhere-mode-map
+            ;; Analogous to the post command in most web applications,
+            ;; and it's also bound to mode-aware repl commands, which
+            ;; is irrelevant in text-mode.
+            "<C-return>" #'emacs-everywhere-finish))
 (use-package helm-dash
   :custom
   (dash-docs-browser-func #'akirak/browse-url))
@@ -325,6 +335,12 @@
 (require 'setup-info)
 (require 'setup-unicode)
 (require 'setup-mmm)
+
+;;;; Starting the server
+;; This may fail if there is another Emacs session running a server.
+(ignore-errors
+  (unless (server-running-p)
+    (server-start)))
 
 ;;; Commands and keybindings
 ;;;; Basic keybindings
