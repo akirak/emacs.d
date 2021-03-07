@@ -8,6 +8,7 @@
          ;; ("\\.jsx?$" . web-mode)
          ("\\.es6\\'" . web-mode)
          ("\\.ejs\\'" . web-mode)
+         ("\\.leex\\'" . web-mode)
          ("\\.phtml\\'" . web-mode)
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'" . web-mode)
