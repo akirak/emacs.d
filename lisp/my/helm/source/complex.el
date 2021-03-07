@@ -74,15 +74,12 @@
             (other-projects (->> (-map #'root-of other-project-buffers)
                                  (delq nil)
                                  (-uniq))))
-      (list (cond
-             (same-project-buffers
-              (helm-make-source (format "File buffers in project %s"
-                                        default-directory)
-                  'akirak/helm-source-buffer
-                :candidates (mapcar #'file-buffer-cell
-                                    (or same-project-other-buffers
-                                        same-project-buffers))))
-             (project akirak/helm-source-project-files))
+      (list (helm-make-source (format "File buffers in project %s"
+                                      default-directory)
+                'akirak/helm-source-buffer
+              :candidates (mapcar #'file-buffer-cell
+                                  (or same-project-other-buffers
+                                      same-project-buffers)))
             (helm-make-source "File buffers in other projects"
                 'akirak/helm-source-buffer
               :candidates (mapcar #'file-buffer-cell other-project-buffers))
