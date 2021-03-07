@@ -138,13 +138,23 @@
           :sources akirak/yankpad-helm-category-source))
 
   (defun akirak/yankpad-guess-category ()
-    (when (derived-mode-p 'text-mode)
-      (or (and (eq major-mode 'org-mode)
-               (-some-> (buffer-file-name)
-                 (file-name-base)
-                 (member (yankpad--categories))
-                 (car)))
-          yankpad-default-category)))
+    "Return the default yankpad category for the file.
+
+Determine the yankpad category based on the file name if one is
+available. This is useful for per-project configuration files
+sharing the common practices among different projects, such as
+shell.nix."
+    (let* ((categories (yankpad--categories))
+           (filename (buffer-file-name (or (buffer-base-buffer)
+                                           (current-buffer)))))
+      (or (when filename
+            (or (cl-find (file-name-nondirectory filename)
+                         categories)
+                (when (eq major-mode 'org-mode)
+                  (cl-find (file-name-base filename)
+                           categories))))
+          (when (derived-mode-p 'text-mode)
+            yankpad-default-category))))
 
   (defun akirak/yankpad-insert (&optional arg)
     (interactive "P")
@@ -159,18 +169,6 @@
 
   (setq yankpad-auto-category-functions
         (list #'yankpad-major-mode-category
-              (defun akirak/yankpad-file-category ()
-                (when-let (filename (buffer-file-name (or (buffer-base-buffer)
-                                                          (current-buffer))))
-                  (file-name-nondirectory filename)))
-              ;; (defun akirak/yankpad-org-file-category ()
-              ;;   (and (eq major-mode 'org-mode)
-              ;;        (when-let (filename (buffer-file-name (org-base-buffer (current-buffer))))
-              ;;          (cond
-              ;;           ((member (expand-file-name filename) org-starter-known-files)
-              ;;            (file-name-base filename))
-              ;;           ((when-let (plist (org-multi-wiki-entry-file-p))
-              ;;              (symbol-name (plist-get plist :namespace))))))))
               (defun akirak/yankpad-project-category ()
                 (and (featurep 'project)
                      (when-let* ((name (-some-> (project-current)
