@@ -124,6 +124,8 @@
 ;;;; Org integration
 (use-package octopus
   :straight (octopus :host github :repo "akirak/octopus.el")
+  :custom
+  (octopus-session-value-source 'windows)
   :config
   (require 'octopus-capture)
   (setq octopus-capture-template-alist
