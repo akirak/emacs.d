@@ -11,6 +11,19 @@
           ".config")
       "/"))
 
+(defvar akirak/recentf-cache
+  (make-hash-table :test #'equal
+                   :size 3000))
+
+(defun akirak/recentf-include-p (filename)
+  (let* ((filename (expand-file-name filename))
+         (cached-result (gethash filename akirak/recentf-cache :not-available)))
+    (if (eq cached-result :not-available)
+        (let ((result (recentf-include-p filename)))
+          (puthash filename result akirak/recentf-cache)
+          result)
+      cached-result)))
+
 (defun akirak/helm-project-buffer-sources (project switch-to-project-fn)
   (cl-labels ((root-of (buffer)
                        (akirak/project-root (buffer-dir buffer)))
@@ -51,8 +64,8 @@
                                         (funcall switch-to-project-fn default-directory)))))))
     (-let* ((file-buffers (->> (buffer-list)
                                (-filter (lambda (buf)
-                                          (when-let (filename (buffer-file-name buf))
-                                            (not (recentf-include-p filename)))))))
+                                          (-some->> (buffer-file-name buf)
+                                            (akirak/recentf-include-p))))))
             ((same-project-buffers other-file-buffers)
              (if project (-separate #'same-project-p file-buffers) (list nil file-buffers)))
             (same-project-other-buffers
