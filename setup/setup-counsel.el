@@ -161,7 +161,7 @@
                             (car files)
                           (completing-read (format "README for %s: " x)
                                            files nil t)))
-    (dired-find-file-other-window dir)
+    (dired-other-window dir)
     (message "No readme found for %s" x)))
 
 (defun akirak/open-library-readme (x)
