@@ -34,13 +34,6 @@
                                 "(require '" (s-replace-regexp "-tests?\\'" "" (file-name-base (buffer-file-name))) ")\n\n"
                                 _ "\n\n"
                                 "(provide '" (file-name-base (buffer-file-name)) ")\n"))
-                          (("/shell\\.nix\\'" . "nix-shell")
-                           . (> "{ pkgs ? import <nixpkgs> {} }:\n"
-                                "pkgs.mkShell {\n"
-                                "  buildInputs = [\n"
-                                "    " _ "\n"
-                                "  ];\n"
-                                "}"))
                           (("/dir-locals\\.nix\\'" . "nix-buffer")
                            . (>
                               "# This is a configuration for nix-buffer.el for Emacs.\n"
