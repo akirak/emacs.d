@@ -11,6 +11,7 @@
 ;; Don't run it in minibuffers and helm buffers
 (add-hook 'prog-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'visual-line-mode)
+(add-hook 'help-mode-hook (lambda () (visual-line-mode 1)))
 
 ;; Suppress a message by `toggle-word-wrap' unless the function is
 ;; called interactively. The message is annoying as the option is set

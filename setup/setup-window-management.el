@@ -59,6 +59,7 @@
   (shackle-rules '(
                    ("\\*ivy-occur counsel-projectile " :regexp t :align left :ratio 0.15)
                    ("*xref*" :align below :ratio 0.2)
+                   ("*lsp-help*" :other t)
                    ;; Shackle rules for org-mode
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
