@@ -151,7 +151,8 @@
   :general
   (:keymaps 'elixir-mode-map :package 'elixir-mode
             "C-c i" #'inf-elixir
-            "C-c p" #'inf-elixir-send-region))
+            "C-c e" (general-predicate-dispatch 'inf-elixir-send-line
+                      (region-active-p) 'inf-elixir-send-region)))
 
 ;; Deprecated. Use inf-elixir-project
 (defun akirak/iex-mix (root)
