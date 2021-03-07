@@ -126,6 +126,7 @@
   :straight (octopus :host github :repo "akirak/octopus.el")
   :custom
   (octopus-session-value-source 'windows)
+  (octopus-capture-finish-but-clock-in t)
   :config
   (require 'octopus-capture)
   (setq octopus-capture-template-alist
