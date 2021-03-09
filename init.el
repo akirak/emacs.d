@@ -536,7 +536,8 @@ connection identities of recent files."
              :sources
              (list (akirak/helm-dired-buffer-source)
                    akirak/helm-directory-bookmark-source
-                   akirak/helm-open-file-buffer-directories-source)))
+                   akirak/helm-open-file-buffer-directories-source
+                   akirak/helm-project-parent-directory-source)))
       (_ (user-error "Not matching %s" current-prefix-arg))))
   "C-x g"
   (defun akirak/browse-git-repository ()

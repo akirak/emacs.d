@@ -121,6 +121,25 @@
                     :sources (funcall helm-sources-fn))))))
       (akirak/helm-shell-command))))
 
+;;;; Directory structure
+
+(defun akirak/project-parent-directories ()
+  (cl-labels
+      ((go (level parent)
+           (if (= level 0)
+               (list parent)
+             (->> (f-directories parent)
+                  (--map (go (1- level) it))
+                  (-flatten-n 1)))))
+    (->> magit-repository-directories
+         (-map (pcase-lambda (`(,root . ,level))
+                 (when (and (> level 0)
+                            (f-directory-p root))
+                   (go (1- level) root))))
+         (-flatten-n 1)
+         (-map #'f-slash)
+         (-map #'f-short))))
+
 ;;;; Org integration
 (use-package octopus
   :straight (octopus :host github :repo "akirak/octopus.el")

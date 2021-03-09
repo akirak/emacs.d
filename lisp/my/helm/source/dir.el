@@ -49,4 +49,8 @@
                   (require 'my/dir/enum)
                   (akirak/open-file-buffer-directories))))
 
+(defconst akirak/helm-project-parent-directory-source
+  (helm-make-source "Project parent directories" 'akirak/helm-source-directory
+    :candidates #'akirak/project-parent-directories))
+
 (provide 'my/helm/source/dir)
