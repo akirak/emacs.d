@@ -171,7 +171,7 @@
   :straight octopus
   :commands (octopus-hydra))
 
-(akirak/bind-user "p" #'octopus-hydra)
+(general-def "C-z" #'octopus-hydra)
 
 ;;;; TODO: Add support for initial setup workflow
 
