@@ -34,8 +34,15 @@
         (open-line (or n 1))))
     t)
 
+  (defun akirak/hippie-yankpad-expand (arg)
+    (unless yankpad-category
+      (when-let (category (akirak/yankpad-guess-category))
+        (yankpad-set-local-category category)))
+    (when yankpad-category
+      (yankpad-expand arg)))
+
   (setq-default hippie-expand-try-functions-list
-                '(yankpad-expand
+                '(akirak/hippie-yankpad-expand
                   try-expand-emmet
                   akirak/org-open-line-expand)))
 
