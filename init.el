@@ -952,7 +952,8 @@ outcommented org-mode headers)."
 (cl-defmacro akirak/run-shell-command-silently-at-vc-root (name command)
   `(defun ,name ()
      (interactive)
-     (let ((default-directory (vc-root-dir)))
+     (let ((default-directory (or (vc-root-dir)
+                                  (magit-toplevel))))
        (shell-command ,command))))
 
 (cl-defmacro akirak/make-vc-root-file-command (filename &key regexp name)
