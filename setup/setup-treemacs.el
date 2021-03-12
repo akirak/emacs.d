@@ -8,7 +8,8 @@
     (`(t . _)
      (setq treemacs-git-mode 'simple)))
   :general
-  ("C-0" #'akirak/treemacs)
+  ("C-0" #'akirak/treemacs
+   "C--" #'akirak/treemacs-find-file)
   :config
   (defvar akirak/treemacs-origin-window nil)
   (defun akirak/treemacs ()
@@ -22,6 +23,13 @@
      (t
       (setq akirak/treemacs-origin-window (selected-window))
       (treemacs-select-window))))
+
+  (defun akirak/treemacs-find-file ()
+    "Find the current file in treemacs."
+    (interactive)
+    (treemacs-find-file)
+    (treemacs-select-window))
+
   (add-to-list 'treemacs-ignored-file-predicates
                (defun akirak/treemacs-ignored-file-predicate (filename path)
                  (member filename '(".direnv")))
