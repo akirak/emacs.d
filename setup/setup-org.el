@@ -61,6 +61,16 @@
               org-habit-show-done-always-green t
               org-src-tab-acts-natively t
               org-startup-indented t
+              ;; When `org-tag-persistent-alist' is non-nil,
+              ;; `org-current-tag-alist' is set, and tags from
+              ;; `org-get-buffer-tags' are unavailable in completion.
+              ;;
+              ;; To provide non-persistent tags, enable this option to
+              ;; feed tags from all agenda files.
+              ;;
+              ;; This will be safe, since I use categories instead of
+              ;; tags to identify work projects.
+              org-complete-tags-always-offer-all-agenda-tags t
               org-startup-truncated nil
               org-use-speed-commands t
               org-id-link-to-org-use-id 'create-if-interactive-and-no-custom-id
