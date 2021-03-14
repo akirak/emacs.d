@@ -423,7 +423,11 @@ third argument, i.e. right after the description, in the entry."
                         (reverse-datetree
                          entry (file+function org-reverse-datetree-goto-date-in-file)
                          ,todo-body
-                         :clock-in t :clock-resume t :empty-lines 1))
+                         :clock-in t :clock-resume t :empty-lines 1)
+                        (reverse-datetree-no-clocking
+                         entry (file+function org-reverse-datetree-goto-date-in-file)
+                         ,todo-body
+                         :empty-lines 1))
                       t))
 
   (defun akirak/helm-org-ql-known-files ()
