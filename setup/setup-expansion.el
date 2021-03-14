@@ -151,15 +151,13 @@ Determine the yankpad category based on the file name if one is
 available. This is useful for per-project configuration files
 sharing the common practices among different projects, such as
 shell.nix."
-    (let* ((categories (yankpad--categories))
-           (filename (buffer-file-name (or (buffer-base-buffer)
-                                           (current-buffer)))))
+    (let ((categories (yankpad--categories))
+          (filename (buffer-file-name (or (buffer-base-buffer)
+                                          (current-buffer)))))
       (or (when filename
-            (or (cl-find (file-name-nondirectory filename)
-                         categories)
-                (when (eq major-mode 'org-mode)
-                  (cl-find (file-name-base filename)
-                           categories))))
+            (cl-find (file-name-nondirectory filename)
+                     categories
+                     :test #'string-equal))
           (when (derived-mode-p 'text-mode)
             yankpad-default-category))))
 
