@@ -63,6 +63,36 @@
 (use-package yankpad
   :config
 
+  (defun akirak/yankpad-show-current-category ()
+    (interactive)
+    (let* ((category (or (buffer-local-value 'yankpad-category (current-buffer))
+                         (akirak/yankpad-guess-category)))
+           (major-mode-name (unless (or (eq major-mode 'org-journal-mode)
+                                        (derived-mode-p 'special-mode))
+                              (symbol-name major-mode)))
+           (category-with-default (or category major-mode-name)))
+      (with-current-buffer (or (find-buffer-visiting yankpad-file)
+                               (find-file-noselect yankpad-file))
+        (ignore-errors
+          (unless (buffer-narrowed-p)
+            (goto-char (point-min))
+            (cond
+             ((re-search-forward (rx-to-string `(and bol "**" (+ space)
+                                                     ,category-with-default))
+                                 nil t)
+              (org-show-entry)
+              (org-narrow-to-subtree)
+              (message "Showing category \"%s\"" category-with-default))
+             (category
+              (error "Cannot find category \"%s\"" category))
+             (t
+              (re-search-forward (rx bol "*" (+ space) "Major modes"))
+              (insert "\n** " major-mode-name "\n")
+              (org-show-entry)
+              (org-narrow-to-subtree)
+              (message "Created major mode category \"%s\"" major-mode-name)))))
+        (switch-to-buffer-other-window (current-buffer)))))
+
   ;; I do not want to use the projectile integration.
   (advice-add #'yankpad-local-category-to-projectile
               :override (lambda ()))

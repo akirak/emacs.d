@@ -397,6 +397,7 @@ third argument, i.e. right after the description, in the entry."
   (org-starter-mode t)
   (general-add-hook 'org-starter-extra-find-file-map
                     '((";" org-starter-find-config-file "config")
+                      ("y" akirak/yankpad-show-current-category "yankpad")
                       ("i" akirak/find-user-init-file "init.el")
                       ("c" akirak/commonplace-repos-status "commonplace"))
                     t)
