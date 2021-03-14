@@ -19,10 +19,10 @@
   (autoload 'pdf-occur-ibuffer-minor-mode "pdf-occur")
   (autoload 'pdf-outline-minor-mode "pdf-outline")
   (autoload 'pdf-sync-minor-mode "pdf-sync")
-  :config
-  (pdf-loader-install)
+  :init
   ;; This is necessary to add a corresponding entry to auto-mode-list.
   (load "pdf-tools-autoloads")
+  (pdf-loader-install)
   :general
   (:keymaps 'pdf-view-mode-map
             "C-s" #'isearch-forward
