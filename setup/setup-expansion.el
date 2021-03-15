@@ -195,9 +195,9 @@ shell.nix."
 
   (defun akirak/yankpad-insert (&optional arg)
     (interactive "P")
-    (unless yankpad-category
-      (if-let (category (and (not arg)
-                             (akirak/yankpad-guess-category)))
+    (when (or arg (not yankpad-category))
+      (if-let (category (unless arg
+                          (akirak/yankpad-guess-category)))
           (yankpad-set-local-category category)
         (akirak/yankpad-helm-set-category)
         (yankpad-set-local-category akirak/yankpad-org-clock-category)))
