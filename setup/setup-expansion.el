@@ -97,18 +97,17 @@
   (advice-add #'yankpad-local-category-to-projectile
               :override (lambda ()))
 
-  (defun akirak/yankpad-get-category-data ()
-    (let ((olp (-map #'substring-no-properties
-                     (org-get-outline-path t t))))
-      (list (-last-item olp)
-            :olp olp
-            :include (-some--> (org-entry-get nil "INCLUDE")
-                       (split-string it "|")))))
-
   (defun akirak/yankpad-helm-category-candidates ()
     (let ((data (org-ql-select yankpad-file
                   `(level ,yankpad-category-heading-level)
-                  :action #'akirak/yankpad-get-category-data)))
+                  :action
+                  '(let ((olp (-map #'substring-no-properties
+                                    (org-get-outline-path t t))))
+                     (list (-last-item olp)
+                           :olp olp
+                           :include (-some--> (org-entry-get nil "INCLUDE")
+                                      (split-string it "|"))
+                           :snippets (-map #'car (yankpad-snippets-at-point)))))))
       (cl-labels
           ((inherited-categories
             (category)
@@ -123,7 +122,9 @@
                                 (if categories
                                     (format " (inherits %s)"
                                             (string-join categories ","))
-                                  "")))
+                                  "")
+                                "\n"
+                                (string-join (plist-get plist :snippets) " / ")))
                       name))
               data))))
 
@@ -166,6 +167,7 @@
 
   (defvar akirak/yankpad-helm-category-source
     (helm-build-sync-source "Categories from yankpad-file"
+      :multiline t
       :candidates #'akirak/yankpad-helm-category-candidates
       :action #'akirak/yankpad-set-clock-category))
 
