@@ -193,16 +193,25 @@ shell.nix."
           (when (derived-mode-p 'text-mode)
             yankpad-default-category))))
 
-  (defun akirak/yankpad-insert (&optional arg)
-    (interactive "P")
+  (defun akirak/yankpad-maybe-set-category (&optional arg)
     (when (or arg (not yankpad-category))
       (if-let (category (unless arg
                           (akirak/yankpad-guess-category)))
           (yankpad-set-local-category category)
         (akirak/yankpad-helm-set-category)
-        (yankpad-set-local-category akirak/yankpad-org-clock-category)))
+        (yankpad-set-local-category akirak/yankpad-org-clock-category))))
+
+  (defun akirak/yankpad-insert (&optional arg)
+    (interactive "P")
+    (akirak/yankpad-maybe-set-category arg)
     (when yankpad-category
       (yankpad-insert)))
+
+  (defun akirak/yankpad-map (&optional arg)
+    (interactive "P")
+    (akirak/yankpad-maybe-set-category arg)
+    (when yankpad-category
+      (yankpad-map)))
 
   (setq yankpad-auto-category-functions
         (list #'yankpad-major-mode-category
@@ -233,7 +242,7 @@ shell.nix."
   "C-x i" #'ivy-yasnippet)
 
 (akirak/bind-generic
-  "y" #'yankpad-map)
+  "y" #'akirak/yankpad-map)
 
 (akirak/bind-register
   "a" 'aya-create
