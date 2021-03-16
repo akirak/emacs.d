@@ -65,6 +65,15 @@
 
 ;;;; project.el integration
 
+;; Fallback for Git modules.
+(add-hook 'project-find-functions
+          (defun akirak/project-git-root (dir)
+            (when-let (root (locate-dominating-file dir ".git"))
+              (cons 'git root))))
+
+(defmethod project-root ((project (head git)))
+  (cdr project))
+
 (defun akirak/project-find-build-root (dir)
   (cl-some (lambda (filename)
              (when-let (root (locate-dominating-file dir filename))
