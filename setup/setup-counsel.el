@@ -79,7 +79,24 @@
                       ivy-initial-inputs-alist)))
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
-  (setq counsel-find-file-at-point (not (akirak/windows-subsystem-for-linux-p))))
+  (setq counsel-find-file-at-point (not (akirak/windows-subsystem-for-linux-p)))
+
+  (ivy-add-actions 'counsel-find-file
+                   `(("c"
+                      ,(lambda (file)
+                         (let ((dest (read-file-name (format "Destination [%s]: " file)
+                                                     (file-name-directory file))))
+                           (if (file-name-directory dest)
+                               (copy-file file (f-join dest (f-file-name file)))
+                             (copy-file file dest))))
+                      "Copy")
+                     ("d"
+                      dired-find-file
+                      "Show in dired")
+                     ("t"
+                      ,(lambda (file)
+                         (let ((default-directory file))
+                           (vterm)))))))
 
 ;; TODO: Add todo occur command based on counsel-rg
 
