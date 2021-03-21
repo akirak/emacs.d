@@ -90,9 +90,6 @@
                                (copy-file file (f-join dest (f-file-name file)))
                              (copy-file file dest))))
                       "Copy")
-                     ("d"
-                      dired-find-file
-                      "Show in dired")
                      ("t"
                       ,(lambda (file)
                          (let ((default-directory file))
