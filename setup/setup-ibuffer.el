@@ -51,6 +51,11 @@
   ;; Group buffers by remote connections
   ;; (add-to-list 'ibuffer-project-root-functions
   ;;              '(file-remote-p . "Remote"))
+  (add-hook 'ibuffer-never-show-predicates
+            (defun akirak/org-multi-wiki-buffer-p (buffer)
+              (when (featurep 'org-multi-wiki)
+                (when-let (filename (buffer-file-name buffer))
+                  (org-multi-wiki-recentf-file-p filename)))))
   :custom
   (ibuffer-project-use-cache t))
 
