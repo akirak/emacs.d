@@ -158,6 +158,11 @@
   (dired-mode . dired-filter-mode)
   (dired-mode . dired-filter-group-mode))
 
+(add-hook 'dired-mode-hook
+          (defun akirak/dired-hide-dotfiles-in-home ()
+            (when (string-equal default-directory "~/")
+              (dired-hide-dotfiles-mode t))))
+
 (use-package dired-collapse
   :after dired
   ;; TODO: Suppress dired-collapse-mode in dired-sidebar-mode
