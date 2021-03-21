@@ -27,24 +27,28 @@
 
 (use-package ibuffer-project
   :config
-  (defun ibuffer-project-setup ()
-    (setq ibuffer-filter-groups (ibuffer-project-generate-filter-groups))
-    (unless (eq ibuffer-sorting-mode 'project-file-relative)
-      (ibuffer-do-sort-by-project-file-relative)))
+  (add-hook 'ibuffer-hook
+            (defun akirak/ibuffer-project-setup ()
+              (setq-local ibuffer-filter-groups (ibuffer-project-generate-filter-groups)
+                          ibuffer-formats
+                          '((mark modified read-only locked " "
+                                  (name 18 18 :left :elide)
+                                  " "
+                                  (size 9 -1 :right)
+                                  " "
+                                  (mode 16 16 :left :elide)
+                                  " " project-file-relative)))
+              (unless (eq ibuffer-sorting-mode 'project-file-relative)
+                (ibuffer-do-sort-by-project-file-relative))))
   ;; Group buffers by remote connections
-  (add-to-list 'ibuffer-project-root-functions
-               '(file-remote-p . "Remote"))
-  :hook
-  (ibuffer . ibuffer-project-setup)
+  ;; and don't group by non-project directories
+  (setq ibuffer-project-root-functions
+        '((file-remote-p . "Remote")
+          (ibuffer-project-project-root . "Project")))
+  ;; Group buffers by remote connections
+  ;; (add-to-list 'ibuffer-project-root-functions
+  ;;              '(file-remote-p . "Remote"))
   :custom
-  (ibuffer-project-use-cache t)
-  (ibuffer-formats
-   '((mark modified read-only locked " "
-           (name 18 18 :left :elide)
-           " "
-           (size 9 -1 :right)
-           " "
-           (mode 16 16 :left :elide)
-           " " project-file-relative))))
+  (ibuffer-project-use-cache t))
 
 (provide 'setup-ibuffer)
