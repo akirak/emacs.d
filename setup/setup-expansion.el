@@ -256,7 +256,10 @@ shell.nix."
     (let ((categories (yankpad--categories))
           (filename (buffer-file-name (or (buffer-base-buffer)
                                           (current-buffer)))))
-      (or (when filename
+      (or (when (and filename
+                     (akirak/github-workflow-file-p filename))
+            "GitHub Actions")
+          (when filename
             (cl-find (file-name-nondirectory filename)
                      categories
                      :test #'string-equal))
