@@ -176,6 +176,76 @@
     (helm :prompt (format "Yankpad category [%s]: " yankpad-category)
           :sources akirak/yankpad-helm-category-source))
 
+  (defun akirak/yankpad-capture-to-mode-category ()
+    (interactive)
+    (let* ((category (symbol-name major-mode))
+           (title (read-string "Title for the template: "))
+           (template (concat "*** " title " :src:\n"
+                             "#+begin_src " (string-remove-suffix "-mode" category)
+                             "\n"
+                             (buffer-substring
+                              (region-beginning)
+                              (region-end))
+                             "\n#+end_src\n%?"))
+           (org-capture-entry
+            `("y" "yankpad template"
+              entry
+              ,(list 'function
+                     (lambda ()
+                       (find-file yankpad-file)
+                       (widen)
+                       (goto-char (point-min))
+                       (or (re-search-forward (concat "^** " (regexp-quote category)) nil t)
+                           (progn
+                             (re-search-forward (concat "^* Major modes"))
+                             (insert "\n** " filename "\n")))))
+              ,template)))
+      (org-capture)))
+
+  (defun akirak/github-workflow-file-p (&optional filename)
+    (string-suffix-p "/.github/workflows/"
+                     (file-name-directory (or filename
+                                              (buffer-file-name)))))
+
+  (defun akirak/yankpad-capture-file-source ()
+    "Capture the region or the entire file into `yankpad-file'."
+    (interactive)
+    (let* ((file (or (buffer-file-name)
+                     (user-error "Not in a file buffer")))
+           (filename (f-filename file))
+           (category (if (akirak/github-workflow-file-p file)
+                         "GitHub Actions"
+                       filename))
+           (language (string-remove-suffix "-mode" (symbol-name major-mode)))
+           (title (read-string "Title for the template: "
+                               (concat
+                                (if (string-equal category "GitHub Actions")
+                                    "GitHub workflow"
+                                  filename)
+                                " for ")))
+           (template (concat "*** " title " :src:\n"
+                             "#+begin_src " language "\n"
+                             (if (region-active-p)
+                                 (buffer-substring
+                                  (region-beginning)
+                                  (region-end))
+                               (buffer-string))
+                             "\n#+end_src\n%?"))
+           (org-capture-entry
+            `("y" "yankpad template"
+              entry
+              ,(list 'function
+                     (lambda ()
+                       (find-file yankpad-file)
+                       (widen)
+                       (goto-char (point-min))
+                       (or (re-search-forward (concat "^** " (regexp-quote category)) nil t)
+                           (progn
+                             (re-search-forward (concat "^* File names"))
+                             (insert "\n** " filename "\n")))))
+              ,template)))
+      (org-capture)))
+
   (defun akirak/yankpad-guess-category ()
     "Return the default yankpad category for the file.
 
