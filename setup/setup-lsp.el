@@ -189,4 +189,7 @@
   :config
   (require 'dap-java))
 
+(use-package lsp-tailwindcss
+  :after web-mode)
+
 (provide 'setup-lsp)
