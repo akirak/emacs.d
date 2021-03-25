@@ -86,6 +86,8 @@
               org-special-ctrl-a/e t
               org-M-RET-may-split-line nil
               org-imenu-depth 6
+              ;; Prevent an annoying behaviour probably due to org's bug.
+              org-link-search-must-match-exact-headline t
               ;; Based on https://lepisma.xyz/2017/10/28/ricing-org-mode/
               org-ellipsis " ⌄ "
               org-pretty-entities t
