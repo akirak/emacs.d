@@ -469,7 +469,37 @@ third argument, i.e. right after the description, in the entry."
   "M-m" #'helm-org-multi-wiki
   "M-w" #'helm-org-multi-wiki-all)
 (akirak/bind-jump
-  "M-o" #'org-starter-find-file-by-key)
+  "M-o" #'org-starter-find-file-by-key
+  "@" (defun akirak/org-clock-follow-link ()
+        (interactive)
+        (unless (org-clocking-p)
+          (user-error "Not clocking"))
+        (let (links
+              directory)
+          (org-with-point-at org-clock-marker
+            (setq directory default-directory)
+            (org-back-to-heading)
+            (let ((entry-end (org-entry-end-position)))
+              (while (re-search-forward org-link-any-re entry-end t)
+                (push (propertize (org-link-display-format
+                                   (buffer-substring-no-properties (line-beginning-position)
+                                                                   (point)))
+                                  'htmlize-link
+                                  (get-char-property (1- (point)) 'htmlize-link))
+                      links))))
+          (let* ((dest (cl-case (length links)
+                         (0 (user-error "No link found in the clocked entry"))
+                         (1 (car links))
+                         (otherwise (completing-read "Link: " links))))
+                 (default-directory directory)
+                 (marker (save-window-excursion
+                           (org-link-open-from-string
+                            (plist-get (get-char-property (1- (length dest)) 'htmlize-link dest)
+                                       :uri))
+                           (point-marker))))
+            (switch-to-buffer (marker-buffer marker))
+            (goto-char marker)
+            (message "Followed %s" dest)))))
 (akirak/bind-mode :keymaps 'org-mode-map :package 'org
   "r" #'org-starter-refile-by-key)
 (general-def :keymaps 'org-mode-map :package 'org
