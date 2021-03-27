@@ -60,6 +60,7 @@
               org-habit-scheduled-past-days 7
               org-habit-show-done-always-green t
               org-src-tab-acts-natively t
+              org-startup-folded 'content
               org-startup-indented t
               ;; When `org-tag-persistent-alist' is non-nil,
               ;; `org-current-tag-alist' is set, and tags from
