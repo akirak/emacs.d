@@ -156,7 +156,7 @@
   (octopus-session-value-source 'windows)
   (octopus-capture-finish-but-clock-in t)
   :general
-  ("<f8> p" #'octopus-switch-project)
+  ("<S-f8>" #'octopus-switch-project)
   :config
   (require 'octopus-capture)
   (setq octopus-capture-template-alist
