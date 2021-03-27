@@ -128,53 +128,10 @@
                       name))
               data))))
 
-  (defvar akirak/yankpad-org-clock-category nil)
-
-  (with-eval-after-load 'org-clock
-    (add-hook 'org-clock-in-hook
-              (defun akirak/yankpad-use-org-clock-category ()
-                "Set `akirak/yankpad-org-clock-category' based on the Org context."
-                (when (require 'yankpad nil t)
-                  (setq akirak/yankpad-org-clock-category
-                        (or (cl-find (or (org-entry-get nil "YANKPAD_CATEGORY" t)
-                                         (org-get-category))
-                                     (yankpad--categories)
-                                     :test #'string-equal)
-                            yankpad-default-category)))))
-    (add-hook 'org-clock-out-hook
-              (defun akirak/yankpad-unset-org-clock-category ()
-                (setq akirak/yankpad-org-clock-category nil))))
-
-  (defun akirak/yankpad-set-clock-category (category)
-    (setq akirak/yankpad-org-clock-category category)
-    (when (and (org-clocking-p)
-               (yes-or-no-p "Record this category to the clocked Org file?"))
-      (let (ancestors)
-        (org-with-point-at org-clock-marker
-          (cl-labels
-              ((add-heading ()
-                            (push (propertize (thing-at-point 'line t)
-                                              'position (point))
-                                  ancestors)))
-            (save-excursion
-              (add-heading)
-              (while (org-up-heading-safe)
-                (add-heading)))))
-        (let* ((heading (completing-read "Heading to add the category: "
-                                         (nreverse ancestors)))
-               (marker (get-char-property 0 'position heading)))
-          (org-entry-put point "YANKPAD_CATEGORY" category)))))
-
   (defvar akirak/yankpad-helm-category-source
     (helm-build-sync-source "Categories from yankpad-file"
       :multiline t
-      :candidates #'akirak/yankpad-helm-category-candidates
-      :action #'akirak/yankpad-set-clock-category))
-
-  (defun akirak/yankpad-helm-set-category ()
-    (interactive)
-    (helm :prompt (format "Yankpad category [%s]: " yankpad-category)
-          :sources akirak/yankpad-helm-category-source))
+      :candidates #'akirak/yankpad-helm-category-candidates))
 
   (defun akirak/yankpad-capture-to-mode-category ()
     (interactive)
@@ -266,13 +223,40 @@ shell.nix."
           (when (derived-mode-p 'text-mode)
             yankpad-default-category))))
 
+  (defun akirak/yankpad-fallback-category ()
+    (when-let* ((fpath (buffer-file-name))
+                (filename (file-name-nondirectory fpath))
+                (mode (symbol-name major-mode))
+                (categories (yankpad--categories)))
+      (or (-find (lambda (category)
+                   (string-match-p (wildcard-to-regexp category) filename))
+                 categories)
+          (cl-find mode categories :test #'string-equal))))
+
+  (defun akirak/org-set-yankpad-category ()
+    (interactive)
+    (assert (derived-mode-p 'org-mode))
+    (assert (not (org-before-first-heading-p)))
+    (when-let (category (helm :prompt (format "Yankpad category [%s]: " yankpad-category)
+                              :sources akirak/yankpad-helm-category-source))
+      (org-entry-put nil "YANKPAD_CATEGORY" category)))
+
+  (defun akirak/yankpad-get-clock-category ()
+    (when (org-clocking-p)
+      (org-with-point-at org-clock-marker
+        (org-entry-get nil "YANKPAD_CATEGORY" t))))
+
   (defun akirak/yankpad-maybe-set-category (&optional arg)
     (when (or arg (not yankpad-category))
       (if-let (category (unless arg
-                          (akirak/yankpad-guess-category)))
+                          (or (akirak/yankpad-guess-category)
+                              (akirak/yankpad-get-clock-category))))
           (yankpad-set-local-category category)
-        (akirak/yankpad-helm-set-category)
-        (yankpad-set-local-category akirak/yankpad-org-clock-category))))
+        (if-let (category (akirak/yankpad-fallback-category))
+            (progn
+              (yankpad-set-local-category category)
+              (message "Set the yankpad category to %s as a fallback" category))
+          (user-error "Please set YANKPAD_CATEGORY in Org")))))
 
   (defun akirak/yankpad-insert (&optional arg)
     (interactive "P")
