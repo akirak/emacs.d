@@ -71,9 +71,21 @@
             (when-let (root (locate-dominating-file dir ".git"))
               (cons 'git root))))
 
+;; Fallback for Nix
 (defmethod project-root ((project (head git)))
   (cdr project))
 
+(add-hook 'project-find-functions
+          (defun akirak/project-nix-store-root (dir)
+            (save-match-data
+              (when (string-match "^/nix/store/[^/]+/"
+                                  dir)
+                (cons 'nix-store (match-string 0 dir))))))
+
+(defmethod project-root ((project (head nix-store)))
+  (cdr project))
+
+;; Build file
 (defun akirak/project-find-build-root (dir)
   (cl-some (lambda (filename)
              (when-let (root (locate-dominating-file dir filename))
