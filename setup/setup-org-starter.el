@@ -431,6 +431,33 @@ third argument, i.e. right after the description, in the entry."
                          :empty-lines 1))
                       t))
 
+  (org-starter-def-capture "," "To the clock")
+
+  (defun akirak/file-major-mode-name (file)
+    (->> (find-buffer-visiting file)
+         (buffer-local-value 'major-mode)
+         (symbol-name)
+         (string-remove-suffix "-mode")))
+
+  (org-starter-def-capture ",s" "source block"
+    plain
+    (function (lambda ()
+                (org-goto-marker-or-bmk org-clock-marker)
+                (goto-char (org-entry-end-position))))
+    "#+BEGIN_SRC %(akirak/file-major-mode-name \"%F\")\n%i\n#+END_SRC\n\n"
+    :immediate-finish t)
+  (org-starter-def-capture ",q" "quote"
+    plain
+    (function (lambda ()
+                (org-goto-marker-or-bmk org-clock-marker)
+                (goto-char (org-entry-end-position))))
+    "#+BEGIN_QUOTE\n%i\n#+END_QUOTE\n\n"
+    :immediate-finish t)
+  (general-add-hook 'org-capture-templates-contexts
+                    '(("," (org-clocking-p))
+                      (",s" (region-active-p))
+                      (",q" (region-active-p))))
+
   (defun akirak/helm-org-ql-known-files ()
     (interactive)
     (helm-org-ql org-starter-known-files))

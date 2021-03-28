@@ -190,6 +190,16 @@ This can be used for an org-capture template to create an entry in the journal."
 :CREATED_TIME: %U
 :END:
 %?" :clock-in t :clock-resume t)
+  (org-starter-def-capture "jsl" "Start a task with a link to the current position (immediate finish)"
+    entry (function org-journal-find-location)
+    "** STARTED %^{Title}
+:PROPERTIES:
+:CREATED_TIME: %U
+:END:
+
+%
+
+%?" :clock-in t :clock-resume t)
   (push '("jsh" (region-active-p)) org-capture-templates-contexts)
   (org-starter-def-capture "jl" "Journal - With link")
   (org-starter-def-capture "jlc" "(generic) Comment on the entry"

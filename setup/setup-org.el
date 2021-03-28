@@ -750,4 +750,47 @@ With ARG, pick a text from the kill ring instead of the last one."
 (akirak/bind-search :keymaps 'org-mode-map :package 'org
   "s" #'org-babel-goto-named-src-block)
 
+(general-def
+  "C-c q"
+  (defun akirak/org-start-activity-with-link (&optional arg)
+    (interactive "P")
+    (let* ((title (read-string "Title of the new entry: "))
+           (template-body (concat "* STARTED " title "\n"
+                                  ":PROPERTIES:\n"
+                                  ":CREATED_TIME: "
+                                  (org-format-time-string (org-time-stamp-format 'long 'inactive))
+                                  "\n:END:\n"
+                                  "%a"))
+           (org-capture-entry (list "" "started entry with clock"
+                                    'entry
+                                    (list 'function
+                                          (lambda ()
+                                            (if (org-clocking-p)
+                                                (progn
+                                                  (org-goto-marker-or-bmk org-clock-marker)
+                                                  (org-back-to-heading))
+                                              ;; This function is part
+                                              ;; of my config and not
+                                              ;; part of the package.
+                                              (org-journal-find-location))))
+                                    template-body
+                                    :immediate-finish t)))
+      (org-capture)
+      (save-window-excursion
+        (org-capture-goto-last-stored)
+        (org-clock-in))))
+  "C-c #"
+  (defun akirak/org-log-message-to-clock (msg)
+    (interactive "sMessage: ")
+    ;; TODO: Find a better way to compose the message
+    (let* ((org-capture-entry (list "" "message"
+                                    'plain
+                                    (list 'function
+                                          (lambda ()
+                                            (org-goto-marker-or-bmk org-clock-marker)
+                                            (goto-char (org-entry-end-position))))
+                                    (concat msg "\n\n")
+                                    :immediate-finish t)))
+      (org-capture))))
+
 (provide 'setup-org)
