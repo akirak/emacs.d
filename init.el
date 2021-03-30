@@ -868,7 +868,10 @@ outcommented org-mode headers)."
     (pcase current-prefix-arg
       ;; If two prefixes are given, select the compilation buffer window.
       ('(16)
-       (if-let (buffer (get-buffer "*compilation*"))
+       (if-let (buffer (or (get-buffer "*compilation*")
+                           (-find (lambda (buf)
+                                    (buffer-local-value 'compilation-minor-mode buf))
+                                  (buffer-list))))
            (if-let (window (get-buffer-window buffer))
                (select-window window)
              (pop-to-buffer buffer))
