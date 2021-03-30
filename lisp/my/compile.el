@@ -45,6 +45,6 @@
                                        buffer))))
         (display-buffer buffer)
       (akirak/run-interactive-shell-command command
-        buffer))))
+        buffer :compilation t))))
 
 (provide 'my/compile)

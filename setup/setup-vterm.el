@@ -27,7 +27,7 @@
   (add-hook 'vterm-exit-functions #'akirak/vterm-quit-window))
 
 (cl-defun akirak/run-interactive-shell-command (command &optional name
-                                                        &key root)
+                                                        &key root compilation)
   (declare (indent 1))
   (interactive "s")
   (require 'vterm)
@@ -36,6 +36,8 @@
     (with-current-buffer buffer
       (let ((vterm-shell command))
         (vterm-mode))
+      (when compilation
+        (compilation-minor-mode t))
       (pop-to-buffer buffer)
       (remove-hook 'vterm-exit-functions #'akirak/vterm-quit-window :local))))
 
