@@ -1,7 +1,7 @@
 ;; Configuration of mmm-mode for React JSX in TypeScript, a.k.a. TSX.
 ;; Based on https://gist.github.com/rangeoshun/67cb17392c523579bc6cbd758b2315c1
 (use-package mmm-mode
-  :after (typescript-mode)
+  :after (:or typescript-mode markdown-mode)
   :config
 
   ;; Add css mode for CSS in JS blocks
@@ -32,6 +32,15 @@
       :submode web-mode)))
 
   (mmm-add-mode-ext-class 'typescript-mode nil 'mmm-jsx-mode)
+
+  ;; Storybook
+  (mmm-add-classes
+   '((mmm-mdx-canvas-mode
+      :front "^<Canvas>"
+      :back "</Canvas>\n?"
+      :submode web-mode)))
+
+  (mmm-add-mode-ext-class 'markdown-mode nil 'mmm-mdx-canvas-mode)
 
   (defun mmm-reapply ()
     (mmm-mode)
