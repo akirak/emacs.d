@@ -181,10 +181,14 @@
            ,(octopus-entry-capture-template
              :heading "%?"))
           (current-with-input
-           ,(octopus-entry-capture-template
-             :todo "STARTED"
-             :heading "%i"
-             :body "%a\n\n%?")
+           (function
+            (lambda ()
+              (octopus-entry-capture-template
+               :todo "STARTED"
+               :heading "%i"
+               :body (if (buffer-file-name)
+                         "%a\n\n%?"
+                       "%?"))))
            :immediate-finish t))))
 
 (use-package helm-octopus
