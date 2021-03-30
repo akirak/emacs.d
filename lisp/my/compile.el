@@ -37,4 +37,14 @@
           ((&plist :nix-shell-args :directory) args))
     (format "%s [%s]" command directory)))
 
+(defun akirak/run-command-in-vterm-as-compile (command)
+  (let* ((project (f-filename default-directory))
+         (buffer (format "*VTerm:%s: %s*" project command)))
+    (if (and (get-buffer buffer)
+             (not (yes-or-no-p (format "%s is already running. Kill it and start the command again?"
+                                       buffer))))
+        (display-buffer buffer)
+      (akirak/run-interactive-shell-command command
+        buffer))))
+
 (provide 'my/compile)

@@ -16,6 +16,11 @@
    "Compile (with args)"
    (lambda (command)
      (akirak/compile (read-string "Command: " command)))
+   "Vterm" #'akirak/run-command-in-vterm-as-compile
+   "Vterm (with args)"
+   (lambda (command)
+     (akirak/run-command-in-vterm-as-compile
+      (read-string "Command: " command)))
    "Run in eshell"
    #'eshell-command))
 
@@ -58,16 +63,6 @@
         (helm-make-source "Any command"
             'akirak/helm-dummy-compile-command-source)))
 
-(defun akirak/helm-vterm-action-fn (command)
-  (let* ((project (f-filename default-directory))
-         (buffer (format "*VTerm:%s: %s*" project command)))
-    (if (and (get-buffer buffer)
-             (not (yes-or-no-p (format "%s is already running. Kill it and start the command again?"
-                                       buffer))))
-        (display-buffer buffer)
-      (akirak/run-interactive-shell-command command
-        buffer))))
-
 (defun akirak/helm-compile-mix-sources ()
   (require 'my/compile/mix)
   (list (helm-build-sync-source "Mix commands"
@@ -81,7 +76,7 @@
                 (akirak/mix-command-alist))
           :action
           (append (helm-make-actions
-                   "Vterm" #'akirak/helm-vterm-action-fn)
+                   "Vterm" #'akirak/run-command-in-vterm-as-compile)
                   akirak/helm-compile-command-action))))
 
 (defun akirak/helm-compile-spago-sources ()
