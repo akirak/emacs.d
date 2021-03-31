@@ -34,13 +34,13 @@
   (mmm-add-mode-ext-class 'typescript-mode nil 'mmm-jsx-mode)
 
   ;; Storybook
-  (mmm-add-classes
-   '((mmm-mdx-canvas-mode
-      :front "^<Canvas>"
-      :back "</Canvas>\n?"
-      :submode web-mode)))
+  ;; (mmm-add-classes
+  ;;  '((mmm-mdx-canvas-mode
+  ;;     :front "^<Canvas>"
+  ;;     :back "</Canvas>\n?"
+  ;;     :submode web-mode)))
 
-  (mmm-add-mode-ext-class 'markdown-mode nil 'mmm-mdx-canvas-mode)
+  ;; (mmm-add-mode-ext-class 'markdown-mode nil 'mmm-mdx-canvas-mode)
 
   (defun mmm-reapply ()
     (mmm-mode)

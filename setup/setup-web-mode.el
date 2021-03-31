@@ -13,6 +13,7 @@
          ("\\.tpl\\.php\\'" . web-mode)
          ("\\.[agj]sp\\'" . web-mode)
          ("\\.as[cp]x\\'" . web-mode)
+         ("\\.mdx\\'" . web-mode)
          ("\\.djhtml\\'" . web-mode))
   :config
   ;; which-key descriptions for prefixes
