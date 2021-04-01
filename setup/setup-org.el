@@ -19,7 +19,23 @@
   "h" #'org-edit-headline
   "l" '(nil :wk "insert link")
   "s" '(nil :wk "set")
-  "sc" #'akirak/org-set-category)
+  "sc" #'akirak/org-set-category
+  "c"
+  (defun akirak/avy-org-clone-subtree ()
+    "Copy the subtree to a location selected with avy.
+
+If the subtree contains logbooks, they will be removed from the clone."
+    (interactive)
+    (assert (derived-mode-p 'org-mode))
+    (assert (not (org-before-first-heading-p)))
+    (org-copy-subtree 1)
+    (with-temp-buffer
+      (delay-mode-hooks (org-mode))
+      (insert (pop kill-ring))
+      (goto-char (point-min))
+      (while (re-search-forward org-logbook-drawer-re nil t)
+        (replace-match ""))
+      (avy-org-refile-as-child))))
 
 (general-def :package 'org-agenda :keymaps 'org-agenda-mode-map :prefix akirak/mode-prefix-key
   "s" '(nil :wk "set")
