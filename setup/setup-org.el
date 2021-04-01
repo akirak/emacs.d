@@ -647,7 +647,7 @@ With ARG, pick a text from the kill ring instead of the last one."
   (org-chronos-scan-containing-file t)
   (org-chronos-logged-properties
    '(("LANGUAGE" :inherit t)
-     ("PROJECT_REMOTE_REPO" :inherit t)))
+     ("OCTOPUS_REMOTE_REPO" :inherit t)))
   (org-chronos-show-property-summary t)
   (org-chronos-week-start-day 1)
   (org-chronos-clock-threshold 5)
