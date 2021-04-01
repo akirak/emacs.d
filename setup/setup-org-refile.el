@@ -59,8 +59,11 @@
 (advice-add #'org-refile-get-location :around #'akirak/ad-around-org-refile-get-location)
 
 (defun akirak/org-refile-target-verify-function ()
-  (not (or (org-entry-is-done-p)
-           (string-equal (org-get-todo-state) "COMMENT"))))
+  (let ((element (org-element-headline-parser (line-end-position))))
+    (not (or (eq (org-element-property :todo-type element) 'done)
+             (equal (org-element-property :todo-keyword element) "COMMENT")
+             (member (org-element-property :tags element) '("ARCHIVE"
+                                                            "link"))))))
 
 (setq-default org-refile-target-verify-function #'akirak/org-refile-target-verify-function)
 
