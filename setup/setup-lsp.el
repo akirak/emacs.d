@@ -148,6 +148,10 @@
   :straight lsp-mode
   :after (lsp typescript-mode))
 
+(use-package lsp-javascript
+  :straight lsp-mode
+  :after (lsp typescript-mode))
+
 (use-package lsp-dockerfile
   :disabled t
   :after dockerfile-mode
