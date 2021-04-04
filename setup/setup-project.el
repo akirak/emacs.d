@@ -171,6 +171,8 @@
   :general
   ("<S-f8>" #'octopus-switch-project)
   :config
+  (add-to-list 'octopus-select-hidden-tags
+               "@project")
   (require 'octopus-capture)
   (setq octopus-capture-template-alist
         `((todo
@@ -192,19 +194,15 @@
            :immediate-finish t))))
 
 (use-package helm-octopus
-  :straight octopus
-  :after helm-octopus
-  :config
-  (add-to-list 'helm-octopus-excluded-org-tags
-               "@project")
-  (add-to-list 'helm-octopus-extra-dir-fields
-               (-partial #'helm-octopus-format-dir-org-property "LANGUAGE")))
+  :straight octopus)
 
 (use-package octopus-hydra
   :straight octopus
   :commands (octopus-hydra))
 
-(general-def "C-z" #'octopus-hydra)
+(general-def
+  "C-8" #'helm-octopus-project-scoped-ql
+  "C-z" #'octopus-hydra)
 
 ;;;; TODO: Add support for initial setup workflow
 
