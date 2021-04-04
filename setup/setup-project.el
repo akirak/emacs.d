@@ -102,6 +102,18 @@
     (`(builder ,filename ,_)
      (assoc filename akirak/project-builder-alist))))
 
+;;;; project-files
+
+(defmethod project-files (project &optional dirs)
+  (if dirs
+      (-flatten-n 1 (-map (lambda (root)
+                            (-map (lambda (path)
+                                    (f-join root path))
+                                  (akirak/project-files root)))
+                          dirs))
+    (let ((root (project-root project)))
+      (--map (f-join root it) (akirak/project-files root)))))
+
 ;;;; compile integration
 
 (defsubst akirak/project-builder-get-property (property builder)
