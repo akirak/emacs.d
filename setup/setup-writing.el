@@ -7,8 +7,6 @@
                            (* space))))
               sentence-end-double-space nil)
 
-(setq-mode-local emacs-lisp-mode sentence-end-double-space t)
-
 ;;;; Spell checking
 (use-package flyspell
   :if (executable-find "ispell")
