@@ -183,8 +183,9 @@
   :general
   ("<S-f8>" #'octopus-switch-project)
   :config
-  (add-to-list 'octopus-select-hidden-tags
-               "@project")
+  (general-add-hook 'octopus-select-hidden-tags
+                    '("@project"
+                      "ORDERED"))
   (require 'octopus-capture)
   (setq octopus-capture-template-alist
         `((todo
