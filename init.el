@@ -866,6 +866,10 @@ outcommented org-mode headers)."
   (defun akirak/project-compile ()
     (interactive)
     (pcase current-prefix-arg
+      ('(64)
+       (message "Set compilation-auto-jump-to-first-error to %s"
+                (setq-default compilation-auto-jump-to-first-error
+                              (not compilation-auto-jump-to-first-error))))
       ;; If two prefixes are given, select the compilation buffer window.
       ('(16)
        (if-let (buffer (or (get-buffer "*compilation*")
