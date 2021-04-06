@@ -180,8 +180,6 @@
   (octopus-session-value-source 'windows)
   (octopus-capture-finish-but-clock-in t)
   (octopus-project-org-properties '("LANGUAGE"))
-  :general
-  ("<S-f8>" #'octopus-switch-project)
   :config
   (general-add-hook 'octopus-select-hidden-tags
                     '("@project"
@@ -214,7 +212,8 @@
   :commands (octopus-hydra))
 
 (general-def
-  "C-8" #'helm-octopus-project-scoped-ql
+  "<S-f8>" #'octopus-switch-project
+  "<C-f8>" #'helm-octopus-project-scoped-ql
   "C-z" #'octopus-hydra)
 
 ;;;; TODO: Add support for initial setup workflow
