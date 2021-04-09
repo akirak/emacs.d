@@ -13,6 +13,12 @@
 (add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'help-mode-hook (lambda () (visual-line-mode 1)))
 
+(use-package visual-fill-column
+  :hook
+  ;; I don't know if I want to turn it on in org-mode.
+  ;; I am using perfect-margin.
+  (markdown-mode . visual-fill-column-mode))
+
 ;; Suppress a message by `toggle-word-wrap' unless the function is
 ;; called interactively. The message is annoying as the option is set
 ;; on Org files by default.
