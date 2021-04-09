@@ -37,6 +37,7 @@
               delete-old-versions t
               view-read-only t
               compilation-auto-jump-to-first-error t
+              compilation-scroll-output t
               sentence-end-double-space nil
               ;; lock files will kill `npm start'
               create-lockfiles nil
