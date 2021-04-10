@@ -181,6 +181,16 @@
   (octopus-capture-finish-but-clock-in t)
   (octopus-project-org-properties '("LANGUAGE"))
   :config
+
+  ;; This is used for ignoring container headings in date trees.
+  (org-ql-defpred ignored-level ()
+    "Return non-nil if the entry is blocked"
+    :body
+    (when (bound-and-true-p akirak/org-ignored-levels)
+      (<= (org-outline-level) akirak/org-ignored-levels)))
+  (add-to-list 'octopus-org-ql-default-predicates
+               '(not (ignored-level)))
+
   (general-add-hook 'octopus-select-hidden-tags
                     '("@project"
                       "ORDERED"))
