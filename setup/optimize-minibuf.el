@@ -35,6 +35,15 @@
   (add-hook 'minibuffer-setup-hook 'akirak/dimmer-disable)
   (add-hook 'minibuffer-exit-hook 'akirak/dimmer-enable)
 
+  (advice-add 'read-key
+              :around
+              (defun akirak/ad-around-read-key (orig &rest args)
+                (ignore-errors
+                  (akirak/dimmer-disable))
+                (unwind-protect
+                    (apply orig args)
+                  (akirak/dimmer-enable))))
+
   (advice-add 'org-starter--display-options
               :before #'akirak/dimmer-disable)
   (advice-add 'org-starter--delete-message-frame
