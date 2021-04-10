@@ -6,6 +6,8 @@
   inputs.flake-compat.url = "github:edolstra/flake-compat";
   inputs.flake-compat.flake = false;
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
+  inputs.my-nur.url = "github:akirak/nur-packages";
+  inputs.my-nur.flake = false;
   inputs.epub2json.url = "github:akirak/epub2json";
   inputs.pdftotext.url = "github:akirak/haskell-pdftotext";
 
@@ -17,6 +19,7 @@
           overlays = [ emacs-overlay.overlay ];
         });
         # pkgs = nixpkgs.legacyPackages.${system};
+        my-nur = import inputs.my-nur { inherit pkgs; };
         emacsPackage = pkgs.emacsUnstable;
         epkgOverrides = eself: esuper: with pkgs; {
 
@@ -81,6 +84,8 @@
             # epub2json, pdftotext, etc.
             inputs.epub2json.packages.${system}.epub2json
             inputs.pdftotext.packages.${system}.pdftotext
+
+            my-nur.readability-cli
 
             gitAndTools.delta
 

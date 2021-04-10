@@ -128,6 +128,22 @@
         "type": "github"
       }
     },
+    "my-nur": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1618055468,
+        "narHash": "sha256-CmBQmGKgDATMYXEo+GG8QElsdNg8kJJFDeoAQsTqDlA=",
+        "owner": "akirak",
+        "repo": "nur-packages",
+        "rev": "8c7fb232554e3a205fd2c3f3be82c28278fde810",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "repo": "nur-packages",
+        "type": "github"
+      }
+    },
     "nixpkgs": {
       "locked": {
         "lastModified": 1607245000,
@@ -202,6 +218,7 @@
         "epub2json": "epub2json",
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_2",
+        "my-nur": "my-nur",
         "nixpkgs": "nixpkgs_2",
         "pdftotext": "pdftotext"
       }
