@@ -138,6 +138,10 @@
   (akirak/install-vscode-extension-if-missing "msjsdiag" "debugger-for-chrome"))
 
 ;;;; Additional LSP client packages which are not part of lsp-mode
+(use-package lsp-javascript
+  :straight lsp-mode
+  :after (:and lsp typescript-mode))
+
 (use-package lsp-eslint
   ;; You will need an executable of eslint to use this server, since
   ;; the server installation functionality of lsp-mode doesn't install
@@ -146,11 +150,7 @@
   ;; If you don't want to install eslint globally, you can add
   ;; nodePackages.eslint to shell.nix instead.
   :straight lsp-mode
-  :after (lsp typescript-mode))
-
-(use-package lsp-javascript
-  :straight lsp-mode
-  :after (lsp typescript-mode))
+  :after (:and lsp typescript-mode))
 
 (use-package lsp-dockerfile
   :disabled t
@@ -194,6 +194,6 @@
   (require 'dap-java))
 
 (use-package lsp-tailwindcss
-  :after web-mode)
+  :after (:and lsp web-mode))
 
 (provide 'setup-lsp)
