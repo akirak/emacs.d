@@ -31,6 +31,11 @@
      :package "package.json"
      :languages (javascript typescript)
      :helm-sources-fn akirak/helm-compile-npm-sources)
+    ("poetry.lock"
+     :name "Python (poetry)"
+     :executable "poetry"
+     :package "pyproject.toml"
+     :languages (python))
     ("spago.dhall"
      :name "PureScript Spago"
      :executable "spago"
