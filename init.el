@@ -243,6 +243,7 @@
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
+  :disabled t
   :after org
   :config
   (general-add-hook 'org-recent-headings-advise-functions
@@ -282,6 +283,7 @@
     (garbage-collect))
   (run-with-idle-timer 1200 t #'akirak/org-recent-headings-cleanup))
 (use-package helm-org-recent-headings
+  :disabled t
   :after (helm org-recent-headings)
   :config
   ;; Modified from `helm-org-recent-headings-source'.
@@ -554,15 +556,15 @@ connection identities of recent files."
   (defun akirak/switch-to-org-buffer ()
     (interactive)
     (require 'helm-org-ql)
-    (require 'org-recent-headings)
-    (require 'helm-org-recent-headings)
+    ;; (require 'org-recent-headings)
+    ;; (require 'helm-org-recent-headings)
     (helm :prompt "Switch to Org: "
           :sources
           (list (akirak/helm-indirect-org-buffer-source)
                 (if (org-clocking-p)
                     'akirak/helm-org-clock-context-source
                   'akirak/helm-org-planning-items-source)
-                'akirak/helm-org-recent-headings-source
+                ;; 'akirak/helm-org-recent-headings-source
                 ;; akirak/helm-source-org-starter-known-files
                 ;; helm-org-ql-views-source
                 'akirak/org-agenda-buffer-source
