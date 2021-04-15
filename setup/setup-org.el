@@ -75,6 +75,9 @@ If the subtree contains logbooks, they will be removed from the clone."
               org-habit-preceding-days 14
               org-habit-scheduled-past-days 7
               org-habit-show-done-always-green t
+              org-image-actual-width (ignore-errors
+                                       (* 90 (/ (frame-text-width)
+                                                (frame-width))))
               org-src-tab-acts-natively t
               org-startup-folded 'content
               org-startup-indented t
