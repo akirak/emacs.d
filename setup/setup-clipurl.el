@@ -52,6 +52,16 @@
                          :default-title t
                          :manual-tags t)
                       "Capture to global.org")
+                     ("n"
+                      ,(akirak/def-org-capture-url-fn
+                           (list 'file+function
+                                 (or (org-starter-locate-file "news.org" nil t)
+                                     (error "Cannot find news.org"))
+                                 #'org-reverse-datetree-goto-date-in-file)
+                         :default-title t
+                         :manual-tags t
+                         :props (:clock-in t :clock-resume t))
+                      "Capture to news.org")
                      ("a"
                       ,(akirak/def-org-capture-url-fn
                            (avy-with avy-goto-line
