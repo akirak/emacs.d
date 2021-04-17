@@ -1,3 +1,0 @@
-#+title: Notes on my Emacs config
-* Deprecate projectile
-* Deprecate ibuffer
