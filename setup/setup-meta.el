@@ -18,7 +18,7 @@
     setup-dired           ; File browser
     setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
-    setup-helm-descbinds  ; Better keybinding search
+    ;; setup-helm-descbinds  ; Better keybinding search
     setup-anzu            ; Provide info in search & replace
     setup-smartparens     ; Parenthesis editing
     setup-org-make-toc    ; Generating TOCs
@@ -31,9 +31,9 @@
     setup-counsel-org-clock
     setup-link-hint                     ; Jumping to a URL
     setup-ibuffer
-    setup-prescient
+    ;; setup-prescient
     setup-lsp                          ; Language-agnostic IDE toolkit
-    setup-rich-minority                ; Whitelist minor modes
+    ;; setup-rich-minority                ; Whitelist minor modes
     setup-clipboard                    ; Clipboard integration
     setup-ivy-omni-org
     setup-window-management
