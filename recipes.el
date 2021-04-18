@@ -11,5 +11,6 @@
  (org-ql :host github :repo "akirak/org-ql" :branch "devel")
  (org-web-tools :host github :repo "akirak/org-web-tools"
                 :branch "encoding")
+ (org-multi-wiki :host github :repo "akirak/org-multi-wiki" :branch "devel")
  (su :host github :repo "PythonNut/su.el")
  (valign :host github :repo "casouri/valign"))
