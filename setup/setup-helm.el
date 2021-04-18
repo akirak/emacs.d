@@ -39,6 +39,19 @@
   (helm-autoresize-max-height 40)
   (helm-display-function (quote pop-to-buffer)))
 
+(use-package helm-bookmark
+  :straight helm
+  :config
+  (add-to-list 'helm-type-bookmark-actions
+               '("Terminal" . (lambda (candidate)
+                                (let* ((dir (bookmark-get-filename candidate))
+                                       (default-directory (if (string-suffix-p "/" dir)
+                                                              dir
+                                                            (error "Doesn't look like a directory bookmark: %s"
+                                                                   candidate))))
+                                  (vterm))))
+               t))
+
 (use-package helm-org
   :after (helm org))
 
