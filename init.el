@@ -101,7 +101,12 @@
 
 ;; Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository.
 
-(use-package no-littering)
+(use-package no-littering
+  :preface
+  (let* ((var-dir "~/local/emacs/var/"))
+    (unless (file-directory-p var-dir)
+      (make-directory var-dir t))
+    (setq no-littering-var-directory var-dir)))
 
 ;; Use the executable path from the shell
 
