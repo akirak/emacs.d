@@ -565,15 +565,12 @@ connection identities of recent files."
     ;; (require 'helm-org-recent-headings)
     (helm :prompt "Switch to Org: "
           :sources
-          (list (akirak/helm-indirect-org-buffer-source)
-                (if (org-clocking-p)
-                    'akirak/helm-org-clock-context-source
-                  'akirak/helm-org-planning-items-source)
-                ;; 'akirak/helm-org-recent-headings-source
-                ;; akirak/helm-source-org-starter-known-files
-                ;; helm-org-ql-views-source
-                'akirak/org-agenda-buffer-source
-                'akirak/helm-org-ql-dummy-source)))
+          (-non-nil
+           (list (akirak/helm-indirect-org-buffer-source)
+                 (unless (org-clocking-p)
+                   'akirak/helm-org-planning-items-source)
+                 (helm-org-multi-wiki-recent-entry-source)
+                 helm-source-bookmark-org))))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
