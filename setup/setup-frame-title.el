@@ -13,22 +13,11 @@
 
 ;;;;; Track an initially clocked task
 
-(defun akirak/ad-fr-frame-workflow-make-frame (frame)
-  (set-frame-parameter frame 'initial-clock-task
-                       org-clock-current-task)
-  frame)
-
-(advice-add 'frame-workflow--make-frame
-            :filter-return #'akirak/ad-fr-frame-workflow-make-frame)
-
 ;;;; Title components
 
 (defun akirak/frame-title-subject ()
   (require 'project)
   (cond
-   ((and (bound-and-true-p frame-workflow-mode)
-         (frame-parameter nil 'workflow))
-    (format "#%s# " (frame-workflow--frame-subject-name)))
    ((frame-parameter nil 'buffer-predicate)
     (format ":%s: " (frame-parameter nil 'purpose-name)))
    (t (format "%s: " (akirak/project-name)))))

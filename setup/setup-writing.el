@@ -19,6 +19,7 @@
 
 ;;;;; User interface (flyspell-correct)
 (use-package flyspell-correct
+  :disabled t
   :commands
   (flyspell-correct-wrapper
    flyspell-correct-at-point)

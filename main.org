@@ -164,10 +164,6 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 
   (defconst akirak/major-mode-hydra-key "M-SPC")
 #+end_src
-*** frog-menu
-#+begin_src emacs-lisp
-  (akirak/require 'setup-frog-menu)
-#+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
 (use-package ov
@@ -403,8 +399,6 @@ I'm not using olivetti-mode
       ("fv" flycheck-verify-setup)
       ("fs" flyspell-mode :toggle t)
       ("fp" flyspell-prog-mode :toggle t)
-      ("a" apheleia-mode :toggle t)
-      ("A" apheleia-global-mode :toggle t)
       ("ld" lsp-ui-doc-mode :toggle t)
       ("lp" lsp-ui-peek-mode :toggle t)
       ("ls" lsp-ui-sideline-mode :toggle t))
@@ -777,13 +771,7 @@ I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
 :PROPERTIES:
 :CREATED_TIME: [2019-09-23 Mon 22:48]
 :END:
-I will try out apheleia.
-
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-apheleia)
-#+end_src
-
-Another option would be reformatter by Steve Purcell, but I haven't managed to configure it for Nix + npm projects yet.
+I am using reformatter.
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-reformatter)

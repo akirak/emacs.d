@@ -9,7 +9,6 @@
     setup-large-files
     setup-repos
     setup-tramp
-    setup-ivy-frame-actions        ; Add frame-creation actions to Ivy
     setup-magit                    ; The Git porcelain for Emacs
     setup-vdiff
     setup-helpful         ; Extended helpful commands
@@ -18,7 +17,6 @@
     setup-dired           ; File browser
     setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
-    ;; setup-helm-descbinds  ; Better keybinding search
     setup-anzu            ; Provide info in search & replace
     setup-smartparens     ; Parenthesis editing
     setup-org-make-toc    ; Generating TOCs

@@ -73,15 +73,15 @@
   (pcase arg
     ('(16)
      (if-let ((buffer-list (--> (buffer-list)
-                                (cl-remove-if-not
-                                 (lambda (buf)
-                                   (eq 'vterm-mode
-                                       (buffer-local-value 'major-mode buf)))
-                                 it)
-                                (mapcar (lambda (buf)
-                                          (cons (buffer-name buf) buf))
-                                        it)))
-              (buffer (frog-menu-read "Select a vterm buffer" buffer-list)))
+                             (cl-remove-if-not
+                              (lambda (buf)
+                                (eq 'vterm-mode
+                                    (buffer-local-value 'major-mode buf)))
+                              it)
+                             (mapcar (lambda (buf)
+                                       (cons (buffer-name buf) buf))
+                                     it)))
+              (buffer (completing-read "Select a vterm buffer" buffer-list)))
          (if-let ((window (akirak/vterm-find-window)))
              (progn
                (select-window window)

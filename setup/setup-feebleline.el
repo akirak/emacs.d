@@ -255,20 +255,13 @@
              ;; This does not always detect all active workspaces.
              (visible-p (frm) (exwm-workspace--active-p frm))
              (get-frame (i) (exwm-workspace--workspace-from-frame-or-index i))
-             ;; (get-name (frm) (when (fboundp 'frame-workflow--frame-subject-name)
-             ;;                   (frame-workflow--frame-subject-name frm)))
              (format-workspace (i)
-                               (let* ((frm (get-frame i))
-                                      ;; (name (get-name frm))
-                                      )
+                               (let ((frm (get-frame i)))
                                  (format (cond
                                           ((current-p frm) "[%s%s*]")
                                           ((visible-p frm) "[%s%s]")
                                           (t "%s%s"))
                                          (int-to-string i)
-                                         ;; (if name
-                                         ;;     (concat ":" name)
-                                         ;;   "")
                                          ""))))
           (let ((workspaces (number-sequence 0 (1- (exwm-workspace--count)))))
             (mapconcat #'format-workspace workspaces " ")))))
@@ -276,8 +269,7 @@
 (with-eval-after-load 'exwm
   (general-add-hook '(exwm-workspace-list-change-hook
                       exwm-randr-screen-change-hook
-                      exwm-workspace-switch-hook
-                      frame-workflow-select-frame-hook)
+                      exwm-workspace-switch-hook)
                     'akirak/feebleline-exwm-workspaces-update))
 
 (provide 'setup-feebleline)
