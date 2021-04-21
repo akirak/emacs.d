@@ -570,6 +570,7 @@ connection identities of recent files."
                  (unless (org-clocking-p)
                    'akirak/helm-org-planning-items-source)
                  (helm-org-multi-wiki-recent-entry-source)
+                 (helm-org-multi-wiki-recent-file-source)
                  helm-source-bookmark-org))))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
