@@ -95,5 +95,30 @@
  ((eq system-type 'windows-nt)
   (setq shell-file-name (executable-find "bash"))))
 
+(use-package compile
+  :straight (:type built-in)
+  :config
+  (setq-default compilation-error-regexp-alist
+                (list
+                 ;; eslint
+                 (list (rx bol (group (or "ERROR" "WARNING"))
+                           " in "
+                           (group (*? anything))
+                           ":" (group (+ digit))
+                           ":" (group (+ digit)))
+                       2 3 4 '(1 . 1))
+                 ;; eslint --fix
+                 (list (rx bol (group "/home/" (+ nonl)) "\n"
+                           (+ space) (group (+ digit)) ":" (group (+ digit))
+                           (+ space) (group (or "error" "WARNING")))
+                       1 2 3 '(4 . 4))
+                 ;; prettier
+                 (list (rx bol "[" (group (or "error" "WARNING")) "] "
+                           (group (*? anything))
+                           ": "
+                           (+ anything)
+                           "(" (group (+ digit)) ":" (group (+ digit)) ")")
+                       2 3 4 '(1 . 1)))))
+
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here
