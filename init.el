@@ -580,17 +580,28 @@ connection identities of recent files."
             :sources (akirak/helm-exwm-buffer-source)))
      ((akirak/windows-subsystem-for-linux-p)
       (user-error "Not supported on WSL"))
-     ((eq system-type 'linux)
+     ((eq system-type 'gnu/linux)
       ;; TODO: Implement it
       (cl-assert (executable-find "wmctrl"))
       (helm :prompt "X window: "
-            :source
+            :sources
             (helm-build-sync-source "X windows"
-              :candidates (-map (lambda (s) (cons s (car (s-split-words s))))
+              :candidates (-map (lambda (s)
+                                  (save-match-data
+                                    (when (string-match (rx bol (group (+ (not (any space))))
+                                                            (+ space)
+                                                            (group (+ (+ digit)))
+                                                            (+ space)
+                                                            (+ (not (any space)))
+                                                            (+ space)
+                                                            (group (+ anything)))
+                                                        s)
+                                      (cons (format "%s: %s" (match-string 2 s)
+                                                    (match-string 3 s))
+                                            (match-string 1 s)))))
                                 (process-lines "wmctrl" "-l"))
               :action (lambda (wid)
-                        (async-start-process "wmctrl" "wmctrl" nil
-                                             "-a" wid)))))))
+                        (call-process "wmctrl" nil nil nil "-i" "-a" wid)))))))
   "C-x '"
   (defun akirak/switch-to-reference-buffer-or-browser ()
     (interactive)

@@ -124,6 +124,8 @@
             xorg.xwininfo
             xorg.xprop
             xclip
+
+            wmctrl
           ];
         };
 
