@@ -118,7 +118,13 @@
                            ": "
                            (+ anything)
                            "(" (group (+ digit)) ":" (group (+ digit)) ")")
-                       2 3 4 '(1 . 1)))))
+                       2 3 4 '(1 . 1))
+                 ;; Emacs checkdoc/byte-compile
+                 (list (rx bol (group (+ (not (any ":")))) ":"
+                           (group (+ digit)) ":" (group (+ digit))
+                           ":" (* space)
+                           (or "Error" "error") ":")
+                       1 2 3 '(4 . 4)))))
 
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here
