@@ -142,7 +142,12 @@ Package-specific configuration files, including snippets, are kept in [[https://
 
 
 #+begin_src emacs-lisp
-(use-package no-littering)
+(use-package no-littering
+  :preface
+  (let* ((var-dir "~/local/emacs/var/"))
+    (unless (file-directory-p var-dir)
+      (make-directory var-dir t))
+    (setq no-littering-var-directory var-dir)))
 #+end_src
 
 Use the executable path from the shell
@@ -277,6 +282,16 @@ load them first.
 **  Packages
 #+begin_src emacs-lisp
 (use-package dash-docs)
+(use-package emacs-everywhere
+  ;; Use my fork until the path issue is fixed
+  :straight (:host github :repo "akirak/emacs-everywhere" :branch "with-editor-1")
+  :functions (emacs-everywhere)
+  :general
+  (:keymaps 'emacs-everywhere-mode-map
+            ;; Analogous to the post command in most web applications,
+            ;; and it's also bound to mode-aware repl commands, which
+            ;; is irrelevant in text-mode.
+            "<C-return>" #'emacs-everywhere-finish))
 (use-package helm-dash
   :custom
   (dash-docs-browser-func #'akirak/browse-url))
@@ -291,6 +306,7 @@ load them first.
 (use-package helm-tail
   :commands (helm-tail))
 (use-package org-recent-headings
+  :disabled t
   :after org
   :config
   (general-add-hook 'org-recent-headings-advise-functions
@@ -330,6 +346,7 @@ load them first.
     (garbage-collect))
   (run-with-idle-timer 1200 t #'akirak/org-recent-headings-cleanup))
 (use-package helm-org-recent-headings
+  :disabled t
   :after (helm org-recent-headings)
   :config
   ;; Modified from `helm-org-recent-headings-source'.
@@ -385,6 +402,15 @@ load them first.
 (require 'setup-info)
 (require 'setup-unicode)
 (require 'setup-mmm)
+#+end_src
+
+***  Starting the server
+This may fail if there is another Emacs session running a server.
+
+#+begin_src emacs-lisp
+(ignore-errors
+  (unless (server-running-p)
+    (server-start)))
 #+end_src
 
 **  Commands and keybindings
@@ -612,7 +638,8 @@ connection identities of recent files."
              :sources
              (list (akirak/helm-dired-buffer-source)
                    akirak/helm-directory-bookmark-source
-                   akirak/helm-open-file-buffer-directories-source)))
+                   akirak/helm-open-file-buffer-directories-source
+                   akirak/helm-project-parent-directory-source)))
       (_ (user-error "Not matching %s" current-prefix-arg))))
   "C-x g"
   (defun akirak/browse-git-repository ()
@@ -629,19 +656,16 @@ connection identities of recent files."
   (defun akirak/switch-to-org-buffer ()
     (interactive)
     (require 'helm-org-ql)
-    (require 'org-recent-headings)
-    (require 'helm-org-recent-headings)
+    ;; (require 'org-recent-headings)
+    ;; (require 'helm-org-recent-headings)
     (helm :prompt "Switch to Org: "
           :sources
-          (list (akirak/helm-indirect-org-buffer-source)
-                (if (org-clocking-p)
-                    'akirak/helm-org-clock-context-source
-                  'akirak/helm-org-planning-items-source)
-                'akirak/helm-org-recent-headings-source
-                ;; akirak/helm-source-org-starter-known-files
-                ;; helm-org-ql-views-source
-                'akirak/org-agenda-buffer-source
-                'akirak/helm-org-ql-dummy-source)))
+          (-non-nil
+           (list (akirak/helm-indirect-org-buffer-source)
+                 (unless (org-clocking-p)
+                   'akirak/helm-org-planning-items-source)
+                 (helm-org-multi-wiki-recent-entry-source)
+                 helm-source-bookmark-org))))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
@@ -979,15 +1003,22 @@ Bind M-s M-s
   (defun akirak/project-compile ()
     (interactive)
     (pcase current-prefix-arg
+      ('(64)
+       (message "Set compilation-auto-jump-to-first-error to %s"
+                (setq-default compilation-auto-jump-to-first-error
+                              (not compilation-auto-jump-to-first-error))))
       ;; If two prefixes are given, select the compilation buffer window.
       ('(16)
-       (if-let (buffer (get-buffer "*compilation*"))
+       (if-let (buffer (or (get-buffer "*compilation*")
+                           (-find (lambda (buf)
+                                    (buffer-local-value 'compilation-minor-mode buf))
+                                  (buffer-list))))
            (if-let (window (get-buffer-window buffer))
                (select-window window)
              (pop-to-buffer buffer))
          (user-error "No compilation buffer")))
       ('(4)
-       (akirak/project-find-build-file))
+       (akirak/project-find-package-file))
       (_
        (akirak/project-call-build-command))))
   "C-x C"
@@ -1070,7 +1101,8 @@ These commands are used to maintain this Emacs configuration.
 (cl-defmacro akirak/run-shell-command-silently-at-vc-root (name command)
   `(defun ,name ()
      (interactive)
-     (let ((default-directory (vc-root-dir)))
+     (let ((default-directory (or (vc-root-dir)
+                                  (magit-toplevel))))
        (shell-command ,command))))
 
 (cl-defmacro akirak/make-vc-root-file-command (filename &key regexp name)
@@ -1177,17 +1209,14 @@ These commands are used to maintain this Emacs configuration.
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "n" '(nil :wk "nix")
-  "nf" '(nil :wk "fetch")
-  "nff" #'akirak/nix-prefetch-url)
+  "nf" #'akirak/nix-prefetch-url)
 #+end_src
 
-****  Org
+***  Org
 #+begin_src emacs-lisp
 (akirak/bind-admin
   "o" '(nil :wk "org")
-  "oj" '(nil :wk "org-journal")
-  ;; Add keybindings for switching the journal context
-  "ojd" #'org-journal-new-date-entry)
+  "oj" #'org-journal-new-date-entry)
 #+end_src
 
 ****  Remote connections (TRAMP)
