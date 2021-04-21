@@ -93,6 +93,12 @@
   (advice-add 'org-switch-to-buffer-other-window
               :override #'switch-to-buffer-other-window))
 
+(defun akirak/display-buffer-prefer-other-pane (buffer &rest args)
+  "Display BUFFER in another pane in the current frame, if possible."
+  (if-let (windows (akirak/find-other-pane-windows))
+      (set-window-buffer (car windows) buffer)
+    (display-buffer buffer args)))
+
 (defun akirak/display-buffer-prefer-center-pane (buffer &rest args)
   "Display BUFFER in the center pane of the current frame."
   (if-let (windows (or (akirak/find-center-pane-windows :exclude-self t)
@@ -117,6 +123,15 @@
       (if exclude-self
           (cl-remove (selected-window) windows)
         windows))))
+
+(cl-defun akirak/find-other-pane-windows ()
+  (when (> (frame-width) 240)
+    (->> (akirak/get-window-panes)
+         (-map #'cdr)
+         (-remove (lambda (ws)
+                    (--any (equal (selected-window) it) ws)))
+         (-sort (-on #'< #'length))
+         (car))))
 
 (defun akirak/get-window-panes ()
   "Return an alist."

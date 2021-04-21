@@ -45,6 +45,23 @@
                                         akirak/magit-large-repositories
                                         :test #'file-equal-p))))
 
+  (setq-default magit-display-buffer-function
+                ;; Based on 'magit-display-buffer-same-window-except-diff-v1
+                (defun akirak/magit-display-buffer (buffer)
+                  (let ((action (with-current-buffer buffer
+                                  (cond
+                                   ((derived-mode-p 'magit-diff-mode)
+                                    '(nil (inhibit-same-window . t)))
+                                   ((derived-mode-p 'magit-process-mode)
+                                    '(akirak/display-buffer-prefer-other-pane))
+                                   (t
+                                    '(display-buffer-same-window))))))
+                    (prog1 (display-buffer buffer action)
+                      (with-current-buffer buffer
+                        (when (derived-mode-p 'magit-process-mode)
+                          (goto-char (point-max))
+                          (recenter-top-bottom -1)))))))
+
   ;; Functions for magit-list-repositories.
   (defun akirak/magit-repolist-column-group (_id)
     (f-filename (abbreviate-file-name (f-parent default-directory))))
@@ -188,8 +205,6 @@ Only one letter is shown, the first that applies."
      ("S" 3 magit-repolist-column-stashes
       ((:right-align t)))
      ("origin" 35 akirak/magit-repolist-column-origin nil)))
-  (magit-display-buffer-function
-   'magit-display-buffer-same-window-except-diff-v1)
   ;; Don't use `magit-file-mode-map'
   (global-magit-file-mode nil)
   ;; Automatically save file buffers in the repository
