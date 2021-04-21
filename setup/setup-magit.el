@@ -23,6 +23,8 @@
   (advice-add 'magit--process-coding-system :override
               (lambda () '(utf-8-unix . utf-8-unix)))
 
+  (add-hook 'magit-process-mode-hook #'compilation-minor-mode)
+
   ;; Speed up Magit on large Git repositories by limiting the types of
   ;; information displayed inside `magit-status' buffer.
   ;;
