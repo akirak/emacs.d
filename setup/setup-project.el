@@ -36,6 +36,15 @@
      :executable "poetry"
      :package "pyproject.toml"
      :languages (python))
+    ("package.yaml"
+     :name "Haskell (hpack)"
+     :executable "cabal"
+     :package "*.cabal"
+     :languages (haskell))
+    ("*.cabal"
+     :name "Haskell (Cabal)"
+     :executable "cabal"
+     :languages (haskell))
     ("spago.dhall"
      :name "PureScript Spago"
      :executable "spago"
@@ -93,7 +102,15 @@
 ;; Build file
 (defun akirak/project-find-build-root (dir)
   (cl-some (lambda (filename)
-             (when-let (root (locate-dominating-file dir filename))
+             (when-let (root (locate-dominating-file
+                              dir
+                              (if (string-match-p (rx (any "*?")) filename)
+                                  (lambda (parent)
+                                    (directory-files parent
+                                                     nil
+                                                     (concat "\\<" (wildcard-to-regexp filename))
+                                                     t))
+                                filename)))
                (list 'builder filename root)))
            (mapcar #'car akirak/project-builder-alist)))
 
@@ -128,9 +145,11 @@
   (when-let* ((project (project-current))
               (builder (akirak/project-builder project)))
     (funcall (or func #'find-file)
-             (expand-file-name (or (akirak/project-builder-get-property :package builder)
-                                   (car builder))
-                               (project-root project)))))
+             (car (let ((default-directory (project-root project)))
+                    (file-expand-wildcards
+                     (or (akirak/project-builder-get-property :package builder)
+                         (car builder))
+                     t))))))
 
 (defun akirak/project-call-build-command ()
   (require 'my/compile)
