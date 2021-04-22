@@ -61,21 +61,19 @@
 (general-def :keymaps 'dante-mode-map :package 'dante
   "C-x C-e" #'dante-eval-block)
 
-(use-package shm
-  :disabled t
-  :after haskell-mode
-  :hook
-  (haskell-mode . structured-haskell-mode))
-
 (use-package haskell-interactive-mode
+  :straight haskell-mode
   ;; I was unable to set up interactive-haskell-mode for snack.
   ;; Maybe I'll work on it later.
-  :disabled t
   :commands interactive-haskell-mode
   :hook
   (haskell-mode . interactive-haskell-mode)
   :custom
   (haskell-process-suggest-remove-import-lines t)
+  ;; I don't know which importing suggestion would be better
+  (haskell-process-suggest-hoogle-imports t)
+  (haskell-process-suggest-hayoo-imports t)
+  (haskell-process-suggest-language-pragmas t)
   (haskell-process-auto-import-loaded-modules t)
   (haskell-process-log t))
 
