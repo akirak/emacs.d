@@ -119,6 +119,27 @@
                            (+ anything)
                            "(" (group (+ digit)) ":" (group (+ digit)) ")")
                        2 3 4 '(1 . 1))
+                 ;; nix-linter
+                 ;; Unused argument `hsuper` at default.nix:9:24-15:6
+                 (list (rx " at " (group (+ (not (any ":"))))
+                           ":" (group (+ digit)) ":" (group (+ digit))
+                           "-" (+ digit) ":" (+ digit) eol)
+                       1 2 3)
+                 ;; hlint
+                 (list (rx bol (group (+ (not (any ":")))) ":"
+                           (group (+ digit)) ":" (group (+ digit))
+                           "-"
+                           (+ digit)
+                           ":" (* space)
+                           "Warning:" space (+ anything))
+                       1 2 3 '(4 . 4))
+                 (list (rx bol (group (+ (not (any ":")))) ":"
+                           "(" (group (+ digit)) "," (group (+ digit)) ")"
+                           "-"
+                           "(" (+ digit) "," (+ digit) ")"
+                           ":" (* space)
+                           "Warning:" space (+ anything))
+                       1 2 3 '(4 . 4))
                  ;; Emacs checkdoc/byte-compile
                  (list (rx bol (group (+ (not (any ":")))) ":"
                            (group (+ digit)) ":" (group (+ digit))
