@@ -13,23 +13,6 @@
      ((require 'dante nil t)
       (dante-mode 1)))
     (haskell-auto-insert-module-template))
-  (akirak/bind-mode :keymaps 'haskell-mode-map
-    "c" #'haskell-compile
-    "C" (defun akirak/hpack ()
-          (interactive)
-          (when-let (dir (locate-dominating-file
-                          default-directory "package.yaml"))
-            (let ((default-directory dir))
-              (shell-command "hpack ."))))
-    "f" '(:wk "format")
-    "fi" '(:wk "imports")
-    "fii" #'haskell-mode-format-imports
-    "fis" #'haskell-sort-imports
-    "fia" #'haskell-align-imports
-    "fs" #'haskell-mode-stylish-buffer
-    "h" #'akirak/haskell-hoogle-local
-    "j" '(:wk "jump")
-    "ji" #'haskell-navigate-imports)
 
   ;; nix-env -if https://github.com/tweag/ormolu/archive/master.tar.gz -A ormolu
   (reformatter-define ormolu
@@ -38,25 +21,45 @@
   :hook
   (haskell-mode . akirak/setup-haskell-mode))
 
+(akirak/bind-mode :keymaps 'haskell-mode-map :package 'haskell-mode
+  "c" #'haskell-compile
+  "g" '(:wk "generate")
+  "gh" (defun akirak/hoogle-generate ()
+         (interactive)
+         (compilation-start "hoogle generate -i"))
+  "gp" (defun akirak/hpack-generate ()
+         (interactive)
+         (when-let (dir (locate-dominating-file
+                         default-directory "package.yaml"))
+           (let ((default-directory dir))
+             (shell-command "hpack ."))))
+  "h" #'akirak/haskell-hoogle-local
+  "i" '(:wk "imports")
+  "if" #'haskell-mode-format-imports
+  "is" #'haskell-sort-imports
+  "ia" #'haskell-align-imports
+  "ij" #'haskell-navigate-imports)
+
 (use-package dante
   :commands dante-mode
   :config
   (defun akirak/setup-dante ()
-    (flycheck-mode t)
     ;; (setq-local flymake-no-changes-timeout nil)
     ;; (setq-local flymake-start-syntax-check-on-newline nil)
     ;; (setq-local flycheck-check-syntax-automatically '(save mode-enabled))
-    )
+    (flycheck-mode t))
   (flycheck-add-next-checker 'haskell-dante '(info . haskell-hlint))
-  (akirak/bind-mode :keymaps 'dante-mode-map
-    "a" #'attrap-attrap
-    "," #'dante-info
-    "." #'dante-type-at)
-  :general
-  (:keymaps 'dante-mode-map
-            "C-x C-e" #'dante-eval-block)
   :hook
   (dante-mode . akirak/setup-dante))
+
+(akirak/bind-mode :keymaps 'dante-mode-map :package 'dante
+  "D" #'dante-diagnose
+  "R" #'dante-restart
+  "a" #'attrap-attrap
+  "," #'dante-info
+  "." #'dante-type-at)
+(general-def :keymaps 'dante-mode-map :package 'dante
+  "C-x C-e" #'dante-eval-block)
 
 (use-package shm
   :disabled t
@@ -75,36 +78,6 @@
   (haskell-process-suggest-remove-import-lines t)
   (haskell-process-auto-import-loaded-modules t)
   (haskell-process-log t))
-
-(use-package haskell-hoogle
-  :straight haskell-mode
-  :after haskell-mode
-  :functions (haskell-hoogle-server-live-p))
-
-(defun akirak/hoogle-generate ()
-  (interactive)
-  (compilation-start "hoogle generate -i"))
-
-(major-mode-hydra-define haskell-mode
-  (:title (concat "Haskell\n"
-                  (if-let (buf (dante-buffer-p))
-                      (with-current-buffer buf
-                        (format "Dante command line: %s\n      state: %s"
-                                dante-command-line
-                                dante-state))
-                    "Dante: Not loaded")
-                  (format "Hoogle server: %s"
-                          (if (haskell-hoogle-server-live-p)
-                              "Started"
-                            "Not started")))
-          :exit nil)
-  ("Dante"
-   (("dd" dante-diagnose)
-    ("dr" dante-restart))
-   "Hoogle"
-   (("hs" haskell-hoogle-start-server)
-    ("hk" haskell-hoogle-kill-server)
-    ("hg" akirak/hoogle-generate))))
 
 (defun akirak/haskell-hoogle-local (query)
   (interactive "sHoogle: ")
