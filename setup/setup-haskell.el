@@ -77,47 +77,86 @@
   (haskell-process-auto-import-loaded-modules t)
   (haskell-process-log t))
 
+(cl-defstruct akirak-hoogle-entry url module package item type docs)
+
+(cl-defmethod akirak/hoogle-format-entry ((entry akirak-hoogle-entry))
+  (let ((item (akirak-hoogle-entry-item entry))
+        (package (-some-> (akirak-hoogle-entry-package entry)
+                   (plist-get :name)))
+        (module (-some-> (akirak-hoogle-entry-module entry)
+                  (plist-get :name))))
+    (concat item " "
+            (propertize (format "<%s> " package)
+                        'face 'font-lock-constant-face)
+            (propertize module 'face 'font-lock-keyword-face)
+            " ")))
+
+(cl-defmethod akirak/helm-hoogle-show-entry ((entry akirak-hoogle-entry))
+  (let* ((item (akirak-hoogle-entry-item entry))
+         (package (-some-> (akirak-hoogle-entry-package entry)
+                    (plist-get :name)))
+         (module (-some-> (akirak-hoogle-entry-module entry)
+                   (plist-get :name)))
+         (name (save-match-data
+                 (string-match (rx bol (+ (not (any space)))) item)
+                 (match-string 0 item))))
+    (with-current-buffer (if helm-alive-p
+                             (get-buffer-create "*hoogle tmp*")
+                           (generate-new-buffer (format "*hoogle %s:%s:%s*"
+                                                        package module name)))
+      (erase-buffer)
+      (insert (format "<a href='%s'>%s:%s</a>\n<h1>%s</h1>\n\n"
+                      (akirak-hoogle-entry-url entry)
+                      package module
+                      name))
+      (insert (akirak-hoogle-entry-docs entry))
+      (shr-render-buffer (current-buffer))
+      (if helm-alive-p
+          (display-buffer (current-buffer))
+        (catch 'exit
+          (helm-run-after-exit
+           (lambda ()
+             (pop-to-buffer (current-buffer)
+                            '(nil (inhibit-same-window . t))))))))))
+
+(cl-defmethod akirak/hoogle-insert-entry ((entry akirak-hoogle-entry))
+  (let* ((synopsis (akirak-hoogle-entry-item entry))
+         (identifier (save-match-data
+                       (string-match (rx bol (+ (not (any space)))) synopsis)
+                       (match-string 0 synopsis)))
+         (module (plist-get (akirak-hoogle-entry-module entry) :name)))
+    (insert identifier)
+    (save-excursion
+      (haskell-navigate-imports)
+      (insert (format "import %s (%s)\n" module identifier)))
+    (kill-new identifier)
+    (message "Saved %s in the kill ring" identifier)))
+
 (defun akirak/haskell-hoogle-local (query)
   (interactive "sHoogle: ")
-  (cl-labels
-      ((format-item
-        (x)
-        (let ((module (-some->> x (alist-get 'module)
-                                (alist-get 'name)))
-              (package (-some->> x (alist-get 'package)
-                                 (alist-get 'name)))
-              (item (alist-get 'item x))
-              (docs (car (split-string (alist-get 'docs x) "\n"))))
-          (cl-labels
-              ((face (f s) (propertize s 'face f))
-               (comment (s) (face 'font-lock-comment-face s)))
-            (concat item
-                    (if package
-                        (face 'font-lock-keyword-face (format " <<%s>>" package))
-                      "")
-                    " "
-                    (if docs (comment docs)
-                      "")
-                    "  "
-                    (if module (face 'font-lock-constant-face module)
-                      ""))))))
-    (let* ((tmp-buffer (generate-new-buffer "*hoogle output*"))
-           (json-object-type 'alist)
-           (json-array-type 'list)
-           (r (call-process "hoogle" nil (list tmp-buffer nil) nil
-                            "--json" query))
-           (items (when (= r 0)
-                    (with-current-buffer tmp-buffer
-                      (goto-char (point-min))
-                      (->> (json-read)
-                           (-map (lambda (x)
-                                   (propertize (format-item x)
-                                               'url
-                                               (alist-get 'url x)))))))))
-      (ivy-read "Hoogle: " items
-                :history akirak/haskell-hoogle-history
-                :action
-                (lambda (inp)
-                  (browse-url (get-char-property 0 'url inp)))))))
+  (let* ((temp-error-file (make-temp-file "hoogle"))
+         (result (-map (lambda (x)
+                         (apply #'make-akirak-hoogle-entry x))
+                       (unwind-protect
+                           (with-temp-buffer
+                             (unless (zerop (call-process
+                                             "hoogle"
+                                             nil (list (current-buffer) temp-error-file) nil
+                                             "--json" query))
+                               (with-temp-buffer
+                                 (insert-file-contents temp-error-file)
+                                 (error (buffer-string))))
+                             (goto-char (point-min))
+                             (json-parse-buffer :object-type 'plist :array-type 'list))
+                         (delete-file temp-error-file)))))
+    (helm :prompt query
+          :sources
+          (helm-build-sync-source "Hoogle"
+            :candidates (-map (lambda (entry)
+                                (cons (akirak/hoogle-format-entry entry) entry))
+                              result)
+            :action
+            '(("display" . akirak/helm-hoogle-show-entry)
+              ("insert" . akirak/hoogle-insert-entry))))))
 
 (provide 'setup-haskell)
