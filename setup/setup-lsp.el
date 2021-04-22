@@ -140,7 +140,7 @@
 ;;;; Additional LSP client packages which are not part of lsp-mode
 (use-package lsp-javascript
   :straight lsp-mode
-  :after (:and lsp typescript-mode))
+  :after (:and lsp-mode typescript-mode))
 
 (use-package lsp-eslint
   ;; You will need an executable of eslint to use this server, since
@@ -150,7 +150,7 @@
   ;; If you don't want to install eslint globally, you can add
   ;; nodePackages.eslint to shell.nix instead.
   :straight lsp-mode
-  :after (:and lsp typescript-mode))
+  :after lsp-javascript)
 
 (use-package lsp-dockerfile
   :disabled t
