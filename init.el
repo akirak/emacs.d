@@ -1006,7 +1006,11 @@ outcommented org-mode headers)."
   "s" #'project-shell
   "d" #'project-dired
   ;; "v" #'project-vc-dir
-  "c" #'project-compile
+  "c" (defun akirak/project-or-vc-compile (&optional arg)
+        (interactive "P")
+        (if arg
+            (counsel-compile (vc-root-dir))
+          (project-compile)))
   ;; "e" #'project-eshell
   ;; "k" #'project-kill-buffers
   ;; "p" #'project-switch-project
