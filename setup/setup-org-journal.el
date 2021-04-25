@@ -133,6 +133,14 @@ This can be used for an org-capture template to create an entry in the journal."
     ;; Return the journal dir.
     journal-dir)
 
+  (add-to-list 'recentf-exclude
+               (defun akirak/org-journal-file-p (file)
+                 (ignore-errors
+                   (and (string-prefix-p (expand-file-name org-journal-dir)
+                                         (expand-file-name file))
+                        (string-suffix-p ".org" file))))
+               t)
+
   (defun akirak/org-journal-current-file ()
     (ignore-errors
       (setq akirak/org-journal-current-file
