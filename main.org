@@ -677,28 +677,38 @@ Emacs also provides eww:
   (akirak/bind-search "i" 'counsel-imenu)
 
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    ;; Former definition of M-s i.
-    ;; "i"
-    ;; (defun akirak/helm-org-current-context ()
-    ;;   (interactive)
-    ;;   (let* ((file (buffer-file-name))
-    ;;          (heading (unless (org-before-first-heading-p)
-    ;;                     (save-excursion
-    ;;                       (org-back-to-heading)
-    ;;                       (point-marker))))
-    ;;          (context-source (helm-build-sync-source "Current clock context"
-    ;;                            :candidates (lambda ()
-    ;;                                          (when heading
-    ;;                                            (akirak/helm-org-context-candidates
-    ;;                                             heading
-    ;;                                             :descendants t)))
-    ;;                            :action 'helm-org-headings-actions)))
-    ;;     (helm :prompt (format "%s: " file)
-    ;;           :sources (list context-source
-    ;;                          (helm-org-build-sources (list file))))))
+    "i"
+    (defun akirak/helm-org-ancestors ()
+      (interactive)
+      (unless (derived-mode-p 'org-mode)
+        (user-error "Not in org-mode"))
+      (let (result
+            preselect)
+        (save-excursion
+          (org-back-to-heading)
+          (cl-flet
+              ((add-candidate
+                ()
+                (let ((start (point-at-bol))
+                      (end (point-at-eol)))
+                  (font-lock-ensure start end)
+                  (let ((cand (buffer-substring start end)))
+                    (push (cons cand (point-marker))
+                          result)
+                    ;; Pre-select the first candidate, i.e. the current heading.
+                    (unless preselect
+                      (setq preselect cand))))))
+            (add-candidate)
+            (while (> (org-outline-level) 1)
+              (org-up-heading-all 1)
+              (add-candidate))))
+        (helm :sources (helm-build-sync-source "Ancestor headings"
+                         :candidates result)
+              :preselect preselect)))
 
     ;; Simply browse headings in the buffer.
-    "i" #'helm-org-in-buffer-headings)
+    ;; "i" #'helm-org-in-buffer-headings
+    )
 
   (akirak/bind-search :package 'restclient-helm :keymaps 'restclient-mode-map
     "i" #'helm-restclient)
