@@ -560,13 +560,44 @@ With ARG, pick a text from the kill ring instead of the last one."
                (when deadline
                  (format "Deadline %s" deadline))
                state-log)
-         (-non-nil it)
-         (string-join it ", ")
-         (concat (akirak/org-eldoc-heading) " " it))))
+      (-non-nil it)
+      (string-join it ", ")
+      (concat (akirak/org-eldoc-heading) " " it))))
+
+(defun akirak/org-id-files ()
+  (append org-starter-known-files
+          (directory-files org-journal-dir t org-agenda-file-regexp 'nosort)
+          (org-multi-wiki-entry-files (-map #'car org-multi-wiki-namespace-list))))
+
+(defun akirak/org-update-id-locations (&optional silent)
+  (interactive)
+  (org-id-update-id-locations
+   (akirak/org-id-files)
+   silent))
+
+(defun akirak/org-eldoc-maybe-resolve-link (uri)
+  (if-let (id (save-match-data
+                (when (string-match (rx bol "id:") uri)
+                  (substring uri (match-end 0)))))
+      (if-let (marker (--> (org-id-find-id-file id)
+                        (org-id-find-id-in-file id it 'markerp)))
+          (org-with-point-at marker
+            (let ((prefix (concat (buffer-name (marker-buffer marker)) ":"))
+                  (suffix (concat "/" (org-get-heading))))
+              (concat prefix
+                      (org-format-outline-path
+                       (org-get-outline-path)
+                       (- (frame-width)
+                          (length prefix)
+                          (length suffix)))
+                      suffix)))
+        (concat uri " (missing location)"))
+    uri))
 
 (defun akirak/org-eldoc-function ()
-  (or (-> (get-text-property (point) 'htmlize-link)
-          (plist-get :uri))
+  (or (-some-> (get-text-property (point) 'htmlize-link)
+        (plist-get :uri)
+        (akirak/org-eldoc-maybe-resolve-link))
       (if (org-at-heading-p)
           (akirak/org-eldoc-heading-with-extra)
         (akirak/org-eldoc-heading))))
