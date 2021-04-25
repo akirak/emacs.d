@@ -31,6 +31,9 @@ This can be used for an org-capture template to create an entry in the journal."
                '("j" akirak/helm-org-ql-journal "org-journal"))
   (general-unbind "C-c C-j")
 
+  (akirak/bind-jump
+    "M-d" #'org-journal-new-date-entry)
+
   (defun akirak/org-journal-refile-to-date (time)
     (interactive (list (org-read-date nil 'to-time)))
     (cond

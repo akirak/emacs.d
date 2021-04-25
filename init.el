@@ -1079,11 +1079,6 @@ outcommented org-mode headers)."
   "n" '(nil :wk "nix")
   "nf" #'akirak/nix-prefetch-url)
 
-;;;; Org
-(akirak/bind-admin
-  "o" '(nil :wk "org")
-  "oj" #'org-journal-new-date-entry)
-
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
   "r" '(nil :wk "remote")
