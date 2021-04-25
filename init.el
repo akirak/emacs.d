@@ -1042,7 +1042,26 @@ outcommented org-mode headers)."
   ;; "e" (akirak/run-at-project-root ielm :other-window t)
   )
 
-;;;; Administration
+;;;; f12: Administration and external tool integration
+;;;;; Capture
+(akirak/bind-admin
+  ;; WIP: Use transient to organize these entry points
+  "c" '(nil :wk "capture")
+  "ce"
+  ;; Based on https://www.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/
+  (defun screenshot-svg ()
+    "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file and puts the filename in the kill ring."
+    (interactive)
+    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+           (data (x-export-frames nil 'svg)))
+      (with-temp-file filename
+        (insert data))
+      (kill-new filename)
+      (message filename)))
+  "cE" #'akirak/gif-screencast
+  "cx" #'org-download-screenshot)
+
 ;;;;; Directory/disk
 (akirak/bind-admin
   "d" '(nil :wk "dir")
@@ -1083,18 +1102,3 @@ outcommented org-mode headers)."
 (akirak/bind-admin
   "r" '(nil :wk "remote")
   "rk" #'helm-delete-tramp-connection)
-
-;;;; Others
-(general-def
-  "C-c z"
-  ;; https://www.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/
-  (defun screenshot-svg ()
-    "Save a screenshot of the current frame as an SVG image.
-Saves to a temp file and puts the filename in the kill ring."
-    (interactive)
-    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
-           (data (x-export-frames nil 'svg)))
-      (with-temp-file filename
-        (insert data))
-      (kill-new filename)
-      (message filename))))
