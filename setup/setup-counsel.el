@@ -72,6 +72,7 @@
                    '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
+  (general-def :keymaps 'counsel-mode-map "M-y" nil)
   (cl-loop for (command . str) in ivy-initial-inputs-alist
            do (when (and (symbolp command)
                          (string-prefix-p "counsel-" (symbol-name command)))
