@@ -17,7 +17,7 @@
     setup-dired           ; File browser
     setup-rename          ; Utilities for rename operations
     setup-crux            ; Collection of utilities with modifications
-    setup-anzu            ; Provide info in search & replace
+    setup-regexp
     setup-smartparens     ; Parenthesis editing
     setup-org-make-toc    ; Generating TOCs
     setup-unpackaged      ; A bunch of useful commands
