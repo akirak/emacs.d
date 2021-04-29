@@ -233,9 +233,7 @@
               (octopus-entry-capture-template
                :todo "STARTED"
                :heading "%i"
-               :body (if (buffer-file-name)
-                         "%a\n\n%?"
-                       "%?"))))
+               :body "%?")))
            :immediate-finish t))))
 
 (use-package helm-octopus
