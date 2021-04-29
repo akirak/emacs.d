@@ -1098,6 +1098,11 @@ Saves to a temp file and puts the filename in the kill ring."
   "n" '(nil :wk "nix")
   "nf" #'akirak/nix-prefetch-url)
 
+;;;;; Misc query commands
+(akirak/bind-admin
+  "q" '(nil :wk "query")
+  "qc" #'calc)
+
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
   "r" '(nil :wk "remote")
