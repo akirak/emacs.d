@@ -5,10 +5,6 @@
             "c" #'akirak/string-inflection-hydra/body)
   :config
   (defrepeater 'string-inflection-cycle)
-  (akirak/bind-generic :keymaps 'java-mode-map
-    "." (defrepeater 'string-inflection-java-style-cycle))
-  (akirak/bind-generic :keymaps 'python-mode-map
-    "." (defrepeater 'string-inflection-python-style-cycle))
   (defhydra akirak/string-inflection-hydra (:hint nil)
     "
 string inflection

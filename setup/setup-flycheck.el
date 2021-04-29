@@ -3,9 +3,6 @@
   (:keymaps 'flycheck-mode-map
             [remap next-error] #'flycheck-next-error
             [remap previous-error] #'flycheck-previous-error)
-  :config
-  (akirak/bind-generic :keymaps 'flycheck-mode-map
-    "fl" #'flycheck-list-errors)
   :custom
   (flycheck-relevant-error-other-file-show nil))
 

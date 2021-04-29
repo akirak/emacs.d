@@ -116,15 +116,6 @@
   :init
   (exec-path-from-shell-initialize))
 
-;; Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
-
-(use-package diminish
-  :disabled t
-  :init
-  (diminish 'auto-revert-mode)
-  (diminish 'outline-minor-mode)
-  (diminish 'flyspell-mode))
-
 (use-package use-package-company
   ;; Originally written by Foltik, but I use my fork
   :straight (use-package-company :host github :repo "akirak/use-package-company"))
@@ -181,11 +172,6 @@
   ;; ~C-c~ is reserved for the user.
   ;; Package developers should not use them for their packages.
   (general-create-definer akirak/bind-user :prefix "C-c")
-
-  ;; bind-generic (C-.) for editing
-  ;; Generic prefix key for editing commands.
-  (general-create-definer akirak/bind-generic :prefix "C-."
-    :prefix-map 'akirak/generic-prefix-map)
 
   ;; bind-mode (C-,) for major-mode-specific commands
   (defconst akirak/mode-prefix-key "C-,"
@@ -809,72 +795,6 @@ outcommented org-mode headers)."
 ;; Bind M-s M-s
 (akirak/bind-search
   "M-s" #'xref-find-apropos)
-
-;;;;; Formatting code
-(akirak/bind-generic
-  "lf"
-  (defun akirak/run-formatter ()
-    (interactive)
-    (require 'my/formatter)
-    (pcase (akirak/get-project-formatter)
-      (`(reformatter ,name)
-       (if (region-active-p)
-           (funcall (intern (concat name "-region")))
-         (funcall (intern (concat name "-buffer"))))
-       (let ((error-buf (get-buffer (format "*%s errors*" name))))
-         (if (and error-buf
-                  (> (buffer-size error-buf) 0))
-             (display-buffer error-buf)
-           (when-let (w (and error-buf
-                             (get-buffer-window error-buf)))
-             (quit-window nil w)))))
-      (_ (user-error "%s formatter" formatter)))))
-
-(akirak/bind-mode :keymaps 'magit-status-mode-map :package 'magit-status
-  "lf"
-  (defun akirak/run-formatter-on-project ()
-    (interactive)
-    (require 'my/formatter)
-    (require 'my/file/enum)
-    (let* ((project default-directory)
-           (files (akirak/project-files project))
-           (alist (->> (-group-by #'f-ext files)
-                       (-sort (lambda (a b)
-                                (> (length (cdr a))
-                                   (length (cdr b)))))
-                       (-filter #'car)))
-           (ext (completing-read "File extension: "
-                                 (-map #'car alist)
-                                 nil t)))
-      (dolist (file (cdr (assoc ext alist)))
-        (let (new-buffer)
-          (with-current-buffer (or (find-buffer-visiting file)
-                                   (setq new-buffer
-                                         (find-file-noselect file)))
-            (save-restriction
-              (widen)
-              (pcase (akirak/get-project-formatter project :mode major-mode)
-                (`(reformatter ,name)
-                 (funcall (intern (concat name "-buffer"))))
-                (_ (user-error "%s formatter" formatter)))
-              (save-buffer))
-            (let ((error-buf (get-buffer (format "*%s errors*" name))))
-              (if (and error-buf
-                       (> (buffer-size error-buf) 0))
-                  (progn
-                    (switch-to-buffer (current-buffer))
-                    (display-buffer error-buf)
-                    (user-error "Error while applying the formatter"))
-                (when-let (w (and error-buf
-                                  (get-buffer-window error-buf)))
-                  (quit-window nil w)))))
-          (when new-buffer
-            (kill-buffer new-buffer)))))
-    (if (derived-mode-p 'magit-status-mode)
-        (progn
-          (message "Finished formatting. Refreshing the magit buffer...")
-          (magit-refresh))
-      (message "Finished formatting"))))
 
 ;;;; Running external commands
 (general-def

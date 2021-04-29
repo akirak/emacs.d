@@ -806,10 +806,6 @@ Resources:
   :general
   ("M-;" 'comment-dwim-2))
 #+end_src
-**** Refactoring
-#+begin_src emacs-lisp
-  (akirak/require 'setup-refactor)
-#+end_src
 **** Case conversion
 #+begin_src emacs-lisp
 (use-package fix-word
@@ -836,8 +832,6 @@ Use hl-todo by tarsius
     (akirak/bind-jump :keymaps 'hl-todo-mode-map
       "t" #'hl-todo-next
       "r" #'hl-todo-previous)
-    (akirak/bind-generic
-      "t" #'hl-todo-insert)
     (general-add-hook 'hl-todo-keyword-faces
                       '(("REVIEW" . "DarkOrange3")
                         ("OPTIMIZE" . "LightSeaGreen")))
@@ -850,9 +844,6 @@ There is another package named comment-tags for the same purpose, but I won't us
 #+begin_src emacs-lisp
   (use-package comment-tags
     :disabled t
-    :config
-    (akirak/bind-generic :keymaps 'comment-tags-mode-map
-      "'" (defrepeater 'comment-tags-next-tag))
     :hook (prog-mode . comment-tags-mode)
     :custom
     (comment-tags-case-sensitive t)
@@ -1364,10 +1355,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
   (akirak/require 'setup-vue)
 #+end_src
 *** Web-mode
-#+begin_src emacs-lisp
-  (akirak/require 'setup-sgml)
-#+end_src
-
 #+begin_src emacs-lisp
   (akirak/require 'setup-web-mode)
 #+end_src

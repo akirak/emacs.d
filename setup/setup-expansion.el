@@ -298,9 +298,6 @@ shell.nix."
   "C-x y" #'akirak/yankpad-insert
   "C-x i" #'ivy-yasnippet)
 
-(akirak/bind-generic
-  "y" #'akirak/yankpad-map)
-
 (akirak/bind-register
   "a" 'aya-create
   "e" 'aya-expand
