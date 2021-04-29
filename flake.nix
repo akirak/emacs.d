@@ -23,25 +23,6 @@
         emacsPackage = pkgs.emacsUnstable;
         epkgOverrides = eself: esuper: with pkgs; {
 
-          beancount = eself.melpaBuild {
-            pname = "beancount";
-            version = "2.2.3";
-
-            src = fetchFromBitbucket {
-              owner = "blais";
-              repo = "beancount";
-              rev = "2.2.3";
-              sha256 = "0k53kjs81kp12y7w8j54kbp5saxrrvpkhgydizylnnjbfxj9zl4l";
-            };
-
-            recipe = writeText "recipe" ''
-(beancount
-  :fetcher bitbucket
-  :repo "blais/beancount"
-  :files ("editors/emacs/*.el" (:exclude "*-test.el")))
-'';
-          };
-
           # based on the configuration of vterm
           liberime-config = eself.melpaBuild rec {
             pname = "liberime-config";
@@ -126,6 +107,8 @@
             xclip
 
             wmctrl
+
+            beancount
           ];
         };
 

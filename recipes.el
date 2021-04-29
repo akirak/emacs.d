@@ -1,5 +1,6 @@
 ((calibredb :host github :repo "chenyanming/calibredb.el")
  (company-elixir :host github :repo "ayrat555/company-elixir")
+ (beancount :host github :repo "beancount/beancount-mode" :branch "main")
  (explain-pause-mode :host github
                      :repo "lastquestion/explain-pause-mode")
  (nix-boilerplate :host github :repo "akirak/nix-boilerplate")
