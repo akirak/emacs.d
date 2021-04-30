@@ -125,6 +125,8 @@
                 (extension "txt" "md" "mkd" "markdown" "rst")))
            ("Org"
             (extension "org" "bib"))
+           ("Ledger"
+            (extension "beancount"))
            ("Data files"
             (extension "csv" "json" "sql"))
            ;; Binary files
