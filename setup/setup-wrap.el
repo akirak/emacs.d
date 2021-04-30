@@ -12,6 +12,7 @@
 (add-hook 'prog-mode-hook #'visual-line-mode)
 (add-hook 'text-mode-hook #'visual-line-mode)
 (add-hook 'help-mode-hook (lambda () (visual-line-mode 1)))
+(add-hook 'special-mode-hook (lambda () (visual-line-mode 1)))
 
 (use-package visual-fill-column
   :hook
