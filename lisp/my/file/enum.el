@@ -33,14 +33,16 @@
               (when-let (root (-some->> (project-current)
                                 (project-root)
                                 (expand-file-name)))
-                (let ((cell (gethash root akirak/directory-contents-cache 'missing)))
-                  (when (eq 'missing cell)
-                    (let ((path (file-relative-name (buffer-file-name) root)))
-                      (puthash root (cons (current-time)
-                                          (cons path (cdr cell)))
-                               akirak/directory-contents-cache)
-                      (akirak/set-project-files-added)
-                      (message "Added %s to cache" path))))))))
+                (let ((cell (gethash root akirak/directory-contents-cache))
+                      (path (file-relative-name (buffer-file-name) root)))
+                  (puthash root
+                           (cons (current-time)
+                                 (cons path
+                                       (when cell
+                                         (cdr cell))))
+                           akirak/directory-contents-cache)
+                  (akirak/set-project-files-added)
+                  (message "Added %s to cache" path))))))
 
 (cl-defun akirak/clear-project-file-cache (root &key _sort)
   (message "Clearing cache for %s..." root)
