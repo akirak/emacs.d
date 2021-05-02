@@ -557,7 +557,7 @@ connection identities of recent files."
                    'akirak/helm-org-planning-items-source)
                  (helm-org-multi-wiki-recent-entry-source)
                  (helm-org-multi-wiki-recent-file-source)
-                 helm-source-bookmark-org))))
+                 akirak/helm-source-bookmark-org))))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")

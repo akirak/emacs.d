@@ -48,11 +48,17 @@
   ;; Override actions of helm-source-bookmark-arg for supporting org-multi-wiki.
   ;; It would be better to define a custom bookmark type in the package,
   ;; but I just haven't done it yet.
-  (setcdr (assoc 'action helm-source-bookmark-org)
-          '(("Jump to bookmark" .
-             (lambda (bmk)
-               (bookmark-jump bmk)
-               (org-multi-wiki-run-mode-hooks)))))
+  (defvar akirak/helm-source-bookmark-org
+    (let ((var (copy-sequence helm-source-bookmark-org)))
+      (setcdr (assoc 'action var)
+              '(("Jump to bookmark" .
+                 (lambda (bmk)
+                   (bookmark-jump bmk)
+                   (org-multi-wiki-run-mode-hooks)))
+                ("Rename" . bookmark-rename)
+                ("Delete" . bookmark-delete)))
+      var))
+
   (add-to-list 'helm-type-bookmark-actions
                '("Terminal" . (lambda (candidate)
                                 (let* ((dir (bookmark-get-filename candidate))
