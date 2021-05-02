@@ -451,33 +451,21 @@ With ARG, pick a text from the kill ring instead of the last one."
 ;; Allow you to bookmark headings in Org-Mode
 (use-package org-bookmark-heading
   :after org
-  :straight (:host github :repo "akirak/org-bookmark-heading")
   :custom
   (org-bookmark-heading-filename-fn
    (defun akirak/org-bookmark-heading-filename (path)
-     (let* ((path (abbreviate-file-name (expand-file-name path)))
-            (project (project-current))
-            (dir (abbreviate-file-name (file-name-directory path)))
-            (filename (file-name-nondirectory path))
-            (root (car-safe (ignore-errors (project-roots project)))))
-       (if root
-           (f-relative path (f-parent root))
-         path))))
-  (org-bookmark-heading-name-fn
-   (defun akirak/org-bookmark-heading-name-fn (path heading)
-     (if-let ((reverse-path (nreverse (ignore-errors (org-get-outline-path t)))))
-         (format "%s:%s%s"
-                 (akirak/org-bookmark-heading-filename path)
-                 (org-link-display-format (car reverse-path))
-                 (if (cdr reverse-path)
-                     (format " (in %s)"
-                             (substring-no-properties
-                              (org-format-outline-path
-                               (mapcar #'org-link-display-format
-                                       (cdr reverse-path))
-                               nil nil " < ")))
-                   ""))
-       (akirak/org-bookmark-heading-filename path)))))
+     (if-let (plist (ignore-errors (org-multi-wiki-entry-file-p path)))
+         (format "%s::%s"
+                 (plist-get plist :namespace)
+                 (plist-get plist :basename))
+       (let* ((path (abbreviate-file-name (expand-file-name path)))
+              (project (project-current))
+              (dir (abbreviate-file-name (file-name-directory path)))
+              (filename (file-name-nondirectory path))
+              (root (car-safe (ignore-errors (project-roots project)))))
+         (if root
+             (f-relative path (f-parent root))
+           path))))))
 
 (defun akirak/org-eldoc-heading ()
   (let ((outline (-> (org-get-outline-path t t)
