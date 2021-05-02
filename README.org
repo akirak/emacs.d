@@ -159,18 +159,6 @@ Use the executable path from the shell
   :if (memq window-system '(mac ns x))
   :init
   (exec-path-from-shell-initialize))
-#+end_src
-
-Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
-
-
-#+begin_src emacs-lisp
-(use-package diminish
-  :disabled t
-  :init
-  (diminish 'auto-revert-mode)
-  (diminish 'outline-minor-mode)
-  (diminish 'flyspell-mode))
 
 (use-package use-package-company
   ;; Originally written by Foltik, but I use my fork
@@ -232,11 +220,6 @@ directives.
   ;; ~C-c~ is reserved for the user.
   ;; Package developers should not use them for their packages.
   (general-create-definer akirak/bind-user :prefix "C-c")
-
-  ;; bind-generic (C-.) for editing
-  ;; Generic prefix key for editing commands.
-  (general-create-definer akirak/bind-generic :prefix "C-."
-    :prefix-map 'akirak/generic-prefix-map)
 
   ;; bind-mode (C-,) for major-mode-specific commands
   (defconst akirak/mode-prefix-key "C-,"
@@ -665,7 +648,8 @@ connection identities of recent files."
                  (unless (org-clocking-p)
                    'akirak/helm-org-planning-items-source)
                  (helm-org-multi-wiki-recent-entry-source)
-                 helm-source-bookmark-org))))
+                 (helm-org-multi-wiki-recent-file-source)
+                 akirak/helm-source-bookmark-org))))
   "C-x x"
   (defun akirak/switch-to-x-buffer (&optional arg)
     (interactive "P")
@@ -675,17 +659,28 @@ connection identities of recent files."
             :sources (akirak/helm-exwm-buffer-source)))
      ((akirak/windows-subsystem-for-linux-p)
       (user-error "Not supported on WSL"))
-     ((eq system-type 'linux)
+     ((eq system-type 'gnu/linux)
       ;; TODO: Implement it
       (cl-assert (executable-find "wmctrl"))
       (helm :prompt "X window: "
-            :source
+            :sources
             (helm-build-sync-source "X windows"
-              :candidates (-map (lambda (s) (cons s (car (s-split-words s))))
+              :candidates (-map (lambda (s)
+                                  (save-match-data
+                                    (when (string-match (rx bol (group (+ (not (any space))))
+                                                            (+ space)
+                                                            (group (+ (+ digit)))
+                                                            (+ space)
+                                                            (+ (not (any space)))
+                                                            (+ space)
+                                                            (group (+ anything)))
+                                                        s)
+                                      (cons (format "%s: %s" (match-string 2 s)
+                                                    (match-string 3 s))
+                                            (match-string 1 s)))))
                                 (process-lines "wmctrl" "-l"))
               :action (lambda (wid)
-                        (async-start-process "wmctrl" "wmctrl" nil
-                                             "-a" wid)))))))
+                        (call-process "wmctrl" nil nil nil "-i" "-a" wid)))))))
   "C-x '"
   (defun akirak/switch-to-reference-buffer-or-browser ()
     (interactive)
@@ -928,74 +923,6 @@ Bind M-s M-s
   "M-s" #'xref-find-apropos)
 #+end_src
 
-****  Formatting code
-#+begin_src emacs-lisp
-(akirak/bind-generic
-  "lf"
-  (defun akirak/run-formatter ()
-    (interactive)
-    (require 'my/formatter)
-    (pcase (akirak/get-project-formatter)
-      (`(reformatter ,name)
-       (if (region-active-p)
-           (funcall (intern (concat name "-region")))
-         (funcall (intern (concat name "-buffer"))))
-       (let ((error-buf (get-buffer (format "*%s errors*" name))))
-         (if (and error-buf
-                  (> (buffer-size error-buf) 0))
-             (display-buffer error-buf)
-           (when-let (w (and error-buf
-                             (get-buffer-window error-buf)))
-             (quit-window nil w)))))
-      (_ (user-error "%s formatter" formatter)))))
-
-(akirak/bind-mode :keymaps 'magit-status-mode-map :package 'magit-status
-  "lf"
-  (defun akirak/run-formatter-on-project ()
-    (interactive)
-    (require 'my/formatter)
-    (require 'my/file/enum)
-    (let* ((project default-directory)
-           (files (akirak/project-files project))
-           (alist (->> (-group-by #'f-ext files)
-                       (-sort (lambda (a b)
-                                (> (length (cdr a))
-                                   (length (cdr b)))))
-                       (-filter #'car)))
-           (ext (completing-read "File extension: "
-                                 (-map #'car alist)
-                                 nil t)))
-      (dolist (file (cdr (assoc ext alist)))
-        (let (new-buffer)
-          (with-current-buffer (or (find-buffer-visiting file)
-                                   (setq new-buffer
-                                         (find-file-noselect file)))
-            (save-restriction
-              (widen)
-              (pcase (akirak/get-project-formatter project :mode major-mode)
-                (`(reformatter ,name)
-                 (funcall (intern (concat name "-buffer"))))
-                (_ (user-error "%s formatter" formatter)))
-              (save-buffer))
-            (let ((error-buf (get-buffer (format "*%s errors*" name))))
-              (if (and error-buf
-                       (> (buffer-size error-buf) 0))
-                  (progn
-                    (switch-to-buffer (current-buffer))
-                    (display-buffer error-buf)
-                    (user-error "Error while applying the formatter"))
-                (when-let (w (and error-buf
-                                  (get-buffer-window error-buf)))
-                  (quit-window nil w)))))
-          (when new-buffer
-            (kill-buffer new-buffer)))))
-    (if (derived-mode-p 'magit-status-mode)
-        (progn
-          (message "Finished formatting. Refreshing the magit buffer...")
-          (magit-refresh))
-      (message "Finished formatting"))))
-#+end_src
-
 ***  Running external commands
 #+begin_src emacs-lisp
 (general-def
@@ -1132,7 +1059,11 @@ These commands are used to maintain this Emacs configuration.
   "s" #'project-shell
   "d" #'project-dired
   ;; "v" #'project-vc-dir
-  "c" #'project-compile
+  "c" (defun akirak/project-or-vc-compile (&optional arg)
+        (interactive "P")
+        (if arg
+            (counsel-compile (vc-root-dir))
+          (project-compile)))
   ;; "e" #'project-eshell
   ;; "k" #'project-kill-buffers
   ;; "p" #'project-switch-project
@@ -1165,7 +1096,28 @@ These commands are used to maintain this Emacs configuration.
   )
 #+end_src
 
-***  Administration
+***  f12: Administration and external tool integration
+****  Capture
+#+begin_src emacs-lisp
+(akirak/bind-admin
+  ;; WIP: Use transient to organize these entry points
+  "c" '(nil :wk "capture")
+  "ce"
+  ;; Based on https://www.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/
+  (defun screenshot-svg ()
+    "Save a screenshot of the current frame as an SVG image.
+Saves to a temp file and puts the filename in the kill ring."
+    (interactive)
+    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
+           (data (x-export-frames nil 'svg)))
+      (with-temp-file filename
+        (insert data))
+      (kill-new filename)
+      (message filename)))
+  "cE" #'akirak/gif-screencast
+  "cx" #'org-download-screenshot)
+#+end_src
+
 ****  Directory/disk
 #+begin_src emacs-lisp
 (akirak/bind-admin
@@ -1212,11 +1164,11 @@ These commands are used to maintain this Emacs configuration.
   "nf" #'akirak/nix-prefetch-url)
 #+end_src
 
-***  Org
+****  Misc query commands
 #+begin_src emacs-lisp
 (akirak/bind-admin
-  "o" '(nil :wk "org")
-  "oj" #'org-journal-new-date-entry)
+  "q" '(nil :wk "query")
+  "qc" #'calc)
 #+end_src
 
 ****  Remote connections (TRAMP)
@@ -1224,22 +1176,5 @@ These commands are used to maintain this Emacs configuration.
 (akirak/bind-admin
   "r" '(nil :wk "remote")
   "rk" #'helm-delete-tramp-connection)
-#+end_src
-
-***  Others
-#+begin_src emacs-lisp
-(general-def
-  "C-c z"
-  ;; https://www.reddit.com/r/emacs/comments/idz35e/emacs_27_can_take_svg_screenshots_of_itself/
-  (defun screenshot-svg ()
-    "Save a screenshot of the current frame as an SVG image.
-Saves to a temp file and puts the filename in the kill ring."
-    (interactive)
-    (let* ((filename (make-temp-file "Emacs" nil ".svg"))
-           (data (x-export-frames nil 'svg)))
-      (with-temp-file filename
-        (insert data))
-      (kill-new filename)
-      (message filename))))
 #+end_src
 
