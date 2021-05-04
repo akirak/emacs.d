@@ -703,7 +703,9 @@ Emacs also provides eww:
               (org-up-heading-all 1)
               (add-candidate))))
         (helm :sources (helm-build-sync-source "Ancestor headings"
-                         :candidates result)
+                         :candidates result
+                         :action 'helm-org-headings-actions)
+              :keymaps 'helm-org-headings-map
               :preselect preselect)))
 
     ;; Simply browse headings in the buffer.
