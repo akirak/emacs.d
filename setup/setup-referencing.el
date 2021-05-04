@@ -60,6 +60,8 @@
 
 (use-package org-volume
   :straight (:host github :repo "akirak/org-volume")
-  :after org)
+  :after org
+  :custom
+  (org-volume-dblock-defaults '(:lang "en" :limit 1)))
 
 (provide 'setup-referencing)
