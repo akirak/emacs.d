@@ -315,7 +315,8 @@
             (defun akirak/project-syncthing-root (dir)
               (-some->> (locate-dominating-file dir ".stfolder")
                 (cons 'syncthing)))))
-(use-package su)
+(use-package su
+  :disabled t)
 (use-package valign
   :disabled t
   :hook
