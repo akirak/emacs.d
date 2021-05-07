@@ -126,19 +126,28 @@
                            "-" (+ digit) ":" (+ digit) eol)
                        1 2 3)
                  ;; hlint
-                 (list (rx bol (group (+ (not (any ":")))) ":"
+                 ;; path:67:23-45:
+                 (list (rx bol (group (any "/" alnum)
+                                      (* (any "./" alnum)))
+                           ":"
                            (group (+ digit)) ":" (group (+ digit))
                            "-"
                            (+ digit)
                            ":" (* space)
-                           "Warning:" space (+ anything))
+                           (group (or "Warning" "Suggestion"
+                                      "warning" "error"))
+                           ":" space (+ nonl))
                        1 2 3 '(4 . 4))
-                 (list (rx bol (group (+ (not (any ":")))) ":"
+                 (list (rx bol (group (any "/" alnum)
+                                      (* (any "./" alnum)))
+                           ":"
                            "(" (group (+ digit)) "," (group (+ digit)) ")"
                            "-"
                            "(" (+ digit) "," (+ digit) ")"
                            ":" (* space)
-                           "Warning:" space (+ anything))
+                           (group (or "Warning" "Suggestion"
+                                      "warning" "error"))
+                           ":" space (+ nonl))
                        1 2 3 '(4 . 4))
                  ;; Emacs checkdoc/byte-compile
                  (list (rx bol (group (+ (not (any ":")))) ":"
