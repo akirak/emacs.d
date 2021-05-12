@@ -46,7 +46,7 @@
 ;;
 ;; https://stackoverflow.com/questions/6820051/unicode-characters-in-emacs-term-mode
 (defadvice ansi-term (after advise-ansi-term-coding-system)
-  (set-buffer-process-coding-system 'utf-8-unix 'utf-8-unix))
+  (set-process-coding-system 'utf-8-unix 'utf-8-unix))
 (ad-activate 'ansi-term)
 
 (provide 'setup-terminal-colors)
