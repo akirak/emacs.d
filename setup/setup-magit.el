@@ -161,6 +161,10 @@ Only one letter is shown, the first that applies."
 
   (add-hook 'magit-credential-hook 'akirak/ensure-gpg-ssh-auth-sock)
 
+  (general-unbind :keymaps 'magit-status-mode-map
+    ;; Conflicts with tab-bar-mode
+    "<C-tab>")
+
   :custom
   (magit-repository-directories
    '(("~/.emacs.d" . 0)
