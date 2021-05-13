@@ -22,11 +22,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1611852529,
-        "narHash": "sha256-GU4+xhBw95WvP3ckVCBytgFlHmr9AM6uJwq6Jdtepnw=",
+        "lastModified": 1619798936,
+        "narHash": "sha256-G73dhCnOpEJsPyfURiUNoPvAHl8RoFkMPyrq04oYyZk=",
         "owner": "akirak",
         "repo": "epub2json",
-        "rev": "9dafe2faa095bb3c715efa5b55e884a87a7bba55",
+        "rev": "30e81762b1e8a22d69d8e20a6b8b04459f4756ff",
         "type": "github"
       },
       "original": {
@@ -131,11 +131,11 @@
     "my-nur": {
       "flake": false,
       "locked": {
-        "lastModified": 1618055468,
-        "narHash": "sha256-CmBQmGKgDATMYXEo+GG8QElsdNg8kJJFDeoAQsTqDlA=",
+        "lastModified": 1620930177,
+        "narHash": "sha256-T7ZSJL8zNjYra3vBd/yisDkOSNNr+Mdpyw/eagjiRmg=",
         "owner": "akirak",
         "repo": "nur-packages",
-        "rev": "8c7fb232554e3a205fd2c3f3be82c28278fde810",
+        "rev": "f62521564a0414a66847a92ddec5ca329ee275c6",
         "type": "github"
       },
       "original": {
@@ -199,11 +199,11 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1617767142,
-        "narHash": "sha256-I4fL5To6qRv9L/GErf1ZEllBKxhtrdvaM6zYgFWqP/I=",
+        "lastModified": 1620868858,
+        "narHash": "sha256-fJeUw4z0IbVL9um35S0UXGLdJqUIZvek+wNvwQeUquA=",
         "owner": "akirak",
         "repo": "haskell-pdftotext",
-        "rev": "671abcf5d3819e57a25172320fb96596482b47c8",
+        "rev": "930032933320db05ad5dd5b2245c1ccc60e373d9",
         "type": "github"
       },
       "original": {

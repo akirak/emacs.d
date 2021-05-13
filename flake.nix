@@ -19,7 +19,7 @@
           overlays = [ emacs-overlay.overlay ];
         });
         # pkgs = nixpkgs.legacyPackages.${system};
-        my-nur = import inputs.my-nur { inherit pkgs; };
+        my-nur = import inputs.my-nur { inherit system; };
         emacsPackage = pkgs.emacsUnstable;
         epkgOverrides = eself: esuper: with pkgs; {
 
