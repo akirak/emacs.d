@@ -58,7 +58,11 @@
   (yas-indent-line 'fixed))
 
 (use-package auto-yasnippet
-  :commands (aya-create aya-expand))
+  :commands (aya-create aya-expand)
+  :custom
+  (aya-marker "~")
+  ;; I frequently use $ in templates, so something else is better
+  (aya-marker-one-line "&"))
 
 (use-package yankpad
   :config
