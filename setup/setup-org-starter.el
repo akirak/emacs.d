@@ -494,6 +494,9 @@ third argument, i.e. right after the description, in the entry."
   :straight (:host github :repo "akirak/xmind-org-el")
   :commands (xmind-org-insert-file))
 
+(use-package readable
+  :straight (:host github :repo "akirak/readable.el"))
+
 ;;;; Extra keybindings
 (akirak/bind-search
   "M-a" #'helm-org-ql-agenda-files
