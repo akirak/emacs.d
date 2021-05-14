@@ -154,7 +154,48 @@
 
 (defun akirak/feebleline-update-file-directory ()
   (setq akirak/feebleline-file-directory
-        (feebleline-file-directory)))
+        (akirak/feebleline-file-directory)))
+
+(defun akirak/feebleline-file-directory ()
+  "Modified version of `feebleline-file-directory'."
+  (when (buffer-file-name)
+    (let ((path (replace-regexp-in-string
+                 (concat "^" feebleline--home-dir) "~"
+                 default-directory)))
+      (if (< (length path) 20)
+          path
+        (akirak/feebleline-abbr-dir)))))
+
+(defun akirak/feebleline-abbr-dir ()
+  "Abbreviate the default directory."
+  (cl-labels
+      ((match-dir
+        (dir)
+        (if (string-match (rx bos (group (+ anything) "/")
+                              (group (+ (not (any "/"))) (?  "/"))
+                              eol)
+                          dir)
+            (list (match-string 1 dir)
+                  (match-string 2 dir))
+          (list "" dir)))
+       ())
+    (-let* ((here (replace-regexp-in-string (concat "^" feebleline--home-dir)
+                                            "~"
+                                            default-directory))
+            (vc-root (or (vc-root-dir) here))
+            ((p1 p2) (match-dir vc-root))
+            (relative (string-remove-prefix vc-root here))
+            ((p3 p4) (match-dir relative)))
+      (concat (replace-regexp-in-string
+               (rx (group (repeat 1 1 (any alnum))) (+ (any "." alnum)))
+               "\\1"
+               p1)
+              p2
+              (replace-regexp-in-string
+               (rx (group (repeat 1 3 (any alnum))) (+ (any "." alnum)))
+               "\\1"
+               p3)
+              p4))))
 
 (byte-compile #'akirak/feebleline-update-file-directory)
 
