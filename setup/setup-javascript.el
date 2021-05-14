@@ -175,7 +175,18 @@ the contents of the current buffer as the root document."
 (use-package typescript-mode
   :mode "\\.tsx?\\'"
   :custom
-  (typescript-indent-level 2))
+  (typescript-indent-level 2)
+  :config
+  (setq-mode-local typescript-mode
+                   beginning-of-defun-function
+                   (defun akirak/typescript-beginning-of-defun (&optional arg)
+                     (if (eq (typescript-syntactic-context) 'function)
+                         (typescript-beginning-of-defun)
+                       (re-search-backward (rx bol
+                                               (?  "export" (+ space))
+                                               (or "const" "type" "function")
+                                               space)
+                                           nil t)))))
 
 (use-package tide
   :disabled t
