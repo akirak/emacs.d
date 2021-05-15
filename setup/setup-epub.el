@@ -4,6 +4,9 @@
   (:keymaps 'nov-mode-map :package 'nov
             "?" #'akirak/nov-mode-hydra/body))
 
+(use-package org-epubinfo
+  :straight (:host github :repo "akirak/org-epubinfo"))
+
 (defhydra akirak/nov-mode-hydra (:exit nil
                                        :hint nil
                                        :foreign-keys 'run)
