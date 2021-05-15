@@ -8,7 +8,7 @@
   inputs.emacs-overlay.url = "github:nix-community/emacs-overlay";
   inputs.my-nur.url = "github:akirak/nur-packages";
   inputs.my-nur.flake = false;
-  inputs.epub2json.url = "github:akirak/epub2json";
+  inputs.epubinfo.url = "github:akirak/epubinfo";
   inputs.pdftotext.url = "github:akirak/haskell-pdftotext";
 
   outputs = { emacs-overlay, nixpkgs, flake-utils, flake-compat, ... }@inputs:
@@ -62,8 +62,8 @@
           paths = with pkgs; [
             # defaultPackage provides an entire Haskell package, so
             # you have to specify individual packages such as
-            # epub2json, pdftotext, etc.
-            inputs.epub2json.packages.${system}.epub2json
+            # epubinfo, pdftotext, etc.
+            inputs.epubinfo.packages.${system}.epubinfo
             inputs.pdftotext.packages.${system}.pdftotext
 
             my-nur.readability-cli

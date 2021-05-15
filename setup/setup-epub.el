@@ -17,7 +17,7 @@
   (message "Reading metadata from %s" file)
   (json-parse-string
    (call-process-with-args "nix" "run"
-     "github:akirak/epub2json"
+     "github:akirak/epubinfo"
      "--" (expand-file-name file))
    :object-type 'alist
    :array-type 'list
