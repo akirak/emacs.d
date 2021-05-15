@@ -2,11 +2,11 @@
   "nodes": {
     "emacs-overlay": {
       "locked": {
-        "lastModified": 1618031615,
-        "narHash": "sha256-OuhJ3K0PMuSYNCc9zkxYS1P9fBlhbpiN0zu+HiYeBNg=",
+        "lastModified": 1621072981,
+        "narHash": "sha256-YkM+NSFX8e6WBcou+Or2wit6eBVK+poLGjGJu9iGE84=",
         "owner": "nix-community",
         "repo": "emacs-overlay",
-        "rev": "b24e8ac1c8ec70b04208ef4e12d187cc17051abd",
+        "rev": "7320af085d29058bd39657ad6cc78c08e53b3174",
         "type": "github"
       },
       "original": {
@@ -15,23 +15,23 @@
         "type": "github"
       }
     },
-    "epub2json": {
+    "epubinfo": {
       "inputs": {
         "flake-compat": "flake-compat",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1619798936,
-        "narHash": "sha256-G73dhCnOpEJsPyfURiUNoPvAHl8RoFkMPyrq04oYyZk=",
+        "lastModified": 1621088740,
+        "narHash": "sha256-8W140RwB1AfJoFvXAu7MAOqRTzX0WrOrNASEHS5R28Y=",
         "owner": "akirak",
-        "repo": "epub2json",
-        "rev": "30e81762b1e8a22d69d8e20a6b8b04459f4756ff",
+        "repo": "epubinfo",
+        "rev": "b9e10861f05e14d571675be147cce3b72fe17c71",
         "type": "github"
       },
       "original": {
         "owner": "akirak",
-        "repo": "epub2json",
+        "repo": "epubinfo",
         "type": "github"
       }
     },
@@ -100,11 +100,11 @@
     },
     "flake-utils_2": {
       "locked": {
-        "lastModified": 1617631617,
-        "narHash": "sha256-PARRCz55qN3gy07VJZIlFeOX420d0nGF0RzGI/9hVlw=",
+        "lastModified": 1620759905,
+        "narHash": "sha256-WiyWawrgmyN0EdmiHyG2V+fqReiVi8bM9cRdMaKQOFg=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "b2c27d1a81b0dc266270fa8aeecebbd1807fc610",
+        "rev": "b543720b25df6ffdfcf9227afafc5b8c1fabfae8",
         "type": "github"
       },
       "original": {
@@ -162,11 +162,11 @@
     },
     "nixpkgs_2": {
       "locked": {
-        "lastModified": 1617929752,
-        "narHash": "sha256-ji0nqJUZp2bfHvO0sKxD24cW6Nk7LyjbPPMxjbJHji0=",
+        "lastModified": 1621059955,
+        "narHash": "sha256-ZBp5ldncflAL/7libdmcVw5Jrcqw5c//WW+/cR5Ptmc=",
         "owner": "nixos",
         "repo": "nixpkgs",
-        "rev": "6fc2b7ecc2a167ce6a6902d5417daf1fa5cac777",
+        "rev": "a2c3ea5bf825348322c901358b155f651d8ed699",
         "type": "github"
       },
       "original": {
@@ -215,7 +215,7 @@
     "root": {
       "inputs": {
         "emacs-overlay": "emacs-overlay",
-        "epub2json": "epub2json",
+        "epubinfo": "epubinfo",
         "flake-compat": "flake-compat_2",
         "flake-utils": "flake-utils_2",
         "my-nur": "my-nur",
