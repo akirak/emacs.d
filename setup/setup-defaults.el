@@ -149,11 +149,12 @@
                                       "warning" "error"))
                            ":" space (+ nonl))
                        1 2 3 '(4 . 4))
-                 ;; Emacs checkdoc/byte-compile
-                 (list (rx bol (group (+ (not (any ":")))) ":"
+                 ;; Emacs checkdoc/byte-compile, GHC, etc.
+                 ;; path:line:col: error:
+                 (list (rx (group (+ (not (any space ":")))) ":"
                            (group (+ digit)) ":" (group (+ digit))
                            ":" (* space)
-                           (or "Error" "error") ":")
+                           (or "Error" "error" "warning") ":")
                        1 2 3 '(4 . 4)))))
 
 (setq-default bookmark-default-file "~/local/emacs/bookmarks.el")
