@@ -19,9 +19,8 @@
 (defun akirak/epub-metadata (file)
   (message "Reading metadata from %s" file)
   (json-parse-string
-   (call-process-with-args "nix" "run"
-     "github:akirak/epubinfo"
-     "--" (expand-file-name file))
+   (call-process-with-args "epubinfo"
+     "metadata" (expand-file-name file))
    :object-type 'alist
    :array-type 'list
    :null-object nil))
