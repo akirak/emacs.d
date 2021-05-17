@@ -22,11 +22,11 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1621088740,
-        "narHash": "sha256-8W140RwB1AfJoFvXAu7MAOqRTzX0WrOrNASEHS5R28Y=",
+        "lastModified": 1621271566,
+        "narHash": "sha256-7H1ZMonHedINn38h1J0NRC/eLo8nS0QWTzjeOafWGlE=",
         "owner": "akirak",
         "repo": "epubinfo",
-        "rev": "b9e10861f05e14d571675be147cce3b72fe17c71",
+        "rev": "bf358179dcdfa09cdcf4393af0db1f7bc215c54f",
         "type": "github"
       },
       "original": {
