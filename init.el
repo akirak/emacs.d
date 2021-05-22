@@ -1030,3 +1030,11 @@ Saves to a temp file and puts the filename in the kill ring."
 (akirak/bind-admin
   "r" '(nil :wk "remote")
   "rk" #'helm-delete-tramp-connection)
+
+;;;;; Execute or X desktop
+(akirak/bind-admin
+  "x" '(nil :wk "execute")
+  "xx" (defun akirak/docopt (command)
+         ;; TODO: Select from  a list of executables in PATH
+         (interactive "sCommand: ")
+         (docopt command)))
