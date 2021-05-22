@@ -1039,9 +1039,13 @@ Saves to a temp file and puts the filename in the kill ring."
   "rk" #'helm-delete-tramp-connection)
 
 ;;;;; Execute or X desktop
+(defvar akirak/docopt-history nil)
 (akirak/bind-admin
   "x" '(nil :wk "execute")
   "xx" (defun akirak/docopt (command)
          ;; TODO: Select from  a list of executables in PATH
-         (interactive "sCommand: ")
+         (interactive (list (completing-read "Command: "
+                                             (akirak/executables-in-path)
+                                             nil t nil
+                                             'akirak/docopt-history)))
          (docopt command)))
