@@ -752,6 +752,9 @@ connection identities of recent files."
 
 ;; e.g. M-` M-m -> <f1> ESC m
 (akirak/bind-help
+  "ESC n" (defun akirak/manix-search ()
+            (interactive)
+            (docopt "manix"))
   "ESC m" #'woman
   "ESC i" #'helm-info
   "ESC d" #'helm-dash)
@@ -1019,7 +1022,11 @@ Saves to a temp file and puts the filename in the kill ring."
 ;;;;; Nix
 (akirak/bind-admin
   "n" '(nil :wk "nix")
-  "nf" #'akirak/nix-prefetch-url)
+  "nf" #'akirak/nix-prefetch-url
+  "nl" (defun akirak/nix-locate ()
+         (interactive)
+         ;; TODO: Improve the interface
+         (docopt "nix-locate")))
 
 ;;;;; Misc query commands
 (akirak/bind-admin
