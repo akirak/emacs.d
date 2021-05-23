@@ -67,4 +67,42 @@
                               (dired store-path))))))
       (delete-file err-file))))
 
+(defun akirak/manix-source-options ()
+  "Retrieve a list of possible values for --source option from the help.
+
+This is a hack, so it may not work in the future."
+  (let* ((option (->> (docopt-parse (shell-command-to-string "manix --help"))
+                   (docopt-program-options)
+                   (--find (equal (oref it name) "source"))))
+         (description (oref option description)))
+    (->> (save-match-data
+           (if (string-match (rx "[possible values:"
+                                 (group (+? anything))
+                                 "]")
+                             description)
+               (split-string (match-string 1 description) ",")
+             (error "Did not match on %s" description)))
+      (-map #'string-trim))))
+
+(defvar akirak/manix-query-history nil)
+
+(defun akirak/manix-search (query &key source)
+  "Search documentation for QUERY from a Nix-related SOURCE."
+  (interactive (list (read-string "Search Nix documentation: "
+                                  nil
+                                  'akirak/manix-query-history)
+                     :source (completing-read "Source: "
+                                              (akirak/manix-source-options))))
+  (let ((help (with-temp-buffer
+                (if (zerop (apply #'process-file
+                                  "manix" nil (list (current-buffer) nil) nil
+                                  query
+                                  (when source
+                                    (list "--source" source))))
+                    (buffer-string)
+                  (error "manix failed with non-zero exit code")))))
+    (with-help-window (help-buffer)
+      (with-current-buffer (help-buffer)
+        (insert help)))))
+
 (provide 'setup-nix)

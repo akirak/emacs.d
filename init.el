@@ -752,9 +752,7 @@ connection identities of recent files."
 
 ;; e.g. M-` M-m -> <f1> ESC m
 (akirak/bind-help
-  "ESC n" (defun akirak/manix-search ()
-            (interactive)
-            (docopt "manix"))
+  "ESC n" #'akirak/manix-search
   "ESC m" #'woman
   "ESC i" #'helm-info
   "ESC d" #'helm-dash)
