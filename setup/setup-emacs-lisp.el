@@ -202,6 +202,21 @@
                              new " ")
               ")"))))
 
+;; Stolen from https://github.com/alphapapa/emacs-package-dev-handbook#bench-macro
+;; Originally from https://phillord.github.io/m-buffer-el/#sec-5-1-2
+(cl-defmacro bench (&optional (times 100000) &rest body)
+  "Call `benchmark-run-compiled' on BODY with TIMES iterations, returning list suitable for Org source block evaluation.
+Garbage is collected before calling `benchmark-run-compiled' to
+avoid counting existing garbage which needs collection."
+  (declare (indent defun))
+  `(progn
+     (garbage-collect)
+     (list '("Total runtime" "# of GCs" "Total GC runtime")
+           'hline
+           (benchmark-run-compiled ,times
+             (progn
+               ,@body)))))
+
 ;;;; Commands
 (defun akirak/straight-pull-package-project (name)
   "Pull the package recipe for the current project."
