@@ -50,10 +50,6 @@
 (use-package yasnippet
   :hook
   ((text-mode prog-mode) . yas-minor-mode)
-  :config
-  (let ((dir "~/god/emacs/yasnippet/snippets/"))
-    (when (file-directory-p dir)
-      (add-to-list 'yas-snippet-dirs dir)))
   :custom
   (yas-indent-line 'fixed))
 
@@ -287,10 +283,6 @@ shell.nix."
   :custom
   (yankpad-category-heading-level 2))
 
-;; Use ivy-yasnippet as an alternative for insert-file-contents.
-(use-package ivy-yasnippet
-  :commands (ivy-yasnippet))
-
 (use-package emmet-mode
   :general
   (:keymaps 'web-mode-map :package 'web-mode
@@ -299,8 +291,7 @@ shell.nix."
   ((html-mode css-mode) . emmet-mode))
 
 (general-def
-  "C-x y" #'akirak/yankpad-insert
-  "C-x i" #'ivy-yasnippet)
+  "C-x y" #'akirak/yankpad-insert)
 
 (akirak/bind-register
   "a" 'aya-create
