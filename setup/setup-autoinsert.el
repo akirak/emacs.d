@@ -73,20 +73,21 @@
                           (("/config/config\.exs\\'" . "config/config.exs")
                            . (> "use Mix.Config\n\n"
                                 _))
-                          ;; Fallback to "auto-insert" yasnippet template
-                          (("\\.[[:alpha:]]+\\'" . "yasnippet")
-                           . akirak/yas-auto-insert)))
-
-(defun akirak/yas-auto-insert ()
-  ;; Expand a snippet named \"auto-insert\" if and only if it exists
-  (unless (or (and (eq major-mode 'emacs-lisp-mode)
-                   (member (file-name-base (buffer-file-name))
-                           '(".dir-locals.el" "init.el")))
-              ;; Respect org-journal-file-header in org-journal
-              (eq major-mode 'org-journal-mode))
-    (when-let ((snippet (condition-case nil
-                            (yas-lookup-snippet "auto-insert")
-                          (error nil))))
-      (yas-expand-snippet snippet))))
+                          (("\.ex\\'" . "Elixir module")
+                           . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+                                "  " _
+                                "end"))
+                          (("\.el\\'" . "Emacs Lisp")
+                           . (> ";;; "
+                                (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                                " --- " _
+                                " -*- lexical-binding: t -*-\n"
+                                "\n\n\n"
+                                "(provide "
+                                (file-name-base (or buffer-file-name (buffer-name)))
+                                ")\n"
+                                ";;; "
+                                (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                                " ends here"))))
 
 (provide 'setup-autoinsert)
