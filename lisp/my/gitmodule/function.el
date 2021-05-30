@@ -77,9 +77,9 @@ FUNC is called with ARGS."
 
 (defun akirak/git-module-tags (pairs)
   (->> (cl-remove 'tags pairs :key #'car :test-not #'eq)
-       (-map #'cdr)
-       (mapcar (lambda (s) (split-string s ",")))
-       (-flatten-n 1)))
+    (-map #'cdr)
+    (mapcar (lambda (s) (split-string s ",")))
+    (-flatten-n 1)))
 
 (defun akirak/git-remote-topics (repo)
   (cond
