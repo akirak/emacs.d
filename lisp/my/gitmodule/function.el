@@ -82,13 +82,13 @@ FUNC is called with ARGS."
        (-flatten-n 1)))
 
 (defun akirak/git-remote-topics (repo)
-  (cl-typecase repo
-    (string (akirak/git-remote-topics
-             (akirak/parse-git-url repo)))
-    (akirak/remote-git-repo-github (akirak/github-repo-topics
-                                    (akirak/remote-git-repo-owner repo)
-                                    (akirak/remote-git-repo-name repo)))
-    (otherwise nil)))
+  (cond
+   ((stringp repo)
+    (akirak/git-remote-topics (akirak/parse-git-url repo)))
+   ((akirak/remote-git-repo-github-p repo)
+    (akirak/github-repo-topics
+     (akirak/remote-git-repo-owner repo)
+     (akirak/remote-git-repo-name repo)))))
 
 (defun akirak/git-module-add-tags ()
   (interactive)
