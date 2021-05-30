@@ -1,5 +1,4 @@
 (use-package vc-msg
-  :straight (:host github :repo "akirak/vc-msg" :branch "devel")
   :config/el-patch
   (defun vc-msg-show ()
     "Show commit message of current line.
