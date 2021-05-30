@@ -495,7 +495,10 @@ third argument, i.e. right after the description, in the entry."
   :commands (xmind-org-insert-file))
 
 (use-package readable
-  :straight (:host github :repo "akirak/readable.el"))
+  :straight (:host github :repo "akirak/readable.el")
+  :custom
+  (readable-cache-directory (expand-file-name "emacs-readable"
+                                              (xdg-cache-home))))
 
 ;;;; Extra keybindings
 (akirak/bind-search
