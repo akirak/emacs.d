@@ -128,6 +128,11 @@
                                  (file-name-directory
                                   (string-remove-suffix "/" invocation-directory)))))
 
+(use-package iedit
+  :custom
+  ;; Prevent conflict with my custom binding
+  (iedit-toggle-key-default nil))
+
 ;;;; Keybindings
 
 (use-package which-key

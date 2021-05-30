@@ -1133,20 +1133,6 @@ To visit a URL, use =browse-url-at-point=:
 (akirak/bind-user
   "i" 'scratch)
 #+end_src
-*** iedit
-I am not using iedit-mode now, so I will disable its default keybinding:
-
-#+begin_src emacs-lisp
-  (use-package iedit
-    :straight (:type built-in)
-    :disabled t
-    :general
-    ("C-;" nil))
-
-  (general-unbind "C-;")
-#+end_src
-
-Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-cursors]]. You can first select all the occurrences of a symbol using multiple-cursors and then edit them using iedit.
 *** Debugging Emacs
 #+begin_src emacs-lisp
 (akirak/require 'setup-debug-emacs)
