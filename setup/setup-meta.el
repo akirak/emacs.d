@@ -23,7 +23,7 @@
     setup-unpackaged      ; A bunch of useful commands
     setup-org-custom-commands
     setup-ace-window      ; An alternative way for window manipulation
-    setup-outshine        ; Extra support for outline editing
+    ;; setup-outshine        ; Extra support for outline editing
     setup-org-refile      ; Enhance org-refile
     setup-org-download    ; Screenshots
     setup-counsel-org-clock
