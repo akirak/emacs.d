@@ -474,7 +474,8 @@
 (general-def :prefix "C-c !"
   "8" (akirak/def-insert-date-time-command "yyyymmdd-date" "%Y%m%d")
   "f" (akirak/def-insert-date-time-command "iso8601-date" "%F")
-  "t" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X"))
+  "t" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X")
+  "z" (akirak/def-insert-date-time-command "iso8601-datetime-with-zone" "%FT%X%:z"))
 
 ;;;; Switching buffers
 ;; Switching buffers is the most essential operation in Emacs.
