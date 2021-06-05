@@ -55,8 +55,8 @@
         (find-file doc)
       (user-error "Cannot find NOTER_DOCUMENT property in the file"))))
 
-(general-def :keymaps 'org-mode-map :package 'org-noter :prefix "C-c C-x"
-  "nf" #'akirak/org-noter-find-document)
+;; (general-def :keymaps 'org-mode-map :package 'org-noter :prefix "C-c C-x"
+;;   "nf" #'akirak/org-noter-find-document)
 
 (use-package org-volume
   :straight (:host github :repo "akirak/org-volume")
