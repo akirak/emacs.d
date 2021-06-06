@@ -899,8 +899,11 @@ outcommented org-mode headers)."
      (when ,other-window
        (or (other-window 1)
            (split-window-sensibly)))
-     (let ((default-directory (vc-root-dir)))
-       (call-interactively (quote ,command)))))
+     (if-let (root (or (vc-root-dir)
+                       (locate-dominating-file default-directory ".git")))
+         (let ((default-directory root))
+           (call-interactively (quote ,command)))
+       (user-error "vc-root is not found"))))
 
 (cl-defmacro akirak/run-shell-command-silently-at-vc-root (name command)
   `(defun ,name ()
@@ -955,7 +958,10 @@ outcommented org-mode headers)."
   ;; Commands run at a vc root
   "A" (defun akirak/treemacs-add-vc-root-to-workspace ()
         (interactive)
-        (treemacs-add-project-to-workspace (vc-root-dir)))
+        (if-let (root (or (vc-root-dir)
+                          (locate-dominating-file default-directory ".git")))
+            (treemacs-add-project-to-workspace root)
+          (user-error "VC root is missing. Run `git init` first")))
   "D" (akirak/run-at-vc-root add-dir-local-variable)
   "n" '(:wk "nix")
   "nd" (akirak/make-vc-root-file-command "default.nix")
