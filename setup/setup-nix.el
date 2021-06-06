@@ -101,8 +101,10 @@ This is a hack, so it may not work in the future."
                                     (list "--source" source))))
                     (buffer-string)
                   (error "manix failed with non-zero exit code")))))
-    (with-help-window (help-buffer)
-      (with-current-buffer (help-buffer)
-        (insert help)))))
+    (if (string-empty-p help)
+        (message "The query for \"%s\" returned no result from %s." query source)
+      (with-help-window (help-buffer)
+        (with-current-buffer (help-buffer)
+          (insert help))))))
 
 (provide 'setup-nix)
