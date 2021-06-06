@@ -1270,7 +1270,10 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/require 'setup-elixir)
 #+end_src
-
+*** Go
+#+begin_src emacs-lisp
+  (akirak/require 'setup-go)
+#+end_src
 *** Haskell
 
 #+begin_src emacs-lisp
