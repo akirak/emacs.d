@@ -1,6 +1,9 @@
 (use-package reformatter
   :config
 
+  (reformatter-define yapf
+    :program "yapf")
+
   (reformatter-define nixfmt
     :program "nixfmt"
     :mode t)
