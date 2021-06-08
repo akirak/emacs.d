@@ -73,6 +73,7 @@ for a better understanding of my previous work and organizing it in a more sensi
   -  [[#markdown][Markdown]]
 -  [[#programming-languages][Programming languages]]
   -  [[#elixir][Elixir]]
+  -  [[#go][Go]]
   -  [[#haskell][Haskell]]
   -  [[#java][Java]]
   -  [[#javascript][JavaScript]]
@@ -1240,9 +1241,6 @@ Use major-mode-hydra to define a hydra for Org mode:
   (akirak/require 'setup-org-hydra)
 #+end_src
 **** Org-babel
-- Graphviz (=graphviz-dot-mode=)
-- Ditaa
-
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-babel t)
 #+end_src
