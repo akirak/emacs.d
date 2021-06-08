@@ -85,6 +85,10 @@
             gifsicle
             # gif-progress
 
+            # This also installs Chromium, which is not small in size
+            # but I think is acceptable.
+            nodePackages.mermaid-cli
+
             # file converters
             pngquant
             # for document conversion
