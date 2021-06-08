@@ -15,6 +15,7 @@
                   (go . t)
                   (graphql . t)
                   (mermaid . t)
+                  (erd . t)
                   (dot . t)
                   (ditaa . t)
                   (restclient . t)
@@ -69,6 +70,10 @@
   :after ob)
 
 (use-package ob-go
+  :after ob)
+
+(use-package ob-erd
+  :straight (:host github :repo "akirak/ob-erd")
   :after ob)
 
 (use-package ob-graphql
