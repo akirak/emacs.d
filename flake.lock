@@ -35,6 +35,26 @@
         "type": "github"
       }
     },
+    "erd": {
+      "inputs": {
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2"
+      },
+      "locked": {
+        "lastModified": 1623169445,
+        "narHash": "sha256-UeHFzc2npUXC4JYnBOJdpBKEOCINJAAAd1gpmGYEUzg=",
+        "owner": "akirak",
+        "repo": "erd",
+        "rev": "64f6955508b8ef11a970c325e251a9d5216548d2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "akirak",
+        "ref": "flake-init",
+        "repo": "erd",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -115,6 +135,21 @@
     },
     "flake-utils_3": {
       "locked": {
+        "lastModified": 1622445595,
+        "narHash": "sha256-m+JRe6Wc5OZ/mKw2bB3+Tl0ZbtyxxxfnAWln8Q5qs+Y=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7d706970d94bc5559077eb1a6600afddcd25a7c8",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_4": {
+      "locked": {
         "lastModified": 1605370193,
         "narHash": "sha256-YyMTf3URDL/otKdKgtoMChu4vfVL3vCMkRqpGifhUn0=",
         "owner": "numtide",
@@ -162,6 +197,21 @@
     },
     "nixpkgs_2": {
       "locked": {
+        "lastModified": 1623167903,
+        "narHash": "sha256-m1JHo/kfsA+wcbZeYa0Ri96MSUZ3pR5PSLFfOq3+OME=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "f2f583eceb7b6ab9a7f0c9b14dfaac9d0b059a10",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
+      "locked": {
         "lastModified": 1622972307,
         "narHash": "sha256-ENOu0FPCf95iLLoq2txhJtnA2ZpOFhIVBqQVbKM8ra0=",
         "owner": "nixos",
@@ -176,7 +226,7 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1607245000,
         "narHash": "sha256-j5/2ifXdBjGjd/hG+WNCaZNMaEFOxEtV9+/pa6tP0p8=",
@@ -195,8 +245,8 @@
     "pdftotext": {
       "inputs": {
         "flake-compat": "flake-compat_3",
-        "flake-utils": "flake-utils_3",
-        "nixpkgs": "nixpkgs_3"
+        "flake-utils": "flake-utils_4",
+        "nixpkgs": "nixpkgs_4"
       },
       "locked": {
         "lastModified": 1620868858,
@@ -216,10 +266,11 @@
       "inputs": {
         "emacs-overlay": "emacs-overlay",
         "epubinfo": "epubinfo",
+        "erd": "erd",
         "flake-compat": "flake-compat_2",
-        "flake-utils": "flake-utils_2",
+        "flake-utils": "flake-utils_3",
         "my-nur": "my-nur",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "pdftotext": "pdftotext"
       }
     }

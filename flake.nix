@@ -10,6 +10,7 @@
   inputs.my-nur.flake = false;
   inputs.epubinfo.url = "github:akirak/epubinfo";
   inputs.pdftotext.url = "github:akirak/haskell-pdftotext";
+  inputs.erd.url = "github:akirak/erd/flake-init";
 
   outputs = { emacs-overlay, nixpkgs, flake-utils, flake-compat, ... }@inputs:
     (flake-utils.lib.eachDefaultSystem (system:
@@ -65,6 +66,10 @@
             # epubinfo, pdftotext, etc.
             inputs.epubinfo.packages.${system}.epubinfo
             inputs.pdftotext.packages.${system}.pdftotext
+
+            inputs.erd.packages.${system}.erd
+            # required by erd
+            graphviz
 
             my-nur.readability-cli
 
