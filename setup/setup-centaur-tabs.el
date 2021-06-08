@@ -1,4 +1,5 @@
 (use-package centaur-tabs
+  :disabled t
   :config
   (defun akirak/centaur-tabs-hide-tab (name)
     ;; Hide if the major mode is not a derived mode
