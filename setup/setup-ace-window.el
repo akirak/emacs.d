@@ -13,6 +13,12 @@
         (if (window-live-p window)
             (quit-window window)
           (error "Got a dead window %S" window)))))
+  (defun akirak/aw-replace-window (window)
+    (let* ((buffer (current-buffer))
+           (cur-window (get-buffer-window buffer)))
+      (aw-switch-to-window window)
+      (switch-to-buffer buffer)
+      (delete-window cur-window)))
   (custom-theme-set-faces 'user
                           '(aw-leading-char-face
                             ((default
@@ -38,6 +44,7 @@
           (?v aw-split-window-horz "Split horizontally")
           (?s aw-split-window-vert "Split vertically")
           (?p aw-delete-window "Delete Window")
+          (?x akirak/aw-replace-window "Replace window")
           (?m delete-other-windows "Delete Other Windows")
           ;; Unused.
           ;; (?k akirak/aw-quit-window "Quit window")
