@@ -77,6 +77,11 @@
                            . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
                                 "  " _
                                 "end"))
+                          (("\.go\\'" . "Go module")
+                           . (> "package "
+                                (file-name-base (or buffer-file-name (buffer-name)))
+                                "\n\nimport (\n"
+                                ")\n\n"))
                           (("\.el\\'" . "Emacs Lisp")
                            . (> ";;; "
                                 (file-name-nondirectory (or buffer-file-name (buffer-name)))
