@@ -4,6 +4,13 @@
   (reformatter-define yapf
     :program "yapf")
 
+  ;; Experimental.
+  (reformatter-define golint
+    :program "golint"
+    :stdin nil
+    :stdout nil
+    :args (list (buffer-file-name)))
+
   (reformatter-define nixfmt
     :program "nixfmt"
     :mode t)
