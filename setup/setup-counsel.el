@@ -186,7 +186,8 @@
          (dir (if path
                   (file-name-directory (file-truename path))
                 (user-error "Cannot find library %s" x))))
-    (akirak/find-readme dir)))
+    (akirak/find-readme (or (locate-dominating-file dir ".git")
+                            dir))))
 
 (defun akirak/view-file (filename)
   (let ((buffer (or (find-buffer-visiting filename)
