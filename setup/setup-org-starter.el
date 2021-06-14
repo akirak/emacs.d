@@ -508,6 +508,8 @@ third argument, i.e. right after the description, in the entry."
   "M-o" #'org-starter-alternative-find-file-by-key
   "M-m" #'helm-org-multi-wiki
   "M-w" #'helm-org-multi-wiki-all)
+(akirak/bind-search :keymaps 'org-mode-map :package 'org
+  "l" #'org-multi-wiki-backlink-view)
 (akirak/bind-jump
   "M-o" #'org-starter-find-file-by-key
   "@" (defun akirak/org-clock-follow-link ()
