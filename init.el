@@ -1074,6 +1074,6 @@ Saves to a temp file and puts the filename in the kill ring."
          ;; TODO: Select from  a list of executables in PATH
          (interactive (list (completing-read "Command: "
                                              (akirak/executables-in-path)
-                                             nil t nil
+                                             nil nil nil
                                              'akirak/docopt-history)))
          (docopt command)))
