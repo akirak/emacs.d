@@ -63,4 +63,15 @@
           (format "%s" x)
         x)))))
 
+(defun akirak/lv-window-content ()
+  "Return the content of lv-window."
+  (with-current-buffer (window-buffer (lv-window))
+    (buffer-string)))
+
+(defun akirak/save-lv-content ()
+  (interactive)
+  (let ((content (akirak/lv-window-content)))
+    (kill-new content)
+    (message "Saved to the kill ring")))
+
 (provide 'setup-eldoc)
