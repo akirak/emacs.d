@@ -654,66 +654,6 @@ connection identities of recent files."
   ;; This command lets you browse lines in error buffers.
   "C-x t" #'helm-tail)
 ;;;; Navigation in buffer
-;;;;; Avy
-;; avy-goto-word-1 was recommended in https://irreal.org/blog/?p=9130,
-;; but avy-goto-char-2 looks better on cognitive load.
-(general-def
-  "C-'" #'avy-goto-char-2)
-
-(defun akirak/avy-pre-action-function (operand operation res)
-  (let ((start (caar res))
-        (window (cdr res)))
-    (with-current-buffer (window-buffer window)
-      (save-excursion
-        (goto-char start)
-        (let (beg end)
-          (cl-ecase operand
-            (symbol (setq beg (if (looking-at (rx symbol-start))
-                                  (point)
-                                (re-search-backward (rx symbol-start) nil t))
-                          end (save-excursion
-                                (re-search-forward
-                                 (rx (group (+? anything)) symbol-end)
-                                 nil t))))
-            (word (setq beg (if (looking-at (rx word-start))
-                                (point)
-                              (re-search-backward (rx word-start) nil t))
-                        end (save-excursion
-                              (re-search-forward
-                               (rx (group (+? anything)) word-end)
-                               nil t)))))
-          (pcase operation
-            ;; `copy-region-as-kill' may append the region
-            ;; depending on the last command. I find it
-            ;; annoying, so this just copies the region
-            ;; instead.
-            (`kill-new (kill-new (buffer-substring beg end)))
-            ((pred functionp) (funcall operation beg end))))))))
-
-(cl-defmacro akirak/def-avy-edit-command (name
-                                          operand operation
-                                          &rest post-action)
-  (declare (indent 1))
-  `(defun ,(intern (concat "akirak/avy-" name)) ()
-     (interactive)
-     (let ((avy-all-windows t)
-           (avy-pre-action (-partial #'akirak/avy-pre-action-function
-                                     ,operand
-                                     ,operation)))
-       (save-excursion
-         (save-window-excursion
-           (call-interactively #'avy-goto-char-timer)))
-       ,@post-action)))
-
-(general-def :prefix "C-;"
-  "s" `(,(akirak/def-avy-edit-command "mirror-symbol"
-           'symbol 'kill-new
-           (yank))
-        :wk "mirror symbol")
-  "w" `(,(akirak/def-avy-edit-command "mirror-word"
-           'word 'kill-new
-           (yank))
-        :wk "mirror word"))
 
 ;;;;; Page navigation
 ;; I will use ~C-x [~ and ~C-x ]~ for "page" navigation. These keys

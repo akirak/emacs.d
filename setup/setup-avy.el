@@ -81,7 +81,7 @@
     (point))
   :general
   ("M-z" #'avy-goto-char-in-line
-   "C-\"" #'avy-goto-char-timer)
+   "C-'" #'avy-goto-char-timer)
   :custom
   (avy-style 'at)
   (avy-styles-alist '((ivy-avy . pre)
@@ -97,5 +97,11 @@
    (t
     (kill-line)))
   (message "Killed: %s" (current-kill 0)))
+
+(use-package eat
+  :straight (:host github :repo "akirak/eat")
+  :commands (eat-edit)
+  :general
+  ("C-;" #'eat-edit))
 
 (provide 'setup-avy)
