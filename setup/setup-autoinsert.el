@@ -88,10 +88,10 @@
                                 " --- " _
                                 " -*- lexical-binding: t -*-\n"
                                 "\n\n\n"
-                                "(provide "
+                                "(provide '"
                                 (file-name-base (or buffer-file-name (buffer-name)))
                                 ")\n"
-                                ";;; '"
+                                ";;; "
                                 (file-name-nondirectory (or buffer-file-name (buffer-name)))
                                 " ends here"))))
 
