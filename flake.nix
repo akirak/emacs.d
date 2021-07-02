@@ -118,6 +118,10 @@
             wmctrl
 
             beancount
+
+            # language servers, formatters, linters, etc. for my favourite languages
+            rnix-lsp
+            nixpkgs-fmt
           ];
         };
 

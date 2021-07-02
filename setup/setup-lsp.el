@@ -45,6 +45,7 @@
   (lsp-mode . akirak/setup-lsp)
   ((css-mode
     typescript-mode
+    nix-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
     ;; java-mode
