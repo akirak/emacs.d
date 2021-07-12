@@ -50,4 +50,6 @@
           (insert (cdar candidates)))
       (insert (google-translate-json-translation json)))))
 
+(general-def "C-x a j" #'akirak/insert-japanese-from-english)
+
 (provide 'setup-language-tools)

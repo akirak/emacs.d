@@ -471,11 +471,11 @@
      (insert (format-time-string ,format))))
 
 ;; This prefix map will be overridden in org-mode
-(general-def :prefix "C-c !"
-  "8" (akirak/def-insert-date-time-command "yyyymmdd-date" "%Y%m%d")
-  "f" (akirak/def-insert-date-time-command "iso8601-date" "%F")
-  "t" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X")
-  "z" (akirak/def-insert-date-time-command "iso8601-datetime-with-zone" "%FT%X%:z"))
+(general-def :prefix "C-x a"
+  "0" (akirak/def-insert-date-time-command "yyyymmdd-date" "%Y%m%d")
+  "1" (akirak/def-insert-date-time-command "iso8601-date" "%F")
+  "2" (akirak/def-insert-date-time-command "iso8601-datetime" "%FT%X")
+  "3" (akirak/def-insert-date-time-command "iso8601-datetime-with-zone" "%FT%X%:z"))
 
 ;;;; Switching buffers
 ;; Switching buffers is the most essential operation in Emacs.
