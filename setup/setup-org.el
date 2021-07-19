@@ -16,6 +16,9 @@
 (akirak/bind-org-export "" '(nil :wk "export shortcuts"))
 
 (general-def :package 'org :keymaps 'org-mode-map :prefix akirak/mode-prefix-key
+  "/" (defun akirak/org-show-context ()
+        (interactive)
+        (org-show-context))
   "h" #'org-edit-headline
   "l" '(nil :wk "insert link")
   "s" '(nil :wk "set")
