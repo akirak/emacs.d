@@ -172,6 +172,9 @@ This is intended to be set inside `akirak/set-header-line' function.")
                             " "
                             (:eval (dired-filter--describe-filters))))
                     nil))
+                 ((memq 'tabulated-list-mode modes)
+                  (setq groups (list "Tabulated"))
+                  nil)
                  ((memq 'vterm-mode modes)
                   (setq groups (list (if project
                                          (format "@%s:Terminal" project)
