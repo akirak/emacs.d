@@ -214,6 +214,7 @@
 (org-babel-load-file (expand-file-name "main.org" user-emacs-directory))
 
 ;;; Packages
+
 (use-package dash-docs)
 (use-package emacs-everywhere
   ;; Use my fork until the path issue is fixed
@@ -312,6 +313,9 @@
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package podman
+  :straight (:host github :repo "akirak/podman.el")
+  :commands (podman-pod-list))
 (use-package project
   :config
   (add-hook 'project-find-functions
@@ -981,10 +985,11 @@ Saves to a temp file and puts the filename in the kill ring."
 
 ;;;;; Docker
 (akirak/bind-admin
-  "k" '(nil :wk "docker")
+  "k" '(nil :wk "docker/podman")
   "ki" #'docker-images
   "kk" #'docker-containers
   "kn" #'docker-networks
+  "kp" #'podman-pod-list
   "kv" #'docker-volumes)
 
 ;;;;; Nix
