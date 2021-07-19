@@ -19,6 +19,9 @@
   :custom
   (org-confirm-babel-evaluate nil))
 
+(use-package ob-async
+  :after ob)
+
 ;;;; Natural languages
 
 (use-package ob-translate
