@@ -671,7 +671,7 @@ Emacs also provides eww:
   (akirak/bind-search "i" 'counsel-imenu)
 
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    "i"
+    "u"
     (defun akirak/helm-org-ancestors ()
       (interactive)
       (unless (derived-mode-p 'org-mode)
@@ -703,8 +703,7 @@ Emacs also provides eww:
               :preselect preselect)))
 
     ;; Simply browse headings in the buffer.
-    ;; "i" #'helm-org-in-buffer-headings
-    )
+    "i" #'helm-org-in-buffer-headings)
 
   (akirak/bind-search :package 'restclient-helm :keymaps 'restclient-mode-map
     "i" #'helm-restclient)
