@@ -11,6 +11,7 @@
                   (erd . t)
                   (shell . t)
                   (emacs-lisp . t)
+                  (sql . t)
                   (sqlite . t)
                   (restclient . t)
                   (graphql . t)))
