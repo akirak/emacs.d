@@ -206,6 +206,11 @@
   (octopus-project-org-properties '("LANGUAGE"))
   :config
 
+  (add-hook 'octopus-extra-project-properties
+            '("CREATED_TIME"
+              . (lambda ()
+                  (org-format-time-string (org-time-stamp-format t t)))))
+
   ;; This is used for ignoring container headings in date trees.
   (org-ql-defpred ignored-level ()
     "Return non-nil if the entry is blocked"
