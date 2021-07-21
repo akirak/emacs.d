@@ -74,22 +74,30 @@
     (with-current-buffer (or (find-buffer-visiting file)
                              (find-file-noselect file))
       (org-with-wide-buffer
-       (let ((ancestors (cons "Resources" (-butlast olp))))
-         (catch 'finish
-           (dolist (prefix (-non-nil (-inits ancestors)))
-             (condition-case nil
-                 (goto-char (org-find-olp prefix t))
-               (error
-                (let ((rest (-drop (1- (length prefix)) ancestors))
-                      (level (org-outline-level)))
-                  (org-back-to-heading)
-                  (org-end-of-meta-data t)
-                  (org-open-line 1)
-                  (dolist (seg rest)
-                    (setq level (org-get-valid-level (1+ level)))
-                    (insert (make-string level ?*) " " seg "\n"))
-                  (throw 'finish t))))))
-         (octopus-register-project root :noninteractive t))))))
+       (if-let (marker (org-ql-select (current-buffer)
+                         (octopus--ql-expand
+                           `(project-remote-property
+                             ,(octopus--abbreviate-remote-url root)))
+                         :action '(point-marker)))
+           (progn
+             (goto-char marker)
+             (message "There is already an Org entry for the repository"))
+         (let ((ancestors (cons "Resources" (-butlast olp))))
+           (catch 'finish
+             (dolist (prefix (-non-nil (-inits ancestors)))
+               (condition-case nil
+                   (goto-char (org-find-olp prefix t))
+                 (error
+                  (let ((rest (-drop (1- (length prefix)) ancestors))
+                        (level (org-outline-level)))
+                    (org-back-to-heading)
+                    (org-end-of-meta-data t)
+                    (org-open-line 1)
+                    (dolist (seg rest)
+                      (setq level (org-get-valid-level (1+ level)))
+                      (insert (make-string level ?*) " " seg "\n"))
+                    (throw 'finish t))))))
+           (octopus-register-project root :noninteractive t)))))))
 
 ;; FIXME
 (defun akirak/git-archive-ensure-file-funcall (file func &rest args)
