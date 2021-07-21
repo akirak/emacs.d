@@ -336,7 +336,7 @@
 
 ;;;; Modules
 (require 'setup-project)
-(require 'setup-git-bookmark)
+(require 'setup-git-archive)
 (require 'setup-info)
 (require 'setup-unicode)
 (require 'setup-mmm)
