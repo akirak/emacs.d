@@ -405,13 +405,11 @@ third argument, i.e. right after the description, in the entry."
   (general-add-hook 'org-starter-extra-find-file-map
                     '((";" org-starter-find-config-file "config")
                       ;; ("y" akirak/yankpad-show-current-category "yankpad")
-                      ("i" akirak/find-user-init-file "init.el")
-                      ("c" akirak/commonplace-repos-status "commonplace"))
+                      ("i" akirak/find-user-init-file "init.el"))
                     t)
   (general-add-hook 'org-starter-extra-alternative-find-file-map
                     '((";" org-starter-swiper-config-files "config")
-                      ("i" akirak/find-file-in-user-emacs-dir "emacs-dir")
-                      ("c" akirak/find-file-in-commonplace "commonplace"))
+                      ("i" akirak/find-file-in-user-emacs-dir "emacs-dir"))
                     t)
   (general-add-hook 'org-starter-extra-refile-map
                     '(("'" avy-org-refile-as-child "avy"))
