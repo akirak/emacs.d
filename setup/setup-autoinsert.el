@@ -73,10 +73,21 @@
                           (("/config/config\.exs\\'" . "config/config.exs")
                            . (> "use Mix.Config\n\n"
                                 _))
-                          (("\.ex\\'" . "Elixir module")
+                          (("/lib/.+\.ex\\'" . "Elixir library module")
                            . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
                                 "  " _
                                 "end"))
+                          (("/test/.+_test\.exs\\'" . "Elixir test module")
+                           . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+                                "  use ExUnit.Case\n\n"
+                                "  alias " (string-remove-suffix
+                                            "Test" (akirak/elixir-module-name-from-file))
+                                "\n"
+                                "  doctest " (string-remove-suffix
+                                              "Test" (akirak/elixir-module-name-from-file))
+                                "\n"
+                                "  " _
+                                "\nend"))
                           (("\.go\\'" . "Go module")
                            . (> "package "
                                 (file-name-base (or buffer-file-name (buffer-name)))

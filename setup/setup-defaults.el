@@ -155,6 +155,14 @@
                            (group (+ digit)) ":" (group (+ digit))
                            ":" (* space)
                            (or "Error" "error" "warning") ":")
+                       1 2 3 '(4 . 4))
+
+                 ;; Elixir iex
+                 ;; ** (SyntaxError) xxx/xxx/xxx.ex:97:29: syntax error before: '{'
+                 (list (rx bol (+ "*") "(" (+ anything) ")"
+                           (group (+ (not (any space ":")))) ":"
+                           (group (+ digit)) ":" (group (+ digit))
+                           ":" (* space))
                        1 2 3 '(4 . 4)))))
 
 (setq-default bookmark-default-file "~/local/emacs/bookmarks.el")
