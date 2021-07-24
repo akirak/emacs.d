@@ -504,11 +504,14 @@
                 ,akirak/helm-source-recent-files))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
-    (interactive (list (or (akirak/project-root default-directory)
+    (interactive (list (or (if (equal current-prefix-arg '(16))
+                               (read-directory-name "Root: "
+                                                    (vc-root-dir))
+                             (akirak/project-root default-directory))
                            (akirak/try-init-project-root)
                            (user-error "Cannot find the project root"))))
     (require 'my/helm/source/file)
-    (when current-prefix-arg
+    (when (equal current-prefix-arg '(4))
       (akirak/clear-project-file-cache root :sort 'modified))
     (let ((default-directory root))
       (helm :prompt (format "Browse %s: " root)
