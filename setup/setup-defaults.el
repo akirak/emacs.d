@@ -27,7 +27,7 @@
               vc-make-backup-files t
               buffer-file-coding-system 'utf-8
               sentence-end-double-space nil
-              default-fill-column 80
+              fill-column 80
               indent-tabs-mode nil
               recenter-positions '(top middle bottom)
               indicate-empty-lines t
