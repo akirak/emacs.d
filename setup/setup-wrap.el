@@ -15,6 +15,7 @@
 (add-hook 'special-mode-hook (lambda () (visual-line-mode 1)))
 
 (use-package visual-fill-column
+  :disabled t
   :hook
   ;; I don't know if I want to turn it on in org-mode.
   ;; I am using perfect-margin.
