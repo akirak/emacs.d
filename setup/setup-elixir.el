@@ -15,6 +15,8 @@
   (elixir-mode . mix-minor-mode))
 
 (use-package flycheck-credo
+  ;; Use lsp
+  :disabled t
   :after elixir-mode
   :config
   (add-hook 'elixir-mode-hook

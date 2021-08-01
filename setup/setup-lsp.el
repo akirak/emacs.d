@@ -46,6 +46,7 @@
   ((css-mode
     typescript-mode
     nix-mode
+    elixir-mode
     ;; Use psc-ide in purescript
     ;; purescript-mode
     ;; java-mode
