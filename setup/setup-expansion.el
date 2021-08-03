@@ -55,8 +55,9 @@
 
 (use-package auto-yasnippet
   :commands (aya-create aya-expand)
+  :config
+  (setq aya-marker "~")
   :custom
-  (aya-marker "~")
   ;; I frequently use $ in templates, so something else is better
   (aya-marker-one-line "&"))
 
