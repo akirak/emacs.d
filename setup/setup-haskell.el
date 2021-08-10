@@ -6,12 +6,13 @@
     (interactive)
     (unless (derived-mode-p 'haskell-mode)
       (user-error "Not haskell-mode"))
-    (cond
-     ((and (executable-find "ghcide")
-           (require 'lsp-haskell nil t))
-      (lsp))
-     ((require 'dante nil t)
-      (dante-mode 1)))
+    ;; Turn on either lsp or dante-mode depending on the project
+    ;; (cond
+    ;;  ((and (executable-find "ghcide")
+    ;;        (require 'lsp-haskell nil t))
+    ;;   (lsp))
+    ;;  ((require 'dante nil t)
+    ;;   (dante-mode 1)))
     (haskell-auto-insert-module-template))
 
   ;; nix-env -if https://github.com/tweag/ormolu/archive/master.tar.gz -A ormolu
