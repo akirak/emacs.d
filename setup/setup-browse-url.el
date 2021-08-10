@@ -181,9 +181,10 @@
 (defcustom akirak/browse-url-generic-args-for-referencing
   (let ((program akirak/browse-url-generic-program-for-referencing))
     (cond
-     ((string-match-p (rx (or (and bol "next" eol)
-                              (and "/next" eol)))
-                      program)
+     ((and program
+           (string-match-p (rx (or (and bol "next" eol)
+                                   (and "/next" eol)))
+                           program))
       '("--no-session"))))
   "Command line arguments for `akirak/browse-url-generic-program-for-referencing'."
   :type '(repeat string))

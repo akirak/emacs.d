@@ -1,6 +1,7 @@
 (straight-use-package '(cus-edit :type built-in))
 
 (use-package unpackaged
+  :disabled t
   :straight (unpackaged :host github :repo "alphapapa/unpackaged.el")
   :config
   (unpackaged/magit-log-date-headers-mode 1))
