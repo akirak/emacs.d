@@ -33,7 +33,7 @@
    (t (call-interactively 'forward-whitespace))))
 ;; (advice-add 'akirak/ctrl-meta-f
 ;;             :around 'akirak/ad-around-verbose-call-interactively)
-(general-def "C-M-f" 'akirak/ctrl-meta-f)
+;; (general-def "C-M-f" 'akirak/ctrl-meta-f)
 
 (defun akirak/ctrl-meta-b ()
   (interactive)
