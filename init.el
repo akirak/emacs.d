@@ -232,6 +232,7 @@
 (use-package discover-my-major
   :commands (discover-my-major))
 (use-package docopt
+  :disabled t
   :functions (docopt))
 (use-package electric
   :straight (:type built-in)
@@ -999,10 +1000,11 @@ Saves to a temp file and puts the filename in the kill ring."
 (akirak/bind-admin
   "n" '(nil :wk "nix")
   "nf" #'akirak/nix-prefetch-url
-  "nl" (defun akirak/nix-locate ()
-         (interactive)
-         ;; TODO: Improve the interface
-         (docopt "nix-locate")))
+  ;; "nl" (defun akirak/nix-locate ()
+  ;;        (interactive)
+  ;;        ;; TODO: Improve the interface
+  ;;        (docopt "nix-locate"))
+  )
 
 ;;;;; Misc query commands
 (akirak/bind-admin
