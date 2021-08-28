@@ -7,7 +7,7 @@
     :program "nix-linter")
   (akirak/bind-mode :keymaps 'nix-mode-map
     "u" #'nix-update-fetch)
-  (akirak/bind-mode-repl :mode 'nix-mode
+  (akirak/bind-mode-repl :keymaps 'nix-mode-map
     "" #'nix-repl))
 
 (use-package nix
