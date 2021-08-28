@@ -74,7 +74,10 @@
     (akirak/browse-url-incognito url))
    ((akirak/incognito-url-p url)
     (akirak/browse-url-incognito url))
-   (t (browse-url-generic url))))
+   (browse-url-generic-program
+    (browse-url-generic url))
+   ((eq system-type 'gnu/linux)
+    (browse-url-xdg-open url))))
 
 (defvar akirak/read-url-history nil)
 
