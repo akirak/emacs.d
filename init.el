@@ -103,7 +103,7 @@
 
 (use-package no-littering
   :preface
-  (let* ((var-dir "~/local/emacs/var/"))
+  (let* ((var-dir (expand-file-name "emacs" (xdg-data-home))))
     (unless (file-directory-p var-dir)
       (make-directory var-dir t))
     (setq no-littering-var-directory var-dir)))
