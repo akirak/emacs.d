@@ -14,6 +14,8 @@
               (buffer-repos (->> (buffer-list)
                                  (-map (lambda (buf) (buffer-local-value 'default-directory buf)))
                                  (delq nil)
+                                 (cl-delete-duplicates)
+                                 (-filter #'file-directory-p)
                                  (-map #'akirak/project-root)
                                  (cl-delete-duplicates)))
               ((open-repos closed-repos)
