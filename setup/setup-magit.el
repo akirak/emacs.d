@@ -165,18 +165,21 @@ Only one letter is shown, the first that applies."
     ;; Conflicts with tab-bar-mode
     "<C-tab>")
 
+  (setq magit-repository-directories
+        `(("~/" . 1)
+          ("~/.config" . 1)
+          ("/etc/nixos" . 0)
+          ;; ("~/.emacs.d/straight/repos/" . 1)
+          ;; domain/org - group - worktree
+          ("~/work" . 3)
+          ,@(ignore-errors
+              (->> (f-directories "~/archives/")
+                   (--map (f-join it "git/"))
+                   (-filter #'f-directory-p)
+                   (-map #'f-short)
+                   (--map (cons it 3))))))
+
   :custom
-  (magit-repository-directories
-   '(("~/.emacs.d" . 0)
-     ;; ("~/.emacs.d/straight/repos/" . 1)
-     ("~/.config" . 1)
-     ;; Deprecated
-     ("~/projects" . 2)
-     ;; domain/org - group - worktree
-     ("~/work" . 3)
-     ("~/lib" . 1)
-     ("~" . 1)
-     ("/etc/nixos" . 0)))
   (magit-repolist-columns
    '(("Path" 30 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
