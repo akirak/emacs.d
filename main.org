@@ -1267,6 +1267,13 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/require 'setup-elixir)
 #+end_src
+*** Gleam
+:PROPERTIES:
+:CREATED_TIME: [2021-09-15 Wed 22:47]
+:END:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-gleam)
+#+end_src
 *** Go
 #+begin_src emacs-lisp
   (akirak/require 'setup-go)
