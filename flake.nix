@@ -97,7 +97,7 @@
             # file converters
             pngquant
             # for document conversion
-            unoconv
+            # unoconv
             pandoc
 
             # needed for helm-dash (really?)
@@ -138,7 +138,7 @@
             elisp-ffi
             exwm
             # beancount
-            liberime-config
+	    # liberime-config
             elpaPackages.project
             #
             # These package have large Git repositories, so I will install them
