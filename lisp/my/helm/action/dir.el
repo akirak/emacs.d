@@ -60,10 +60,12 @@
              (enabled-when project "README") #'akirak/find-readme
              (enabled-when git "Browse remote")
              (with-dir forge-browse-remote 'interactive)
-             (enabled-when git "Browse issues")
-             (with-dir forge-browse-issues 'interactive)
-             (enabled-when git "Browse PRs")
-             (with-dir forge-browse-pullreqs 'interactive)))))
+             ;; (enabled-when git "Browse issues")
+             ;; (with-dir forge-browse-issues 'interactive)
+             ;; (enabled-when git "Browse PRs")
+             ;; (with-dir forge-browse-pullreqs 'interactive)
+             "Nix run"
+             (with-dir akirak/nix-run 'interactive)))))
 
 (defconst akirak/helm-directory-actions-1
   (akirak/helm-make-directory-actions))

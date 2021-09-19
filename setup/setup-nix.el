@@ -107,4 +107,31 @@ This is a hack, so it may not work in the future."
         (with-current-buffer (help-buffer)
           (insert help))))))
 
+(defun akirak/nix-flake-attr-names (type)
+  (with-temp-buffer
+    (call-process "nix" nil (list t nil) nil
+                  "eval" (format ".#%s.%s" type (nix-system))
+                  "--apply" "builtins.attrNames" "--json")
+    (goto-char (point-min))
+    (ignore-errors
+      (json-parse-buffer :array-type 'list))))
+
+(defun akirak/nix-run (name &optional impure)
+  ;; TODO: Make this a transient command
+  (interactive (list (progn
+                       (unless (file-exists-p "flake.nix")
+                         (user-error "Cannot find flake.nix in the current directory"))
+                       (completing-read
+                        "Run Nix app/package: "
+                        (-uniq (append (akirak/nix-flake-attr-names "apps")
+                                       (akirak/nix-flake-attr-names "packages")))))
+                     current-prefix-arg))
+  (apply #'start-process
+         (format "nix run %s in %s" name default-directory)
+         (format "*nix run %s*" name)
+         "nix" "run"
+         `(,@(when impure
+               '("--impure"))
+           ,(format ".#%s" name))))
+
 (provide 'setup-nix)
