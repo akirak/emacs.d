@@ -1,4 +1,7 @@
 ((calibredb :host github :repo "chenyanming/calibredb.el")
+ (autorevert :type built-in)
+ (view :type built-in)
+ (compile :type built-in)
  (company-elixir :host github :repo "ayrat555/company-elixir")
  (beancount :host github :repo "beancount/beancount-mode" :branch "main")
  (explain-pause-mode :host github

@@ -17,7 +17,6 @@
 (blink-cursor-mode 0)
 
 (use-package autorevert
-  :straight (:type built-in)
   :custom
   (global-auto-revert-mode t))
 
@@ -78,7 +77,6 @@
   )
 
 (use-package view
-  :straight (:type built-in)
   :general
   (:keymaps 'View-mode-map
             [remap scroll-up-command] #'View-scroll-half-page-forward
@@ -96,7 +94,6 @@
   (setq shell-file-name (executable-find "bash"))))
 
 (use-package compile
-  :straight (:type built-in)
   :config
   (setq-default compilation-error-regexp-alist
                 (list
