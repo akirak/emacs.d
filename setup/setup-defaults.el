@@ -162,7 +162,7 @@
                            ":" (* space))
                        1 2 3 '(4 . 4)))))
 
-(setq-default bookmark-default-file "~/local/emacs/bookmarks.el")
+;; (setq-default bookmark-default-file "~/local/emacs/bookmarks.el")
 
 (provide 'setup-defaults)
 ;;; setup-defaults.el ends here
