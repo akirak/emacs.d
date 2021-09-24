@@ -114,7 +114,7 @@
 
 (cl-defun akirak/set-font-family-if-existing (family &rest faces)
   (declare (indent 1))
-  (if (member family (or akirak/font-family-list (font-family-list)))
+  (if (and family (member family (or akirak/font-family-list (font-family-list))))
       (dolist (face faces)
         (set-face-attribute face nil :family family))
     (message "Font family %s does not exist, so the following faces won't have expected settings: %s"
@@ -123,7 +123,8 @@
 
 (cl-defun akirak/set-fontset-font (fontset family)
   (declare (indent 1))
-  (if (member family (or akirak/font-family-list (font-family-list)))
+  (if (and family
+           (member family (or akirak/font-family-list (font-family-list))))
       (set-fontset-font "fontset-default" fontset family)
     (message "Font family %s does not exist, so %s fontset won't get a proper font setting."
              family fontset)))
@@ -133,9 +134,11 @@
 
 (defun akirak/set-local-text-fonts ()
   (cond
-   ((derived-mode-p 'Info-mode 'eww-mode 'help-mode 'helpful-mode)
+   ((and akirak/paragraph-font
+         (derived-mode-p 'Info-mode 'eww-mode 'help-mode 'helpful-mode))
     (face-remap-add-relative 'default `(:family ,akirak/paragraph-font)))
-   ((derived-mode-p 'org-mode 'markdown-mode)
+   ((and akirak/maybe-duospace-font
+         (derived-mode-p 'org-mode 'markdown-mode))
     (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font))))
   ;; Set line-spacing depending on the mode
   (-some->> (or (and (derived-mode-p 'org-mode) 0.5)
@@ -148,8 +151,7 @@
 
 ;; Set the default font
 (defcustom akirak/default-font-family
-  ;; Available from my agave package
-  "Agave"
+  "Cascadia Code"
   "Font family used as the default font."
   :type 'string
   :set (lambda (sym default)
@@ -173,34 +175,33 @@
                     ref-faces)))))
 
 ;; Set the other font families
-(let (;; Monospace or duospace of any type
-      ;; used for writing
-      (monospace-or-duospace
-       ;; Nerd font variant of Go Mono
-       "GoMono Nerd Font Mono")
-      ;; Variable-pitch handwriting font.
-      ;; Used for tags in org-mode
-      (handwriting
-       ;; Brushy italic script font.
-       ;; https://fonts.google.com/specimen/Courgette
-       ;; Deployed as part of Google Fonts
-       "Courgette")
-      ;; Used for headings in org-mode, Info-mode, etc.
-      (heading
-       ;; Humanist sans serif typeface
-       ;; https://fonts.google.com/specimen/Belleza
-       ;; Deployed as part of Google Fonts
-       "Belleza")
-      ;; A fixed pitch font for text body.
-      (info-paragraph
-       "Hack NF")
-      ;; A fixed/variable pitch font for text body.
-      (paragraph
-       "Hack NF")
-      (symbol
-       "Noto Color Emoji")
-      (kana "HannariMincho")
-      (han "Adobe Fangsong Std"))
+(let* (;; Monospace or duospace of any type
+       ;; used for writing
+       (monospace-or-duospace
+        nil)
+       ;; Variable-pitch handwriting font.
+       ;; Used for tags in org-mode
+       (handwriting
+        ;; Brushy italic script font.
+        ;; https://fonts.google.com/specimen/Courgette
+        ;; Deployed as part of Google Fonts
+        nil)
+       ;; Used for headings in org-mode, Info-mode, etc.
+       (heading
+        ;; Humanist sans serif typeface
+        ;; https://fonts.google.com/specimen/Belleza
+        ;; Deployed as part of Google Fonts
+        nil)
+       ;; A fixed pitch font for text body.
+       (info-paragraph
+        nil)
+       ;; A fixed/variable pitch font for text body.
+       (paragraph
+        nil)
+       (symbol
+        nil)
+       (kana "Shippori Mincho")
+       (han kana))
   (setq akirak/font-family-list (font-family-list))
   (unwind-protect
       (progn
@@ -271,6 +272,7 @@
 
 ;; Use Hasklig in haskell-mode and enable ligatures.
 (use-package hasklig-mode
+  :disabled t
   :straight (:host github :repo "minad/hasklig-mode")
   :config
   (defun akirak/use-hasklig-font-locally ()
