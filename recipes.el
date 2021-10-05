@@ -3,6 +3,7 @@
  (view :type built-in)
  (compile :type built-in)
  (company-elixir :host github :repo "ayrat555/company-elixir")
+ (conventional-commit :host github :repo "akirak/conventional-commit.el")
  (beancount :host github :repo "beancount/beancount-mode" :branch "main")
  (explain-pause-mode :host github
                      :repo "lastquestion/explain-pause-mode")

@@ -78,6 +78,10 @@
   (company-dabbrev-code-other-buffers 'all)
   (company-tooltip-align-annotations nil))
 
+(use-package conventional-commit
+  :hook
+  (git-commit-mode . conventional-commit-setup))
+
 (use-package company-posframe
   :if (posframe-workable-p)
   :custom
