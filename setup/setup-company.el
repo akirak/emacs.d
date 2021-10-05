@@ -33,21 +33,9 @@
               company-keywords)
              company-files
              company-dabbrev))
-          ((and (fboundp 'text-mode)
-                (derived-mode-p 'text-mode))
-           '((company-capf
-              company-dabbrev)
-             (company-keywords)
-             ;; company-emoji is unavailable now
-             ;; (company-keywords
-             ;;  company-emoji)
-             company-files))
-          ((derived-mode-p 'git-commit-mode)
-           '((company-dabbrev company-yankpad company-yasnippet)
-             (company-dabbrev-code company-gtags company-etags)))
           (t
-           '((company-capf
-              company-keywords)
+           '(company-capf
+             company-keywords
              company-dabbrev
              company-files)))))
   (cl-delete 'company-echo-metadata-frontend
