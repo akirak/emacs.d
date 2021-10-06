@@ -61,7 +61,11 @@
                 (org-multi-wiki-recentf-file-p filename)))))
 (add-hook 'ibuffer-never-show-predicates
           (defun akirak/org-journal-buffer-p (buffer)
-            (eq (buffer-local-value 'major-mode buffer)
-                'org-journal-mode)))
+            (or (eq (buffer-local-value 'major-mode buffer)
+                    'org-journal-mode)
+                (and (eq (buffer-local-value 'major-mode buffer)
+                         'org-mode)
+                     (equal (buffer-local-value 'default-directory buffer)
+                            org-journal-dir)))))
 
 (provide 'setup-ibuffer)
