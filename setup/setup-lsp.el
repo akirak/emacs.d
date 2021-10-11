@@ -144,6 +144,12 @@
   :straight lsp-mode
   :after (:and lsp-mode typescript-mode))
 
+(use-package lsp-elixir
+  :straight lsp-mode
+  :after (lsp-mode elixir-mode)
+  :config
+  (add-to-list 'lsp-elixir-server-command "elixir-ls"))
+
 (use-package lsp-eslint
   ;; You will need an executable of eslint to use this server, since
   ;; the server installation functionality of lsp-mode doesn't install
