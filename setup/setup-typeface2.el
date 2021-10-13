@@ -41,14 +41,14 @@
 (set-face-attribute 'org-document-title nil :height 1.6
                     :weight 'normal
                     :inherit 'default)
-(set-face-attribute 'org-level-1 nil :height 1.75 :inherit 'default)
-(set-face-attribute 'org-level-2 nil :height 1.6 :inherit 'default)
-(set-face-attribute 'org-level-3 nil :height 1.5 :inherit 'default)
-(set-face-attribute 'org-level-4 nil :height 1.35 :inherit 'default)
-(set-face-attribute 'org-level-5 nil :height 1.25 :inherit 'default)
-(set-face-attribute 'org-level-6 nil :height 1.2 :inherit 'default)
-(set-face-attribute 'org-level-7 nil :height 1.15 :inherit 'default)
-(set-face-attribute 'org-level-8 nil :height 1.1 :inherit 'default)
+(set-face-attribute 'org-level-1 nil :height 1.68 :inherit 'default)
+(set-face-attribute 'org-level-2 nil :height 1.57 :inherit 'default)
+(set-face-attribute 'org-level-3 nil :height 1.47 :inherit 'default)
+(set-face-attribute 'org-level-4 nil :height 1.38 :inherit 'default)
+(set-face-attribute 'org-level-5 nil :height 1.30 :inherit 'default)
+(set-face-attribute 'org-level-6 nil :height 1.21 :inherit 'default)
+(set-face-attribute 'org-level-7 nil :height 1.14 :inherit 'default)
+(set-face-attribute 'org-level-8 nil :height 1.07 :inherit 'default)
 
 ;; Other headings (for reading)
 (with-eval-after-load 'helpful
