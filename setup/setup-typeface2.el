@@ -191,7 +191,7 @@
         ;; Humanist sans serif typeface
         ;; https://fonts.google.com/specimen/Belleza
         ;; Deployed as part of Google Fonts
-        nil)
+        "Libre Baskerville")
        ;; A fixed pitch font for text body.
        (info-paragraph
         nil)
