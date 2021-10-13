@@ -148,8 +148,9 @@
                      (not akirak/to-be-run-as-exwm))
                 "garcon-url-handler")
                (t
-                (or (executable-find "brave")
-                    (executable-find "chromium")))))
+                ;; (or (executable-find "brave")
+                ;;     (executable-find "chromium"))
+                "xdg-open")))
 
 (setq-default browse-url-browser-function 'akirak/browse-url)
 
