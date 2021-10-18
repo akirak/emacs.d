@@ -27,6 +27,18 @@
   (:keymaps 'org-mode-map
             "M-m" #'er/expand-region))
 
+(use-package akirak-elec-pair
+  :straight (:host github :repo "akirak/trivial-elisps"
+                   :files ("akirak-elec-pair.el"))
+  :init
+  (general-unbind :keymaps 'lispy-mode-map :package 'lispy
+    "M-i")
+  (general-unbind "M-i")
+  :general
+  (:prefix "M-i"
+           "c" #'akirak-elec-pair-replace
+           "d" #'akirak-elec-pair-delete))
+
 ;; embrace.el is based on expand-region
 (use-package embrace
   ;; embrace depends on expand-region, so I have to stop using it
