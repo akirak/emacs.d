@@ -1,4 +1,11 @@
+(use-package puni
+  :general
+  ("M-m" (general-predicate-dispatch #'puni-mark-sexp-at-point
+           (region-active-p)
+           #'puni-expand-region)))
+
 (use-package expand-region
+  :disabled t
   :general
   ;; This mark behaviour is similar to that of easy-mark command from
   ;; easy-kill package.
@@ -13,6 +20,7 @@
            #'er/mark-symbol-with-prefix)))
 
 (use-package the-org-mode-expansions
+  :disabled t
   :straight expand-region
   :after org
   :general
@@ -21,6 +29,8 @@
 
 ;; embrace.el is based on expand-region
 (use-package embrace
+  ;; embrace depends on expand-region, so I have to stop using it
+  :disabled t
   :init
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy
     "M-i")
