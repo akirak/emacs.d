@@ -23,18 +23,10 @@
   (add-to-list 'magic-mode-alist
                (cons (rx bol "#!/usr/bin/env nix-shell") 'nix-shebang-mode)))
 
-(use-package helm-nixos-options
-  :after (nixos-options)
-  :straight (:host github :repo "travisbhartwell/nix-emacs"))
-
 (use-package nix-update
   :commands (nix-update-fetch))
 
 (use-package nix-sandbox)
-
-(use-package nix-env-install)
-
-(use-package nix-boilerplate)
 
 (cl-defun akirak/nix-prefetch-url (url &key unpack)
   (interactive (list (string-trim (read-string "Url: "))
