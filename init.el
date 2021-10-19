@@ -327,6 +327,8 @@
             (defun akirak/project-syncthing-root (dir)
               (-some->> (locate-dominating-file dir ".stfolder")
                 (cons 'syncthing)))))
+(use-package recompile-bookmark
+  :straight (:host github :repo "akirak/recompile-bookmark.el"))
 (use-package su
   :disabled t)
 (use-package valign
@@ -795,6 +797,8 @@ outcommented org-mode headers)."
          (user-error "No compilation buffer")))
       ('(4)
        (akirak/project-find-package-file))
+      ('-
+       (recompile-bookmark-store))
       (_
        (akirak/project-call-build-command))))
   "C-x C"
