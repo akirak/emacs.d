@@ -935,7 +935,7 @@ outcommented org-mode headers)."
   "ne" (akirak/run-shell-command-silently-at-vc-root
         akirak/project-nix-shell-exit "nix-shell --run exit")
   "nf" (akirak/make-vc-root-file-command "flake.nix")
-  "nr" (akirak/run-at-vc-root akirak/nix-run)
+  "f" (akirak/run-at-vc-root nix-flake-dispatch)
   "ns" (akirak/make-vc-root-file-command "shell.nix")
   "r" (akirak/make-vc-root-file-command "^README\\..+\\'" :regexp t :name "readme")
 

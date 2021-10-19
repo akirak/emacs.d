@@ -7,6 +7,8 @@
  (beancount :host github :repo "beancount/beancount-mode" :branch "main")
  (explain-pause-mode :host github
                      :repo "lastquestion/explain-pause-mode")
+ (nix-mode :host github :repo "akirak/nix-mode"
+           :branch "flake-transient")
  (nix-boilerplate :host github :repo "akirak/nix-boilerplate")
  (helm-org-recent-headings :host github :repo "alphapapa/org-recent-headings"
                            :files ("helm-org-recent-headings.el"))
