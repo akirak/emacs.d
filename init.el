@@ -319,14 +319,14 @@
   :commands (podman-pod-list))
 (use-package project
   :config
+  ;; (add-hook 'project-find-functions
+  ;;           (defun akirak/project-syncthing-root (dir)
+  ;;             (-some->> (locate-dominating-file dir ".stfolder")
+  ;;               (cons 'syncthing))))
   (add-hook 'project-find-functions
             (defun akirak/project-tramp-root (dir)
               (-some->> (file-remote-p dir)
-                (cons 'remote))))
-  (add-hook 'project-find-functions
-            (defun akirak/project-syncthing-root (dir)
-              (-some->> (locate-dominating-file dir ".stfolder")
-                (cons 'syncthing)))))
+                (cons 'remote)))))
 (use-package recompile-bookmark
   :straight (:host github :repo "akirak/recompile-bookmark.el"))
 (use-package su
