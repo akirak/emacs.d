@@ -102,15 +102,16 @@
 ;; Build file
 (defun akirak/project-find-build-root (dir)
   (cl-some (lambda (filename)
-             (when-let (root (locate-dominating-file
-                              dir
-                              (if (string-match-p (rx (any "*?")) filename)
-                                  (lambda (parent)
-                                    (directory-files parent
-                                                     nil
-                                                     (concat "\\<" (wildcard-to-regexp filename))
-                                                     t))
-                                filename)))
+             (when-let (root (ignore-errors
+                               (locate-dominating-file
+                                dir
+                                (if (string-match-p (rx (any "*?")) filename)
+                                    (lambda (parent)
+                                      (directory-files parent
+                                                       nil
+                                                       (concat "\\<" (wildcard-to-regexp filename))
+                                                       t))
+                                  filename))))
                (list 'builder filename root)))
            (mapcar #'car akirak/project-builder-alist)))
 
