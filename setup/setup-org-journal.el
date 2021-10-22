@@ -278,6 +278,13 @@ This can be used for an org-capture template to create an entry in the journal."
             (defun akirak/org-journal-entry-init ()
               (setq-local org-multi-wiki-want-custom-id nil)))
 
+  :general
+
+  (:keymaps 'org-journal-mode-map
+            ;; Use the same values as in org-mode-map
+            "C-c C-f" #'org-forward-heading-same-level
+            "C-c C-b" #'org-backward-heading-same-level)
+
   :custom
   (org-journal-find-file #'find-file)
   (org-journal-date-format "%F (%a)")
