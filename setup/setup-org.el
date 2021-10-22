@@ -699,14 +699,13 @@ With ARG, pick a text from the kill ring instead of the last one."
   (let ((dest-logbook (with-current-buffer (marker-buffer dest)
                         (org-with-wide-buffer
                          (goto-char dest)
-                         (akirak/org-find-or-create-logbook)
-                         (point-marker)))))
+                         (akirak/org-find-or-create-logbook)))))
     (let (entries)
       (save-excursion
         (save-restriction
           (widen)
           (org-back-to-heading)
-          (org-narrow-to-subtree)
+          (narrow-to-region (point) (org-entry-end-position))
           (while (re-search-forward (rx-to-string `(and bol (* (any " \\t"))
                                                         ,org-clock-string
                                                         (+ (any " \\t"))))
@@ -725,7 +724,8 @@ With ARG, pick a text from the kill ring instead of the last one."
         (org-with-wide-buffer
          (goto-char dest-logbook)
          (while entries
-           (insert (pop entries)))))
+           (insert (pop entries)))
+         (org-hide-drawer-all)))
       (org-back-to-heading))))
 
 (defun akirak/avy-org-transfer-clock-entries ()
