@@ -314,6 +314,9 @@
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package plantuml-mode
+  :custom
+  (plantuml-default-exec-mode 'executable))
 (use-package podman
   :straight (:host github :repo "akirak/podman.el")
   :commands (podman-pod-list))

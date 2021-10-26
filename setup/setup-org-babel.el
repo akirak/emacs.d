@@ -11,6 +11,7 @@
                   (erd . t)
                   (shell . t)
                   (emacs-lisp . t)
+                  (plantuml . t)
                   (sql . t)
                   (sqlite . t)
                   (restclient . t)
@@ -36,6 +37,11 @@
 (use-package ob-erd
   :straight (:host github :repo "akirak/ob-erd")
   :after ob)
+
+(use-package ob-plantuml
+  :straight (:type built-in)
+  :custom
+  (org-plantuml-exec-mode 'plantuml))
 
 ;;;; Everyday scripting
 
