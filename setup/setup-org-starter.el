@@ -206,7 +206,8 @@
   (setq helm-org-ql-actions
         '(("Show" . akirak/helm-org-ql-show-marker)
           ("Show indirect buffer" . akirak/helm-org-ql-show-marker-indirect)
-          ("Store link" . akirak/org-store-link-to-marker)))
+          ("Store link" . akirak/org-store-link-to-marker)
+          ("Clock in" . akirak/org-clock-in)))
 
   (general-def :keymaps 'helm-org-ql-map :package 'helm-org-ql
     "C-x n"
