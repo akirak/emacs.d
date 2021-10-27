@@ -31,9 +31,6 @@
 
 ;;;; Diagramming
 
-(use-package ob-mermaid
-  :after ob)
-
 (use-package ob-erd
   :straight (:host github :repo "akirak/ob-erd")
   :after ob)
