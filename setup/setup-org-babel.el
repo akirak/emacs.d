@@ -43,6 +43,8 @@
   :custom
   (org-plantuml-exec-mode 'plantuml))
 
+(use-package ob-dataflow)
+
 ;;;; Everyday scripting
 
 (use-package ob-shell

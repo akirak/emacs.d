@@ -216,6 +216,7 @@
 ;;; Packages
 
 (use-package dash-docs)
+(use-package dataflow-diagram)
 (use-package emacs-everywhere
   ;; Use my fork until the path issue is fixed
   :straight (:host github :repo "akirak/emacs-everywhere" :branch "with-editor-1")

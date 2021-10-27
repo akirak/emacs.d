@@ -5,6 +5,7 @@
  (company-elixir :host github :repo "ayrat555/company-elixir")
  (conventional-commit :host github :repo "akirak/conventional-commit.el")
  (beancount :host github :repo "beancount/beancount-mode" :branch "main")
+ (dataflow-diagram :host github :repo "akirak/dataflow-diagram-mode")
  (explain-pause-mode :host github
                      :repo "lastquestion/explain-pause-mode")
  (nix-mode :host github :repo "akirak/nix-mode"
@@ -14,6 +15,7 @@
                            :files ("helm-org-recent-headings.el"))
  (helm-tail :host github :repo "akirak/helm-tail"
             :branch "feature/source-alist")
+ (ob-dataflow :host github :repo "akirak/ob-dataflow")
  (org-web-tools :host github :repo "akirak/org-web-tools"
                 :branch "encoding")
  (org-multi-wiki :host github :repo "akirak/org-multi-wiki" :branch "devel")
