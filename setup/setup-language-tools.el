@@ -1,5 +1,24 @@
 ;;;; Language-agnostic tools
 
+(use-package fanyi
+  :custom
+  (fanyi-providers '(fanyi-longman-provider
+                     fanyi-etymon-provider)))
+
+(defun akirak/lookup-dictionary (word)
+  "Look up a word at point, the region, or any input."
+  (interactive (list (let* ((default (if (use-region-p)
+                                         (buffer-substring-no-properties
+                                          (region-beginning)
+                                          (region-end))
+                                       (thing-at-point 'word t))))
+                       (if (or (consp current-prefix-arg)
+                               (null default)
+                               (string-empty-p default))
+                           (read-string "Look up word: " default)
+                         default))))
+  (fanyi-dwim word))
+
 (use-package google-translate
   :commands (google-translate-at-point
              google-translate-query-translate)

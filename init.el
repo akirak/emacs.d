@@ -1018,7 +1018,8 @@ Saves to a temp file and puts the filename in the kill ring."
 ;;;;; Misc query commands
 (akirak/bind-admin
   "q" '(nil :wk "query")
-  "qc" #'calc)
+  "qc" #'calc
+  "qw" #'akirak/lookup-dictionary)
 
 ;;;;; Remote connections (TRAMP)
 (akirak/bind-admin
