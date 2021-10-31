@@ -5,6 +5,10 @@
   (fanyi-providers '(fanyi-longman-provider
                      fanyi-etymon-provider)))
 
+(use-package ol-fanyi
+  :straight fanyi
+  :after ol)
+
 (defun akirak/lookup-dictionary (word)
   "Look up a word at point, the region, or any input."
   (interactive (list (let* ((default (if (use-region-p)
