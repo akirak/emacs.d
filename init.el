@@ -896,7 +896,7 @@ outcommented org-mode headers)."
                            (when (file-exists-p ,filename)
                              (list ,filename)))
                     (`(,file) file)
-                    ('() (if (and (not regexp)
+                    ('() (if (and (not ,regexp)
                                   (yes-or-no-p (format "%s does not exist. Create it?" ,filename)))
                              filename
                            (user-error "Aborted")))
