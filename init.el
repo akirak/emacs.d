@@ -335,6 +335,8 @@
   :straight (:host github :repo "akirak/recompile-bookmark.el"))
 (use-package su
   :disabled t)
+(use-package taxy
+  :straight (:host github :repo "alphapapa/taxy.el"))
 (use-package valign
   :disabled t
   :hook
