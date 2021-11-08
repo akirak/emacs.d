@@ -38,7 +38,8 @@
     setup-window-management
     setup-flycheck
     setup-navigation-bindings
-    setup-git-clone
+    ;; Use akirak-git-clone instead
+    ;; setup-git-clone
     setup-clipurl
     ;; setup-org-offtime
     setup-multiple-cursors

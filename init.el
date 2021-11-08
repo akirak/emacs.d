@@ -215,6 +215,10 @@
 
 ;;; Packages
 
+(use-package akirak-git-clone
+  :straight (:host github :repo "akirak/trivial-elisps"
+                   :files ("akirak-git-clone.el"))
+  :commands (akirak-git-clone))
 (use-package dash-docs)
 (use-package dataflow-diagram)
 (use-package emacs-everywhere
