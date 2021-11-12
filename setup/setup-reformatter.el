@@ -11,10 +11,6 @@
     :stdout nil
     :args (list (buffer-file-name)))
 
-  (reformatter-define nixfmt
-    :program "nixfmt"
-    :mode t)
-
   (reformatter-define prettier
     :program "prettier"
     :args (list "--stdin-filepath" (buffer-file-name)))
