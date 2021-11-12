@@ -19,6 +19,10 @@
     :program "prettier"
     :args (list "--stdin-filepath" (buffer-file-name)))
 
+  (reformatter-define deno-fmt
+    :program "deno"
+    :args '("fmt" "-"))
+
   (reformatter-define mix-format
     :program "mix"
     :mode t
