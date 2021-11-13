@@ -1423,7 +1423,6 @@ Restclient is useful for development in teams where it is used.
    (akirak/bind-jump "M-j" #'counsel-org-clock-goto)
    (akirak/bind-search "M-c" #'counsel-org-clock-context)
    (akirak/bind-user
-     "c" #'org-capture
      "l" 'org-store-link)
  #+end_src
 *** Recurring tasks

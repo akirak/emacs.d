@@ -219,10 +219,12 @@
 
 ;;; Packages
 
-(use-package akirak-git-clone
-  :straight (:host github :repo "akirak/trivial-elisps"
-                   :files ("akirak-git-clone.el"))
-  :commands (akirak-git-clone))
+(use-package akirak
+  :straight (:host github :repo "akirak/trivial-elisps")
+  :commands (akirak-git-clone
+             akirak-capture)
+  :general
+  ("C-c c" #'akirak-capture))
 (use-package dash-docs)
 (use-package dataflow-diagram)
 (use-package emacs-everywhere
@@ -241,7 +243,6 @@
 (use-package discover-my-major
   :commands (discover-my-major))
 (use-package docopt
-  :disabled t
   :functions (docopt))
 (use-package electric
   :straight (:type built-in)
