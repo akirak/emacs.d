@@ -198,6 +198,10 @@
    [remap text-scale-increase] (defrepeater #'text-scale-increase)
    [remap text-scale-decrease] (defrepeater #'text-scale-decrease)))
 
+(use-package embark
+  :general
+  ("C-." #'embark-act))
+
 ;;;; Default settings
 (require 'setup-defaults)
 
