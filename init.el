@@ -222,6 +222,7 @@
 (use-package akirak
   :straight (:host github :repo "akirak/trivial-elisps")
   :commands (akirak-git-clone
+             akirak-org-journal-overview
              akirak-capture)
   :general
   ("C-c c" #'akirak-capture))

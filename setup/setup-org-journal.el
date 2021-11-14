@@ -6,6 +6,9 @@
 (use-package org-journal
   :after org-starter
   :config
+  ;; Set up advices
+  (akirak-org-journal-setup)
+
   (defun org-journal-find-location (&optional time)
     "Go to the beginning of the today's journal file.
 
