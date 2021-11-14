@@ -1,4 +1,8 @@
 * Emacs Configuration
+*This configuration is slow, complex and buggy, so it is unsuitable for use by people other than myself.*
+It is still my daily driver, but I plan on switching to a new config.
+I am currently developing a reusable library in [[https://github.com/akirak/trivial-elisps][akirak/trivial-elisps]], I recommend you have a look at it if you are interested in it.
+
 This is my Emacs configuration.
 
 ** Table of contents
