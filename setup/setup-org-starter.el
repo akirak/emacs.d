@@ -287,9 +287,12 @@
   (setq org-multi-wiki-extra-files (list 'org-agenda-files
                                          (defun akirak/org-journal-dir-files ()
                                            (-sort #'string>
-                                                  (directory-files org-journal-dir t
-                                                                   org-agenda-file-regexp
-                                                                   'nosort)))))
+                                                  (directory-files
+                                                   (file-truename org-journal-dir)
+                                                   t
+                                                   org-agenda-file-regexp
+                                                   'nosort)))))
+
   :custom
   (org-multi-wiki-recentf-exclude t)
   (org-multi-wiki-want-custom-id t)
