@@ -1,3 +1,5 @@
+(general-def "C-c c" #'org-capture)
+
 (require 'org-habit)
 (add-hook 'org-modules 'org-protocol)
 

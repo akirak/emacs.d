@@ -338,6 +338,8 @@
          s
          :super-groups '((:auto-category)))))))
 
+(use-package doct)
+
 (use-package org-starter
   :straight (:host github :repo "akirak/org-starter"
                    :branch "devel"
