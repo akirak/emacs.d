@@ -34,6 +34,9 @@ This can be used for an org-capture template to create an entry in the journal."
                '("j" akirak/helm-org-ql-journal "org-journal"))
   (general-unbind "C-c C-j")
 
+  (akirak/bind-search
+    "M-j" #'org-journal-search)
+
   (akirak/bind-jump
     "M-d" #'org-journal-new-date-entry)
 
