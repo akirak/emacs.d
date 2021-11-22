@@ -65,14 +65,6 @@ This can be used for an org-capture template to create an entry in the journal."
   ;; I'll use daily journal for personal use, and weekly for
   ;; workplace.
 
-  (defun akirak/org-journal-todo-match-expr (todos)
-    "Used to set `org-journal-carryover-items' variable."
-    (concat "TODO="
-            (cl-etypecase todos
-              (string (format "\"%s\"" todos))
-              (list (format "\{%s\}"
-                            (string-join todos "\\|"))))))
-
   (cl-defun akirak/setup-org-journal (journal-dir daily-or-weekly
                                                   &key
                                                   carry-over)
@@ -85,7 +77,7 @@ This can be used for an org-capture template to create an entry in the journal."
                       (format-time-string "#+TITLE: Week %-W, %Y" time))))
       (daily (setq org-journal-file-type 'daily)))
     (setq org-journal-dir journal-dir
-          org-journal-carryover-items (akirak/org-journal-todo-match-expr carry-over)
+          org-journal-carryover-items carry-over
           org-journal-enable-agenda-integration t)
     ;; Update the current file for org-agenda.
     (akirak/org-journal-current-file)
