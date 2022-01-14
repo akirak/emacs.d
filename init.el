@@ -345,6 +345,8 @@
   :disabled t)
 (use-package taxy
   :straight (:host github :repo "alphapapa/taxy.el"))
+(use-package twist
+  :straight (:host github :repo "akirak/twist.el"))
 (use-package valign
   :disabled t
   :hook
