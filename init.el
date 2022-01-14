@@ -340,6 +340,7 @@
                 (cons 'remote)))))
 (use-package recompile-bookmark
   :straight (:host github :repo "akirak/recompile-bookmark.el"))
+(use-package setup)
 (use-package su
   :disabled t)
 (use-package taxy
