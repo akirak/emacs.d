@@ -314,15 +314,14 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 :CREATED_TIME: [2019-09-24 Tue 00:49]
 :END:
 #+begin_src emacs-lisp
-(use-package page-break-lines
-  :hook ((doc-mode
-          emacs-lisp-mode
-          compilation-mode
-          outline-mode
-          prog-mode
-          haskell-mode
-          help-mode
-          magit-mode) . page-break-lines-mode))
+  (use-package page-break-lines
+    :hook ((doc-mode
+            compilation-mode
+            outline-mode
+            prog-mode
+            haskell-mode
+            help-mode
+            magit-mode) . page-break-lines-mode))
 #+end_src
 **** Color support in terminal and compilation buffers
 #+begin_src emacs-lisp
