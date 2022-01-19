@@ -53,6 +53,6 @@
 
 (defconst akirak/helm-project-parent-directory-source
   (helm-make-source "Project parent directories" 'akirak/helm-source-directory
-    :candidates #'akirak/project-parent-directories))
+    :candidates #'akirak-project-group-list))
 
 (provide 'my/helm/source/dir)
