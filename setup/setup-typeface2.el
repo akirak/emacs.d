@@ -38,17 +38,18 @@
   (set-face-attribute 'info-title-4 nil :slant 'italic))
 
 ;;;;; Headings
-(set-face-attribute 'org-document-title nil :height 1.6
+
+(set-face-attribute 'org-document-title nil :height 1.7
                     :weight 'normal
                     :inherit 'default)
-(set-face-attribute 'org-level-1 nil :height 1.68 :inherit 'default)
-(set-face-attribute 'org-level-2 nil :height 1.57 :inherit 'default)
-(set-face-attribute 'org-level-3 nil :height 1.47 :inherit 'default)
-(set-face-attribute 'org-level-4 nil :height 1.38 :inherit 'default)
-(set-face-attribute 'org-level-5 nil :height 1.30 :inherit 'default)
-(set-face-attribute 'org-level-6 nil :height 1.21 :inherit 'default)
-(set-face-attribute 'org-level-7 nil :height 1.14 :inherit 'default)
-(set-face-attribute 'org-level-8 nil :height 1.07 :inherit 'default)
+(set-face-attribute 'org-level-1 nil :height 1.54 :inherit 'default)
+(set-face-attribute 'org-level-2 nil :height 1.41 :inherit 'default)
+(set-face-attribute 'org-level-3 nil :height 1.30 :inherit 'default)
+(set-face-attribute 'org-level-4 nil :height 1.19 :inherit 'default)
+(set-face-attribute 'org-level-5 nil :height 1.10 :inherit 'default)
+(set-face-attribute 'org-level-6 nil :height 1.07 :inherit 'default)
+(set-face-attribute 'org-level-7 nil :height 1.03 :inherit 'default)
+(set-face-attribute 'org-level-8 nil :height 1.00 :inherit 'default)
 
 ;; Other headings (for reading)
 (with-eval-after-load 'helpful
