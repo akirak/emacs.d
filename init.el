@@ -216,7 +216,10 @@
 (use-package akirak
   :straight (:host github :repo "akirak/trivial-elisps")
   :commands (akirak-git-clone
-             akirak-org-journal-overview))
+             akirak-org-journal-overview)
+  :config
+  ;; Update `directory-abbrev-alist'.
+  (run-with-timer 1 nil #'akirak-files-ensure-abbrev-list))
 (use-package dash-docs)
 (use-package dataflow-diagram)
 (use-package emacs-everywhere
