@@ -334,11 +334,41 @@
                 (cons 'remote)))))
 (use-package recompile-bookmark
   :straight (:host github :repo "akirak/recompile-bookmark.el"))
-(use-package setup)
+(use-package setup
+  :config
+  ;; Exactly the same definition as a snippet available at
+  ;; https://www.emacswiki.org/emacs/SetupEl#h5o-4 but renamed
+  (defmacro define-setup-macro (name signature &rest body)
+    "Shorthand for `setup-define'.
+  NAME is the name of the local macro.  SIGNATURE is used as the
+  argument list for FN.  If BODY starts with a string, use this as
+  the value for :documentation.  Any following keywords are passed
+  as OPTS to `setup-define'."
+    (declare (debug defun))
+    (let (opts)
+      (when (stringp (car body))
+        (setq opts (nconc (list :documentation (pop body))
+                          opts)))
+      (while (keywordp (car body))
+        (let* ((prop (pop body))
+               (val `',(pop body)))
+          (setq opts (nconc (list prop val) opts))))
+      `(setup-define ,name
+         (cl-function (lambda ,signature ,@body))
+         ,@opts)))
+
+  ;; Indentation
+  (define-setup-macro :status (tag &rest progn)
+    "Conditionally expand the macro."
+    :indent 1
+    (when (or (eq t akirak/enabled-status-tags)
+              (memq tag akirak/enabled-status-tags))
+      (macroexp-progn progn))))
 (use-package su
   :disabled t)
 (use-package taxy
   :straight (:host github :repo "alphapapa/taxy.el"))
+(use-package taxy-magit-section)
 (use-package twist
   :straight (:host github :repo "akirak/twist.el"))
 (use-package valign
