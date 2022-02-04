@@ -232,6 +232,10 @@
             ;; and it's also bound to mode-aware repl commands, which
             ;; is irrelevant in text-mode.
             "<C-return>" #'emacs-everywhere-finish))
+(use-package github-linguist
+  :straight (:host github :repo "akirak/github-linguist.el")
+  :custom
+  (github-linguist-executable "github-linguist"))
 (use-package helm-dash
   :custom
   (dash-docs-browser-func #'akirak/browse-url))
