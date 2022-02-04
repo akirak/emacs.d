@@ -200,6 +200,7 @@
 
 ;;;; Org integration
 (use-package octopus
+  :disabled t
   :straight (octopus :host github :repo "akirak/octopus.el")
   :custom
   (octopus-session-value-source 'windows)
@@ -243,11 +244,13 @@
            :immediate-finish t))))
 
 (use-package helm-octopus
-  :straight octopus)
+	     :disabled t
+	     :straight octopus)
 
 (use-package octopus-hydra
-  :straight octopus
-  :commands (octopus-hydra))
+	     :disabled t
+	     :straight octopus
+	     :commands (octopus-hydra))
 
 (general-def
   "<S-f8>" #'octopus-switch-project
