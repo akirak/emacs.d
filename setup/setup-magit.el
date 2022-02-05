@@ -172,12 +172,7 @@ Only one letter is shown, the first that applies."
           ;; ("~/.emacs.d/straight/repos/" . 1)
           ;; domain/org - group - worktree
           ("~/work" . 3)
-          ,@(ignore-errors
-              (->> (f-directories "~/archives/")
-                   (--map (f-join it "git/"))
-                   (-filter #'f-directory-p)
-                   (-map #'f-short)
-                   (--map (cons it 3))))))
+          ("~/archives/oss/" . 3)))
 
   :custom
   (magit-repolist-columns
