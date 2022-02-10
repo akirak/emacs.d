@@ -605,37 +605,6 @@ connection identities of recent files."
                  (helm-org-multi-wiki-recent-entry-source)
                  (helm-org-multi-wiki-recent-file-source)
                  akirak/helm-source-bookmark-org))))
-  "C-x x"
-  (defun akirak/switch-to-x-buffer (&optional arg)
-    (interactive "P")
-    (cond
-     ((akirak/exwm-session-p)
-      (helm :prompt "Switch to EXWM buffer: "
-            :sources (akirak/helm-exwm-buffer-source)))
-     ((akirak/windows-subsystem-for-linux-p)
-      (user-error "Not supported on WSL"))
-     ((eq system-type 'gnu/linux)
-      ;; TODO: Implement it
-      (cl-assert (executable-find "wmctrl"))
-      (helm :prompt "X window: "
-            :sources
-            (helm-build-sync-source "X windows"
-              :candidates (-map (lambda (s)
-                                  (save-match-data
-                                    (when (string-match (rx bol (group (+ (not (any space))))
-                                                            (+ space)
-                                                            (group (+ (+ digit)))
-                                                            (+ space)
-                                                            (+ (not (any space)))
-                                                            (+ space)
-                                                            (group (+ anything)))
-                                                        s)
-                                      (cons (format "%s: %s" (match-string 2 s)
-                                                    (match-string 3 s))
-                                            (match-string 1 s)))))
-                                (process-lines "wmctrl" "-l"))
-              :action (lambda (wid)
-                        (call-process "wmctrl" nil nil nil "-i" "-a" wid)))))))
   "C-x '"
   (defun akirak/switch-to-reference-buffer-or-browser ()
     (interactive)
@@ -647,26 +616,7 @@ connection identities of recent files."
                            (list helm-source-bookmark-info
                                  helm-source-bookmark-man)
                            (list (helm-def-source--info-files))
-                           (akirak/helm-web-sources))))
-
-  "<f6> <f6>"
-  (defun akirak/switch-to-recent-file-buffer ()
-    (interactive)
-    (if-let (buf (->> (buffer-list)
-                      (-filter (lambda (buf)
-                                 (and (buffer-file-name buf)
-                                      (not (get-buffer-window buf)))))
-                      (-map (lambda (buf)
-                              (cons buf
-                                    (buffer-local-value 'buffer-display-time buf))))
-                      (-filter #'cdr)
-                      (-sort (-on (-compose #'not #'time-less-p) #'cdr))
-                      (car)
-                      (car)))
-        (if current-prefix-arg
-            (pop-to-buffer buf)
-          (switch-to-buffer buf))
-      (user-error "No recent buffer"))))
+                           (akirak/helm-web-sources)))))
 
 
 ;; In the list of project buffers, you can switch to a file list with
@@ -827,30 +777,7 @@ outcommented org-mode headers)."
       ('-
        (recompile-bookmark-store))
       (_
-       (akirak/project-call-build-command))))
-  "C-x C"
-  (defun akirak/helm-shell-command (&optional root)
-    (interactive)
-    (require 'my/helm/source/org)
-    (require 'my/helm/action/org-marker)
-    (let ((root (or root
-                    (akirak/project-root default-directory)
-                    default-directory)))
-      (setq akirak/programming-recipe-mode-name "sh"
-            akirak/helm-org-ql-buffers-files (org-multi-wiki-entry-files 'refs :as-buffers t))
-      (helm :prompt (format "Execute command (project root: %s): " root)
-            :sources
-            (list (helm-make-source "Command" 'akirak/helm-source-org-ql-src-block
-                    :action akirak/helm-org-marker-sh-block-action-list)
-                  (helm-build-dummy-source "Command"
-                    :action
-                    `(("compile"
-                       . (lambda (command)
-                           (akirak/compile command :directory ,root)))
-                      ("eshell"
-                       . (lambda (command)
-                           (let ((default-directory ,root))
-                             (eshell-command command)))))))))))
+       (akirak/project-call-build-command)))))
 
 ;;;; Maintenance and development of the config
 ;; These commands are used to maintain this Emacs configuration.
