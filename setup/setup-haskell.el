@@ -42,6 +42,7 @@
   "ij" #'haskell-navigate-imports)
 
 (use-package dante
+  :disabled t
   :commands dante-mode
   :config
   (defun akirak/setup-dante ()

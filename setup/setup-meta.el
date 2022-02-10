@@ -31,7 +31,7 @@
     setup-link-hint                     ; Jumping to a URL
     setup-ibuffer
     ;; setup-prescient
-    setup-lsp      ; Language-agnostic IDE toolkit
+    ;; setup-lsp      ; Language-agnostic IDE toolkit
     ;; setup-rich-minority                ; Whitelist minor modes
     setup-clipboard                     ; Clipboard integration
     setup-ivy-omni-org
