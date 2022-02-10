@@ -3,7 +3,9 @@
 
 (use-package ivy
   :config
-  (ivy-mode 1)                   ; Use ivy as completing-read-function
+  ;; Use ivy as completing-read-function
+  ;; (ivy-mode 1)
+
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
   (defvar ivy-switch-buffer-2-map

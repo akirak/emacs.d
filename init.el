@@ -196,6 +196,11 @@
   :general
   ("C-." #'embark-act))
 
+(use-package embark-consult
+  :after (:and embark consult)
+  :hook
+  (embark-collect-mode . consult-preview-at-point-mode))
+
 ;;;; Default settings
 (require 'setup-defaults)
 
@@ -220,6 +225,52 @@
   :config
   ;; Update `directory-abbrev-alist'.
   (run-with-timer 1 nil #'akirak-files-ensure-abbrev-list))
+(use-package consult
+  :general
+  ("C-x b" #'consult-buffer
+   [remap switch-to-buffer] #'consult-buffer
+   [remap bookmark-jump] #'consult-bookmark
+   [remap yank-pop] #'consult-yank-pop
+   "C-c k" #'consult-kmacro
+   [remap goto-line] #'consult-goto-line
+   "M-s m" #'consult-mark
+   "M-s M-m" #'consult-global-mark
+   "M-s o" #'consult-outline
+   [remap isearch-forward] #'consult-line
+   [remap isearch-backward] #'consult-isearch
+   "C-S-s" #'consult-line-multi
+   "C-c f" #'consult-focus-lines
+   "C-x /" #'consult-ripgrep
+   "M-s x" #'consult-complex-command
+   "M-s M-x" #'consult-mode-command
+
+   ;; consult-imenu
+   "M-s i" #'consult-imenu
+   "M-s M-i" #'consult-imenu-multi
+
+   ;; consult-compile
+   "M-s e" #'consult-compile-error
+
+   ;; consult-flymake: I'm not using flymake in this config
+   ;; "M-s f" #'consult-flymake
+   )
+
+  :hook
+  (consult-preview-at-point-mode . completion-list-mode)
+
+  :config
+  (advice-add #'completing-read-multiple :override #'consult-completing-read-multiple)
+
+  :custom
+  (consult-narrow-key "<")
+  (consult-project-root-function (defun akirak/consult-project-root ()
+                                   (when-let (project (project-current))
+                                     (project-root project)))))
+(use-package consult-xref
+  :straight consult
+  :custom
+  (xref-show-xrefs-function #'consult-xref)
+  (xref-show-definitions-function #'consult-xref))
 (use-package dash-docs)
 (use-package github-linguist
   :straight (:host github :repo "akirak/github-linguist.el")
@@ -312,6 +363,16 @@
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package marginalia
+  :config
+  (marginalia-mode t)
+  (add-to-list 'marginalia-annotator-registry
+               '(project-root
+                 akirak-project-root-annotator
+                 builtin none))
+  :general
+  (:keymaps 'minibuffer-local-map
+            "M-a" #'marginalia-cycle))
 (use-package nix26-flake
   :straight (:host github :repo "emacs-twist/nix26.el"))
 (use-package plantuml-mode
@@ -373,6 +434,11 @@
   :disabled t
   :hook
   (org-mode . valign-mode))
+(use-package vertico
+  :config
+  (vertico-mode t)
+  :custom
+  (vertico-resize t))
 (use-package whole-line-or-region)
 
 ;;;; Modules
@@ -526,23 +592,54 @@
 ;; Switching buffers is the most essential operation in Emacs.
 ;; Most of these commands are bound on C-x.
 ;;;;; Helm commands
+(ignore
+ "C-x b"
+ (defun akirak/switch-to-project-file-buffer (project)
+   (interactive (list (if current-prefix-arg
+                          'all
+                        (-some-> (project-current)
+                          (project-roots)
+                          (car-safe)))))
+   (cond
+    ((eq project 'all)
+     (helm-buffers-list))
+    (t
+     (let ((default-directory (or project default-directory)))
+       (helm :prompt (format "Project %s: " project)
+             :sources
+             `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
+               ,akirak/helm-source-recent-files))))))
+ "C-x d"
+ (defun akirak/switch-to-dired-buffer ()
+   "Switch to a directory buffer interactively.
+
+Without a prefix, it displays a list of dired buffers, a list of
+directories of live file buffers, and a list of directory
+bookmarks.
+
+With a single universal prefix, it displays a list of known Git
+repositories.
+
+With two universal prefixes, it displays a list of remote
+connection identities of recent files."
+   (interactive)
+   (pcase current-prefix-arg
+     ('(4)
+      (require 'my/helm/source/remote)
+      (helm :prompt "Remote: "
+            :sources
+            '(akirak/helm-source-remote-bookmark
+              akirak/helm-source-recent-remotes)))
+     ('()
+      (require 'my/helm/source/dir)
+      (helm :prompt "Directory/repository: "
+            :sources
+            (list (akirak/helm-dired-buffer-source)
+                  akirak/helm-directory-bookmark-source
+                  akirak/helm-open-file-buffer-directories-source
+                  akirak/helm-project-parent-directory-source)))
+     (_ (user-error "Not matching %s" current-prefix-arg)))))
 (general-def
-  "C-x b"
-  (defun akirak/switch-to-project-file-buffer (project)
-    (interactive (list (if current-prefix-arg
-                           'all
-                         (-some-> (project-current)
-                           (project-roots)
-                           (car-safe)))))
-    (cond
-     ((eq project 'all)
-      (helm-buffers-list))
-     (t
-      (let ((default-directory (or project default-directory)))
-        (helm :prompt (format "Project %s: " project)
-              :sources
-              `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-                ,akirak/helm-source-recent-files))))))
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (or (if (equal current-prefix-arg '(16))
@@ -559,36 +656,6 @@
             :sources
             (list akirak/helm-source-project-files
                   akirak/helm-source-dummy-find-file))))
-  "C-x d"
-  (defun akirak/switch-to-dired-buffer ()
-    "Switch to a directory buffer interactively.
-
-Without a prefix, it displays a list of dired buffers, a list of
-directories of live file buffers, and a list of directory
-bookmarks.
-
-With a single universal prefix, it displays a list of known Git
-repositories.
-
-With two universal prefixes, it displays a list of remote
-connection identities of recent files."
-    (interactive)
-    (pcase current-prefix-arg
-      ('(4)
-       (require 'my/helm/source/remote)
-       (helm :prompt "Remote: "
-             :sources
-             '(akirak/helm-source-remote-bookmark
-               akirak/helm-source-recent-remotes)))
-      ('()
-       (require 'my/helm/source/dir)
-       (helm :prompt "Directory/repository: "
-             :sources
-             (list (akirak/helm-dired-buffer-source)
-                   akirak/helm-directory-bookmark-source
-                   akirak/helm-open-file-buffer-directories-source
-                   akirak/helm-project-parent-directory-source)))
-      (_ (user-error "Not matching %s" current-prefix-arg))))
   "C-x g" #'akirak-project-switch
   "C-x j"
   (defun akirak/switch-to-org-buffer ()
