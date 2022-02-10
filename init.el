@@ -312,6 +312,8 @@
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
 (use-package license-templates)
+(use-package nix26-flake
+  :straight (:host github :repo "emacs-twist/nix26.el"))
 (use-package plantuml-mode
   :custom
   (plantuml-default-exec-mode 'executable))
