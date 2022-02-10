@@ -61,7 +61,6 @@
                          :props (:immediate-finish t))
                       "Capture immediately to clock")
                      ("d"
-                      org-download-image
                       "Insert as an image into Org"))))
 
 (provide 'setup-clipurl)

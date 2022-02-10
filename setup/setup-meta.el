@@ -26,7 +26,6 @@
     setup-ace-window                ; An alternative way for window manipulation
     ;; setup-outshine        ; Extra support for outline editing
     setup-org-refile                    ; Enhance org-refile
-    setup-org-download                  ; Screenshots
     setup-counsel-org-clock
     setup-link-hint                     ; Jumping to a URL
     setup-ibuffer

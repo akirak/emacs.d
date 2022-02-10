@@ -56,10 +56,6 @@
    "Set"
    (("sc" akirak/org-set-category "Category")
     ("st" org-edit-headline "Headline"))
-   "Media (org-download)"
-   (("is" org-download-screenshot "Ins screenshot")
-    ("yi" org-download-yank "Yank image")
-    ("ril" org-download-rename-last-file "Rename last"))
    "Relationship"
    (("e" org-linker-edna))))
 

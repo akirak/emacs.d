@@ -987,8 +987,7 @@ Saves to a temp file and puts the filename in the kill ring."
         (insert data))
       (kill-new filename)
       (message filename)))
-  "cE" #'akirak/gif-screencast
-  "cx" #'org-download-screenshot)
+  "cE" #'akirak/gif-screencast)
 
 ;;;;; Directory/disk
 (akirak/bind-admin
