@@ -221,17 +221,6 @@
   ;; Update `directory-abbrev-alist'.
   (run-with-timer 1 nil #'akirak-files-ensure-abbrev-list))
 (use-package dash-docs)
-(use-package dataflow-diagram)
-(use-package emacs-everywhere
-  ;; Use my fork until the path issue is fixed
-  :straight (:host github :repo "akirak/emacs-everywhere" :branch "with-editor-1")
-  :functions (emacs-everywhere)
-  :general
-  (:keymaps 'emacs-everywhere-mode-map
-            ;; Analogous to the post command in most web applications,
-            ;; and it's also bound to mode-aware repl commands, which
-            ;; is irrelevant in text-mode.
-            "<C-return>" #'emacs-everywhere-finish))
 (use-package github-linguist
   :straight (:host github :repo "akirak/github-linguist.el")
   :custom
