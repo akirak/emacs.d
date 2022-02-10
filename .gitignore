@@ -24,3 +24,6 @@ main.el
 result
 .pre-commit-config.yaml
 .lsp-eslint-choices
+
+/nix26
+/etc
