@@ -61,6 +61,7 @@
                          :props (:immediate-finish t))
                       "Capture immediately to clock")
                      ("d"
+                      akirak-image-insert-link
                       "Insert as an image into Org"))))
 
 (provide 'setup-clipurl)
