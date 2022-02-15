@@ -592,26 +592,26 @@
 ;; Switching buffers is the most essential operation in Emacs.
 ;; Most of these commands are bound on C-x.
 ;;;;; Helm commands
-(ignore
- "C-x b"
- (defun akirak/switch-to-project-file-buffer (project)
-   (interactive (list (if current-prefix-arg
-                          'all
-                        (-some-> (project-current)
-                          (project-roots)
-                          (car-safe)))))
-   (cond
-    ((eq project 'all)
-     (helm-buffers-list))
-    (t
-     (let ((default-directory (or project default-directory)))
-       (helm :prompt (format "Project %s: " project)
-             :sources
-             `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
-               ,akirak/helm-source-recent-files))))))
- "C-x d"
- (defun akirak/switch-to-dired-buffer ()
-   "Switch to a directory buffer interactively.
+(general-def
+  "C-x b"
+  (defun akirak/switch-to-project-file-buffer (project)
+    (interactive (list (if current-prefix-arg
+                           'all
+                         (-some-> (project-current)
+                           (project-roots)
+                           (car-safe)))))
+    (cond
+     ((eq project 'all)
+      (helm-buffers-list))
+     (t
+      (let ((default-directory (or project default-directory)))
+        (helm :prompt (format "Project %s: " project)
+              :sources
+              `(,@(akirak/helm-project-buffer-sources project #'akirak/switch-to-project-file-buffer)
+                ,akirak/helm-source-recent-files))))))
+  "C-x d"
+  (defun akirak/switch-to-dired-buffer ()
+    "Switch to a directory buffer interactively.
 
 Without a prefix, it displays a list of dired buffers, a list of
 directories of live file buffers, and a list of directory
@@ -622,24 +622,24 @@ repositories.
 
 With two universal prefixes, it displays a list of remote
 connection identities of recent files."
-   (interactive)
-   (pcase current-prefix-arg
-     ('(4)
-      (require 'my/helm/source/remote)
-      (helm :prompt "Remote: "
-            :sources
-            '(akirak/helm-source-remote-bookmark
-              akirak/helm-source-recent-remotes)))
-     ('()
-      (require 'my/helm/source/dir)
-      (helm :prompt "Directory/repository: "
-            :sources
-            (list (akirak/helm-dired-buffer-source)
-                  akirak/helm-directory-bookmark-source
-                  akirak/helm-open-file-buffer-directories-source
-                  akirak/helm-project-parent-directory-source)))
-     (_ (user-error "Not matching %s" current-prefix-arg)))))
-(general-def
+    (interactive)
+    (pcase current-prefix-arg
+      ('(4)
+       (require 'my/helm/source/remote)
+       (helm :prompt "Remote: "
+             :sources
+             '(akirak/helm-source-remote-bookmark
+               akirak/helm-source-recent-remotes)))
+      ('()
+       (require 'my/helm/source/dir)
+       (helm :prompt "Directory/repository: "
+             :sources
+             (list (akirak/helm-dired-buffer-source)
+                   akirak/helm-directory-bookmark-source
+                   akirak/helm-open-file-buffer-directories-source
+                   akirak/helm-project-parent-directory-source)))
+      (_ (user-error "Not matching %s" current-prefix-arg))))
+
   "C-x p"
   (defun akirak/find-file-recursively (root)
     (interactive (list (or (if (equal current-prefix-arg '(16))
