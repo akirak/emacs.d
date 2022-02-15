@@ -362,6 +362,8 @@
        (org-insert-last-stored-link 1))
      "Remove entry" 'helm-org-recent-headings-remove-entries
      "Bookmark heading" 'org-recent-headings--bookmark-entry)))
+(use-package hercules
+  :straight (hercules :host gitlab :repo "jjzmajic/hercules.el"))
 (use-package license-templates)
 (use-package marginalia
   :config
@@ -391,6 +393,11 @@
             (defun akirak/project-tramp-root (dir)
               (-some->> (file-remote-p dir)
                 (cons 'remote)))))
+(use-package project-hercules
+  :straight (:host github :repo "akirak/project-hercules.el")
+  :commands (project-hercules-dispatch)
+  :general
+  ("M-SPC" #'project-hercules-dispatch))
 (use-package recompile-bookmark
   :straight (:host github :repo "akirak/recompile-bookmark.el"))
 (use-package setup
