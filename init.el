@@ -442,8 +442,6 @@
   :hook
   (org-mode . valign-mode))
 (use-package vertico
-  :config
-  (vertico-mode t)
   :custom
   (vertico-resize t))
 (use-package whole-line-or-region)

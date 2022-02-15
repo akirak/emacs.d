@@ -4,7 +4,7 @@
 (use-package ivy
   :config
   ;; Use ivy as completing-read-function
-  ;; (ivy-mode 1)
+  (ivy-mode 1)
 
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
