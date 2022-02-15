@@ -30,6 +30,15 @@
                                (when blocker (format " Blocker: %s" blocker)))))))
                 "\n")))
 
+(akirak/bind-mode :keymaps 'org-mode-map
+  "@"
+  (defun akirak/org-add-creation-time ()
+    (interactive)
+    (unless (org-entry-get nil "CREATED_TIME")
+      (org-entry-put nil "CREATED_TIME"
+                     ;; TODO: Check for clock data in the entry
+                     (format-time-string (org-time-stamp-format t t))))))
+
 (major-mode-hydra-define org-mode
   (:title (akirak/org-agenda-hydra-title)
           :foreign-keys t)

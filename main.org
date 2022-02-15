@@ -150,12 +150,7 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
   (akirak/require 'setup-hydra)
 #+end_src
 
-Bind ~M-SPC~ to =major-mode-hydra=.
-This key was originally bound to =just-one-space=, but I replaced it with =akirak/shrink-whitespace=:
-
 #+begin_src emacs-lisp
-  (general-def "M-SPC" #'major-mode-hydra)
-
   (defconst akirak/major-mode-hydra-key "M-SPC")
 #+end_src
 *** ov (overlays)
@@ -1293,25 +1288,6 @@ Use lsp-mode.
 *** Lisp (Emacs Lisp and Common Lisp)
 #+begin_src emacs-lisp
   (akirak/require 'setup-emacs-lisp)
-#+end_src
-**** Hydra
-#+begin_src emacs-lisp
-  (major-mode-hydra-define emacs-lisp-mode
-    (:title "emacs-lisp-mode"
-            :quit-key "q")
-    ("file/buffer"
-     (("e" akirak/eval-buffer-or-load-file "Eval or load file")
-      ("l" package-lint-current-buffer "package-lint")
-      ("pb" (straight-rebuild-package (file-name-base (buffer-file-name)))
-       "Rebuild package" :exit nil)
-      ("pl" (load-library (file-name-base (buffer-file-name)))
-       "Load library" :exit nil))
-     "point"
-     (("m" pp-macroexpand-last-sexp "macroexpand")
-      ("tb" buttercup-run-at-point "buttercup"))
-     "help/references"
-     (("s" suggest)
-      ("i" counsel-info-lookup-symbol "info symbol"))))
 #+end_src
 *** PureScript
 #+begin_src emacs-lisp

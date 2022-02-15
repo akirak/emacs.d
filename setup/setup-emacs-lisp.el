@@ -242,4 +242,7 @@ avoid counting existing garbage which needs collection."
         (load-file buffer-file-name)
       (eval-buffer))))
 
+(akirak/bind-mode :keymaps 'emacs-lisp-mode
+  "e" #'akirak/eval-buffer-or-load-file)
+
 (provide 'setup-emacs-lisp)
