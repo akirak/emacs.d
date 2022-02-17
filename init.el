@@ -396,6 +396,8 @@
 (use-package project-hercules
   :straight (:host github :repo "akirak/project-hercules.el")
   :commands (project-hercules-dispatch)
+  :config
+  (require 'project-hercules-config)
   :general
   ("M-SPC" #'project-hercules-dispatch))
 (use-package recompile-bookmark
