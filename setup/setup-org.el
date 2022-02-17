@@ -794,4 +794,11 @@ With ARG, pick a text from the kill ring instead of the last one."
 (akirak/bind-search :keymaps 'org-mode-map :package 'org
   "s" #'org-babel-goto-named-src-block)
 
+(use-package org-transclusion
+  :after org)
+
+(use-package org-remark
+  :hook
+  (after-init . org-remark-global-tracking-mode))
+
 (provide 'setup-org)
