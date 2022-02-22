@@ -1406,7 +1406,7 @@ Restclient is useful for development in teams where it is used.
 #+end_src
 *** Org Journal
 #+begin_src emacs-lisp
-  (akirak/require 'setup-org-journal)
+  ;; (akirak/require 'setup-org-journal)
 #+end_src
 *** Org-agenda keybindings                                :Emacs:Org__Mode:
 :PROPERTIES:
