@@ -240,7 +240,6 @@
    [remap isearch-backward] #'consult-isearch
    "C-S-s" #'consult-line-multi
    "C-c f" #'consult-focus-lines
-   "C-x /" #'consult-ripgrep
    "M-s x" #'consult-complex-command
    "M-s M-x" #'consult-mode-command
 
