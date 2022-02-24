@@ -7,7 +7,7 @@
                                  org-babel-load-languages))
   (setq-default org-babel-load-languages
                 '((translate . t)
-                  (mermaid . t)
+                  ;; (mermaid . t)
                   (erd . t)
                   (shell . t)
                   (emacs-lisp . t)
