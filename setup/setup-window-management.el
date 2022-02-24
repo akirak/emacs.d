@@ -546,7 +546,7 @@ may have been stored before."
     (apply 'pop-to-buffer buffer args)))
 
 (general-def
-  "C-2" #'delete-window
+  "C-2" #'akirak-window-setup-columns
   "C-3" #'akirak-window-split-vertically
   "C-4" #'akirak-window-split-and-select)
 
