@@ -770,6 +770,7 @@ connection identities of recent files."
 (general-def :package 'lsp-mode :keymaps 'lsp-mode-map
   [help ?.] #'lsp-describe-thing-at-point)
 
+(general-unbind "<f1> x")
 (akirak/bind-help
   "M" #'discover-my-major
   "xc" #'describe-char
