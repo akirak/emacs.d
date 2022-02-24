@@ -43,7 +43,7 @@
               ;; For lsp-mode
               read-process-output-max (* 1024 1024))
 
-(set-language-environment "UTF-8")
+;; (set-language-environment "UTF-8")
 
 (defun akirak/turn-on-indent-tabs-mode ()
   (interactive)
