@@ -559,7 +559,7 @@ With ARG, pick a text from the kill ring instead of the last one."
 
 (defun akirak/org-id-files ()
   (append org-starter-known-files
-          (directory-files org-journal-dir t org-agenda-file-regexp 'nosort)
+          ;; (directory-files org-journal-dir t org-agenda-file-regexp 'nosort)
           (org-multi-wiki-entry-files (-map #'car org-multi-wiki-namespace-list))))
 
 (defun akirak/org-update-id-locations (&optional silent)

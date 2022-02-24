@@ -285,13 +285,14 @@
              (akirak/helm-org-multi-wiki-show-indirect marker)))))
 
   (setq org-multi-wiki-extra-files (list 'org-agenda-files
-                                         (defun akirak/org-journal-dir-files ()
-                                           (-sort #'string>
-                                                  (directory-files
-                                                   (file-truename org-journal-dir)
-                                                   t
-                                                   org-agenda-file-regexp
-                                                   'nosort)))))
+                                         ;; (defun akirak/org-journal-dir-files ()
+                                         ;;   (-sort #'string>
+                                         ;;          (directory-files
+                                         ;;           (file-truename org-journal-dir)
+                                         ;;           t
+                                         ;;           org-agenda-file-regexp
+                                         ;;           'nosort)))
+                                         ))
 
   :custom
   (org-multi-wiki-recentf-exclude t)
