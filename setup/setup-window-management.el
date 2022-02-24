@@ -531,105 +531,27 @@ may have been stored before."
 ;; This function advice is a workaround to alter the buffer switching
 ;; function used by `find-function'.
 (defun akirak/ad-around-find-function-do-it (orig symbol type switch-fn)
-  (funcall orig symbol type 'akirak/switch-buffer-maybe-same-window))
+  (funcall orig symbol type 'akirak-switch-buffer-maybe-same-window))
 
 (advice-add 'find-function-do-it
             :around 'akirak/ad-around-find-function-do-it)
 
 ;;;; Window manipulation commands
 
-(defun akirak/switch-buffer-maybe-same-window (buffer &rest args)
+(defun akirak-switch-buffer-maybe-same-window (buffer &rest args)
   "Display BUFFER in the same window if the buffer refers to the same file."
   (if (file-equal-p (buffer-file-name (current-buffer))
                     (buffer-file-name buffer))
       (apply 'pop-to-buffer-same-window buffer args)
     (apply 'pop-to-buffer buffer args)))
 
-(defun akirak/split-window-aggressively ()
-  (cond
-   ((> (akirak/available-width-for-new-window) 80)
-    (split-window-horizontally))
-   ((and (not (window-dedicated-p))
-         (not (window-minibuffer-p))
-         (window-splittable-p (selected-window)))
-    (split-window-below))))
-
-(defun akirak/available-width-for-new-window (&optional window)
-  (let ((window (or (selected-window)))
-        (windows (list window))
-        (leftw window)
-        (rightw window))
-    (while (setq leftw (window-in-direction 'left leftw))
-      (push leftw windows))
-    (while (setq rightw (window-in-direction 'right rightw))
-      (push rightw windows))
-    (-sum (-map (lambda (wnd)
-                  (if (window-dedicated-p wnd)
-                      0
-                    (- (+ (window-width wnd)
-                          ;; perfect-margin.el sets window margins
-                          (pcase (window-margins wnd)
-                            (`(,_) 0)
-                            (`(,left . ,right) (+ left right))))
-                       80)))
-                windows))))
-
-(defun akirak/split-window-and-select ()
-  (interactive)
-  (pcase current-prefix-arg
-    ('(4)
-     (progn
-       (delete-window)
-       (balance-windows)))
-    (_
-     (if-let ((window (akirak/split-window-aggressively)))
-         (progn
-           (select-window window)
-           (balance-windows))
-       (message "No window was created")))))
-
-(defun akirak/split-window-vertically ()
-  (interactive)
-  (split-window-vertically)
-  (balance-windows))
-
 (general-def
   "C-2" #'delete-window
-  "C-3" #'akirak/split-window-vertically
-  "C-4" #'akirak/split-window-and-select)
-
-(defun akirak/delete-below-windows ()
-  (interactive)
-  (let ((initial-window (selected-window))
-        w)
-    (while (setq w (window-in-direction 'below))
-      (when (and (window-valid-p w)
-                 (window-live-p w)
-                 (not (window-minibuffer-p w)))
-        (delete-window w))
-      (select-window initial-window))))
+  "C-3" #'akirak-window-split-vertically
+  "C-4" #'akirak-window-split-and-select)
 
 (general-def
-  [remap abort-recursive-edit]
-  (defun akirak/cleanup-windows (&optional arg)
-    " Clean up windows or call `abort-recursive-edit'."
-    (interactive "P")
-    (if arg
-        (akirak/delete-below-windows)
-      (let (killed)
-        (walk-window-tree (lambda (w)
-                            (cond
-                             ((member (buffer-name (window-buffer w))
-                                      '("*direnv*"
-                                        " *LV*"
-                                        "*Warnings*"))
-                              (quit-window nil w)
-                              (setq killed t))
-                             ((< (window-height w) 7)
-                              (delete-window w)
-                              (setq killed t)))))
-        (unless killed
-          (abort-recursive-edit))))))
+  [remap abort-recursive-edit] #'akirak-window-cleanup)
 
 (general-def :keymaps 'xref--xref-buffer-mode-map :package 'xref
   [remap xref-goto-xref]
