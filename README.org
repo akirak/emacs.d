@@ -1,10 +1,6 @@
 * Emacs Configuration
-*This configuration is slow, complex and buggy, so it is unsuitable for use by people other than myself.*
-It is still my daily driver, but I plan on switching to a new config.
-I am currently developing a reusable library in [[https://github.com/akirak/trivial-elisps][akirak/trivial-elisps]], I recommend you have a look at it if you are interested in it.
-
-This is my Emacs configuration.
-
+This is my Emacs configuration I have been using since 2018.
+I am currently switching to [[https://github.com/akirak/nix-config/blob/master/emacs/emacs-config.org][a new configuration]] which is much more lightweight than this one.
 ** Table of contents
 :PROPERTIES:
 :TOC: siblings
