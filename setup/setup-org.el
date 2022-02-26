@@ -25,22 +25,7 @@
   "l" '(nil :wk "insert link")
   "s" '(nil :wk "set")
   "sc" #'akirak/org-set-category
-  "c"
-  (defun akirak/avy-org-clone-subtree ()
-    "Copy the subtree to a location selected with avy.
-
-If the subtree contains logbooks, they will be removed from the clone."
-    (interactive)
-    (assert (derived-mode-p 'org-mode))
-    (assert (not (org-before-first-heading-p)))
-    (org-copy-subtree 1)
-    (with-temp-buffer
-      (delay-mode-hooks (org-mode))
-      (insert (pop kill-ring))
-      (goto-char (point-min))
-      (while (re-search-forward org-logbook-drawer-re nil t)
-        (replace-match ""))
-      (avy-org-refile-as-child))))
+  "c" #'akirak-org-avy-clone-subtree)
 
 (general-def :package 'org-agenda :keymaps 'org-agenda-mode-map :prefix akirak/mode-prefix-key
   "s" '(nil :wk "set")
@@ -680,63 +665,6 @@ With ARG, pick a text from the kill ring instead of the last one."
   (org-chronos-week-start-day 1)
   (org-chronos-clock-threshold 5)
   (org-chronos-auto-export t))
-
-(defun akirak/org-find-or-create-logbook ()
-  "Go to the end of the log book of the entry."
-  (org-back-to-heading)
-  (let ((bound (org-entry-end-position)))
-    (if (re-search-forward org-logbook-drawer-re bound t)
-        (beginning-of-line 1)
-      (forward-line)
-      (if (re-search-forward org-property-drawer-re bound t)
-          (insert "\n")
-        (while (looking-at org-planning-line-re)
-          (forward-line)))
-      (insert ":LOGBOOK:\n:END:\n")
-      (beginning-of-line 0)))
-  (point-marker))
-
-(defun akirak/org-transfer-clock-entries (dest)
-  (assert (markerp dest))
-  (let ((dest-logbook (with-current-buffer (marker-buffer dest)
-                        (org-with-wide-buffer
-                         (goto-char dest)
-                         (akirak/org-find-or-create-logbook)))))
-    (let (entries)
-      (save-excursion
-        (save-restriction
-          (widen)
-          (org-back-to-heading)
-          (narrow-to-region (point) (org-entry-end-position))
-          (while (re-search-forward (rx-to-string `(and bol (* (any " \\t"))
-                                                        ,org-clock-string
-                                                        (+ (any " \\t"))))
-                                    nil t)
-            (beginning-of-line 1)
-            (let ((start (point))
-                  (end (line-beginning-position 2)))
-              (push (buffer-substring-no-properties (point) end) entries)
-              (delete-region (point) end)
-              (goto-char start)))
-          (goto-char (point-min))
-          (replace-regexp (rx bol (* (any " \\t")) ":LOGBOOK:\n"
-                              (* (any " \\t"))  ":END:\n")
-                          "")))
-      (with-current-buffer (marker-buffer dest-logbook)
-        (org-with-wide-buffer
-         (goto-char dest-logbook)
-         (while entries
-           (insert (pop entries)))
-         (org-hide-drawer-all)))
-      (org-back-to-heading))))
-
-(defun akirak/avy-org-transfer-clock-entries ()
-  (interactive)
-  (let ((dest (save-selected-window
-                (save-excursion
-                  (akirak/avy-org-heading t)
-                  (point-marker)))))
-    (akirak/org-transfer-clock-entries dest)))
 
 (defun akirak/org-from-tsv (text &optional dest
                                  &key last-column-as-tags)

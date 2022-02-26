@@ -1,20 +1,5 @@
 (use-package avy
   :config
-  (defun akirak/avy-action-org-goto-heading (pt)
-    (avy-action-goto pt)
-    (org-back-to-heading))
-
-  (defun akirak/avy-action-org-goto-heading (pt)
-    (avy-action-goto pt)
-    (org-back-to-heading)
-    (let ((element (org-element-headline-parser
-                    (save-excursion (org-end-of-subtree)))))
-      (goto-char (plist-get (cadr element) :contents-begin))
-      (when (org-at-property-block-p)
-        (goto-char (cdr (org-get-property-block)))
-        (end-of-line)
-        (re-search-forward (rx bol bow) nil t))))
-
   (defun akirak/avy-action-org-store-link (pt)
     (avy-action-goto pt)
     (org-store-link nil 'interactive))
@@ -45,25 +30,18 @@
                         (member (thing-at-point 'symbol t)
                                 keywords)))))))
 
-    "h"
-    (defun akirak/avy-org-heading (arg &optional action)
-      (declare (indent 1))
-      (interactive "P")
-      (let ((avy-all-windows (when arg t))
-            (avy-action (or action #'akirak/avy-action-org-goto-heading)))
-        (avy-with avy-goto-line
-          (avy-jump (rx bol (+ "*") space)))))
+    "h" #'akirak/org-avy-heading
     "M-h"
     (defun akirak/avy-org-heading-all-windows ()
       (interactive)
-      (akirak/avy-org-heading '(4))))
+      (akirak-org-avy-heading '(4))))
 
   (general-def :package 'org :keymaps 'org-mode-map  :prefix "C-c C-x"
     "lh"
     (defun akirak/org-insert-link-to-avy-org-heading ()
       (interactive)
       (save-selected-window
-        (akirak/avy-org-heading t #'akirak/avy-action-org-store-link))
+        (akirak-org-avy-heading t #'akirak/avy-action-org-store-link))
       (org-insert-last-stored-link 1)))
 
   :config/el-patch
