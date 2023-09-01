@@ -6,6 +6,7 @@
 ;;   (mode . ansible)))
 ;; #+end_src
 (use-package ansible
+  :straight (:type built-in)
   :after yaml
   :commands (ansible)
   :init
@@ -39,7 +40,7 @@ variable.")
 
 (defun akirak/ansible-has-playbook-p ()
   "Check if the current project directory contains an Ansible playbook."
-  (when-let ((root (projectile-project-root)))
+  (when-let ((root (car-safe (project-roots (project-current)))))
     (--some (file-exists-p (expand-file-name it root))
             akirak/ansible-playbook-files)))
 

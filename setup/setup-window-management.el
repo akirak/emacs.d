@@ -1,3 +1,54 @@
+(setq split-height-threshold 50
+      split-width-threshold nil)
+
+(defun akirak/window-left-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'left window))))
+
+(defun akirak/window-right-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'right window))))
+
+(defun akirak/window-bottom-side-window-p (&optional window)
+  (and (window-dedicated-p window)
+       (not (window-in-direction 'below window))))
+
+(use-package windmove
+  :config
+  (windmove-default-keybindings 'control))
+
+(use-package windswap
+  :config
+  (general-def "<C-S-left>" (general-predicate-dispatch 'windswap-left
+                              (akirak/window-left-side-window-p)
+                              #'shrink-window-horizontally
+                              (akirak/window-right-side-window-p)
+                              #'enlarge-window-horizontally))
+  (general-def "<C-S-right>" (general-predicate-dispatch 'windswap-right
+                               (akirak/window-left-side-window-p)
+                               #'enlarge-window-horizontally
+                               (akirak/window-right-side-window-p)
+                               #'shrink-window-horizontally))
+  (general-def "<C-S-up>" (general-predicate-dispatch 'windswap-up
+                            (akirak/window-bottom-side-window-p)
+                            #'enlarge-window))
+  (general-def "<C-S-down>" (general-predicate-dispatch 'windswap-down
+                              (akirak/window-bottom-side-window-p)
+                              #'shrink-window))
+  ;; These keys are bound by default in org-mode, so unbind them.
+  (general-unbind :package 'org :keymaps 'org-mode-map
+    "<C-S-left>"
+    "<C-S-right>"
+    "<C-S-up>"
+    "<C-S-down>")
+  (general-unbind :package 'org-agenda :keymaps 'org-agenda-mode-map
+    "<C-S-left>"
+    "<C-S-right>"
+    "<C-S-up>"
+    "<C-S-down>"))
+
+;;;; display-buffer configuration
+
 (use-package shackle
   :init
   (shackle-mode 1)
@@ -7,23 +58,21 @@
   (shackle-default-alignment 'below)
   (shackle-rules '(
                    ("\\*ivy-occur counsel-projectile " :regexp t :align left :ratio 0.15)
+                   ("*xref*" :align below :ratio 0.2)
+                   ("*lsp-help*" :other t)
                    ;; Shackle rules for org-mode
                    ;; org-mks should be substituted with the menu function in org-starter.
                    ("*Org Select*" :align below :ratio 0.3)
-                   ;; ("\\*Org Src " :regexp t :align below :ratio 0.5)
-                   ;; (" *Org todo*" :custom akirak/display-org-todo-buffer)
                    ("*org clocking*" :other t)
                    ("*Org Edna Edit Blocker/Trigger*" :align below :ratio 0.3)
                    ("*Org Note*" :align below :ratio 0.3)
+                   ("\\*Org Ql View: " :regexp t :same t)
                    ("*compilation*" :align below :ratio 0.4)
+                   ("*Occur*" :align below :ratio 0.25)
                    ("*lispy-message*" :align below :ratio 0.4)
-                   ;; org-capture to org-journal needs a big window
-                   ;; ("^CAPTURE-[[:digit:]+]" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(code\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(journal\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-\\(scratch\\)" :regexp t :other t)
-                   ;; ("^CAPTURE-" :regexp t :ratio 0.3 :align below)
-                   ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
+                   ;; This rule does not work since org 9.3.6.
+                   ;; I will disable them for now.
+                   ;; ("*Capture*" :inhibit-window-quit t :custom akirak/display-org-capture-temp-buffer)
                    ("^CAPTURE-" :inhbit-window-quit t :custom akirak/display-org-capture-buffer)
                    ;; This should precede the generic helm rule
                    ("*helm top*" :same t)
@@ -36,13 +85,69 @@
                    ("*Calendar*" :align below :ratio 0.3)
                    ("*Google Translate*" :align below :ratio 0.3)
                    ("*Org Links*" :ratio 0.1 :align below)
-                   ;; ("*undo tree*" :size 0.2 :align right)
                    ("*Help*" :other t)
-                   ("\\*Org Agenda" :regexp t :other t))))
+                   ;; ("\\*Org Agenda" :regexp t :other t)
+                   ("*Flycheck errors*" :align below :ratio 0.15))))
 
 (with-eval-after-load 'org
   (advice-add 'org-switch-to-buffer-other-window
               :override #'switch-to-buffer-other-window))
+
+(defun akirak/display-buffer-prefer-other-pane (buffer &rest args)
+  "Display BUFFER in another pane in the current frame, if possible."
+  (if-let (windows (akirak/find-other-pane-windows))
+      (set-window-buffer (car windows) buffer)
+    (display-buffer buffer args)))
+
+(defun akirak/display-buffer-prefer-center-pane (buffer &rest args)
+  "Display BUFFER in the center pane of the current frame."
+  (if-let (windows (or (akirak/find-center-pane-windows :exclude-self t)
+                       ;; If the selected window is the only window in
+                       ;; the center pane, then find another window in
+                       ;; the same frame.
+                       (cl-remove (selected-window) (window-list))))
+      (set-window-buffer (car windows) buffer)
+    (display-buffer buffer args)))
+
+(defun akirak/pop-to-buffer-prefer-center-pane (buffer &rest _args)
+  (pop-to-buffer buffer
+                 '(akirak/display-buffer-prefer-center-pane . nil)))
+
+(cl-defun akirak/find-center-pane-windows (&key exclude-self)
+  (when (> (frame-width) 240)
+    (let* ((panes (akirak/get-window-panes))
+           (range (list (/ (length panes) 2)))
+           (windows (->> range
+                         (-map (lambda (i) (cdr (nth i panes))))
+                         (-flatten-n 1))))
+      (if exclude-self
+          (cl-remove (selected-window) windows)
+        windows))))
+
+(cl-defun akirak/find-other-pane-windows ()
+  (when (> (frame-width) 240)
+    (->> (akirak/get-window-panes)
+         (-map #'cdr)
+         (-remove (lambda (ws)
+                    (--any (equal (selected-window) it) ws)))
+         (-sort (-on #'< #'length))
+         (car))))
+
+(defun akirak/get-window-panes ()
+  "Return an alist."
+  (->> (window-list)
+       (-map (lambda (w)
+               (unless (or (window-minibuffer-p w)
+                           (member (buffer-name (window-buffer w))
+                                   akirak/skipped-window-buffers)
+                           (window-dedicated-p w))
+                 (cons (window-left-column w) w))))
+       (-non-nil)
+       (-group-by #'car)
+       (-sort (-on #'< #'car))
+       (-map (lambda (cell)
+               (cons (car cell)
+                     (-map #'cdr (cdr cell)))))))
 
 (defun akirak/display-buffer-split-below (buf alist)
   "Split the current window below and display the buffer in the new window.
@@ -426,16 +531,32 @@ may have been stored before."
 ;; This function advice is a workaround to alter the buffer switching
 ;; function used by `find-function'.
 (defun akirak/ad-around-find-function-do-it (orig symbol type switch-fn)
-  (funcall orig symbol type 'akirak/switch-buffer-maybe-same-window))
+  (funcall orig symbol type 'akirak-switch-buffer-maybe-same-window))
 
 (advice-add 'find-function-do-it
             :around 'akirak/ad-around-find-function-do-it)
 
-(defun akirak/switch-buffer-maybe-same-window (buffer &rest args)
+;;;; Window manipulation commands
+
+(defun akirak-switch-buffer-maybe-same-window (buffer &rest args)
   "Display BUFFER in the same window if the buffer refers to the same file."
   (if (file-equal-p (buffer-file-name (current-buffer))
                     (buffer-file-name buffer))
       (apply 'pop-to-buffer-same-window buffer args)
     (apply 'pop-to-buffer buffer args)))
+
+(general-def
+  "C-2" #'akirak-window-setup-columns
+  "C-3" #'akirak-window-split-vertically
+  "C-4" #'akirak-window-split-and-select)
+
+(general-def
+  [remap abort-recursive-edit] #'akirak-window-cleanup)
+
+(general-def :keymaps 'xref--xref-buffer-mode-map :package 'xref
+  [remap xref-goto-xref]
+  (defun akirak/xref-goto-xref (&optional arg)
+    (interactive "P")
+    (xref-goto-xref (not arg))))
 
 (provide 'setup-window-management)

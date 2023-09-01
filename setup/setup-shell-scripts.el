@@ -1,15 +1,14 @@
 (use-package sh-script
   :straight (:type built-in)
   :config
-  (defun akirak/setup-flycheck-shellcheck ()
-    (interactive)
-    (setq flycheck-sh-shellcheck-executable "shellcheck")
-    (unless (executable-find "shellcheck")
-      (start-process-shell-command "nix-env" "nix-env" "nix-env -i ShellCheck"))
-    (add-to-list 'flycheck-checkers 'sh-shellcheck t)
-    (flycheck-select-checker 'sh-shellcheck)
-    (flycheck-mode 1))
+  (defun akirak/sh-override-shell ()
+    ;; Since I usually don't write shell scripts specific to zsh, I
+    ;; override zsh with bash. This is necessary for preventing an
+    ;; error of shellcheck not enabled for zsh.
+    (when (eq sh-shell 'zsh)
+      (sh-set-shell "bash")))
   :hook
-  (sh-mode . akirak/setup-flycheck-shellcheck))
+  (sh-set-shell . akirak/sh-override-shell)
+  (sh-mode . flycheck-mode))
 
 (provide 'setup-shell-scripts)

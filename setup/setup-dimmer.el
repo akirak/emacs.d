@@ -1,7 +1,15 @@
 (use-package dimmer
-  :init
-  (dimmer-mode 1)
-  :custom
-  (dimmer-exclusion-regexp "\\(\\*Help\\*\\|\\*helm\\|\\*LV\\*\\)"))
+  :disabled t
+  :straight (:type built-in)
+  ;; :unless (akirak/windows-subsystem-for-linux-p)
+  :config
+  (general-add-hook 'dimmer-buffer-exclusion-regexps
+                    (mapcar #'regexp-quote
+                            '("*Help*"
+                              "*LV*")))
+  (dimmer-configure-helm)
+  (dimmer-configure-org)
+  (dimmer-configure-which-key)
+  (dimmer-mode 1))
 
 (provide 'setup-dimmer)

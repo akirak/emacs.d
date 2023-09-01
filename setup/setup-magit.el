@@ -1,4 +1,13 @@
+(use-package magit-section)
+
+(defcustom akirak/magit-large-repositories nil
+  "List of large Git repositories where Magit should limit its features."
+  :type '(repeat directory))
+
 (use-package magit
+  :init
+  (setq with-editor-emacsclient-executable
+        (executable-find "emacsclient"))
   :config
   (when-let ((bin (executable-find "git")))
     (setq magit-git-executable bin))
@@ -14,14 +23,57 @@
   (advice-add 'magit--process-coding-system :override
               (lambda () '(utf-8-unix . utf-8-unix)))
 
+  (add-hook 'magit-process-mode-hook #'compilation-minor-mode)
+
+  ;; Speed up Magit on large Git repositories by limiting the types of
+  ;; information displayed inside `magit-status' buffer.
+  ;;
+  ;; Based on ideas from this article:
+  ;; https://jakemccrary.com/blog/2020/11/14/speeding-up-magit/
+  (general-advice-add '(
+                        ;; I don't want to remove these headers right now
+                        ;;
+                        ;; magit-insert-tags-header
+                        ;; magit-insert-status-headers
+                        magit-insert-unpushed-to-pushremote
+                        magit-insert-unpulled-from-pushremote
+                        magit-insert-unpulled-from-upstream
+                        magit-insert-unpushed-to-upstream-or-recent)
+                      :before-while
+                      (defun akirak/magit-not-inside-large-repository-p ()
+                        (not (cl-member (magit-toplevel)
+                                        akirak/magit-large-repositories
+                                        :test #'file-equal-p))))
+
+  (setq-default magit-display-buffer-function
+                ;; Based on 'magit-display-buffer-same-window-except-diff-v1
+                (defun akirak/magit-display-buffer (buffer)
+                  (let ((action (with-current-buffer buffer
+                                  (cond
+                                   ((derived-mode-p 'magit-diff-mode)
+                                    '(nil (inhibit-same-window . t)))
+                                   ((derived-mode-p 'magit-process-mode)
+                                    '(akirak/display-buffer-prefer-other-pane))
+                                   (t
+                                    '(display-buffer-same-window))))))
+                    (prog1 (display-buffer buffer action)
+                      (with-current-buffer buffer
+                        (when (derived-mode-p 'magit-process-mode)
+                          (goto-char (point-max))
+                          (recenter-top-bottom -1)))))))
+
   ;; Functions for magit-list-repositories.
   (defun akirak/magit-repolist-column-group (_id)
     (f-filename (abbreviate-file-name (f-parent default-directory))))
 
   (defun akirak/magit-repolist-column-path (_id)
-    (string-join `(,@(--map (if (string-prefix-p "." it)
-                                (substring it 0 1)
-                              (substring it 0 1))
+    (string-join `(,@(--map (cond
+                             ((string-empty-p it)
+                              "")
+                             ((string-prefix-p "." it)
+                              (substring it 1 2))
+                             (t
+                              (substring it 0 1)))
                             (split-string (f-short (f-parent default-directory)) "/"))
                    ,(f-filename default-directory))
                  "/"))
@@ -57,6 +109,36 @@ Only one letter is shown, the first that applies."
           ((magit-unstaged-files)  "*")
           ((magit-staged-files)    "+")))
 
+  (defun akirak/magit-modulelist-column-path (path)
+    (let* ((segs (f-split path)))
+      (apply #'f-join `(,@(--map (seq-take it 1) (-butlast segs))
+                        ,(-last-item segs)))))
+
+  (general-def :package 'magit-repolist :keymaps 'magit-repolist-mode-map
+    "k" (defun akirak/magit-repolist-kill-origin-url-at-point ()
+          (interactive)
+          (let* ((default-directory (tabulated-list-get-id))
+                 (url (magit-git-string "remote" "get-url" "origin")))
+            (kill-new url)
+            (message "Saved to kill ring: %s" url)))
+
+    "D" (defun akirak/magit-repolist-trash-repository-at-point (&optional arg)
+          (interactive "P")
+          (when (akirak/trash-git-repository (tabulated-list-get-id) arg)
+            (tabulated-list-delete-entry)))
+
+    "R" (defun akirak/magit-repolist-rename-repository-at-point ()
+          (interactive)
+          (let* ((dir (tabulated-list-get-id))
+                 (worktrees (let ((default-directory dir))
+                              (mapcar #'car (magit-list-worktrees)))))
+            (if (> (length worktrees) 1)
+                (user-error "You can't rename the repository if it has other working trees.")
+              (let ((new-name (read-directory-name "New name: ")))
+                (when (file-exists-p new-name)
+                  (user-error "File/directory %s already exists" new-name))
+                (rename-file dir new-name))))))
+
   (akirak/bind-f8
     ;; <f8> <f8>
     "<f8>" #'magit-status
@@ -66,16 +148,34 @@ Only one letter is shown, the first that applies."
     "<f9>" #'magit-dispatch
     ;; <f8> <f10>
     "<f10>" #'magit-file-dispatch)
+  (akirak/bind-file-extra
+    "g" #'magit-blob-visit-file
+    "l" #'magit-log-buffer-file
+    "s" #'magit-stage-file)
+
+  ;; Sort the repo list by date in descending order
+  (add-hook 'magit-repolist-mode-hook
+            (defun akirak/magit-repolist-sort-by-date ()
+              (cl-dotimes (i 2)
+                (tabulated-list-sort 7))))
+
+  (add-hook 'magit-credential-hook 'akirak/ensure-gpg-ssh-auth-sock)
+
+  (general-unbind :keymaps 'magit-status-mode-map
+    ;; Conflicts with tab-bar-mode
+    "<C-tab>")
+
+  (setq magit-repository-directories
+        `(("~/" . 1)
+          ("~/.config" . 1)
+          ;; ("~/.emacs.d/straight/repos/" . 1)
+          ;; domain/org - group - worktree
+          ("~/work" . 3)
+          ("~/archives/oss/" . 3)))
+
   :custom
-  (magit-repository-directories
-   '(("~/.emacs.d" . 0)
-     ("~/arts" . 2)
-     ("~/projects" . 2)
-     ("~/home.nix" . 0)
-     ("~/lib" . 1)
-     ("/etc/nixos" . 0)))
   (magit-repolist-columns
-   '(("Path" 20 akirak/magit-repolist-column-path nil)
+   '(("Path" 30 akirak/magit-repolist-column-path nil)
      ("Branch" 20 magit-repolist-column-branch nil)
      ("Drty" 4 akirak/magit-repolist-column-dirty nil)
      ("Unmg" 5 akirak/magit-repolist-column-unmerged nil)
@@ -88,21 +188,43 @@ Only one letter is shown, the first that applies."
        (:help-echo "Local changes not in upstream")))
      ("Date" 12 akirak/magit-repolist-column-commit-date nil)
      ("origin" 30 akirak/magit-repolist-column-origin nil)))
-  (magit-display-buffer-function
-   (if akirak/to-be-run-as-exwm
-       'magit-display-buffer-same-window-except-diff-v1
-     'magit-display-buffer-fullframe-status-v1))
+  (magit-submodule-list-columns
+   '(("Path" 25 akirak/magit-modulelist-column-path nil)
+     ("Version" 13 magit-repolist-column-version nil)
+     ("Branch" 9 magit-repolist-column-branch nil)
+     ("Drty" 4 akirak/magit-repolist-column-dirty nil)
+     ("B<U" 3 magit-repolist-column-unpulled-from-upstream
+      ((:right-align t)))
+     ("B>U" 3 magit-repolist-column-unpushed-to-upstream
+      ((:right-align t)))
+     ("B<P" 3 magit-repolist-column-unpulled-from-pushremote
+      ((:right-align t)))
+     ("B>P" 3 magit-repolist-column-unpushed-to-pushremote
+      ((:right-align t)))
+     ("B" 3 magit-repolist-column-branches
+      ((:right-align t)))
+     ("S" 3 magit-repolist-column-stashes
+      ((:right-align t)))
+     ("origin" 35 akirak/magit-repolist-column-origin nil)))
+  ;; Don't use `magit-file-mode-map'
+  (global-magit-file-mode nil)
   ;; Automatically save file buffers in the repository
   (magit-save-repository-buffers (quote dontask)))
 
-(use-package orgit)
+(use-package magit-delta
+  ;; I don't always need the features of magit-delta-mode, so I will
+  ;; turn it on only in certain repositories.
+  ;;
+  ;; Add it to .dir-locals.el in repositories where you need it.
+  ;;
+  ;; :config
+  ;; (add-hook 'magit-mode-hook #'magit-delta-mode)
+  :after magit)
 
-(use-package hotplate
-  :straight (:host github :repo "akirak/hotplate.el")
-  :custom
-  (hotplate-root "~/lib/src/")
-  ;; TODO: Create a remote repository
-  ;; (hotplate-remote-repository "https://github.com/akirak/repo-collection")
-  )
+(use-package orgit
+  :after org)
+
+(use-package magit-annex
+  :after magit)
 
 (provide 'setup-magit)

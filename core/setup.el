@@ -13,6 +13,20 @@
 
 (defvar akirak/setup-module-worked-on nil)
 
+(defun akirak/setup-display-failed-modules-if-any ()
+  (when akirak/setup-failed-modules
+    (with-current-buffer (generate-new-buffer "*failed modules*")
+      (insert "The following modules have failed to load:\n"
+              (mapconcat
+               (lambda (module)
+                 (propertize module
+                             'button
+                             (lambda (&rest _) (find-file (find-library-name module)))))
+               akirak/setup-failed-modules "\n"))
+      (pop-to-buffer (current-buffer)))))
+
+(add-hook 'emacs-startup-hook 'akirak/setup-display-failed-modules-if-any)
+
 (defun akirak/setup-find-failed-module ()
   "Open a module which has been failed to load."
   (interactive)
@@ -47,7 +61,7 @@ If SEVERITY is non-nil, abort the initialization process."
                    (message "Module %s is blacklisted. See akirak/blacklisted-features" feature)
                    nil)
                t)
-             (not (require feature nil t)))
+             (not (require feature nil (not init-file-debug))))
     (add-to-list 'akirak/setup-failed-modules feature t)
     (message "Failed to load %s" feature)
     (when severity
@@ -76,41 +90,3 @@ output file without the directory."
     (when verbose
       (message "%s package is unavailable" name))
     nil))
-
-(defun akirak/running-on-crostini-p ()
-  "Return non-nil if Emacs is running on Crostini of Chrome OS."
-  (stringp (getenv-internal "SOMMELIER_VERSION")))
-
-(defvar akirak/is-wsl)
-
-(defun akirak/windows-subsystem-for-linux-p ()
-  "Return non-nil if Emacs is running inside WSL."
-  (if (boundp 'akirak/is-wsl)
-      akirak/is-wsl
-    (setq akirak/is-wsl (and (eq system-type 'gnu/linux)
-                             (with-temp-buffer
-                               (insert-file-contents "/proc/sys/kernel/osrelease")
-                               (insert-file-contents "/proc/version")
-                               (string-match-p (rx (or "Microsoft" "WSL"))
-                                               (buffer-string)))))))
-
-(defun akirak/os-like-debian-p ()
-  (when (file-exists-p "/etc/os-release")
-    (with-temp-buffer
-      (insert-file-contents "/etc/os-release")
-      (goto-char (point-min))
-      (or (re-search-forward (rx bol "ID=" (?  "\"") "debian" (?  "\"") eol)
-                             nil t)
-          (re-search-forward (rx bol "ID_LIKE=" (? "\"") (* anything) "debian")
-                             nil t)))))
-
-(defconst akirak/window-system
-  (cond
-   ((and (getenv "WAYLAND_DISPLAY")
-         ;; I use :2 for Xephyr sessions
-         (not (equal x-display-name ":2")))
-    'wayland)
-   ((eq window-system 'x)
-    'x)
-   (t
-    window-system)))

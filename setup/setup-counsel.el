@@ -35,12 +35,17 @@
   ;; counsel-rg may fail in a direnv + shell.nix + lorri environment,
   ;; so I included the absolute path of rg in the command line.
   (setq counsel-rg-base-command
-        (replace-regexp-in-string (rx bol "rg ")
-                                  (let ((exec-path (default-value 'exec-path)))
-                                    (concat (executable-find "rg")
-                                            " "))
-                                  counsel-rg-base-command))
+        (cl-typecase counsel-rg-base-command
+          (string (replace-regexp-in-string (rx bol "rg ")
+                                            (let ((exec-path (default-value 'exec-path)))
+                                              (concat (executable-find "rg")
+                                                      " "))
+                                            counsel-rg-base-command))
+          (list (cons (executable-find "rg")
+                      (cdr counsel-rg-base-command)))
+          (otherwise counsel-rg-base-command)))
   (counsel-mode 1) ; Remap built-in functions with counsel equivalents
+  (general-unbind :keymaps 'counsel-mode-map "<menu>")
   (ivy-add-actions #'counsel-find-library
                    '(("l" load-library "load")
                      ("g" akirak/magit-status-of-library "git repo")
@@ -67,15 +72,29 @@
                    '(("gs" magit-status "magit-status")))
   (global-set-key [remap recentf-open-files] 'counsel-recentf)
   (global-set-key [remap insert-char] 'counsel-unicode-char)
-  (akirak/bind-file-extra :keymaps 'counsel-mode-map
-    "c" #'counsel-compile)
-  :general
-  (:keymaps 'counsel-mode-map
-            "C-x b" #'counsel-ibuffer)
-  :custom
+  (general-def :keymaps 'counsel-mode-map "M-y" nil)
+  (cl-loop for (command . str) in ivy-initial-inputs-alist
+           do (when (and (symbolp command)
+                         (string-prefix-p "counsel-" (symbol-name command)))
+                (delq (assoc command ivy-initial-inputs-alist)
+                      ivy-initial-inputs-alist)))
   ;; Let counsel-find-file-at-point choose the file under cursor
   ;; https://www.reddit.com/r/emacs/comments/7wjyhy/emacs_tip_findfileatpoint/du1xlbg/
-  (counsel-find-file-at-point t))
+  (setq counsel-find-file-at-point (not (akirak/windows-subsystem-for-linux-p)))
+
+  (ivy-add-actions 'counsel-find-file
+                   `(("c"
+                      ,(lambda (file)
+                         (let ((dest (read-file-name (format "Destination [%s]: " file)
+                                                     (file-name-directory file))))
+                           (if (file-name-directory dest)
+                               (copy-file file (f-join dest (f-file-name file)))
+                             (copy-file file dest))))
+                      "Copy")
+                     ("t"
+                      ,(lambda (file)
+                         (let ((default-directory file))
+                           (vterm)))))))
 
 ;; TODO: Add todo occur command based on counsel-rg
 
@@ -149,19 +168,26 @@
                        (t path)))
     (user-error "Cannot find library or its directory %s" x)))
 
+(defun akirak/find-readme (dir)
+  (interactive )
+  (if-let (files (or (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))
+                     (directory-files dir t (rx (or ".org" ".md") eol))))
+      (akirak/view-file (if (= 1 (length files))
+                            (car files)
+                          (completing-read (format "README for %s: " x)
+                                           files nil t)))
+    (dired-other-window dir)
+    (message "No readme found for %s" x)))
+
 (defun akirak/open-library-readme (x)
-  (let* ((path (find-library-name x))
-         (dir (file-name-directory (file-truename path)))
-         (files (directory-files dir t (rx bol "README" (+ (any alpha ".")) eol))))
-    (unless path
-      (user-error "Cannot find library %s" x))
-    (if files
-        (akirak/view-file (if (= 1 (length files))
-                              (car files)
-                            (completing-read (format "README for %s: " x)
-                                             files nil t)))
-      (dired-find-file-other-window dir)
-      (message "No readme found for %s" x))))
+  (let* ((path (find-library-name (cl-etypecase x
+                                    (string x)
+                                    (symbol (symbol-name x)))))
+         (dir (if path
+                  (file-name-directory (file-truename path))
+                (user-error "Cannot find library %s" x))))
+    (akirak/find-readme (or (locate-dominating-file dir ".git")
+                            dir))))
 
 (defun akirak/view-file (filename)
   (let ((buffer (or (find-buffer-visiting filename)
@@ -169,26 +195,5 @@
     (with-current-buffer buffer
       (view-mode 1))
     (pop-to-buffer buffer)))
-
-(use-package counsel-projectile
-  :after (projectile counsel)
-  :init
-  (counsel-projectile-mode 1)
-  :config
-  (defun counsel-projectile-other-frame-action (name)
-    "Switch to buffer or find file named NAME."
-    (if (member name counsel-projectile--buffers)
-        (switch-to-buffer-other-frame name)
-      (find-file-other-frame (projectile-expand-root name))
-      (run-hooks 'projectile-find-file-hook)))
-  (ivy-add-actions 'counsel-projectile
-                   '(("f" counsel-projectile-other-frame-action "frame")))
-  (ivy-add-actions 'counsel-projectile-switch-project
-                   '(("gs" magit-status "magit-status"))))
-
-(use-package counsel-tramp
-  :commands (counsel-tramp))
-
-(use-package counsel-world-clock)
 
 (provide 'setup-counsel)

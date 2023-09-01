@@ -1,5 +1,6 @@
 (use-package ivy-omni-org
   :custom
+  (ivy-omni-org-bookmark-display-transformer nil)
   (ivy-omni-org-file-sources '(org-starter-known-files
                                akirak/conflict-org-files))
   (ivy-omni-org-content-types '(agenda-commands
@@ -14,6 +15,8 @@
              (file-directory-p org-directory))
     (directory-files org-directory t "\\.sync-conflict-[-[:digit:]]+\\.org\\'")))
 
-(akirak/bind-register-map "M-o" #'ivy-omni-org)
+(akirak/bind-register
+  "M-b" #'ivy-omni-org-bookmarks
+  "M-o" #'ivy-omni-org)
 
 (provide 'setup-ivy-omni-org)

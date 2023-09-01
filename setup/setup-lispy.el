@@ -1,16 +1,26 @@
 (use-package lispy
+  :config
+  (advice-add 'hydra-lispy-x/body
+              :override
+              'akirak/lispy-x-hydra/body)
   :hook
-  ((emacs-lisp-mode
+  ((lisp-mode
+    emacs-lisp-mode
     lisp-interaction-mode
     ielm-mode
     eval-expression-minibuffer-setup)
    . lispy-mode)
   :general
-  (:keymaps 'lispy-mode-map
-            ;; Bind M-m to easy-mark (from easy-kill package) instead
+  ;; Disable keybindings I don't like
+  (:keymaps 'lispy-mode-map-lispy
+            "C-," nil
+            "M-<left>" nil
+            "M-<right>" nil
             "M-m" nil
-            [remap lispy-outline-promote] 'outline-promote
-            [remap lispy-outline-demote] 'outline-demote))
+            "<M-return>" nil
+            "<M-RET>" nil)
+  :custom
+  (lispy-key-theme '(special lispy)))
 
 (defun akirak/lispy-goto-symbol-elisp-other-window (symbol)
   "Goto definition of an Elisp SYMBOL in other window."
@@ -47,6 +57,40 @@
              (error "Couldn't find definition of %s"
                     symbol))))))
 
-(advice-add 'lispy-goto-symbol-elisp :override #'akirak/lispy-goto-symbol-elisp-other-window)
+(advice-add 'lispy-goto-symbol-elisp
+            :override #'akirak/lispy-goto-symbol-elisp-other-window)
+
+(pretty-hydra-define akirak/lispy-x-hydra
+  (:title "Lispy code transformation"
+          :exit t)
+  ("Conditionals"
+   (("c" lispy-to-cond "if to cond")
+    ("i" lispy-to-ifs "cond to if"))
+   "Functions"
+   (("l" lispy-to-lambda "defun to lambda")
+    ("d" lispy-to-defun "lambda to defun"))
+   "Extract/bind"
+   (("b" akirak/lispy-bind-variable "Bind in a new let")
+    ("D" lispy-extract-defun "Extract defun"))
+   "Development"
+   (("e" lispy-edebug "edebug"))))
+
+(defun akirak/lispy-bind-variable (name)
+  ;; An alternative to `lispy-bind-variable', which seems to mangle undo-fu.
+  (interactive "sName: ")
+  (-let* (((start . end) (if (region-active-p)
+                             (cons (region-beginning) (region-end))
+                           (bounds-of-thing-at-point 'sexp)))
+          (sexp (buffer-substring start end))
+          (keyword (if current-prefix-arg
+                       "let*"
+                     "let")))
+    (delete-region start end)
+    (insert "(" keyword " ((" name " " sexp ")\n")
+    (let ((pos (point)))
+      (insert "\n)\n")
+      (push-mark)
+      (insert name ")")
+      (goto-char pos))))
 
 (provide 'setup-lispy)

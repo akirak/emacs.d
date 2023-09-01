@@ -8,7 +8,8 @@
     (`(t . _)
      (setq treemacs-git-mode 'simple)))
   :general
-  ("C-0" #'akirak/treemacs)
+  ("C-0" #'akirak/treemacs
+   "C--" #'akirak/treemacs-find-file)
   :config
   (defvar akirak/treemacs-origin-window nil)
   (defun akirak/treemacs ()
@@ -22,25 +23,29 @@
      (t
       (setq akirak/treemacs-origin-window (selected-window))
       (treemacs-select-window))))
+
+  (defun akirak/treemacs-find-file ()
+    "Find the current file in treemacs."
+    (interactive)
+    (treemacs-find-file)
+    (treemacs-select-window))
+
+  (add-to-list 'treemacs-ignored-file-predicates
+               (defun akirak/treemacs-ignored-file-predicate (filename path)
+                 (member filename '(".direnv")))
+               t)
+  :custom
   (treemacs-follow-mode 1)
   (treemacs-filewatch-mode 1)
-  (treemacs-fringe-indicator-mode 1))
+  (treemacs-fringe-indicator-mode 'always))
 
 (use-package treemacs-icons-dired
-  :after (treemacs dired)
-  :config
-  (treemacs-icons-dired-mode))
+  :after (dired)
+  :hook
+  (dired-mode . treemacs-icons-dired-mode))
 
 (use-package treemacs-magit
-  :after (treemacs magit))
-
-(use-package treemacs-projectile
   :disabled t
-  :init
-  (defun akirak/treemacs-projectile (&optional arg)
-    (interactive)
-    (if arg
-        (treemacs-projectile-toggle)
-      (treemacs-projectile))))
+  :after (treemacs magit))
 
 (provide 'setup-treemacs)

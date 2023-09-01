@@ -30,6 +30,15 @@
                                (when blocker (format " Blocker: %s" blocker)))))))
                 "\n")))
 
+(akirak/bind-mode :keymaps 'org-mode-map
+  "@"
+  (defun akirak/org-add-creation-time ()
+    (interactive)
+    (unless (org-entry-get nil "CREATED_TIME")
+      (org-entry-put nil "CREATED_TIME"
+                     ;; TODO: Check for clock data in the entry
+                     (format-time-string (org-time-stamp-format t t))))))
+
 (major-mode-hydra-define org-mode
   (:title (akirak/org-agenda-hydra-title)
           :foreign-keys t)
@@ -43,24 +52,21 @@
             (call-interactively 'org-store-link))
      "With custom ID"))
    "Mark/config"
-   (("mh" akirak/org-set-habit "Set habit")
-    ("mc" (unless (org-entry-get nil "CREATED_TIME")
+   (("mc" (unless (org-entry-get nil "CREATED_TIME")
             (org-entry-put nil "CREATED_TIME"
                            ;; TODO: Check for clock data in the entry
                            (format-time-string (org-time-stamp-format t t))))
      "Set created time")
-    ("%" (akirak/org-add-statistics-cookie "%") "Add [%%]")
+    ("%" (akirak/org-add-statistics-cookie "%") "Add [%%%%]")
     ("/" (akirak/org-add-statistics-cookie "/") "Add [/]")
+    ("ms" org-sidebar-tree)
     ;; TODO: Show history
     )
    "Set"
-   (("sc" akirak/org-set-category "Category"))
-   "Media (org-download)"
-   (("is" org-download-screenshot "Ins screenshot")
-    ("yi" org-download-yank "Yank image")
-    ("ril" org-download-rename-last-file "Rename last"))
-   "Extras"
-   (("ed" org-edna-edit "Edit deps"))))
+   (("sc" akirak/org-set-category "Category")
+    ("st" org-edit-headline "Headline"))
+   "Relationship"
+   (("e" org-linker-edna))))
 
 (major-mode-hydra-define org-agenda-mode
   (:title (akirak/org-agenda-hydra-title)
@@ -75,9 +81,7 @@
             (call-interactively 'org-store-link))
      "With custom ID"))
    "Set"
-   (("sc" akirak/org-set-category "Category"))
-   "Edit"
-   (("ed" org-edna-edit "Edit deps"))))
+   (("sc" akirak/org-set-category "Category"))))
 
 ;;;; org-habit support
 

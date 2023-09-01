@@ -1,45 +1,50 @@
 (use-package ob
   :after org
   :straight nil
-  :init
+  :config
   (defun akirak/org-babel-do-load-languages ()
     (org-babel-do-load-languages 'org-babel-load-languages
                                  org-babel-load-languages))
-  :config
-  (setq org-confirm-babel-evaluate nil)
+  (setq-default org-babel-load-languages
+                '((translate . t)
+                  ;; (mermaid . t)
+                  (erd . t)
+                  (shell . t)
+                  (emacs-lisp . t)
+                  (plantuml . t)
+                  (sql . t)
+                  (sqlite . t)
+                  (restclient . t)
+                  (graphql . t)))
   :hook
-  (emacs-startup . akirak/org-babel-do-load-languages))
+  (emacs-startup . akirak/org-babel-do-load-languages)
+  :custom
+  (org-confirm-babel-evaluate nil))
 
-;; To add support for a language in org-babel, add the following configuration:
+(use-package ob-async
+  :after ob)
 
-;; - Add =(LANG . t)= to =org-babel-load-languages= in =:init= section
-;;   of a =use-package= directive. If necessary, add a custom mapping
-;;
-;; - to =org-src-lang-modes=.
+;;;; Natural languages
 
-(unless (bound-and-true-p org-babel-load-languages)
-  (setq org-babel-load-languages
-        '((emacs-lisp . t)
-          (java . t)
-          (shell . t)
-          (elixir . t)
-          (python . t)
-          (sqlite . t)
-          (dot . t)
-          (ditaa . t)
-          (restclient . t)              ; requires ob-restclient
-          (typescript . t))))
+(use-package ob-translate
+  :after ob)
 
-(use-package ob-async)
+;;;; Diagramming
 
-;;;; Language supports
+(use-package ob-erd
+  :straight (:host github :repo "akirak/ob-erd")
+  :after ob)
 
-;;;;; Contributed packages shipped with the main org package
+(use-package ob-plantuml
+  :straight (:type built-in)
+  :custom
+  (org-plantuml-exec-mode 'plantuml))
+
+(use-package ob-dataflow)
+
+;;;; Everyday scripting
 
 (use-package ob-shell
-  :straight (:type built-in))
-
-(use-package ob-python
   :straight (:type built-in))
 
 (use-package ob-emacs-lisp
@@ -48,27 +53,12 @@
 (use-package ob-sqlite
   :straight (:type built-in))
 
-(use-package ob-dot
-  :after ob
-  :straight nil
-  :init
-  (add-to-list 'org-src-lang-modes '("dot" . graphviz-dot)))
-
-(use-package ob-ditaa
-  :after ob
-  :straight nil)
-
-;;;;; Third-party packages
+;;;; Web
 
 (use-package ob-restclient
   :after ob)
 
-;; You'll need tsc and node in the path to use this package.
-(use-package ob-typescript
-  :after ob)
-
-(use-package ob-elixir
-  :straight (:host github :repo "zweifisch/ob-elixir")
+(use-package ob-graphql
   :after ob)
 
 (provide 'setup-org-babel)

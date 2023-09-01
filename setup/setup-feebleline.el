@@ -1,11 +1,13 @@
 (use-package feebleline
   :config
+  (require 'font-lock)
   (defvar akirak/orig-mode-line-format nil)
   (unless akirak/orig-mode-line-format
     (setq akirak/orig-mode-line-format mode-line-format))
   (feebleline-mode 1)
   (setq feebleline-msg-functions
-        '(((lambda () (format-mode-line "%e")))
+        '(
+          ;; ((lambda () (format-mode-line "%e")))
           ;; ((lambda () (frame-parameter nil 'name)) :post " " :face font-lock-function-name-face)
           (akirak/feebleline-time-string :post " " :face font-lock-comment-face)
           (akirak/feebleline-input-method :post " " :face font-lock-constant-face)
@@ -14,12 +16,51 @@
           (akirak/feebleline-vc :face font-lock-string-face)
           ;; ((lambda () (when (and buffer-file-name (require 'magit nil t))
           ;;               (magit-get-current-branch))) :face font-lock-string-face :post " ")
-          ((lambda () (format-mode-line mode-name)) :post " " :face font-lock-comment-face)
+          (akirak/feebleline-mode-name :post " " :face font-lock-comment-face)
+          ;; (akirak/feebleline-lsp :face font-lock-type-face)
           ;; Disable this segment for now.
           ;; (akirak/feebleline-buffer-group :post " " :face akirak/feebleline-buffer-group-face)
           (akirak/feebleline-buffer-size :post " " :face font-lock-comment-face)
+          ;; TODO: This is a memory hog. I will look for an alternative
+          ;; (akirak/feebleline-process-status)
+          (akirak/feebleline-gcmh-status :face font-lock-warning-face)
+          (akirak/feebleline-org-journal-status :post " " :face font-lock-constant-face)
+          (akirak/org-multi-wiki-workspace-status :post " " :face font-lock-constant-face)
           (akirak/feebleline-exwm-workspaces :post " " :face font-lock-constant-face)
           (akirak/org-clock-summary-for-feebleline :face font-lock-builtin-face :pre " :: "))))
+
+(defvar akirak/feebleline-org-journal-status nil)
+
+(defsubst akirak/feebleline-mode-name ()
+  (format-mode-line mode-name))
+
+(defun akirak/feebleline-org-journal-status ()
+  (or (when-let (dir (bound-and-true-p org-journal-dir))
+        (if (and akirak/feebleline-org-journal-status
+                 (string-equal dir (car akirak/feebleline-org-journal-status)))
+            (cdr akirak/feebleline-org-journal-status)
+          (save-match-data
+            (string-match (rx "/" (group (+ (not (any "/")))) (?  "/") eol)
+                          dir)
+            (cdr (setq akirak/feebleline-org-journal-status
+                       (cons dir (match-string 1 dir)))))))
+      ""))
+
+(defun akirak/org-multi-wiki-workspace-status ()
+  (if-let (workspace (bound-and-true-p org-multi-wiki-current-namespace))
+      (format "%s" workspace)
+    ""))
+
+(defun akirak/feebleline-gcmh-status ()
+  (if (bound-and-true-p akirak/gcmh-status)
+      (concat akirak/gcmh-status " ")
+    ""))
+
+(defun akirak/feebleline-process-status ()
+  (let ((status (format-mode-line "%s")))
+    (if (equal "no process" status)
+        ""
+      status)))
 
 (defface akirak/feebleline-buffer-group-face
   '((t :weight bold :inherit font-lock-comment-face))
@@ -55,6 +96,11 @@
 
 (defsubst akirak/feebleline-input-method ()
   current-input-method-title)
+
+(defsubst akirak/feebleline-lsp ()
+  (if (bound-and-true-p lsp-mode)
+      (format-mode-line (car (alist-get 'lsp-mode minor-mode-alist)))
+    ""))
 
 (defvar akirak/feebleline-time-string nil)
 
@@ -108,7 +154,48 @@
 
 (defun akirak/feebleline-update-file-directory ()
   (setq akirak/feebleline-file-directory
-        (feebleline-file-directory)))
+        (akirak/feebleline-file-directory)))
+
+(defun akirak/feebleline-file-directory ()
+  "Modified version of `feebleline-file-directory'."
+  (when (buffer-file-name)
+    (let ((path (replace-regexp-in-string
+                 (concat "^" feebleline--home-dir) "~"
+                 default-directory)))
+      (if (< (length path) 20)
+          path
+        (akirak/feebleline-abbr-dir)))))
+
+(defun akirak/feebleline-abbr-dir ()
+  "Abbreviate the default directory."
+  (cl-labels
+      ((match-dir
+        (dir)
+        (if (string-match (rx bos (group (+ anything) "/")
+                              (group (+ (not (any "/"))) (?  "/"))
+                              eol)
+                          dir)
+            (list (match-string 1 dir)
+                  (match-string 2 dir))
+          (list "" dir)))
+       ())
+    (-let* ((here (replace-regexp-in-string (concat "^" feebleline--home-dir)
+                                            "~"
+                                            default-directory))
+            (vc-root (or (vc-root-dir) here))
+            ((p1 p2) (match-dir vc-root))
+            (relative (string-remove-prefix vc-root here))
+            ((p3 p4) (match-dir relative)))
+      (concat (replace-regexp-in-string
+               (rx (group (repeat 1 1 (any alnum))) (+ (any "." alnum)))
+               "\\1"
+               p1)
+              p2
+              (replace-regexp-in-string
+               (rx (group (repeat 1 3 (any alnum))) (+ (any "." alnum)))
+               "\\1"
+               p3)
+              p4))))
 
 (byte-compile #'akirak/feebleline-update-file-directory)
 
@@ -156,10 +243,9 @@
                            (t (org-minutes-to-clocksum-string
                                (floor seconds 60))))
                           (if (string-empty-p org-clock-current-task)
-                              (with-current-buffer (marker-buffer org-clock-marker)
-                                (org-with-wide-buffer
-                                 (goto-char org-clock-marker)
-                                 (nth 4 (org-heading-components))))
+                              (org-with-point-at org-clock-marker
+                                (org-link-display-format
+                                 (org-get-heading t t t t)))
                             org-clock-current-task))))
           (setq akirak/org-clock-summary-for-feebleline (cons seconds v))
           v)))))
@@ -204,29 +290,27 @@
 
 (defun akirak/feebleline-exwm-workspaces-update ()
   (setq akirak/feebleline-exwm-workspaces
-        (mapconcat (lambda (i)
-                     (let* ((frm (exwm-workspace--workspace-from-frame-or-index i))
-                            (name (when (fboundp 'frame-workflow--frame-subject-name)
-                                    (frame-workflow--frame-subject-name frm))))
-                       (format
-                        (cond
-                         ((equal frm (selected-frame)) "[%s*]")
-                         ;; TODO: A better way to detect active workspaces
-                         ;; This does not always detect all active workspaces.
-                         ((exwm-workspace--active-p frm) "[%s]")
-                         (t "%s"))
-                        (concat (int-to-string i)
-                                (if name
-                                    (concat ":" name)
-                                  "")))))
-                   (number-sequence 0 (1- (exwm-workspace--count)))
-                   " ")))
+        (cl-labels
+            ((current-p (frm) (equal frm (selected-frame)))
+             ;; TODO: A better way to detect active workspaces
+             ;; This does not always detect all active workspaces.
+             (visible-p (frm) (exwm-workspace--active-p frm))
+             (get-frame (i) (exwm-workspace--workspace-from-frame-or-index i))
+             (format-workspace (i)
+                               (let ((frm (get-frame i)))
+                                 (format (cond
+                                          ((current-p frm) "[%s%s*]")
+                                          ((visible-p frm) "[%s%s]")
+                                          (t "%s%s"))
+                                         (int-to-string i)
+                                         ""))))
+          (let ((workspaces (number-sequence 0 (1- (exwm-workspace--count)))))
+            (mapconcat #'format-workspace workspaces " ")))))
 
 (with-eval-after-load 'exwm
   (general-add-hook '(exwm-workspace-list-change-hook
                       exwm-randr-screen-change-hook
-                      exwm-workspace-switch-hook
-                      frame-workflow-select-frame-hook)
+                      exwm-workspace-switch-hook)
                     'akirak/feebleline-exwm-workspaces-update))
 
 (provide 'setup-feebleline)

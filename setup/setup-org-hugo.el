@@ -14,6 +14,8 @@
 (defvar akirak/org-hugo-keywords)
 (make-variable-buffer-local 'akirak/org-hugo-keywords)
 
+(defvar-local akirak/org-hugo-editing-subtrees nil)
+
 ;;;; Custom variables
 
 (defcustom akirak/hugo-default-project-directory ""
@@ -157,35 +159,41 @@
     (replace-regexp-in-string "[^[:alnum:]_-]" "")))
 
 ;;;;; Exporting
-(defun akirak/org-hugo-export-subtree (&optional arg)
-  (interactive "P")
-  (akirak/org-hugo-setup-file)
-  (save-excursion
-    (when (akirak/org-hugo-find-root)
-      (akirak/org-hugo-configure-subtree-post arg)
-      (org-hugo-export-wim-to-md)
-      (akirak/org-hugo-open-exported-file))))
+(akirak/bind-org-export
+  "h"
+  (defun akirak/org-hugo-export-subtree (&optional arg)
+    (interactive "P")
+    (akirak/org-hugo-setup-file)
+    (save-excursion
+      (when (akirak/org-hugo-find-root)
+        (akirak/org-hugo-configure-subtree-post arg)
+        (add-to-list 'akirak/org-hugo-editing-subtrees
+                     (org-entry-get nil "EXPORT_FILE_NAME"))
+        (org-hugo-export-wim-to-md)
+        (akirak/org-hugo-subtree-reexport-mode t)
+        (akirak/org-hugo-open-exported-file)))))
 
-(defun akirak/org-hugo-export-subtrees-in-file ()
+(defun akirak/org-hugo-reexport-subtrees ()
   "Export all subtrees in the file/buffer."
   (interactive)
-  (save-excursion
-    (goto-char (point-min))
-    (save-excursion
-      (while (re-search-forward akirak/org-hugo-root-regexp nil t)
-        (org-hugo-export-wim-to-md)
-        (org-end-of-subtree)))))
+  (org-with-wide-buffer
+   (goto-char (point-min))
+   (dolist (out akirak/org-hugo-editing-subtrees)
+     (when (ignore-errors
+             (org-find-property "EXPORT_FILE_NAME" out)
+             t)
+       (message "Re-exporting to %s..." out)
+       (org-hugo-export-wim-to-md)))))
 
-(define-minor-mode akirak/org-hugo-subtree-export-mode
-  "Toggle auto exporting the Org file using `ox-hugo'."
+(define-minor-mode akirak/org-hugo-subtree-reexport-mode
+  "Minor mode for automatically re-exporting ox-hugo entries on save."
   :global nil
-  :lighter "Hugo Subtree"
-  (if akirak/org-hugo-subtree-export-mode
-      ;; When the mode is enabled
-      (progn
-        (add-hook 'after-save-hook #'akirak/org-hugo-export-subtrees-in-file :append :local))
-    ;; When the mode is disabled
-    (remove-hook 'after-save-hook #'akirak/org-hugo-export-subtrees-in-file :local)))
+  :lighter "HugoReexp"
+  (cond
+   (akirak/org-hugo-subtree-reexport-mode
+    (add-hook 'after-save-hook #'akirak/org-hugo-reexport-subtrees :append :local))
+   (t
+    (remove-hook 'after-save-hook #'akirak/org-hugo-reexport-subtrees :local))))
 
 ;;;; Opening the exported file
 

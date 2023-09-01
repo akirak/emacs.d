@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if [ -n "$2" ]; then
     exit
@@ -15,7 +15,7 @@ for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
     if [[ "$s" =~ setup-([^.]+) ]]; then
         FILENAME=${BASH_REMATCH[1]}
         # Prevent from inserting a message if the file is setup-misc.el
-        if [[ ${FILENAME} =~ '^(meta|misc)$' ]]; then
+        if [[ ${FILENAME} =~ ^(meta|misc)$ ]]; then
             continue
         fi
         # Insert a line into the message depending on the status of the file
@@ -28,9 +28,11 @@ for s in $(git --no-pager diff --cached --name-status "$COMMIT"); do
                 sed -i "1iAdd ${FILENAME}\n" "$1"
                 ;;
         esac
+    elif [[ "$s" =~ lisp/my/([^.]+)\.el ]]; then
+        sed -i "1i${BASH_REMATCH[1]}: " "$1"
     elif [[ "$s" =~ meta/ ]] || [[ "$s" =~ .githooks/ ]]; then
         sed -i "1iMeta: " "$1"
     elif [[ "$s" =~ README ]]; then
-        sed -i "1iDoc: " "$1"
+        sed -i "1iREADME: Auto-update by pre-push git hook" "$1"
     fi
 done

@@ -8,18 +8,6 @@
 ;; Enable faces for contents inside blocks
 (setq-default org-fontify-quote-and-verse-blocks t)
 
-;;;;; Line spacing 
-;; Line spacing for writing
-(setq-mode-local org-mode line-spacing 0.3)
-(setq-mode-local markdown-mode line-spacing 0.3)
-
-;; Line spacing for reading
-(setq-mode-local Info-mode jline-spacing 0.5)
-
-;; Browser
-;; This does not seem to effect
-;; (setq-mode-local eww-mode line-spacing 0.3)
-
 ;;;; Utilities for fonts
 (defun akirak/check-fonts (list)
   "Check availablity of fonts in LIST and transform it into an alist."
@@ -34,6 +22,10 @@
 
 (set-face-attribute 'fixed-pitch-serif nil :foreground "gold" :inherit 'default)
 
+(set-face-attribute 'italic nil :underline nil :slant 'italic)
+(with-eval-after-load 'org
+  (set-face-attribute 'org-verbatim nil :inherit 'org-code))
+
 ;;;;; Header line
 (when (featurep 'akirak/setup-header-line)
   (set-face-attribute 'header-line nil
@@ -46,17 +38,18 @@
   (set-face-attribute 'info-title-4 nil :slant 'italic))
 
 ;;;;; Headings
-(set-face-attribute 'org-document-title nil :height 1.6
+
+(set-face-attribute 'org-document-title nil :height 1.7
                     :weight 'normal
                     :inherit 'default)
-(set-face-attribute 'org-level-1 nil :height 1.75 :inherit 'default)
-(set-face-attribute 'org-level-2 nil :height 1.6 :inherit 'default)
-(set-face-attribute 'org-level-3 nil :height 1.5 :inherit 'default)
-(set-face-attribute 'org-level-4 nil :height 1.35 :inherit 'default)
-(set-face-attribute 'org-level-5 nil :height 1.25 :inherit 'default)
-(set-face-attribute 'org-level-6 nil :height 1.2 :inherit 'default)
-(set-face-attribute 'org-level-7 nil :height 1.15 :inherit 'default)
-(set-face-attribute 'org-level-8 nil :height 1.1 :inherit 'default)
+(set-face-attribute 'org-level-1 nil :height 1.54 :inherit 'default)
+(set-face-attribute 'org-level-2 nil :height 1.41 :inherit 'default)
+(set-face-attribute 'org-level-3 nil :height 1.30 :inherit 'default)
+(set-face-attribute 'org-level-4 nil :height 1.19 :inherit 'default)
+(set-face-attribute 'org-level-5 nil :height 1.10 :inherit 'default)
+(set-face-attribute 'org-level-6 nil :height 1.07 :inherit 'default)
+(set-face-attribute 'org-level-7 nil :height 1.03 :inherit 'default)
+(set-face-attribute 'org-level-8 nil :height 1.00 :inherit 'default)
 
 ;; Other headings (for reading)
 (with-eval-after-load 'helpful
@@ -122,7 +115,7 @@
 
 (cl-defun akirak/set-font-family-if-existing (family &rest faces)
   (declare (indent 1))
-  (if (member family (or akirak/font-family-list (font-family-list)))
+  (if (and family (member family (or akirak/font-family-list (font-family-list))))
       (dolist (face faces)
         (set-face-attribute face nil :family family))
     (message "Font family %s does not exist, so the following faces won't have expected settings: %s"
@@ -131,7 +124,8 @@
 
 (cl-defun akirak/set-fontset-font (fontset family)
   (declare (indent 1))
-  (if (member family (or akirak/font-family-list (font-family-list)))
+  (if (and family
+           (member family (or akirak/font-family-list (font-family-list))))
       (set-fontset-font "fontset-default" fontset family)
     (message "Font family %s does not exist, so %s fontset won't get a proper font setting."
              family fontset)))
@@ -141,51 +135,77 @@
 
 (defun akirak/set-local-text-fonts ()
   (cond
-   ((derived-mode-p 'Info-mode 'eww-mode 'help-mode 'helpful-mode)
+   ((and akirak/paragraph-font
+         (derived-mode-p 'Info-mode 'eww-mode 'help-mode 'helpful-mode))
     (face-remap-add-relative 'default `(:family ,akirak/paragraph-font)))
-   ((derived-mode-p 'org-mode 'markdown-mode)
-    (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font)))))
+   ((and akirak/maybe-duospace-font
+         (derived-mode-p 'org-mode 'markdown-mode))
+    (face-remap-add-relative 'default `(:family ,akirak/maybe-duospace-font))))
+  ;; Set line-spacing depending on the mode
+  (-some->> (or (and (derived-mode-p 'org-mode) 0.5)
+                (and (derived-mode-p 'markdown-mode) 0.6)
+                (and (derived-mode-p 'helpful-mode 'help-mode) 0.3)
+                (cl-case major-mode
+                  ('Info-mode 0.3)
+                  ('eww-mode 0.35)))
+    (setq-local line-spacing)))
 
-(let (;; Default font family.
-      ;; Used for normal text in programming and message buffers.
-      (default
-        ;; Available from my agave package
-        "Agave")
-      ;; Monospace or duospace of any type
-      ;; used for writing
-      (monospace-or-duospace
-       ;; Nerd font variant of Go Mono
-       "GoMono Nerd Font Mono")
-      ;; Variable-pitch handwriting font.
-      ;; Used for tags in org-mode
-      (handwriting
-       ;; Brushy italic script font.
-       ;; https://fonts.google.com/specimen/Courgette
-       ;; Deployed as part of Google Fonts
-       "Courgette")
-      ;; Used for headings in org-mode, Info-mode, etc.
-      (heading
-       ;; Humanist sans serif typeface
-       ;; https://fonts.google.com/specimen/Belleza
-       ;; Deployed as part of Google Fonts
-       "Belleza")
-      ;; A fixed pitch font for text body.
-      (info-paragraph
-       "Hack NF")
-      ;; A fixed/variable pitch font for text body.
-      (paragraph
-       "Tinos Nerd Font")
-      (kana "HannariMincho")
-      (han "Adobe Fangsong Std"))
+;; Set the default font
+(defcustom akirak/default-font-family
+  "Cascadia Code"
+  "Font family used as the default font."
+  :type 'string
+  :set (lambda (sym default)
+         (set sym default)
+         (akirak/set-font-family-if-existing default
+           'default
+           ;; text in Info-Mode
+           'fixed-pitch-serif
+           'org-code
+           'org-block)
+         (with-eval-after-load 'info
+           (let ((ref-faces (let (faces)
+                              (mapatoms
+                               (lambda (sym)
+                                 (when (and (face-documentation sym)
+                                            (string-prefix-p "info-colors-ref-item-"
+                                                             (symbol-name sym)))
+                                   (push sym faces))))
+                              faces)))
+             (apply #'akirak/set-font-family-if-existing default
+                    ref-faces)))))
+
+;; Set the other font families
+(let* (;; Monospace or duospace of any type
+       ;; used for writing
+       (monospace-or-duospace
+        nil)
+       ;; Variable-pitch handwriting font.
+       ;; Used for tags in org-mode
+       (handwriting
+        ;; Brushy italic script font.
+        ;; https://fonts.google.com/specimen/Courgette
+        ;; Deployed as part of Google Fonts
+        nil)
+       ;; Used for headings in org-mode, Info-mode, etc.
+       (heading
+        ;; Humanist sans serif typeface
+        ;; https://fonts.google.com/specimen/Belleza
+        ;; Deployed as part of Google Fonts
+        "Libre Baskerville")
+       ;; A fixed pitch font for text body.
+       (info-paragraph
+        nil)
+       ;; A fixed/variable pitch font for text body.
+       (paragraph
+        nil)
+       (symbol
+        nil)
+       (kana "Shippori Mincho")
+       (han kana))
   (setq akirak/font-family-list (font-family-list))
   (unwind-protect
       (progn
-        (akirak/set-font-family-if-existing default
-          'default
-          ;; text in Info-Mode
-          'fixed-pitch-serif
-          'org-code
-          'org-block)
 
         (akirak/set-font-family-if-existing paragraph
           'variable-pitch)
@@ -217,7 +237,11 @@
             'dired-filter-group-header))
         (with-eval-after-load 'info
           (akirak/set-font-family-if-existing heading
-            'info-menu-header))
+            'info-menu-header
+            'info-title-1
+            'info-title-2
+            'info-title-3
+            'info-title-4))
         (with-eval-after-load 'markdown-mode
           (akirak/set-font-family-if-existing heading
             'markdown-header-face))
@@ -226,7 +250,11 @@
         (with-eval-after-load 'org
           (akirak/set-font-family-if-existing handwriting
             'org-todo
-            'org-tag))
+            'org-checkbox-statistics-done
+            'org-tag)
+          (akirak/set-font-family-if-existing info-paragraph
+            'org-link))
+
 
         (setq akirak/paragraph-font info-paragraph)
         (setq akirak/maybe-duospace-font monospace-or-duospace)
@@ -237,19 +265,21 @@
             (akirak/set-local-text-fonts)))
 
         (akirak/set-fontset-font 'kana kana)
-        (akirak/set-fontset-font 'han han))
+        (akirak/set-fontset-font 'han han)
+        (akirak/set-fontset-font 'symbol symbol))
     (setq akirak/font-family-list nil)))
 
 ;;;; Packages for extra face settings
 
 ;; Use Hasklig in haskell-mode and enable ligatures.
 (use-package hasklig-mode
+  :disabled t
   :straight (:host github :repo "minad/hasklig-mode")
   :config
   (defun akirak/use-hasklig-font-locally ()
     (face-remap-add-relative 'default '(:family "Hasklig")))
   :hook
-  (haskell-mode . hasklig-mode)
+  ((haskell-mode purescript-mode) . hasklig-mode)
   (hasklig-mode . akirak/use-hasklig-font-locally))
 
 (use-package info-colors

@@ -12,3 +12,20 @@
         (goto-char (point-max))
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage)))
+
+;; Manage recipes in a file.
+(defconst akirak/straight-default-recipes-file
+  (expand-file-name "recipes.el" user-emacs-directory))
+
+(defun akirak/straight-read-recipes-from-file (file)
+  (with-temp-buffer
+    (insert-file-contents file)
+    (goto-char (point-min))
+    (read (current-buffer))))
+
+(defun akirak/straight-use-recipes-from-file (file)
+  (cl-labels ((register-recipe
+               (recipe)
+               (straight-use-package recipe 'no-clone 'no-build)))
+    (mapc #'register-recipe
+          (akirak/straight-read-recipes-from-file file))))

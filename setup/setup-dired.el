@@ -25,9 +25,12 @@
 
 ;;;; Basic configuration (without external dependencies)
 
-(setq-default dired-dwim-target t
-              dired-recursive-copies 'always
+(setq-default dired-recursive-copies 'always
               dired-recursive-deletes 'top)
+
+;;;; dired-open-functions
+(general-add-hook 'dired-open-extensions
+                  '(("gif" . "mpv --loop")))
 
 ;;;; Formatting
 
@@ -122,6 +125,8 @@
                 (extension "txt" "md" "mkd" "markdown" "rst")))
            ("Org"
             (extension "org" "bib"))
+           ("Ledger"
+            (extension "beancount"))
            ("Data files"
             (extension "csv" "json" "sql"))
            ;; Binary files
@@ -154,6 +159,11 @@
   :hook
   (dired-mode . dired-filter-mode)
   (dired-mode . dired-filter-group-mode))
+
+(add-hook 'dired-mode-hook
+          (defun akirak/dired-hide-dotfiles-in-home ()
+            (when (string-equal default-directory "~/")
+              (dired-hide-dotfiles-mode t))))
 
 (use-package dired-collapse
   :after dired
@@ -240,5 +250,29 @@
   "z h" #'dired-hide-dotfiles-mode
   "/" 'dired-filter-map
   "<S-return>" #'dired-open-xdg)
+
+;;;; Bookmark support
+(defun akirak/dired-bookmark-make-record (&rest args)
+  (let* ((default (apply #'bookmark-make-record-default args))
+         (filename (alist-get 'filename default)))
+    (cons (abbreviate-file-name (expand-file-name filename))
+          default)))
+
+(add-hook 'dired-mode-hook
+          (defun akirak/dired-setup-bookmark-function ()
+            (set
+             (make-local-variable 'bookmark-make-record-function) 'akirak/dired-bookmark-make-record)))
+
+;;;; Hydra
+(major-mode-hydra-define dired-mode
+  (:title "Dired")
+  ("Open/execute"
+   (("x" dired-open-xdg))
+   "Transfer"
+   (("r" dired-rsync))
+   "Minor modes"
+   (("mc" dired-collapse-mode "collapse" :toggle t)
+    ("mf" dired-filter-mode "filter" :toggle t)
+    ("mg" dired-filter-group-mode "group" :toggle t))))
 
 (provide 'setup-dired)

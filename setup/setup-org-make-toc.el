@@ -1,6 +1,6 @@
 (use-package org-make-toc
   :after (org)
-  :commands (org-make-toc)
+  :commands (org-make-toc org-make-toc-mode)
   :config
   (defun akirak/org-insert-toc-for-top-level ()
     (interactive)

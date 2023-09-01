@@ -26,6 +26,7 @@
      `(hl-line
        ((default :background ,bg0)))
      `(dired-filter-group-header
-       ((default :foreground ,keyword))))))
+       ((default :foreground ,keyword)))))
+  (load-theme 'dracula 'noconfirm))
 
 (provide 'setup-dracula-theme)

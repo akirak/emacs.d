@@ -2,12 +2,17 @@
   :straight (ivy-decorator :host github :repo "akirak/ivy-decorator"))
 
 (use-package ivy
-  ;; :diminish (ivy-mode)
-  :init
-  (ivy-mode 1)               ; Use ivy as completing-read-function
   :config
+  ;; Use ivy as completing-read-function
+  (ivy-mode 1)
+
   (add-to-list 'ivy-sort-functions-alist
                '(read-file-name-internal . eh-ivy-sort-file-by-mtime))
+  (defvar ivy-switch-buffer-2-map
+    (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
+      (define-key map (kbd "C-c C-p") 'ivy-switch-buffer-2-toggle-mode)
+      map))
+  (akirak/bind-register "M-r" #'ivy-resume)
   :general
   (:keymaps 'ivy-occur-mode-map
             "n" #'ivy-occur-next-line
@@ -17,7 +22,7 @@
   (enable-recursive-minibuffers t)
   (ivy-height 10)
   (ivy-initial-inputs-alist nil "Don't prepend `^' to any of the ivy prompts")
-  (projectile-completion-system 'ivy)
+  ;; (projectile-completion-system 'ivy)
   (ivy-ignore-buffers (quote ("\\` " "\\\\*lemonbar\\\\*" "\\\\*i3status\\\\*"))))
 
 ;; https://github.com/abo-abo/swiper/wiki/Sort-files-by-mtime#a-simple-version
@@ -35,11 +40,6 @@
         (time-less-p y-mtime x-mtime)))))
 
 ;;;; ivy-switch-buffer-2
-
-(defvar ivy-switch-buffer-2-map
-  (let ((map (make-composed-keymap nil ivy-switch-buffer-map)))
-    (define-key map (kbd "C-c C-p") 'ivy-switch-buffer-2-toggle-mode)
-    map))
 
 (defun ivy-switch-buffer-2--complete (&rest args)
   (mapcar #'buffer-name (buffer-list)))
@@ -84,6 +84,9 @@
   "Alist of height.")
 
 (use-package ivy-posframe
+  :disabled t
+  :unless (akirak/windows-subsystem-for-linux-p)
+  :after ivy
   ;; Use posframe to display candidates in ivy commands.
   ;;
   ;; 1. The default display function is ivy-posframe-display-at-frame-center.
@@ -122,6 +125,8 @@
   (defun akirak/ivy-decorator-width ()
     (let ((caller (ivy-state-caller ivy-last)))
       (cdr (assoc caller akirak/ivy-posframe-width-alist))))
+  (when (akirak/exwm-session-p)
+    (setq ivy-posframe-parameters '((parent-frame nil))))
   :config/el-patch
   (el-patch-defun ivy-posframe-display-at-window-bottom-left (str)
     (el-patch-wrap 1
@@ -133,7 +138,7 @@
   (ivy-posframe-width 100)
   (akirak/ivy-posframe-width-alist
    `((counsel-ibuffer . 120)
-     (ivy-omni-org . 80)
+     (ivy-omni-org . 100)
      (all-the-icons-ivy . 50)
      ,@(--map (cons it 130)
               '(counsel-describe-function
@@ -142,12 +147,15 @@
                 counsel-M-x))))
   (akirak/ivy-posframe-height-alist
    '((ivy-omni-org . 30)
-     (all-the-icons-ivy . 30)))
+     (all-the-icons-ivy . 30)
+     (ivy-clipurl . 15)
+     (counsel-yank-pop . 20)))
   (ivy-posframe-size-function #'akirak/ivy-posframe-default-size)
   (org-starter-swiper-width-function (lambda () (- (window-body-width) 5)))
   (ivy-posframe-display-functions-alist
    `(,@(--map (cons it nil)
-              '(swiper swiper-all swiper-multi org-starter-swiper-config-files))
+              '(swiper swiper-all swiper-multi org-starter-swiper-config-files
+                       counsel-locate counsel-rg))
      (counsel-minibuffer-history . nil)
      (counsel-yank-pop . ivy-posframe-display-at-point)
      (all-the-icons-ivy . ivy-posframe-display-at-point)

@@ -1,61 +1,34 @@
-;; The following settings should be done in individual hosts:
-;;
-;; - Setting `org-journal-enable-agenda-integration' to t
-;; - Setting `org-journal-dir' using `general-setq'
-
 (use-package org-journal
   :after org-starter
   :config
-  (defun org-journal-find-location ()
-    "Go to the beginning of the today's journal file.
+  (akirak-org-journal-setup)
 
-This can be used for an org-capture template to create an entry in the journal."
-    ;; Open today's journal, but specify a non-nil prefix argument in order to
-    ;; inhibit inserting the heading; org-capture will insert the heading.
-    (org-journal-new-entry t)
-    ;; Position point on the journal's top-level heading so that org-capture
-    ;; will add the new entry as a child entry.
-    (widen)
-    (goto-char (point-min))
-    (org-show-entry))
-  (defun akirak/org-journal-open-today ()
+  (defun akirak/helm-org-ql-journal ()
     (interactive)
-    (org-journal-new-entry t))
-  (defun akirak/org-journal-files ()
-    (directory-files org-journal-dir t
-                     (file-name-nondirectory org-journal-file-pattern)))
-  (defun akirak/helm-org-rifle-org-journal ()
-    (interactive)
-    (helm-org-rifle-files (nreverse (akirak/org-journal-files))))
-  (add-to-list 'org-starter-extra-find-file-map
-               '("J" akirak/org-journal-open-today "org-journal"))
-  (add-to-list 'org-starter-extra-find-file-map
-               '("C-j" org-journal-new-scheduled-entry "org-journal (schedule)"))
+    (helm-org-ql (nreverse (akirak-org-journal-files))))
   (add-to-list 'org-starter-extra-alternative-find-file-map
-               '("J" akirak/helm-org-rifle-org-journal "org-journal"))
-  (org-starter-def-capture "J" "org-journal (plain)"
-    entry (function org-journal-find-location)
-    "* %?
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-"
-    :unnarrowed t :clock-in t :clock-resume t)
-  (org-starter-def-capture "j" "Journal")
-  (org-starter-def-capture "jo" "Operation log"
-    entry (function org-journal-find-location)
-    "* %^{Title} :operation:
-:PROPERTIES:
-:CREATED_TIME: %U
-:END:
-%?
-"
-    :clock-start t :clock-resume t)
-  ;; Don't bind C-c C-j to org-journal-new-entry
+               '("j" akirak/helm-org-ql-journal "org-journal"))
   (general-unbind "C-c C-j")
+
+  (akirak/bind-search
+    "M-j" #'org-journal-search)
+
+  (akirak/bind-jump
+    "M-d" #'org-journal-new-date-entry)
+
+  (add-hook 'org-journal-mode-hook
+            (defun akirak/org-journal-entry-init ()
+              (setq-local org-multi-wiki-want-custom-id nil)))
+
+  :general
+  (:keymaps 'org-journal-mode-map
+            ;; Use the same values as in org-mode-map
+            "C-c C-f" #'org-forward-heading-same-level
+            "C-c C-b" #'org-backward-heading-same-level)
+
   :custom
-  (org-extend-today-until 4)
-  (org-journal-carryover-items "TODO=\{TODO\\|NEXT\\|STARTED\}")
-  (org-journal-date-format "%F (%a)"))
+  (org-journal-find-file #'find-file)
+  (org-journal-date-format "%F (%a)")
+  (org-journal-file-format "%Y%m%d.org"))
 
 (provide 'setup-org-journal)

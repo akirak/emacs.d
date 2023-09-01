@@ -1,3 +1,0 @@
-
-
-(provide 'init-mastodon)

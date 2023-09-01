@@ -1,4 +1,7 @@
-(use-package vdiff)
+(use-package vdiff
+  :config
+  (akirak/bind-file-extra
+    "d" #'vdiff-files))
 
 (use-package vdiff-magit
   :after magit

@@ -7,491 +7,107 @@ for a better understanding of my previous work and organizing it in a more sensi
 :PROPERTIES:
 :TOC:      siblings
 :END:
-    -  [[#why][Why?]]
-      -  [[#literate-configuration-in-org-mode][Literate configuration in Org mode]]
-        -  [[#pros][Pros]]
-        -  [[#cons][Cons]]
-      -  [[#organizational-policies][Organizational policies]]
-    -  [[#support-older-versions-of-emacs][Support older versions of Emacs]]
-    -  [[#before-using-use-package][Before using use-package]]
-    -  [[#overriding-defaults][Overriding defaults]]
-    -  [[#keybindings-infrastructure][Keybindings infrastructure]]
-      -  [[#repeatable-keys][Repeatable keys]]
-      -  [[#per-mode-hydra][Per-mode hydra]]
-      -  [[#generic-definer][Generic definer]]
-      -  [[#definers-for-emacs-standard-prefix-keys][Definers for Emacs standard prefix keys]]
-      -  [[#definers-for-non-standard-prefix-keys][Definers for non-standard prefix keys]]
-      -  [[#other-custom-key-definitions][Other custom key definitions]]
-    -  [[#dependencies-for-other-packages][Dependencies for other packages]]
-      -  [[#built-in][Built-in]]
-      -  [[#dashel][dash.el]]
-      -  [[#ivy][Ivy]]
-      -  [[#helm][Helm]]
-      -  [[#posframe][posframe]]
-      -  [[#hydra][Hydra]]
-      -  [[#ov-overlays][ov (overlays)]]
-      -  [[#ts-date-time-library-by-alphapapa][ts (date-time library by alphapapa)]]
-      -  [[#org-ql][org-ql]]
-      -  [[#all-the-icons][all-the-icons]]
-      -  [[#emacsql-sqlite][emacsql-sqlite]]
-      -  [[#nix-env-install][nix-env-install]]
-      -  [[#desktop-integration][desktop integration]]
-      -  [[#language-detection][language-detection]]
-    -  [[#platform-workarounds][Platform workarounds]]
-      -  [[#chrome-os-support][Chrome OS support]]
-    -  [[#appearances][Appearances]]
-      -  [[#theme][Theme]]
-      -  [[#frame-elements][Frame elements]]
-      -  [[#typeface][Typeface]]
-      -  [[#visual-enhancements][Visual enhancements]]
-        -  [[#page-break-lines][page-break-lines]]
-        -  [[#color-support-in-terminal-and-compilation-buffers][Color support in terminal and compilation buffers]]
-        -  [[#colorize-color-names][Colorize color names]]
-        -  [[#fontify-face][fontify-face]]
-        -  [[#centralizing-window-contents][Centralizing window contents]]
-    -  [[#a-bunch-of-useful-features][A bunch of useful features]]
-      -  [[#pretty-hydras][Pretty hydras]]
-      -  [[#frame-workflow][frame-workflow]]
-      -  [[#terminal-and-shells][Terminal and shells]]
-      -  [[#dired][Dired]]
-      -  [[#crux-and-file-operations][Crux and file operations]]
-      -  [[#buffer-management][Buffer management]]
-      -  [[#git][Git]]
-      -  [[#project-management][Project management]]
-      -  [[#web-browser-integration][Web browser integration]]
-      -  [[#company-completion][Company completion]]
-      -  [[#templates][Templates]]
-      -  [[#frequent-counsel-commands][Frequent counsel commands]]
-      -  [[#avy][Avy]]
-      -  [[#source-code-navigation][Source code navigation]]
-      -  [[#outline-editing][Outline editing]]
-      -  [[#referencing][Referencing]]
-      -  [[#general-tools-for-editing-source-code][General tools for editing source code]]
-      -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
-      -  [[#miscellaneous-commands][Miscellaneous commands]]
-      -  [[#poporg][Poporg]]
-      -  [[#window-management][Window management]]
-      -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
-      -  [[#startup-buffer][Startup buffer]]
-      -  [[#auto-saving-and-auto-git-commit][Auto saving and auto git-commit]]
-      -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
-      -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
-      -  [[#development-workflow][Development workflow]]
-      -  [[#scratch-buffers][Scratch buffers]]
-      -  [[#spell-checking-and-iedit][Spell checking and iedit]]
-      -  [[#integrating-language-servers][Integrating language servers]]
-      -  [[#optimization][Optimization]]
-    -  [[#writing][Writing]]
-      -  [[#multi-lingual-support][Multi-lingual support]]
-      -  [[#utilities][Utilities]]
-      -  [[#using-org-mode][Using Org mode]]
-      -  [[#markdown][Markdown]]
-    -  [[#programming-languages][Programming languages]]
-      -  [[#elixir][Elixir]]
-      -  [[#elm][Elm]]
-      -  [[#emacs-lisp][Emacs Lisp]]
-      -  [[#haskell][Haskell]]
-      -  [[#java][Java]]
-      -  [[#javascript][JavaScript]]
-      -  [[#kotlin][Kotlin]]
-      -  [[#nim][Nim]]
-      -  [[#python][Python]]
-      -  [[#rust][Rust]]
-      -  [[#shell-scripts-bash][Shell scripts (bash)]]
-      -  [[#vbscript][VBScript]]
-      -  [[#vue][Vue]]
-      -  [[#web-mode][Web-mode]]
-    -  [[#dsls][DSLs]]
-      -  [[#bats][Bats]]
-      -  [[#dhall][Dhall]]
-      -  [[#dockerfile][Dockerfile]]
-      -  [[#graphviz][GraphViz]]
-      -  [[#nix][Nix]]
-      -  [[#pug][Pug]]
-      -  [[#systemd][Systemd]]
-    -  [[#emacs-applications][Emacs applications]]
-      -  [[#getting-organised][Getting organised]]
-        -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
-          -  [[#on-navigation][On navigation]]
-        -  [[#org-journal][Org Journal]]
-        -  [[#frame][Frame]]
-        -  [[#org-agenda-keybindings][Org-agenda keybindings]]
-      -  [[#beancount][Beancount]]
-      -  [[#system-tools][System tools]]
-        -  [[#system-services][System services]]
-        -  [[#mounting-disks][Mounting disks]]
-        -  [[#disk-usage][Disk usage]]
-    -  [[#multiple-major-modes][Multiple major modes]]
-      -  [[#polymode][polymode]]
-    -  [[#exwm][EXWM]]
-      -  [[#slack][Slack]]
-      -  [[#visual-studio-code][Visual Studio Code]]
-      -  [[#web-browser][Web browser]]
-    -  [[#meta][Meta]]
-      -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
-      -  [[#sort-entries-in-this-file][Sort entries in this file]]
+-  [[#dependencies-for-other-packages][Dependencies for other packages]]
+  -  [[#built-in][Built-in]]
+  -  [[#dashel][dash.el]]
+  -  [[#f][f]]
+  -  [[#ivy][Ivy]]
+  -  [[#helm][Helm]]
+  -  [[#posframe][posframe]]
+  -  [[#hydra][Hydra]]
+  -  [[#ov-overlays][ov (overlays)]]
+  -  [[#ts-date-time-library-by-alphapapa][ts (date-time library by alphapapa)]]
+  -  [[#org-ql][org-ql]]
+  -  [[#all-the-icons][all-the-icons]]
+  -  [[#emacsql-sqlite][emacsql-sqlite]]
+  -  [[#memoize][memoize]]
+  -  [[#desktop-integration][desktop integration]]
+  -  [[#language-detection][language-detection]]
+  -  [[#elexandria][elexandria]]
+-  [[#appearances][Appearances]]
+  -  [[#theme][Theme]]
+  -  [[#frame-elements][Frame elements]]
+  -  [[#typeface][Typeface]]
+  -  [[#visual-enhancements][Visual enhancements]]
+    -  [[#page-break-lines][page-break-lines]]
+    -  [[#color-support-in-terminal-and-compilation-buffers][Color support in terminal and compilation buffers]]
+    -  [[#colorize-color-names][Colorize color names]]
+    -  [[#fontify-face][fontify-face]]
+    -  [[#centralizing-window-contents][Centralizing window contents]]
+-  [[#a-bunch-of-useful-features][A bunch of useful features]]
+  -  [[#customizing-emacs][Customizing Emacs]]
+  -  [[#pretty-hydras][Pretty hydras]]
+  -  [[#terminal-and-shells][Terminal and shells]]
+  -  [[#dired][Dired]]
+  -  [[#file-operations][File operations]]
+  -  [[#full-text-search-and-replace][Full-text search (and replace)]]
+  -  [[#buffer-management][Buffer management]]
+  -  [[#git][Git]]
+  -  [[#project-management][Project management]]
+  -  [[#experimenting-with-remote-apis][Experimenting with remote APIs]]
+  -  [[#web-browser-integration][Web browser integration]]
+  -  [[#templates][Templates]]
+  -  [[#frequent-counsel-commands][Frequent counsel commands]]
+  -  [[#avy][Avy]]
+  -  [[#source-code-navigation][Source code navigation]]
+  -  [[#outline-editing][Outline editing]]
+  -  [[#referencing-and-reading][Referencing and reading]]
+  -  [[#general-tools-for-editing-source-code][General tools for editing source code]]
+  -  [[#editing-specific-types-of-formats][Editing specific types of formats]]
+  -  [[#miscellaneous-commands][Miscellaneous commands]]
+  -  [[#window-management][Window management]]
+  -  [[#visual-cues-and-extra-information-display][Visual cues and extra information display]]
+  -  [[#startup-buffer][Startup buffer]]
+  -  [[#auto-saving][Auto saving]]
+  -  [[#org-web-tools-and-clipurl][org-web-tools and clipurl]]
+  -  [[#highlighting-parts-of-source-code-and-focusing][Highlighting part(s) of source code and focusing]]
+  -  [[#development-workflow][Development workflow]]
+  -  [[#scratch-buffers][Scratch buffers]]
+  -  [[#debugging-emacs][Debugging Emacs]]
+  -  [[#external-tools][External tools]]
+  -  [[#optimization][Optimization]]
+-  [[#writing][Writing]]
+  -  [[#multi-lingual-support][Multi-lingual support]]
+  -  [[#utilities][Utilities]]
+  -  [[#using-org-mode][Using Org mode]]
+  -  [[#markdown][Markdown]]
+-  [[#programming-languages][Programming languages]]
+  -  [[#elixir][Elixir]]
+  -  [[#go][Go]]
+  -  [[#haskell][Haskell]]
+  -  [[#java][Java]]
+  -  [[#javascript][JavaScript]]
+  -  [[#lisp-emacs-lisp-and-common-lisp][Lisp (Emacs Lisp and Common Lisp)]]
+  -  [[#purescript][PureScript]]
+  -  [[#python][Python]]
+  -  [[#rust][Rust]]
+  -  [[#shell-scripts-bash][Shell scripts (bash)]]
+  -  [[#vue][Vue]]
+  -  [[#web-mode][Web-mode]]
+-  [[#dsls][DSLs]]
+  -  [[#bats][Bats]]
+  -  [[#dhall][Dhall]]
+  -  [[#dockerfile][Dockerfile]]
+  -  [[#graphql][GraphQL]]
+  -  [[#graphviz][GraphViz]]
+  -  [[#mermaid][Mermaid]]
+  -  [[#nix][Nix]]
+  -  [[#pug][Pug]]
+  -  [[#systemd][Systemd]]
+  -  [[#svelte][Svelte]]
+  -  [[#terraform][Terraform]]
+  -  [[#yaml][YAML]]
+-  [[#org-mode][Org mode]]
+  -  [[#global-bindings-related-to-org-mode][Global bindings related to Org mode]]
+  -  [[#recurring-tasks][Recurring tasks]]
+  -  [[#org-journal][Org Journal]]
+  -  [[#org-agenda-keybindings][Org-agenda keybindings]]
+-  [[#exwm][EXWM]]
+-  [[#meta][Meta]]
+  -  [[#synchronizing-my-configuration-repositories][Synchronizing my configuration repositories]]
+  -  [[#rebuild-packages][Rebuild packages]]
+  -  [[#sort-entries-in-this-file][Sort entries in this file]]
 
-** Why?
-*** Literate configuration in Org mode
-Quite a few people maintain their Emacs configuration in a single literate Org file. I didn't like the idea, but I have to admit that it offers several benefits.
-**** Pros
-- You can quickly add a piece of configuration by refiling a subtree to the file from another location, e.g. your inbox Org file.
-- You'll be exposed to a constant pressure to maintain a consistent structure, so the configuration will be more consistent.
-- Each piece of configuration gets an explicit context.
-**** Cons
-- It is slightly more tedious to edit the literate config in Org mode. Rather than edit a file directly, you have to pop up an edit buffer for each piece of configuration you want to change.
-- Revision history is lost when entries are reordered. This can be prevented by automatically sorting all headings before saving.
-*** Organizational policies
-I will combine both a literate configuration file and separate configuration files:
-
-- The main configuration file is a single Org file containing babel source blocks. Simple package configurations can be put directly in the file.
-- Complex package configurations are put in separate files, because they are likely to entail bugfixes and updates.
-- However, certain kinds of configuration code to integrate those packages can be put in the Org configuration file. Keybindings and frame (frame-workflow) configurations are examples of such ones. They are inherently personal and often interrelated, so it doesn't make sense to treat them as independent ideas.
-
-In principle, the main configuration file should be a thin layer of the Emacs configuration, even though they can contain some complex pieces.
-** Support older versions of Emacs
-=when-let= and =if-let= are available in Emacs 25.1, but they have been renamed to =when-let*= and =if-let*= in 26.1, which are correct names to describe their behaviours.
-
-#+begin_src emacs-lisp
-  (eval-and-compile
-    (when (version< emacs-version "26")
-      (with-no-warnings
-        (defalias 'when-let* #'when-let)
-        (function-put #'when-let* 'lisp-indent-function 1)
-        (defalias 'if-let* #'if-let)
-        (function-put #'if-let* 'lisp-indent-function 2))))
-#+end_src
-
-** Before using =use-package=
-#+begin_src emacs-lisp
-(akirak/require 'setup-gc)
-#+end_src
-
-#+begin_src emacs-lisp
-  (setq-default enable-local-variables :safe)
-#+end_src
-
-These packages are required in other use-package directives declared in this
-configuration.
-
-#+begin_src emacs-lisp
-  (use-package el-patch
-    :custom
-    (el-patch-enable-use-package-integration t))
-#+end_src
-
-Activate =package.el= for loading built-in packages from nixpkgs:
-
-#+begin_src emacs-lisp
-  (require 'package)
-  (package-initialize 'noactivate)
-#+end_src
-
-Package-specific configuration files, including snippets, are kept in [[https://github.com/akirak/emacs-config-library][a separate repository]], not in this repository. 
-
-#+begin_src emacs-lisp
-  (defcustom akirak/no-littering-use-my-etc-library t
-    "Whether to use my configuration file library in ~/lib/emacs as `no-littering-etc-directory'.")
-
-  (use-package no-littering
-    :init
-    (when akirak/no-littering-use-my-etc-library
-      (let ((dir "~/lib/emacs"))
-        (when (or (file-directory-p dir)
-                  (and (yes-or-no-p "~/lib/emacs does not exist. Clone it from GitHub?")
-                       (= 0 (call-process-shell-command
-                             (format "git clone %s %s"
-                                     "https://github.com/akirak/emacs-config-library.git"
-                                     (shell-quote-argument (expand-file-name dir)))
-                             nil nil nil))))
-          (setq no-littering-etc-directory dir)))))
-#+end_src
-
-Use the executable path from the shell
-
-#+begin_src emacs-lisp
-(use-package exec-path-from-shell
-  :disabled t
-  :if (memq window-system '(mac ns x))
-  :init
-  (exec-path-from-shell-initialize))
-#+end_src
-
-Use diminish to reduce clutters from the modeline. This adds support for =:diminish= keyword:
-
-#+begin_src emacs-lisp
-  (use-package diminish
-    :disabled t
-    :init
-    (diminish 'auto-revert-mode)
-    (diminish 'outline-minor-mode)
-    (diminish 'flyspell-mode))
-#+end_src
-
-#+begin_src emacs-lisp
-  (use-package use-package-company
-    ;; Originally written by Foltik, but I use my fork
-    :straight (use-package-company :host github :repo "akirak/use-package-company"))
-#+end_src
-
-** Overriding defaults
-These settings don't depend on external dependencies, so they should be applied earlier.
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-defaults t)
-#+end_src
-
-** Keybindings infrastructure
-:PROPERTIES:
-:TOC:      1
-:END:
-Use general.el to define keybindings. It has made several improvements over
-bind-key, including a built-in support for which-key.
-
-#+begin_src emacs-lisp
-  (use-package general)
-#+end_src
-
-This also adds support for =:general= keyword in use-package directives
-
-Allow use of =:wk= keyword in general.el keybinding definitions
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-which-key t)
-#+end_src
-
-*** Repeatable keys
-
-Hopefully, defrepeater is soon going to be integrated with general
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-defrepeater t)
-#+end_src
-
-*** Per-mode hydra
-As it is hard to remember workflow for every programming language, I've decided to set up a hydra for each programming language I use. Frequently-used commands specific to a major mode should be added to the hydra for its language. All mode hydras should share the same keybinding, which is currently ~C-d~.
-
-I added a function =akirak/bind-mode-hydra= which binds a per-mode hydra for on the key. It takes the name of the major mode and binds the key to =akirak/MODE-hydra/body=. This is not a precisely keybinding definer but plays a somewhat similar role.
-
-#+begin_src emacs-lisp
-  (defcustom akirak/mode-hydra-key (kbd "C-c d")
-    "Key sequence to access the hydra for the current mode.")
-
-  (defun akirak/bind-mode-hydra (mode &optional hydra-function)
-    (let ((map (intern (concat (symbol-name mode) "-map"))))
-      (define-key (symbol-value map) akirak/mode-hydra-key
-        (or hydra-function
-            (intern (format "akirak/%s-hydra/body" mode))))))
-#+end_src
-*** Generic definer
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-key)
-#+end_src
-*** Definers for Emacs standard prefix keys
-**** M-s: Search
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-search :prefix "M-s")
-  (define-obsolete-function-alias 'akirak/bind-search-map
-    'akirak/bind-search)
-#+end_src
-**** M-g: Jump
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-jump :prefix "M-g")
-#+end_src
-**** M-r: Registers
-#+begin_src emacs-lisp
-  (general-def
-    "M-r" (general-simulate-key "C-x r"))
-#+end_src
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-register :prefix "C-x r")
-  (define-obsolete-function-alias 'akirak/bind-register-map
-    'akirak/bind-register)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-register "M-r" #'ivy-resume)
-#+end_src
-**** F1: Help
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-help :prefix "<f1>")
-#+end_src
-*** Definers for non-standard prefix keys
-**** bind-customization (C-x ESC) for customization
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:39]
-:END:
-I often need to tweak Emacs while I am using it.
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-customization :prefix "C-x ESC")
-
-  (define-obsolete-function-alias 'akirak/bind-customize-map
-    'akirak/bind-customization)
-#+end_src
-
-There are not so many commands that need to be add to the map:
-
-#+begin_src emacs-lisp
-  (akirak/bind-customization
-    "" '(nil :wk "customize")
-    "f" #'customize-face-other-window
-    "o" #'customize-group-other-window
-    "l" #'counsel-find-library
-    "p" '((lambda () (interactive)
-            (if (featurep 'straight)
-                (call-interactively 'straight-use-package)
-              (package-list-packages)))
-          :wk "packages")
-    "s" #'customize-set-value
-    "v" #'customize-variable-other-window)
-#+end_src
-**** bind-user (C-c) for miscellaneous commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:40]
-:END:
-
-~C-c~ is reserved for the user:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-user :prefix "C-c")
-#+end_src
-***** eval
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:41]
-:END:
-Add a prefix for keybindings to eval commands:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-eval :prefix "C-c e")
-  (define-obsolete-function-alias 'akirak/bind-eval-map 'akirak/bind-eval)
-#+end_src
-**** bind-generic (C-.) for editing
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:41]
-:END:
-Generic prefix key for editing commands:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-generic :prefix "C-."
-    :prefix-map 'akirak/generic-prefix-map)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-generic
-    "a" '(nil :wk "align")
-    "b" '(nil :wk "barf")
-    "f" '(nil :wk "format")
-    "i" '(nil :wk "insert")
-    "j" '(nil :wk "join")
-    "k" '(nil :wk "kill")
-    "m" '(nil :wk "mark")
-    "o" '(nil :wk "origami")
-    "r" '(nil :wk "rename/refactor")
-    "s" '(nil :wk "slurp/split")
-    "u" '(nil :wk "splice/unwrap"))
-
-  (general-create-definer akirak/bind-align :prefix "C-. a"
-    :prefix-map 'akirak/align-prefix-map)
-  (general-create-definer akirak/bind-barf :prefix "C-. b"
-    :prefix-map 'akirak/barf-prefix-map)
-  (general-create-definer akirak/bind-insert :prefix "C-. i"
-    :prefix-map 'akirak/insert-prefix-map)
-  (general-create-definer akirak/bind-join :prefix "C-. j"
-    :prefix-map akirak/join)
-  (general-create-definer akirak/bind-kill :prefix "C-. k"
-    :prefix-map 'akirak/kill-prefix-map)
-  (general-create-definer akirak/bind-mark :prefix "C-. m"
-    :prefix-map 'akirak/mark-prefix-map)
-  (general-create-definer akirak/bind-split :prefix "C-. s"
-    :prefix-map 'akirak/split-prefix-map)
-  (general-create-definer akirak/bind-replace :prefix "C-. r"
-    :prefix-map 'akirak/replace-prefix-map)
-  (general-create-definer akirak/bind-unwrap :prefix "C-. u"
-    :prefix-map 'akirak/unwrap-prefix-map)
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-kill
-   "f" 'flush-lines
-   "l" 'delete-blank-lines)
-#+end_src
-**** bind-mode (C-,) for major-mode-specific commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:42]
-:END:
-Prefix for mode-specific keys:
-
-#+begin_src emacs-lisp
-(defconst akirak/mode-prefix-key "C-,")
-(general-create-definer akirak/bind-mode :prefix akirak/mode-prefix-key)
-#+end_src
-**** bind-extra-help (<f1> x) for extra help commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:42]
-:END:
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-extra-help :prefix "<f1>x")
-#+end_src
-
-#+begin_src emacs-lisp
-  (akirak/bind-extra-help
-    "c" #'describe-char
-    "f" #'counsel-faces)
-#+end_src
-**** bind-specific-help (<f1> ESC) for specific help commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:43]
-:END:
-Also create a prefix for specific help commands, e.g. =info= and =man=:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-specific-help :prefix "<f1> ESC")
-#+end_src
-**** <f6> to global file commands
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-file-extra :prefix "<f6>")
-#+end_src
-**** <f7> to hydra commands
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-hydra :prefix "<f7>")
-#+end_src
-**** <f8> to projectile commands
-#+begin_src emacs-lisp
-  (general-def
-    :keymaps 'projectile-mode-map
-    :package 'projectile
-    "<f8>" #'projectile-command-map)
-
-  (general-create-definer akirak/bind-f8
-    :package 'projectile
-    :keymaps 'projectile-command-map)
-#+end_src
-
-I bind ~<f8>~ followed by another function key press to magit commands.
-**** bind-system (<f12>) for system commands
-:PROPERTIES:
-:CREATED_TIME: [2019-04-13 Sat 09:43]
-:END:
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-system :prefix "<f12>"
-    :prefix-map 'akirak/system-map)
-#+end_src
-*** Other custom key definitions
-Use ~<C-return>~ for starting a REPL session:
-
-#+begin_src emacs-lisp
-  (general-create-definer akirak/bind-mode-repl
-    :prefix "<C-return>")
-#+end_src
-
-Example usage:
-
-#+begin_src emacs-lisp :tangle no
-  (akirak/bind-mode-repl :keymaps '(js-mode-map typescript-mode-map)
-    "" #'js-comint-repl)
-#+end_src
 ** Dependencies for other packages
 :PROPERTIES:
 :TOC:      1
@@ -509,6 +125,10 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
 #+begin_src emacs-lisp
   (use-package dash)
   (use-package dash-functional)
+#+end_src
+*** f
+#+begin_src emacs-lisp
+  (use-package f)
 #+end_src
 *** Ivy
 #+begin_src emacs-lisp
@@ -530,11 +150,8 @@ Quite a few packages depend on =dash.el= and/or =dash-functional.el=, so they sh
   (akirak/require 'setup-hydra)
 #+end_src
 
-Bind ~M-SPC~ to =major-mode-hydra=.
-This key was originally bound to =just-one-space=, but I replaced it with =akirak/shrink-whitespace=:
-
 #+begin_src emacs-lisp
-  (general-def "M-SPC" #'major-mode-hydra)
+  (defconst akirak/major-mode-hydra-key "M-SPC")
 #+end_src
 *** ov (overlays)
 #+begin_src emacs-lisp
@@ -549,13 +166,31 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
 *** org-ql
 #+begin_src emacs-lisp
   (use-package org-ql
-    :straight (org-ql :host github :repo "alphapapa/org-ql")
     :custom
     (org-ql-views nil))
 #+end_src
 *** all-the-icons
 #+begin_src emacs-lisp
   (use-package all-the-icons
+    ;; I prefer install fonts using Nix
+    ;; :preface
+    ;; (defconst akirak/all-the-icons-status-file
+    ;;   (no-littering-expand-var-file-name "all-the-icons"))
+    ;; (defvar akirak/all-the-icons-fonts-installed
+    ;;   (file-exists-p akirak/all-the-icons-status-file))
+    ;; :config
+    ;; (defun akirak/all-the-icons-install-fonts-if-missing ()
+    ;;   (unless akirak/all-the-icons-fonts-installed
+    ;;     (all-the-icons-install-fonts t)))
+    ;; (defun akirak/all-the-icons-mark-as-fonts-installed ()
+    ;;   (with-temp-buffer
+    ;;     (write-file akirak/all-the-icons-status-file))
+    ;;   (setq akirak/all-the-icons-fonts-installed t))
+    ;; (advice-add #'all-the-icons-install-fonts
+    ;;             :after #'akirak/all-the-icons-mark-as-fonts-installed)
+    ;; (when (and (window-system)
+    ;;            (not akirak/all-the-icons-fonts-installed))
+    ;;   (all-the-icons-install-fonts))
     :general
     ("C-x 8 i" #'all-the-icons-ivy))
 #+end_src
@@ -567,10 +202,9 @@ This key was originally bound to =just-one-space=, but I replaced it with =akira
     :straight (emacsql-sqlite :type built-in)
     :if (akirak/library-exists-p "emacsql-sqlite"))
 #+end_src
-*** nix-env-install
+*** memoize
 #+begin_src emacs-lisp
-  (use-package nix-env-install
-    :straight (:host github :repo "akirak/nix-env-install"))
+  (use-package memoize)
 #+end_src
 *** desktop integration
 #+begin_src emacs-lisp
@@ -595,15 +229,10 @@ language-detection is used by eww.
 #+begin_src emacs-lisp
   (akirak/require 'setup-language-detection)
 #+end_src
-** Platform workarounds
-I use Emacs on the following platforms:
-
-- Debian on Crostini on Chrome OS
-- Ubuntu/Debian on WSL on Windows 10
-*** Chrome OS support
-I use Emacs on Crostini on Chrome OS, and Emacs needs some workarounds when it runs on Chrome OS:
+*** elexandria
 #+begin_src emacs-lisp
-  (akirak/require 'setup-chromeos t :when (akirak/running-on-crostini-p))
+  (use-package elexandria
+    :straight (:host github :repo "alphapapa/elexandria"))
 #+end_src
 ** Appearances
 *** Theme
@@ -643,8 +272,6 @@ Due to consistency with other applications on computer, my eyes tend to stay in 
   (akirak/require 'setup-header-line t)
                                           ; Hide the mode line and use the header line
   (akirak/require 'setup-feebleline t)  ; Display extra information in the echo area
-  ;; (akirak/require 'setup-frame-title t)
-                                          ; Configure a custom frame title format
 
   ;; (akirak/require 'setup-centaur-tabs)
 #+end_src
@@ -682,15 +309,14 @@ If your operating system supports Docker, you can use [[https://github.com/akira
 :CREATED_TIME: [2019-09-24 Tue 00:49]
 :END:
 #+begin_src emacs-lisp
-(use-package page-break-lines
-  :hook ((doc-mode
-          emacs-lisp-mode
-          compilation-mode
-          outline-mode
-          prog-mode
-          haskell-mode
-          help-mode
-          magit-mode) . page-break-lines-mode))
+  (use-package page-break-lines
+    :hook ((doc-mode
+            compilation-mode
+            outline-mode
+            prog-mode
+            haskell-mode
+            help-mode
+            magit-mode) . page-break-lines-mode))
 #+end_src
 **** Color support in terminal and compilation buffers
 #+begin_src emacs-lisp
@@ -736,97 +362,16 @@ I'm not using olivetti-mode
   (akirak/require 'setup-misc)
 #+end_src
 
+*** Customizing Emacs
+#+begin_src emacs-lisp
+  (akirak/require 'setup-custom)
+#+end_src
 *** Pretty hydras
 #+begin_src emacs-lisp
   ;; C-c h
   (akirak/bind-user "h" #'akirak/minor-mode-hydra/body)
-  (general-def "C-z" #'akirak/context-hydra/body)
   (general-def [remap text-scale-adjust] 'akirak/appearance-hydra/body)
   (akirak/bind-user "k" #'akirak/window-layout-hydra/body)
-  (general-def "<f1>j" #'akirak/emacs-lisp-debugging-hydra/body)
-#+end_src
-**** Context hydra
-:PROPERTIES:
-:CREATED_TIME: [2019-07-27 Sat 17:43]
-:END:
-The following hydra is deprecated:
-
-#+begin_src emacs-lisp
-  (pretty-hydra-define akirak/context-hydra
-    (:title (string-join
-             `(,(concat "Desktop dir: "
-                        (or (ignore-errors
-                              (and desktop-dirname
-                                   (format "%s %s"
-                                           (abbreviate-file-name desktop-dirname)
-                                           (if (file-exists-p (desktop-full-file-name))
-                                               (format "(exists, updated: %s)"
-                                                       (akirak/context-hydra-format-relative-filetime
-                                                        (desktop-full-file-name) t))
-                                             "(does not exist)"))))
-                            "nil"))
-               ,(concat " Current clock: "
-                        (or (ignore-errors
-                              (and (markerp org-clock-marker)
-                                   (with-current-buffer (marker-buffer org-clock-marker)
-                                     (concat (buffer-name)
-                                             ": "
-                                             (org-with-wide-buffer
-                                              (goto-char (marker-position org-clock-marker))
-                                              (substring-no-properties
-                                               (org-format-outline-path
-                                                (org-get-outline-path t t))))))))
-                            "nil")))
-             "\n")
-            :quit-key "C-g"
-            :foreign-keys run)
-    ("Org"
-     (("j" org-clock-goto "Go to clock" :exit t)
-      ("h" counsel-org-clock-history "History" :exit t)
-      ("a" org-agenda "Agenda" :exit t)
-      ("O" org-clock-out "Clock out")
-      ("C-q" org-clock-cancel "Cancel clock"))
-     "Desktop"
-     (("s" desktop-save-in-desktop-dir "Save to the dir")
-      ("w" desktop-save "Save to another dir")
-      ("R" desktop-read "Reload from the dir")
-      ("D" desktop-remove "Purge")
-      ("L" desktop-change-dir "Change the dir")
-      ("F" desktop-clear "Clear"))
-     "Projectile & Magit"
-     (("p" projectile-switch-project "Switch project" :exit t)
-      ("g" magit-list-repositories "Git repo list" :exit t))
-     "Lock"
-     (("o" org-offtime-ivy "Offtime"))))
-
-  (defun akirak/context-hydra-format-relative-filetime (file &optional verbose type)
-    (let* ((attrs (file-attributes file))
-           (internal (pcase type
-                       ;; TODO: Add support for other time attributes, e.g. visited time
-                       (_ (file-attribute-modification-time attrs))))
-           (file-time (make-ts :unix (float-time internal)))
-           (abs-format "%Y-%m-%d %H:%M"))
-      (if verbose
-          (format "%s (%s)"
-                  (ts-format abs-format file-time)
-                  (ts-human-format-duration
-                   (ts-difference (ts-now) file-time)
-                   'abbreviate))
-        (ts-format abs-format file-time))))
-#+end_src
-
-Instead, I will bind ~<f10>~ to a context-sensitive command:
-
-#+begin_src emacs-lisp
-  (defun akirak/contextual-f10 ()
-    (interactive)
-    (cond
-     ((org-clocking-p)
-      (message "This command currently does nothing when you are clocking in"))
-     (t
-      (call-interactively 'org-agenda))))
-
-  (general-def "<f10>" #'akirak/contextual-f10)
 #+end_src
 **** Minor-mode-hydra: hydra for toggling minor modes
 #+begin_src emacs-lisp
@@ -842,8 +387,6 @@ Instead, I will bind ~<f10>~ to a context-sensitive command:
       ("fv" flycheck-verify-setup)
       ("fs" flyspell-mode :toggle t)
       ("fp" flyspell-prog-mode :toggle t)
-      ("a" apheleia-mode :toggle t)
-      ("A" apheleia-global-mode :toggle t)
       ("ld" lsp-ui-doc-mode :toggle t)
       ("lp" lsp-ui-peek-mode :toggle t)
       ("ls" lsp-ui-sideline-mode :toggle t))
@@ -936,35 +479,7 @@ Instead, I will bind ~<f10>~ to a context-sensitive command:
         (quit-window nil window)
       (flycheck-list-errors)))
 #+end_src
-**** Emacs debugging hydra
-:PROPERTIES:
-:CREATED_TIME: [2019-07-27 Sat 17:43]
-:END:
-#+begin_src emacs-lisp
-  (pretty-hydra-define akirak/emacs-lisp-debugging-hydra
-    (:title "Emacs Lisp Debugging")
-    ("Debug"
-     (("d" toggle-debug-on-error :toggle (default-value 'debug-on-error)))
-     "Profiler"
-     (("s" profiler-start "Start" :exit t)
-      ("S" (progn
-             (profiler-report)
-             (profiler-stop)) "Report" :exit t)
-      ("R" profiler-reset "Reset"))))
-#+end_src
-*** frame-workflow
-[[https://github.com/akirak/frame-workflow][frame-workflow]] is my package originally written for providing named workspaces in EXWM. 
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-frame-workflow t) ; Ensure loading frame-workflow
-
-  (general-def "C-M-g" #'frame-workflow-prefix-map)
-#+end_src
-
 *** Terminal and shells
-#+begin_src emacs-lisp
-  (akirak/require 'setup-terminal t)
-#+end_src
 **** Using vterm
 I will use vterm.
 
@@ -975,78 +490,24 @@ I will use vterm.
 To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp.
 
 #+begin_src emacs-lisp
-  (akirak/bind-user "t" #'vterm-toggle-cd)
+  (akirak/bind-user "t" #'akirak/vterm-toggle-cd)
 #+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (defun akirak/vterm-buffer-live-p ()
-    (and (derived-mode-p 'vterm-mode)
-         (let ((process (get-buffer-process (current-buffer))))
-           (and process
-                (process-live-p process)))))
-
-  (defun akirak/get-live-vterm-buffer ()
-    (car (-filter (lambda (buf)
-                    (with-current-buffer buf
-                      (akirak/vterm-buffer-live-p)))
-                  (buffer-list))))
-
-  (defun akirak/get-or-create-vterm-buffer ()
-    (or (akirak/vterm-buffer-live-p)
-        (akirak/get-live-vterm-buffer)
-        (progn
-          (vterm)
-          (current-buffer))))
-
-  (frame-workflow-define-subject "terminal"
-    :key "t"
-    :make-frame
-    '(let ((frame-purpose--initial-buffer-fn #'akirak/get-or-create-vterm-buffer))
-       (frame-purpose-make-frame :modes '(term-mode
-                                          vterm-mode
-                                          eshell-mode
-                                          shell-mode)))
-    :layout
-    '(switch-to-buffer (akirak/get-or-create-vterm-buffer))
-    :refocus
-    '(switch-to-buffer (akirak/get-or-create-vterm-buffer)))
-#+end_src
-
 *** Dired
 #+begin_src emacs-lisp
   (general-def "C-x C-j" #'dired-jump)
 #+end_src
-**** Hydra
-#+begin_src emacs-lisp
-  (major-mode-hydra-define dired-mode
-    (:title "Dired")
-    ("Open/execute"
-     (("x" dired-open-xdg))
-     "Transfer"
-     (("r" dired-rsync))))
-#+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "dired"
-    :key "d"
-    :make-frame
-    '(frame-purpose-make-mode-frame 'dired-mode)
-    :layout
-    '(when (fboundp 'ibuffer-sidebar-show-sidebar)
-       (ibuffer-sidebar-show-sidebar)))
-#+end_src
-
-*** Crux and file operations
-#+begin_src emacs-lisp
-  (general-def
-    "C-x D" #'crux-delete-file-and-buffer
-    "C-x R" #'crux-rename-file-and-buffer
-    "C-x S" #'sudo-find-file
-    "C-x x" #'crux-open-with)
-#+end_src
-
+*** File operations
 #+begin_src emacs-lisp
   (akirak/require 'setup-files)
+#+end_src
+*** Full-text search (and replace)                                 :search:
+#+begin_src emacs-lisp
+  (akirak/bind-search
+    "M-f" #'org-recoll-search)
+#+end_src
+**** Recoll
+#+begin_src emacs-lisp
+  (akirak/require 'setup-recoll)
 #+end_src
 *** Buffer management
 #+begin_src emacs-lisp
@@ -1068,13 +529,15 @@ To open a terminal, use =vterm-toggle=. =vterm-toggle-cd= command supports tramp
   :commands (git-attr-linguist)
   :hook (find-file . git-attr-linguist))
 #+end_src
-**** magit-todos
+**** Magit-Todos
 #+begin_src emacs-lisp
-  (use-package magit-todos :after (magit hl-todo)
-    :straight (magit-todos :host github :repo "alphapapa/magit-todos")
+  (use-package magit-todos
+    :after magit
     :config
-    (magit-todos-mode 1)
+    (unless (akirak/windows-subsystem-for-linux-p)
+      (magit-todos-mode 1))
     :custom
+    (magit-todos-depth 0)
     (magit-todos-exclude-globs '("**/*.map")))
 #+end_src
 **** GitHub/GitLab workflow
@@ -1112,18 +575,17 @@ Differences between =browse-at-remote= and equivalent commands from =forge= pack
 - =browse-at-remote= opens a link with a line number.
 **** Cloning Git repositories
 [[file:setup/setup-git-clone.el::(defun%20akirak/git-clone%20(url)][akirak/git-clone]] function lets you clone a Git repository to a designated location from a Git repository, a GitHub repository page, or a path on GitHub (=account/name=). It is integrated with ivy-clipurl, so you can clone a Git repository from its web page URL in the clipboard.
-**** magit-list-repositories
+**** Vc-Msg
+#+begin_src emacs-lisp
+  (akirak/require 'setup-vc-msg)
+
+  (akirak/bind-user "v" #'vc-msg-show)
+#+end_src
+**** Magit-List-Repositories
 =magit-list-repositories= is a convenient command which lets you browse your repositories on the file system.
 
 To use it, you first have to customize =magit-repository-directories=.
-**** Git-Annex
-Use =magit-annex= for working with =git-annex= repositories:
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-git-annex)
-#+end_src
 *** Project management
-**** Projectile
 **** EditorConfig
 #+begin_src emacs-lisp
 (use-package editorconfig
@@ -1134,9 +596,13 @@ Use =magit-annex= for working with =git-annex= repositories:
 #+begin_src emacs-lisp
   (akirak/require 'setup-direnv)
   #+end_src
+*** Experimenting with remote APIs
+#+begin_src emacs-lisp
+  (akirak/require 'setup-verb)
+#+end_src
 *** Web browser integration
 #+begin_src emacs-lisp
-  (akirak/require 'setup-web-browser)
+  (akirak/require 'setup-browse-url)
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1151,45 +617,9 @@ Emacs also provides eww:
 #+begin_src emacs-lisp
   (akirak/require 'setup-eww)
 #+end_src
-*** Company completion
-#+begin_src emacs-lisp
-(general-def :package 'company :keymaps 'company-mode-map
-  "M-/" #'company-complete)
-#+end_src
 *** Templates
-**** Yasnippet and auto-yasnippet
-:PROPERTIES:
-:CREATED_TIME: [2019-09-24 Tue 00:45]
-:END:
-I prefer using =ivy-yasnippet= for choosing a snippet:
-
 #+begin_src emacs-lisp
-  (akirak/bind-user "y" 'ivy-yasnippet)
-  (akirak/bind-register "M-n" 'yas-new-snippet)
-#+end_src
-
-=auto-yasnippet= is convenient for temporary snippets:
-
-#+begin_src emacs-lisp
-  (akirak/bind-register-map
-    "a" 'aya-create
-    "e" 'aya-expand)
-#+end_src
-
-=aya-open-line= is the fastest way to expand a snippet if you know its name. It behaves like =open-line= if the word before the point is not registered as a snippet:
-
-#+begin_src emacs-lisp
-  (general-def "C-o" 'aya-open-line)
-#+end_src
-**** Yankpad
-:PROPERTIES:
-:CREATED_TIME: [2019-09-24 Tue 00:45]
-:END:
-Yankpad is more useful in writing.
-
-#+begin_src emacs-lisp
-  (akirak/bind-user "p" #'yankpad-insert)
-  (akirak/bind-generic "y" #'yankpad-map)
+  (akirak/require 'setup-expansion)
 #+end_src
 **** File templates
 #+begin_src emacs-lisp
@@ -1198,7 +628,6 @@ Yankpad is more useful in writing.
 *** Frequent counsel commands                                  :navigation:
 #+begin_src emacs-lisp
   (general-def
-    "C-x p" #'counsel-projectile
     "C-x /" #'counsel-rg
     "C-x F" #'counsel-recentf
     "C-x L" #'counsel-locate)
@@ -1206,10 +635,6 @@ Yankpad is more useful in writing.
 *** Avy                                                        :navigation:
 #+begin_src emacs-lisp
   (akirak/require 'setup-avy)
-
-  (akirak/bind-key "C-'" 'avy-goto-char-timer)
-
-  (general-unbind "C-'" :keymaps 'org-mode-map :package 'org)
 #+end_src
 
 =link-hint= is not part of =avy= package, but it is covenient for following a link:
@@ -1240,7 +665,42 @@ Yankpad is more useful in writing.
   (akirak/bind-search "i" 'counsel-imenu)
 
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    "i" 'counsel-org-goto)
+    "u"
+    (defun akirak/helm-org-ancestors ()
+      (interactive)
+      (unless (derived-mode-p 'org-mode)
+        (user-error "Not in org-mode"))
+      (let (result
+            preselect)
+        (save-excursion
+          (org-back-to-heading)
+          (cl-flet
+              ((add-candidate
+                ()
+                (let ((start (point-at-bol))
+                      (end (point-at-eol)))
+                  (font-lock-ensure start end)
+                  (let ((cand (buffer-substring start end)))
+                    (push (cons cand (point-marker))
+                          result)
+                    ;; Pre-select the first candidate, i.e. the current heading.
+                    (unless preselect
+                      (setq preselect cand))))))
+            (add-candidate)
+            (while (> (org-outline-level) 1)
+              (org-up-heading-all 1)
+              (add-candidate))))
+        (helm :sources (helm-build-sync-source "Ancestor headings"
+                         :candidates result
+                         :action 'helm-org-headings-actions)
+              :keymaps 'helm-org-headings-map
+              :preselect preselect)))
+
+    ;; Simply browse headings in the buffer.
+    "i" #'helm-org-in-buffer-headings)
+
+  (akirak/bind-search :package 'restclient-helm :keymaps 'restclient-mode-map
+    "i" #'helm-restclient)
 #+end_src
 
 =imenu-list= is a useful package which displays an overview of the current buffer.
@@ -1253,7 +713,7 @@ I've added it to =akirak/window-layout-hydra=.
 #+begin_src emacs-lisp
   (akirak/bind-search "o" 'counsel-outline)
   (akirak/bind-search :package 'org :keymaps 'org-mode-map
-    "o" 'counsel-org-goto)
+    "o" #'helm-org-ql)
 #+end_src
 *** Outline editing                                              :outlines:
 #+begin_src emacs-lisp
@@ -1265,7 +725,7 @@ I've added it to =akirak/window-layout-hydra=.
 #+begin_src emacs-lisp
   (akirak/require 'setup-origami)
 #+end_src
-*** Referencing                                               :referencing:
+*** Referencing and reading                                   :referencing:
 #+begin_src emacs-lisp
 (akirak/require 'setup-referencing)
 #+end_src
@@ -1277,6 +737,11 @@ Use =pdf-tools=.
 **** EPUB
 #+begin_src emacs-lisp
   (akirak/require 'setup-epub)
+#+end_src
+**** Pocket
+Read =pocket-reader= to read web pages on Emacs.
+#+begin_src emacs-lisp
+(akirak/require 'setup-pocket)
 #+end_src
 **** Annotating documents
 You can use org-noter to annotate PDF documents as well as other formats supported by doc-view.
@@ -1290,52 +755,13 @@ I will bind ~A~ to =org-noter= both in =pdf-tools= and =doc-view=:
   (general-def :keymaps 'pdf-view-mode-map :package 'pdf-view
     "A" #'org-noter)
 #+end_src
-**** Finding documentation
-***** Built-in help system
-#+begin_src emacs-lisp
-  (akirak/bind-specific-help
-    "i" #'helm-info
-    "m" #'woman)
-#+end_src
-
-I often consult the Emacs Lisp manual:
-
-#+begin_src emacs-lisp
-  (defun akirak/info-elisp ()
-    (interactive)
-    (info "elisp")
-    (call-interactively 'Info-menu))
-
-  (akirak/bind-help
-    "e" #'akirak/info-elisp)
-#+end_src
-***** DevDocs
-#+begin_src emacs-lisp
-  (use-package devdocs-lookup
-    :straight (devdocs-lookup :host github :repo "skeeto/devdocs-lookup")
-    :commands (devdocs-lookup))
-
-  (akirak/bind-user "d" #'devdocs-lookup)
-#+end_src
-***** Dash
-#+begin_src emacs-lisp
-  (use-package dash-docs)
-
-  (use-package helm-dash
-    :custom
-    (helm-dash-browser-func #'akirak/read-local-html-as-org))
-
-  (akirak/bind-specific-help
-    "d" #'helm-dash)
-
-  ;; "a" #'helm-dash-activate-docset
-  ;; "d" #'helm-dash-at-point
-  ;; "+" #'helm-dash-install-docset
-#+end_src
 *** General tools for editing source code
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:30]
 :END:
+#+begin_src emacs-lisp
+(akirak/require 'setup-edit)
+#+end_src
 **** Expand Region
 #+begin_src emacs-lisp
   (akirak/require 'setup-expand-region)
@@ -1344,26 +770,30 @@ I often consult the Emacs Lisp manual:
 :PROPERTIES:
 :CREATED_TIME: [2019-09-23 Mon 22:48]
 :END:
-I will try out apheleia.
+I am using reformatter.
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-apheleia)
+  (akirak/require 'setup-reformatter)
 #+end_src
-
-Another option would be reformatter by Steve Purcell, but I haven't managed to configure it for Nix + npm projects yet.
+**** Search and replace
+I prefer =swiper== and =counsel-rg=.
+I added additional keybindings to the keymaps of those commands, so I can now dispatch an occur/noccur session from those commands.
 
 #+begin_src emacs-lisp
-  ;; (akirak/require 'setup-reformatter)
+(akirak/require 'setup-occur)
 #+end_src
+
+Another useful command is =projectile-replace= (and its regexp variant =projectile-replace-regexp=).
+
+Resources:
+
+- [[https://with-emacs.com/posts/tutorials/using-occur-for-search-and-replace-across-files/][with-emacs · Using Occur for Search and Replace across Files]]
+- [[https://with-emacs.com/posts/tutorials/search-and-replacement-techniques/][with-emacs · Search and Replacement Techniques]]
 **** Commenting
 #+begin_src emacs-lisp
 (use-package comment-dwim-2
   :general
   ("M-;" 'comment-dwim-2))
-#+end_src
-**** Refactoring
-#+begin_src emacs-lisp
-  (akirak/require 'setup-refactor)
 #+end_src
 **** Case conversion
 #+begin_src emacs-lisp
@@ -1386,9 +816,16 @@ Use hl-todo by tarsius
 #+begin_src emacs-lisp
   (use-package hl-todo
     :config
-    (akirak/bind-jump :keymaps 'hl-todo-mode-map "t" #'hl-todo-next)
-    (akirak/bind-insert :keymaps 'hl-todo-mode-map "t" #'hl-todo-insert)
-    :hook (prog-mode . hl-todo-mode))
+    (akirak/bind-search :keymaps 'hl-todo-mode-map
+      "t" #'hl-todo-occur)
+    (akirak/bind-jump :keymaps 'hl-todo-mode-map
+      "t" #'hl-todo-next
+      "r" #'hl-todo-previous)
+    (general-add-hook 'hl-todo-keyword-faces
+                      '(("REVIEW" . "DarkOrange3")
+                        ("OPTIMIZE" . "LightSeaGreen")))
+    :hook
+    (prog-mode . hl-todo-mode))
 #+end_src
 
 There is another package named comment-tags for the same purpose, but I won't use it since there is hl-todo
@@ -1396,9 +833,6 @@ There is another package named comment-tags for the same purpose, but I won't us
 #+begin_src emacs-lisp
   (use-package comment-tags
     :disabled t
-    :config
-    (akirak/bind-generic :keymaps 'comment-tags-mode-map
-      "'" (defrepeater 'comment-tags-next-tag))
     :hook (prog-mode . comment-tags-mode)
     :custom
     (comment-tags-case-sensitive t)
@@ -1408,13 +842,10 @@ There is another package named comment-tags for the same purpose, but I won't us
 :PROPERTIES:
 :CREATED_TIME: [2019-06-11 Tue 22:27]
 :END:
-Use emmet for editing SGML-based formats efficiently.
-#+begin_src emacs-lisp
-  (akirak/require 'setup-emmet)
-#+end_src
+Deprecated. Use =web-mode=.
 
 #+begin_src emacs-lisp
-  (akirak/require 'setup-tagedit)
+  ;; (akirak/require 'setup-tagedit)
 #+end_src
 *** Miscellaneous commands
 **** Switching to an Org window
@@ -1448,22 +879,8 @@ Use emmet for editing SGML-based formats efficiently.
   (use-package modi-org-split-block
     :straight nil
     :load-path "contrib/modi")
-  (akirak/bind-key :package 'org :keymaps 'org-mode-map
+  (general-def :package 'org :keymaps 'org-mode-map
     [remap org-meta-return] 'modi/org-meta-return)
-#+end_src
-*** Poporg
-:PROPERTIES:
-:CREATED_TIME: [2018-12-29 Sat 19:51]
-:ID:       e76069bd-d9b2-488a-a5c8-9f2410240396
-:END:
-
-Use poporg rather than outorg.
-
-- [X] Add poporg package
-- [X] Remap keys
-
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-poporg)
 #+end_src
 *** Window management
 :PROPERTIES:
@@ -1474,10 +891,19 @@ Use poporg rather than outorg.
   "u" #'winner-undo-repeat)
 #+end_src
 
+#+begin_src emacs-lisp
+  (defun akirak/switch-to-last-buffer-other-window ()
+    (interactive)
+    (switch-to-buffer-other-window (other-buffer)))
+
+  (general-def ctl-x-map
+    "B" #'akirak/switch-to-last-buffer-other-window)
+#+end_src
+
 I created a hydra for managing frames and windows.
 
 #+begin_src emacs-lisp
-  (akirak/bind-key "M-o" #'ace-window)
+  (general-def "M-o" #'ace-window)
   ;; You can also display the help from the start
   ;; (akirak/bind-key "M-o" #'aw-show-dispatch-help)
   (general-unbind :keymaps 'lispy-mode-map :package 'lispy "M-o")
@@ -1498,8 +924,13 @@ Additional visual cues can increase productivity, but they can be noisy at the s
 **** Beacon
 I often lose sight of the cursor when I switch to another window, so this is necessary.
 #+begin_src emacs-lisp
-  (use-package beacon                     ; Highlight the cursor on certain events
+  (use-package beacon           ; Highlight the cursor on certain events
+    :disabled t
+    :unless (akirak/windows-subsystem-for-linux-p)
     :config
+    (general-add-hook 'beacon-dont-blink-commands
+                      '(akirak/scroll-half-page-forward
+                        akirak/scroll-half-page-backward))
     (beacon-mode 1))
 #+end_src
 **** Rainbow-delimiters
@@ -1508,8 +939,10 @@ This is especially useful in editing Lisp code.
   (use-package rainbow-delimiters         ; Colourize parentheses in source code
     :hook
     ((lisp-mode
+      emacs-lisp-mode
       elixir-mode
       haskell-mode
+      purescript-mode
       ) . rainbow-delimiters-mode))
 #+end_src
 **** Dimmer
@@ -1525,17 +958,36 @@ This lets you know which parts of the buffers are modified since the last commit
     :init
     (global-git-gutter-mode))
 
-  ;; NOTE: There is no git-gutter-mode-map
   (akirak/bind-jump
-    "j" 'git-gutter:next-hunk
-    "k" 'git-gutter:previous-hunk)
+    "j" #'git-gutter:next-hunk
+    "k" #'git-gutter:previous-hunk)
+
+  (general-advice-add '(git-gutter:next-hunk
+                        git-gutter:previous-hunk)
+                      :around
+                      (defun akirak/git-gutter-follow-up-navigation (orig &rest args)
+                        (when (buffer-narrowed-p)
+                          (widen))
+                        (let ((pos (point)))
+                          (prog1 (apply orig args)
+                            (unless (eq pos (point))
+                              (when (derived-mode-p 'org-mode)
+                                (org-show-context)))))))
+
+  (akirak/bind-user
+    "g" 'git-gutter:mark-hunk)
 #+end_src
 **** Highlight-indent-guides
 This is helpful in programming languages that depend on indentation levels.
 #+begin_src emacs-lisp
   (use-package highlight-indent-guides
+    :config
+    (defun akirak/turn-on-highlight-indent-guides-mode ()
+      (interactive)
+      (highlight-indent-guides-mode 1))
     :hook
-    ((python-mode nim-mode) . highlight-indent-guides-mode))
+    ((python-mode nim-mode yaml-mode)
+     . akirak/turn-on-highlight-indent-guides-mode))
 #+end_src
 **** Prism
 #+begin_src emacs-lisp
@@ -1553,6 +1005,8 @@ This is helpful in programming languages that depend on indentation levels.
 Visualise (usually) 80 columns.
 #+begin_src emacs-lisp
   (use-package fill-column-indicator
+    :unless (akirak/windows-subsystem-for-linux-p)
+    :disabled t
     :init
     (add-hook 'prog-mode-hook 'fci-mode))
 #+end_src
@@ -1565,8 +1019,29 @@ Visualise unnecessary, extra whitespace characters in source code.
 **** Manual highlighting
 ***** Symbol overlays
 #+begin_src emacs-lisp
-(use-package symbol-overlay
-  :commands (symbol-overlay-put symbol-overlay-mode))
+  (use-package symbol-overlay
+    :commands (symbol-overlay-put symbol-overlay-mode)
+    :config
+
+    (akirak/bind-search
+      "s"
+      (defun akirak/symbol-overlay-jump ()
+        (interactive)
+        (let* ((name (completing-read "Highlighted symbol: "
+                                      (-map #'car symbol-overlay-keywords-alist)))
+               (x (assoc name symbol-overlay-keywords-alist))
+               (face (cddr x))
+               (initial (point))
+               pos)
+          (goto-char (point-min))
+          (unless (catch 'finish
+                    (while (setq pos (next-single-char-property-change (point) 'face))
+                      (goto-char pos)
+                      (when (eq face (get-char-property pos 'face))
+                        (throw 'finish t))))
+            (goto-char initial))))))
+
+
 #+end_src
 ***** Visual bookmarks
 #+begin_src emacs-lisp
@@ -1579,17 +1054,12 @@ By default, =*Messages*= buffer is shown at startup.
   (akirak/require 'setup-initial-buffer)
 #+end_src
 
-*** Auto saving and auto git-commit
-
+*** Auto saving
 Files are automatically saved on certain events by =super-save-mode=:
 
 #+begin_src emacs-lisp
   (akirak/require 'setup-super-save)
 #+end_src
-
-Some files are automatically committed to their contained repositories.
-
-[[file:setup/setup-git-auto-commit.el]]
 *** org-web-tools and clipurl
 [[https://github.com/alphapapa/org-web-tools][org-web-tools]] is handy, but commands in the package often fail to retrieve a proper URL I want to operate on. Therefore I created =clipurl= package to pick a URL from the kill ring.
 
@@ -1643,9 +1113,6 @@ To visit a URL, use =browse-url-at-point=:
 #+begin_src emacs-lisp
   (general-def
     "<f9>" 'recompile)
-
-  (general-def
-    "C-x t" #'helm-tail)
 #+end_src
 *** Scratch buffers
 #+begin_src emacs-lisp
@@ -1653,37 +1120,22 @@ To visit a URL, use =browse-url-at-point=:
 (akirak/bind-user
   "i" 'scratch)
 #+end_src
-*** Spell checking and iedit                               :editor:writing:
-Note that iedit works with [[file:setup/setup-multiple-cursors.el][multiple-cursors]]. You can first select all the occurrences of a symbol using multiple-cursors and then edit them using iedit.
-
+*** Debugging Emacs
 #+begin_src emacs-lisp
-  (general-def "C-;" 'akirak/iedit-or-flyspell)
-
-  (defun akirak/iedit-or-flyspell ()
-    "With a prefix argument, run iedit in the function. Otherwise, run iedit or flyspell.
-
-  With a prefix argument, call `unpackaged/iedit-scoped'.
-  Otherwise, call `unpackaged/iedit-or-flyspell'."
-    (interactive)
-    (if current-prefix-arg
-	(unpackaged/iedit-scoped)
-      (unpackaged/iedit-or-flyspell)))
-
-  (defhydra akirak/flyspell-hydra ()
-    "flyspell"
-    ("n" flyspell-goto-next-error)
-    ("c" flyspell-correct-word))
-
-  (defun akirak/turn-on-flyspell-mode-in-text-mode ()
-    (when (derived-mode-p 'text-mode)
-      (flyspell-mode-on)))
-
-  (advice-add 'akirak/flyspell-hydra/body
-              :before 'akirak/turn-on-flyspell-mode-in-text-mode)
+(akirak/require 'setup-debug-emacs)
 #+end_src
-*** Integrating language servers
+*** External tools
+**** Storage management
 #+begin_src emacs-lisp
-  (akirak/require 'setup-bold)
+  (akirak/require 'setup-storage)
+#+end_src
+**** Background services
+#+begin_src emacs-lisp
+  (akirak/require 'setup-services)
+#+end_src
+**** Personal finance (beancount)
+#+begin_src emacs-lisp
+  (akirak/require 'setup-beancount)
 #+end_src
 *** Optimization
 #+begin_src emacs-lisp
@@ -1719,7 +1171,8 @@ You can customize a list of modules for supported languages through the followin
   input method in the environment."
     :group 'akirak
     :type '(set (const :tag "Japanese/日本語 (mozc)" setup-japanese-mozc)
-                (const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim))
+                (const :tag "Chinese/简体中文 (pyim)" setup-chinese-pyim)
+                (const :tag "Japanese/日本語 (SKK)" setup-japanese-skk))
     :set (lambda (sym value)
            (set sym value)
            (dolist (module value)
@@ -1730,14 +1183,28 @@ You can customize a list of modules for supported languages through the followin
 #+end_src
 
 I don't set the default input method here. Set =default-input-method= in your =custom-file=. 
-**** Google Translate
+
 #+begin_src emacs-lisp
-  (akirak/require 'setup-google-translate)
+  (akirak/require 'setup-language-tools)
 #+end_src
 *** Utilities
 #+begin_src emacs-lisp
-  (akirak/require 'akirak/setup-writing)
-  #+end_src
+  (akirak/require 'setup-writing)
+#+end_src
+**** Spell checking with flyspell
+I will use [[https://github.com/d12frosted/flyspell-correct][flyspell-correct]] to run flyspell.
+
+- =flyspell-correct-wrapper= is the main entry point to the package.
+  I bind ~C-c f~ to the command.
+  - When =flyspell-mode= is not on, the key sequence turns the mode on.
+
+#+begin_src emacs-lisp
+  (akirak/bind-user
+    "f" #'flyspell-mode)
+
+  (akirak/bind-user :keymaps 'flyspell-mode-map
+    "f" #'flyspell-correct-wrapper)
+#+end_src
 **** Quotation marks
 ***** Typo
 Typo.el is a successor to [[https://www.emacswiki.org/emacs/TypographicalPunctuationMarks][typopunct.el]].
@@ -1760,12 +1227,6 @@ Set basic options for org-mode:
   ;; org-starter should be loaded after org is loaded
   (akirak/require 'setup-org-starter)
 #+end_src
-**** org-plain-wiki
-Use org-plain-wiki experimentally.
-
-#+begin_src emacs-lisp
-  (akirak/require 'setup-org-wiki)
-#+end_src
 **** Org hydra
 Use major-mode-hydra to define a hydra for Org mode:
 
@@ -1773,9 +1234,6 @@ Use major-mode-hydra to define a hydra for Org mode:
   (akirak/require 'setup-org-hydra)
 #+end_src
 **** Org-babel
-- Graphviz (=graphviz-dot-mode=)
-- Ditaa
-
 #+begin_src emacs-lisp
   (akirak/require 'setup-org-babel t)
 #+end_src
@@ -1803,52 +1261,17 @@ Ideally, this section should be a portfolio of my skills.
 #+begin_src emacs-lisp
   (akirak/require 'setup-elixir)
 #+end_src
-
-*** Elm
-
+*** Gleam
+:PROPERTIES:
+:CREATED_TIME: [2021-09-15 Wed 22:47]
+:END:
 #+begin_src emacs-lisp
-  (akirak/require 'setup-elm)
+  (akirak/require 'setup-gleam)
 #+end_src
-
-*** Emacs Lisp
+*** Go
 #+begin_src emacs-lisp
-(akirak/require 'setup-emacs-lisp)
+  (akirak/require 'setup-go)
 #+end_src
-**** Hydra
-#+begin_src emacs-lisp
-  (major-mode-hydra-define emacs-lisp-mode
-    (:title "emacs-lisp-mode"
-            :quit-key "q")
-    ("file/buffer"
-     (("e" akirak/eval-buffer-or-load-file "Eval or load file")
-      ("l" package-lint-current-buffer "package-lint"))
-     "point"
-     (("m" pp-macroexpand-last-sexp "macroexpand"))
-     "help/references"
-     (("s" suggest)
-      ("i" counsel-info-lookup-symbol "info symbol"))))
-#+end_src
-**** Frame
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "emacs-lisp"
-    :key "e"
-    :make-frame '(frame-purpose-make-mode-frame 'emacs-lisp-mode))
-#+end_src
-**** Frame for the Emacs config
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "emacs-config"
-    :key "C"
-    :layout
-    '(progn
-       (delete-other-windows)
-       (let ((default-directory user-emacs-directory))
-         (frame-workflow-magit-same-window)))
-    :make-frame
-    '(frame-purpose-make-directory-frame user-emacs-directory))
-#+end_src
-**** Makel
-I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I have experimentally switched to [[https://gitlab.petton.fr/DamienCassou/makel][makel]].
-
 *** Haskell
 
 #+begin_src emacs-lisp
@@ -1856,32 +1279,20 @@ I find [[https://github.com/vermiculus/emake.el][emake]] difficult to use, so I 
 #+end_src
 
 *** Java
-#+begin_src emacs-lisp
-  (defcustom akirak/java-support-module 'setup-java-lsp
-    "Module for supporting Java."
-    :type '(choice (const setup-java-lsp)
-                   (const setup-java-meghanada)))
-
-  (add-hook 'java-mode-hook (lambda () (require akirak/java-support-module)))
-
-#+end_src
+Use lsp-mode.
 *** JavaScript
 #+begin_src emacs-lisp
   (akirak/require 'setup-javascript)
   (akirak/require 'setup-json)
 #+end_src
-*** Kotlin
-
+*** Lisp (Emacs Lisp and Common Lisp)
 #+begin_src emacs-lisp
-  (akirak/require 'setup-kotlin)
+  (akirak/require 'setup-emacs-lisp)
 #+end_src
-
-*** Nim
-
+*** PureScript
 #+begin_src emacs-lisp
-  (akirak/require 'setup-nim)
+  (akirak/require 'setup-purescript)
 #+end_src
-
 *** Python
 *** Rust
 :PROPERTIES:
@@ -1899,13 +1310,6 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-shell-scripts)
 #+end_src
-*** VBScript
-:PROPERTIES:
-:CREATED_TIME: [2019-05-16 Thu 01:10]
-:END:
-#+begin_src emacs-lisp
-  (akirak/require 'setup-visual-basic)
-#+end_src
 *** Vue
 :PROPERTIES:
 :CREATED_TIME: [2019-04-03 Wed 22:45]
@@ -1918,8 +1322,14 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
   (akirak/require 'setup-web-mode)
 #+end_src
 
+Restclient is useful for development in teams where it is used.
+
 #+begin_src emacs-lisp
   (akirak/require 'setup-restclient)
+#+end_src
+**** CSS
+#+begin_src emacs-lisp
+  (akirak/require 'setup-css)
 #+end_src
 ** DSLs
 :PROPERTIES:
@@ -1942,9 +1352,17 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-dockerfile)
 #+end_src
+*** GraphQL
+#+begin_src emacs-lisp
+  (akirak/require 'setup-graphql)
+#+end_src
 *** GraphViz                                           :diagramming:org_babel:
 #+begin_src emacs-lisp
 (akirak/require 'setup-graphviz-dot)
+#+end_src
+*** Mermaid                                         :diagramming:org_babel:
+#+begin_src emacs-lisp
+  (akirak/require 'setup-mermaid)
 #+end_src
 *** Nix                                           :configuration__language:
 #+begin_src emacs-lisp
@@ -1958,6 +1376,14 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
 (akirak/require 'setup-systemd)
 #+end_src
+*** Svelte
+#+begin_src emacs-lisp
+  (akirak/require 'setup-svelte)
+#+end_src
+*** Terraform
+#+begin_src emacs-lisp
+  (akirak/require 'setup-terraform)
+#+end_src
 *** YAML                                          :configuration__language:
 #+begin_src emacs-lisp
   (akirak/require 'setup-yaml)
@@ -1966,46 +1392,23 @@ CLOCK: [2019-01-01 Tue 15:54]--[2019-01-01 Tue 15:56] =>  0:02
 #+begin_src emacs-lisp
   (akirak/require 'setup-ansible)
 #+end_src
-** Emacs applications
-*** Getting organised
-**** Global bindings related to Org mode
+** Org mode
+*** Global bindings related to Org mode
  #+begin_src emacs-lisp
-   (akirak/bind-key "M-g M-j" #'org-clock-goto)
-   (akirak/bind-search
-     "M-o" #'helm-org-rifle-known-files
-     "M-h" #'org-recent-headings-helm)
-   (akirak/bind-jump "M-o" #'org-starter-find-file-by-key)
+   (akirak/bind-jump "M-j" #'counsel-org-clock-goto)
+   (akirak/bind-search "M-c" #'counsel-org-clock-context)
    (akirak/bind-user
-     "c" #'org-capture
      "l" 'org-store-link)
  #+end_src
-***** On navigation
+*** Recurring tasks
 #+begin_src emacs-lisp
-  (akirak/require 'setup-org-recent-headings)
+  (akirak/require 'setup-org-recur)
 #+end_src
-**** Org Journal
+*** Org Journal
 #+begin_src emacs-lisp
-  (akirak/require 'setup-org-journal)
+  ;; (akirak/require 'setup-org-journal)
 #+end_src
-**** Frame
-:PROPERTIES:
-:ID:       5c418e70-a0a0-4d86-81a5-3186abb038ee
-:END:
-
-#+begin_src emacs-lisp
-  (akirak/define-frame-workflow "org"
-    :key "o"
-    :layout '(progn
-               (org-starter-load-all-known-files)
-               (when (fboundp #'ibuffer-sidebar-show-sidebar)
-                 (ibuffer-sidebar-show-sidebar)
-                 (with-current-buffer (ibuffer-sidebar-buffer (selected-frame))
-                   (ibuffer-projectile-set-filter-groups)
-                   (ibuffer-update nil))))
-    :make-frame '(frame-purpose-make-mode-frame 'org-mode))
-#+end_src
-
-**** Org-agenda keybindings                              :Emacs:Org__Mode:
+*** Org-agenda keybindings                                :Emacs:Org__Mode:
 :PROPERTIES:
 :CREATED_TIME: [2019-01-19 Sat 12:22]
 :END:
@@ -2018,51 +1421,11 @@ CLOCK: [2019-01-19 Sat 12:22]--[2019-01-19 Sat 12:25] =>  0:03
     "M-n" #'org-agenda-drag-line-forward
     "M-p" #'org-agenda-drag-line-backward)
 #+end_src
-*** Beancount
-#+begin_src emacs-lisp
-  (akirak/require 'setup-beancount)
-#+end_src
-*** System tools
-**** System services
-#+begin_src emacs-lisp
-;; Run (root) systemd operations
-(use-package helm-systemd :after helm
-  :commands (helm-systemd))
-#+end_src
-
-I'm not using the following packages:
-
-#+begin_src emacs-lisp
-  ;; Manage docker services
-  (use-package docker
-    :disabled t)
-  ;; Manage daemons
-  (use-package prodigy
-    :disabled t)
-#+end_src
-**** Mounting disks
-#+begin_src emacs-lisp
-(use-package helm-linux-disks
-  :straight (helm-linux-disks :host github
-                              :repo "akirak/helm-linux-disks")
-  :commands (helm-linux-disks)
-  :custom
-  (linux-disk-terminal-type 'akirak/shell-new))
-#+end_src
-**** Disk usage
-#+begin_src emacs-lisp
-(use-package disk-usage
-  :general
-  (:keymaps 'akirak/system-map
-            "D" 'disk-usage))
-#+end_src
-** Multiple major modes
+** COMMENT Multiple major modes                                   :noexport:
+:PROPERTIES:
+:TOC:      ignore
+:END:
 Some package need to be loaded after other packages, so they are put here.
-*** polymode
-This could be useful, but I am not using any of the derived modes for now.
-#+begin_src emacs-lisp
-  ;; (akirak/require 'setup-polymode)
-#+end_src
 ** EXWM
 #+begin_src emacs-lisp
   (when (member "--exwm" command-line-args)
@@ -2073,59 +1436,7 @@ This could be useful, but I am not using any of the derived modes for now.
 #+end_src
 
 When you connect/disconnect to an external monitor, run =akirak/exwm-configure-screens= command, unless it is automatically called by the screen change hook.
-I use EXWM for development both on Chrome OS (at home) and on NixOS (at work).
-*** Slack
-I use Slack inside EXWM at work.
 
-#+begin_src emacs-lisp
-  (defcustom akirak/slack-app-url ""
-    "URL to the Slack workspace I am working for."
-    :type 'string)
-
-  (defun akirak/exwm-open-slack-this-workspace ()
-    (interactive)
-    (akirak/exwm-raise-web-app akirak/slack-app-url
-                               #'akirak/exwm-select-buffer-window))
-
-  (frame-workflow-define-subject "slack"
-    :key "S"
-    :layout
-    '(akirak/exwm-open-slack-this-workspace)
-    :refocus
-    '(akirak/exwm-open-slack-this-workspace)
-    :after-kill-buffer
-    '(delete-frame))
-#+end_src
-*** Visual Studio Code
-I use Visual Studio Code for work.
-
-#+begin_src emacs-lisp
-  (defun akirak/raise-vscode-here ()
-    (interactive)
-    (akirak/exwm-raise-desktop-app "code.desktop"
-                                   'akirak/exwm-select-buffer-window))
-
-  (frame-workflow-define-subject "vscode"
-    :key "V"
-    :layout
-    '(akirak/raise-vscode-here)
-    :refocus
-    '(akirak/raise-vscode-here)
-    :after-kill-buffer
-    '(delete-frame))
-#+end_src
-*** Web browser
-#+begin_src emacs-lisp
-  (akirak/require 'setup-web-browser)
-#+end_src
-
-#+begin_src emacs-lisp
-  (when (akirak/exwm-session-p)
-    (frame-workflow-define-subject "web"
-      :key "w"
-      :layout
-      '(akirak/helm-web-browser)))
-#+end_src
 ** Meta
 *** Synchronizing my configuration repositories
 I am now using myrepos to synchronize my configuration repositories.
@@ -2147,6 +1458,10 @@ I am now using myrepos to synchronize my configuration repositories.
     (let ((default-directory "~"))
       (akirak/run-interactive-shell-command "mr push")))
 #+end_src
+*** Rebuild packages
+#+begin_src emacs-lisp
+  (akirak/require 'setup-straight)
+#+end_src
 *** Sort entries in this file
 #+begin_src emacs-lisp
   (defun akirak/org-sort-entries-as-desired ()
@@ -2163,10 +1478,11 @@ I am now using myrepos to synchronize my configuration repositories.
     (when (org-find-property "TOC")
       (org-make-toc)))
 #+end_src
-*** Ignore
+*** COMMENT Ignore                                                       :noexport:
 :PROPERTIES:
 :TOC:      ignore
 :END:
 # Local Variables:
 # org-id-link-to-org-use-id: nil
+# eval: (when (fboundp 'org-make-toc-mode) (org-make-toc-mode t))
 # End:

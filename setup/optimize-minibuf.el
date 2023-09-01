@@ -23,17 +23,39 @@
 ;;;; Dimmer
 
 (with-eval-after-load 'dimmer
-  (defun optimize-minibuf/dimmer-process-all--fake ())
+  (defun optimize-minibuf/dimmer-process-all--fake (&rest _args))
 
-  (defun akirak/dimmer-disable ()
+  (defun akirak/dimmer-disable (&rest _args)
     (advice-add 'dimmer-process-all :override
                 'optimize-minibuf/dimmer-process-all--fake))
 
-  (defun akirak/dimmer-enable ()
+  (defun akirak/dimmer-enable (&rest _args)
     (advice-remove 'dimmer-process-all 'optimize-minibuf/dimmer-process-all--fake))
 
   (add-hook 'minibuffer-setup-hook 'akirak/dimmer-disable)
-  (add-hook 'minibuffer-exit-hook 'akirak/dimmer-enable))
+  (add-hook 'minibuffer-exit-hook 'akirak/dimmer-enable)
+
+  (advice-add 'read-key
+              :around
+              (defun akirak/ad-around-read-key (orig &rest args)
+                (ignore-errors
+                  (akirak/dimmer-disable))
+                (unwind-protect
+                    (apply orig args)
+                  (akirak/dimmer-enable))))
+
+  (advice-add 'org-starter--display-options
+              :before #'akirak/dimmer-disable)
+  (advice-add 'org-starter--delete-message-frame
+              :after #'akirak/dimmer-enable))
+
+;;;; Helm
+(with-eval-after-load 'helm
+  (defsubst optimize-minibuf/not-helm-major-mode-p (&rest _args)
+    (eq major-mode 'helm-major-mode))
+
+  (advice-add 'yankpad-local-category-to-major-mode
+              :before-while #'optimize-minibuf/not-helm-major-mode-p))
 
 (provide 'optimize-minibuf)
 ;;; optimize-minibuf.el ends here

@@ -1,35 +1,28 @@
-(use-package elixir-mode)
+;; Elixir configuration for Emacs.
+;;
+;; I've installed some of the packages listed in
+;;
+;; https://www.badykov.com/emacs/2020/05/30/emacs-setup-for-elixir/
 
-;; Alchemist package for Elixir support on Emacs
-;; See https://alchemist.readthedocs.io/en/latest/configuration/ for setup
-(defconst akirak/alchemist-key-command-prefix "C-,")
+(use-package elixir-mode
+  :mode "\\.exs?\\'"
+  :hook
+  (elixir-mode . mix-format-on-save-mode))
 
-(use-package alchemist
+(use-package mix
+  :disabled t
+  :hook
+  (elixir-mode . mix-minor-mode))
+
+(use-package flycheck-credo
+  ;; Use lsp
   :disabled t
   :after elixir-mode
-  :general
-  ;; alchemist-mode-keymap is defined as a prefix command, so this
-  ;; works without setting `alchemist-key-command-prefix'.
-  (:keymaps 'alchemist-mode-map
-            akirak/alchemist-key-command-prefix #'alchemist-mode-keymap)
-  ;; Somehow this doesn't seem to work.
-  (:keymaps 'alchemist-mode-map
-            :prefix akirak/alchemist-key-command-prefix
-            "c" '(:ignore t :wk "compile")
-            "e" '(:ignore t :wk "execute")
-            "f" '(:ignore t :wk "point")
-            "m" '(:ignore t :wk "mix")
-            "mt" '(:ignore t :wk "mix-test")
-            "X" '(:ignore t :wk "hex")
-            "h" '(:ignore t :wk "help")
-            "p" '(:ignore t :wk "project")
-            "i" '(:ignore t :wk "iex")
-            "v" '(:ignore t :wk "eval")
-            "o" '(:ignore t :wk "macroexpand"))
-  :custom
-  (alchemist-key-command-prefix (kbd akirak/alchemist-key-command-prefix)))
-
-(akirak/which-key-add-stripped-prefix "alchemist-")
+  :config
+  (add-hook 'elixir-mode-hook
+            (defun akirak/setup-flycheck-credo ()
+              (flycheck-mode 1)
+              (flycheck-credo-setup))))
 
 (defconst akirak/elixir-outline-regexp
   (rx bol (or (seq (group (* space))
@@ -125,5 +118,39 @@
 (ivy-set-display-transformer
  'akirak/counsel-outline-elixir
  'akirak/counsel-outline-elixir-display-transformer)
+
+(use-package inf-elixir
+  :after elixir-mode
+  :config
+  (setq-mode-local inf-elixir-mode compilation-minor-mode t)
+  :general
+  (:keymaps 'elixir-mode-map :package 'elixir-mode
+            "C-c i" #'inf-elixir
+            "C-c e" (general-predicate-dispatch 'inf-elixir-send-line
+                      (region-active-p) 'inf-elixir-send-region)))
+
+;; Deprecated. Use inf-elixir-project
+(defun akirak/iex-mix (root)
+  (interactive (list (or (locate-dominating-file default-directory "mix.exs")
+                         (user-error "Cannot find mix.exs"))))
+  (akirak/run-interactive-shell-command "iex -S mix"
+    (format "*iex %s*" (f-filename root))
+    :root root))
+
+(akirak/bind-mode-repl :keymaps 'elixir-mode-map
+  "" #'inf-elixir-project)
+
+(defun akirak/elixir-module-name-from-file ()
+  (let ((segments (f-split (buffer-file-name))))
+    (when-let (i (-find-last-index
+                  (lambda (x) (member x '("lib" "test")))
+                  segments))
+      (mapconcat (lambda (s)
+                   (->> (split-string s "_")
+                        (-map #'capitalize)
+                        (string-join)))
+                 (append (-slice segments (1+ i) -1)
+                         (list (f-base (-last-item segments))))
+                 "."))))
 
 (provide 'setup-elixir)

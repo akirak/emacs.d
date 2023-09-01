@@ -4,7 +4,8 @@
 (defun akirak/build-helm-package (&optional force)
   "Build Helm package."
   (interactive "P")
-  (let* ((dir "~/.emacs.d/straight/build/helm-core")
+  (let* ((dir (expand-file-name "straight/build/helm-core"
+                                user-emacs-directory))
          (build-flag (expand-file-name ".built" dir)))
     (if (and (file-exists-p build-flag)
              (not force))
@@ -21,12 +22,54 @@
   ;; To prevent an error saying "Invalid function: helm-build-sync-source"
   ;; build the package.
   (akirak/build-helm-package)
-  (load "~/.emacs.d/straight/build/helm-core/helm-core-autoloads.el")
+  (load (expand-file-name "straight/build/helm-core/helm-core-autoloads.el"
+                          user-emacs-directory))
   ;; (require 'helm-source)
   :config
   (helm-autoresize-mode 1)
+  ;; Load all configuration files in lisp/my/helm/{source,action}
+  (dolist (type '("source" "action"))
+    (let ((dir (f-join user-emacs-directory "lisp/my/helm" type)))
+      (dolist (filename (directory-files dir nil "\\.el\\'" 'nosort))
+        (unless (ignore-errors (featurep (intern-sort (file-name-base filename))))
+          (load (f-join dir filename) nil 'nomessage))))
+    (f-files (f-join user-emacs-directory "lisp/my/helm" type)
+             (lambda (filename) (string-match-p "\\.el\\'" filename))))
+  :general
+  ([remap yank-pop] #'helm-show-kill-ring)
   :custom
+  (helm-kill-ring-max-offset 200)
   (helm-autoresize-max-height 40)
   (helm-display-function (quote pop-to-buffer)))
+
+(use-package helm-bookmark
+  :straight helm
+  :config
+  ;; Override actions of helm-source-bookmark-arg for supporting org-multi-wiki.
+  ;; It would be better to define a custom bookmark type in the package,
+  ;; but I just haven't done it yet.
+  (defvar akirak/helm-source-bookmark-org
+    (let ((var (copy-sequence helm-source-bookmark-org)))
+      (setcdr (assoc 'action var)
+              '(("Jump to bookmark" .
+                 (lambda (bmk)
+                   (bookmark-jump bmk)
+                   (org-multi-wiki-run-mode-hooks)))
+                ("Rename" . bookmark-rename)
+                ("Delete" . bookmark-delete)))
+      var))
+
+  (add-to-list 'helm-type-bookmark-actions
+               '("Terminal" . (lambda (candidate)
+                                (let* ((dir (bookmark-get-filename candidate))
+                                       (default-directory (if (string-suffix-p "/" dir)
+                                                              dir
+                                                            (error "Doesn't look like a directory bookmark: %s"
+                                                                   candidate))))
+                                  (vterm))))
+               t))
+
+(use-package helm-org
+  :after (helm org))
 
 (provide 'setup-helm)

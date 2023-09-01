@@ -7,7 +7,15 @@
          ("Procfile\\'" . yaml-mode))
   :general
   (:keymaps 'yaml-mode-map
-            "C-m" 'newline-and-indent))
+            "C-m" 'newline-and-indent)
+  :config
+  (defun akirak/maybe-setup-hpack ()
+    "Set up a hook for hpack if the file is package.yaml"
+    (when (ignore-errors
+            (string-suffix-p "/package.yaml" (buffer-file-name)))
+      (add-hook 'after-save-hook #'akirak/hpack 'append 'local)))
+  :hook
+  (yaml-mode . akirak/maybe-setup-hpack))
 
 ;; Also see setup-ansible.el
 

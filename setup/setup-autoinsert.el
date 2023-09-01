@@ -2,18 +2,19 @@
 (setq auto-insert 'other
       auto-insert-query nil
       auto-insert-alist `((
-                           ;; ~/.emacs.d/extras/**/*.el
+                           ;; ~/.emacs.d/lisp/my/**/*.el
                            ;; Add
                            ;; (provide 'DIRECTORY/BASENAME)
                            ;; e.g. (provide 'akirak/org-refile)
-                           (,(rx "/.emacs.d/extras/" (+ anything) ".el" eos)
+                           (,(rx "/lisp/my/" (+ anything) ".el" eos)
                             . "Extra elisp file")
-                           . (> _ "\n\n"
+                           . (> ";; -*- lexical-binding: t; -*-\n"
+                                _ "\n\n"
                                 "(provide '"
                                 (file-relative-name
                                  (file-name-sans-extension
                                   (expand-file-name (buffer-file-name)))
-                                 (expand-file-name "extras" user-emacs-directory))
+                                 (expand-file-name "lisp" user-emacs-directory))
                                 ")"))
                           ;; setup-*.el
                           ;; Add
@@ -27,6 +28,20 @@
                           ;; Elisp dotfiles (.*.el)
                           ;; Noop
                           ((,(rx "/." (+ (not (any "/"))) ".el" eos) . "Configuration files") . nil)
+                          ((,(rx "-test" (optional "s") ".el" eos) . "Test suite (buttercup)")
+                           . (> ";;; -*- lexical-binding: t -*-\n\n"
+                                "(require 'buttercup)\n"
+                                "(require '" (s-replace-regexp "-tests?\\'" "" (file-name-base (buffer-file-name))) ")\n\n"
+                                _ "\n\n"
+                                "(provide '" (file-name-base (buffer-file-name)) ")\n"))
+                          (("/dir-locals\\.nix\\'" . "nix-buffer")
+                           . (>
+                              "# This is a configuration for nix-buffer.el for Emacs.\n"
+                              "# See <https://github.com/shlevy/nix-buffer>\n"
+                              "let pkgs = import <nixpkgs> {}; in\n"
+                              "pkgs.nixBufferBuilders.withPackages [\n"
+                              "  " _
+                              "\n]"))
                           ;; Melpa recipes
                           ;; Insert a minimal recipe definition
                           (("melpa/recipes/.+\\'" . "Melpa recipe")
@@ -55,18 +70,40 @@
                                 "# Local Variables:\n"
                                 "# eval: (when (require (quote org-make-toc) nil t) (org-make-toc-mode t))\n"
                                 "# End:\n"))
-                          ;; Fallback to "auto-insert" yasnippet template
-                          (("\\.[[:alpha:]]+\\'" . "yasnippet")
-                           . akirak/yas-auto-insert)))
-
-(defun akirak/yas-auto-insert ()
-  ;; Expand a snippet named \"auto-insert\" if and only if it exists
-  (unless (and (eq major-mode 'emacs-lisp-mode)
-               (member (file-name-base (buffer-file-name))
-                       '(".dir-locals.el" "init.el")))
-    (when-let ((snippet (condition-case nil
-                            (yas-lookup-snippet "auto-insert")
-                          (error nil))))
-      (yas-expand-snippet snippet))))
+                          (("/config/config\.exs\\'" . "config/config.exs")
+                           . (> "use Mix.Config\n\n"
+                                _))
+                          (("/lib/.+\.ex\\'" . "Elixir library module")
+                           . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+                                "  " _
+                                "end"))
+                          (("/test/.+_test\.exs\\'" . "Elixir test module")
+                           . (> "defmodule " (akirak/elixir-module-name-from-file) " do\n"
+                                "  use ExUnit.Case\n\n"
+                                "  alias " (string-remove-suffix
+                                            "Test" (akirak/elixir-module-name-from-file))
+                                "\n"
+                                "  doctest " (string-remove-suffix
+                                              "Test" (akirak/elixir-module-name-from-file))
+                                "\n"
+                                "  " _
+                                "\nend"))
+                          (("\.go\\'" . "Go module")
+                           . (> "package "
+                                (file-name-base (or buffer-file-name (buffer-name)))
+                                "\n\nimport (\n"
+                                ")\n\n"))
+                          (("\.el\\'" . "Emacs Lisp")
+                           . (> ";;; "
+                                (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                                " --- " _
+                                " -*- lexical-binding: t -*-\n"
+                                "\n\n\n"
+                                "(provide '"
+                                (file-name-base (or buffer-file-name (buffer-name)))
+                                ")\n"
+                                ";;; "
+                                (file-name-nondirectory (or buffer-file-name (buffer-name)))
+                                " ends here"))))
 
 (provide 'setup-autoinsert)

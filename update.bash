@@ -14,40 +14,42 @@ section() {
 
 section "Updating the Emacs configuration..."
 
-echo "Checking if $PWD has changes..."
-if ! git diff-index --name-status --exit-code HEAD; then
-    echo "The working tree has changes. Please stash or commit them."
-    echo "Entering a subshell."
-    $SHELL -i
-    if ! git diff-index --name-status --exit-code HEAD; then
-        echo "There are still changes. Aborting." >&2
-        echo "Press enter to exit"
-        read
-        exit 1
-    fi
-else
-    echo "No changes in the working tree."
-fi
+# echo "Checking if $PWD has changes..."
+# if ! git diff-index --name-status --exit-code HEAD; then
+#     echo "The working tree has changes. Please stash or commit them."
+#     echo "Entering a subshell."
+#     $SHELL -i
+#     if ! git diff-index --name-status --exit-code HEAD; then
+#         echo "There are still changes. Aborting." >&2
+#         echo "Press enter to exit"
+#         read -r
+#         exit 1
+#     fi
+# else
+#     echo "No changes in the working tree."
+# fi
 
 # Rebase HEAD onto its corresponding remote branch
 
 remote=origin
 branch=$(git symbolic-ref --short HEAD)
 git fetch $remote
-if git --no-pager log --exit-code --oneline --summary HEAD..$remote/$branch; then
+if git --no-pager log --exit-code --oneline --summary "HEAD..$remote/$branch"; then
     echo "The branch is up-to-date."
 else
-    echo -n "Rebase onto $remote/$branch? (y/n): "
-    read need_rebase
-    if [[ ${need_rebase} = [Yy]* ]]; then
-        git rebase $remote/$branch
-        if [ $? -gt 0 ]; then
-            echo "There was an error during the rebase."
-            echo "Press enter."
-            read
-            exit 1
-        fi
+    if ! git rebase --autostash --preserve-merges "$remote/$branch"; then
+        $SHELL -i
     fi
+    # echo -n "Rebase onto $remote/$branch? (y/n): "
+    # read -r need_rebase
+    # if [[ ${need_rebase} = [Yy]* ]]; then
+    #     if ! git rebase "$remote/$branch"; then
+    #         echo "There was an error during the rebase."
+    #         echo "Press enter."
+    #         read -r
+    #         exit 1
+    #     fi
+    # fi
 fi
 
 section "Updating the submodules in the Emacs configuration..."
@@ -55,24 +57,46 @@ section "Updating the submodules in the Emacs configuration..."
 # Update the submodule
 git submodule update --recursive
 
-section "Updating my favorite packages..."
+pull_all_packages_ff() {
+    local initial="$PWD"
+    local parent="$PWD/straight/repos"
+    cd "$parent" || return 1
+    for d in *; do
+        cd "$parent/$d" || continue
+        git pull --ff-only --recurse-submodules origin
+    done
+    cd "$initial" || exit 1
+}
 
-# Auto-update packages I want to keep up-to-date
-# It is important to update the MELPA package cache to prevent missing package errors
-cd straight/repos
-for pkg in melpa org ivy counsel swiper org-starter org-reverse-datetree \
-           transient magit org-ql company-mode lsp-mode treemacs; do
-    [[ ! -d $pkg ]] && continue
-    echo "Trying to update $pkg package..."
-    cd $pkg
-    # Run git-safe-update if the program exists
-    if command -v git-safe-update >/dev/null; then
-        git-safe-update
+pull_package() {
+    local initial="$PWD"
+    local package="$1"
+    cd "straight/repos/$package" || return 1
+    git pull --ff-only --recurse-submodules origin
+    cd "$initial" || exit 1
+}
+
+echo -n "Rebuild the updated packages? (y/n): "
+read -r update
+if [[ ${update} = [Yy]* ]]; then
+    echo -n "Pull all packages? (y/n): "
+    read -r fetch
+    if [[ ${fetch} = [Yy]* ]]; then
+        pull_all_packages_ff
     else
-        git pull
+        pull_package melpa
+        ./update-packages.bash
     fi
-    if [[ $? -gt 0 ]]; then
-        echo "Failed to update the repository of $pkg package"
-    fi
-    cd ..
-done
+
+    section "Rebuilding org autoloads..."
+    cd straight/repos/org
+    make autoloads
+    cd ../../..
+
+    section "Rebuilding outdated packages..."
+    emacs -nw -q --load init.el \
+          --eval '(progn (akirak/straight-rebuild-outdated-packages) (kill-emacs))'
+fi
+
+echo "Done."
+exit 0

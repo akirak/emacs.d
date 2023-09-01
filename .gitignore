@@ -20,3 +20,10 @@ main.el
 # Created by desktop.el
 .emacs.desktop
 .emacs.desktop.lock
+
+result
+.pre-commit-config.yaml
+.lsp-eslint-choices
+
+/nix26
+/etc
