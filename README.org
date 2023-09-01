@@ -1,6 +1,6 @@
 * Emacs Configuration
-This is my Emacs configuration I have been using since 2018.
-I am currently switching to [[https://github.com/akirak/nix-config/blob/master/emacs/emacs-config.org][a new configuration]] which is much more lightweight than this one.
+This configuration is no longer maintained, so it has been archived.
+I used this Emacs configuration in 2018–2021, but I made a [[https://github.com/akirak/emacs-config/][rewrite]] in 2022.
 ** Table of contents
 :PROPERTIES:
 :TOC: siblings
